@@ -79,6 +79,46 @@ func TestMakeXmlTheme(t *testing.T) {
 	assertEqual(t, makeXmlTheme(pres), readGoldenStr(t, "01-basic", "ppt", "theme", "theme1.xml"))
 }
 
+func TestCustomizeThemeColorsAndEscapeFonts(t *testing.T) {
+	pres := &IPresentationProps{PresentationProps: PresentationProps{Theme: ThemeProps{
+		HeadFontFace: `Heading & Display`,
+		BodyFontFace: `Body "Sans"`,
+	}}}
+	xml := customizeThemeColors(makeXmlTheme(pres), ThemeColorScheme{
+		Dark1: "112233", Light1: "FDFCFB", Accent1: "a1b2c3", FollowedLink: "654321",
+	})
+	for _, want := range []string{
+		`<a:dk1><a:srgbClr val="112233"/></a:dk1>`,
+		`<a:lt1><a:srgbClr val="FDFCFB"/></a:lt1>`,
+		`<a:accent1><a:srgbClr val="A1B2C3"/></a:accent1>`,
+		`<a:folHlink><a:srgbClr val="654321"/></a:folHlink>`,
+		`typeface="Heading &amp; Display"`,
+		`typeface="Body &quot;Sans&quot;"`,
+	} {
+		if !strings.Contains(xml, want) {
+			t.Errorf("custom theme XML does not contain %q", want)
+		}
+	}
+	if strings.Contains(xml, `accent1><a:srgbClr val="4472C4"`) {
+		t.Error("custom accent1 retained the Office default")
+	}
+}
+
+func TestImageSizingUsesIntrinsicSourceRatio(t *testing.T) {
+	obj := &SlideObject{
+		Type: SlideObjectTypeImage, ImageRID: 1, Image: "wide.png",
+		Options: &ObjectOptions{
+			ObjectNameProps: ObjectNameProps{ObjectName: "wide"},
+			Sizing:          &ImageSizing{Type: "cover", W: Inches(1), H: Inches(1), SourceW: 200, SourceH: 100},
+		},
+	}
+	slide := &SlideBaseProps{SlideObjects: []SlideObject{*obj}, RelsMedia: []SlideRelMedia{{RID: 1, Extn: "png"}}}
+	xml := slideObjectImageToXml(&slide.SlideObjects[0], slide, nil, 0, 0, 100, 100, 100, 100, slide.SlideObjects[0].Options.Sizing, nil, "")
+	if !strings.Contains(xml, `<a:srcRect l="25000" r="25000" t="0" b="0"/>`) {
+		t.Fatalf("cover sizing did not use 2:1 source ratio: %s", xml)
+	}
+}
+
 func TestMakeXmlNotesMaster(t *testing.T) {
 	assertEqual(t, makeXmlNotesMaster(), readGoldenStr(t, "01-basic", "ppt", "notesMasters", "notesMaster1.xml"))
 }

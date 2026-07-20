@@ -96,6 +96,27 @@ func TestWriteValidMediaStillSucceeds(t *testing.T) {
 	}
 }
 
+func TestReadMediaFileRejectsNonRegularAndOversizedFiles(t *testing.T) {
+	if _, err := readMediaFile(t.TempDir()); err == nil || !strings.Contains(err.Error(), "not a regular file") {
+		t.Fatalf("directory media error = %v", err)
+	}
+	path := filepath.Join(t.TempDir(), "oversized.png")
+	f, err := os.Create(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := f.Truncate(maxMediaBytes + 1); err != nil {
+		_ = f.Close()
+		t.Fatal(err)
+	}
+	if err := f.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := readMediaFile(path); err == nil || !strings.Contains(err.Error(), "exceeds") {
+		t.Fatalf("oversized media error = %v", err)
+	}
+}
+
 // ---------------------------------------------------------------------------
 // REVIEW M9: compression must be reachable through Write/WriteTo/WriteFile.
 // ---------------------------------------------------------------------------

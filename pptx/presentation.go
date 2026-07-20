@@ -160,6 +160,16 @@ func New() *Presentation {
 // Layout returns the current layout key (e.g. "LAYOUT_16x9").
 func (p *Presentation) Layout() string { return p.layoutName }
 
+// SetTimeProvider sets the clock used for document and embedded-workbook
+// metadata. Passing nil restores the wall clock. Callers that require
+// byte-reproducible output can provide a fixed timestamp.
+func (p *Presentation) SetTimeProvider(now func() time.Time) { p.nowFunc = now }
+
+// SetUUIDProvider sets the generator used for section identifiers. Passing nil
+// restores the random generator. Callers that require byte-reproducible output
+// can provide a stable generator derived from their input.
+func (p *Presentation) SetUUIDProvider(uuid func(format string) string) { p.uuidFunc = uuid }
+
 // SetLayout selects a standard or custom layout by name (as registered by
 // DefineLayout). Ports the TS `layout` setter, which throws UNKNOWN-LAYOUT;
 // this returns ErrUnknownLayout wrapped with the requested name.

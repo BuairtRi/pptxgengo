@@ -5,6 +5,7 @@ package pptx
 import (
 	"errors"
 	"testing"
+	"time"
 )
 
 // ---------------------------------------------------------------------------
@@ -60,6 +61,20 @@ func TestSetLayoutUnknownNameWrapsSentinel(t *testing.T) {
 	}
 	if got := err.Error(); !contains(got, "NOT-REGISTERED") {
 		t.Errorf("SetLayout error %q does not name the requested layout", got)
+	}
+}
+
+func TestPublicReproducibilityProviders(t *testing.T) {
+	p := New()
+	wantTime := time.Date(2026, 7, 20, 12, 0, 0, 0, time.UTC)
+	p.SetTimeProvider(func() time.Time { return wantTime })
+	p.SetUUIDProvider(func(string) string { return "fixed-section-id" })
+	ctx := p.newBuildContext()
+	if got := ctx.now(); !got.Equal(wantTime) {
+		t.Fatalf("time provider = %v, want %v", got, wantTime)
+	}
+	if got := ctx.uuid("ignored"); got != "fixed-section-id" {
+		t.Fatalf("UUID provider = %q", got)
 	}
 }
 

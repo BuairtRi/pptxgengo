@@ -226,7 +226,7 @@ func (p *Presentation) build(compression bool) ([]byte, error) {
 	if err := addStr("ppt/_rels/presentation.xml.rels", makeXmlPresentationRels(slidesVal, p.embeddedFonts)); err != nil {
 		return nil, err
 	}
-	if err := addStr("ppt/theme/theme1.xml", makeXmlTheme(pres)); err != nil {
+	if err := addStr("ppt/theme/theme1.xml", customizeThemeColors(makeXmlTheme(pres), pres.Theme.ColorScheme)); err != nil {
 		return nil, err
 	}
 	if err := addStr("ppt/presentation.xml", makeXmlPresentation(pres, bc)); err != nil {

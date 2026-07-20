@@ -44,6 +44,12 @@ import (
 // documented deviation from the TS source.
 const mediaHTTPTimeout = 30 * time.Second
 
+// maxMediaBytes prevents local devices, FIFOs, oversized files, and remote
+// responses from turning a presentation build into an unbounded read. One
+// hundred MiB is intentionally generous for slide media while still bounding
+// memory use.
+const maxMediaBytes int64 = 100 << 20
+
 // mediaHTTPClient is overridable by tests; production code uses the default.
 var mediaHTTPClient = &http.Client{Timeout: mediaHTTPTimeout}
 
@@ -188,9 +194,27 @@ func readMediaSource(path string) (string, error) {
 }
 
 func readMediaFile(path string) (string, error) {
-	b, err := os.ReadFile(path)
+	f, err := os.Open(path)
 	if err != nil {
 		return "", fmt.Errorf("unable to read media: %q: %w", path, err)
+	}
+	defer f.Close()
+	info, err := f.Stat()
+	if err != nil {
+		return "", fmt.Errorf("unable to inspect media: %q: %w", path, err)
+	}
+	if !info.Mode().IsRegular() {
+		return "", fmt.Errorf("unable to read media: %q is not a regular file", path)
+	}
+	if info.Size() > maxMediaBytes {
+		return "", fmt.Errorf("unable to read media: %q exceeds %d bytes", path, maxMediaBytes)
+	}
+	b, err := io.ReadAll(io.LimitReader(f, maxMediaBytes+1))
+	if err != nil {
+		return "", fmt.Errorf("unable to read media: %q: %w", path, err)
+	}
+	if int64(len(b)) > maxMediaBytes {
+		return "", fmt.Errorf("unable to read media: %q exceeds %d bytes", path, maxMediaBytes)
 	}
 	return base64.StdEncoding.EncodeToString(b), nil
 }
@@ -210,9 +234,12 @@ func fetchMediaHTTP(url string) (string, error) {
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return "", fmt.Errorf("unable to load image (https.get): %s: HTTP %d", url, resp.StatusCode)
 	}
-	body, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(io.LimitReader(resp.Body, maxMediaBytes+1))
 	if err != nil {
 		return "", fmt.Errorf("unable to load image (https.get): %s: %w", url, err)
+	}
+	if int64(len(body)) > maxMediaBytes {
+		return "", fmt.Errorf("unable to load image (https.get): %s exceeds %d bytes", url, maxMediaBytes)
 	}
 	return base64.StdEncoding.EncodeToString(body), nil
 }

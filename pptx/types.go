@@ -71,10 +71,29 @@ type ObjectNameProps struct {
 	ObjectName string
 }
 
-// ThemeProps sets heading/body theme fonts.
+// ThemeColorScheme customizes the twelve colors stored in the presentation
+// theme. Empty fields retain the corresponding Office default so callers can
+// override only the colors they own.
+type ThemeColorScheme struct {
+	Dark1        HexColor
+	Light1       HexColor
+	Dark2        HexColor
+	Light2       HexColor
+	Accent1      HexColor
+	Accent2      HexColor
+	Accent3      HexColor
+	Accent4      HexColor
+	Accent5      HexColor
+	Accent6      HexColor
+	Hyperlink    HexColor
+	FollowedLink HexColor
+}
+
+// ThemeProps sets presentation theme fonts and colors.
 type ThemeProps struct {
 	HeadFontFace string
 	BodyFontFace string
+	ColorScheme  ThemeColorScheme
 }
 
 // ---------------------------------------------------------------------------
@@ -213,6 +232,12 @@ type ImageSizing struct {
 	H    Coord
 	X    *Coord
 	Y    *Coord
+	// SourceW and SourceH are the intrinsic image dimensions in any common
+	// unit (normally pixels). Only their ratio matters for contain/cover. When
+	// omitted, sizing falls back to the destination dimensions for backward
+	// compatibility.
+	SourceW float64
+	SourceH float64
 }
 
 // ImageProps are options for an added image.
