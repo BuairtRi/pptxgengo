@@ -154,3 +154,191 @@ The dominant theme: **JS `undefined`-vs-`0/false` semantics** — one root cause
 expressed in at least 10 findings across five files. Second theme: **package
 -global mutable state** (clock hooks, chart counter) unsafe for a long-lived
 or concurrent Go process. Both are systematically fixable.
+
+## Resolution log (remediation waves 1-4)
+
+Status legend: **fixed** = behavior now matches TS (or panics eliminated);
+**documented-deviation** = a deliberate, commented divergence from TS remains
+(by design, not an oversight); **inert-documented** = the TS behavior being
+ported cannot occur in Go's type system, so no code change was possible or
+needed — the reasoning is left in a comment for the next reader. Every test
+name below was confirmed present with `grep` against `pptx/*_test.go`, not
+taken on faith from commit messages.
+
+### Critical
+
+- **C1** (package-global clock race) — fixed. `writer.go`/`presentation.go`
+  thread a per-build `buildContext{now, uuid}` instead of swapping package
+  vars. Test: `TestConcurrentWriteRace`.
+- **C2** (`_chartCounter` racy process-global) — fixed. Counter moved onto
+  `Presentation.chartCtr` (mutex-guarded, per-instance). Tests:
+  `TestConcurrentAddChartRace`, `TestChartNumberingPerPresentation`.
+- **C3** (media failures silently swallowed) — fixed (wave 4). `build()` now
+  collects every `[]error` from the three `resolveSlideMediaRels` call sites
+  and returns `errors.Join(...)` before any zip assembly, so `Write`/
+  `WriteTo`/`WriteFile` all fail together and `WriteFile` never leaves a
+  partial file. media.go's own IMG_BROKEN-vs-error classification was left
+  untouched, as instructed. Tests: `TestWriteSurfacesMediaError`,
+  `TestWriteToSurfacesMediaError`,
+  `TestWriteFileSurfacesMediaErrorAndLeavesNoPartialFile`,
+  `TestWriteValidMediaStillSucceeds`, `TestBuildErrorIsJoinedAndUnwrappable`.
+- **C4** (explicit numeric zero clobbered on chart options) — fixed.
+  `V3DRotX/Y`, `V3DPerspective`, `BarGapWidthPct/DepthPct`, `LineSize` are now
+  `*float64`. Tests: `TestExplicitZero_V3DRotXSurvives`,
+  `TestExplicitZero_V3DRotYAndPerspectiveSurvive`,
+  `TestExplicitZero_BarGapWidthPctSurvives`,
+  `TestExplicitZero_BarGapDepthPctSurvives`,
+  `TestExplicitZero_LineSizeRendersNoFill`,
+  `TestExplicitZero_LineSizeDefaultsToTwoWhenUnset`.
+
+### Major
+
+- **M1** (`embeddedFontLst` wrong schema position) — fixed. Now emitted after
+  `sldIdLst`/`sldSz`/`notesSz` per ECMA-376 `CT_Presentation`. Test:
+  `TestMakeXmlPresentationFontHooks`; also verified end-to-end in wave 4's
+  scratch deck (`ppt/presentation.xml`: `<p:notesSz.../><p:embeddedFontLst>`).
+- **M2** (explicit-zero/unset collapse, systemic) — fixed at each listed site.
+  Doughnut `HoleSize`: `TestExplicitZero_HoleSizeSurvives`,
+  `TestExplicitZero_HoleSizeDefaultsWhenUnset`. Reflection/combo overlay:
+  `TestExplicitZero_OverlayLineSizeOverride`,
+  `TestExplicitZero_OverlayBoolPointerOverride`. Shadow merge:
+  `TestExplicitZero_ShadowFieldsHonored`. Glow:
+  `TestExplicitZero_GlowFieldsHonored`. `AutoPageSlideStartY`:
+  `TestExplicitZero_AutoPageSlideStartY`. Placeholder merge:
+  `TestPlaceholderMerge_ParaSpaceBeforeExplicitZeroWins`.
+- **M3** (`ColW` scalar shorthand lost) — fixed: `len==1` now means uniform
+  width, matching RowH/Margin handling. Tests:
+  `TestColW_ScalarShorthandExpandsUniform`,
+  `TestAddTableDefinition_ColWSingleValue`,
+  `TestAddTableDefinition_ColWMatching`.
+- **M4** (empty-but-non-nil `ChartColors`/`CatAxes`/`ValAxes` panics) — fixed,
+  no more `% len(...)` divide-by-zero or index-into-empty-slice panics. Tests:
+  `TestEmptyChartColors_NoPanic_SameAsNil`, `TestEmptyCatAxes_NoPanic`.
+- **M5** (`ftoa` lacks JS exponential notation) — fixed: emits `1e+21`/`1e-7`
+  style JS notation at the same magnitude thresholds Node uses, with the
+  single-digit-exponent zero-pad difference eliminated. Test: `TestFtoa`
+  (covers the exponential-threshold cases explicitly, including the -0 and
+  just-under-1e21 boundary cases).
+- **M6** (serAxis time-unit fidelity inversion) — fixed: the upstream TS
+  variable-name bug is replicated (serAxis base/major/minorTimeUnit are never
+  emitted), matching real PptxGenJS output rather than the technically-more-
+  correct un-buggy behavior. Test: `TestSerAxisTimeUnit_NeverEmitted`.
+- **M7** (run-option inheritance vs JS falsiness) — fixed as a **documented
+  deviation kept intentionally on the JS side**: shape-level `bold:true` now
+  overwrites a run's explicit `bold:false`, matching live pptxgenjs's falsy-
+  check inheritance loop (even though the previous Go behavior was arguably
+  saner). Test: `TestInheritRunOptionsFalsyOverwrite`.
+- **M8** (auto-paging silently drops rows on nil `getSlide`) — fixed: a
+  mis-wired/nil continuation slide now surfaces as an error instead of a
+  silently-continued loop. Test: `TestAddTableDefinition_AutoPageMissingSlideErrors`.
+- **M9** (compression unreachable through `WriteTo`/`WriteFile`) — fixed
+  (wave 4). New `WriteToOpts(w, *WriteProps)` and `WriteFileOpts(path,
+  *WriteProps)` honor `Compression` on every output path; `WriteFileWith` is
+  now a documented thin deprecated wrapper over `WriteFileOpts`; `Write`
+  additionally rejects >1 `*WriteProps` arguments (previously silently used
+  the first and discarded the rest) rather than staying ambiguous. Tests:
+  `TestWriteRejectsMultipleProps`, `TestWriteToOptsCompression`,
+  `TestWriteFileOptsCompression`, `TestWriteFileWithStillHonorsCompression`,
+  plus the pre-existing `TestWriteCompression`.
+- **M10** (`DefineLayout` early-returns where TS registers) — fixed (wave 4):
+  `DefineLayout` now always registers the layout, matching TS's
+  warn-then-register-unconditionally behavior; there is no Go `console.warn`
+  equivalent, so the guards were simply removed rather than becoming a
+  logged no-op. Tests: `TestDefineLayoutRegistersDegenerateDimensions`,
+  `TestDefineLayoutRegisteredSlideBuildsWithoutPanic`,
+  `TestDefineLayoutZeroHeightAlsoRegisters`.
+- **M11** (IMG_BROKEN/IMG_PLAYBTN 40-char prefix guard) — fixed: regression
+  guard now hashes the full constants (SHA-256 + exact length), not a prefix.
+  Test: `TestImageConstants`.
+
+### Minor
+
+- `getSmartParseNumber` truncated fractional ≥100 "already-EMU" values —
+  **documented-deviation**: now rounds via `jsRound` instead of truncating
+  (reduces, but per Go's `int` return type cannot fully eliminate, the
+  divergence from TS's raw-float passthrough). Test:
+  `TestGetSmartParseNumberCase2Rounding`.
+- `<c:v>` main-path drops TS's `value||value===0` guard — **inert-documented**:
+  Go's `Values []float64` cannot hold a JS-style "hole" (every index is a real
+  float64), so the guard has no Go equivalent; explained in a code comment at
+  `charts.go:564-568` rather than a test.
+- Combo-chart validation throws dropped — fixed: the two TS
+  malformed-multi-axis-config errors are now raised. Tests:
+  `TestValidateChartConfig_SecondaryAxisRequired`,
+  `TestValidateChartConfig_AxesCountMismatch`.
+- vmerge dummy-cell drop on irregular colspan+rowspan grids — fixed: Go now
+  reproduces JS `Array.splice`'s out-of-range clamp-to-append instead of
+  dropping the cell. Test: `TestVmergeDummyCellClampAppends`.
+- Margin len 2/3 silently no-ops insets — fixed: zero-filled to len 4 like TS.
+  Tests: `TestMarginOutOfContractLenZeroFillsInsets`,
+  `TestSlideNumberMarginOutOfContractLenZeroFillsInsets`.
+- SVG sniffers (viewBox comma form; single-quoted width/height; BITMAPCOREHEADER
+  BMPs) — fixed. Tests: `TestGetSizeFromImage_SVG_ViewBoxCommaSeparated`,
+  `TestGetSizeFromImage_SVG_ViewBoxCommaSpaceSeparated`,
+  `TestGetSizeFromImage_SVG_SingleQuotedWidthHeightAttrs`,
+  `TestGetSizeFromImage_SVG_MixedQuoteStyles`,
+  `TestGetSizeFromImage_BMP_CoreHeaderVariant`.
+- Empty `TableRow` silently skipped where TS crashes — **documented-deviation**
+  (kept as Go's saner no-panic behavior rather than replicating the TS crash).
+  Test: `TestGetSlidesForTableRows_EmptyRowSkipped`.
+- `DefineSlideMaster` stores caller pointers without ISSUE#406 deep-clone —
+  fixed (wave 4): `cloneSlideMasterProps` clones the Margin slice and the
+  Background/SlideNumber pointers (including SlideNumber's own Margin/Coord/
+  bool-pointer/Bullet/TabStops fields) before storing. Tests:
+  `TestDefineSlideMasterDeepCopiesBackground`,
+  `TestDefineSlideMasterDeepCopiesMargin`,
+  `TestDefineSlideMasterDeepCopiesSlideNumber`.
+- `Slides()`/`SlideLayouts()` aliasing inconsistency — **documented** (wave 4):
+  doc comments on both methods now spell out the asymmetry (Slides returns
+  live pointers into internal storage; SlideLayouts returns copies) instead of
+  leaving it an implicit trap; behavior itself is unchanged, so no new
+  regression test — this was a documentation gap, not a bug.
+- Error strings carried TS-style "ERROR:" prefixes / `UNKNOWN-LAYOUT`
+  sentinel — fixed (wave 4): no `"ERROR:"`-prefixed strings remain anywhere in
+  `pptx/*.go` (verified by grep); `SetLayout`'s bare `"UNKNOWN-LAYOUT"` string
+  is now `var ErrUnknownLayout = errors.New(...)`, wrapped with the requested
+  name via `%w`, so callers can `errors.Is`. Test:
+  `TestSetLayoutUnknownNameWrapsSentinel`.
+- PORTING.md documents a `uuidFunc` injection hook that was never built —
+  fixed: `Presentation.uuidFunc` is wired through `buildContext` exactly like
+  `nowFunc`. It is an unexported (test/internal-only) hook, not public API,
+  which matches PORTING.md's original framing of it as a determinism seam
+  rather than a user-facing setting. Test: `TestGoldenIntegration` (buildCase08
+  pins `p.uuidFunc` to get a byte-exact golden match on the section GUID).
+- `WriteFile` truncate-in-place could leave a corrupt file on mid-write
+  failure — fixed (wave 4): `atomicWriteFile` writes to a sibling temp file in
+  the same directory and `os.Rename`s it into place, removing the temp file on
+  any failure. Applies to `WriteFile`, `WriteFileOpts`, and `WriteFileWith`.
+  Tests: `TestWriteFileAtomicReplacesExisting`,
+  `TestWriteFileFailureLeavesNoStrayTempFile`,
+  `TestWriteFileSurfacesMediaErrorAndLeavesNoPartialFile`.
+- No `context.Context` on network fetch (fixed 30s timeout only) —
+  **documented-deviation**, left as-is: `media.go:41-48`'s comment explains
+  this is a deliberate, bounded deviation from TS's un-timed `https.get`
+  (a library call should not be able to hang forever); adding a caller-supplied
+  `context.Context` would be a real API addition, out of scope for this
+  remediation wave, not a bug fix.
+- Media resolution is sequential where TS is concurrent — **documented-
+  deviation**, left as-is: `media.go:64-67`'s comment explains why (shared
+  mutable slide/layout state makes naive parallelism unsafe; a caller wanting
+  concurrency can fan out per-slide itself). Latency-only, not a correctness
+  issue.
+- Redirects: Go follows (embeds final image) vs TS embeds the redirect body —
+  **documented-deviation**, kept as Go's improved behavior (embedding a
+  redirect's HTML body as "image bytes" is not useful and matches no golden
+  fixture). Test: `TestResolveSlideMediaRels_HTTPFollowsRedirect`.
+
+### Nits (WriteProps variadic + aliasing documentation)
+
+- `Write(props ...*WriteProps)`'s variadic-abuse footgun — fixed (wave 4):
+  doc comment on `Write` now states explicitly it accepts zero-or-one
+  `*WriteProps` and that passing more is a caller error (returns an error,
+  does not silently take the first). Test: `TestWriteRejectsMultipleProps`.
+
+### Open items
+
+None. Every finding above is either fixed-with-a-regression-test,
+inert-documented (a TS behavior with no reachable Go equivalent), or
+documented-deviation (a deliberate, commented divergence retained on purpose,
+each with a test locking in the *actual* Go behavior so it can't silently
+drift further).

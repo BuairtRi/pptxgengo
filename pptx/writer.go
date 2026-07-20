@@ -11,23 +11,43 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 // Write renders the presentation to an in-memory .pptx byte slice. STORE
-// (uncompressed) by default; pass a WriteProps with Compression=true for
+// (uncompressed) by default; pass a *WriteProps with Compression=true for
 // DEFLATE. Ports TS write.
+//
+// Write is variadic only for backward-compatible call sites (Write() and
+// Write(opts)); it is not a way to pass multiple option sets. Calling it with
+// more than one *WriteProps is a caller error and returns an error rather
+// than silently using the first argument and discarding the rest — prefer
+// Write(opts) (zero or one argument).
 func (p *Presentation) Write(props ...*WriteProps) ([]byte, error) {
+	if len(props) > 1 {
+		return nil, fmt.Errorf("pptx: Write takes at most one *WriteProps, got %d", len(props))
+	}
 	return p.build(compressionFrom(props))
 }
 
-// WriteTo renders the presentation and writes it to w, returning the byte count.
-// Ports the Node stream path of TS write/stream.
+// WriteTo renders the presentation (STORE, uncompressed) and writes it to w,
+// returning the byte count. Ports the Node stream path of TS write/stream.
+// Use WriteToOpts to opt into DEFLATE compression.
 func (p *Presentation) WriteTo(w io.Writer) (int64, error) {
-	data, err := p.build(false)
+	return p.WriteToOpts(w, nil)
+}
+
+// WriteToOpts renders the presentation honoring opts.Compression and writes
+// it to w, returning the byte count. This is the compression-aware sibling of
+// WriteTo (REVIEW M9: compression was previously unreachable through the
+// io.Writer path).
+func (p *Presentation) WriteToOpts(w io.Writer, opts *WriteProps) (int64, error) {
+	data, err := p.build(compressionFrom([]*WriteProps{opts}))
 	if err != nil {
 		return 0, err
 	}
@@ -35,31 +55,73 @@ func (p *Presentation) WriteTo(w io.Writer) (int64, error) {
 	return int64(n), err
 }
 
-// WriteFile renders the presentation and writes it to path (adding a .pptx
-// extension if missing). Ports the Node fs path of TS writeFile.
+// WriteFile renders the presentation (STORE, uncompressed) and writes it
+// atomically to path (adding a .pptx extension if missing). Ports the Node fs
+// path of TS writeFile. Use WriteFileOpts to opt into DEFLATE compression.
 func (p *Presentation) WriteFile(path string) error {
+	return p.WriteFileOpts(path, nil)
+}
+
+// WriteFileOpts renders the presentation honoring opts.Compression and writes
+// it atomically to path (adding a .pptx extension if missing): the data is
+// written to a sibling temp file in the same directory, then renamed into
+// place, so a failure (including a media error from build) never leaves a
+// partially-written or corrupt file at path. This is the compression-aware
+// sibling of WriteFile (REVIEW M9).
+func (p *Presentation) WriteFileOpts(path string, opts *WriteProps) error {
 	if !strings.HasSuffix(strings.ToLower(path), ".pptx") {
 		path += ".pptx"
 	}
-	data, err := p.build(false)
+	data, err := p.build(compressionFrom([]*WriteProps{opts}))
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, data, 0o644)
+	return atomicWriteFile(path, data)
 }
 
-// WriteFileProps-style variant: WriteFileWith writes to path honoring compression.
+// WriteFileWith is a deprecated thin wrapper over WriteFileOpts, kept for
+// source compatibility with earlier ports; prefer WriteFileOpts.
 func (p *Presentation) WriteFileWith(path string, compression bool) error {
-	if !strings.HasSuffix(strings.ToLower(path), ".pptx") {
-		path += ".pptx"
-	}
-	data, err := p.build(compression)
+	return p.WriteFileOpts(path, &WriteProps{WriteBaseProps: WriteBaseProps{Compression: &compression}})
+}
+
+// atomicWriteFile writes data to a temp file beside path (same directory,
+// so the final os.Rename is same-filesystem and atomic on POSIX), then
+// renames it into place. On any failure the temp file is removed and no
+// partial/corrupt file is left at path (minor fix: WriteFile truncate-in-place
+// could previously leave a corrupt file on a mid-write failure).
+func atomicWriteFile(path string, data []byte) (err error) {
+	dir := filepath.Dir(path)
+	tmp, err := os.CreateTemp(dir, filepath.Base(path)+".tmp-*")
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, data, 0o644)
+	tmpPath := tmp.Name()
+	defer func() {
+		if err != nil {
+			_ = os.Remove(tmpPath)
+		}
+	}()
+
+	if _, err = tmp.Write(data); err != nil {
+		_ = tmp.Close()
+		return err
+	}
+	if err = tmp.Close(); err != nil {
+		return err
+	}
+	if err = os.Chmod(tmpPath, 0o644); err != nil {
+		return err
+	}
+	if err = os.Rename(tmpPath, path); err != nil {
+		return err
+	}
+	return nil
 }
 
+// compressionFrom resolves the effective compression flag from an optional
+// WriteProps slice, treating a nil slice, a nil *WriteProps, or a nil
+// Compression field alike as "not requested" (STORE).
 func compressionFrom(props []*WriteProps) bool {
 	if len(props) > 0 && props[0] != nil && props[0].Compression != nil {
 		return *props[0].Compression
@@ -74,13 +136,31 @@ func (p *Presentation) build(compression bool) ([]byte, error) {
 	bc := p.newBuildContext()
 
 	// STEP 1: Read/encode all media before assembly (TS encodeSlideMediaRels).
+	//
+	// REVIEW C3: resolveSlideMediaRels reports (but does not itself fail on)
+	// read/fetch errors — it substitutes IMG_BROKEN into the rel and keeps
+	// going, matching the *synchronous* effect of the TS fallback. But real
+	// PptxGenJS's async pipeline awaits Promise.all(arrMediaPromises) BEFORE
+	// building the zip (pptxgen.ts:494), and each encodeSlideMediaRels promise
+	// *rejects* on failure (gen-media.ts:70,93,125) — so the overall write
+	// rejects with the first media error rather than silently shipping
+	// IMG_BROKEN. We aggregate every error (not just the first) since Go has
+	// no short-circuiting Promise.all equivalent worth emulating here, and
+	// errors.Join reports all of them instead of hiding N-1.
+	var mediaErrs []error
 	for i := range p.slides {
-		resolveSlideMediaRels(&p.slides[i].SlideBaseProps)
+		mediaErrs = append(mediaErrs, resolveSlideMediaRels(&p.slides[i].SlideBaseProps)...)
 	}
 	for i := range p.slideLayouts {
-		resolveSlideMediaRels(&p.slideLayouts[i].SlideBaseProps)
+		mediaErrs = append(mediaErrs, resolveSlideMediaRels(&p.slideLayouts[i].SlideBaseProps)...)
 	}
-	resolveSlideMediaRels(&p.masterSlide.SlideBaseProps)
+	mediaErrs = append(mediaErrs, resolveSlideMediaRels(&p.masterSlide.SlideBaseProps)...)
+	if len(mediaErrs) > 0 {
+		// Fail the whole build before any zip assembly, so Write/WriteTo/
+		// WriteFile all observe the error and WriteFile never creates a
+		// partial output file.
+		return nil, errors.Join(mediaErrs...)
+	}
 
 	// STEP 2A: Add empty placeholder objects to slides that lack them.
 	for i := range p.slides {

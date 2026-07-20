@@ -14,6 +14,12 @@ import (
 // Version is the PptxGenJS library version this port tracks.
 const Version = "4.0.1"
 
+// ErrUnknownLayout is the sentinel error returned by SetLayout when name has
+// not been registered via DefineLayout or one of the built-in LAYOUT_* keys.
+// It replaces the earlier TS-style bare "UNKNOWN-LAYOUT" string so callers can
+// test for it with errors.Is; the requested name is wrapped in for context.
+var ErrUnknownLayout = errors.New("pptx: unknown layout name")
+
 // Presentation is the top-level object that builds a .pptx. Create one with
 // New, add slides/masters/sections/fonts, then Write / WriteTo / WriteFile.
 //
@@ -155,11 +161,12 @@ func New() *Presentation {
 func (p *Presentation) Layout() string { return p.layoutName }
 
 // SetLayout selects a standard or custom layout by name (as registered by
-// DefineLayout). Ports the TS `layout` setter, which throws UNKNOWN-LAYOUT.
+// DefineLayout). Ports the TS `layout` setter, which throws UNKNOWN-LAYOUT;
+// this returns ErrUnknownLayout wrapped with the requested name.
 func (p *Presentation) SetLayout(name string) error {
 	newLayout, ok := p.layouts[name]
 	if !ok {
-		return errors.New("UNKNOWN-LAYOUT")
+		return fmt.Errorf("%w: %q", ErrUnknownLayout, name)
 	}
 	p.layoutName = name
 	p.presLayout = PresLayout{
@@ -175,25 +182,46 @@ func (p *Presentation) SetLayout(name string) error {
 // PresLayout returns the resolved presentation layout (size in EMU).
 func (p *Presentation) PresLayout() PresLayout { return p.presLayout }
 
-// Slides returns the presentation's slides (pointers into internal storage).
+// Slides returns the presentation's slides.
+//
+// ALIASING: the returned slice is a fresh copy of the internal slice header,
+// but each element is a *PresSlide pointing at the presentation's live,
+// internal slide storage — the same pointers Write/WriteFile will render.
+// Mutating a returned *PresSlide (or anything it points to) mutates the
+// presentation. This mirrors the TS `this.slides` array of object references.
+// Contrast with SlideLayouts, which returns copies.
 func (p *Presentation) Slides() []*PresSlide { return p.slides }
 
 // Sections returns the presentation's sections.
 func (p *Presentation) Sections() []SectionProps { return p.sections }
 
 // SlideLayouts returns the presentation's slide layouts.
+//
+// ALIASING: unlike Slides, this returns a slice of SlideLayout *values*
+// (copied out of internal storage), not pointers into it — mutating an
+// element of the returned slice does not affect the presentation. This
+// asymmetry with Slides is intentional (PresSlide identity matters for the
+// auto-paging/getSlide callback plumbing; SlideLayout does not need the same
+// treatment) but is worth knowing before relying on either aliasing behavior.
 func (p *Presentation) SlideLayouts() []SlideLayout { return p.slideLayouts }
 
 // EmbeddedFonts returns the registered embedded fonts.
 func (p *Presentation) EmbeddedFonts() []*EmbeddedFont { return p.embeddedFonts }
 
-// DefineLayout registers a custom layout sized in inches. Ports TS defineLayout
-// (inches → EMU via Math.round). The new layout can then be selected with
-// SetLayout(name).
+// DefineLayout registers a custom layout sized in inches. Ports TS
+// defineLayout (inches → EMU via Math.round). The new layout can then be
+// selected with SetLayout(name).
+//
+// REVIEW M10: TS defineLayout only console.warns on a missing name/width/
+// height (or a non-numeric width/height) and then registers the layout
+// unconditionally (pptxgen.ts:720-736) — SetLayout(name) on a degenerate
+// layout succeeds in TS, it just produces a garbage-in-garbage-out slide size.
+// This port previously early-returned on name=="" or width/height==0, which
+// silently dropped the registration and made the matching SetLayout fail with
+// UNKNOWN-LAYOUT — a fidelity break, not a safety feature. It now always
+// registers, matching TS; there is no Go equivalent of console.warn here, so
+// the validation guards are simply gone rather than becoming a logged no-op.
 func (p *Presentation) DefineLayout(name string, width, height float64) {
-	if name == "" || width == 0 || height == 0 {
-		return
-	}
 	w := int(jsRound(width * EMU))
 	h := int(jsRound(height * EMU))
 	p.layouts[name] = PresLayout{Name: name, Width: w, Height: h, SizeW: w, SizeH: h}
@@ -351,10 +379,21 @@ func (p *Presentation) setSlideNumber(snp *SlideNumberProps) {
 
 // DefineSlideMaster registers a new slide master/layout. Ports TS
 // defineSlideMaster. Requires a Title.
+//
+// Minor fix (ISSUE#406/PULL#1176 parity): TS deep-clones props via
+// JSON.parse(JSON.stringify(props)) before using it, specifically so that a
+// caller mutating the SlideMasterProps object *after* calling
+// defineSlideMaster cannot retroactively change the registered layout. This
+// port previously stored the caller's Margin slice and Background/SlideNumber
+// pointers directly, so a later in-place mutation of any of those did leak
+// through. cloneSlideMasterProps reproduces the load-bearing part of the JSON
+// round-trip (Margin, Background, SlideNumber) without a full recursive deep
+// clone of every nested pointer/slice in the type graph.
 func (p *Presentation) DefineSlideMaster(props *SlideMasterProps) error {
 	if props == nil || props.Title == "" {
 		return errors.New("defineSlideMaster() object argument requires a `title` value. (https://gitbrent.github.io/PptxGenJS/docs/masters.html)")
 	}
+	props = cloneSlideMasterProps(props)
 
 	margin := props.Margin
 	if margin == nil {
@@ -407,4 +446,72 @@ func (p *Presentation) EmbedFont(props FontEmbedProps) error {
 	}
 	p.embeddedFonts = append(p.embeddedFonts, ef)
 	return nil
+}
+
+// cloneSlideMasterProps returns a copy of props whose Margin slice and
+// Background/SlideNumber pointers (and the mutable slice/pointer fields
+// reachable from SlideNumber) are independent of the caller's — mirroring the
+// load-bearing effect of TS's JSON.parse(JSON.stringify(props)) deep clone in
+// defineSlideMaster (ISSUE#406/PULL#1176). props is assumed non-nil (callers
+// check that before invoking this).
+func cloneSlideMasterProps(props *SlideMasterProps) *SlideMasterProps {
+	clone := *props
+
+	if props.Margin != nil {
+		clone.Margin = append(Margin{}, props.Margin...)
+	}
+
+	if props.Background != nil {
+		bg := *props.Background
+		clone.Background = &bg
+	}
+
+	if props.SlideNumber != nil {
+		sn := *props.SlideNumber
+		if props.SlideNumber.Margin != nil {
+			sn.Margin = append(Margin{}, props.SlideNumber.Margin...)
+		}
+		if props.SlideNumber.X != nil {
+			v := *props.SlideNumber.X
+			sn.X = &v
+		}
+		if props.SlideNumber.Y != nil {
+			v := *props.SlideNumber.Y
+			sn.Y = &v
+		}
+		if props.SlideNumber.W != nil {
+			v := *props.SlideNumber.W
+			sn.W = &v
+		}
+		if props.SlideNumber.H != nil {
+			v := *props.SlideNumber.H
+			sn.H = &v
+		}
+		if props.SlideNumber.Bold != nil {
+			v := *props.SlideNumber.Bold
+			sn.Bold = &v
+		}
+		if props.SlideNumber.BreakLine != nil {
+			v := *props.SlideNumber.BreakLine
+			sn.BreakLine = &v
+		}
+		if props.SlideNumber.Italic != nil {
+			v := *props.SlideNumber.Italic
+			sn.Italic = &v
+		}
+		if props.SlideNumber.SoftBreakBefore != nil {
+			v := *props.SlideNumber.SoftBreakBefore
+			sn.SoftBreakBefore = &v
+		}
+		if props.SlideNumber.Bullet != nil {
+			b := *props.SlideNumber.Bullet
+			sn.Bullet = &b
+		}
+		if props.SlideNumber.TabStops != nil {
+			sn.TabStops = append([]TabStop{}, props.SlideNumber.TabStops...)
+		}
+		clone.SlideNumber = &sn
+	}
+
+	return &clone
 }
