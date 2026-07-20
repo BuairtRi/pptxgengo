@@ -85,6 +85,23 @@ Use these shared helpers from `utils.go` everywhere a number is interpolated int
 - Timestamp/UUID injection: `Presentation` has unexported `nowFunc func() time.Time` and
   `uuidFunc func(string) string` hooks; tests override them.
 
+## Font embedding (net-new feature, not in PptxGenJS)
+
+Owned by the fonts task in `pptx/fonts.go` (+ `fonts_test.go`). API sketch:
+`(*Presentation).EmbedFont(FontEmbedProps) error` where FontEmbedProps carries
+Typeface string plus Regular/Bold/Italic/BoldItalic []byte (or file paths) TTF data.
+Writer emits `ppt/fonts/fontN.fntdata` parts. Hooks other tasks MUST provide:
+
+- **xml.go**: `makeXmlContTypes` adds `<Default Extension="fntdata" ContentType="application/x-fontdata"/>`
+  when the presentation has embedded fonts; `makeXmlPresentation` emits `embedTrueTypeFonts="1"`
+  attribute and `<p:embeddedFontLst>` (one `<p:embeddedFont>` per typeface with
+  `<p:font typeface="..."/>` + `<p:regular r:id="..."/>` etc.) immediately after `<p:sldMasterIdLst>`
+  ordering per ECMA-376 schema (embeddedFontLst comes after sldMasterIdLst/notesMasterIdLst and
+  before sldIdLst); `makeXmlPresentationRels` adds relationships of type
+  `http://schemas.openxmlformats.org/officeDocument/2006/relationships/font` targeting `fonts/fontN.fntdata`.
+- **types.go consumers**: presentation-level state lives on the Presentation struct
+  (`EmbeddedFonts []EmbeddedFont`), defined in fonts.go, not types.go.
+
 ## Output API (replaces JSZip output types)
 
 - `(*Presentation).Write() ([]byte, error)`
