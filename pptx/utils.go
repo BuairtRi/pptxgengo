@@ -1,0 +1,316 @@
+// utils.go ports src/gen-utils.ts: numeric/color/XML helper functions plus the
+// shared JS-numeric helpers required for byte-identical output.
+package pptx
+
+import (
+	"math"
+	"math/rand"
+	"strconv"
+	"strings"
+)
+
+// ptr returns a pointer to v. Shared helper for optional (pointer) fields.
+func ptr[T any](v T) *T { return &v }
+
+// fptrOr returns *p when p is non-nil, else def. Used to default *float64
+// option fields that distinguish an explicit 0 from "unset" (nil).
+func fptrOr(p *float64, def float64) float64 {
+	if p != nil {
+		return *p
+	}
+	return def
+}
+
+// ftoa formats a float the way JS `String(number)` does: shortest round-trip
+// decimal for "normal" magnitudes (integers printed without a decimal
+// point), switching to JS-style exponential notation outside that range —
+// mirroring the ECMA-262 Number::toString algorithm, which JS engines use
+// for `String(number)`/template-literal coercion:
+//   - |f| >= 1e21: exponential, e.g. "1e+21", "1.5e+21".
+//   - 0 < |f| < 1e-6: exponential, e.g. "1e-7", "1.5e-7".
+//   - otherwise: plain decimal, shortest round-trip ('f' format).
+//
+// Go's strconv 'e' verb zero-pads single-digit exponents (e.g. "1e-07")
+// where JS never pads (e.g. "1e-7"); normalizeJSExponent strips that.
+func ftoa(f float64) string {
+	if f == 0 { // handles -0 too: JS `String(-0)` === "0"
+		return "0"
+	}
+	abs := math.Abs(f)
+	if abs >= 1e21 || abs < 1e-6 {
+		return normalizeJSExponent(strconv.FormatFloat(f, 'e', -1, 64))
+	}
+	return strconv.FormatFloat(f, 'f', -1, 64)
+}
+
+// normalizeJSExponent rewrites a Go 'e'-format string (e.g. "1e-07",
+// "1.23e+21") into JS's exponent shape: lowercase 'e' (already the Go
+// default), explicit sign (already emitted by Go), and no leading zeros in
+// the exponent digits (e.g. "1e-07" -> "1e-7", but "1e+100" is untouched).
+func normalizeJSExponent(s string) string {
+	idx := strings.IndexByte(s, 'e')
+	if idx < 0 {
+		return s
+	}
+	mantissa := s[:idx]
+	expPart := s[idx+1:] // sign + digits, e.g. "-07" or "+21"
+	sign := expPart[:1]
+	digits := strings.TrimLeft(expPart[1:], "0")
+	if digits == "" {
+		digits = "0"
+	}
+	return mantissa + "e" + sign + digits
+}
+
+// jsRound mirrors JS `Math.round`: rounds half toward +Infinity (unlike Go's
+// math.Round, which rounds half away from zero — they differ for negatives).
+func jsRound(f float64) float64 {
+	return math.Floor(f + 0.5)
+}
+
+// getSmartParseNumber translates an x/y/w/h Coord to EMU.
+//   - percentage: fraction of the layout width (X/default) or height (Y)
+//   - inches (< 100): converted via inch2Emu
+//   - >= 100: assumed already EMU, returned as-is
+//
+// Mirrors gen-utils.ts getSmartParseNumber.
+func getSmartParseNumber(size Coord, xyDir string, layout PresLayout) int {
+	// CASE 3: Percentage
+	if size.IsPct {
+		if xyDir == "Y" {
+			return int(jsRound((size.Val / 100) * float64(layout.Height)))
+		}
+		// Default (including "X"): assume width
+		return int(jsRound((size.Val / 100) * float64(layout.Width)))
+	}
+
+	// CASE 1: Number in inches (assume any number < 100 is inches)
+	if size.Val < 100 {
+		return inch2Emu(size.Val)
+	}
+
+	// CASE 2: Number already converted to EMU.
+	// NOTE (deviation, gen-utils.ts:29): TS returns `size` raw and unchanged
+	// here — a fractional "already-EMU" value like 5000000.6 stays a float
+	// all the way to XML serialization. Go's signature returns `int` (see
+	// PORTING.md's optional-fields rule: EMU values are ints post-conversion),
+	// so an exact float passthrough isn't possible without a wider ripple
+	// through every caller. We jsRound instead of truncating to minimize the
+	// divergence: this only differs from TS when the fractional part is
+	// discarded by JS's own later-stage `Math.round`/string coercion (which
+	// happens almost everywhere size/pos values are emitted), so the
+	// residual deviation is sub-EMU and only surfaces for callers that both
+	// (a) pass an already-EMU float with a fractional component and (b)
+	// read the numeric value back out before it reaches XML. Truncating
+	// would silently lose up to ~1 EMU in the *wrong* direction relative to
+	// TS's eventual rounding; rounding here is the closer approximation.
+	return int(jsRound(size.Val))
+}
+
+// getUuid returns a UUID by replacing 'x'/'y' in uuidFormat with hex digits,
+// mirroring the JS Math.random()-based implementation.
+func getUuid(uuidFormat string) string {
+	var b strings.Builder
+	for _, c := range uuidFormat {
+		switch c {
+		case 'x':
+			r := int(rand.Float64()*16) | 0
+			b.WriteString(strconv.FormatInt(int64(r), 16))
+		case 'y':
+			r := int(rand.Float64()*16) | 0
+			v := (r & 0x3) | 0x8
+			b.WriteString(strconv.FormatInt(int64(v), 16))
+		default:
+			b.WriteRune(c)
+		}
+	}
+	return b.String()
+}
+
+// encodeXmlEntities escapes XML special characters, in the exact replacement
+// order of the JS implementation (& < > " ').
+func encodeXmlEntities(xml string) string {
+	xml = strings.ReplaceAll(xml, "&", "&amp;")
+	xml = strings.ReplaceAll(xml, "<", "&lt;")
+	xml = strings.ReplaceAll(xml, ">", "&gt;")
+	xml = strings.ReplaceAll(xml, "\"", "&quot;")
+	xml = strings.ReplaceAll(xml, "'", "&apos;")
+	return xml
+}
+
+// inch2Emu converts inches to EMU. Values > 100 are assumed already EMU and
+// returned unchanged (caller-safety, matching the JS behavior).
+func inch2Emu(inches float64) int {
+	if inches > 100 {
+		return int(inches)
+	}
+	return int(jsRound(EMU * inches))
+}
+
+// valToPts converts a point value to EMU-points (ONEPT units).
+func valToPts(pt float64) int {
+	return int(jsRound(pt * ONEPT))
+}
+
+// convertRotationDegrees converts degrees (0..360) to a PowerPoint `rot` value.
+func convertRotationDegrees(d float64) int {
+	deg := d
+	if deg > 360 {
+		deg = deg - 360
+	}
+	return int(jsRound(deg * 60000))
+}
+
+// componentToHex converts an 8-bit component value to a 2-char lowercase hex.
+func componentToHex(c int) string {
+	hex := strconv.FormatInt(int64(c), 16)
+	if len(hex) == 1 {
+		return "0" + hex
+	}
+	return hex
+}
+
+// rgbToHex converts r/g/b components to an uppercase hex color string.
+func rgbToHex(r, g, b int) string {
+	return strings.ToUpper(componentToHex(r) + componentToHex(g) + componentToHex(b))
+}
+
+// isSchemeColor reports whether colorVal is one of the valid scheme colors.
+func isSchemeColor(colorVal string) bool {
+	switch colorVal {
+	case string(SchemeColorText1), string(SchemeColorText2),
+		string(SchemeColorBackground1), string(SchemeColorBackground2),
+		string(SchemeColorAccent1), string(SchemeColorAccent2),
+		string(SchemeColorAccent3), string(SchemeColorAccent4),
+		string(SchemeColorAccent5), string(SchemeColorAccent6):
+		return true
+	}
+	return false
+}
+
+// createColorElement builds an `a:srgbClr` (hex) or `a:schemeClr` (theme) XML
+// element. Invalid input falls back to DEF_FONT_COLOR. innerElements, when
+// non-empty, are wrapped inside the color element.
+func createColorElement(colorStr, innerElements string) string {
+	colorVal := strings.Replace(colorStr, "#", "", 1)
+
+	if !RegexHexColor.MatchString(colorVal) && !isSchemeColor(colorVal) {
+		// NOTE: JS logs a console.warn here; libraries should not log.
+		colorVal = DEF_FONT_COLOR
+	}
+
+	isHex := RegexHexColor.MatchString(colorVal)
+	var tagName, val string
+	if isHex {
+		tagName = "srgbClr"
+		val = strings.ToUpper(colorVal)
+	} else {
+		tagName = "schemeClr"
+		val = colorVal
+	}
+	colorAttr := "val=\"" + val + "\""
+
+	if innerElements != "" {
+		return "<a:" + tagName + " " + colorAttr + ">" + innerElements + "</a:" + tagName + ">"
+	}
+	return "<a:" + tagName + " " + colorAttr + "/>"
+}
+
+// createGlowElement builds an `a:glow` element, merging options over defaults
+// (unset/zero option fields fall back to the corresponding default).
+// Mirrors the TS `{...defaults, ...options}` spread: a non-nil options field
+// (including an explicit 0) overrides the default; a nil field falls through.
+func createGlowElement(options, defaults TextGlowProps) string {
+	opts := defaults
+	if options.Size != nil {
+		opts.Size = options.Size
+	}
+	if options.Color != "" {
+		opts.Color = options.Color
+	}
+	if options.Opacity != nil {
+		opts.Opacity = options.Opacity
+	}
+
+	size := int(jsRound(fptrOr(opts.Size, 0) * ONEPT))
+	opacity := int(jsRound(fptrOr(opts.Opacity, 0) * 100000))
+
+	var b strings.Builder
+	b.WriteString("<a:glow rad=\"" + strconv.Itoa(size) + "\">")
+	b.WriteString(createColorElement(opts.Color, "<a:alpha val=\""+strconv.Itoa(opacity)+"\"/>"))
+	b.WriteString("</a:glow>")
+	return b.String()
+}
+
+// genXmlColorSelection builds a fill color selection (`a:solidFill`). Pass a
+// ShapeFillProps (for a plain color string, use &ShapeFillProps{Color: c}).
+// Returns "" for a nil argument or a non-"solid" fill type.
+func genXmlColorSelection(props *ShapeFillProps) string {
+	if props == nil {
+		return ""
+	}
+
+	fillType := "solid"
+	colorVal := ""
+	internalElements := ""
+
+	if props.Type != "" {
+		fillType = props.Type
+	}
+	if props.Color != "" {
+		colorVal = props.Color
+	}
+	if props.Alpha != 0 { // DEPRECATED v3.3.0
+		internalElements += "<a:alpha val=\"" + strconv.Itoa(int(jsRound((100-props.Alpha)*1000))) + "\"/>"
+	}
+	if props.Transparency != 0 {
+		internalElements += "<a:alpha val=\"" + strconv.Itoa(int(jsRound((100-props.Transparency)*1000))) + "\"/>"
+	}
+
+	if fillType == "solid" {
+		return "<a:solidFill>" + createColorElement(colorVal, internalElements) + "</a:solidFill>"
+	}
+	return ""
+}
+
+// getNewRelId returns the next relationship id (rId) for a slide.
+func getNewRelId(target *PresSlide) int {
+	return len(target.Rels) + len(target.RelsChart) + len(target.RelsMedia) + 1
+}
+
+// correctShadowOptions validates/normalizes shadow options in place and returns
+// it (nil for a nil input). Mirrors gen-utils.ts correctShadowOptions.
+func correctShadowOptions(shadow *ShadowProps) *ShadowProps {
+	if shadow == nil {
+		return nil
+	}
+
+	// OPT: type
+	if shadow.Type != "outer" && shadow.Type != "inner" && shadow.Type != "none" {
+		shadow.Type = "outer"
+	}
+
+	// OPT: angle (TS truthy `if (shadow.angle)`: nil or 0 skips normalization)
+	if shadow.Angle != nil && *shadow.Angle != 0 {
+		if *shadow.Angle < 0 || *shadow.Angle > 359 {
+			shadow.Angle = ptr(270.0)
+		}
+		shadow.Angle = ptr(jsRound(*shadow.Angle))
+	}
+
+	// OPT: opacity (TS truthy `if (shadow.opacity)`: nil or 0 skips)
+	if shadow.Opacity != nil && *shadow.Opacity != 0 {
+		if *shadow.Opacity < 0 || *shadow.Opacity > 1 {
+			shadow.Opacity = ptr(0.75)
+		}
+	}
+
+	// OPT: color
+	if shadow.Color != "" {
+		if strings.HasPrefix(shadow.Color, "#") {
+			shadow.Color = strings.Replace(shadow.Color, "#", "", 1)
+		}
+	}
+
+	return shadow
+}
