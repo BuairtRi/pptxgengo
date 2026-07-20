@@ -2,10 +2,12 @@ package pptx
 
 import (
 	"encoding/base64"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -105,6 +107,41 @@ func TestResolveSlideMediaRels_HTTP(t *testing.T) {
 	}
 }
 
+// TestResolveSlideMediaRels_HTTPFollowsRedirect locks in a deliberate,
+// documented divergence from the TS source (see the deviation notes at the
+// top of media.go): Go's http.Client follows HTTP redirects by default and
+// embeds the FINAL response body, whereas TS's https.get does not follow
+// redirects and would embed the (typically tiny, non-image) redirect
+// response body instead. We keep the Go behavior as an improvement.
+func TestResolveSlideMediaRels_HTTPFollowsRedirect(t *testing.T) {
+	content := tinyPNGBytes(t)
+	final := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/png")
+		_, _ = w.Write(content)
+	}))
+	defer final.Close()
+
+	redirect := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, final.URL+"/pic.png", http.StatusFound)
+	}))
+	defer redirect.Close()
+
+	layout := &SlideBaseProps{
+		RelsMedia: []SlideRelMedia{
+			{Type: "image/png", Path: redirect.URL + "/redirect.png", RID: 1, Target: "../media/image-1-1.png"},
+		},
+	}
+	errs := resolveSlideMediaRels(layout)
+	if len(errs) != 0 {
+		t.Fatalf("expected no errors (redirect should be followed to completion), got %v", errs)
+	}
+	want := base64.StdEncoding.EncodeToString(content)
+	got, ok := layout.RelsMedia[0].Data.(string)
+	if !ok || got != want {
+		t.Errorf("Data = %v, want base64 of the FINAL redirect target %q (not the redirect response body)", layout.RelsMedia[0].Data, want)
+	}
+}
+
 func TestResolveSlideMediaRels_HTTPError(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
@@ -123,6 +160,96 @@ func TestResolveSlideMediaRels_HTTPError(t *testing.T) {
 	got, ok := layout.RelsMedia[0].Data.(string)
 	if !ok || got != IMG_BROKEN {
 		t.Errorf("expected Data == IMG_BROKEN for HTTP 404, got %v", layout.RelsMedia[0].Data)
+	}
+}
+
+// ---------------------------------------------------------------------------
+// resolveSlideMediaRels: []error contents (path/URL + wrapped cause)
+//
+// A later wave surfaces resolveSlideMediaRels's []error return from Write();
+// these tests lock in that every failure mode produces a well-formed entry
+// carrying enough context (the offending path/URL) and, where an underlying
+// error exists, wraps it with %w so errors.Is/errors.As keep working.
+// ---------------------------------------------------------------------------
+
+func TestResolveSlideMediaRels_ErrorContext_MissingFile(t *testing.T) {
+	path := "/definitely/does/not/exist/nope.png"
+	layout := &SlideBaseProps{
+		RelsMedia: []SlideRelMedia{
+			{Type: "image/png", Path: path, RID: 1, Target: "../media/image-1-1.png"},
+		},
+	}
+	errs := resolveSlideMediaRels(layout)
+	if len(errs) != 1 {
+		t.Fatalf("expected exactly 1 error, got %d: %v", len(errs), errs)
+	}
+	if !strings.Contains(errs[0].Error(), path) {
+		t.Errorf("error %q does not mention the failing path %q", errs[0].Error(), path)
+	}
+	if !errors.Is(errs[0], os.ErrNotExist) {
+		t.Errorf("error should wrap the underlying os.ErrNotExist cause via %%w: %v", errs[0])
+	}
+	got, ok := layout.RelsMedia[0].Data.(string)
+	if !ok || got != IMG_BROKEN {
+		t.Errorf("expected Data == IMG_BROKEN for missing file, got %v", layout.RelsMedia[0].Data)
+	}
+}
+
+func TestResolveSlideMediaRels_ErrorContext_UnreachableURL(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer srv.Close()
+
+	url := srv.URL + "/broken.png"
+	layout := &SlideBaseProps{
+		RelsMedia: []SlideRelMedia{
+			{Type: "image/png", Path: url, RID: 1, Target: "../media/image-1-1.png"},
+		},
+	}
+	errs := resolveSlideMediaRels(layout)
+	if len(errs) != 1 {
+		t.Fatalf("expected exactly 1 error for HTTP 500, got %d: %v", len(errs), errs)
+	}
+	msg := errs[0].Error()
+	if !strings.Contains(msg, url) {
+		t.Errorf("error %q does not mention the failing URL %q", msg, url)
+	}
+	if !strings.Contains(msg, "500") {
+		t.Errorf("error %q does not mention the HTTP status code", msg)
+	}
+	got, ok := layout.RelsMedia[0].Data.(string)
+	if !ok || got != IMG_BROKEN {
+		t.Errorf("expected Data == IMG_BROKEN for HTTP 500, got %v", layout.RelsMedia[0].Data)
+	}
+}
+
+func TestResolveSlideMediaRels_ErrorContext_MalformedBase64Data(t *testing.T) {
+	// A caller-supplied Path that looks like an inline base64 data URI
+	// (rather than a real filesystem path or an http(s) URL) falls through
+	// to the local-file read branch, since readMediaSource only special-cases
+	// paths starting with "http". The read fails, but the returned error
+	// must still identify the offending (malformed) source value and wrap
+	// the underlying cause, exactly like any other failed local read.
+	badPath := "data:image/png;base64,%%%not-valid-base64%%%"
+	layout := &SlideBaseProps{
+		RelsMedia: []SlideRelMedia{
+			{Type: "image/png", Path: badPath, RID: 1, Target: "../media/image-1-1.png"},
+		},
+	}
+	errs := resolveSlideMediaRels(layout)
+	if len(errs) != 1 {
+		t.Fatalf("expected exactly 1 error, got %d: %v", len(errs), errs)
+	}
+	if !strings.Contains(errs[0].Error(), badPath) {
+		t.Errorf("error %q does not mention the malformed source %q", errs[0].Error(), badPath)
+	}
+	if !errors.Is(errs[0], os.ErrNotExist) {
+		t.Errorf("error should wrap an underlying cause via %%w: %v", errs[0])
+	}
+	got, ok := layout.RelsMedia[0].Data.(string)
+	if !ok || got != IMG_BROKEN {
+		t.Errorf("expected Data == IMG_BROKEN, got %v", layout.RelsMedia[0].Data)
 	}
 }
 
@@ -337,6 +464,9 @@ func tinyBMPBytes() []byte {
 	// Minimal 40-byte BITMAPINFOHEADER BMP: width=8, height=9.
 	b := make([]byte, 54)
 	b[0], b[1] = 'B', 'M'
+	// DIB header-size field at offset 14 (little-endian uint32) = 40
+	// (BITMAPINFOHEADER), which selects the 4-byte-field width/height layout.
+	b[14], b[15], b[16], b[17] = 40, 0, 0, 0
 	// width at offset 18, height at offset 22 (little-endian int32).
 	b[18], b[19], b[20], b[21] = 8, 0, 0, 0
 	b[22], b[23], b[24], b[25] = 9, 0, 0, 0
@@ -366,6 +496,49 @@ func TestGetSizeFromImage_BMP_TopDownNegativeHeight(t *testing.T) {
 	}
 }
 
+// tinyBMPCoreHeaderBytes builds a minimal BITMAPCOREHEADER (OS/2 v1, legacy)
+// BMP: 14-byte BITMAPFILEHEADER + 12-byte DIB header (header-size field ==
+// 12), where width/height are 2-byte (not 4-byte) LE fields at offsets
+// 18/20 respectively. This is the review's repro: naively reading it with
+// BITMAPINFOHEADER offsets/widths silently produced 589832x1572865 for an
+// image that's actually 8x9.
+func tinyBMPCoreHeaderBytes() []byte {
+	b := make([]byte, 26)
+	b[0], b[1] = 'B', 'M'
+	// DIB header-size field at offset 14 == 12 (BITMAPCOREHEADER).
+	b[14], b[15], b[16], b[17] = 12, 0, 0, 0
+	// width (2-byte LE) at offset 18 = 8.
+	b[18], b[19] = 8, 0
+	// height (2-byte LE) at offset 20 = 9.
+	b[20], b[21] = 9, 0
+	// planes = 1, bit count = 24 (unused by the sniffer, present in real files).
+	b[22], b[23] = 1, 0
+	b[24], b[25] = 24, 0
+	return b
+}
+
+func TestGetSizeFromImage_BMP_CoreHeaderVariant(t *testing.T) {
+	size, err := getSizeFromImage(tinyBMPCoreHeaderBytes())
+	if err != nil {
+		t.Fatalf("unexpected error parsing BITMAPCOREHEADER BMP: %v", err)
+	}
+	if size.Width != 8 || size.Height != 9 {
+		t.Errorf("size = %+v, want 8x9 (previously silently misread as 589832x1572865)", size)
+	}
+}
+
+func TestGetSizeFromImage_BMP_UnknownDIBHeaderSize_Errors(t *testing.T) {
+	b := tinyBMPBytes()
+	// Overwrite the DIB header-size field with a value that is neither 12
+	// (BITMAPCOREHEADER) nor >= 40 (BITMAPINFOHEADER and supersets) so the
+	// parser cannot safely assume either field layout.
+	b[14], b[15], b[16], b[17] = 20, 0, 0, 0
+	_, err := getSizeFromImage(b)
+	if err == nil {
+		t.Fatalf("expected an error for an unrecognized BMP DIB header size, got none")
+	}
+}
+
 func TestGetSizeFromImage_SVG_WidthHeightAttrs(t *testing.T) {
 	svg := []byte(`<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="120" height="80" viewBox="0 0 240 160"></svg>`)
 	size, err := getSizeFromImage(svg)
@@ -385,6 +558,63 @@ func TestGetSizeFromImage_SVG_ViewBoxFallback(t *testing.T) {
 	}
 	if size.Width != 300 || size.Height != 150 {
 		t.Errorf("size = %+v, want 300x150 from viewBox", size)
+	}
+}
+
+func TestGetSizeFromImage_SVG_ViewBoxCommaSeparated(t *testing.T) {
+	svg := []byte(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,300,150"></svg>`)
+	size, err := getSizeFromImage(svg)
+	if err != nil {
+		t.Fatalf("comma-separated viewBox: unexpected error %v (comma is a valid SVG comma-wsp separator)", err)
+	}
+	if size.Width != 300 || size.Height != 150 {
+		t.Errorf("size = %+v, want 300x150", size)
+	}
+}
+
+func TestGetSizeFromImage_SVG_ViewBoxCommaSpaceSeparated(t *testing.T) {
+	svg := []byte(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0, 0, 300, 150"></svg>`)
+	size, err := getSizeFromImage(svg)
+	if err != nil {
+		t.Fatalf("comma+space viewBox: unexpected error %v", err)
+	}
+	if size.Width != 300 || size.Height != 150 {
+		t.Errorf("size = %+v, want 300x150", size)
+	}
+}
+
+func TestGetSizeFromImage_SVG_ViewBoxDecimalsAndNegativeOrigin(t *testing.T) {
+	svg := []byte(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10.5,-5.25,300.5,150.75"></svg>`)
+	size, err := getSizeFromImage(svg)
+	if err != nil {
+		t.Fatalf("decimal/negative-origin viewBox: unexpected error %v", err)
+	}
+	// width/height come from viewBox[2]/[3] (unaffected by the negative
+	// origin in viewBox[0]/[1]); jsRound(300.5)=301, jsRound(150.75)=151.
+	if size.Width != 301 || size.Height != 151 {
+		t.Errorf("size = %+v, want 301x151", size)
+	}
+}
+
+func TestGetSizeFromImage_SVG_SingleQuotedWidthHeightAttrs(t *testing.T) {
+	svg := []byte(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='80'></svg>`)
+	size, err := getSizeFromImage(svg)
+	if err != nil {
+		t.Fatalf("single-quoted width/height attrs: unexpected error %v", err)
+	}
+	if size.Width != 120 || size.Height != 80 {
+		t.Errorf("size = %+v, want 120x80", size)
+	}
+}
+
+func TestGetSizeFromImage_SVG_MixedQuoteStyles(t *testing.T) {
+	svg := []byte(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height='80'></svg>`)
+	size, err := getSizeFromImage(svg)
+	if err != nil {
+		t.Fatalf("mixed quote styles: unexpected error %v", err)
+	}
+	if size.Width != 120 || size.Height != 80 {
+		t.Errorf("size = %+v, want 120x80", size)
 	}
 }
 

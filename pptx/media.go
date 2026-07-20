@@ -4,6 +4,22 @@
 // Only the Node.js code paths of the TS source are ported (per PORTING.md);
 // the browser FileReader/XMLHttpRequest/<canvas> paths are skipped since Go
 // has no browser runtime.
+//
+// Known deviations from the TS Node path (deliberate; each is also called
+// out at its point of use below):
+//   - mediaHTTPTimeout: TS's https.get has no timeout at all; Go bounds the
+//     fetch at 30s so a library call can never hang forever.
+//   - fetchMediaHTTP treats any non-2xx HTTP response as a failure. TS's
+//     https.get only rejects on transport-level errors and would happily
+//     base64-encode a 404/500 error page as if it were valid image bytes.
+//   - Redirects: Go's http.Client (the zero-value CheckRedirect policy)
+//     follows HTTP 3xx redirects automatically and embeds the FINAL
+//     response's body — i.e. the actual image at the redirect target. TS's
+//     https.get does NOT follow redirects on its own; given a 3xx response
+//     it has no manual redirect-following logic, so real PptxGenJS embeds
+//     the redirect response's own (typically tiny, non-image) body as-is.
+//     Go's behavior is treated as an intentional improvement here, not
+//     bug-for-bug fidelity with the TS source.
 package pptx
 
 import (
@@ -19,6 +35,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 // mediaHTTPTimeout bounds the http(s).Get used to fetch remote media. The TS
@@ -173,7 +190,7 @@ func readMediaSource(path string) (string, error) {
 func readMediaFile(path string) (string, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
-		return "", fmt.Errorf("ERROR: Unable to read media: %q: %w", path, err)
+		return "", fmt.Errorf("unable to read media: %q: %w", path, err)
 	}
 	return base64.StdEncoding.EncodeToString(b), nil
 }
@@ -187,15 +204,15 @@ func readMediaFile(path string) (string, error) {
 func fetchMediaHTTP(url string) (string, error) {
 	resp, err := mediaHTTPClient.Get(url)
 	if err != nil {
-		return "", fmt.Errorf("ERROR! Unable to load image (https.get): %s: %w", url, err)
+		return "", fmt.Errorf("unable to load image (https.get): %s: %w", url, err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return "", fmt.Errorf("ERROR! Unable to load image (https.get): %s: HTTP %d", url, resp.StatusCode)
+		return "", fmt.Errorf("unable to load image (https.get): %s: HTTP %d", url, resp.StatusCode)
 	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("ERROR! Unable to load image (https.get): %s: %w", url, err)
+		return "", fmt.Errorf("unable to load image (https.get): %s: %w", url, err)
 	}
 	return base64.StdEncoding.EncodeToString(body), nil
 }
@@ -339,34 +356,79 @@ func parseGIFSize(data []byte) (ImageSize, error) {
 	return ImageSize{Width: int(w), Height: int(h)}, nil
 }
 
-// parseBMPSize reads width/height from the BITMAPINFOHEADER (offsets 18/22,
-// little-endian int32 each). A negative height indicates a top-down bitmap;
-// we report the absolute value since callers want a magnitude, not orientation.
+// parseBMPSize reads width/height from a BMP's DIB header, dispatching on
+// the DIB header-size field (a little-endian uint32 at offset 14, right
+// after the 14-byte BITMAPFILEHEADER):
+//   - 12 (BITMAPCOREHEADER / OS/2 v1): width/height are 2-byte LE fields at
+//     offsets 18/20. This header predates BITMAPINFOHEADER and uses a
+//     narrower, differently-laid-out struct; blindly reading it with the
+//     BITMAPINFOHEADER offsets/widths (as an earlier version of this
+//     function did) silently produces garbage dimensions.
+//   - >= 40 (BITMAPINFOHEADER and its supersets — BITMAPV4HEADER (108),
+//     BITMAPV5HEADER (124), OS/2 BITMAPCOREHEADER2 (64), etc.): all of
+//     these begin with the same first 40 bytes as BITMAPINFOHEADER, so
+//     width/height are 4-byte LE int32 fields at offsets 18/22. A negative
+//     height indicates a top-down bitmap; we report the absolute value
+//     since callers want a magnitude, not orientation.
+//   - any other value: an unrecognized/unsupported DIB header layout. We
+//     error out rather than guessing, since guessing is exactly how this
+//     function used to misread BITMAPCOREHEADER BMPs.
 func parseBMPSize(data []byte) (ImageSize, error) {
 	if len(data) < 26 {
 		return ImageSize{}, errors.New("getSizeFromImage: truncated BMP (< 26 bytes)")
 	}
-	w := int32(binary.LittleEndian.Uint32(data[18:22]))
-	h := int32(binary.LittleEndian.Uint32(data[22:26]))
-	if h < 0 {
-		h = -h
+	headerSize := binary.LittleEndian.Uint32(data[14:18])
+	switch {
+	case headerSize == 12:
+		w := binary.LittleEndian.Uint16(data[18:20])
+		h := binary.LittleEndian.Uint16(data[20:22])
+		return ImageSize{Width: int(w), Height: int(h)}, nil
+	case headerSize >= 40:
+		w := int32(binary.LittleEndian.Uint32(data[18:22]))
+		h := int32(binary.LittleEndian.Uint32(data[22:26]))
+		if h < 0 {
+			h = -h
+		}
+		if w < 0 {
+			w = -w
+		}
+		return ImageSize{Width: int(w), Height: int(h)}, nil
+	default:
+		return ImageSize{}, fmt.Errorf("getSizeFromImage: unsupported BMP DIB header size (%d bytes)", headerSize)
 	}
-	if w < 0 {
-		w = -w
-	}
-	return ImageSize{Width: int(w), Height: int(h)}, nil
 }
 
 var (
-	svgTagRe        = regexp.MustCompile(`(?is)<svg\b[^>]*>`)
-	svgWidthAttrRe  = regexp.MustCompile(`(?i)\bwidth\s*=\s*"([^"]*)"`)
-	svgHeightAttrRe = regexp.MustCompile(`(?i)\bheight\s*=\s*"([^"]*)"`)
-	svgViewBoxRe    = regexp.MustCompile(`(?i)\bviewBox\s*=\s*"([^"]*)"`)
+	svgTagRe = regexp.MustCompile(`(?is)<svg\b[^>]*>`)
+	// Attribute regexes support both double- and single-quoted values (both
+	// are valid XML/SVG: width="120" and width='120'); exactly one of the
+	// two capture groups will be non-nil on a match — see svgAttrValue.
+	svgWidthAttrRe  = regexp.MustCompile(`(?i)\bwidth\s*=\s*(?:"([^"]*)"|'([^']*)')`)
+	svgHeightAttrRe = regexp.MustCompile(`(?i)\bheight\s*=\s*(?:"([^"]*)"|'([^']*)')`)
+	svgViewBoxRe    = regexp.MustCompile(`(?i)\bviewBox\s*=\s*(?:"([^"]*)"|'([^']*)')`)
 	// svgNumericRe accepts a plain number or a "px"-suffixed number; it
 	// rejects percentages and other CSS units (em, cm, pt, ...), which must
 	// fall back to viewBox since they aren't absolute pixel dimensions.
 	svgNumericRe = regexp.MustCompile(`^[0-9]*\.?[0-9]+(px)?$`)
 )
+
+// svgAttrValue matches re against tag and returns the attribute value,
+// reading whichever of the two quote-style capture groups participated in
+// the match (the other is nil since regexp alternation only matches one
+// branch). Returns ok=false if re did not match at all.
+func svgAttrValue(tag []byte, re *regexp.Regexp) (value string, ok bool) {
+	m := re.FindSubmatch(tag)
+	if m == nil {
+		return "", false
+	}
+	if m[1] != nil {
+		return string(m[1]), true
+	}
+	if m[2] != nil {
+		return string(m[2]), true
+	}
+	return "", true
+}
 
 // parseSVGSize reads pixel dimensions from the root <svg> element's
 // width/height attributes (when both are present and given in absolute
@@ -378,11 +440,11 @@ func parseSVGSize(data []byte) (ImageSize, error) {
 		return ImageSize{}, errors.New("getSizeFromImage: no <svg> root element found")
 	}
 
-	wMatch := svgWidthAttrRe.FindSubmatch(tag)
-	hMatch := svgHeightAttrRe.FindSubmatch(tag)
-	if wMatch != nil && hMatch != nil {
-		wStr := strings.TrimSpace(string(wMatch[1]))
-		hStr := strings.TrimSpace(string(hMatch[1]))
+	wStr, wFound := svgAttrValue(tag, svgWidthAttrRe)
+	hStr, hFound := svgAttrValue(tag, svgHeightAttrRe)
+	if wFound && hFound {
+		wStr = strings.TrimSpace(wStr)
+		hStr = strings.TrimSpace(hStr)
 		if svgNumericRe.MatchString(wStr) && svgNumericRe.MatchString(hStr) {
 			w, wErr := strconv.ParseFloat(strings.TrimSuffix(wStr, "px"), 64)
 			h, hErr := strconv.ParseFloat(strings.TrimSuffix(hStr, "px"), 64)
@@ -392,8 +454,14 @@ func parseSVGSize(data []byte) (ImageSize, error) {
 		}
 	}
 
-	if vbMatch := svgViewBoxRe.FindSubmatch(tag); vbMatch != nil {
-		parts := strings.Fields(string(vbMatch[1]))
+	if vbStr, ok := svgAttrValue(tag, svgViewBoxRe); ok {
+		// SVG's viewBox list-of-numbers syntax separates values with
+		// "comma-wsp" (whitespace, a comma, or a comma surrounded by
+		// whitespace) — e.g. "0,0,300,150" and "0, 0, 300, 150" are both
+		// valid alongside the plain-whitespace form "0 0 300 150".
+		parts := strings.FieldsFunc(vbStr, func(r rune) bool {
+			return unicode.IsSpace(r) || r == ','
+		})
 		if len(parts) == 4 {
 			w, wErr := strconv.ParseFloat(parts[2], 64)
 			h, hErr := strconv.ParseFloat(parts[3], 64)
