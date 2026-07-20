@@ -1,7 +1,8 @@
 package pptx
 
 import (
-	"strings"
+	"crypto/sha256"
+	"encoding/hex"
 	"testing"
 )
 
@@ -155,16 +156,40 @@ func TestBulletTypes(t *testing.T) {
 	}
 }
 
+// TestImageConstants freezes IMG_BROKEN/IMG_PLAYBTN as full SHA-256 hashes
+// of the complete base64 data-URI strings (M11: a 40-char prefix check
+// would not catch mid-blob corruption).
+//
+// The expected hashes were computed by independently re-extracting the
+// literal string constants from src/core-enums.ts (the `export const
+// IMG_BROKEN = '...'` / `IMG_PLAYBTN` string literals) and hashing them
+// with Python's hashlib.sha256 — NOT by hashing whatever ended up in this
+// Go source, so a match here certifies the Go constant against the TS
+// source of truth, not just against itself:
+//
+//	IMG_BROKEN  len=2150  sha256=3c23bca3209cf22899e8a09dc3e82b6707c8ed54e28dca77338e7799d45f1ae8
+//	IMG_PLAYBTN len=74402 sha256=60781f4b64d3afa871fc59d2ff49999d5bc8ab0f47c77efbff489e0cb404847a
 func TestImageConstants(t *testing.T) {
-	if !strings.HasPrefix(IMG_BROKEN, "data:image/png;base64,iVBORw0KG") {
-		t.Errorf("IMG_BROKEN prefix wrong: %.40q", IMG_BROKEN)
+	const wantBrokenSHA256 = "3c23bca3209cf22899e8a09dc3e82b6707c8ed54e28dca77338e7799d45f1ae8"
+	const wantPlaybtnSHA256 = "60781f4b64d3afa871fc59d2ff49999d5bc8ab0f47c77efbff489e0cb404847a"
+
+	if got := sha256Hex(IMG_BROKEN); got != wantBrokenSHA256 {
+		t.Errorf("IMG_BROKEN sha256 = %s, want %s (len=%d)", got, wantBrokenSHA256, len(IMG_BROKEN))
 	}
-	if !strings.HasPrefix(IMG_PLAYBTN, "data:image/png;base64,iVBORw0KG") {
-		t.Errorf("IMG_PLAYBTN prefix wrong: %.40q", IMG_PLAYBTN)
+	if got := sha256Hex(IMG_PLAYBTN); got != wantPlaybtnSHA256 {
+		t.Errorf("IMG_PLAYBTN sha256 = %s, want %s (len=%d)", got, wantPlaybtnSHA256, len(IMG_PLAYBTN))
 	}
-	if len(IMG_BROKEN) < 1000 || len(IMG_PLAYBTN) < 1000 {
-		t.Errorf("IMG constants too short: broken=%d playbtn=%d", len(IMG_BROKEN), len(IMG_PLAYBTN))
+	if len(IMG_BROKEN) != 2150 {
+		t.Errorf("IMG_BROKEN len = %d, want 2150", len(IMG_BROKEN))
 	}
+	if len(IMG_PLAYBTN) != 74402 {
+		t.Errorf("IMG_PLAYBTN len = %d, want 74402", len(IMG_PLAYBTN))
+	}
+}
+
+func sha256Hex(s string) string {
+	sum := sha256.Sum256([]byte(s))
+	return hex.EncodeToString(sum[:])
 }
 
 func TestRegexHexColor(t *testing.T) {

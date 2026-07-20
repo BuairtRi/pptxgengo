@@ -1,6 +1,7 @@
 package pptx
 
 import (
+	"math"
 	"regexp"
 	"testing"
 )
@@ -9,10 +10,16 @@ import (
 var testLayout = PresLayout{Name: "LAYOUT_16x9", Width: 12192000, Height: 6858000}
 
 func TestFtoa(t *testing.T) {
+	// Expectations below are literal `String(number)` output captured from
+	// Node.js (v22) for each input — see the agent report for the exact
+	// commands. JS switches to exponential notation at |x| >= 1e21 and at
+	// 0 < |x| < 1e-6; Go's strconv never does, and its 'e' verb zero-pads
+	// single-digit exponents ("1e-07") where JS does not ("1e-7").
 	cases := []struct {
 		in   float64
 		want string
 	}{
+		// Normal range: unchanged shortest round-trip decimal.
 		{1, "1"},
 		{1.5, "1.5"},
 		{0.1, "0.1"},
@@ -20,6 +27,49 @@ func TestFtoa(t *testing.T) {
 		{12700, "12700"},
 		{2.25, "2.25"},
 		{0, "0"},
+		{-1.5, "-1.5"},
+		{-1, "-1"},
+
+		// -0 prints as "0" in JS (String(-0) === "0").
+		{math.Copysign(0, -1), "0"},
+
+		// Large integers just under the 1e21 exponential threshold still
+		// print as plain decimal (shortest round-trip).
+		{9.999e20, "999900000000000000000"},
+		{1e20, "100000000000000000000"},
+		{9.99999e20, "999999000000000000000"},
+
+		// Number.MAX_SAFE_INTEGER (2^53-1) and one past it: still decimal.
+		{9007199254740991, "9007199254740991"},
+		{9007199254740992, "9007199254740992"},
+		{123456789012345680000, "123456789012345680000"},
+
+		// >= 1e21: JS exponential form, lowercase 'e', explicit '+', no
+		// leading zeros in the exponent.
+		{1e21, "1e+21"},
+		{1.23e21, "1.23e+21"},
+		{2e21, "2e+21"},
+		{1.1e21, "1.1e+21"},
+		{-1e21, "-1e+21"},
+		{1e22, "1e+22"},
+		{1e100, "1e+100"},
+		{1.23456e23, "1.23456e+23"},
+		{1.7976931348623157e308, "1.7976931348623157e+308"}, // math.MaxFloat64
+
+		// Decimal boundary at 1e-6: still plain decimal (not < 1e-6).
+		{1e-6, "0.000001"},
+		{-1e-6, "-0.000001"},
+		{1e-5, "0.00001"},
+
+		// < 1e-6: JS exponential form with negative, unpadded exponent.
+		{1e-7, "1e-7"},
+		{1.5e-7, "1.5e-7"},
+		{-1e-7, "-1e-7"},
+		{9.999999e-7, "9.999999e-7"},
+		{9.9999999e-7, "9.9999999e-7"},
+		{1.234e-10, "1.234e-10"},
+		{-0.0000001234, "-1.234e-7"},
+		{5e-324, "5e-324"}, // math.SmallestNonzeroFloat64
 	}
 	for _, c := range cases {
 		if got := ftoa(c.in); got != c.want {
@@ -80,10 +130,55 @@ func TestGetSmartParseNumber(t *testing.T) {
 		{Percent(50), "X", 6096000},         // 0.5 * 12192000
 		{Percent(50), "Y", 3429000},         // 0.5 * 6858000
 		{Percent(25), "", 3048000},          // default -> width: 0.25 * 12192000
+
+		// Negative values (M5/Minor boundary coverage).
+		{Inches(-1), "X", -914400},
+		{Percent(-50), "X", -6096000}, // jsRound(-0.5 * 12192000)
+		{Percent(-25), "Y", -1714500}, // jsRound(-0.25 * 6858000)
+
+		// Val==100 is the CASE-1/CASE-2 boundary: `size.Val < 100` is false
+		// at exactly 100, so it falls into CASE 2 (already-EMU), NOT
+		// inch2Emu. (inch2Emu's own >100 special-case is a different,
+		// unrelated boundary at a different threshold.)
+		{Coord{Val: 100}, "X", 100},
+		{Coord{Val: 99.999}, "X", 91439086}, // just under 100 -> CASE 1 (inches), not CASE 2
+
+		// Percent > 100 is valid (oversized/offset shapes) and not clamped.
+		{Percent(150), "X", 18288000}, // 1.5 * 12192000
+		{Percent(200), "Y", 13716000}, // 2.0 * 6858000
 	}
 	for _, c := range cases {
 		if got := getSmartParseNumber(c.size, c.dir, testLayout); got != c.want {
 			t.Errorf("getSmartParseNumber(%+v, %q) = %d, want %d", c.size, c.dir, got, c.want)
+		}
+	}
+}
+
+// TestGetSmartParseNumberCase2Rounding locks the CASE-2 ("already EMU")
+// rounding behavior: TS returns the raw float unchanged (gen-utils.ts:29),
+// but Go's getSmartParseNumber returns int, so it rounds (jsRound) rather
+// than truncates to minimize divergence from the TS fractional value. See
+// the comment on getSmartParseNumber's CASE 2 in utils.go for the documented
+// residual deviation.
+func TestGetSmartParseNumberCase2Rounding(t *testing.T) {
+	// NOTE: CASE 2 only triggers for size.Val >= 100 (the same raw
+	// comparison JS uses: `typeof size === 'number' && size < 100` routes
+	// to CASE 1/inches). A negative "already-EMU" value like -5000000.6 is
+	// still < 100, so both JS and Go treat it as CASE 1 (inches), not
+	// CASE 2 — there is no negative-EMU rounding case to test here.
+	cases := []struct {
+		val  float64
+		dir  string
+		want int
+	}{
+		{5000000.6, "X", 5000001}, // rounds up, would truncate to 5000000
+		{5000000.4, "X", 5000000}, // rounds down
+		{5000000.5, "X", 5000001}, // .5 rounds toward +Inf (jsRound)
+		{100.5, "X", 101},         // boundary value with a fraction
+	}
+	for _, c := range cases {
+		if got := getSmartParseNumber(Coord{Val: c.val}, c.dir, testLayout); got != c.want {
+			t.Errorf("getSmartParseNumber(Val:%v) = %d, want %d", c.val, got, c.want)
 		}
 	}
 }

@@ -13,9 +13,44 @@ import (
 func ptr[T any](v T) *T { return &v }
 
 // ftoa formats a float the way JS `String(number)` does: shortest round-trip
-// decimal, with integers printed without a decimal point.
+// decimal for "normal" magnitudes (integers printed without a decimal
+// point), switching to JS-style exponential notation outside that range —
+// mirroring the ECMA-262 Number::toString algorithm, which JS engines use
+// for `String(number)`/template-literal coercion:
+//   - |f| >= 1e21: exponential, e.g. "1e+21", "1.5e+21".
+//   - 0 < |f| < 1e-6: exponential, e.g. "1e-7", "1.5e-7".
+//   - otherwise: plain decimal, shortest round-trip ('f' format).
+//
+// Go's strconv 'e' verb zero-pads single-digit exponents (e.g. "1e-07")
+// where JS never pads (e.g. "1e-7"); normalizeJSExponent strips that.
 func ftoa(f float64) string {
+	if f == 0 { // handles -0 too: JS `String(-0)` === "0"
+		return "0"
+	}
+	abs := math.Abs(f)
+	if abs >= 1e21 || abs < 1e-6 {
+		return normalizeJSExponent(strconv.FormatFloat(f, 'e', -1, 64))
+	}
 	return strconv.FormatFloat(f, 'f', -1, 64)
+}
+
+// normalizeJSExponent rewrites a Go 'e'-format string (e.g. "1e-07",
+// "1.23e+21") into JS's exponent shape: lowercase 'e' (already the Go
+// default), explicit sign (already emitted by Go), and no leading zeros in
+// the exponent digits (e.g. "1e-07" -> "1e-7", but "1e+100" is untouched).
+func normalizeJSExponent(s string) string {
+	idx := strings.IndexByte(s, 'e')
+	if idx < 0 {
+		return s
+	}
+	mantissa := s[:idx]
+	expPart := s[idx+1:] // sign + digits, e.g. "-07" or "+21"
+	sign := expPart[:1]
+	digits := strings.TrimLeft(expPart[1:], "0")
+	if digits == "" {
+		digits = "0"
+	}
+	return mantissa + "e" + sign + digits
 }
 
 // jsRound mirrors JS `Math.round`: rounds half toward +Infinity (unlike Go's
@@ -45,8 +80,22 @@ func getSmartParseNumber(size Coord, xyDir string, layout PresLayout) int {
 		return inch2Emu(size.Val)
 	}
 
-	// CASE 2: Number already converted to EMU
-	return int(size.Val)
+	// CASE 2: Number already converted to EMU.
+	// NOTE (deviation, gen-utils.ts:29): TS returns `size` raw and unchanged
+	// here — a fractional "already-EMU" value like 5000000.6 stays a float
+	// all the way to XML serialization. Go's signature returns `int` (see
+	// PORTING.md's optional-fields rule: EMU values are ints post-conversion),
+	// so an exact float passthrough isn't possible without a wider ripple
+	// through every caller. We jsRound instead of truncating to minimize the
+	// divergence: this only differs from TS when the fractional part is
+	// discarded by JS's own later-stage `Math.round`/string coercion (which
+	// happens almost everywhere size/pos values are emitted), so the
+	// residual deviation is sub-EMU and only surfaces for callers that both
+	// (a) pass an already-EMU float with a fractional component and (b)
+	// read the numeric value back out before it reaches XML. Truncating
+	// would silently lose up to ~1 EMU in the *wrong* direction relative to
+	// TS's eventual rounding; rounding here is the closer approximation.
+	return int(jsRound(size.Val))
 }
 
 // getUuid returns a UUID by replacing 'x'/'y' in uuidFormat with hex digits,
