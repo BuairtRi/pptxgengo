@@ -67,14 +67,14 @@ func (s *Slide) AddTable(rows []TableRow, opts *TableProps) error {
 // AddChart adds a single-type chart to the slide. Ports TS addChart (single
 // type). For combo charts use AddMultiChart.
 func (s *Slide) AddChart(chartType ChartType, data []ChartData, opts *ChartOptions) error {
-	_, err := addChartDefinition(s.ps, chartType, nil, data, opts)
+	_, err := addChartDefinition(s.ps, &s.pres.chartCtr, chartType, nil, data, opts)
 	return err
 }
 
 // AddMultiChart adds a multi-type (combo) chart to the slide. Ports the
 // IChartMulti[] form of TS addChart.
 func (s *Slide) AddMultiChart(multi []IChartMulti, opts *ChartOptions) error {
-	_, err := addChartDefinition(s.ps, "", multi, nil, opts)
+	_, err := addChartDefinition(s.ps, &s.pres.chartCtr, "", multi, nil, opts)
 	return err
 }
 

@@ -17,7 +17,6 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"time"
 )
 
 // ---------------------------------------------------------------------------
@@ -1868,16 +1867,15 @@ func overlayValue(dst, src reflect.Value) {
 // createExcelWorksheet
 // ---------------------------------------------------------------------------
 
-// excelNowFunc supplies the timestamp for docProps/core.xml. Overridable in
-// tests. Mirrors the TS `new Date().toISOString()`.
-var excelNowFunc = func() time.Time { return time.Now().UTC() }
-
 // createExcelWorksheet builds the embedded .xlsx (data source for a chart) and
 // returns its complete bytes. Ports gen-charts.ts createExcelWorksheet, redesigned
 // for Go stdlib: builds an in-memory zip (archive/zip) with STORE compression
 // (matching JSZip's default). The internal part CONTENTS are byte-identical to
 // the TS templates; zip container metadata differs (that is acceptable).
-func createExcelWorksheet(chartObject *SlideRelChart) ([]byte, error) {
+//
+// The docProps/core.xml timestamp comes from the build context's clock (bc.now),
+// threaded explicitly rather than read from a package global (REVIEW C1).
+func createExcelWorksheet(chartObject *SlideRelChart, bc *buildContext) ([]byte, error) {
 	data := chartObject.Data
 	opts := chartObject.Opts
 	intBubbleCols := (len(data)-1)*2 + 1
@@ -1986,7 +1984,7 @@ func createExcelWorksheet(chartObject *SlideRelChart) ([]byte, error) {
 	sheet := buildSheet1(data, opts, intBubbleCols, isBubble, isScatter, isMultiCatAxes)
 
 	// docProps/core.xml (timestamped)
-	ts := excelNowFunc().Format("2006-01-02T15:04:05.000Z07:00")
+	ts := bc.now().UTC().Format("2006-01-02T15:04:05.000Z07:00")
 	core := `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">` +
 		`<dc:creator>PptxGenJS</dc:creator>` +
 		`<cp:lastModifiedBy>PptxGenJS</cp:lastModifiedBy>` +

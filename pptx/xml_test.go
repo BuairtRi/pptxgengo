@@ -104,7 +104,7 @@ func TestMakeXmlContTypesBasic(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
-// core.xml — timestamps are injected via xmlNowFunc.
+// core.xml — timestamps come from the build context's clock (bc.now).
 // ---------------------------------------------------------------------------
 
 var coreTsRe = regexp.MustCompile(`<dcterms:(created|modified) xsi:type="dcterms:W3CDTF">[^<]*</dcterms:(created|modified)>`)
@@ -113,12 +113,17 @@ func normalizeCoreTs(s string) string {
 	return coreTsRe.ReplaceAllString(s, `<dcterms:$1 xsi:type="dcterms:W3CDTF">TS</dcterms:$2>`)
 }
 
-func TestMakeXmlCore(t *testing.T) {
-	old := xmlNowFunc
-	xmlNowFunc = func() time.Time { return time.Date(2026, 7, 20, 4, 28, 22, 0, time.UTC) }
-	defer func() { xmlNowFunc = old }()
+// testBC returns a build context with wall-clock time and the real UUID
+// generator, for generators that don't assert on timestamps/GUIDs.
+func testBC() *buildContext { return &buildContext{now: time.Now, uuid: getUuid} }
 
-	got := makeXmlCore("PptxGenGo Golden Test Title", "PptxGenGo Golden Test Subject", "PptxGenGo Test Author", "1")
+func TestMakeXmlCore(t *testing.T) {
+	bc := &buildContext{
+		now:  func() time.Time { return time.Date(2026, 7, 20, 4, 28, 22, 0, time.UTC) },
+		uuid: getUuid,
+	}
+
+	got := makeXmlCore(bc, "PptxGenGo Golden Test Title", "PptxGenGo Golden Test Subject", "PptxGenGo Test Author", "1")
 	want := readGoldenStr(t, "01-basic", "docProps", "core.xml")
 
 	// Exact (timestamp chosen to match golden), plus normalized safety net.
@@ -141,7 +146,7 @@ func TestMakeXmlPresentation(t *testing.T) {
 	pres := &IPresentationProps{}
 	pres.PresLayout = defLayout
 	pres.Slides = []PresSlide{{RID: 2, SlideID: 256}}
-	assertEqual(t, makeXmlPresentation(pres), readGoldenStr(t, "01-basic", "ppt", "presentation.xml"))
+	assertEqual(t, makeXmlPresentation(pres, testBC()), readGoldenStr(t, "01-basic", "ppt", "presentation.xml"))
 }
 
 // ---------------------------------------------------------------------------
@@ -490,7 +495,7 @@ func TestMakeXmlPresentationFontHooks(t *testing.T) {
 	pres.Slides = []PresSlide{{RID: 2, SlideID: 256}}
 	pres.EmbeddedFonts = fontFixture()
 
-	got := makeXmlPresentation(pres)
+	got := makeXmlPresentation(pres, testBC())
 
 	if !strings.Contains(got, `embedTrueTypeFonts="1"`) {
 		t.Errorf("presentation missing embedTrueTypeFonts attribute")

@@ -13,8 +13,6 @@ func newTestSlide() *PresSlide {
 	return s
 }
 
-func resetChartCounter() { _chartCounter = 0 }
-
 // ---------------------------------------------------------------------------
 // addTextDefinition
 // ---------------------------------------------------------------------------
@@ -325,9 +323,8 @@ func TestAddImageDefinition_DuplicateReusesTarget(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestAddChartDefinition_Defaults(t *testing.T) {
-	resetChartCounter()
 	s := newTestSlide()
-	obj, err := addChartDefinition(s, ChartTypeBar, nil,
+	obj, err := addChartDefinition(s, &chartCounter{}, ChartTypeBar, nil,
 		[]ChartData{{Name: "S1", Values: []float64{1, 2, 3}}},
 		&ChartOptions{Bar3DShape: "invalid"})
 	if err != nil {
@@ -371,17 +368,15 @@ func TestAddChartDefinition_Defaults(t *testing.T) {
 }
 
 func TestAddChartDefinition_BarGapWidthBounds(t *testing.T) {
-	resetChartCounter()
 	s := newTestSlide()
-	_, _ = addChartDefinition(s, ChartTypeBar, nil,
+	_, _ = addChartDefinition(s, &chartCounter{}, ChartTypeBar, nil,
 		[]ChartData{{Values: []float64{1}}}, &ChartOptions{BarGapWidthPct: ptr(5000.0)})
 	if got := fptrOr(s.RelsChart[0].Opts.BarGapWidthPct, 0); got != 150 {
 		t.Errorf("out-of-range barGapWidthPct should reset to 150, got %v", got)
 	}
 
-	resetChartCounter()
 	s2 := newTestSlide()
-	_, _ = addChartDefinition(s2, ChartTypeBar, nil,
+	_, _ = addChartDefinition(s2, &chartCounter{}, ChartTypeBar, nil,
 		[]ChartData{{Values: []float64{1}}}, &ChartOptions{BarGapWidthPct: ptr(300.0)})
 	if got := fptrOr(s2.RelsChart[0].Opts.BarGapWidthPct, 0); got != 300 {
 		t.Errorf("in-range barGapWidthPct should be kept, got %v", got)
@@ -389,17 +384,15 @@ func TestAddChartDefinition_BarGapWidthBounds(t *testing.T) {
 }
 
 func TestAddChartDefinition_DataLabelPosWhitelist(t *testing.T) {
-	resetChartCounter()
 	s := newTestSlide()
-	_, _ = addChartDefinition(s, ChartTypePie, nil,
+	_, _ = addChartDefinition(s, &chartCounter{}, ChartTypePie, nil,
 		[]ChartData{{Values: []float64{1}}}, &ChartOptions{DataLabelPosition: "bogus"})
 	if got := s.RelsChart[0].Opts.DataLabelPosition; got != "" {
 		t.Errorf("invalid pie dataLabelPosition should be cleared, got %q", got)
 	}
 
-	resetChartCounter()
 	s2 := newTestSlide()
-	_, _ = addChartDefinition(s2, ChartTypePie, nil,
+	_, _ = addChartDefinition(s2, &chartCounter{}, ChartTypePie, nil,
 		[]ChartData{{Values: []float64{1}}}, &ChartOptions{DataLabelPosition: "ctr"})
 	if got := s2.RelsChart[0].Opts.DataLabelPosition; got != "ctr" {
 		t.Errorf("valid pie dataLabelPosition should be kept, got %q", got)
@@ -407,9 +400,8 @@ func TestAddChartDefinition_DataLabelPosWhitelist(t *testing.T) {
 }
 
 func TestAddChartDefinition_PieColorsAndFormat(t *testing.T) {
-	resetChartCounter()
 	s := newTestSlide()
-	_, _ = addChartDefinition(s, ChartTypePie, nil,
+	_, _ = addChartDefinition(s, &chartCounter{}, ChartTypePie, nil,
 		[]ChartData{{Values: []float64{1}}}, &ChartOptions{ShowPercent: ptr(true)})
 	o := s.RelsChart[0].Opts
 	if o.ChartColors[0] != PIECHART_COLORS[0] {
@@ -421,13 +413,12 @@ func TestAddChartDefinition_PieColorsAndFormat(t *testing.T) {
 }
 
 func TestAddChartDefinition_MultiType(t *testing.T) {
-	resetChartCounter()
 	s := newTestSlide()
 	multi := []IChartMulti{
 		{Type: ChartTypeBar, Data: []ChartData{{Name: "A", Values: []float64{1}}}},
 		{Type: ChartTypeLine, Data: []ChartData{{Name: "B", Values: []float64{2}}}},
 	}
-	_, err := addChartDefinition(s, "", multi, nil, &ChartOptions{})
+	_, err := addChartDefinition(s, &chartCounter{}, "", multi, nil, &ChartOptions{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -541,7 +532,7 @@ func TestAddTableDefinition_AutoPageMissingSlideErrors(t *testing.T) {
 func TestValidateChartConfig_SecondaryAxisRequired(t *testing.T) {
 	s := newTestSlide()
 	data := []ChartData{{Values: []float64{1}, Labels: [][]string{{"A"}}}}
-	_, err := addChartDefinition(s, ChartTypeBar, nil, data, &ChartOptions{
+	_, err := addChartDefinition(s, &chartCounter{}, ChartTypeBar, nil, data, &ChartOptions{
 		ValAxes: []ChartOptions{{}, {}}, // 2 value axes, none secondary
 	})
 	if err == nil || !strings.Contains(err.Error(), "secondary axis must be used") {
@@ -552,7 +543,7 @@ func TestValidateChartConfig_SecondaryAxisRequired(t *testing.T) {
 func TestValidateChartConfig_AxesCountMismatch(t *testing.T) {
 	s := newTestSlide()
 	data := []ChartData{{Values: []float64{1}, Labels: [][]string{{"A"}}}}
-	_, err := addChartDefinition(s, ChartTypeBar, nil, data, &ChartOptions{
+	_, err := addChartDefinition(s, &chartCounter{}, ChartTypeBar, nil, data, &ChartOptions{
 		CatAxes: []ChartOptions{{}}, // 1 category axis, 0 value axes
 	})
 	if err == nil || !strings.Contains(err.Error(), "same number of value and category axes") {
@@ -698,7 +689,7 @@ func TestCreateSlideMaster(t *testing.T) {
 		},
 		SlideNumber: &SlideNumberProps{},
 	}
-	if err := createSlideMaster(props, target); err != nil {
+	if err := createSlideMaster(props, &chartCounter{}, target); err != nil {
 		t.Fatal(err)
 	}
 	if len(target.SlideObjects) != 2 {

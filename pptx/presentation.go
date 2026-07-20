@@ -7,6 +7,7 @@ package pptx
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -39,10 +40,71 @@ type Presentation struct {
 	sections      []SectionProps
 	embeddedFonts []*EmbeddedFont
 
-	// nowFunc, when non-nil, is wired to the package timestamp hooks
-	// (xmlNowFunc / excelNowFunc) for the duration of a Write call, making
-	// output deterministic in tests. Nil = use wall-clock time.
+	// nowFunc, when non-nil, supplies the timestamp threaded through each build
+	// (docProps/core.xml and the embedded workbook's core.xml), making output
+	// deterministic in tests. Nil = wall-clock time. It is read into a per-build
+	// buildContext (never a package global), so concurrent writes of different
+	// presentations cannot clobber each other's clock (REVIEW C1).
 	nowFunc func() time.Time
+
+	// uuidFunc, when non-nil, supplies the section GUID emitted in
+	// ppt/presentation.xml (mirrors PORTING.md's promised uuid hook). Nil =
+	// getUuid (random). Tests may pin it to make section GUIDs deterministic.
+	uuidFunc func(format string) string
+
+	// chartCtr assigns each chart its 1-based part index (chart1.xml, ...).
+	// Per-Presentation and concurrency-safe — see the chartCounter doc comment.
+	chartCtr chartCounter
+}
+
+// buildContext carries the per-build injectable dependencies — a clock and a
+// UUID generator — so the XML/worksheet generators never read package-global
+// mutable state. It is created once per build() from the Presentation's fields.
+//
+// REVIEW C1: PptxGenJS's Go port previously swapped package-level xmlNowFunc /
+// excelNowFunc for the duration of build(); two goroutines writing two
+// presentations raced (and a deferred restore could reinstate the other
+// writer's clock). Threading the clock explicitly removes that shared state.
+type buildContext struct {
+	now  func() time.Time
+	uuid func(format string) string
+}
+
+// newBuildContext builds the context from the Presentation's optional hooks,
+// falling back to wall-clock time and the real getUuid.
+func (p *Presentation) newBuildContext() *buildContext {
+	now := p.nowFunc
+	if now == nil {
+		now = time.Now
+	}
+	uuid := p.uuidFunc
+	if uuid == nil {
+		uuid = getUuid
+	}
+	return &buildContext{now: now, uuid: uuid}
+}
+
+// chartCounter is a per-Presentation, concurrency-safe counter that assigns each
+// chart its 1-based part index (chart1.xml, chart2.xml, ...).
+//
+// DEVIATION (REVIEW C2/M3): PptxGenJS uses a module-level `let _chartCounter`
+// that is never reset, so a second presentation built in the same process
+// numbers its charts chart2+/Microsoft_Excel_Worksheet2+ — output that leaks
+// across presentations and is not reproducible without a manual reset. The Go
+// port makes the counter per-Presentation: every Presentation numbers its charts
+// from 1, deterministic regardless of process history, and safe under concurrent
+// AddChart both across presentations and on the same presentation.
+type chartCounter struct {
+	mu sync.Mutex
+	n  int
+}
+
+// next returns the next 1-based chart index.
+func (c *chartCounter) next() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.n++
+	return c.n
 }
 
 // New creates a Presentation with the same defaults as the PptxGenJS
@@ -310,7 +372,7 @@ func (p *Presentation) DefineSlideMaster(props *SlideMasterProps) error {
 	}}
 
 	// STEP 1: build the master/layout objects.
-	if err := createSlideMaster(props, &newLayout); err != nil {
+	if err := createSlideMaster(props, &p.chartCtr, &newLayout); err != nil {
 		return err
 	}
 

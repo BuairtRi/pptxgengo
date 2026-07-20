@@ -15,10 +15,6 @@ import (
 	"strings"
 )
 
-// _chartCounter is the global counter for included charts (used as the index
-// in their filenames). Mirrors the module-level `let _chartCounter` in TS.
-var _chartCounter = 0
-
 // imageDataMimeRe extracts the subtype from an `image/<subtype>;` data URI.
 var imageDataMimeRe = regexp.MustCompile(`image/(\w+);`)
 
@@ -376,7 +372,7 @@ func mergePlaceholderOptions(dst, src *ObjectOptions) {
 // registering its background/objects/slide-number/placeholders. Ports the TS
 // `createSlideMaster`. The layout's SlideBaseProps is bridged into a temporary
 // PresSlide because the add* helpers operate on PresSlide (TS casts freely).
-func createSlideMaster(props *SlideMasterProps, target *SlideLayout) error {
+func createSlideMaster(props *SlideMasterProps, cc *chartCounter, target *SlideLayout) error {
 	// STEP 1: DEPRECATED bkgd passthrough (remove in v4.0.0)
 	if props.Bkgd != nil {
 		target.Bkgd = props.Bkgd
@@ -390,7 +386,7 @@ func createSlideMaster(props *SlideMasterProps, target *SlideLayout) error {
 		object := props.Objects[idx]
 		switch {
 		case object.Chart != nil:
-			if _, err := addChartDefinition(ps, object.Chart.Type, object.Chart.MultiTypes, nil, object.Chart); err != nil {
+			if _, err := addChartDefinition(ps, cc, object.Chart.Type, object.Chart.MultiTypes, nil, object.Chart); err != nil {
 				return err
 			}
 		case object.Image != nil:
@@ -438,7 +434,7 @@ func createSlideMaster(props *SlideMasterProps, target *SlideLayout) error {
 // Ports the TS `addChartDefinition`. TS uses console.warn (never throws) for
 // invalid sub-options; here those are silently corrected, so the returned
 // error is always nil (kept for signature symmetry / future validation).
-func addChartDefinition(target *PresSlide, chartType ChartType, multiTypes []IChartMulti, data []ChartData, opt *ChartOptions) (*SlideObject, error) {
+func addChartDefinition(target *PresSlide, cc *chartCounter, chartType ChartType, multiTypes []IChartMulti, data []ChartData, opt *ChartOptions) (*SlideObject, error) {
 	correctGridLineOptions := func(gl *OptsChartGridLine) {
 		if gl == nil || gl.Style == "none" {
 			return
@@ -454,8 +450,7 @@ func addChartDefinition(target *PresSlide, chartType ChartType, multiTypes []ICh
 		}
 	}
 
-	_chartCounter++
-	chartID := _chartCounter
+	chartID := cc.next()
 
 	isMulti := len(multiTypes) > 0
 

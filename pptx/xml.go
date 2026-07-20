@@ -12,14 +12,6 @@ import (
 )
 
 // ---------------------------------------------------------------------------
-// Time hook — mirrors `new Date().toISOString()` in makeXmlCore. Overridable in
-// tests so timestamps are deterministic.
-// ---------------------------------------------------------------------------
-
-// xmlNowFunc returns the current time; tests may override it.
-var xmlNowFunc = time.Now
-
-// ---------------------------------------------------------------------------
 // Small helpers: itoa/boolDeref/strOr are shared with charts.go and media.go.
 // ---------------------------------------------------------------------------
 // Image sizing helpers (ImageSizingXml in TS)
@@ -2041,12 +2033,12 @@ func makeXmlApp(slides []PresSlide, company string) string {
 // ---------------------------------------------------------------------------
 // makeXmlCore — docProps/core.xml
 //
-// The created/modified timestamps use xmlNowFunc (overridable in tests), and the
-// `.\d\d\dZ → Z` truncation of the JS ISO string is applied via w3cdtf().
+// The created/modified timestamps come from the build context's clock (bc.now),
+// and the `.\d\d\dZ → Z` truncation of the JS ISO string is applied via w3cdtf().
 // ---------------------------------------------------------------------------
 
-func makeXmlCore(title, subject, author, revision string) string {
-	ts := w3cdtf(xmlNowFunc())
+func makeXmlCore(bc *buildContext, title, subject, author, revision string) string {
+	ts := w3cdtf(bc.now())
 	return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 	<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<dc:title>` + encodeXmlEntities(title) + `</dc:title>
@@ -2342,7 +2334,7 @@ func makeXmlTheme(pres *IPresentationProps) string {
 // makeXmlPresentation — ppt/presentation.xml
 // ---------------------------------------------------------------------------
 
-func makeXmlPresentation(pres *IPresentationProps) string {
+func makeXmlPresentation(pres *IPresentationProps, bc *buildContext) string {
 	rtl := ""
 	if pres.RtlMode {
 		rtl = `rtl="1"`
@@ -2397,7 +2389,7 @@ func makeXmlPresentation(pres *IPresentationProps) string {
 		strXml += `<p14:sectionLst xmlns:p14="http://schemas.microsoft.com/office/powerpoint/2010/main">`
 		for si := range pres.Sections {
 			sect := &pres.Sections[si]
-			strXml += `<p14:section name="` + encodeXmlEntities(sect.Title) + `" id="{` + getUuid("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx") + `}"><p14:sldIdLst>`
+			strXml += `<p14:section name="` + encodeXmlEntities(sect.Title) + `" id="{` + bc.uuid("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx") + `}"><p14:sldIdLst>`
 			for sli := range sect.Slides {
 				strXml += `<p14:sldId id="` + itoa(sect.Slides[sli].SlideID) + `"/>`
 			}

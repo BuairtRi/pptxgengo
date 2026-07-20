@@ -329,11 +329,12 @@ func unzipParts(t *testing.T, data []byte) map[string]string {
 func compareXlsx(t *testing.T, goldenXlsx string, rel *SlideRelChart) {
 	t.Helper()
 	// Fixed timestamp for determinism (core.xml is compared with TS normalized).
-	prev := excelNowFunc
-	excelNowFunc = func() time.Time { return time.Date(2026, 7, 20, 4, 28, 22, 542000000, time.UTC) }
-	defer func() { excelNowFunc = prev }()
+	bc := &buildContext{
+		now:  func() time.Time { return time.Date(2026, 7, 20, 4, 28, 22, 542000000, time.UTC) },
+		uuid: getUuid,
+	}
 
-	gotBytes, err := createExcelWorksheet(rel)
+	gotBytes, err := createExcelWorksheet(rel, bc)
 	if err != nil {
 		t.Fatalf("createExcelWorksheet: %v", err)
 	}
@@ -623,7 +624,7 @@ func TestCreateExcelWorksheetScatterShape(t *testing.T) {
 		{DataIndex: 1, Name: "Y1", Labels: [][]string{{"", "", ""}}, Values: []float64{2, 4, 6}},
 	}
 	rel := newChartRel(ChartTypeScatter, data, ChartOptions{})
-	b, err := createExcelWorksheet(rel)
+	b, err := createExcelWorksheet(rel, testBC())
 	if err != nil {
 		t.Fatalf("createExcelWorksheet: %v", err)
 	}

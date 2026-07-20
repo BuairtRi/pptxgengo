@@ -15,7 +15,6 @@ import (
 	"io"
 	"os"
 	"strings"
-	"time"
 )
 
 // Write renders the presentation to an in-memory .pptx byte slice. STORE
@@ -70,13 +69,9 @@ func compressionFrom(props []*WriteProps) bool {
 
 // build produces the complete .pptx package bytes.
 func (p *Presentation) build(compression bool) ([]byte, error) {
-	// Wire deterministic timestamp hooks for the duration of this write.
-	if p.nowFunc != nil {
-		prevXML, prevXLS := xmlNowFunc, excelNowFunc
-		xmlNowFunc = p.nowFunc
-		excelNowFunc = func() time.Time { return p.nowFunc().UTC() }
-		defer func() { xmlNowFunc, excelNowFunc = prevXML, prevXLS }()
-	}
+	// Per-build clock + uuid, threaded explicitly (no package-global state) so
+	// concurrent writes of different presentations don't race (REVIEW C1).
+	bc := p.newBuildContext()
 
 	// STEP 1: Read/encode all media before assembly (TS encodeSlideMediaRels).
 	for i := range p.slides {
@@ -145,7 +140,7 @@ func (p *Presentation) build(compression bool) ([]byte, error) {
 	if err := addStr("docProps/app.xml", makeXmlApp(slidesVal, p.Company)); err != nil {
 		return nil, err
 	}
-	if err := addStr("docProps/core.xml", makeXmlCore(p.Title, p.Subject, p.Author, p.Revision)); err != nil {
+	if err := addStr("docProps/core.xml", makeXmlCore(bc, p.Title, p.Subject, p.Author, p.Revision)); err != nil {
 		return nil, err
 	}
 	if err := addStr("ppt/_rels/presentation.xml.rels", makeXmlPresentationRels(slidesVal, p.embeddedFonts)); err != nil {
@@ -154,7 +149,7 @@ func (p *Presentation) build(compression bool) ([]byte, error) {
 	if err := addStr("ppt/theme/theme1.xml", makeXmlTheme(pres)); err != nil {
 		return nil, err
 	}
-	if err := addStr("ppt/presentation.xml", makeXmlPresentation(pres)); err != nil {
+	if err := addStr("ppt/presentation.xml", makeXmlPresentation(pres, bc)); err != nil {
 		return nil, err
 	}
 	if err := addStr("ppt/presProps.xml", makeXmlPresProps()); err != nil {
@@ -208,7 +203,7 @@ func (p *Presentation) build(compression bool) ([]byte, error) {
 	writeChartMedia := func(base *SlideBaseProps) error {
 		for j := range base.RelsChart {
 			rel := &base.RelsChart[j]
-			xlsx, err := createExcelWorksheet(rel)
+			xlsx, err := createExcelWorksheet(rel, bc)
 			if err != nil {
 				return err
 			}
