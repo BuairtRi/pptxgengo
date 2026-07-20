@@ -1028,4 +1028,7 @@ type IPresentationProps struct {
 	Sections     []SectionProps
 	SlideLayouts []SlideLayout
 	Slides       []PresSlide
+	// EmbeddedFonts holds fonts registered via EmbedFont (net-new vs PptxGenJS);
+	// emitted as ppt/fonts/fontN.fntdata parts + p:embeddedFontLst.
+	EmbeddedFonts []*EmbeddedFont
 }
