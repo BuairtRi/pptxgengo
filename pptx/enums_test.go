@@ -43,14 +43,14 @@ func TestDefaultComposites(t *testing.T) {
 	if DEF_CELL_BORDER.Color != "666666" || DEF_CELL_BORDER.Pt != 1 {
 		t.Errorf("DEF_CELL_BORDER = %+v", DEF_CELL_BORDER)
 	}
-	if DEF_TEXT_GLOW.Size != 8 || DEF_TEXT_GLOW.Color != "FFFFFF" || DEF_TEXT_GLOW.Opacity != 0.75 {
+	if fptrOr(DEF_TEXT_GLOW.Size, 0) != 8 || DEF_TEXT_GLOW.Color != "FFFFFF" || fptrOr(DEF_TEXT_GLOW.Opacity, 0) != 0.75 {
 		t.Errorf("DEF_TEXT_GLOW = %+v", DEF_TEXT_GLOW)
 	}
 	if DEF_SHAPE_SHADOW.RotateWithShape == nil || *DEF_SHAPE_SHADOW.RotateWithShape != true {
 		t.Errorf("DEF_SHAPE_SHADOW.RotateWithShape not true")
 	}
 	// offset = 23000/12700
-	if DEF_SHAPE_SHADOW.Offset != 23000.0/12700.0 {
+	if fptrOr(DEF_SHAPE_SHADOW.Offset, 0) != 23000.0/12700.0 {
 		t.Errorf("DEF_SHAPE_SHADOW.Offset = %v", DEF_SHAPE_SHADOW.Offset)
 	}
 	if DEF_CELL_MARGIN_IN != [4]float64{0.05, 0.1, 0.05, 0.1} {

@@ -1,6 +1,9 @@
 package pptx
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 // newTestSlide builds a minimal PresSlide with a 16x9 layout for object tests.
 func newTestSlide() *PresSlide {
@@ -83,6 +86,31 @@ func TestAddTextDefinition_Placeholder(t *testing.T) {
 	// placeholder anchor is cleared (null), not ctr
 	if obj.Options.BodyProp.Anchor != "" {
 		t.Errorf("placeholder Anchor = %q, want empty", obj.Options.BodyProp.Anchor)
+	}
+}
+
+// M2/F: a placeholder's explicit ParaSpaceBefore:0 must win over a run's 12
+// (TS spread `{...itemOpts, ...placeHold.options}` copies the explicit 0).
+func TestPlaceholderMerge_ParaSpaceBeforeExplicitZeroWins(t *testing.T) {
+	s := newTestSlide()
+	// Register a body placeholder on the layout whose stored options set
+	// ParaSpaceBefore to an explicit 0.
+	s.SlideLayout.SlideObjects = []SlideObject{{
+		Type: SlideObjectTypePlaceholder,
+		Options: &ObjectOptions{
+			Placeholder:     "body",
+			ParaSpaceBefore: ptr(0.0),
+		},
+	}}
+	// Add text targeting that placeholder with its own ParaSpaceBefore:12.
+	addTextDefinition(s, []TextProps{{Text: "hi"}}, &ObjectOptions{
+		Placeholder:     "body",
+		ParaSpaceBefore: ptr(12.0),
+	}, false)
+
+	got := s.SlideObjects[0].Options.ParaSpaceBefore
+	if got == nil || *got != 0 {
+		t.Fatalf("placeholder ParaSpaceBefore:0 should win over run's 12; got %v", got)
 	}
 }
 
@@ -322,7 +350,7 @@ func TestAddChartDefinition_Defaults(t *testing.T) {
 	if o.LegendPos != "r" {
 		t.Errorf("legendPos default = %q, want r", o.LegendPos)
 	}
-	if o.BarGapWidthPct != 150 {
+	if fptrOr(o.BarGapWidthPct, 0) != 150 {
 		t.Errorf("barGapWidthPct default = %v, want 150", o.BarGapWidthPct)
 	}
 	if len(o.ChartColors) == 0 || o.ChartColors[0] != BARCHART_COLORS[0] {
@@ -346,16 +374,16 @@ func TestAddChartDefinition_BarGapWidthBounds(t *testing.T) {
 	resetChartCounter()
 	s := newTestSlide()
 	_, _ = addChartDefinition(s, ChartTypeBar, nil,
-		[]ChartData{{Values: []float64{1}}}, &ChartOptions{BarGapWidthPct: 5000})
-	if got := s.RelsChart[0].Opts.BarGapWidthPct; got != 150 {
+		[]ChartData{{Values: []float64{1}}}, &ChartOptions{BarGapWidthPct: ptr(5000.0)})
+	if got := fptrOr(s.RelsChart[0].Opts.BarGapWidthPct, 0); got != 150 {
 		t.Errorf("out-of-range barGapWidthPct should reset to 150, got %v", got)
 	}
 
 	resetChartCounter()
 	s2 := newTestSlide()
 	_, _ = addChartDefinition(s2, ChartTypeBar, nil,
-		[]ChartData{{Values: []float64{1}}}, &ChartOptions{BarGapWidthPct: 300})
-	if got := s2.RelsChart[0].Opts.BarGapWidthPct; got != 300 {
+		[]ChartData{{Values: []float64{1}}}, &ChartOptions{BarGapWidthPct: ptr(300.0)})
+	if got := fptrOr(s2.RelsChart[0].Opts.BarGapWidthPct, 0); got != 300 {
 		t.Errorf("in-range barGapWidthPct should be kept, got %v", got)
 	}
 }
@@ -488,6 +516,47 @@ func TestAddTableDefinition_ColWMatching(t *testing.T) {
 	obj := s.SlideObjects[0]
 	if len(obj.Options.ColW) != 2 {
 		t.Errorf("matching colW should be preserved, got %+v", obj.Options.ColW)
+	}
+}
+
+// M8: a mis-wired getSlide callback (always returns nil) must produce an error
+// naming the missing slide(s), not silently drop rows.
+func TestAddTableDefinition_AutoPageMissingSlideErrors(t *testing.T) {
+	s := newTestSlide()
+	rows := manyShortRows(100) // enough to overflow into multiple slides
+	opt := &TableProps{AutoPage: ptr(true)}
+	addSlide := func(_ *AddSlideProps) *PresSlide { return &PresSlide{} }
+	getSlide := func(int) *PresSlide { return nil } // mis-wired: never delivers
+
+	_, err := addTableDefinition(s, rows, opt, &s.SlideLayout, s.PresLayout, addSlide, getSlide)
+	if err == nil {
+		t.Fatal("mis-wired getSlide should return an error, not silent success")
+	}
+	if !strings.Contains(err.Error(), "getSlide returned nil") {
+		t.Errorf("error should name the missing-slide condition, got: %v", err)
+	}
+}
+
+// Minor (K): combo-chart multi-axis validation throws are surfaced as errors.
+func TestValidateChartConfig_SecondaryAxisRequired(t *testing.T) {
+	s := newTestSlide()
+	data := []ChartData{{Values: []float64{1}, Labels: [][]string{{"A"}}}}
+	_, err := addChartDefinition(s, ChartTypeBar, nil, data, &ChartOptions{
+		ValAxes: []ChartOptions{{}, {}}, // 2 value axes, none secondary
+	})
+	if err == nil || !strings.Contains(err.Error(), "secondary axis must be used") {
+		t.Fatalf("expected secondary-axis error, got: %v", err)
+	}
+}
+
+func TestValidateChartConfig_AxesCountMismatch(t *testing.T) {
+	s := newTestSlide()
+	data := []ChartData{{Values: []float64{1}, Labels: [][]string{{"A"}}}}
+	_, err := addChartDefinition(s, ChartTypeBar, nil, data, &ChartOptions{
+		CatAxes: []ChartOptions{{}}, // 1 category axis, 0 value axes
+	})
+	if err == nil || !strings.Contains(err.Error(), "same number of value and category axes") {
+		t.Fatalf("expected axes-count error, got: %v", err)
 	}
 }
 

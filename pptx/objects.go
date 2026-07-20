@@ -40,6 +40,16 @@ func orF(v, def float64) float64 {
 	return def
 }
 
+// rangeOr mirrors the TS `!isNaN(x) && x >= lo && x <= hi ? x : def` chart-option
+// defaulting for a *float64: nil (unset) or an out-of-range value yields def; an
+// explicit in-range value (including 0) is honored.
+func rangeOr(p *float64, lo, hi, def float64) float64 {
+	if p != nil && *p >= lo && *p <= hi {
+		return *p
+	}
+	return def
+}
+
 func strInSet(v string, set ...string) bool {
 	for _, s := range set {
 		if v == s {
@@ -282,13 +292,19 @@ func mergePlaceholderOptions(dst, src *ObjectOptions) {
 	if src.BodyProp != nil {
 		dst.BodyProp = src.BodyProp
 	}
+	// NOTE: IndentLevel/RectRadius/Rotate/CharSpacing/Baseline are plain numeric
+	// fields; TS's spread would copy an explicit 0, but Go cannot distinguish an
+	// explicit 0 from "unset" here without pointer-converting the whole run
+	// surface (a large ripple). We copy them only when non-zero and accept that
+	// residual zero-ambiguity.
 	if src.IndentLevel != 0 {
 		dst.IndentLevel = src.IndentLevel
 	}
-	if src.ParaSpaceBefore != 0 {
+	// ParaSpace* ARE pointers: an explicit placeholder 0 wins (TS honors it).
+	if src.ParaSpaceBefore != nil {
 		dst.ParaSpaceBefore = src.ParaSpaceBefore
 	}
-	if src.ParaSpaceAfter != 0 {
+	if src.ParaSpaceAfter != nil {
 		dst.ParaSpaceAfter = src.ParaSpaceAfter
 	}
 	if src.LineSpacing != 0 {
@@ -299,6 +315,56 @@ func mergePlaceholderOptions(dst, src *ObjectOptions) {
 	}
 	if src.RtlMode != nil {
 		dst.RtlMode = src.RtlMode
+	}
+	// Extended toward the TS full `{...itemOpts, ...placeHold.options}` spread
+	// (gen-objects.ts:1026): copy each additional field the placeholder sets.
+	if src.Wrap != nil {
+		dst.Wrap = src.Wrap
+	}
+	if src.AutoFit != nil {
+		dst.AutoFit = src.AutoFit
+	}
+	if src.ShrinkText != nil {
+		dst.ShrinkText = src.ShrinkText
+	}
+	if src.Vert != "" {
+		dst.Vert = src.Vert
+	}
+	if src.RectRadius != 0 {
+		dst.RectRadius = src.RectRadius
+	}
+	if src.Rotate != 0 {
+		dst.Rotate = src.Rotate
+	}
+	if src.FlipH != nil {
+		dst.FlipH = src.FlipH
+	}
+	if src.FlipV != nil {
+		dst.FlipV = src.FlipV
+	}
+	if src.CharSpacing != 0 {
+		dst.CharSpacing = src.CharSpacing
+	}
+	if src.Baseline != 0 {
+		dst.Baseline = src.Baseline
+	}
+	if src.Fit != "" {
+		dst.Fit = src.Fit
+	}
+	if src.Glow != nil {
+		dst.Glow = src.Glow
+	}
+	if src.Outline != nil {
+		dst.Outline = src.Outline
+	}
+	if src.Strike != "" {
+		dst.Strike = src.Strike
+	}
+	if src.Subscript != nil {
+		dst.Subscript = src.Subscript
+	}
+	if src.Superscript != nil {
+		dst.Superscript = src.Superscript
 	}
 }
 
@@ -456,8 +522,9 @@ func addChartDefinition(target *PresSlide, chartType ChartType, multiTypes []ICh
 		}
 	}
 	if strings.Contains(opts.BarGrouping, "tacked") {
-		if opts.BarGapWidthPct == 0 {
-			opts.BarGapWidthPct = 50
+		// TS `if (!options.barGapWidthPct)` (gen-objects.ts:224): falsy = nil or 0.
+		if opts.BarGapWidthPct == nil || *opts.BarGapWidthPct == 0 {
+			opts.BarGapWidthPct = ptr(50.0)
 		}
 	}
 
@@ -567,30 +634,24 @@ func addChartDefinition(target *PresSlide, chartType ChartType, multiTypes []ICh
 		opts.SerAxisLineShow = ptr(true)
 	}
 
-	// 3D view (default 30; note: a plain 0 is treated as unset per foundation
-	// float64 convention)
-	if !(opts.V3DRotX >= -90 && opts.V3DRotX <= 90) || opts.V3DRotX == 0 {
-		opts.V3DRotX = 30
-	}
-	if !(opts.V3DRotY >= 0 && opts.V3DRotY <= 360) || opts.V3DRotY == 0 {
-		opts.V3DRotY = 30
-	}
-	if !(opts.V3DPerspective >= 0 && opts.V3DPerspective <= 240) || opts.V3DPerspective == 0 {
-		opts.V3DPerspective = 30
-	}
+	// 3D view: TS `!isNaN(x) && x >= lo && x <= hi ? x : 30` (gen-objects.ts:293-296).
+	// With *float64, nil (unset) -> 30; an explicit in-range value (incl. 0) is kept.
+	opts.V3DRotX = ptr(rangeOr(opts.V3DRotX, -90, 90, 30))
+	opts.V3DRotY = ptr(rangeOr(opts.V3DRotY, 0, 360, 30))
+	opts.V3DPerspective = ptr(rangeOr(opts.V3DPerspective, 0, 240, 30))
 	if opts.V3DRAngAx == nil {
 		opts.V3DRAngAx = ptr(true)
 	}
 
-	// D: chart
-	if !(opts.BarGapWidthPct >= 0 && opts.BarGapWidthPct <= 1000) || opts.BarGapWidthPct == 0 {
-		opts.BarGapWidthPct = 150
-	}
-	if !(opts.BarGapDepthPct >= 0 && opts.BarGapDepthPct <= 1000) || opts.BarGapDepthPct == 0 {
-		opts.BarGapDepthPct = 150
-	}
+	// D: chart (gen-objects.ts:299-300)
+	opts.BarGapWidthPct = ptr(rangeOr(opts.BarGapWidthPct, 0, 1000, 150))
+	opts.BarGapDepthPct = ptr(rangeOr(opts.BarGapDepthPct, 0, 1000, 150))
 
-	if opts.ChartColors == nil {
+	// M4: treat an empty (non-nil, len 0) slice the same as nil -> default
+	// palette, so downstream `% len(ChartColors)` never divides by zero.
+	// (TS keeps a user's empty [] and renders undefined colors; we fall back to
+	// the palette instead, matching the nil path and avoiding a Go panic.)
+	if len(opts.ChartColors) == 0 {
 		if opts.Type == ChartTypePie || opts.Type == ChartTypeDoughnut {
 			opts.ChartColors = PIECHART_COLORS
 		} else {
@@ -671,13 +732,24 @@ func addChartDefinition(target *PresSlide, chartType ChartType, multiTypes []ICh
 		opts.DataLabelFormatScatter = "custom"
 	}
 
-	opts.LineSize = orF(opts.LineSize, 2)
+	// TS `typeof options.lineSize === 'number' ? x : 2` (gen-objects.ts:348):
+	// nil -> 2; an explicit value (incl. 0, which renders a noFill line) is kept.
+	if opts.LineSize == nil {
+		opts.LineSize = ptr(2.0)
+	}
 
 	if opts.Type == ChartTypeArea || opts.Type == ChartTypeBar || opts.Type == ChartTypeBar3d || opts.Type == ChartTypeLine {
 		v := opts.CatAxisMultiLevelLabels != nil && *opts.CatAxisMultiLevelLabels
 		opts.CatAxisMultiLevelLabels = ptr(v)
 	} else {
 		opts.CatAxisMultiLevelLabels = nil
+	}
+
+	// Minor (gen-charts.ts:625-632): validate multi-axis combo configs. TS throws
+	// these at render time; we surface them as returned errors here in the
+	// option-resolution path (the earliest faithful place that returns an error).
+	if err := validateChartConfig(opts); err != nil {
+		return nil, err
 	}
 
 	// STEP 4/5: build slide object + chart relationship.
@@ -757,10 +829,10 @@ func addImageDefinition(target *PresSlide, opt *ImageProps) error {
 
 	// REALITY-CHECK
 	if strImagePath == "" && strImageData == "" {
-		return errors.New("ERROR: addImage() requires either 'data' or 'path' parameter!")
+		return errors.New("addImage() requires either `data` or `path` parameter")
 	}
 	if strImageData != "" && !strings.Contains(strings.ToLower(strImageData), "base64,") {
-		return errors.New("ERROR: Image `data` value lacks a base64 header! Ex: 'image/png;base64,NMP[...]')")
+		return errors.New("addImage() `data` value lacks a base64 header, e.g. 'image/png;base64,NMP[...]'")
 	}
 
 	// STEP 1: extension (split to address URLs with params)
@@ -861,7 +933,7 @@ func addImageDefinition(target *PresSlide, opt *ImageProps) error {
 	// STEP 5: hyperlink support
 	if objHyperlink != nil {
 		if objHyperlink.URL == "" && objHyperlink.Slide == 0 {
-			return errors.New("ERROR: `hyperlink` option requires either: `url` or `slide`")
+			return errors.New("`hyperlink` option requires either `url` or `slide`")
 		}
 		imageRelID++
 		data := "dummy"
@@ -1088,7 +1160,7 @@ func addShapeDefinition(target *PresSlide, shapeName ShapeType, opts *ShapeProps
 
 	// Reality check
 	if shapeName == "" {
-		return errors.New("Missing/Invalid shape parameter! Example: `addShape(pptxgen.shapes.LINE, {x:1, y:1, w:1, h:1});`")
+		return errors.New("missing/invalid shape parameter; example: `addShape(pptxgen.shapes.LINE, {x:1, y:1, w:1, h:1})`")
 	}
 
 	// 1: ShapeLineProps defaults
@@ -1384,6 +1456,7 @@ func addTableDefinition(
 			AutoPageRepeatHeader: opt.AutoPageRepeatHeader,
 			NewSlideStartY:       opt.NewSlideStartY,
 		}
+		var missingSlides []int
 		for idx, slide := range GetSlidesForTableRows(arrRows, ttsProps, presLayout, slideLayout) {
 			// A: create new slide when needed
 			if getSlide == nil || getSlide(target.SlideNum+idx) == nil {
@@ -1396,14 +1469,15 @@ func addTableDefinition(
 				}
 			}
 
-			// B: reset y after first slide
+			// B: reset y after first slide.
+			// TS `autoPageSlideStartY || newSlideStartY || arrTableMargin[0]`
+			// (gen-objects.ts:970): JS `||`, so nil OR explicit 0 falls through.
 			if idx > 0 {
-				startY := opt.AutoPageSlideStartY
-				if startY == 0 {
-					startY = opt.NewSlideStartY
-				}
-				if startY == 0 {
-					startY = arrTableMargin[0]
+				startY := arrTableMargin[0]
+				if opt.AutoPageSlideStartY != nil && *opt.AutoPageSlideStartY != 0 {
+					startY = *opt.AutoPageSlideStartY
+				} else if opt.NewSlideStartY != nil && *opt.NewSlideStartY != 0 {
+					startY = *opt.NewSlideStartY
 				}
 				opt.Y = ptr(Coord{Val: float64(inch2Emu(startY))})
 			}
@@ -1414,6 +1488,9 @@ func addTableDefinition(
 				newSlide = getSlide(target.SlideNum + idx)
 			}
 			if newSlide == nil {
+				// M8: a mis-wired getSlide callback that fails to deliver a slide
+				// silently dropped rows in the old code. Record it and fail loudly.
+				missingSlides = append(missingSlides, target.SlideNum+idx)
 				continue
 			}
 			opt.AutoPage = ptr(false)
@@ -1423,6 +1500,9 @@ func addTableDefinition(
 			if idx > 0 {
 				newAutoPagedSlides = append(newAutoPagedSlides, newSlide)
 			}
+		}
+		if len(missingSlides) > 0 {
+			return newAutoPagedSlides, fmt.Errorf("addTable auto-paging: getSlide returned nil for slide number(s) %v; table rows were dropped", missingSlides)
 		}
 	}
 

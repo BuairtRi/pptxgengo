@@ -316,14 +316,14 @@ func TestGenXmlColorSelection(t *testing.T) {
 
 func TestCreateGlowElement(t *testing.T) {
 	// options {Size:5}, default DEF_TEXT_GLOW{8, FFFFFF, 0.75}
-	got := createGlowElement(TextGlowProps{Size: 5}, DEF_TEXT_GLOW)
+	got := createGlowElement(TextGlowProps{Size: ptr(5.0)}, DEF_TEXT_GLOW)
 	want := `<a:glow rad="63500"><a:srgbClr val="FFFFFF"><a:alpha val="75000"/></a:srgbClr></a:glow>`
 	if got != want {
 		t.Errorf("createGlowElement(size5) = %q, want %q", got, want)
 	}
 
 	// full override
-	got = createGlowElement(TextGlowProps{Size: 8, Color: "FF0000", Opacity: 0.5}, DEF_TEXT_GLOW)
+	got = createGlowElement(TextGlowProps{Size: ptr(8.0), Color: "FF0000", Opacity: ptr(0.5)}, DEF_TEXT_GLOW)
 	want = `<a:glow rad="101600"><a:srgbClr val="FF0000"><a:alpha val="50000"/></a:srgbClr></a:glow>`
 	if got != want {
 		t.Errorf("createGlowElement(override) = %q, want %q", got, want)
@@ -356,26 +356,26 @@ func TestCorrectShadowOptions(t *testing.T) {
 	}
 
 	// angle out of range -> 270
-	s = correctShadowOptions(&ShadowProps{Type: "outer", Angle: 400})
-	if s.Angle != 270 {
+	s = correctShadowOptions(&ShadowProps{Type: "outer", Angle: ptr(400.0)})
+	if fptrOr(s.Angle, 0) != 270 {
 		t.Errorf("angle 400 -> %v, want 270", s.Angle)
 	}
 
 	// angle rounded
-	s = correctShadowOptions(&ShadowProps{Type: "outer", Angle: 12.7})
-	if s.Angle != 13 {
+	s = correctShadowOptions(&ShadowProps{Type: "outer", Angle: ptr(12.7)})
+	if fptrOr(s.Angle, 0) != 13 {
 		t.Errorf("angle 12.7 -> %v, want 13", s.Angle)
 	}
 
-	// angle 0 untouched
-	s = correctShadowOptions(&ShadowProps{Type: "outer", Angle: 0})
-	if s.Angle != 0 {
+	// angle 0 untouched (explicit 0 stays 0, not normalized)
+	s = correctShadowOptions(&ShadowProps{Type: "outer", Angle: ptr(0.0)})
+	if fptrOr(s.Angle, -1) != 0 {
 		t.Errorf("angle 0 -> %v, want 0", s.Angle)
 	}
 
 	// opacity out of range -> 0.75
-	s = correctShadowOptions(&ShadowProps{Type: "outer", Opacity: 1.5})
-	if s.Opacity != 0.75 {
+	s = correctShadowOptions(&ShadowProps{Type: "outer", Opacity: ptr(1.5)})
+	if fptrOr(s.Opacity, 0) != 0.75 {
 		t.Errorf("opacity 1.5 -> %v, want 0.75", s.Opacity)
 	}
 

@@ -244,7 +244,7 @@ func TestGetSlidesForTableRows_NewSlideStartY_HonoredOnPage2Plus(t *testing.T) {
 	}
 
 	override := GetSlidesForTableRows(rows, &TableToSlidesProps{
-		TableProps: TableProps{AutoPageSlideStartY: 1.0},
+		TableProps: TableProps{AutoPageSlideStartY: ptr(1.0)},
 	}, testLayout, nil)
 	if len(override) != 3 {
 		t.Fatalf("override: expected 3 slides, got %d", len(override))

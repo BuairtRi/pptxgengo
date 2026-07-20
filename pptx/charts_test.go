@@ -46,8 +46,8 @@ func applyChartDefaults(chartType ChartType, data []ChartData, opts *ChartOption
 			opts.BarGrouping = "standard"
 		}
 	}
-	if strings.Contains(opts.BarGrouping, "tacked") && opts.BarGapWidthPct == 0 {
-		opts.BarGapWidthPct = 50
+	if strings.Contains(opts.BarGrouping, "tacked") && (opts.BarGapWidthPct == nil || *opts.BarGapWidthPct == 0) {
+		opts.BarGapWidthPct = ptr(50.0)
 	}
 	// legendPos
 	switch opts.LegendPos {
@@ -121,21 +121,17 @@ func applyChartDefaults(chartType ChartType, data []ChartData, opts *ChartOption
 		opts.SerAxisLineShow = ptr(true)
 	}
 
-	// 3D
-	opts.V3DRotX = 30
-	opts.V3DRotY = 30
-	opts.V3DPerspective = 30
+	// 3D (mirror rangeOr: nil or out-of-range -> 30; explicit in-range kept)
+	opts.V3DRotX = ptr(rangeOr(opts.V3DRotX, -90, 90, 30))
+	opts.V3DRotY = ptr(rangeOr(opts.V3DRotY, 0, 360, 30))
+	opts.V3DPerspective = ptr(rangeOr(opts.V3DPerspective, 0, 240, 30))
 
 	// gaps
-	if !(opts.BarGapWidthPct >= 0 && opts.BarGapWidthPct <= 1000) || opts.BarGapWidthPct == 0 {
-		opts.BarGapWidthPct = 150
-	}
-	if !(opts.BarGapDepthPct >= 0 && opts.BarGapDepthPct <= 1000) || opts.BarGapDepthPct == 0 {
-		opts.BarGapDepthPct = 150
-	}
+	opts.BarGapWidthPct = ptr(rangeOr(opts.BarGapWidthPct, 0, 1000, 150))
+	opts.BarGapDepthPct = ptr(rangeOr(opts.BarGapDepthPct, 0, 1000, 150))
 
 	// chartColors
-	if opts.ChartColors == nil {
+	if len(opts.ChartColors) == 0 {
 		if chartType == ChartTypePie || chartType == ChartTypeDoughnut {
 			opts.ChartColors = PIECHART_COLORS
 		} else {
@@ -176,8 +172,8 @@ func applyChartDefaults(chartType ChartType, data []ChartData, opts *ChartOption
 		opts.DataLabelFormatScatter = "custom"
 	}
 
-	if opts.LineSize == 0 {
-		opts.LineSize = 2
+	if opts.LineSize == nil {
+		opts.LineSize = ptr(2.0)
 	}
 
 	if chartType == ChartTypeArea || chartType == ChartTypeBar || chartType == ChartTypeBar3d || chartType == ChartTypeLine {
@@ -475,7 +471,7 @@ func TestCreateShadowElementNil(t *testing.T) {
 }
 
 func TestCreateShadowElementOuter(t *testing.T) {
-	sh := &ShadowProps{Type: "outer", Blur: 3, Offset: 23000.0 / 12700.0, Angle: 90, Color: "000000", Opacity: 0.35, RotateWithShape: ptr(true)}
+	sh := &ShadowProps{Type: "outer", Blur: ptr(3.0), Offset: ptr(23000.0 / 12700.0), Angle: ptr(90.0), Color: "000000", Opacity: ptr(0.35), RotateWithShape: ptr(true)}
 	got := createShadowElement(sh, DEF_SHAPE_SHADOW)
 	want := `<a:effectLst><a:outerShdw sx="100000" sy="100000" kx="0" ky="0"  algn="bl" blurRad="38100" rotWithShape="1" dist="23000" dir="5400000"><a:srgbClr val="000000"><a:alpha val="35000"/></a:srgbClr></a:outerShdw></a:effectLst>`
 	if got != want {
@@ -540,7 +536,7 @@ func TestMakeXmlChartsDoughnutHoleSize(t *testing.T) {
 
 func TestMakeXmlChartsDoughnutHoleSizeCustom(t *testing.T) {
 	data := []ChartData{{DataIndex: 0, Name: "S", Labels: [][]string{{"A", "B"}}, Values: []float64{1, 2}}}
-	rel := newChartRel(ChartTypeDoughnut, data, ChartOptions{HoleSize: 75})
+	rel := newChartRel(ChartTypeDoughnut, data, ChartOptions{HoleSize: ptr(75.0)})
 	got := makeXmlCharts(rel)
 	if !strings.Contains(got, `<c:holeSize val="75"/>`) {
 		t.Errorf("missing custom holeSize=75, got holeSize region")

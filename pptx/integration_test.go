@@ -133,7 +133,7 @@ func buildCase03(t *testing.T) *Presentation {
 		PositionProps: PositionProps{X: cp(Inches(7)), Y: cp(Inches(2)), W: cp(Inches(2)), H: cp(Inches(1.5))},
 		Fill:          &ShapeFillProps{Color: "FFFFFF"},
 		Line:          &ShapeLineProps{ShapeFillProps: ShapeFillProps{Color: "333333"}, Width: 1},
-		Shadow:        &ShadowProps{Type: "outer", Color: "000000", Opacity: 0.5, Blur: 3, Angle: 45, Offset: 3},
+		Shadow:        &ShadowProps{Type: "outer", Color: "000000", Opacity: ptr(0.5), Blur: ptr(3.0), Angle: ptr(45.0), Offset: ptr(3.0)},
 	}))
 	return p
 }

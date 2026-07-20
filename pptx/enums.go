@@ -45,10 +45,10 @@ var (
 	DEF_CELL_MARGIN_IN  = [4]float64{0.05, 0.1, 0.05, 0.1}
 	DEF_CHART_BORDER    = BorderProps{Type: "solid", Color: "363636", Pt: 1}
 	DEF_CHART_GRIDLINE  = OptsChartGridLine{Color: "888888", Style: "solid", Size: 1, Cap: "flat"}
-	DEF_SHAPE_SHADOW    = ShadowProps{Type: "outer", Blur: 3, Offset: 23000.0 / 12700.0, Angle: 90, Color: "000000", Opacity: 0.35, RotateWithShape: ptr(true)}
+	DEF_SHAPE_SHADOW    = ShadowProps{Type: "outer", Blur: ptr(3.0), Offset: ptr(23000.0 / 12700.0), Angle: ptr(90.0), Color: "000000", Opacity: ptr(0.35), RotateWithShape: ptr(true)}
 	DEF_SLIDE_MARGIN_IN = [4]float64{0.5, 0.5, 0.5, 0.5} // TRBL
-	DEF_TEXT_SHADOW     = ShadowProps{Type: "outer", Blur: 8, Offset: 4, Angle: 270, Color: "000000", Opacity: 0.75}
-	DEF_TEXT_GLOW       = TextGlowProps{Size: 8, Color: "FFFFFF", Opacity: 0.75}
+	DEF_TEXT_SHADOW     = ShadowProps{Type: "outer", Blur: ptr(8.0), Offset: ptr(4.0), Angle: ptr(270.0), Color: "000000", Opacity: ptr(0.75)}
+	DEF_TEXT_GLOW       = TextGlowProps{Size: ptr(8.0), Color: "FFFFFF", Opacity: ptr(0.75)}
 )
 
 // LETTERS is A..Z (column-letter helper).

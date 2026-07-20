@@ -11,6 +11,7 @@ package pptx
 import (
 	"archive/zip"
 	"bytes"
+	"errors"
 	"math"
 	"math/rand"
 	"reflect"
@@ -79,6 +80,30 @@ type chartTitleOpts struct {
 
 // makeXmlCharts is the main entry point: it builds the full chart XML for a
 // chart relationship. Ports gen-charts.ts makeXmlCharts.
+// validateChartConfig replicates the two combo-chart validation throws in
+// gen-charts.ts:625-632. Non-pie/doughnut charts with multiple value axes must
+// have at least one series that targets the secondary value axis, and the count
+// of category axes must match the count of value axes. Returns an error instead
+// of panicking (Go idiom; TS throws at render time).
+func validateChartConfig(opts *ChartOptions) error {
+	if opts.Type == ChartTypePie || opts.Type == ChartTypeDoughnut {
+		return nil
+	}
+	usesSecondaryValAxis := chartBool(opts.SecondaryValAxis)
+	for i := range opts.MultiTypes {
+		if opts.MultiTypes[i].Options != nil && chartBool(opts.MultiTypes[i].Options.SecondaryValAxis) {
+			usesSecondaryValAxis = true
+		}
+	}
+	if len(opts.ValAxes) > 1 && !usesSecondaryValAxis {
+		return errors.New("secondary axis must be used by one of the multiple charts")
+	}
+	if len(opts.CatAxes) > 0 && len(opts.ValAxes) != len(opts.CatAxes) {
+		return errors.New("there must be the same number of value and category axes")
+	}
+	return nil
+}
+
 func makeXmlCharts(rel *SlideRelChart) string {
 	opts := rel.Opts
 	var strXml strings.Builder
@@ -126,7 +151,7 @@ func makeXmlCharts(rel *SlideRelChart) string {
 		if !chartBool(opts.V3DRAngAx) {
 			rAngAx = "0"
 		}
-		strXml.WriteString(`<c:view3D><c:rotX val="` + ftoa(opts.V3DRotX) + `"/><c:rotY val="` + ftoa(opts.V3DRotY) + `"/><c:rAngAx val="` + rAngAx + `"/><c:perspective val="` + ftoa(opts.V3DPerspective) + `"/></c:view3D>`)
+		strXml.WriteString(`<c:view3D><c:rotX val="` + ftoa(fptrOr(opts.V3DRotX, 30)) + `"/><c:rotY val="` + ftoa(fptrOr(opts.V3DRotY, 30)) + `"/><c:rAngAx val="` + rAngAx + `"/><c:perspective val="` + ftoa(fptrOr(opts.V3DPerspective, 30)) + `"/></c:view3D>`)
 	}
 
 	strXml.WriteString(`<c:plotArea>`)
@@ -172,13 +197,16 @@ func makeXmlCharts(rel *SlideRelChart) string {
 			// still emitting — matches JS only when input is valid.
 		}
 
-		if opts.CatAxes != nil {
+		// M4: guard against an explicitly-empty (non-nil, len 0) slice, which
+		// would panic at &CatAxes[0]. JS spreads `{...opts, ...catAxes[0]}` where
+		// catAxes[0] is undefined -> harmless no-op; the len>0 check mirrors that.
+		if len(opts.CatAxes) > 0 {
 			strXml.WriteString(makeCatAxis(overlayChartOptions(opts, &opts.CatAxes[0]), AXIS_ID_CATEGORY_PRIMARY, AXIS_ID_VALUE_PRIMARY))
 		} else {
 			strXml.WriteString(makeCatAxis(opts, AXIS_ID_CATEGORY_PRIMARY, AXIS_ID_VALUE_PRIMARY))
 		}
 
-		if opts.ValAxes != nil {
+		if len(opts.ValAxes) > 0 {
 			strXml.WriteString(makeValAxis(overlayChartOptions(opts, &opts.ValAxes[0]), AXIS_ID_VALUE_PRIMARY))
 			if len(opts.ValAxes) > 1 {
 				strXml.WriteString(makeValAxis(overlayChartOptions(opts, &opts.ValAxes[1]), AXIS_ID_VALUE_SECONDARY))
@@ -398,14 +426,14 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			}
 
 			if chartType == ChartTypeLine || chartType == ChartTypeRadar {
-				if opts.LineSize == 0 {
+				if fptrOr(opts.LineSize, 2) == 0 {
 					strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
 				} else {
 					lineDash := opts.LineDash
 					if lineDash == "" {
 						lineDash = "solid"
 					}
-					strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.LineSize)) + `" cap="` + createLineCap(opts.LineCap) + `"><a:solidFill>` + createColorElement(seriesColor, "") + `</a:solidFill>`)
+					strXml.WriteString(`<a:ln w="` + itoa(valToPts(fptrOr(opts.LineSize, 2))) + `" cap="` + createLineCap(opts.LineCap) + `"><a:solidFill>` + createColorElement(seriesColor, "") + `</a:solidFill>`)
 					strXml.WriteString(`<a:prstDash val="` + lineDash + `"/><a:round/></a:ln>`)
 				}
 			} else if opts.DataBorder != nil {
@@ -477,7 +505,7 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 					strXml.WriteString(`      <c:invertIfNegative val="0"/>`)
 					strXml.WriteString(`    <c:bubble3D val="0"/>`)
 					strXml.WriteString(`    <c:spPr>`)
-					if opts.LineSize == 0 {
+					if fptrOr(opts.LineSize, 2) == 0 {
 						strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
 					} else if chartType == ChartTypeBar {
 						strXml.WriteString(`<a:solidFill>`)
@@ -534,6 +562,11 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			strXml.WriteString(`    <c:numCache>`)
 			strXml.WriteString(`      <c:formatCode>` + strOr(strOr(opts.ValLabelFormatCode, opts.DataTableFormatCode), "General") + `</c:formatCode>`)
 			strXml.WriteString(`      <c:ptCount val="` + itoa(len(obj.Labels[0])) + `"/>`)
+			// Minor (gen-charts.ts:537): TS guards each point with
+			// `if (value || value === 0)` to skip JS array holes (undefined). Go's
+			// Values is []float64, which cannot hold a hole (every index is a real
+			// number), so the guard is inert and unrepresentable — no change needed.
+			// (Do NOT switch Values to []*float64 to model JS holes; out of scope.)
 			for idx, value := range obj.Values {
 				strXml.WriteString(`<c:pt idx="` + itoa(idx) + `"><c:v>` + ftoa(value) + `</c:v></c:pt>`)
 			}
@@ -575,7 +608,7 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 
 		// 4: chart options (gapWidth, marker, etc.)
 		if chartType == ChartTypeBar {
-			strXml.WriteString(`  <c:gapWidth val="` + ftoa(opts.BarGapWidthPct) + `"/>`)
+			strXml.WriteString(`  <c:gapWidth val="` + ftoa(fptrOr(opts.BarGapWidthPct, 150)) + `"/>`)
 			overlap := "0"
 			if strings.Contains(opts.BarGrouping, "tacked") {
 				overlap = "100"
@@ -584,8 +617,8 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			}
 			strXml.WriteString(`  <c:overlap val="` + overlap + `"/>`)
 		} else if chartType == ChartTypeBar3d {
-			strXml.WriteString(`  <c:gapWidth val="` + ftoa(opts.BarGapWidthPct) + `"/>`)
-			strXml.WriteString(`  <c:gapDepth val="` + ftoa(opts.BarGapDepthPct) + `"/>`)
+			strXml.WriteString(`  <c:gapWidth val="` + ftoa(fptrOr(opts.BarGapWidthPct, 150)) + `"/>`)
+			strXml.WriteString(`  <c:gapDepth val="` + ftoa(fptrOr(opts.BarGapDepthPct, 150)) + `"/>`)
 			strXml.WriteString(`  <c:shape val="` + opts.Bar3DShape + `"/>`)
 		} else if chartType == ChartTypeLine {
 			strXml.WriteString(`  <c:marker val="1"/>`)
@@ -626,11 +659,11 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			} else {
 				strXml.WriteString(`<a:solidFill>` + createColorElement(tmpSerColor, "") + `</a:solidFill>`)
 			}
-			if opts.LineSize == 0 {
+			if fptrOr(opts.LineSize, 2) == 0 {
 				strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
 			} else {
 				lineDash := strOr(opts.LineDash, "solid")
-				strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.LineSize)) + `" cap="` + createLineCap(opts.LineCap) + `"><a:solidFill>` + createColorElement(tmpSerColor, "") + `</a:solidFill>`)
+				strXml.WriteString(`<a:ln w="` + itoa(valToPts(fptrOr(opts.LineSize, 2))) + `" cap="` + createLineCap(opts.LineCap) + `"><a:solidFill>` + createColorElement(tmpSerColor, "") + `</a:solidFill>`)
 				strXml.WriteString(`<a:prstDash val="` + lineDash + `"/><a:round/></a:ln>`)
 			}
 			strXml.WriteString(createShadowElement(opts.Shadow, DEF_SHAPE_SHADOW))
@@ -789,7 +822,7 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 					strXml.WriteString(`      <c:invertIfNegative val="0"/>`)
 					strXml.WriteString(`    <c:bubble3D val="0"/>`)
 					strXml.WriteString(`    <c:spPr>`)
-					if opts.LineSize == 0 {
+					if fptrOr(opts.LineSize, 2) == 0 {
 						strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
 					} else {
 						strXml.WriteString(`<a:solidFill>`)
@@ -890,13 +923,13 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			} else {
 				strXml.WriteString(`<a:solidFill>` + createColorElement(tmpSerColor, "") + `</a:solidFill>`)
 			}
-			if opts.LineSize == 0 {
+			if fptrOr(opts.LineSize, 2) == 0 {
 				strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
 			} else if opts.DataBorder != nil {
 				strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.DataBorder.Pt)) + `" cap="flat"><a:solidFill>` + createColorElement(opts.DataBorder.Color, "") + `</a:solidFill><a:prstDash val="solid"/><a:round/></a:ln>`)
 			} else {
 				lineDash := strOr(opts.LineDash, "solid")
-				strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.LineSize)) + `" cap="flat"><a:solidFill>` + createColorElement(tmpSerColor, "") + `</a:solidFill>`)
+				strXml.WriteString(`<a:ln w="` + itoa(valToPts(fptrOr(opts.LineSize, 2))) + `" cap="flat"><a:solidFill>` + createColorElement(tmpSerColor, "") + `</a:solidFill>`)
 				strXml.WriteString(`<a:prstDash val="` + lineDash + `"/><a:round/></a:ln>`)
 			}
 			strXml.WriteString(createShadowElement(opts.Shadow, DEF_SHAPE_SHADOW))
@@ -1104,9 +1137,11 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 		}
 		strXml.WriteString(`  <c:firstSliceAng val="` + firstSlice + `"/>`)
 		if chartType == ChartTypeDoughnut {
+			// TS: `typeof opts.holeSize === 'number' ? opts.holeSize : '50'`
+			// (gen-charts.ts:1616) — explicit 0 renders <c:holeSize val="0"/>.
 			holeSize := "50"
-			if opts.HoleSize != 0 {
-				holeSize = ftoa(opts.HoleSize)
+			if opts.HoleSize != nil {
+				holeSize = ftoa(*opts.HoleSize)
 			}
 			strXml.WriteString(`<c:holeSize val="` + holeSize + `"/>`)
 		}
@@ -1458,15 +1493,12 @@ func makeSerAxis(opts *ChartOptions, axisID, valAxisID string) string {
 		strXml.WriteString(` <c:tickLblSkip val="` + opts.SerAxisLabelFrequency + `"/>`)
 	}
 	if opts.SerLabelFormatCode != "" {
-		if opts.SerAxisBaseTimeUnit != "" {
-			strXml.WriteString(` <c:baseTimeUnit  val="` + strings.ToLower(opts.SerAxisBaseTimeUnit) + `"/>`)
-		}
-		if opts.SerAxisMajorTimeUnit != "" {
-			strXml.WriteString(` <c:majorTimeUnit val="` + strings.ToLower(opts.SerAxisMajorTimeUnit) + `"/>`)
-		}
-		if opts.SerAxisMinorTimeUnit != "" {
-			strXml.WriteString(` <c:minorTimeUnit val="` + strings.ToLower(opts.SerAxisMinorTimeUnit) + `"/>`)
-		}
+		// M6 (fidelity): upstream NEVER emits serAxis base/major/minorTimeUnit.
+		// gen-charts.ts:1883-1893 validates via `opt.toLowerCase()` where `opt`
+		// is the KEY name string (e.g. "serAxisBaseTimeUnit"), never one of
+		// 'days'/'months'/'years', so the guard always sets `opts[opt] = null`
+		// and the three `if (opts.serAxis*TimeUnit)` emissions below it can never
+		// fire. We replicate that bug for byte-fidelity by not emitting them.
 		if opts.SerAxisMajorUnit != nil && *opts.SerAxisMajorUnit != 0 {
 			strXml.WriteString(` <c:majorUnit val="` + ftoa(*opts.SerAxisMajorUnit) + `"/>`)
 		}
@@ -1566,11 +1598,10 @@ func getExcelColName(colIndex int) string {
 
 // createShadowElement ports gen-charts.ts createShadowElement.
 //
-// Deviation: the TS `{...defaults, ...options}` spread overrides every key the
-// user object carries. Go cannot distinguish "field absent" from "zero value",
-// so a non-nil options overrides each field only when it is non-zero; unset
-// fields fall through to defaults. This matches the common cases (nil options,
-// or a fully-specified shadow). options == nil returns `<a:effectLst/>`.
+// The TS `{...defaults, ...options}` spread overrides every key the user object
+// carries (key-presence based). With *float64 numeric fields, a non-nil field
+// (including an explicit 0) overrides the default; a nil field falls through.
+// options == nil returns `<a:effectLst/>`.
 func createShadowElement(options *ShadowProps, defaults ShadowProps) string {
 	if options == nil {
 		return `<a:effectLst/>`
@@ -1579,19 +1610,19 @@ func createShadowElement(options *ShadowProps, defaults ShadowProps) string {
 	if options.Type != "" {
 		opts.Type = options.Type
 	}
-	if options.Blur != 0 {
+	if options.Blur != nil {
 		opts.Blur = options.Blur
 	}
-	if options.Offset != 0 {
+	if options.Offset != nil {
 		opts.Offset = options.Offset
 	}
-	if options.Angle != 0 {
+	if options.Angle != nil {
 		opts.Angle = options.Angle
 	}
 	if options.Color != "" {
 		opts.Color = options.Color
 	}
-	if options.Opacity != 0 {
+	if options.Opacity != nil {
 		opts.Opacity = options.Opacity
 	}
 	if options.RotateWithShape != nil {
@@ -1602,10 +1633,10 @@ func createShadowElement(options *ShadowProps, defaults ShadowProps) string {
 	if typ == "" {
 		typ = "outer"
 	}
-	blur := valToPts(opts.Blur)
-	offset := valToPts(opts.Offset)
-	angle := int(jsRound(opts.Angle * 60000))
-	opacity := int(jsRound(opts.Opacity * 100000))
+	blur := valToPts(fptrOr(opts.Blur, 0))
+	offset := valToPts(fptrOr(opts.Offset, 0))
+	angle := int(jsRound(fptrOr(opts.Angle, 0) * 60000))
+	opacity := int(jsRound(fptrOr(opts.Opacity, 0) * 100000))
 	rotShape := "0"
 	if chartBool(opts.RotateWithShape) {
 		rotShape = "1"

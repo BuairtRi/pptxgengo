@@ -12,6 +12,15 @@ import (
 // ptr returns a pointer to v. Shared helper for optional (pointer) fields.
 func ptr[T any](v T) *T { return &v }
 
+// fptrOr returns *p when p is non-nil, else def. Used to default *float64
+// option fields that distinguish an explicit 0 from "unset" (nil).
+func fptrOr(p *float64, def float64) float64 {
+	if p != nil {
+		return *p
+	}
+	return def
+}
+
 // ftoa formats a float the way JS `String(number)` does: shortest round-trip
 // decimal for "normal" magnitudes (integers printed without a decimal
 // point), switching to JS-style exponential notation outside that range —
@@ -209,20 +218,22 @@ func createColorElement(colorStr, innerElements string) string {
 
 // createGlowElement builds an `a:glow` element, merging options over defaults
 // (unset/zero option fields fall back to the corresponding default).
+// Mirrors the TS `{...defaults, ...options}` spread: a non-nil options field
+// (including an explicit 0) overrides the default; a nil field falls through.
 func createGlowElement(options, defaults TextGlowProps) string {
 	opts := defaults
-	if options.Size != 0 {
+	if options.Size != nil {
 		opts.Size = options.Size
 	}
 	if options.Color != "" {
 		opts.Color = options.Color
 	}
-	if options.Opacity != 0 {
+	if options.Opacity != nil {
 		opts.Opacity = options.Opacity
 	}
 
-	size := int(jsRound(opts.Size * ONEPT))
-	opacity := int(jsRound(opts.Opacity * 100000))
+	size := int(jsRound(fptrOr(opts.Size, 0) * ONEPT))
+	opacity := int(jsRound(fptrOr(opts.Opacity, 0) * 100000))
 
 	var b strings.Builder
 	b.WriteString("<a:glow rad=\"" + strconv.Itoa(size) + "\">")
@@ -279,18 +290,18 @@ func correctShadowOptions(shadow *ShadowProps) *ShadowProps {
 		shadow.Type = "outer"
 	}
 
-	// OPT: angle
-	if shadow.Angle != 0 {
-		if shadow.Angle < 0 || shadow.Angle > 359 {
-			shadow.Angle = 270
+	// OPT: angle (TS truthy `if (shadow.angle)`: nil or 0 skips normalization)
+	if shadow.Angle != nil && *shadow.Angle != 0 {
+		if *shadow.Angle < 0 || *shadow.Angle > 359 {
+			shadow.Angle = ptr(270.0)
 		}
-		shadow.Angle = jsRound(shadow.Angle)
+		shadow.Angle = ptr(jsRound(*shadow.Angle))
 	}
 
-	// OPT: opacity
-	if shadow.Opacity != 0 {
-		if shadow.Opacity < 0 || shadow.Opacity > 1 {
-			shadow.Opacity = 0.75
+	// OPT: opacity (TS truthy `if (shadow.opacity)`: nil or 0 skips)
+	if shadow.Opacity != nil && *shadow.Opacity != 0 {
+		if *shadow.Opacity < 0 || *shadow.Opacity > 1 {
+			shadow.Opacity = ptr(0.75)
 		}
 	}
 

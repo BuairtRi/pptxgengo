@@ -97,12 +97,17 @@ type HyperlinkProps struct {
 }
 
 // ShadowProps describes an outer/inner shadow. Type: "outer" | "inner" | "none".
+//
+// Opacity/Blur/Angle/Offset are *float64 (not plain float64) because the TS code
+// distinguishes an explicitly-supplied 0 from "unset": createShadowElement uses
+// object-spread `{...defaults, ...options}` (key-presence based), so an explicit
+// 0 overrides the non-zero default. A nil pointer means the field was not set.
 type ShadowProps struct {
 	Type            string
-	Opacity         float64
-	Blur            float64
-	Angle           float64
-	Offset          float64
+	Opacity         *float64
+	Blur            *float64
+	Angle           *float64
+	Offset          *float64
 	Color           HexColor
 	RotateWithShape *bool
 }
@@ -319,16 +324,21 @@ type TableProps struct {
 	AutoPageLineWeight   float64
 	AutoPageRepeatHeader *bool
 	AutoPageHeaderRows   int
-	AutoPageSlideStartY  float64
+	// AutoPageSlideStartY is *float64 because the TS paging code uses a
+	// `typeof === 'number'` check (gen-tables.ts:203): an explicit 0 IS an
+	// override (start table at top of slide), distinct from nil = unset.
+	AutoPageSlideStartY *float64
 	// Border: nil unset; len 1 all sides; len 4 [top,right,bottom,left].
-	Border  []BorderProps
+	Border []BorderProps
+	// ColW: nil/empty = distribute evenly; len 1 = uniform width applied to
+	// every column (TS scalar `colW`); len N = explicit per-column widths.
 	ColW    []float64
 	Fill    *ShapeFillProps
 	Margin  Margin
 	RowH    []float64
 	Verbose *bool
-	// Deprecated (v3.3.0):
-	NewSlideStartY float64
+	// Deprecated (v3.3.0): *float64 for the same explicit-0 reason as AutoPageSlideStartY.
+	NewSlideStartY *float64
 }
 
 // TableCell is a single table cell.
@@ -394,7 +404,7 @@ type TableToSlidesProps struct {
 	SlideMargin          Margin
 	// Deprecated (v3.3.0):
 	AddHeaderToEach *bool
-	NewSlideStartY  float64
+	NewSlideStartY  *float64
 }
 
 // ---------------------------------------------------------------------------
@@ -402,10 +412,14 @@ type TableToSlidesProps struct {
 // ---------------------------------------------------------------------------
 
 // TextGlowProps describes a text glow effect. Size is required.
+//
+// Opacity/Size are *float64 because createGlowElement uses object-spread
+// `{...defaults, ...options}` semantics: an explicit 0 overrides the default
+// (nil = unset). See ShadowProps for the same rationale.
 type TextGlowProps struct {
 	Color   HexColor
-	Opacity float64
-	Size    float64
+	Opacity *float64
+	Size    *float64
 }
 
 // BodyProps are internal text-body layout properties (`_bodyProp`).
@@ -445,20 +459,23 @@ type TextPropsOptions struct {
 	LineSpacingMultiple float64
 	Margin              Margin
 	Outline             *OutlineProps
-	ParaSpaceAfter      float64
-	ParaSpaceBefore     float64
-	Placeholder         string
-	RectRadius          float64
-	Rotate              float64
-	RtlMode             *bool
-	Shadow              *ShadowProps
-	Shape               ShapeType
-	Strike              string // "" | "sngStrike" | "dblStrike"
-	Subscript           *bool
-	Superscript         *bool
-	Valign              VAlign
-	Vert                string
-	Wrap                *bool
+	// ParaSpaceAfter/Before are *float64: a placeholder can override a run's
+	// value with an explicit 0 (TS spread merge), and the value must survive to
+	// the render check (nil = unset).
+	ParaSpaceAfter  *float64
+	ParaSpaceBefore *float64
+	Placeholder     string
+	RectRadius      float64
+	Rotate          float64
+	RtlMode         *bool
+	Shadow          *ShadowProps
+	Shape           ShapeType
+	Strike          string // "" | "sngStrike" | "dblStrike"
+	Subscript       *bool
+	Superscript     *bool
+	Valign          VAlign
+	Vert            string
+	Wrap            *bool
 	// Deprecated (v3.3.0 / v3.10.0):
 	AutoFit    *bool
 	ShrinkText *bool
@@ -557,12 +574,15 @@ type ChartOptions struct {
 	ShowSerName        *bool
 	ShowTitle          *bool
 	ShowValue          *bool
-	V3DPerspective     float64
-	V3DRAngAx          *bool
-	V3DRotX            float64
-	V3DRotY            float64
-	ChartArea          *ChartAreaProps
-	PlotArea           *ChartFillLineProps
+	// V3DPerspective/V3DRotX/V3DRotY are *float64: TS defaults them via
+	// `!isNaN(x) && inRange ? x : 30`, so an explicit in-range 0 is honored
+	// (nil = unset → 30). See gen-objects.ts:293-296.
+	V3DPerspective *float64
+	V3DRAngAx      *bool
+	V3DRotX        *float64
+	V3DRotY        *float64
+	ChartArea      *ChartAreaProps
+	PlotArea       *ChartFillLineProps
 	// Deprecated (v3.11.0):
 	Border *BorderProps
 	Fill   HexColor
@@ -666,16 +686,21 @@ type ChartOptions struct {
 	ValLabelFormatCode      string
 
 	// --- bar ---
-	Bar3DShape     string
-	BarDir         string
-	BarGapDepthPct float64
-	BarGapWidthPct float64
+	Bar3DShape string
+	BarDir     string
+	// BarGapDepthPct/BarGapWidthPct are *float64: TS defaults via
+	// `!isNaN(x) && inRange ? x : 150`, so an explicit in-range 0 is honored
+	// (renders <c:gapWidth val="0"/>). See gen-objects.ts:299-300.
+	BarGapDepthPct *float64
+	BarGapWidthPct *float64
 	BarGrouping    string
 	BarOverlapPct  float64
 
 	// --- doughnut / pie ---
 	DataNoEffects *bool
-	HoleSize      float64
+	// HoleSize is *float64: TS render uses `typeof holeSize === 'number' ? x : 50`
+	// (gen-charts.ts:1616), so an explicit 0 renders <c:holeSize val="0"/>.
+	HoleSize      *float64
 	FirstSliceAng float64
 
 	// --- line ---
@@ -685,8 +710,11 @@ type ChartOptions struct {
 	LineDataSymbolLineColor string
 	LineDataSymbolLineSize  float64
 	LineDataSymbolSize      float64
-	LineSize                float64
-	LineSmooth              *bool
+	// LineSize is *float64: TS defaults via `typeof lineSize === 'number' ? x : 2`
+	// (gen-objects.ts:348) and render treats `lineSize === 0` as "no line"
+	// (noFill). An explicit 0 must survive; nil = unset → 2.
+	LineSize   *float64
+	LineSmooth *bool
 
 	// --- radar ---
 	RadarStyle string
@@ -857,8 +885,8 @@ type ObjectOptions struct {
 	LineSpacing         float64
 	LineSpacingMultiple float64
 	Outline             *OutlineProps
-	ParaSpaceAfter      float64
-	ParaSpaceBefore     float64
+	ParaSpaceAfter      *float64
+	ParaSpaceBefore     *float64
 	Shape               ShapeType
 	Strike              string
 	Subscript           *bool

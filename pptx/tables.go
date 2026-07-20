@@ -25,6 +25,10 @@
 //   - Several odd-looking conditionals below (documented inline) are
 //     faithful reproductions of quirks/bugs in the original TS, preserved
 //     deliberately for byte-identical row-split behavior.
+//   - DEVIATION: a zero-length input row is skipped in STEP 6, where upstream
+//     TS crashes (it indexes row[0]/reduces over the row). This is a
+//     deliberate safety choice, locked by
+//     TestGetSlidesForTableRows_EmptyRowSkipped.
 package pptx
 
 import (
@@ -273,11 +277,13 @@ func GetSlidesForTableRows(tableRows []TableRow, tableProps *TableToSlidesProps,
 			}
 		}
 		if len(tableRowSlides) > 0 {
+			// TS `autoPageSlideStartY || newSlideStartY || arrInchMargins[0]`
+			// (gen-tables.ts:197): JS `||`, so nil OR explicit 0 falls through.
 			startYIn := arrInchMargins[0]
-			if tableProps.AutoPageSlideStartY != 0 {
-				startYIn = tableProps.AutoPageSlideStartY
-			} else if tableProps.NewSlideStartY != 0 { // @deprecated v3.3.0
-				startYIn = tableProps.NewSlideStartY
+			if tableProps.AutoPageSlideStartY != nil && *tableProps.AutoPageSlideStartY != 0 {
+				startYIn = *tableProps.AutoPageSlideStartY
+			} else if tableProps.NewSlideStartY != nil && *tableProps.NewSlideStartY != 0 { // @deprecated v3.3.0
+				startYIn = *tableProps.NewSlideStartY
 			}
 			emuStartY = float64(inch2Emu(startYIn))
 		}
@@ -291,10 +297,12 @@ func GetSlidesForTableRows(tableRows []TableRow, tableProps *TableToSlidesProps,
 		if len(tableRowSlides) > 1 {
 			// RULE: Use margins for starting point after the initial Slide, not
 			// `opt.y` (ISSUE #43, ISSUE #47, ISSUE #48).
-			if tableProps.AutoPageSlideStartY != 0 {
-				emuSlideTabH = tabHOrLayout - float64(inch2Emu(tableProps.AutoPageSlideStartY+arrInchMargins[2]))
-			} else if tableProps.NewSlideStartY != 0 { // @deprecated v3.3.0
-				emuSlideTabH = tabHOrLayout - float64(inch2Emu(tableProps.NewSlideStartY+arrInchMargins[2]))
+			// TS `typeof === 'number'` (gen-tables.ts:203-205): an explicit 0 IS
+			// an override (non-nil), distinct from the nil/unset fall-through.
+			if tableProps.AutoPageSlideStartY != nil {
+				emuSlideTabH = tabHOrLayout - float64(inch2Emu(*tableProps.AutoPageSlideStartY+arrInchMargins[2]))
+			} else if tableProps.NewSlideStartY != nil { // @deprecated v3.3.0
+				emuSlideTabH = tabHOrLayout - float64(inch2Emu(*tableProps.NewSlideStartY+arrInchMargins[2]))
 			} else if tablePropY != 0 {
 				base := arrInchMargins[0]
 				if tablePropY/float64(EMU) < arrInchMargins[0] {
@@ -341,12 +349,18 @@ func GetSlidesForTableRows(tableRows []TableRow, tableProps *TableToSlidesProps,
 	}
 
 	// STEP 3: Calculate width using tableProps.ColW if possible.
+	// M3: len==1 is the TS scalar `colW` shorthand (uniform width per column),
+	// so total = colW * numCols; len>1 sums the explicit per-column widths.
 	if tablePropW == 0 && len(tableProps.ColW) > 0 {
-		sum := 0.0
-		for _, w := range tableProps.ColW {
-			sum += w
+		if len(tableProps.ColW) == 1 {
+			tableCalcW = tableProps.ColW[0] * float64(numCols) * float64(EMU)
+		} else {
+			sum := 0.0
+			for _, w := range tableProps.ColW {
+				sum += w
+			}
+			tableCalcW = sum * float64(EMU)
 		}
-		tableCalcW = sum * float64(EMU)
 	}
 
 	// STEP 4: Calculate usable width now that total usable space is known.
@@ -362,11 +376,18 @@ func GetSlidesForTableRows(tableRows []TableRow, tableProps *TableToSlidesProps,
 		}
 	}
 
-	// STEP 5: Calculate column widths if not provided (distribute evenly).
+	// STEP 5: Calculate column widths if not provided (distribute evenly), or
+	// expand the M3 scalar shorthand (len==1) to a uniform per-column slice.
 	if len(tableProps.ColW) == 0 {
 		tableProps.ColW = make([]float64, numCols)
 		for i := range tableProps.ColW {
 			tableProps.ColW[i] = emuSlideTabW / float64(EMU) / float64(numCols)
+		}
+	} else if len(tableProps.ColW) == 1 && numCols > 1 {
+		w := tableProps.ColW[0]
+		tableProps.ColW = make([]float64, numCols)
+		for i := range tableProps.ColW {
+			tableProps.ColW[i] = w
 		}
 	}
 
@@ -374,6 +395,10 @@ func GetSlidesForTableRows(tableRows []TableRow, tableProps *TableToSlidesProps,
 	// slides as rows overflow.
 	newTableRowSlide := TableRowSlide{}
 	for _, row := range tableRows {
+		// DEVIATION (documented in the tables.go header): an empty row is
+		// skipped here. Upstream TS indexes `row[0]`/reduces over the row and
+		// crashes on a zero-length row; skipping is the safer Go behavior and is
+		// locked by TestGetSlidesForTableRows_EmptyRowSkipped.
 		if len(row) == 0 {
 			continue
 		}

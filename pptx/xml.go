@@ -527,23 +527,25 @@ func marginAt(m Margin, i int) float64 {
 // shadowXml builds the <a:effectLst> shadow for text/placeholder/image shapes.
 // It mutates the shadow struct exactly as the TS does before rendering.
 func shadowXml(sh *ShadowProps) string {
+	// TS uses JS `||` here (gen-xml.ts:521-524): nil OR explicit 0 falls back
+	// to the default, so fptrOr(...,0)==0 maps to the default value.
 	sh.Type = strOr(sh.Type, "outer")
-	blur := sh.Blur
+	blur := fptrOr(sh.Blur, 0)
 	if blur == 0 {
 		blur = 8
 	}
 	blurV := valToPts(blur)
-	offset := sh.Offset
+	offset := fptrOr(sh.Offset, 0)
 	if offset == 0 {
 		offset = 4
 	}
 	offsetV := valToPts(offset)
-	angle := sh.Angle
+	angle := fptrOr(sh.Angle, 0)
 	if angle == 0 {
 		angle = 270
 	}
 	angleV := int(jsRound(angle * 60000))
-	opacity := sh.Opacity
+	opacity := fptrOr(sh.Opacity, 0)
 	if opacity == 0 {
 		opacity = 0.75
 	}
@@ -566,23 +568,24 @@ func shadowXml(sh *ShadowProps) string {
 
 // shadowImageXml mirrors the (slightly different) shadow block in the image case.
 func shadowImageXml(sh *ShadowProps) string {
+	// TS uses JS `||` here (gen-xml.ts:616-619): nil OR explicit 0 falls back to default.
 	sh.Type = strOr(sh.Type, "outer")
-	blur := sh.Blur
+	blur := fptrOr(sh.Blur, 0)
 	if blur == 0 {
 		blur = 8
 	}
 	blurV := valToPts(blur)
-	offset := sh.Offset
+	offset := fptrOr(sh.Offset, 0)
 	if offset == 0 {
 		offset = 4
 	}
 	offsetV := valToPts(offset)
-	angle := sh.Angle
+	angle := fptrOr(sh.Angle, 0)
 	if angle == 0 {
 		angle = 270
 	}
 	angleV := int(jsRound(angle * 60000))
-	opacity := sh.Opacity
+	opacity := fptrOr(sh.Opacity, 0)
 	if opacity == 0 {
 		opacity = 0.75
 	}
@@ -1224,11 +1227,11 @@ func genXmlParagraphProperties(opts *ObjectOptions, isDefault bool) string {
 		paragraphPropXml += ` lvl="` + itoa(opts.IndentLevel) + `"`
 	}
 
-	if opts.ParaSpaceBefore > 0 {
-		strXmlParaSpc += `<a:spcBef><a:spcPts val="` + itoa(int(jsRound(opts.ParaSpaceBefore*100))) + `"/></a:spcBef>`
+	if opts.ParaSpaceBefore != nil && *opts.ParaSpaceBefore > 0 {
+		strXmlParaSpc += `<a:spcBef><a:spcPts val="` + itoa(int(jsRound(*opts.ParaSpaceBefore*100))) + `"/></a:spcBef>`
 	}
-	if opts.ParaSpaceAfter > 0 {
-		strXmlParaSpc += `<a:spcAft><a:spcPts val="` + itoa(int(jsRound(opts.ParaSpaceAfter*100))) + `"/></a:spcAft>`
+	if opts.ParaSpaceAfter != nil && *opts.ParaSpaceAfter > 0 {
+		strXmlParaSpc += `<a:spcAft><a:spcPts val="` + itoa(int(jsRound(*opts.ParaSpaceAfter*100))) + `"/></a:spcAft>`
 	}
 
 	// bullet
@@ -1619,10 +1622,11 @@ func genXmlTextBodyCore(typ SlideObjectType, opts *ObjectOptions, tmpTextObjects
 			if textObj.options.IndentLevel == 0 {
 				textObj.options.IndentLevel = opts.IndentLevel
 			}
-			if textObj.options.ParaSpaceBefore == 0 {
+			// TS `||` (gen-xml.ts:1283-1284): nil or explicit 0 inherits object-level.
+			if fptrOr(textObj.options.ParaSpaceBefore, 0) == 0 {
 				textObj.options.ParaSpaceBefore = opts.ParaSpaceBefore
 			}
-			if textObj.options.ParaSpaceAfter == 0 {
+			if fptrOr(textObj.options.ParaSpaceAfter, 0) == 0 {
 				textObj.options.ParaSpaceAfter = opts.ParaSpaceAfter
 			}
 			paragraphPropXml := genXmlParagraphProperties(textObj.options, false)
