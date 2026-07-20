@@ -463,7 +463,7 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 			boldVal = "1"
 		}
 		strSlideXml += `<a:fld id="` + SLDNUMFLDID + `" type="slidenum"><a:rPr b="` + boldVal + `" lang="en-US"/>`
-		strSlideXml += `<a:t>` + itoa(slide.SlideNum) + `</a:t></a:fld><a:endParaRPr lang="en-US"/></a:p>`
+		strSlideXml += `<a:t>` + slideNumFieldText(slide.SlideNum) + `</a:t></a:fld><a:endParaRPr lang="en-US"/></a:p>`
 		strSlideXml += "</p:txBody></p:sp>"
 	}
 
@@ -472,6 +472,17 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 	strSlideXml += "</p:cSld>"
 
 	return strSlideXml
+}
+
+// slideNumFieldText renders the text content of a slide-number field. The slide
+// master has no slide number (TS `_slideNum` is null → String(null) == "null");
+// PresSlide models that absence as 0 (slides are 1-based, layouts are 1000+), so
+// 0 renders as "null" to match String(null) in the JS output.
+func slideNumFieldText(n int) string {
+	if n == 0 {
+		return "null"
+	}
+	return itoa(n)
 }
 
 // tooltipVal encodes the hyperlink tooltip (empty when unset), mirroring

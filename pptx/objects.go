@@ -685,6 +685,15 @@ func addChartDefinition(target *PresSlide, chartType ChartType, multiTypes []ICh
 	resultObject := &SlideObject{
 		Type:     SlideObjectTypeChart,
 		ChartRID: rid,
+		// Carry the geometry/name/altText onto the slide object so the chart's
+		// <p:graphicFrame> (rendered by slideObjectToXml) gets its position,
+		// cNvPr name, and descr. Mirrors TS storing `options` on the chart
+		// slide object.
+		Options: &ObjectOptions{
+			PositionProps:   opts.PositionProps,
+			ObjectNameProps: opts.ObjectNameProps,
+			AltText:         opts.AltText,
+		},
 	}
 
 	rel := SlideRelChart{
