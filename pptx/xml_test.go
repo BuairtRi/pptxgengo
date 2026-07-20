@@ -242,6 +242,182 @@ func TestGenXmlTextBodyRich(t *testing.T) {
 	assertEqual(t, got, want)
 }
 
+// TestBkgdEmptyStringTreatedAsAbsent covers REVIEW.md Nit (xml.go:111): TS
+// checks `!slide.bkgd` (falsy), so `bkgd: ""` is equivalent to `bkgd:
+// undefined`. Bkgd is `any` in Go, so a non-nil interface holding "" must be
+// treated the same as nil — otherwise the DEFAULT-layout bgRef fallback never
+// fires for a slide/layout that explicitly (if pointlessly) set `bkgd: ""`.
+func TestBkgdEmptyStringTreatedAsAbsent(t *testing.T) {
+	slide := &SlideBaseProps{Name: DEF_PRES_LAYOUT_NAME, Bkgd: ""}
+	got := slideObjectToXml(slide, nil)
+	want := `<p:bg><p:bgRef idx="1001"><a:schemeClr val="bg1"/></p:bgRef></p:bg>`
+	if !strings.Contains(got, want) {
+		t.Errorf("Bkgd:\"\" should be treated as absent (JS falsy), triggering the default bgRef; got: %s", got)
+	}
+}
+
+// TestMarginOutOfContractLenZeroFillsInsets covers REVIEW.md Minor
+// (xml.go:213-224): TS's margin-to-bodyPr conversion only special-cases
+// `typeof margin === 'number'` (Go's len==1 uniform slice); any other array
+// length goes through `margin[i] || 0` and zero-fills missing indices. The Go
+// port used to require len==4 exactly, silently no-op'ing (leaving all four
+// insets at their previous/zero value) for len 2 or 3. It must now populate
+// the present indices and zero-fill the rest, for any length other than 1.
+func TestMarginOutOfContractLenZeroFillsInsets(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		margin Margin
+	}{
+		{"len2", Margin{10, 20}},
+		{"len3", Margin{10, 20, 30}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			opts := &ObjectOptions{
+				PositionProps:   PositionProps{X: coordPtr(Inches(1)), Y: coordPtr(Inches(1)), W: coordPtr(Inches(8)), H: coordPtr(Inches(1))},
+				TextBaseProps:   TextBaseProps{FontSize: 12, Color: "000000"},
+				ObjectNameProps: ObjectNameProps{ObjectName: "Text 0"},
+				Line:            &ShapeLineProps{},
+				Margin:          tc.margin,
+			}
+			slide := &SlideBaseProps{SlideNum: 1, SlideObjects: []SlideObject{{
+				Type: SlideObjectTypeText, Shape: ShapeTypeRect, Options: opts,
+				Text: []TextProps{{Text: "Hi", Options: &TextPropsOptions{}}},
+			}}}
+			_ = slideObjectToXml(slide, nil)
+
+			wantL := float64(valToPts(marginAt(tc.margin, 0)))
+			wantR := float64(valToPts(marginAt(tc.margin, 1)))
+			wantB := float64(valToPts(marginAt(tc.margin, 2))) // 0 for len2, real for len3
+			wantT := float64(valToPts(marginAt(tc.margin, 3))) // always 0 (out of contract)
+			if opts.BodyProp == nil {
+				t.Fatalf("BodyProp not set")
+			}
+			if opts.BodyProp.LIns != wantL {
+				t.Errorf("LIns = %v, want %v", opts.BodyProp.LIns, wantL)
+			}
+			if opts.BodyProp.RIns != wantR {
+				t.Errorf("RIns = %v, want %v", opts.BodyProp.RIns, wantR)
+			}
+			if opts.BodyProp.BIns != wantB {
+				t.Errorf("BIns = %v, want %v", opts.BodyProp.BIns, wantB)
+			}
+			if opts.BodyProp.TIns != wantT {
+				t.Errorf("TIns = %v, want %v (out-of-contract index zero-filled)", opts.BodyProp.TIns, wantT)
+			}
+		})
+	}
+}
+
+// TestSlideNumberMarginOutOfContractLenZeroFillsInsets is the sibling of
+// TestMarginOutOfContractLenZeroFillsInsets for the slide-number bodyPr
+// insets (REVIEW.md Minor, xml.go:415-420). Unlike the shape-margin path,
+// this one writes the lIns/tIns/rIns/bIns attributes unconditionally, so the
+// zero-fill is directly observable in the rendered XML.
+func TestSlideNumberMarginOutOfContractLenZeroFillsInsets(t *testing.T) {
+	margin := Margin{10, 20} // len2: TS zero-fills margin[2]/margin[3]
+	slide := &SlideBaseProps{
+		SlideNum:         1,
+		SlideNumberProps: &SlideNumberProps{Margin: margin},
+	}
+	got := slideObjectToXml(slide, nil)
+
+	want := ` lIns="` + itoa(valToPts(marginAt(margin, 3))) + `"` + // 0, out of contract
+		` tIns="` + itoa(valToPts(marginAt(margin, 0))) + `"` +
+		` rIns="` + itoa(valToPts(marginAt(margin, 1))) + `"` +
+		` bIns="` + itoa(valToPts(marginAt(margin, 2))) + `"` // 0, out of contract
+	if !strings.Contains(got, want) {
+		t.Errorf("missing zero-filled slide-number bodyPr insets.\nwant substring: %s\ngot: %s", want, got)
+	}
+}
+
+// TestInheritRunOptionsFalsyOverwrite reproduces the JS falsy-inheritance
+// semantics verified against live pptxgenjs (REVIEW.md M7): a shape-level
+// `bold: true` OVERWRITES a run's explicit `bold: false`, because the TS
+// inheritance loop (`gen-xml.ts:1292-1296`) does `if (!textObj.options[key])
+// textObj.options[key] = val`, and `false` is falsy in JS. This must hold for
+// Bold/Italic/Subscript/Superscript (boolean-valued options); non-boolean
+// (object/array/pointer) fields like Underline/Outline/Glow/Hyperlink/TabStops
+// stay nil-check gated since JS objects are always truthy when non-null.
+func TestInheritRunOptionsFalsyOverwrite(t *testing.T) {
+	shape := &ObjectOptions{
+		PositionProps:   PositionProps{X: coordPtr(Inches(0.5)), Y: coordPtr(Inches(0.5)), W: coordPtr(Inches(9)), H: coordPtr(Inches(1))},
+		TextBaseProps:   TextBaseProps{Color: "000000", Bold: ptr(true), Italic: ptr(true)},
+		ObjectNameProps: ObjectNameProps{ObjectName: "Text 0"},
+		Line:            &ShapeLineProps{},
+		BodyProp:        &BodyProps{},
+		Subscript:       ptr(true),
+		Superscript:     ptr(true),
+	}
+	obj := SlideObject{
+		Type:    SlideObjectTypeText,
+		Shape:   ShapeTypeRect,
+		Options: shape,
+		Text: []TextProps{
+			{Text: "Run", Options: &TextPropsOptions{
+				TextBaseProps: TextBaseProps{Color: "000000", Bold: ptr(false), Italic: ptr(false)},
+				Subscript:     ptr(false),
+				Superscript:   ptr(false),
+			}},
+		},
+	}
+	got := genXmlTextBody(&obj)
+
+	run := extractBetween(t, got, "<a:r>", "</a:r>")
+	if !strings.Contains(run, `b="1"`) {
+		t.Errorf("shape bold:true must overwrite run bold:false (JS falsy semantics); run xml: %s", run)
+	}
+	if !strings.Contains(run, `i="1"`) {
+		t.Errorf("shape italic:true must overwrite run italic:false; run xml: %s", run)
+	}
+	// Subscript/Superscript both true is a contradiction in practice, but the
+	// inheritance rule only cares that an explicit `false` on the run gets
+	// overwritten; assert at least one baseline attribute reflecting the
+	// overwritten (truthy) shape value made it through rather than being
+	// suppressed by the run's stale falsy pointer.
+	if !strings.Contains(run, `baseline=`) {
+		t.Errorf("expected baseline attr from overwritten subscript/superscript; run xml: %s", run)
+	}
+}
+
+// TestVmergeDummyCellClampAppends reproduces the TS splice-clamp behavior for
+// irregular colspan+rowspan grids (REVIEW.md Minor, xml.go:832-839). When a
+// rowspan>1 cell's column index (cIdx) lands beyond the next row's current
+// length, TS's `nextRow.splice(cIdx, 0, hMergeCell)` still inserts the cell —
+// JS Array.prototype.splice clamps an out-of-range start index to the array's
+// length instead of no-op'ing. The Go port must append the merge cell at the
+// end in that case rather than silently dropping it.
+//
+// Row0 (post hmerge-expansion) has 4 cells at indices 0..3, only the last
+// (index 3) has rowspan=2; row1 starts with 0 real cells, so by the time cIdx
+// reaches 3, len(nextRow) is still 0 and the naive `cIdx <= len(nextRow)`
+// guard used to drop the merge cell entirely.
+func TestVmergeDummyCellClampAppends(t *testing.T) {
+	row0 := []TableCell{
+		{Type: SlideObjectTypeTablecell, Text: "A", Options: &TableCellProps{}},
+		{Type: SlideObjectTypeTablecell, Text: "B", Options: &TableCellProps{}},
+		{Type: SlideObjectTypeTablecell, Text: "C", Options: &TableCellProps{}},
+		{Type: SlideObjectTypeTablecell, Text: "D", Options: &TableCellProps{Rowspan: 2}},
+	}
+	row1 := []TableCell{} // deliberately shorter than row0 at the merge point
+	obj := &SlideObject{
+		Type:       SlideObjectTypeTable,
+		Options:    &ObjectOptions{ObjectNameProps: ObjectNameProps{ObjectName: "Table 1"}},
+		ArrTabRows: [][]TableCell{row0, row1},
+	}
+	slide := &SlideBaseProps{SlideNum: 1}
+
+	got := slideObjectTableToXml(obj, slide, 1, 0, 0, 9144000, 1000000)
+
+	trs := strings.Split(got, `<a:tr `)
+	if len(trs) < 3 {
+		t.Fatalf("expected 2 <a:tr> rows, got %d\nxml: %s", len(trs)-1, got)
+	}
+	row1Xml := trs[2]
+	if !strings.Contains(row1Xml, `vMerge="1"`) {
+		t.Errorf("expected the rowspan=2 dummy cell to be appended (clamped) into row1, not dropped; row1 xml: %s", row1Xml)
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Font-embedding hooks (no golden — asserted against ECMA-376-derived strings).
 // ---------------------------------------------------------------------------
@@ -323,11 +499,24 @@ func TestMakeXmlPresentationFontHooks(t *testing.T) {
 	if !strings.Contains(got, wantLst) {
 		t.Errorf("presentation missing/incorrect embeddedFontLst.\ngot: %s", got)
 	}
-	// placement: after sldMasterIdLst, before sldIdLst
-	iMaster := strings.Index(got, "</p:sldMasterIdLst>")
-	iLst := strings.Index(got, "<p:embeddedFontLst>")
+	// placement: ECMA-376 CT_Presentation sequence puts embeddedFontLst AFTER
+	// sldIdLst/sldSz/notesSz (not immediately after sldMasterIdLst). Verify it
+	// lands immediately after the (self-closing) <p:notesSz.../>, and after
+	// sldIdLst/sldSz too.
+	notesSzRe := regexp.MustCompile(`<p:notesSz[^>]*/>`)
+	notesSzLoc := notesSzRe.FindStringIndex(got)
 	iSld := strings.Index(got, "<p:sldIdLst>")
-	if !(iMaster < iLst && iLst < iSld) {
-		t.Errorf("embeddedFontLst misplaced: master=%d lst=%d sld=%d", iMaster, iLst, iSld)
+	iSldSz := strings.Index(got, "<p:sldSz")
+	iLst := strings.Index(got, "<p:embeddedFontLst>")
+	if iSld < 0 || iSldSz < 0 || notesSzLoc == nil || iLst < 0 {
+		t.Fatalf("missing expected elements: sldIdLst=%d sldSz=%d notesSz=%v embeddedFontLst=%d", iSld, iSldSz, notesSzLoc, iLst)
+	}
+	iNotesSzEnd := notesSzLoc[1]
+	if !(iSld < iSldSz && iSldSz < iNotesSzEnd && iNotesSzEnd <= iLst) {
+		t.Fatalf("embeddedFontLst misplaced: sldIdLst=%d sldSz=%d notesSzEnd=%d lst=%d (want sldIdLst < sldSz < notesSzEnd <= embeddedFontLst)", iSld, iSldSz, iNotesSzEnd, iLst)
+	}
+	// must be immediately after the closing notesSz tag (no other elements between).
+	if got[iNotesSzEnd:iLst] != "" {
+		t.Errorf("embeddedFontLst must immediately follow <p:notesSz.../>; found %q in between", got[iNotesSzEnd:iLst])
 	}
 }

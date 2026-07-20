@@ -95,9 +95,11 @@ Writer emits `ppt/fonts/fontN.fntdata` parts. Hooks other tasks MUST provide:
 - **xml.go**: `makeXmlContTypes` adds `<Default Extension="fntdata" ContentType="application/x-fontdata"/>`
   when the presentation has embedded fonts; `makeXmlPresentation` emits `embedTrueTypeFonts="1"`
   attribute and `<p:embeddedFontLst>` (one `<p:embeddedFont>` per typeface with
-  `<p:font typeface="..."/>` + `<p:regular r:id="..."/>` etc.) immediately after `<p:sldMasterIdLst>`
-  ordering per ECMA-376 schema (embeddedFontLst comes after sldMasterIdLst/notesMasterIdLst and
-  before sldIdLst); `makeXmlPresentationRels` adds relationships of type
+  `<p:font typeface="..."/>` + `<p:regular r:id="..."/>` etc.) immediately after `</p:notesSz>`,
+  ordering per the ECMA-376 `CT_Presentation` schema sequence: sldMasterIdLst, notesMasterIdLst,
+  handoutMasterIdLst, sldIdLst, sldSz, notesSz, smartTags, embeddedFontLst, custShowLst, ...
+  (embeddedFontLst comes AFTER sldIdLst/sldSz/notesSz, not immediately after sldMasterIdLst);
+  `makeXmlPresentationRels` adds relationships of type
   `http://schemas.openxmlformats.org/officeDocument/2006/relationships/font` targeting `fonts/fontN.fntdata`.
 - **types.go consumers**: presentation-level state lives on the Presentation struct
   (`EmbeddedFonts []EmbeddedFont`), defined in fonts.go, not types.go.

@@ -108,7 +108,7 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 		strSlideXml += `<p:bg><p:bgPr><a:blipFill dpi="0" rotWithShape="1"><a:blip r:embed="rId` + itoa(slide.BkgdImgRid) + `"><a:lum/></a:blip><a:srcRect/><a:stretch><a:fillRect/></a:stretch></a:blipFill><a:effectLst/></p:bgPr></p:bg>`
 	} else if slide.Background != nil && slide.Background.Color != "" {
 		strSlideXml += `<p:bg><p:bgPr>` + genXmlColorSelection(&slide.Background.ShapeFillProps) + `</p:bgPr></p:bg>`
-	} else if slide.Bkgd == nil && slide.Name != "" && slide.Name == DEF_PRES_LAYOUT_NAME {
+	} else if bkgdIsUnset(slide.Bkgd) && slide.Name != "" && slide.Name == DEF_PRES_LAYOUT_NAME {
 		strSlideXml += `<p:bg><p:bgRef idx="1001"><a:schemeClr val="bg1"/></p:bgRef></p:bg>`
 	}
 
@@ -210,17 +210,21 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 			if opts.BodyProp == nil {
 				opts.BodyProp = &BodyProps{}
 			}
-			if opts.Margin != nil && len(opts.Margin) == 4 {
-				opts.BodyProp.LIns = float64(valToPts(marginAt(opts.Margin, 0)))
-				opts.BodyProp.RIns = float64(valToPts(marginAt(opts.Margin, 1)))
-				opts.BodyProp.BIns = float64(valToPts(marginAt(opts.Margin, 2)))
-				opts.BodyProp.TIns = float64(valToPts(marginAt(opts.Margin, 3)))
-			} else if opts.Margin != nil && len(opts.Margin) == 1 {
+			// Mirrors TS: `typeof margin === 'number'` (Go len==1, uniform on
+			// all sides) vs. `Array.isArray(margin)` (any other length, incl.
+			// 0/2/3), where missing indices zero-fill via `margin[i] || 0`
+			// rather than being skipped.
+			if opts.Margin != nil && len(opts.Margin) == 1 {
 				m := valToPts(opts.Margin[0])
 				opts.BodyProp.LIns = float64(m)
 				opts.BodyProp.RIns = float64(m)
 				opts.BodyProp.BIns = float64(m)
 				opts.BodyProp.TIns = float64(m)
+			} else if opts.Margin != nil {
+				opts.BodyProp.LIns = float64(valToPts(marginAt(opts.Margin, 0)))
+				opts.BodyProp.RIns = float64(valToPts(marginAt(opts.Margin, 1)))
+				opts.BodyProp.BIns = float64(valToPts(marginAt(opts.Margin, 2)))
+				opts.BodyProp.TIns = float64(valToPts(marginAt(opts.Margin, 3)))
 			}
 
 			// A: Start SHAPE
@@ -412,17 +416,21 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 			`</p:spPr>`
 		strSlideXml += "<p:txBody>"
 		strSlideXml += "<a:bodyPr"
-		if snp.Margin != nil && len(snp.Margin) == 4 {
-			strSlideXml += ` lIns="` + itoa(valToPts(marginAt(snp.Margin, 3))) + `"`
-			strSlideXml += ` tIns="` + itoa(valToPts(marginAt(snp.Margin, 0))) + `"`
-			strSlideXml += ` rIns="` + itoa(valToPts(marginAt(snp.Margin, 1))) + `"`
-			strSlideXml += ` bIns="` + itoa(valToPts(marginAt(snp.Margin, 2))) + `"`
-		} else if snp.Margin != nil && len(snp.Margin) == 1 {
+		// See the shape-margin conversion above: len==1 is the Go
+		// representation of TS's scalar `number` margin (uniform); any other
+		// non-nil length is the TS array case, which zero-fills missing
+		// indices via `margin[i] || 0` rather than requiring exactly 4.
+		if snp.Margin != nil && len(snp.Margin) == 1 {
 			m := valToPts(snp.Margin[0])
 			strSlideXml += ` lIns="` + itoa(m) + `"`
 			strSlideXml += ` tIns="` + itoa(m) + `"`
 			strSlideXml += ` rIns="` + itoa(m) + `"`
 			strSlideXml += ` bIns="` + itoa(m) + `"`
+		} else if snp.Margin != nil {
+			strSlideXml += ` lIns="` + itoa(valToPts(marginAt(snp.Margin, 3))) + `"`
+			strSlideXml += ` tIns="` + itoa(valToPts(marginAt(snp.Margin, 0))) + `"`
+			strSlideXml += ` rIns="` + itoa(valToPts(marginAt(snp.Margin, 1))) + `"`
+			strSlideXml += ` bIns="` + itoa(valToPts(marginAt(snp.Margin, 2))) + `"`
 		}
 		if snp.Valign != "" {
 			v := snp.Valign
@@ -492,6 +500,20 @@ func tooltipVal(h *HyperlinkProps) string {
 		return encodeXmlEntities(h.Tooltip)
 	}
 	return ""
+}
+
+// bkgdIsUnset mirrors the JS falsy check `!slide.bkgd`. Bkgd is `any` (it can
+// hold a string color, a *BackgroundProps, or nil); a non-nil interface
+// holding the zero value of a JS-falsy type (currently just the empty
+// string) must be treated as absent, not merely a nil check.
+func bkgdIsUnset(b any) bool {
+	if b == nil {
+		return true
+	}
+	if s, ok := b.(string); ok && s == "" {
+		return true
+	}
+	return false
 }
 
 // marginAt returns m[i] or 0 (mirrors `margin[i] || 0`).
@@ -833,10 +855,15 @@ func slideObjectTableToXml(slideItemObj *SlideObject, slide *SlideBaseProps, int
 				hmerge := cell.Hmerge
 				merge := TableCell{Type: SlideObjectTypeTablecell, Options: &TableCellProps{Colspan: colspan}, RowContinue: rowspan - 1, Vmerge: ptr(true), Hmerge: hmerge}
 				nextRow := arrTabRows[rIdx+1]
-				if cIdx <= len(nextRow) {
-					nextRow = append(nextRow[:cIdx], append([]TableCell{merge}, nextRow[cIdx:]...)...)
-					arrTabRows[rIdx+1] = nextRow
+				// Mirrors JS `nextRow.splice(cIdx, 0, hMergeCell)`: an
+				// out-of-range start index is clamped to the array's length
+				// (append) rather than being a no-op.
+				insertAt := cIdx
+				if insertAt > len(nextRow) {
+					insertAt = len(nextRow)
 				}
+				nextRow = append(nextRow[:insertAt], append([]TableCell{merge}, nextRow[insertAt:]...)...)
+				arrTabRows[rIdx+1] = nextRow
 			}
 		}
 	}
@@ -1695,7 +1722,20 @@ func cloneObjOpts(o *ObjectOptions) *ObjectOptions {
 
 // inheritRunOptions copies run-relevant fields from the shape options to the run
 // options when the run's field is unset. Mirrors the TS Object.entries(opts)
-// inheritance loop (bullet excluded; color skipped when run has a hyperlink).
+// inheritance loop (`gen-xml.ts:1292-1296`): `if (key !== 'bullet' &&
+// !textObj.options[key]) textObj.options[key] = val`, i.e. JS *falsy* check,
+// not a null/undefined check (bullet excluded; color skipped when run has a
+// hyperlink).
+//
+// For string/number fields JS falsy ("" / 0) coincides with the Go
+// zero-value check below. For *bool fields that represent a JS boolean
+// (Bold/Italic/Subscript/Superscript/RtlMode), `false` is JS-falsy too, so an
+// explicit run-level `false` must still be overwritten by a truthy shape
+// value (verified against live pptxgenjs: shape `bold:true` overwrites run
+// `bold:false`) — hence the `== nil || !*run.X` form. Fields that are
+// JS objects/arrays (Underline, Outline, Glow, Hyperlink, TabStops) are
+// truthy whenever non-null regardless of contents, so a plain nil-check
+// already matches JS semantics for those.
 func inheritRunOptions(run, opts *ObjectOptions) {
 	hasHyperlink := run.Hyperlink != nil
 	if run.Lang == "" {
@@ -1707,10 +1747,10 @@ func inheritRunOptions(run, opts *ObjectOptions) {
 	if run.FontFace == "" {
 		run.FontFace = opts.FontFace
 	}
-	if run.Bold == nil {
+	if run.Bold == nil || !*run.Bold {
 		run.Bold = opts.Bold
 	}
-	if run.Italic == nil {
+	if run.Italic == nil || !*run.Italic {
 		run.Italic = opts.Italic
 	}
 	if run.Strike == "" {
@@ -1722,10 +1762,10 @@ func inheritRunOptions(run, opts *ObjectOptions) {
 	if run.Baseline == 0 {
 		run.Baseline = opts.Baseline
 	}
-	if run.Subscript == nil {
+	if run.Subscript == nil || !*run.Subscript {
 		run.Subscript = opts.Subscript
 	}
-	if run.Superscript == nil {
+	if run.Superscript == nil || !*run.Superscript {
 		run.Superscript = opts.Superscript
 	}
 	if run.CharSpacing == 0 {
@@ -1749,7 +1789,7 @@ func inheritRunOptions(run, opts *ObjectOptions) {
 	if run.Hyperlink == nil {
 		run.Hyperlink = opts.Hyperlink
 	}
-	if run.RtlMode == nil {
+	if run.RtlMode == nil || !*run.RtlMode {
 		run.RtlMode = opts.RtlMode
 	}
 	if run.TabStops == nil {
@@ -2314,12 +2354,6 @@ func makeXmlPresentation(pres *IPresentationProps) string {
 	// STEP 1: slide master
 	strXml += `<p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst>`
 
-	// Font embedding (net-new): embeddedFontLst immediately after sldMasterIdLst,
-	// before sldIdLst (per PORTING.md / ECMA-376 placement guidance).
-	if len(pres.EmbeddedFonts) > 0 {
-		strXml += makeEmbeddedFontLst(len(pres.Slides), pres.EmbeddedFonts)
-	}
-
 	// STEP 2: slides
 	strXml += `<p:sldIdLst>`
 	for i := range pres.Slides {
@@ -2333,6 +2367,16 @@ func makeXmlPresentation(pres *IPresentationProps) string {
 	// STEP 4: sizes
 	strXml += `<p:sldSz cx="` + itoa(pres.PresLayout.Width) + `" cy="` + itoa(pres.PresLayout.Height) + `"/>`
 	strXml += `<p:notesSz cx="` + itoa(pres.PresLayout.Height) + `" cy="` + itoa(pres.PresLayout.Width) + `"/>`
+
+	// Font embedding (net-new): embeddedFontLst immediately after notesSz, per
+	// ECMA-376 CT_Presentation sequence (sldMasterIdLst, notesMasterIdLst,
+	// handoutMasterIdLst, sldIdLst, sldSz, notesSz, smartTags, embeddedFontLst,
+	// custShowLst, ...). Everything above/below this insertion keeps its
+	// pre-existing emission order/quirks (e.g. notesMasterIdLst emitted after
+	// sldIdLst) untouched.
+	if len(pres.EmbeddedFonts) > 0 {
+		strXml += makeEmbeddedFontLst(len(pres.Slides), pres.EmbeddedFonts)
+	}
 
 	// STEP 5: text styles
 	strXml += `<p:defaultTextStyle>`
