@@ -89,6 +89,8 @@ func recoveryKindMatches(n *nativepkg.Node, kind string) bool {
 		return tag == "sp" && n.Child("txBody") != nil
 	case "surface":
 		return tag == "sp"
+	case "shape":
+		return tag == "sp"
 	case "image":
 		return tag == "pic"
 	case "line":
@@ -493,6 +495,9 @@ func recoverText(specPath, bundleDir, returned, out string, textOnly bool) error
 			if el.Kind == "text" {
 				txt := sceneText(n)
 				if txt != el.Text {
+					if len(el.Paragraphs) > 0 {
+						return fmt.Errorf("rich text recovery is unsupported for %s; use pptxscene or edit the source rich-text spec", el.Name)
+					}
 					if e := setRecoveredText(&spec.Slides[i], el.Name, txt); e != nil {
 						return e
 					}
@@ -507,6 +512,9 @@ func recoverText(specPath, bundleDir, returned, out string, textOnly bool) error
 	returnedBytes, e := os.ReadFile(returned)
 	if e != nil {
 		return e
+	}
+	if e = validateShapeStructure(returnedBytes, m.Slides); e != nil {
+		return fmt.Errorf("returned roadmap shape semantics changed; use pptxscene: %w", e)
 	}
 	recoveredBytes := jsonBytes(spec)
 	report := map[string]any{"recovered_spec_sha256": hash(recoveredBytes), "schema": "pptxgengo.text-recovery.v1", "original_spec_sha256": m.SpecSHA, "original_deck_sha256": m.DeckSHA, "returned_deck_sha256": hash(returnedBytes), "changes": changes, "requires_new_native_measurement": true, "formatting_policy": "Original spec styling is restored. Returned formatting and notes are not imported.", "limits": "Stable slide order/object names/counts/frames and unchanged media required. This is text recovery, not general semantic reconciliation."}

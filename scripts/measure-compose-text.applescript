@@ -85,6 +85,8 @@ on run argv
 						set boldValue to missing value
 						set textColorValue to missing value
 						set marginsValue to missing value
+						set characterSnapshotsJSON to "[]"
+						set paragraphSnapshotsJSON to "[]"
 						if has text frame of sh then
 							set tr to text range of text frame of sh
 							set tf to text frame of sh
@@ -112,6 +114,7 @@ on run argv
 								set unionRight to missing value
 								set unionBottom to missing value
 								set fullTextLength to text length of tr
+								set characterRows to ""
 							repeat with charIndex from 1 to fullTextLength
 								set charRange to character charIndex of tr
 								set charProperties to properties of charRange
@@ -121,7 +124,9 @@ on run argv
 										set charFont to properties of font of charRange
 										set charFontName to font name of charFont
 										set charFontSize to font size of charFont
-											set charBold to bold of charFont
+										set charBold to bold of charFont
+										set charItalic to italic of charFont
+										set charUnderline to underline style of charFont
 										set charFontColor to font color of charFont
 										set charLeft to left bounds of charProperties
 										set charTop to top bounds of charProperties
@@ -130,7 +135,10 @@ on run argv
 									on error
 										error "Font attributes unavailable for character " & charIndex & " in " & shapeName number 75
 									end try
-									if charFontName is missing value or charFontSize is missing value or charBold is missing value or charFontColor is missing value or (count of charFontColor) is not 3 then error "Mixed or unresolved character font/color in " & shapeName number 76
+									if charFontName is missing value or charFontSize is missing value or charBold is missing value or charItalic is missing value or charUnderline is missing value or charFontColor is missing value or (count of charFontColor) is not 3 then error "Unresolved character style in " & shapeName number 76
+									set charJSON to "{\"text\":" & my jsonString(charText) & ",\"font_name\":" & my jsonString(charFontName as text) & ",\"font_size_pt\":" & my jsonNumber(charFontSize) & ",\"bold\":" & my jsonBoolean(charBold) & ",\"italic\":" & my jsonBoolean(charItalic) & ",\"underline\":" & my jsonString(charUnderline as text) & ",\"color\":" & my jsonRGB(charFontColor) & "}"
+									if characterRows is not "" then set characterRows to characterRows & ","
+									set characterRows to characterRows & charJSON
 									if charWidth < 0 or charHeight < 0 then error "Character has negative bounds: " & shapeName & " character " & charIndex number 83
 									if charWidth > 0 and charHeight > 0 and charText is not " " and charText is not tab then
 										set charRight to charLeft + charWidth
@@ -152,8 +160,6 @@ on run argv
 										set uniformFontSize to charFontSize
 										set uniformBold to charBold
 										set uniformTextColor to charFontColor
-									else if (charFontName as text) is not (uniformFontName as text) or charFontSize is not uniformFontSize or charBold is not uniformBold or charFontColor is not uniformTextColor then
-										error "Mixed character fonts are outside this adapter's supported measurements: " & shapeName number 77
 									end if
 									set measuredCharacterCount to measuredCharacterCount + 1
 								end if
@@ -164,13 +170,30 @@ on run argv
 							set fontNameValue to uniformFontName
 							set fontSizeValue to uniformFontSize
 							set boldValue to uniformBold
-							set textColorValue to uniformTextColor
+								set textColorValue to uniformTextColor
+								set characterSnapshotsJSON to "[" & characterRows & "]"
+								set paragraphRows to ""
+								set paragraphCount to count of paragraphs of tr
+								repeat with paragraphIndex from 1 to paragraphCount
+									set paragraphRange to paragraph paragraphIndex of tr
+									set paragraphFormatValue to paragraph format of paragraphRange
+									set paragraphAlignmentValue to alignment of paragraphFormatValue
+									set paragraphSpaceBeforeValue to space before of paragraphFormatValue
+									set paragraphSpaceAfterValue to space after of paragraphFormatValue
+									set paragraphLineRuleWithinValue to line rule within of paragraphFormatValue
+									set paragraphSpaceWithinValue to space within of paragraphFormatValue
+									if paragraphAlignmentValue is missing value or paragraphSpaceBeforeValue is missing value or paragraphSpaceAfterValue is missing value or paragraphLineRuleWithinValue is missing value or paragraphSpaceWithinValue is missing value then error "Unresolved paragraph style in " & shapeName number 85
+									set paragraphJSON to "{\"alignment\":" & my jsonString(paragraphAlignmentValue as text) & ",\"space_before_pt\":" & my jsonNumber(paragraphSpaceBeforeValue) & ",\"space_after_pt\":" & my jsonNumber(paragraphSpaceAfterValue) & ",\"line_rule_within\":" & my jsonBoolean(paragraphLineRuleWithinValue) & ",\"space_within\":" & my jsonNumber(paragraphSpaceWithinValue) & "}"
+									if paragraphRows is not "" then set paragraphRows to paragraphRows & ","
+									set paragraphRows to paragraphRows & paragraphJSON
+								end repeat
+								set paragraphSnapshotsJSON to "[" & paragraphRows & "]"
 							end if
 						end if
 
 						set fontJSON to "null"
 						if textValue is not missing value and textValue is not "" then set fontJSON to "{\"name\":" & my jsonNullableString(fontNameValue) & ",\"size_pt\":" & my jsonNullableNumber(fontSizeValue) & ",\"bold\":" & my jsonNullableBoolean(boldValue) & "}"
-						set rowJSON to "{\"slide_index\":" & slideIndex & ",\"shape_name\":" & my jsonString(shapeName) & ",\"shape_index\":" & shapeIndex & ",\"text\":" & my jsonNullableContent(textValue) & ",\"shape_frame\":{\"left\":" & my jsonNumber(frameLeft) & ",\"top\":" & my jsonNumber(frameTop) & ",\"width\":" & my jsonNumber(frameWidth) & ",\"height\":" & my jsonNumber(frameHeight) & ",\"rotation_degrees\":" & my jsonNumber(shapeRotation) & "},\"text_bounds\":" & my jsonRawOrNull(textBoundsValue) & ",\"range_bounds\":" & my jsonRawOrNull(rangeBoundsValue) & ",\"fill\":" & fillJSON & ",\"line\":" & lineJSON & ",\"text_color\":" & my jsonRGB(textColorValue) & ",\"margins\":" & my jsonRawOrNull(marginsValue) & ",\"font\":" & fontJSON & "}"
+						set rowJSON to "{\"slide_index\":" & slideIndex & ",\"shape_name\":" & my jsonString(shapeName) & ",\"shape_index\":" & shapeIndex & ",\"text\":" & my jsonNullableContent(textValue) & ",\"shape_frame\":{\"left\":" & my jsonNumber(frameLeft) & ",\"top\":" & my jsonNumber(frameTop) & ",\"width\":" & my jsonNumber(frameWidth) & ",\"height\":" & my jsonNumber(frameHeight) & ",\"rotation_degrees\":" & my jsonNumber(shapeRotation) & "},\"text_bounds\":" & my jsonRawOrNull(textBoundsValue) & ",\"range_bounds\":" & my jsonRawOrNull(rangeBoundsValue) & ",\"fill\":" & fillJSON & ",\"line\":" & lineJSON & ",\"text_color\":" & my jsonRGB(textColorValue) & ",\"margins\":" & my jsonRawOrNull(marginsValue) & ",\"font\":" & fontJSON & ",\"characters\":" & characterSnapshotsJSON & ",\"paragraphs\":" & paragraphSnapshotsJSON & "}"
 						if outputRows is not "" then set outputRows to outputRows & ","
 						set outputRows to outputRows & rowJSON
 					end if
@@ -181,7 +204,7 @@ on run argv
 
 	if visibleSlideCount is 0 then error "Presentation has no visible slides" number 72
 	if outputRows is "" then error "Presentation has no visible shapes to measure" number 73
-	return "{\"schema\":\"pptxgengo.compose-text-measurement.v5\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-whitespace character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
+	return "{\"schema\":\"pptxgengo.compose-text-measurement.v7\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-whitespace character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
 end run
 
 on absoluteValue(valueNumber)

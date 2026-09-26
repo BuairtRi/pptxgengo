@@ -72,6 +72,12 @@ var PIECHART_COLORS = []string{
 // ShapeType is a PowerPoint shape preset geometry name (SHAPE_NAME).
 type ShapeType string
 
+// PatternType is a DrawingML preset pattern name exposed only through typed
+// constants so callers cannot inject arbitrary XML attributes.
+type PatternType string
+
+const PatternWdUpDiag PatternType = "wdUpDiag"
+
 // ShapeType constants (verbatim names, e.g. pptx ShapeType.rect).
 const (
 	ShapeTypeAccentBorderCallout1       ShapeType = "accentBorderCallout1"

@@ -112,11 +112,19 @@ type ShadowProps struct {
 	RotateWithShape *bool
 }
 
-// ShapeFillProps describes a solid/none fill. Type: "none" | "solid".
+// ShapePatternFillProps is the bounded editable DrawingML pattern-fill API.
+type ShapePatternFillProps struct {
+	Preset     PatternType
+	Foreground Color
+	Background Color
+}
+
+// ShapeFillProps describes a solid/none/pattern fill.
 type ShapeFillProps struct {
 	Color        Color
 	Transparency float64
 	Type         string
+	Pattern      *ShapePatternFillProps
 	// Alpha is deprecated (v3.3.0) - use Transparency.
 	Alpha float64
 }
@@ -278,6 +286,7 @@ type ShapeProps struct {
 	Align             HAlign
 	AngleRange        *[2]float64
 	ArcThicknessRatio float64
+	Adjustments       map[string]int
 	Fill              *ShapeFillProps
 	FlipH             *bool
 	FlipV             *bool
@@ -853,6 +862,7 @@ type ObjectOptions struct {
 	// shape:
 	AngleRange        *[2]float64
 	ArcThicknessRatio float64
+	Adjustments       map[string]int
 	Fill              *ShapeFillProps
 	Line              *ShapeLineProps
 	Points            []ShapePoint

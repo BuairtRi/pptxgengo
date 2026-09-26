@@ -7,6 +7,7 @@
 package pptx
 
 import (
+	"sort"
 	"strings"
 	"time"
 )
@@ -298,6 +299,15 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 					}
 					if opts.ArcThicknessRatio != 0 {
 						strSlideXml += `<a:gd name="adj3" fmla="val ` + itoa(int(jsRound(opts.ArcThicknessRatio*50000))) + `" />`
+					}
+				} else if len(opts.Adjustments) != 0 {
+					names := make([]string, 0, len(opts.Adjustments))
+					for name := range opts.Adjustments {
+						names = append(names, name)
+					}
+					sort.Strings(names)
+					for _, name := range names {
+						strSlideXml += `<a:gd name="` + name + `" fmla="val ` + itoa(opts.Adjustments[name]) + `"/>`
 					}
 				}
 				strSlideXml += `</a:avLst></a:prstGeom>`

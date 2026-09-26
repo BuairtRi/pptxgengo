@@ -69,23 +69,24 @@ type CellSpec struct {
 // BlockSpec represents one measured text flow item. Marker creates a paired
 // marker/text shape with a shared measured height and reserved marker width.
 type BlockSpec struct {
-	ID            string  `json:"id"`
-	Text          string  `json:"text"`
-	Marker        string  `json:"marker,omitempty"`
-	MarkerWidthPt float64 `json:"marker_width_pt,omitempty"`
-	GapBeforePt   float64 `json:"gap_before_pt,omitempty"`
-	MinHeightPt   float64 `json:"min_height_pt,omitempty"`
-	MaxHeightPt   float64 `json:"max_height_pt,omitempty"`
-	LeftInsetPt   float64 `json:"left_inset_pt,omitempty"`
-	RightInsetPt  float64 `json:"right_inset_pt,omitempty"`
-	FontFace      string  `json:"font_face"`
-	FontSizePt    float64 `json:"font_size_pt"`
-	Bold          bool    `json:"bold,omitempty"`
-	Foreground    string  `json:"foreground"`
-	Background    string  `json:"background,omitempty"`
-	Align         string  `json:"align,omitempty"`
-	Valign        string  `json:"valign,omitempty"`
-	Layer         int     `json:"layer,omitempty"`
+	ID            string          `json:"id"`
+	Text          string          `json:"text"`
+	Paragraphs    []ParagraphSpec `json:"paragraphs,omitempty"`
+	Marker        string          `json:"marker,omitempty"`
+	MarkerWidthPt float64         `json:"marker_width_pt,omitempty"`
+	GapBeforePt   float64         `json:"gap_before_pt,omitempty"`
+	MinHeightPt   float64         `json:"min_height_pt,omitempty"`
+	MaxHeightPt   float64         `json:"max_height_pt,omitempty"`
+	LeftInsetPt   float64         `json:"left_inset_pt,omitempty"`
+	RightInsetPt  float64         `json:"right_inset_pt,omitempty"`
+	FontFace      string          `json:"font_face"`
+	FontSizePt    float64         `json:"font_size_pt"`
+	Bold          bool            `json:"bold,omitempty"`
+	Foreground    string          `json:"foreground"`
+	Background    string          `json:"background,omitempty"`
+	Align         string          `json:"align,omitempty"`
+	Valign        string          `json:"valign,omitempty"`
+	Layer         int             `json:"layer,omitempty"`
 }
 
 type LayoutZoneFit struct {
@@ -254,7 +255,7 @@ func lowerSlideLayouts(s SlideSpec, measured Measurements, mode layoutMode) ([]C
 			}
 		}
 		if c.RowRule != nil {
-			if !positive(c.RowRule.WidthPt) || c.RowRule.WidthPt > 6 || !finite(c.RowRule.OffsetPt) {
+			if !validLayer(c.RowRule.Layer) || !positive(c.RowRule.WidthPt) || c.RowRule.WidthPt > 6 || !finite(c.RowRule.OffsetPt) {
 				failures = append(failures, fail(s.ID, id, "", "", "row_rule requires finite offset and width in (0,6]"))
 				return nil
 			}
@@ -528,8 +529,14 @@ func lowerSlideLayouts(s SlideSpec, measured Measurements, mode layoutMode) ([]C
 
 func blockHeight(slide string, c ContainerSpec, cell CellSpec, b BlockSpec, width float64, m Measurements, mode layoutMode) (float64, []LayoutZoneFit) {
 	var fs []LayoutZoneFit
-	if !validLayer(b.Layer) || !validID(b.ID) || !validID(b.Text) || b.FontFace != "Arial" || !positive(b.FontSizePt) || !nonnegative(b.GapBeforePt) || !nonnegative(b.MinHeightPt) || !nonnegative(b.MaxHeightPt) || !nonnegative(b.LeftInsetPt) || !nonnegative(b.RightInsetPt) || !nonnegative(b.MarkerWidthPt) || (b.Marker != "" && !positive(b.MarkerWidthPt)) || (b.MaxHeightPt > 0 && b.MaxHeightPt < b.MinHeightPt) {
+	rich := len(b.Paragraphs) > 0
+	if !validLayer(b.Layer) || !validID(b.ID) || (!rich && (!validID(b.Text) || b.FontFace != "Arial" || !positive(b.FontSizePt))) || (rich && (b.Text != "" || b.FontFace != "" || b.FontSizePt != 0 || b.Bold || b.Foreground != "")) || !nonnegative(b.GapBeforePt) || !nonnegative(b.MinHeightPt) || !nonnegative(b.MaxHeightPt) || !nonnegative(b.LeftInsetPt) || !nonnegative(b.RightInsetPt) || !nonnegative(b.MarkerWidthPt) || (b.Marker != "" && (!positive(b.MarkerWidthPt) || rich)) || (b.MaxHeightPt > 0 && b.MaxHeightPt < b.MinHeightPt) {
 		return 0, []LayoutZoneFit{fail(slide, c.ID, cell.ID, b.ID, "invalid block content, typography, inset, gap, or height bounds")}
+	}
+	if rich {
+		if err := validateRichTextStructure(b.Paragraphs); err != nil {
+			return 0, []LayoutZoneFit{fail(slide, c.ID, cell.ID, b.ID, err.Error())}
+		}
 	}
 	if b.Align == "" {
 		b.Align = "left"
@@ -598,7 +605,12 @@ func textCanvas(id, text string, r Rect, b BlockSpec, inheritedBackground string
 	if b.Background != "" {
 		contrast = b.Background
 	}
-	return CanvasSpec{ID: id, Kind: "text", Bounds: r, Text: text, FontFace: b.FontFace, FontSizePt: b.FontSizePt, Bold: b.Bold, Foreground: b.Foreground, Background: b.Background, ContrastBackground: contrast, Align: a, Valign: v, Layer: layer}
+	paragraphs := b.Paragraphs
+	if len(paragraphs) > 0 {
+		paragraphs = resolveRichText(paragraphs, contrast)
+		text = ""
+	}
+	return CanvasSpec{ID: id, Kind: "text", Bounds: r, Text: text, Paragraphs: paragraphs, FontFace: b.FontFace, FontSizePt: b.FontSizePt, Bold: b.Bold, Foreground: b.Foreground, Background: b.Background, ContrastBackground: contrast, Align: a, Valign: v, Layer: layer}
 }
 func validLayer(layer int) bool { return layer >= 0 && layer <= 1000000 }
 

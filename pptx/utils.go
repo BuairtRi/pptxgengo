@@ -249,6 +249,13 @@ func genXmlColorSelection(props *ShapeFillProps) string {
 	if props == nil {
 		return ""
 	}
+	if props.Pattern != nil {
+		p := props.Pattern
+		if p.Preset != PatternWdUpDiag {
+			return ""
+		}
+		return `<a:pattFill prst="` + string(p.Preset) + `"><a:fgClr>` + createColorElement(p.Foreground, "") + `</a:fgClr><a:bgClr>` + createColorElement(p.Background, "") + `</a:bgClr></a:pattFill>`
+	}
 
 	fillType := "solid"
 	colorVal := ""

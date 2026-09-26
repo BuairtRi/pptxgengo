@@ -82,6 +82,12 @@ func objectOptionsFromShapeProps(s *ShapeProps) *ObjectOptions {
 	o.Align = s.Align
 	o.AngleRange = s.AngleRange
 	o.ArcThicknessRatio = s.ArcThicknessRatio
+	if len(s.Adjustments) != 0 {
+		o.Adjustments = make(map[string]int, len(s.Adjustments))
+		for k, v := range s.Adjustments {
+			o.Adjustments[k] = v
+		}
+	}
 	o.Fill = s.Fill
 	o.FlipH = s.FlipH
 	o.FlipV = s.FlipV
@@ -1140,6 +1146,20 @@ func addShapeDefinition(target *PresSlide, shapeName ShapeType, opts *ShapeProps
 	}
 	if opts.Line == nil {
 		opts.Line = &ShapeLineProps{ShapeFillProps: ShapeFillProps{Type: "none"}}
+	}
+	for name, value := range opts.Adjustments {
+		if name != "adj" || value < 0 || value > 100000 {
+			return errors.New("shape adjustments require adj in [0,100000]")
+		}
+	}
+	if len(opts.Adjustments) != 0 && (opts.RectRadius != 0 || opts.AngleRange != nil) {
+		return errors.New("shape adjustments cannot be combined with radius or angle adjustments")
+	}
+	if opts.Fill != nil && opts.Fill.Pattern != nil {
+		p := opts.Fill.Pattern
+		if p.Preset != PatternWdUpDiag || (!RegexHexColor.MatchString(p.Foreground) && !isSchemeColor(p.Foreground)) || (!RegexHexColor.MatchString(p.Background) && !isSchemeColor(p.Background)) {
+			return errors.New("unsupported or invalid shape pattern fill")
+		}
 	}
 	options := objectOptionsFromShapeProps(opts)
 

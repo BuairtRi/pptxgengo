@@ -19,4 +19,11 @@ For named grids/panels and incremental native measurement, read
 `library/layout-components/README.md`. Reuse the cache only through the CLI's
 contract/environment validation. Every final deck still needs native verification
 and visual review. Parent ownership lives in the spec; native manual dragging does
-not move related shapes as a group. Blocks currently use uniform Arial styling.
+not move related shapes as a group.
+
+For mixed typography, image crops, and roadmap presets, read
+`library/visual-components/README.md` and its qualification checkpoint. These are
+bounded Wave 2 features: Arial paragraphs/runs, pinned PNG/JPEG assets, and four
+editable shape presets. Rich bullets and rich-text recovery are not supported.
+Keep source geometry controls distinct from changed-content designs; fixture
+generation and passing unit tests alone do not establish visual fidelity.

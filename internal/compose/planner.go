@@ -119,24 +119,25 @@ type RoleSpec struct {
 // usable inner width; the caller should measure the text with zero textbox
 // margins. Insets are returned separately for tile geometry and auditability.
 type ProbeRequest struct {
-	Align             string  `json:"align,omitempty"`
-	ID                string  `json:"id"`
-	SlideID           string  `json:"slide_id"`
-	PodID             string  `json:"pod_id,omitempty"`
-	RoleID            string  `json:"role_id,omitempty"`
-	PhaseID           string  `json:"phase_id,omitempty"`
-	LegendToken       string  `json:"legend_token,omitempty"`
-	Kind              string  `json:"kind"` // slide_title, pod_title, role
-	Columns           int     `json:"columns"`
-	Text              string  `json:"text"`
-	TextWidthPt       float64 `json:"text_width_pt"`
-	HorizontalInsetPt float64 `json:"horizontal_inset_pt"`
-	VerticalInsetPt   float64 `json:"vertical_inset_pt"`
-	FontFace          string  `json:"font_face"`
-	FontSizePt        float64 `json:"font_size_pt"`
-	Bold              bool    `json:"bold"`
-	Foreground        string  `json:"foreground"`
-	Background        string  `json:"background"`
+	Align             string          `json:"align,omitempty"`
+	ID                string          `json:"id"`
+	SlideID           string          `json:"slide_id"`
+	PodID             string          `json:"pod_id,omitempty"`
+	RoleID            string          `json:"role_id,omitempty"`
+	PhaseID           string          `json:"phase_id,omitempty"`
+	LegendToken       string          `json:"legend_token,omitempty"`
+	Kind              string          `json:"kind"` // slide_title, pod_title, role
+	Columns           int             `json:"columns"`
+	Text              string          `json:"text"`
+	Paragraphs        []ParagraphSpec `json:"paragraphs,omitempty"`
+	TextWidthPt       float64         `json:"text_width_pt"`
+	HorizontalInsetPt float64         `json:"horizontal_inset_pt"`
+	VerticalInsetPt   float64         `json:"vertical_inset_pt"`
+	FontFace          string          `json:"font_face"`
+	FontSizePt        float64         `json:"font_size_pt"`
+	Bold              bool            `json:"bold"`
+	Foreground        string          `json:"foreground"`
+	Background        string          `json:"background"`
 }
 
 type Measurement struct {

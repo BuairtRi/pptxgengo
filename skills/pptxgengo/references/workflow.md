@@ -51,6 +51,15 @@ By default, build requires the exact probed spec hash. `--reuse-measurements` pe
 
 Canvas image paths must be local and SHA-256 pinned. Canvas overlaps require declared `allow_overlap` peers; use those declarations only for intended intersections. Cards and team layouts are bounded native-shape components. The experimental canvas/cards/accent additions remain alpha until the complete native showcase has been measured, verified, and visually reviewed. Do not generalize a successful fixture into approval for every catalog pattern or a broad template library.
 
+Wave 2 adds rich `paragraphs`/`runs`, explicit image fit/crop/focal fields, and
+`canvas.kind: "shape"` for four bounded presets. Read
+`library/visual-components/README.md` for those schemas and qualification limits.
+Rich text requires v7 native evidence, including line-spacing multiples; a compact
+source caption can depend on 0.9 spacing even when its font and frame match.
+Specify image layers above their intended opaque backgrounds: correct image
+bounds and hashes do not prove that an image remains visible. The review fixture
+uses PNG previews traced to the original SVG hashes for EnableComp icons.
+
 An `AccentSpec` attaches a whole canvas text block and currently requires a top-aligned single line. `alpha_bounds` describes normalized visible artwork coordinates; asset hash, padding, and offsets are explicit. If a target is multiline or the needed effect is on a phrase fragment inside rich text, do not estimate a union box: split/reshape the target when acceptable or use a manual placement review. For phrase-level placement, `pptxanchor` consumes native PowerPoint phrase measurement JSON plus a `scripts/svg-visible-bounds.swift` visible-bounds JSON and outputs geometry only. It requires explicit point units; rotated or multi-line phrases return `manual_required`. Manually insert/review that accent in the slide workflow; `pptxanchor` does not alter the deck. Inspect z-order, visible alpha bounds, color/brand restrictions, and collisions against nearby elements.
 
 ## Review and handoff

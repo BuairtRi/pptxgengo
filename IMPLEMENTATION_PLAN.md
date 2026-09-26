@@ -39,8 +39,10 @@ reuse checks pass. Final acceptance is recorded in
 [the Wave 1 checkpoint](planning/WAVE1_CHECKPOINT.md).
 
 Wave 2 has a [source/asset inventory](planning/WAVE2_VISUAL_COMPONENTS.md), including
-all 19 portrait/card pairs on UHG 44. Its visual components and rich typography
-remain to be implemented.
+all 19 portrait/card pairs on UHG 44. Rich paragraphs/runs, image crop modes,
+editable roadmap shapes and structural verification are now implemented and in
+qualification. See [the Wave 2 checkpoint](planning/WAVE2_CHECKPOINT.md) for exact
+evidence, remaining scope and acceptance status.
 
 ### Next fidelity gates
 

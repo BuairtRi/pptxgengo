@@ -1,0 +1,206 @@
+{
+  "schema": "pptxgengo.compose-spec.v1",
+  "slides": [
+    {
+      "id": "long-role-fixed-card-stress",
+      "title": "Long role text is measured at fixed source-sized card geometry",
+      "width_pt": 960,
+      "height_pt": 540,
+      "title_bounds": {
+        "x": 36,
+        "y": 44,
+        "width": 888,
+        "height": 52
+      },
+      "title_font_face": "Arial",
+      "title_font_size_pt": 22,
+      "title_bold": true,
+      "title_foreground": "#070154",
+      "pods": [],
+      "role": "BOUNDED LONG-ROLE STRESS CASE",
+      "takeaway": "Keep the source card dimensions and 9 pt role type; report a fit failure rather than shrinking the role text.",
+      "notes": "One synthetic 172.8×36 pt tile stresses a deliberately long proposed-role label at the same 9 pt Arial source size. The fixture has fixed text bounds and no auto-fit or font reduction. Native measurement must either demonstrate fit at this exact size or report the bounded role text as overflow with an actionable explanation. This is not a claimed successful fit and is not a real person or staffing credential.",
+      "canvas": [
+        {
+          "id": "stress-kicker",
+          "kind": "text",
+          "bounds": {
+            "x": 36,
+            "y": 105,
+            "width": 700,
+            "height": 13
+          },
+          "text": "ILLUSTRATIVE STRESS FIXTURE • NO REAL PERSON DEPICTED",
+          "font_face": "Arial",
+          "font_size_pt": 9,
+          "bold": true,
+          "foreground": "#50658E",
+          "align": "left",
+          "valign": "top",
+          "inset_x": 0,
+          "inset_y": 0
+        },
+        {
+          "id": "stress-X1-card",
+          "kind": "surface",
+          "bounds": {
+            "x": 36.25,
+            "y": 143,
+            "width": 172.8,
+            "height": 36
+          },
+          "background": "#E8EEF8",
+          "allow_overlap": [
+            "stress-X1-initials",
+            "stress-X1-name",
+            "stress-X1-role"
+          ]
+        },
+        {
+          "id": "stress-X1-initials",
+          "kind": "text",
+          "bounds": {
+            "x": 36.25,
+            "y": 143,
+            "width": 36,
+            "height": 36
+          },
+          "text": "X1",
+          "font_face": "Arial",
+          "font_size_pt": 11,
+          "bold": true,
+          "foreground": "#FFFFFF",
+          "align": "center",
+          "valign": "middle",
+          "inset_x": 0,
+          "inset_y": 0,
+          "background": "#0047FF",
+          "allow_overlap": [
+            "stress-X1-card"
+          ]
+        },
+        {
+          "id": "stress-X1-name",
+          "kind": "text",
+          "bounds": {
+            "x": 79.45,
+            "y": 146.6,
+            "width": 125.8,
+            "height": 12
+          },
+          "text": "Illustrative Person X1",
+          "font_face": "Arial",
+          "font_size_pt": 9,
+          "bold": true,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top",
+          "inset_x": 0,
+          "inset_y": 0,
+          "allow_overlap": [
+            "stress-X1-card"
+          ]
+        },
+        {
+          "id": "stress-X1-role",
+          "kind": "text",
+          "bounds": {
+            "x": 79.45,
+            "y": 161,
+            "width": 125.8,
+            "height": 14.4
+          },
+          "text": "Integration and data governance coordination lead for the proposed pilot",
+          "font_face": "Arial",
+          "font_size_pt": 9,
+          "bold": false,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top",
+          "inset_x": 0,
+          "inset_y": 0,
+          "allow_overlap": [
+            "stress-X1-card"
+          ]
+        },
+        {
+          "id": "footer-band",
+          "kind": "surface",
+          "bounds": {
+            "x": 0,
+            "y": 504,
+            "width": 960,
+            "height": 36
+          },
+          "background": "#E8EEF8",
+          "allow_overlap": [
+            "wm-logo",
+            "footer-copy",
+            "page-number"
+          ]
+        },
+        {
+          "id": "wm-logo",
+          "kind": "image",
+          "bounds": {
+            "x": 36,
+            "y": 511,
+            "width": 104,
+            "height": 21.727
+          },
+          "asset_path": "samples/showcase/assets/wm_h_pos_clr_rgb_august2024.png",
+          "asset_sha256": "47a4eaa1be957777d3e106f5c1cc9f67dbfcda79d74fe7a7f2bcbb88b13fa341",
+          "alt_text": "West Monroe horizontal positive color logo",
+          "image_fit": "contain",
+          "allow_overlap": [
+            "footer-band"
+          ]
+        },
+        {
+          "id": "footer-copy",
+          "kind": "text",
+          "bounds": {
+            "x": 174,
+            "y": 516,
+            "width": 700,
+            "height": 17
+          },
+          "text": "© 2026 West Monroe Partners. Reproduction and/or distribution without West Monroe Partners’ prior consent is prohibited.",
+          "font_face": "Arial",
+          "font_size_pt": 8,
+          "bold": false,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top",
+          "inset_x": 0,
+          "inset_y": 0,
+          "allow_overlap": [
+            "footer-band"
+          ]
+        },
+        {
+          "id": "page-number",
+          "kind": "text",
+          "bounds": {
+            "x": 892,
+            "y": 516,
+            "width": 32,
+            "height": 17
+          },
+          "text": "1",
+          "font_face": "Arial",
+          "font_size_pt": 9,
+          "bold": false,
+          "foreground": "#070154",
+          "align": "right",
+          "valign": "top",
+          "inset_x": 0,
+          "inset_y": 0,
+          "allow_overlap": [
+            "footer-band"
+          ]
+        }
+      ]
+    }
+  ]
+}

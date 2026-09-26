@@ -1,15 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"encoding/base64"
 	"fmt"
+	"github.com/buairtri/pptxgengo/internal/compose"
 	"github.com/buairtri/pptxgengo/pptx"
-	"image"
-	_ "image/jpeg"
-	_ "image/png"
-	"math"
-	"os"
 )
 
 type frame struct {
@@ -19,26 +14,34 @@ type frame struct {
 	Height float64 `json:"height"`
 }
 type element struct {
-	AssetMode     string   `json:"asset_mode,omitempty"`
-	AssetPath     string   `json:"asset_path,omitempty"`
-	AssetSHA256   string   `json:"asset_sha256,omitempty"`
-	AltText       string   `json:"alt_text,omitempty"`
-	Name          string   `json:"name"`
-	Kind          string   `json:"kind"`
-	Frame         frame    `json:"frame"`
-	Text          string   `json:"text,omitempty"`
-	FontFace      string   `json:"font_face,omitempty"`
-	FontSize      float64  `json:"font_size,omitempty"`
-	Bold          bool     `json:"bold,omitempty"`
-	Foreground    string   `json:"foreground,omitempty"`
-	Background    string   `json:"background,omitempty"`
-	InsetX        float64  `json:"inset_x"`
-	InsetY        float64  `json:"inset_y"`
-	Align         string   `json:"align,omitempty"`
-	Valign        string   `json:"valign,omitempty"`
-	MeasurementID string   `json:"measurement_id,omitempty"`
-	LineWidth     float64  `json:"line_width,omitempty"`
-	ConnectionIDs []string `json:"connection_ids,omitempty"`
+	AssetMode     string                  `json:"asset_mode,omitempty"`
+	AssetPath     string                  `json:"asset_path,omitempty"`
+	AssetSHA256   string                  `json:"asset_sha256,omitempty"`
+	AltText       string                  `json:"alt_text,omitempty"`
+	ImageFit      string                  `json:"image_fit,omitempty"`
+	ImageCrop     *compose.ImageCropSpec  `json:"image_crop,omitempty"`
+	FocalX        *float64                `json:"focal_x,omitempty"`
+	FocalY        *float64                `json:"focal_y,omitempty"`
+	Preset        string                  `json:"preset,omitempty"`
+	Adjustments   map[string]int          `json:"adjustments,omitempty"`
+	Pattern       *compose.PatternSpec    `json:"pattern,omitempty"`
+	Name          string                  `json:"name"`
+	Kind          string                  `json:"kind"`
+	Frame         frame                   `json:"frame"`
+	Text          string                  `json:"text,omitempty"`
+	Paragraphs    []compose.ParagraphSpec `json:"paragraphs,omitempty"`
+	FontFace      string                  `json:"font_face,omitempty"`
+	FontSize      float64                 `json:"font_size,omitempty"`
+	Bold          bool                    `json:"bold,omitempty"`
+	Foreground    string                  `json:"foreground,omitempty"`
+	Background    string                  `json:"background,omitempty"`
+	InsetX        float64                 `json:"inset_x"`
+	InsetY        float64                 `json:"inset_y"`
+	Align         string                  `json:"align,omitempty"`
+	Valign        string                  `json:"valign,omitempty"`
+	MeasurementID string                  `json:"measurement_id,omitempty"`
+	LineWidth     float64                 `json:"line_width,omitempty"`
+	ConnectionIDs []string                `json:"connection_ids,omitempty"`
 }
 type renderSlide struct {
 	Notes    string    `json:"notes,omitempty"`
@@ -81,25 +84,7 @@ func render(slides []renderSlide) ([]byte, error) {
 		}
 		for _, e := range rs.Elements {
 			if e.Kind == "image" {
-				b, err := os.ReadFile(e.AssetPath)
-				if err != nil {
-					return nil, err
-				}
-				if len(b) > 50*1024*1024 {
-					return nil, fmt.Errorf("asset exceeds 50MB")
-				}
-				if hash(b) != e.AssetSHA256 {
-					return nil, fmt.Errorf("asset hash mismatch: %s", e.AssetPath)
-				}
-				cfg, format, err := image.DecodeConfig(bytes.NewReader(b))
-				if err != nil {
-					return nil, err
-				}
-				if e.AssetMode != "stretch" && math.Abs((e.Frame.Width/e.Frame.Height)/(float64(cfg.Width)/float64(cfg.Height))-1) > 0.005 {
-					return nil, fmt.Errorf("image %s aspect ratio differs from source; supply a preserved-aspect frame", e.Name)
-				}
-				err = s.AddImage(&pptx.ImageProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, DataOrPathProps: pptx.DataOrPathProps{Data: "image/" + format + ";base64," + base64.StdEncoding.EncodeToString(b)}, AltText: e.AltText})
-				if err != nil {
+				if err := renderImage(s, e); err != nil {
 					return nil, err
 				}
 				continue
@@ -113,6 +98,16 @@ func render(slides []renderSlide) ([]byte, error) {
 
 			if e.Kind == "surface" {
 				if err := s.AddShape(pptx.ShapeTypeRect, &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Fill: &pptx.ShapeFillProps{Color: e.Background}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}}); err != nil {
+					return nil, err
+				}
+				continue
+			}
+			if e.Kind == "shape" {
+				fill := &pptx.ShapeFillProps{Color: e.Background}
+				if e.Pattern != nil {
+					fill = &pptx.ShapeFillProps{Pattern: &pptx.ShapePatternFillProps{Preset: pptx.PatternType(e.Pattern.Preset), Foreground: color(e.Pattern.Foreground), Background: color(e.Pattern.Background)}}
+				}
+				if err := s.AddShape(pptx.ShapeType(e.Preset), &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Adjustments: e.Adjustments, Fill: fill, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}}); err != nil {
 					return nil, err
 				}
 				continue
@@ -136,7 +131,26 @@ func render(slides []renderSlide) ([]byte, error) {
 				o.Fill = &pptx.ShapeFillProps{Color: e.Background}
 				o.Shape = pptx.ShapeTypeRect
 			}
-			if err := s.AddText([]pptx.TextProps{{Text: e.Text}}, o); err != nil {
+			var textRuns []pptx.TextProps
+			if len(e.Paragraphs) == 0 {
+				textRuns = []pptx.TextProps{{Text: e.Text}}
+			} else {
+				for pi, paragraph := range e.Paragraphs {
+					for ri, run := range paragraph.Runs {
+						breakLine := pi < len(e.Paragraphs)-1 && ri == len(paragraph.Runs)-1
+						lineSpacing := paragraph.LineSpacingMultiple
+						if lineSpacing == 0 {
+							lineSpacing = 1
+						}
+						runOpts := &pptx.TextPropsOptions{TextBaseProps: pptx.TextBaseProps{FontFace: run.FontFace, FontSize: run.FontSizePt, Bold: pointer(run.Bold), Italic: pointer(run.Italic), Color: color(run.Foreground), Align: pptx.HAlign(paragraph.Align), BreakLine: pointer(breakLine)}, ParaSpaceBefore: pointer(paragraph.SpaceBeforePt), ParaSpaceAfter: pointer(paragraph.SpaceAfterPt), LineSpacingMultiple: lineSpacing}
+						if run.Underline {
+							runOpts.Underline = &pptx.UnderlineProps{Style: "sng"}
+						}
+						textRuns = append(textRuns, pptx.TextProps{Text: run.Text, Options: runOpts})
+					}
+				}
+			}
+			if err := s.AddText(textRuns, o); err != nil {
 				return nil, err
 			}
 		}

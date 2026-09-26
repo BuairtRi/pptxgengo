@@ -43,7 +43,7 @@ func currentEnvironment(adapter string) (*measurementEnvironment, error) {
 	if e = json.Unmarshal(b, &env); e != nil {
 		return nil, e
 	}
-	if env.OS == "" || env.PowerPointVersion == "" || env.PowerPointBuild == "" || len(env.Fonts) != 2 {
+	if env.OS == "" || env.PowerPointVersion == "" || env.PowerPointBuild == "" || len(env.Fonts) != 4 {
 		return nil, fmt.Errorf("incomplete native environment")
 	}
 	for i := range env.Fonts {
@@ -76,20 +76,21 @@ func environmentKey(env *measurementEnvironment) string { return hash(jsonBytes(
 // Every value that can affect the probe rendering belongs here. IDs locate
 // observations but do not alter glyph geometry. This version supports Arial only.
 type textContract struct {
-	Text       string  `json:"text"`
-	Width      float64 `json:"width_pt"`
-	InsetX     float64 `json:"inset_x"`
-	InsetY     float64 `json:"inset_y"`
-	FontFace   string  `json:"font_face"`
-	FontSize   float64 `json:"font_size_pt"`
-	Bold       bool    `json:"bold"`
-	Align      string  `json:"align"`
-	Foreground string  `json:"foreground"`
-	Background string  `json:"background"`
+	Text       string                  `json:"text"`
+	Paragraphs []compose.ParagraphSpec `json:"paragraphs,omitempty"`
+	Width      float64                 `json:"width_pt"`
+	InsetX     float64                 `json:"inset_x"`
+	InsetY     float64                 `json:"inset_y"`
+	FontFace   string                  `json:"font_face"`
+	FontSize   float64                 `json:"font_size_pt"`
+	Bold       bool                    `json:"bold"`
+	Align      string                  `json:"align"`
+	Foreground string                  `json:"foreground"`
+	Background string                  `json:"background"`
 }
 
 func contract(q compose.ProbeRequest) textContract {
-	return textContract{q.Text, q.TextWidthPt, q.HorizontalInsetPt, q.VerticalInsetPt, q.FontFace, q.FontSizePt, q.Bold, q.Align, q.Foreground, q.Background}
+	return textContract{q.Text, q.Paragraphs, q.TextWidthPt, q.HorizontalInsetPt, q.VerticalInsetPt, q.FontFace, q.FontSizePt, q.Bold, q.Align, q.Foreground, q.Background}
 }
 func contractKey(q compose.ProbeRequest) string { return hash(jsonBytes(contract(q))) }
 
@@ -149,8 +150,8 @@ func validateProbeSource(dir, evPath string) (validatedSource, error) {
 	if e = json.Unmarshal(ev.Native, &native); e != nil {
 		return result, e
 	}
-	if native.Schema != "pptxgengo.compose-text-measurement.v5" {
-		return result, fmt.Errorf("cache requires v5 native character-bound evidence")
+	if native.Schema != "pptxgengo.compose-text-measurement.v7" {
+		return result, fmt.Errorf("cache requires v7 native character/paragraph/style evidence")
 	}
 	result.measurements, e = checkNative(pm, native, false)
 	if e != nil {

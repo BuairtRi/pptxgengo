@@ -8,18 +8,21 @@ guard let info = Bundle(path: app)?.infoDictionary,
     fatalError("Microsoft PowerPoint bundle/version unavailable")
 }
 var fonts: [[String: String]] = []
-for bold in [false, true] {
+for style in [("regular", false, false), ("bold", true, false), ("italic", false, true), ("bold_italic", true, true)] {
     let base = CTFontCreateWithName("Arial" as CFString, 12, nil)
     let font: CTFont
-    if bold {
-        guard let result = CTFontCreateCopyWithSymbolicTraits(base, 12, nil, .traitBold, .traitBold) else { fatalError("Arial Bold unavailable") }
+    var traits: CTFontSymbolicTraits = []
+    if style.1 { traits.insert(.traitBold) }
+    if style.2 { traits.insert(.traitItalic) }
+    if !traits.isEmpty {
+        guard let result = CTFontCreateCopyWithSymbolicTraits(base, 12, nil, traits, traits) else { fatalError("Arial \(style.0) unavailable") }
         font = result
     } else { font = base }
     guard CTFontCopyFamilyName(font) as String == "Arial",
           let url = CTFontCopyAttribute(font, kCTFontURLAttribute) as? URL else { fatalError("Arial resolved to a substitute or inaccessible font") }
     fonts.append(["family": CTFontCopyFamilyName(font) as String,
                   "postscript_name": CTFontCopyPostScriptName(font) as String,
-                  "style": bold ? "bold" : "regular", "path": url.path])
+                  "style": style.0, "path": url.path])
 }
 let result: [String: Any] = ["os": ProcessInfo.processInfo.operatingSystemVersionString,
  "powerpoint_version": version, "powerpoint_build": build, "fonts": fonts]

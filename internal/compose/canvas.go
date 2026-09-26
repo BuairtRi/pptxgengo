@@ -9,28 +9,36 @@ import (
 // peers; this makes backgrounds/accents intentional rather than silent collisions.
 // Asset bytes are verified by the CLI against SHA256 before rendering.
 type CanvasSpec struct {
-	ID         string  `json:"id"`
-	Layer      int     `json:"layer,omitempty"`
-	Kind       string  `json:"kind"` // text, surface, line, image
-	Bounds     Rect    `json:"bounds"`
-	Text       string  `json:"text,omitempty"`
-	FontFace   string  `json:"font_face,omitempty"`
-	FontSizePt float64 `json:"font_size_pt,omitempty"`
-	Bold       bool    `json:"bold,omitempty"`
-	Foreground string  `json:"foreground,omitempty"`
-	Background string  `json:"background,omitempty"`
+	ID         string          `json:"id"`
+	Layer      int             `json:"layer,omitempty"`
+	Kind       string          `json:"kind"` // text, surface, shape, line, image
+	Bounds     Rect            `json:"bounds"`
+	Text       string          `json:"text,omitempty"`
+	Paragraphs []ParagraphSpec `json:"paragraphs,omitempty"`
+	FontFace   string          `json:"font_face,omitempty"`
+	FontSizePt float64         `json:"font_size_pt,omitempty"`
+	Bold       bool            `json:"bold,omitempty"`
+	Foreground string          `json:"foreground,omitempty"`
+	Background string          `json:"background,omitempty"`
 	// ContrastBackground supplies the effective inherited surface used for
 	// color validation and measurement without painting a text-box fill.
-	ContrastBackground string   `json:"contrast_background,omitempty"`
-	InsetX             float64  `json:"inset_x,omitempty"`
-	InsetY             float64  `json:"inset_y,omitempty"`
-	Align              string   `json:"align,omitempty"`
-	Valign             string   `json:"valign,omitempty"`
-	LineWidthPt        float64  `json:"line_width_pt,omitempty"`
-	AssetPath          string   `json:"asset_path,omitempty"`
-	AssetSHA256        string   `json:"asset_sha256,omitempty"`
-	AltText            string   `json:"alt_text,omitempty"`
-	AllowOverlap       []string `json:"allow_overlap,omitempty"`
+	ContrastBackground string         `json:"contrast_background,omitempty"`
+	InsetX             float64        `json:"inset_x,omitempty"`
+	InsetY             float64        `json:"inset_y,omitempty"`
+	Align              string         `json:"align,omitempty"`
+	Valign             string         `json:"valign,omitempty"`
+	LineWidthPt        float64        `json:"line_width_pt,omitempty"`
+	AssetPath          string         `json:"asset_path,omitempty"`
+	AssetSHA256        string         `json:"asset_sha256,omitempty"`
+	AltText            string         `json:"alt_text,omitempty"`
+	ImageFit           string         `json:"image_fit,omitempty"`
+	ImageCrop          *ImageCropSpec `json:"image_crop,omitempty"`
+	FocalX             *float64       `json:"focal_x,omitempty"`
+	FocalY             *float64       `json:"focal_y,omitempty"`
+	Preset             string         `json:"preset,omitempty"`
+	Adjustments        map[string]int `json:"adjustments,omitempty"`
+	Pattern            *PatternSpec   `json:"pattern,omitempty"`
+	AllowOverlap       []string       `json:"allow_overlap,omitempty"`
 }
 type PlannedCanvas struct {
 	CanvasSpec
@@ -39,7 +47,7 @@ type PlannedCanvas struct {
 
 func validateCanvas(s SlideSpec, ids map[string]bool) error {
 	for _, c := range s.Canvas {
-		if !validID(c.ID) || ids[c.ID] {
+		if !validID(c.ID) || ids[c.ID] || !validLayer(c.Layer) {
 			return fmt.Errorf("slide %s duplicate/empty canvas ID %q", s.ID, c.ID)
 		}
 		ids[c.ID] = true
@@ -53,9 +61,13 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 		if !inside(c.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) {
 			return fmt.Errorf("canvas %s exceeds slide", c.ID)
 		}
+		if c.Kind != "shape" && (c.Preset != "" || len(c.Adjustments) != 0 || c.Pattern != nil) {
+			return fmt.Errorf("canvas %s shape fields require kind shape", c.ID)
+		}
 		switch c.Kind {
 		case "text":
-			if !validID(c.Text) || c.FontFace != "Arial" || !positive(c.FontSizePt) || !nonnegative(c.InsetX) || !nonnegative(c.InsetY) || c.Bounds.Width <= 2*c.InsetX || c.Bounds.Height <= 2*c.InsetY {
+			rich := len(c.Paragraphs) > 0
+			if (!rich && (!validID(c.Text) || c.FontFace != "Arial" || !positive(c.FontSizePt))) || (rich && (c.Text != "" || c.FontFace != "" || c.FontSizePt != 0 || c.Bold || c.Foreground != "")) || !nonnegative(c.InsetX) || !nonnegative(c.InsetY) || c.Bounds.Width <= 2*c.InsetX || c.Bounds.Height <= 2*c.InsetY {
 				return fmt.Errorf("canvas text %s requires explicit Arial typography, content and usable frame", c.ID)
 			}
 			if c.Align != "left" && c.Align != "center" && c.Align != "right" {
@@ -71,11 +83,19 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 			if bg == "" {
 				bg = white
 			}
-			if _, e := foreground(c.Foreground, bg); e != nil {
+			if rich {
+				if e := validateRichText(c.Paragraphs, bg); e != nil {
+					return fmt.Errorf("canvas %s: %w", c.ID, e)
+				}
+			} else if _, e := foreground(c.Foreground, bg); e != nil {
 				return fmt.Errorf("canvas %s: %w", c.ID, e)
 			}
 		case "surface":
 			if _, e := resolveColor(c.Background); e != nil {
+				return e
+			}
+		case "shape":
+			if e := validateShape(c); e != nil {
 				return e
 			}
 		case "line":
@@ -88,6 +108,9 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 			}
 			if strings.Contains(c.AssetPath, "://") {
 				return fmt.Errorf("canvas image %s requires a local pinned file", c.ID)
+			}
+			if err := validateImagePlacement(c); err != nil {
+				return err
 			}
 		default:
 			return fmt.Errorf("canvas %s unknown kind %q", c.ID, c.Kind)
@@ -116,8 +139,16 @@ func canvasProbes(s SlideSpec) []ProbeRequest {
 			if bg == "" {
 				bg = white
 			}
-			fg, _ := foreground(c.Foreground, bg)
-			q = append(q, ProbeRequest{ID: requestID(s.ID, "canvas", c.ID), SlideID: s.ID, Kind: "canvas_text", Text: c.Text, TextWidthPt: c.Bounds.Width - 2*c.InsetX, FontFace: c.FontFace, FontSizePt: c.FontSizePt, Bold: c.Bold, Foreground: fg, Background: bg, Align: c.Align})
+			fg := ""
+			paragraphs := c.Paragraphs
+			text := c.Text
+			if len(paragraphs) > 0 {
+				paragraphs = resolveRichText(paragraphs, bg)
+				text = richText(paragraphs)
+			} else {
+				fg, _ = foreground(c.Foreground, bg)
+			}
+			q = append(q, ProbeRequest{ID: requestID(s.ID, "canvas", c.ID), SlideID: s.ID, Kind: "canvas_text", Text: text, Paragraphs: paragraphs, TextWidthPt: c.Bounds.Width - 2*c.InsetX, FontFace: c.FontFace, FontSizePt: c.FontSizePt, Bold: c.Bold, Foreground: fg, Background: bg, Align: c.Align})
 		}
 	}
 	return q
@@ -125,9 +156,16 @@ func canvasProbes(s SlideSpec) []ProbeRequest {
 func planCanvas(s SlideSpec, p *PlannedSlide, m Measurements) error {
 	for _, c := range s.Canvas {
 		pc := PlannedCanvas{CanvasSpec: c}
+		if len(c.Adjustments) != 0 {
+			pc.Adjustments = make(map[string]int, len(c.Adjustments))
+			for name, value := range c.Adjustments {
+				pc.Adjustments[name] = value
+			}
+		}
 		if c.Background != "" {
 			pc.Background, _ = resolveColor(c.Background)
 		}
+		pc.Pattern = resolvePattern(c.Pattern)
 		if c.ContrastBackground != "" {
 			pc.ContrastBackground, _ = resolveColor(c.ContrastBackground)
 		}
@@ -145,10 +183,24 @@ func planCanvas(s SlideSpec, p *PlannedSlide, m Measurements) error {
 				pc.Foreground, _ = resolveColor(c.Foreground)
 			}
 		}
+		if len(c.Paragraphs) > 0 {
+			bg := c.Background
+			if bg == "" {
+				bg = c.ContrastBackground
+			}
+			if bg == "" {
+				bg = white
+			}
+			pc.Paragraphs = resolveRichText(c.Paragraphs, bg)
+			pc.Text = richText(pc.Paragraphs)
+		}
 		if c.Kind == "text" {
 			pc.MeasurementID = requestID(s.ID, "canvas", c.ID)
 			z := m.ByRequestID[pc.MeasurementID]
 			if z.RenderedWidthPt > c.Bounds.Width-2*c.InsetX+0.01 || z.RenderedHeightPt > c.Bounds.Height-2*c.InsetY+0.01 {
+				if len(c.Paragraphs) > 0 {
+					return fmt.Errorf("canvas text %s does not fit %.2f x %.2fpt with configured rich text styles", c.ID, c.Bounds.Width-2*c.InsetX, c.Bounds.Height-2*c.InsetY)
+				}
 				return fmt.Errorf("canvas text %s does not fit %.2f x %.2fpt at %.2fpt", c.ID, c.Bounds.Width-2*c.InsetX, c.Bounds.Height-2*c.InsetY, c.FontSizePt)
 			}
 		}

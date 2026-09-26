@@ -384,3 +384,75 @@ values. Cache-backed fit reports have empty legacy top-level probe/evidence hash
 use their per-contract `cache_uses` evidence paths and SHA-256 values. A follow-up
 should omit or replace the empty legacy fields. Neither limitation is hidden by
 claiming general layout or provenance approval.
+
+## QA76 — Source screenshot distortion must be explicit
+
+UHG28 picture 19 has a source aspect ratio of approximately 2.417 but a frame
+ratio of 1.744. Reproducing it with a generic aspect-preserving placement changes
+the source appearance. The control now records explicit `stretch`; normal image
+placement rejects unintended distortion. This source behavior is not a default
+for replacement imagery.
+
+## QA77 — Native export blocked by file access
+
+The Wave 2 smoke deck passed native measurement and final object verification,
+but PDF export timed out (-1712); subsequent opens failed (-9074), including a
+known-good Wave 1 deck. Desktop inspection also failed to connect. The user
+reported granting access; the next probe deck opened successfully and native
+measurement resumed. Preserve unsaved user decks during this failure mode.
+
+## QA78 — Structural shape checks accepted ambiguous input
+
+Code review found a duplicate-name map that could accept a third identical shape
+name after rejecting the second, plus adjustment parsing that tolerated duplicate
+guides and trailing formula text. Monotonic name counts, unique guide names and
+exact canonical formula parsing now reject these cases; regression tests cover
+all three. This hardening precedes final Wave 2 qualification.
+
+## QA79 — Picture frames alone do not prove crop fidelity
+
+Native object checks inspect picture bounds but do not expose the full source
+crop contract. Independent review identified the need to bind the generated
+picture relationship, media hash and source rectangle to the spec. A picture
+with the right frame and wrong crop must fail structural verification; rendered
+review is still required to assess the visible result.
+
+## QA80 — Source line spacing was lost during caption reconstruction
+
+The first full Wave 2 native probe measured two caption overflows: 0.2983pt in
+the source control and 0.2485pt in the scaled instance. The source XML specifies
+90% line spacing; the renderer used 100%. A source native read confirmed
+`line rule within=true`, `space within=0.899999976158` and a 9.720000267pt
+first-character height, versus 10.800000191pt in the generated caption. Preserve
+the source frame and font size; add and verify paragraph line spacing instead.
+
+## QA81 — Source roster text was vertically approximated
+
+The source card uses middle vertical anchoring and one paragraph with a soft
+line break. Its native name/role glyph tops are 155.2109375pt/166.010940551758pt;
+the initial fixture had 151.2pt/165.3pt. Source-control boxes now use the measured
+tops, retaining the explicit limitation that they are separate text shapes.
+
+## QA82 — Crop comparison did not exercise a crop
+
+A square source portrait in two square frames gave contain and cover the same
+result. The comparison now uses equal 76×52pt frames and a declared cover focal
+point so the render can actually demonstrate full-source versus cropped behavior.
+
+## QA83 — Visible icon placement needs paint-order review
+
+All five EnableComp response icons existed at the correct frames and retained
+their media hashes, but their default layer 0 put them behind the opaque row
+surfaces at layer 5. Full-slide visual review caught the missing icons. The
+fixture now explicitly places them at layer 10. The corrected render shows all
+five. Object existence, frame checks and `visible=true` do not prove that later
+objects have not covered an asset.
+
+## QA84 — Bounding boxes require explicit decorative relationships
+
+Planning found the source milestone stars' boxes touching the corner regions of
+the adjacent patterned phase tails. Those source-derived decorative relationships
+are now explicit and visually reviewed; label boxes remain outside the artwork.
+The response arrow also requires explicit overlap with both the foreground need
+tile and its label. A separate accidental overlap between comparison labels was
+fixed by narrowing the oversized source-bio label box, then remeasuring its width.
