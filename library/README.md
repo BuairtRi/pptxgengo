@@ -1,4 +1,4 @@
-# Presentation library — second ingestion checkpoint
+# Presentation library — expanded component checkpoint
 
 2026-09-25. The catalog retains all **369 source slides**. Reviewed layout
 families reduce classification to **306 work units**, avoiding 63 repeated
@@ -12,23 +12,32 @@ reusable library.
 | Source occurrences | 13,831 records across slides, native layouts, masters and their objects; 10,102 slide object nodes include 315 native groups |
 | Layout review | 89 source occurrences reviewed into 24 shared families and 2 distinct items; 280 singleton slides still require review |
 | Geometry | 9,669 resolved frames, 433 unresolved; 579 transforms recovered from layout/master placeholders |
-| Component candidates | 315 native-group occurrences plus 21 selected compositions, 7 proposed families, 37 named slot candidates |
+| Component candidates | 315 native-group occurrences plus 244 selected source examples in 74 source patterns, consolidated into 31 semantic families; 572 named slot candidates |
 | Assets | 2,169 image/vector asset records, including 521 existing photo descriptions preserved verbatim |
 | Fonts | 58 local font files with family/style/hash metadata; these are IBM Plex variants, not a system-wide font availability audit |
-| Search | SQLite FTS5 over 17,191 items, with source identity and readiness retained |
-| Visual evidence | 91 source-indexed native previews with hashes |
+| Search | SQLite FTS5 over 17,451 items (including component families and six proposed style profiles), with source identity and readiness retained |
+| Visual evidence | 144 source-indexed native previews with hashes |
 
-The local current database is `samples/catalog-next/catalog-v2.sqlite`.
+The local current database is `samples/component-expansion/catalog-v2.sqlite`.
 [Catalog manifest](catalog-manifest.json) records the exact current input and
 output paths/hashes. Large generated records, previews and databases stay local.
 Only the modernization source deck is tracked under `samples/`.
 
 ## Review and reports
 
+- [Expanded component findings](component-expansion-report.md), [canonical families](component-families.jsonl),
+  [semantic styling](component-styling.md), and [taxonomy](component-taxonomy.json).
+  Three Luna agents reviewed independent corpus slices; the primary agent reviewed
+  selected source pages, corrected boundaries/descriptions and integrated the results.
+  A Sol agent reviewed compiler/index code. Of 249 input examples, five reviewed
+  duplicates were consolidated; their source references remain as aliases.
+  The 244 retained examples are not 244 unique or adaptation-approved designs.
+
+
 - [Second-pass findings](second-pass-layout-review.md), [layout decisions](layout-decisions.json),
   and [complete worklist](layout-worklist.json).
-- [Component candidates](component-report.md), [proposed seed definitions](component-seeds.json),
-  and [local component gallery](../samples/catalog-next/component-review-v2.html).
+- [Component candidates](component-report.md), [proposed seed definitions](component-seeds-expanded.json),
+  and [local component gallery](../samples/component-expansion/component-review-v2.html).
   The gallery overlays selected frames on unchanged source previews; automated
   browser policy blocked opening local HTML, so its UI is not visually verified.
 - [Geometry](geometry-report.md), [source occurrences](occurrence-report.md),
@@ -39,8 +48,8 @@ Only the modernization source deck is tracked under `samples/`.
 - [Further metadata candidates](broader-dedup-candidates.md) and the local
   `samples/catalog-next/layout-candidates-after-review.json` are pending review.
 
-The three first families to develop into editable components are delivery pods,
-portrait/name cards and metric pairs. Their source bounds and named slots are
+The first families to develop into editable components are delivery pods,
+numbered cards and metric panels. Their source bounds and named slots are
 available; typography, replacement fit, supported resizing, dependencies and
 attachment rules still need proof. No current component is adaptation-approved.
 
@@ -50,15 +59,19 @@ Run from the repository root. Python needs SQLite FTS5 support.
 
 ```sh
 python3 scripts/catalog-index.py search \
-  --db samples/catalog-next/catalog-v2.sqlite --kind component --query pod --limit 5
+  --db samples/component-expansion/catalog-v2.sqlite --kind component_family --query metric --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/catalog-next/catalog-v2.sqlite --kind font --query 'IBM Plex Mono' --limit 5
+  --db samples/component-expansion/catalog-v2.sqlite --kind style_profile --query neutral --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/catalog-next/catalog-v2.sqlite --kind layout_family --query bio --limit 5
+  --db samples/component-expansion/catalog-v2.sqlite --kind component --query pod --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/catalog-next/catalog-v2.sqlite --kind asset --query 'glass atrium' --limit 5
+  --db samples/component-expansion/catalog-v2.sqlite --kind font --query 'IBM Plex Mono' --limit 5
+python3 scripts/catalog-index.py search \
+  --db samples/component-expansion/catalog-v2.sqlite --kind layout_family --query bio --limit 5
+python3 scripts/catalog-index.py search \
+  --db samples/component-expansion/catalog-v2.sqlite --kind asset --query 'glass atrium' --limit 5
 python3 scripts/catalog-index.py inspect \
-  --db samples/catalog-next/catalog-v2.sqlite \
+  --db samples/component-expansion/catalog-v2.sqlite \
   --id component:delivery-pod-three-roles:instance-001
 ```
 
@@ -81,16 +94,23 @@ python3 scripts/deduplicate-layouts.py --registry planning/source-registry.json 
   --out samples/catalog-run/dedup.json --report samples/catalog-run/dedup.md
 python3 scripts/catalog-geometry.py --registry planning/source-registry.json \
   --out samples/catalog-run/geometry.jsonl --report samples/catalog-run/geometry.md
+python3 scripts/compile-component-library.py \
+  --inputs library/component-seeds.json library/component-slices/modernization.json \
+  library/component-slices/stock-001-083.json library/component-slices/stock-084-166.json \
+  library/component-slices/proposals.json --taxonomy library/component-taxonomy.json \
+  --out samples/catalog-run/seeds.json --families samples/catalog-run/families.jsonl \
+  --report samples/catalog-run/component-expansion.md
 python3 scripts/catalog-components.py --registry planning/source-registry.json \
   --occurrences samples/catalog-run/occurrences.jsonl --geometry samples/catalog-run/geometry.jsonl \
-  --seeds library/component-seeds.json --out samples/catalog-run/components.jsonl \
+  --seeds samples/catalog-run/seeds.json --out samples/catalog-run/components.jsonl \
   --report samples/catalog-run/components.md
 python3 scripts/catalog-assets.py ingest --brand-root /Users/rscott/Documents/branding \
   --hosted-inventory /Users/rscott/.codex/skills/wm-brand-assets/references/asset-inventory.json \
   --out samples/catalog-run/assets.jsonl --report samples/catalog-run/assets.md
 python3 scripts/catalog-brand-extras.py ingest --brand-root /Users/rscott/Documents/branding \
   --hosted-inventory /Users/rscott/.codex/skills/wm-brand-assets/references/asset-inventory.json \
-  --out samples/catalog-run/extras.jsonl --report samples/catalog-run/extras.md
+  --out samples/catalog-run/brand-extras.jsonl --report samples/catalog-run/extras.md
+cat samples/catalog-run/brand-extras.jsonl samples/catalog-run/families.jsonl > samples/catalog-run/extras.jsonl
 python3 scripts/catalog-index.py build --occurrences samples/catalog-run/occurrences.jsonl \
   --assets samples/catalog-run/assets.jsonl --dedup samples/catalog-run/dedup.json \
   --decisions library/layout-decisions.json --geometry samples/catalog-run/geometry.jsonl \

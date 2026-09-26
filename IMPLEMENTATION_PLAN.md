@@ -29,11 +29,11 @@ Completed foundations:
 - Native phrase measurement, visible-art bounds, calibrated underline and
   highlight placement, native rendering and pixel/structural QA tools.
 
-The [second catalog checkpoint](library/README.md) now includes occurrence, asset
+The [expanded catalog checkpoint](library/README.md) now includes occurrence, asset
 and font ingestion, resolved geometry, component candidates and SQLite search.
 Review of 89 source occurrences reduces 369 slides to 306 classification work units
-(24 shared families, 2 distinct items, 280 unreviewed singletons). Seven proposed
-component families supply 21 source compositions and 37 named slot candidates;
+(24 shared families, 2 distinct items, 280 unreviewed singletons). The component expansion supplies 244 source examples in 74 source patterns,
+31 semantic families, six proposed color profiles and 572 named slot candidates;
 capacity and adaptation remain unproven. The next work uses the representative
 worklist, reviews the remaining dedup candidates, and develops measured contracts
 for pods, identity cards and metric pairs.

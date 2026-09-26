@@ -13,11 +13,12 @@ planned. The table below records the initial survey before this spike.
 
 ## Catalog execution update
 
-The first two catalog waves add Python inspection commands for hash-verified source
+The catalog waves add Python inspection commands for hash-verified source
 occurrences, layout deduplication, local/hosted asset and font manifests, resolved
 group/placeholder geometry, component candidates, SQLite FTS5 search, and explicit
 visual-family decisions. The current 369-slide corpus has 306 classification work
-units, 24 shared families, 21 curated component candidates and 17,191 indexed items. See the
+units, 24 shared layout families, 244 selected component examples in 74 source patterns,
+31 semantic component families, six proposed style profiles and 17,451 indexed items. See the
 [library checkpoint](library/README.md). These helpers do not yet provide approved
 semantic layout contracts or an integrated Go authoring command. The historical
 survey below remains a record of the pre-experiment baseline.

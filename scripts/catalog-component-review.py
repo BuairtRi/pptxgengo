@@ -68,6 +68,8 @@ def main():
     previews = manifest['previews']
     preview_cache = {}
     cards = []
+    families = set()
+    seen_patterns = set()
     unresolved = 0
     for c in comps:
         sid, source_hash = c['source_id'], c['source_sha256']
@@ -116,7 +118,7 @@ def main():
             label = f"{row['object_path']} · {row['object_kind']}"
             polygons.append(f'<polygon points="{esc(pts)}" class="frame" data-path="{esc(row["object_path"])}"><title>{esc(label)}</title></polygon>')
         relative = os.path.relpath(png, start=root_path(args.out.parent)).replace(os.sep,'/')
-        image_html = (f'<div class="slide"><img src="{esc(relative)}" alt="Unmodified rendered source slide {esc(c["slide_number"])}" '
+        image_html = (f'<div class="slide"><img loading="lazy" src="{esc(relative)}" alt="Unmodified rendered source slide {esc(c["slide_number"])}" '
                       f'width="{int(preview["size_pixels"][0])}" height="{int(preview["size_pixels"][1])}">'
                       f'<svg class="overlay" viewBox="0 0 {width} {height}" preserveAspectRatio="none" aria-label="Object frame overlays">'
                       + ''.join(polygons) + '</svg></div>')
@@ -136,14 +138,22 @@ def main():
         limits = ''.join(f'<li>{esc(x)}</li>' for x in c.get('limitations', []))
         unresolved_members = [r['object_path'] for r in members if r['geometry_status'] != 'resolved']
         status = ('Unresolved member frames: ' + ', '.join(unresolved_members)) if unresolved_members else f'{len(polygons)} member frames overlaid'
-        cards.append(f'''<article class="card" id="{esc(c['id'])}">
+        family = c.get('canonical_family_id') or 'unclassified'
+        families.add(family)
+        representative = c.get('seed_id') not in seen_patterns
+        seen_patterns.add(c.get('seed_id'))
+        search_text = ' '.join(str(c.get(k) or '') for k in ('name','purpose','source_id','canonical_family_id','text'))
+        variant = c.get('source_variant') or {}
+        cards.append(f'''<article class="card" id="{esc(c['id'])}" data-family="{esc(family)}" data-representative="{str(representative).lower()}" data-search="{esc(search_text.lower())}">
 <header><div><h2>{esc(c.get('name') or c['id'])}</h2><p class="meta">{esc(c['id'])} · {esc(sid)} slide {esc(c['slide_number'])} · {esc(status)}</p></div><span class="pill">{esc(c.get('readiness'))}</span></header>
 {image_html}
 <p class="purpose">{esc(c.get('purpose') or 'Purpose not classified.')}</p>
+<p class="purpose">Family: {esc(family)} · Variant: {esc(variant.get('structural_variant', c.get('seed_id')))}<br>Observed style: {esc(variant.get('observed_style_description', 'See source preview'))}<br>Proposed style options: {esc(', '.join(c.get('proposed_style_options', [])))} · Color application remains unproven.</p>
 {slot_table}
 <details><summary>Readiness and constraints</summary><p>Design preference: {esc(c.get('design_preference'))} · Content approval: {esc(c.get('content_approval'))} · Supported operations: {esc(', '.join(c.get('supported_operations', [])))}</p><h3>Adaptation constraints</h3><ul>{constraints or '<li>None recorded</li>'}</ul><h3>Limitations</h3><ul>{limits or '<li>None recorded</li>'}</ul></details>
 </article>''')
 
+    family_options = ''.join(f'<option value="{esc(f)}">{esc(f.removeprefix("component-family:"))}</option>' for f in sorted(families))
     page = f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Curated component review</title>
@@ -151,13 +161,19 @@ def main():
 :root{{color-scheme:light;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#17232d;background:#f2f4f6}}
 *{{box-sizing:border-box}}body{{margin:0}}.top{{position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid #cbd3da;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}}
 h1{{font-size:22px;margin:0}}.top p{{margin:5px 0 0;color:#53626e;font-size:13px}}label{{white-space:nowrap;font-weight:600}}main{{max-width:1250px;margin:22px auto;padding:0 18px;display:grid;gap:24px}}
-.card{{background:#fff;border:1px solid #d2d9df;border-radius:12px;overflow:hidden;box-shadow:0 2px 9px #18212b0d}}.card header{{display:flex;justify-content:space-between;align-items:start;padding:17px 20px;gap:16px}}
+.card{{background:#fff;border:1px solid #d2d9df;border-radius:12px;overflow:hidden;box-shadow:0 2px 9px #18212b0d}}.card[hidden]{{display:none}}.card header{{display:flex;justify-content:space-between;align-items:start;padding:17px 20px;gap:16px}}.filters{{padding:16px 24px;display:flex;gap:18px;flex-wrap:wrap;background:white}}input,select{{font:inherit;padding:5px}}.top{{flex-wrap:wrap}}
 h2{{font-size:20px;margin:0 0 4px}}.meta{{font-size:12px;color:#60707e;margin:0;overflow-wrap:anywhere}}.pill{{font-size:12px;border-radius:99px;padding:5px 9px;background:#eaf0f5;white-space:nowrap}}
 .slide{{position:relative;width:100%;background:#111;line-height:0}}.slide img{{display:block;width:100%;height:auto}}.overlay{{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}}
 .frame{{fill:#ffcc0030;stroke:#f7b500;stroke-width:18000;vector-effect:non-scaling-stroke;stroke-width:2.5px}}body.hide-overlays .overlay{{display:none}}
 .purpose{{margin:16px 20px;color:#34434d}}table{{border-collapse:collapse;width:calc(100% - 40px);margin:0 20px 18px;font-size:13px}}th,td{{padding:8px;border-bottom:1px solid #e1e6ea;text-align:left;vertical-align:top;overflow-wrap:anywhere}}th{{background:#f3f6f8}}td:nth-child(4){{white-space:pre-line;max-width:350px}}details{{border-top:1px solid #e1e6ea;padding:12px 20px 18px;font-size:13px}}summary{{cursor:pointer;font-weight:650}}li{{margin:4px 0}}details h3{{font-size:13px;margin-bottom:4px}}
 </style></head><body><div class="top"><div><h1>Curated component review</h1><p>{len(cards)} source-bound candidates · Preview PNGs are unmodified · Yellow outlines show object frames, not visible ink or fit guarantees</p></div><label><input id="toggle" type="checkbox" checked> Show frame overlays</label></div>
-<main>{''.join(cards)}</main><script>document.getElementById('toggle').addEventListener('change',e=>document.body.classList.toggle('hide-overlays',!e.target.checked));</script></body></html>'''
+<div class="filters"><label>Family <select id="family"><option value="">All families</option>{family_options}</select></label><label>Search <input id="query" type="search"></label><label><input id="representatives" type="checkbox" checked> One example per source pattern</label><span id="count"></span></div>
+<main>{''.join(cards)}</main><script>
+document.getElementById('toggle').addEventListener('change',e=>document.body.classList.toggle('hide-overlays',!e.target.checked));
+const family=document.getElementById('family'), query=document.getElementById('query'), reps=document.getElementById('representatives');
+function filter(){{let n=0;document.querySelectorAll('.card').forEach(c=>{{c.hidden=(family.value&&c.dataset.family!==family.value)||(reps.checked&&c.dataset.representative!=='true')||!c.dataset.search.includes(query.value.toLowerCase());if(!c.hidden)n++;}});document.getElementById('count').textContent=n+' examples shown';}}
+[family,query,reps].forEach(el=>el.addEventListener('input',filter));filter();
+</script></body></html>'''
     args.out.parent.mkdir(parents=True, exist_ok=True)
     fd, temp = tempfile.mkstemp(prefix='.'+args.out.name+'.',suffix='.tmp',dir=args.out.parent)
     try:

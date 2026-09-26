@@ -9,15 +9,16 @@ The rebuildable SQLite catalog was built from occurrence, asset, and dedup manif
 | dedup | `samples/catalog/layout-dedup-v4.json` | `b66fe131c4d9683e81203156f96599bf451d0009650df3c2428a265781f1df43` | 771 |
 | decisions | `library/layout-decisions.json` | `e36373b3a12258918cc59d09f649b3b6f6c7fd129d679afeb836de0923096763` | 26 |
 | geometry | `samples/catalog-next/geometry.jsonl` | `d42dc9b6c2b6a79bc797ad6cb7d03f79e6c4e5eec57961a8f80db06a7f262af6` | 10102 |
-| components | `samples/catalog-next/components-v2.jsonl` | `299f15c7ed2f3423106664a7e024413f58b19c11b78a0beb355df4d64d3d2358` | 336 |
-| extras | `samples/catalog-next/brand-extras-v2.jsonl` | `90609a05e9db622c71d2396b0ca0df055f8c04488f773273f0f63b59316ccd08` | 58 |
+| components | `samples/component-expansion/components-v2.jsonl` | `2caf63572b638f635063dd6e7f8b40c6997d38e23a3d552e411658fbbe9eee68` | 559 |
+| extras | `samples/component-expansion/extras-v2.jsonl` | `23cdd10070541bcc1a3cf31212eb975efa73541c5ae573ed24e2ca78553eb2af` | 95 |
 
-Total indexed items: **17191**.
+Total indexed items: **17451**.
 
 | Kind | Items |
 |---|---:|
 | asset | 2169 |
-| component | 336 |
+| component | 559 |
+| component_family | 31 |
 | dedup_slide | 369 |
 | font | 58 |
 | group | 401 |
@@ -28,5 +29,6 @@ Total indexed items: **17191**.
 | review_queue | 33 |
 | shape | 12737 |
 | slide | 369 |
+| style_profile | 6 |
 
 Dedup slide references were checked against source slide occurrences; component member and slot references were checked against slide occurrence IDs, source hashes, and slide boundaries. Geometry IDs were checked for unique exact coverage of slide shape/group occurrences. Every indexed ID is unique.

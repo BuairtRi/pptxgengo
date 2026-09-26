@@ -114,3 +114,43 @@ shapes remain native objects. No slide is replaced by a full-slide screenshot.
   is Data Scientist in one source pod and Data Engineer in another. Renamed the
   proposed slot to `third_role`; retained each source value and excluded the
   shared phase backdrop from the individual pod compositions.
+
+
+## Component expansion findings
+
+- **QA-28 — Whole layouts mistaken for component boundaries, corrected:** draft
+  grids and whole-slide regions were split into individual cards, phase columns,
+  legend units and other coherent compounds. Uncertain broad diagrams remain a
+  backlog rather than inflating the accepted component count.
+- **QA-29 — XML order does not establish visual pairing, corrected:** stock 101
+  bars were paired with unrelated labels, stock 114 bubbles with neighboring text,
+  and stock 106 cells with explanations on the opposite side. Root geometry and
+  native-preview review corrected or narrowed those selections.
+- **QA-30 — Valid object paths can have the wrong semantic role, corrected:**
+  proposal drafts called empty-text chevrons content panels and a phase ribbon an
+  operating handoff. Those records were removed. The ingester now rejects empty
+  text slots unless they have an explicit empty-role rationale. Tables cannot be
+  passed as ordinary text-shape slots.
+- **QA-31 — Visual descriptions need direct confirmation, corrected:** draft
+  descriptions called quotation marks portraits, rectangular headers triangles,
+  and white evidence cards blue-topped cards. Root inspected native images and
+  corrected the accepted descriptions. Structural validity alone is insufficient.
+- **QA-32 — Shared context changes component appearance, recorded:** UHG26 has a
+  diagram-wide translucent overlay; stock157 metric pairs share a navy backdrop;
+  connected diagrams share arrows and dividers. Composition boundaries record
+  exclusions and dependencies; isolated reuse remains unapproved.
+- **QA-33 — Duplicate layouts can contain identical subcomponents, consolidated:**
+  the five title/body rows on stock24/25 match in geometry, style and text XML after
+  excluding only `dirty` spellcheck-cache attributes. Five aliases replace repeat
+  enrichment; slide25's added arrows remain distinct layout content.
+- **QA-34 — Compiler/index consistency gaps, fixed after code review:** style IDs
+  now use consistent namespaces and are validated on indexing; input/alias IDs
+  are globally unique; exact selections with conflicting family assignments fail;
+  three compiler outputs use staged installation with rollback on failure.
+
+Final corpus ingestion: 249 input examples, 244 retained examples, 74 source
+patterns, 31 semantic families, 572 slot candidates and zero unresolved component
+bounds. SQLite has 17,451 items. The gallery verifies 61 source previews; the full
+preview manifest has 144 entries. Native source review, ingestion and search were
+performed; no unit suite was run. Gallery HTML UI remains unverified because the
+previous browser security review blocked opening local HTML; no bypass was used.

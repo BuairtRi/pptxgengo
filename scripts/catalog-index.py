@@ -91,8 +91,10 @@ def occurrence_item(row, aggregated_slide_text=None):
 
 
 def component_item(row):
-    parts = [row.get(k) for k in ('name', 'title', 'purpose', 'text', 'seed_id')]
+    parts = [row.get(k) for k in ('name', 'title', 'purpose', 'text', 'seed_id', 'canonical_family_id')]
     parts.extend(row.get('adaptation_constraints') or [])
+    parts.extend(row.get('proposed_style_options') or [])
+    parts.append(json.dumps(row.get('source_variant') or {}))
     return {'id': row.get('id'), 'kind': row.get('kind') or 'component',
             'source_id': row.get('source_id'), 'category': row.get('origin'),
             'title': row.get('name') or row.get('title') or row.get('id'),
@@ -110,6 +112,12 @@ def font_item(row):
             'category': row.get('category') or 'font',
             'title': row.get('font_name') or row.get('family_name') or row.get('id'),
             'body': '\n'.join(str(x) for x in body if x), 'json': row}
+
+
+def semantic_item(row):
+    return {'id': row['id'], 'kind': row['kind'], 'source_id': None,
+            'category': row.get('readiness'), 'title': row.get('name') or row['id'],
+            'body': json.dumps(row, ensure_ascii=False), 'json': row}
 
 
 def enrich_geometry(occurrence_rows, geometry_rows, geometry_path):
@@ -315,6 +323,13 @@ def build(args):
     geometry_rows = list(jsonl(args.geometry)) if args.geometry else []
     component_rows = list(jsonl(args.components)) if args.components else []
     extras_rows = list(jsonl(args.extras)) if args.extras else []
+    style_ids = {r['id'] for r in extras_rows if r.get('kind') == 'style_profile'}
+    family_ids = {r['id'] for r in extras_rows if r.get('kind') == 'component_family'}
+    for row in component_rows + extras_rows:
+        if not set(row.get('proposed_style_options') or []).issubset(style_ids):
+            raise ValueError('Unknown component style reference: '+str(row.get('id')))
+        if row.get('canonical_family_id') and row['canonical_family_id'] not in family_ids:
+            raise ValueError('Unknown component family reference: '+str(row.get('id')))
     slides = {}
     for row in occurrence_rows:
         if row.get('occurrence_type') == 'slide':
@@ -335,6 +350,23 @@ def build(args):
             extras_items.append(asset_item(row))
         elif row.get('kind') == 'font':
             extras_items.append(font_item(row))
+        elif row.get('kind') == 'component_family':
+            components_by_id = {r['id']: r for r in component_rows}
+            if not row.get('instances'):
+                raise ValueError('Component family has no instances: '+row['id'])
+            for inst in row['instances']:
+                component = components_by_id.get(inst['id'])
+                if not component or component.get('canonical_family_id') != row['id']:
+                    raise ValueError('Family member is missing or mismatched: '+inst['id'])
+                if (component['source_id'], component['slide_number']) != (inst['source_id'], inst['slide_number']):
+                    raise ValueError('Family member source identity mismatch: '+inst['id'])
+                if row['source_hashes'].get(component['source_id']) != component['source_sha256']:
+                    raise ValueError('Family source hash mismatch: '+row['id'])
+            extras_items.append(semantic_item(row))
+        elif row.get('kind') == 'style_profile':
+            if not row.get('tokens') or row.get('readiness') != 'proposed_contract':
+                raise ValueError('Malformed style contract: '+str(row.get('id')))
+            extras_items.append(semantic_item(row))
         else:
             raise ValueError(f"{args.extras}: unsupported extra kind {row.get('kind')!r}")
     if args.decisions:

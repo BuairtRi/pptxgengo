@@ -1,0 +1,996 @@
+{
+  "schema_version": 1,
+  "guidance": [
+    {
+      "path_hint": "/Users/rscott/Documents/branding/DESIGN.md",
+      "sha256": "f219bfdcd1f8f5b8eb3eb9094600f178b3188b2168ecbed37531790cefa3461d",
+      "scope": "Brand palette and color usage; digital spacing and type sizes are not slide prescriptions."
+    },
+    {
+      "source_id": "graphics-and-layouts",
+      "source_sha256": "9180d0d747500358ecb427dbe7ac771fa0f83de0e55c298ce7ceeb2482334fda",
+      "slide_number": 164,
+      "scope": "Native source preview: word-count, 20pt minimum, single-line and one-highlight guidance."
+    }
+  ],
+  "palette": {
+    "navy": "#070154",
+    "white": "#FFFFFF",
+    "yellow": "#F6EB21",
+    "magenta": "#F900D3",
+    "blue": "#0047FF",
+    "slate": "#50658E",
+    "gray": "#CED7E6",
+    "pale": "#E8EEF8"
+  },
+  "application_rules": [
+    "These are proposed component contracts derived from guidance, not WM-approved reusable components.",
+    "Map semantic roles at object or text-run level. Never replace every occurrence of a source hex value.",
+    "Preserve source typography, geometry, crops and alpha/color transforms until an explicit adaptation is approved.",
+    "Keep data-series, actor-responsibility, timeline-phase, status and intensity colors separate from presentation roles. Require a legend or explicit semantic binding.",
+    "Yellow is reserved for marker-style emphasis behind one to four headline words; no general yellow surfaces or data encoding.",
+    "Blue accent is for text and rules, not a general background fill. Magenta accent requires readable contrast; preserve navy foreground on magenta surfaces.",
+    "White on magenta is limited to large text (18pt regular or 14pt bold). Do not infer these conditions while effective typography is unresolved.",
+    "Use Arial for new Office typography. Preserve observed source fonts in exact reconstruction; web size/spacing tokens are not PowerPoint dimensions.",
+    "Headline marks require word-level geometry and layering; source-observed placement does not approve dynamic placement.",
+    "Graphics and Layouts slide 164: headline highlights require at least 20pt, one to four words on one line, and at most one highlight graphic per headline. Follow the source sizing principle rather than arbitrary stretching."
+  ],
+  "families": [
+    {
+      "id": "text-card",
+      "name": "Text card",
+      "purpose": "Heading and supporting text in a bounded or rule-separated region.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "numbered-card",
+      "name": "Numbered card",
+      "purpose": "A card with a numbered tab, badge or heading; retain number position and body structure.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "numbered-item",
+      "name": "Numbered list item",
+      "purpose": "Compact numbered label and explanation; ordering is meaningful.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "comparison-card",
+      "name": "Comparison panel",
+      "purpose": "A structured option or evidence panel used in a side-by-side comparison.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "comparison-row",
+      "name": "Comparison or evidence row",
+      "purpose": "Aligned cells sharing a row; preserve column meaning and alignment.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "case-study-card",
+      "name": "Case study panel",
+      "purpose": "Context, intervention and outcome evidence for one case; source facts require approval.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "metric-panel",
+      "name": "Metric panel",
+      "purpose": "One or more values with labels and optional context; cardinality is a structural variant.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "rating-scale",
+      "name": "Rating or intensity scale",
+      "purpose": "Repeated markers encoding a magnitude or state; preserve legend and data meaning.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "icon-panel",
+      "name": "Icon and content panel",
+      "purpose": "Icon or graphic with an associated heading, description or implication.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "section-header",
+      "name": "Section header",
+      "purpose": "Heading region separating related content, with optional edge or rule emphasis.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "process-step",
+      "name": "Process step",
+      "purpose": "A phase or action with associated number, caption, evidence or output.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "process-ribbon",
+      "name": "Process ribbon",
+      "purpose": "A connected multi-phase strip; phase count and state remain explicit.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "diagram-node",
+      "name": "Diagram node",
+      "purpose": "A labeled diagram element with shape and optional explanation; relationships are separate dependencies.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "service-panel",
+      "name": "Service panel",
+      "purpose": "Service description, contributions and outputs organized within a panel.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "image-comparison",
+      "name": "Image comparison",
+      "purpose": "Paired labeled images with an explicit comparison relationship.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "prompt-panel",
+      "name": "Prompt panel",
+      "purpose": "Question or instruction with supporting guidance.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "list-panel",
+      "name": "List panel",
+      "purpose": "A bounded list with shared heading, ordering or explanatory note.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "callout",
+      "name": "Takeaway callout",
+      "purpose": "A emphasized takeaway, decision or supporting statement.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "team-pod",
+      "name": "Delivery pod",
+      "purpose": "A bounded team with defined roles, effort or ownership; role count is a variant.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "person-card",
+      "name": "Person identity",
+      "purpose": "Portrait or identity block with name, role and optional credentials.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "timeline-event",
+      "name": "Timeline event",
+      "purpose": "Date or milestone with a caption; position and connectors express chronology.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "phase-column",
+      "name": "Phase detail column",
+      "purpose": "Activities, deliverables and timing organized under a phase.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "quote",
+      "name": "Quotation",
+      "purpose": "Quoted statement with quotation artwork and optional attribution.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "map-label",
+      "name": "Geographic label",
+      "purpose": "A location or geography-linked quantity; anchoring to the map is required.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "pricing-option",
+      "name": "Pricing option",
+      "purpose": "Commercial option with scope, price and terms; retain units and approval requirements.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "hierarchy-tier",
+      "name": "Hierarchy tier",
+      "purpose": "A ranked tier, funnel stage or pyramid level with descriptive content.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "cycle-segment",
+      "name": "Cycle segment",
+      "purpose": "A labeled segment or node of a cycle, preserving direction and adjacency.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "venn-set",
+      "name": "Venn set or intersection",
+      "purpose": "A region or set label with intentional overlap conveying shared membership.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "table-row",
+      "name": "Table row",
+      "purpose": "A record with column-aligned cells; preserve table semantics.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "legend-item",
+      "name": "Legend item",
+      "purpose": "A marker and label explaining a data, status or actor encoding.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "gantt-row",
+      "name": "Gantt workstream row",
+      "purpose": "A workstream label and time-bound activity bars or milestones.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "headline-emphasis",
+      "name": "Headline emphasis",
+      "purpose": "Headline words with an anchored highlight or underline; word-level bounds required.",
+      "proposed_style_options": [
+        "headline-highlight",
+        "neutral"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "chart-panel",
+      "name": "Chart and annotations",
+      "purpose": "A chart with associated labels and legend; data relationships must remain intact.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "image-caption",
+      "name": "Image with caption",
+      "purpose": "Image and associated caption, title or description; preserve crop and relationship.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    },
+    {
+      "id": "status-band",
+      "name": "Status band",
+      "purpose": "A labeled collection of status markers on a shared surface; retain legend semantics and item count.",
+      "proposed_style_options": [
+        "neutral",
+        "subtle",
+        "inverse",
+        "blue-accent",
+        "magenta-accent"
+      ],
+      "variant_axes": [
+        "geometry",
+        "cardinality",
+        "slot_structure",
+        "observed_source_style"
+      ],
+      "promotion_requirements": [
+        "object and text-run semantic role bindings",
+        "effective typography and dependency resolution",
+        "typical and boundary content replacement",
+        "native render and visual QA"
+      ]
+    }
+  ],
+  "style_profiles": [
+    {
+      "id": "neutral",
+      "name": "Neutral on white",
+      "tokens": {
+        "surface": "#FFFFFF",
+        "text.primary": "#070154",
+        "text.secondary": "#50658E",
+        "accent": "#070154",
+        "border": "#CED7E6"
+      },
+      "scope": "presentation_roles_only"
+    },
+    {
+      "id": "subtle",
+      "name": "Quiet surface",
+      "tokens": {
+        "surface": "#E8EEF8",
+        "text.primary": "#070154",
+        "text.secondary": "#50658E",
+        "accent": "#070154",
+        "border": "#CED7E6"
+      },
+      "scope": "presentation_roles_only"
+    },
+    {
+      "id": "inverse",
+      "name": "Inverse navy surface",
+      "tokens": {
+        "surface": "#070154",
+        "text.primary": "#FFFFFF",
+        "text.secondary": "#FFFFFF",
+        "accent": "#FFFFFF",
+        "border": "#FFFFFF"
+      },
+      "scope": "presentation_roles_only"
+    },
+    {
+      "id": "blue-accent",
+      "name": "Blue text and rule emphasis",
+      "tokens": {
+        "surface": "#FFFFFF",
+        "text.primary": "#070154",
+        "text.secondary": "#50658E",
+        "accent": "#0047FF",
+        "border": "#CED7E6"
+      },
+      "scope": "presentation_roles_only"
+    },
+    {
+      "id": "magenta-accent",
+      "name": "Magenta callout accent",
+      "tokens": {
+        "surface": "#FFFFFF",
+        "text.primary": "#070154",
+        "text.secondary": "#50658E",
+        "accent": "#F900D3",
+        "border": "#CED7E6"
+      },
+      "scope": "presentation_roles_only"
+    },
+    {
+      "id": "headline-highlight",
+      "name": "Yellow headline marker",
+      "tokens": {
+        "surface": "#FFFFFF",
+        "text.primary": "#070154",
+        "text.secondary": "#50658E",
+        "accent": "#F6EB21",
+        "border": "#CED7E6"
+      },
+      "scope": "headline_marker_only"
+    }
+  ],
+  "family_aliases": {
+    "timeline_annotation": "timeline-event",
+    "timeline_event": "timeline-event",
+    "phase_column": "phase-column",
+    "roadmap_milestone": "timeline-event",
+    "metric_row": "metric-panel",
+    "quadrant_tile": "icon-panel",
+    "key_point_panel": "numbered-card",
+    "quote_block": "quote",
+    "map_callout": "map-label",
+    "pricing_card": "pricing-option",
+    "hierarchy_row": "hierarchy-tier",
+    "metric_callout": "metric-panel",
+    "case_study_summary": "case-study-card",
+    "diagram_context": "text-card",
+    "icon_callout": "icon-panel",
+    "text_highlight": "headline-emphasis",
+    "platform_architecture": "diagram-node",
+    "architecture_decision": "diagram-node",
+    "evidence_gate": "numbered-card",
+    "team_model": "diagram-node",
+    "adoption_model": "process-step",
+    "transition_model": "process-step",
+    "project_phase": "process-step",
+    "deliverable_catalog": "image-caption",
+    "process_model": "process-step",
+    "workplan": "callout",
+    "capability_value_grid": "text-card",
+    "value_model": "process-step",
+    "matrix_explanation": "text-card",
+    "roadmap": "gantt-row",
+    "governance_process": "process-ribbon"
+  },
+  "seed_family_overrides": {
+    "component:value-driver-card": "text-card",
+    "component:metric-value-label": "metric-panel",
+    "component:phase-progress-ribbon": "process-ribbon",
+    "component:delivery-pod-two-roles": "team-pod",
+    "component:delivery-pod-three-roles": "team-pod",
+    "component:roster-person-card": "person-card",
+    "component:bio-identity": "person-card",
+    "component:slice-proposal-uhg-staffing-availability-key": "legend-item",
+    "component:slice-proposal-uhg-adoption-maturity-leap": "image-caption",
+    "component:slice-stock-b-geographic-metric-callout": "metric-panel"
+  }
+}

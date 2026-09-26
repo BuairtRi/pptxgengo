@@ -64,3 +64,18 @@ effective styles, dependency hashes, supported operations, explicit fit limits,
 known failures and independent design/content/readiness states. Require both a
 successful typical case and boundary cases with honest failure/fallback results.
 Raw inventory completion is tracked separately from these promotion gates.
+
+
+## Component expansion checkpoint
+
+The small 21-example seed set has expanded to 244 retained source examples from
+74 source patterns, simplified into 31 semantic retrieval families. Five reviewed
+duplicate examples remain as aliases. Six proposed color profiles use explicit
+presentation roles; source data/actor/status encodings remain separate. See the
+[component report](../library/component-expansion-report.md) and
+[style contract](../library/component-styling.md).
+
+Next: develop editable contracts for metric panels, numbered cards and delivery
+pods. Bind object/run roles and shared dependencies, resolve typography, exercise
+boundary content and color variants, then promote only successful native renders.
+Continue the stock-diagram backlog without counting whole layouts as components.

@@ -71,6 +71,20 @@ def paragraphs(node):
     return result
 
 
+def color_observations(node):
+    """Preserve explicit color expressions, including transforms, without inheritance guesses."""
+    colors = []
+    color_tags = {'srgbClr', 'schemeClr', 'prstClr', 'sysClr', 'scrgbClr', 'hslClr'}
+    def visit(n, path):
+        if tag(n) in color_tags:
+            colors.append({'xml_path': path, 'type': tag(n), 'attributes': dict(n.attrib),
+                           'transforms': [{'type': tag(c), 'attributes': dict(c.attrib)} for c in n]})
+        for index, child in enumerate(n):
+            visit(child, f'{path}/{tag(child)}[{index}]')
+    visit(node, tag(node))
+    return colors
+
+
 def read_unique_jsonl(path, id_key):
     rows = {}
     for lineno, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
@@ -150,7 +164,7 @@ def main():
         missing = expected_slide_object_ids - set(occurrences)
         raise ValueError(f'Occurrence coverage mismatch: missing={len(missing)}')
     records = []
-    def compose(key, paths, ident, name, origin, slots=None, seed=None):
+    def compose(key, paths, ident, name, origin, slots=None, seed=None, instance=None):
         if not isinstance(paths, list) or not paths or any(not isinstance(p, str) or not p for p in paths):
             raise ValueError('Composition paths must be a non-empty list of object paths: '+ident)
         if slots is not None and not isinstance(slots, list):
@@ -196,6 +210,9 @@ def main():
                 raise ValueError('Slot occurrence_id is stale: '+ident+':'+path)
             if slot['kind'] == 'text' and (tag(node) != 'sp' or not node.findall('./p:txBody/a:p', NS)):
                 raise ValueError('Text slot must reference a native text shape with text paragraphs: '+ident+':'+path)
+            if slot['kind'] == 'text' and not (occ.get('text') or '').strip():
+                if slot.get('allow_empty') is not True or not slot.get('empty_role_rationale'):
+                    raise ValueError('Empty text slot requires an explicit role rationale: '+ident+':'+path)
             if slot['kind'] == 'image' and tag(node) != 'pic':
                 raise ValueError('Image slot is not a native picture: '+ident+':'+path)
             slot_rows.append({**slot, 'occurrence_id': g['occurrence_id'],
@@ -206,6 +223,11 @@ def main():
                               'paragraphs': paragraphs(node) if slot['kind'] == 'text' else [],
                               'effective_typography': 'unresolved', 'capacity_status': 'not_measured'})
         text = '\n'.join(occurrences[gs[p]['occurrence_id']].get('text') or '' for p in leaf_paths).strip()
+        observed_colors = []
+        for path in leaf_paths:
+            colors = color_observations(selected[path])
+            if colors:
+                observed_colors.append({'object_path': path, 'colors': colors})
         return {'id': ident, 'kind': 'component', 'name': name, 'title': name,
                 'source_id': key[0], 'source_sha256': sources[key[0]]['source_sha256'],
                 'slide_number': key[1], 'source_part': slides[key]['part'],
@@ -220,6 +242,13 @@ def main():
                 'design_preference': 'unrated', 'content_approval': 'unreviewed',
                 'supported_operations': ['inspect', 'preserve_source'],
                 'purpose': seed.get('purpose') if seed else None,
+                'canonical_family_id': seed.get('canonical_family_id') if seed else None,
+                'proposed_style_options': seed.get('proposed_style_options', []) if seed else [],
+                'style_application_status': seed.get('style_application_status', 'unmapped') if seed else 'unmapped',
+                'source_variant': {k: v for k, v in (instance or {}).items()
+                                   if k not in {'slots', 'object_paths', 'source_id', 'slide_number'}},
+                'observed_colors': observed_colors,
+                'color_resolution': 'explicit_expressions_only_inheritance_unresolved',
                 'adaptation_constraints': seed.get('adaptation_constraints', []) if seed else [],
                 'limitations': ['No adaptation or rendered fit approval',
                                 'Inherited typography remains unresolved',
@@ -245,8 +274,8 @@ def main():
             if key not in slides:
                 raise ValueError(f'Unknown seed instance slide: {seed["id"]} {key}')
             slots = inst.get('slots', [])
-            records.append(compose(key, inst.get('object_paths', []), seed['id']+f':instance-{index:03d}',
-                                   seed.get('name') or seed['id'], 'curated_composition_candidate', slots, seed))
+            records.append(compose(key, inst.get('object_paths', []), inst.get('instance_id', seed['id']+f':instance-{index:03d}'),
+                                   seed.get('name') or seed['id'], 'curated_composition_candidate', slots, seed, inst))
     if len({r['id'] for r in records}) != len(records):
         raise ValueError('Duplicate component IDs')
     families = defaultdict(list)
@@ -258,6 +287,7 @@ def main():
               'multi_member_structural_buckets': sum(len(m)>1 for m in families.values()),
               'curated_component_seeds': len(seeds['seeds']),
               'curated_composition_instances': len(records)-len(native_groups),
+              'canonical_semantic_families': len({r['canonical_family_id'] for r in records if r['canonical_family_id']}),
               'slot_candidates': sum(len(r['slots']) for r in records),
               'unresolved_bounds': sum(r['bounds_emu'] is None for r in records),
               'approved_reusable_components': 0}
@@ -267,6 +297,7 @@ def main():
     report += 'Structural buckets are source-scoped comparison candidates; no semantic merge is automatic.\n'
     report += 'Every selected source object and slot resolves to a hash-matched occurrence and geometry record.\n'
     report += 'Text slots retain observed text, explicit styles and paragraph XML. Observations are not capacity limits.\n'
+    report += 'Explicit color expressions retain XML locations and transforms; theme inheritance is not resolved. Semantic style options are contracts only, with no automatic object-role bindings or recoloring.\n'
     report += '\nOutput: `'+str(args.out)+'`. Input hashes:\n\n'
     for name in ('registry','geometry','occurrences','seeds'):
         path = getattr(args,name); report += f'- `{path}`: `{sha(path.read_bytes())}`\n'
