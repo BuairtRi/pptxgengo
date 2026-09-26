@@ -29,11 +29,14 @@ Completed foundations:
 - Native phrase measurement, visible-art bounds, calibrated underline and
   highlight placement, native rendering and pixel/structural QA tools.
 
-Execution has begun: the [first catalog checkpoint](library/README.md) adds raw
-occurrence and asset ingestion, SQLite search, and visual deduplication decisions.
-The next enrichment work must consume its representative worklist and preserve
-variants. Raw searchable records are available; reusable semantic contracts remain
-unimplemented.
+The [second catalog checkpoint](library/README.md) now includes occurrence, asset
+and font ingestion, resolved geometry, component candidates and SQLite search.
+Review of 89 source occurrences reduces 369 slides to 306 classification work units
+(24 shared families, 2 distinct items, 280 unreviewed singletons). Seven proposed
+component families supply 21 source compositions and 37 named slot candidates;
+capacity and adaptation remain unproven. The next work uses the representative
+worklist, reviews the remaining dedup candidates, and develops measured contracts
+for pods, identity cards and metric pairs.
 
 Not yet completed: a curated approved library, semantic slide authoring,
 general fit/collision checks, narrative generation, colleague-edit reconciliation,

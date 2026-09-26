@@ -92,3 +92,25 @@ shapes remain native objects. No slide is replaced by a full-slide screenshot.
   a database. Joining text blocks fixed the build; a body-only COBOL search then
   returned source slides with readiness labels. Layout IDs are also searchable
   so useful names such as timeline are not lost when rationale wording differs.
+
+## Resolved geometry and component findings
+
+- **QA-23 — Nested placeholder inheritance can mix coordinate systems, guarded:**
+  the geometry resolver accepts raw inherited transforms only for top-level
+  placeholders. A nested placeholder without a transform remains unresolved;
+  its layout/master ancestor matrix is not guessed. Per-slide transform state
+  is cleared so matrices cannot leak across source slides.
+- **QA-24 — Source biography reaches the footer:** native UHG 73 has a final
+  biography line at the footer boundary. Retain the source and its bio-family
+  membership while recording this as a source fit issue, not library approval.
+- **QA-25 — Source underline detached from its phrase:** modernization 45 keeps
+  the short underline below the introduction even though the corresponding
+  emphasized wording in 44 has changed. Preserve it as a source issue and a
+  future phrase-anchor regression example; no original was edited.
+- **QA-26 — Frame bounds do not establish text capacity:** component slots retain
+  observed lengths and explicit paragraph properties with null measured capacity.
+  Effective typography, ink bounds and replacement fit remain unproven.
+- **QA-27 — Pod role naming over-specified meaning, corrected:** the third role
+  is Data Scientist in one source pod and Data Engineer in another. Renamed the
+  proposed slot to `third_role`; retained each source value and excluded the
+  shared phase backdrop from the individual pod compositions.

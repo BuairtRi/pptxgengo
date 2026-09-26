@@ -89,6 +89,96 @@ def occurrence_item(row, aggregated_slide_text=None):
             'title': title, 'body': body, 'json': row}
 
 
+
+def component_item(row):
+    parts = [row.get(k) for k in ('name', 'title', 'purpose', 'text', 'seed_id')]
+    parts.extend(row.get('adaptation_constraints') or [])
+    return {'id': row.get('id'), 'kind': row.get('kind') or 'component',
+            'source_id': row.get('source_id'), 'category': row.get('origin'),
+            'title': row.get('name') or row.get('title') or row.get('id'),
+            'body': '\n'.join(str(x) for x in parts if x), 'json': row}
+
+
+def font_item(row):
+    refs = row.get('source_refs') or []
+    body = [row.get('font_name'), row.get('family_name'), row.get('style')]
+    body.extend(row.get('aliases') or [])
+    for ref in refs:
+        body.extend(str(v) for v in ref.values() if v)
+    body.append(row.get('readiness'))
+    return {'id': row.get('id'), 'kind': 'font', 'source_id': None,
+            'category': row.get('category') or 'font',
+            'title': row.get('font_name') or row.get('family_name') or row.get('id'),
+            'body': '\n'.join(str(x) for x in body if x), 'json': row}
+
+
+def enrich_geometry(occurrence_rows, geometry_rows, geometry_path):
+    expected = {row['occurrence_id']: row for row in occurrence_rows
+                if row.get('native_category') == 'slides' and row.get('occurrence_type') in {'shape', 'group'}}
+    geometry = {}
+    for lineno, row in enumerate(geometry_rows, 1):
+        ident = row.get('occurrence_id')
+        if not ident:
+            raise ValueError(f'{geometry_path}:{lineno}: geometry row missing occurrence_id')
+        if ident in geometry:
+            raise ValueError(f'{geometry_path}:{lineno}: duplicate geometry occurrence_id {ident}')
+        source = expected.get(ident)
+        if source is None:
+            raise ValueError(f'{geometry_path}:{lineno}: geometry refers to non-slide or unknown occurrence {ident}')
+        for field, source_field in (('source_sha256', 'source_sha256'), ('source_part', 'source_part'),
+                                    ('object_path', 'object_path')):
+            if row.get(field) != source.get(source_field):
+                raise ValueError(f'{geometry_path}:{lineno}: {field} mismatch for {ident}')
+        if row.get('source_id') != source.get('source_id') or row.get('slide_number') != source.get('slide_number'):
+            raise ValueError(f'{geometry_path}:{lineno}: source/slide mismatch for {ident}')
+        geometry[ident] = row
+    missing = set(expected) - set(geometry)
+    if missing:
+        raise ValueError(f'{geometry_path}: missing geometry for {len(missing)} slide shape/group occurrences; first: {sorted(missing)[0]}')
+    for ident, row in expected.items():
+        row['geometry'] = geometry[ident]
+    return len(geometry)
+
+
+def validate_components(component_rows, occurrence_rows, components_path):
+    occurrences = {row.get('occurrence_id'): row for row in occurrence_rows
+                   if row.get('native_category') == 'slides' and row.get('occurrence_type') in {'shape', 'group'}}
+    seen_ids = set()
+    for lineno, row in enumerate(component_rows, 1):
+        if row.get('kind') != 'component':
+            raise ValueError(f'{components_path}:{lineno}: expected component kind')
+        ident = row.get('id')
+        if not isinstance(ident, str) or not ident:
+            raise ValueError(f'{components_path}:{lineno}: component missing non-empty id')
+        if ident in seen_ids:
+            raise ValueError(f'{components_path}:{lineno}: duplicate component id {ident}')
+        seen_ids.add(ident)
+        member_ids = row.get('member_occurrence_ids')
+        if not isinstance(member_ids, list) or not member_ids:
+            raise ValueError(f'{components_path}:{lineno}: component {ident} has no member occurrences')
+        if len(set(member_ids)) != len(member_ids):
+            raise ValueError(f'{components_path}:{lineno}: component {ident} repeats a member occurrence')
+        members = []
+        for member_id in member_ids:
+            member = occurrences.get(member_id)
+            if member is None:
+                raise ValueError(f'{components_path}:{lineno}: component {ident} references unknown/non-slide occurrence {member_id}')
+            if any(member.get(field) != row.get(field) for field in
+                   ('source_id', 'source_sha256', 'slide_number', 'source_part')):
+                raise ValueError(f'{components_path}:{lineno}: component {ident} member crosses source/slide/hash boundary')
+            members.append(member)
+        member_set = set(member_ids)
+        slot_names = set()
+        for slot in row.get('slots') or []:
+            name = slot.get('name')
+            if not isinstance(name, str) or not name or name in slot_names:
+                raise ValueError(f'{components_path}:{lineno}: missing or repeated slot name for {ident}')
+            slot_names.add(name)
+            slot_ref = slot.get('occurrence_id')
+            if not slot_ref or slot_ref not in member_set:
+                raise ValueError(f'{components_path}:{lineno}: component {ident} slot reference is not in member_occurrence_ids')
+
+
 def load_dedup(path, occurrence_slides):
     data = json.loads(path.read_text(encoding='utf-8'))
     rows = []
@@ -211,8 +301,10 @@ def atomic_install(staged, destination):
 
 def build(args):
     inputs = {'occurrences': args.occurrences, 'assets': args.assets, 'dedup': args.dedup}
-    if args.decisions:
-        inputs['decisions'] = args.decisions
+    for name in ('decisions', 'geometry', 'components', 'extras'):
+        path = getattr(args, name)
+        if path:
+            inputs[name] = path
     for name, path in inputs.items():
         if not path.is_file():
             raise FileNotFoundError(f'{name} input not found: {path}')
@@ -220,6 +312,9 @@ def build(args):
         raise FileExistsError(f'refusing to overwrite existing database: {args.out}')
     occurrence_rows = list(jsonl(args.occurrences))
     asset_rows = list(jsonl(args.assets))
+    geometry_rows = list(jsonl(args.geometry)) if args.geometry else []
+    component_rows = list(jsonl(args.components)) if args.components else []
+    extras_rows = list(jsonl(args.extras)) if args.extras else []
     slides = {}
     for row in occurrence_rows:
         if row.get('occurrence_type') == 'slide':
@@ -230,6 +325,18 @@ def build(args):
     dedup_rows, dedup_data = load_dedup(args.dedup, slides)
     decision_rows = []
     decisions_data = None
+    geometry_count = enrich_geometry(occurrence_rows, geometry_rows, args.geometry) if args.geometry else 0
+    if args.components:
+        validate_components(component_rows, occurrence_rows, args.components)
+    component_items = [component_item(row) for row in component_rows]
+    extras_items = []
+    for row in extras_rows:
+        if row.get('kind') == 'asset':
+            extras_items.append(asset_item(row))
+        elif row.get('kind') == 'font':
+            extras_items.append(font_item(row))
+        else:
+            raise ValueError(f"{args.extras}: unsupported extra kind {row.get('kind')!r}")
     if args.decisions:
         if not args.decisions.is_file():
             raise FileNotFoundError(f'decisions input not found: {args.decisions}')
@@ -252,6 +359,8 @@ def build(args):
     items.extend(asset_item(x) for x in asset_rows)
     items.extend(dedup_rows)
     items.extend(decision_rows)
+    items.extend(component_items)
+    items.extend(extras_items)
     seen = set()
     for row in items:
         if not isinstance(row['id'], str) or not row['id']:
@@ -288,19 +397,23 @@ def build(args):
                  json.dumps(x['json'], ensure_ascii=False, separators=(',', ':'))) for x in items])
             conn.executemany('INSERT INTO items_fts(item_id,title,body) VALUES(?,?,?)', [
                 (x['id'], x['title'] or '', x['body']) for x in items])
-            ingestion = [
-                ('occurrences', args.occurrences, len(occurrence_rows), {
-                    'source_counts': source_counts(occurrence_rows)}),
-                ('assets', args.assets, len(asset_rows), {'kinds': count_values(asset_rows, 'kind'),
-                                                         'categories': count_values(asset_rows, 'category')}),
-                ('dedup', args.dedup, len(dedup_rows), {
-                    'native_groups': len(dedup_data.get('native_groups', [])),
-                    'slides': len(dedup_data.get('slides', [])),
-                    'review_queue': len(dedup_data.get('review_queue', []))}),
-            ]
-            if args.decisions:
-                ingestion.append(('decisions', args.decisions, len(decision_rows),
-                                  {'groups': len(decisions_data.get('groups', []))}))
+            input_counts = {
+                'occurrences': len(occurrence_rows), 'assets': len(asset_rows),
+                'dedup': len(dedup_rows), 'decisions': len(decision_rows),
+                'geometry': len(geometry_rows), 'components': len(component_rows),
+                'extras': len(extras_rows),
+            }
+            input_details = {
+                'occurrences': {'source_counts': source_counts(occurrence_rows)},
+                'assets': {'kinds': count_values(asset_rows, 'kind'), 'categories': count_values(asset_rows, 'category')},
+                'dedup': {'native_groups': len(dedup_data.get('native_groups', [])),
+                          'slides': len(dedup_data.get('slides', [])), 'review_queue': len(dedup_data.get('review_queue', []))},
+                'decisions': {'groups': len(decisions_data.get('groups', [])) if decisions_data else 0},
+                'geometry': {'enriched_slide_shape_group_occurrences': geometry_count},
+                'components': {'indexed_component_records': len(component_items)},
+                'extras': {'kinds': count_values(extras_rows, 'kind')},
+            }
+            ingestion = [(name, path, input_counts[name], input_details[name]) for name, path in inputs.items()]
             conn.executemany('INSERT INTO ingestion VALUES (?,?,?,?,?)', [
                 (name, str(path), file_hash(path), count, json.dumps(detail, ensure_ascii=False))
                 for name, path, count, detail in ingestion])
@@ -314,7 +427,7 @@ def build(args):
         finally:
             conn.close()
         with staged_report.open('w', encoding='utf-8', newline='\n') as stream:
-            write_report(stream, args, inputs, occurrence_rows, asset_rows, dedup_rows, decision_rows, counts, len(items))
+            write_report(stream, args, inputs, input_counts, occurrence_rows, asset_rows, dedup_rows, decision_rows, component_rows, extras_rows, geometry_count, counts, len(items))
             stream.flush()
             os.fsync(stream.fileno())
         if args.report.exists():
@@ -355,19 +468,18 @@ def _source_counts(rows):
     return result
 
 
-def write_report(stream, args, inputs, occurrence_rows, asset_rows, dedup_rows, decision_rows, counts, total):
+def write_report(stream, args, inputs, input_counts, occurrence_rows, asset_rows, dedup_rows, decision_rows, component_rows, extras_rows, geometry_count, counts, total):
     stream.write('# Catalog index build report\n\n')
-    stream.write('The rebuildable SQLite catalog was built from the occurrence, asset, and dedup JSON/JSONL manifests. Full records are preserved in the `items.json` column; FTS5 indexes item titles and searchable text. Slide occurrence search bodies include text aggregated from all shape and group descendants on that slide. This inspection index carries source readiness/review fields as supplied and does not infer approval. Optional layout-family decisions are stored as separate records and do not replace native dedup review statuses.\n\n')
+    stream.write('The rebuildable SQLite catalog was built from occurrence, asset, and dedup manifests plus any supplied decision, geometry, component, and extras manifests. Full records are preserved in the `items.json` column; FTS5 indexes item titles and searchable text. Slide occurrence search bodies include text aggregated from all shape and group descendants on that slide. Geometry is attached to matching slide shape/group occurrence records and adds no item rows. Components and optional layout-family decisions are separate indexed records; decisions do not replace native dedup review statuses. Source readiness/review fields are preserved without inferring approval.\n\n')
     stream.write('| Input | Path | SHA-256 | Records ingested |\n|---|---|---|---:|\n')
     for name, path in inputs.items():
-        n = {'occurrences': len(occurrence_rows), 'assets': len(asset_rows),
-             'dedup': len(dedup_rows), 'decisions': len(decision_rows)}[name]
+        n = input_counts[name]
         stream.write(f'| {name} | `{path}` | `{file_hash(path)}` | {n} |\n')
     stream.write(f'\nTotal indexed items: **{total}**.\n\n')
     stream.write('| Kind | Items |\n|---|---:|\n')
     for kind, n in sorted(counts.items()):
         stream.write(f'| {kind} | {n} |\n')
-    stream.write('\nDedup slide references were checked against source slide occurrences using `(source_id, slide_number)` mapping; all native-group members/representatives and both review-queue endpoints must resolve. Every indexed ID is unique.\n')
+    stream.write('\nDedup slide references were checked against source slide occurrences; component member and slot references were checked against slide occurrence IDs, source hashes, and slide boundaries. Geometry IDs were checked for unique exact coverage of slide shape/group occurrences. Every indexed ID is unique.\n')
 
 
 def connect_db(path):
@@ -439,6 +551,9 @@ def main():
     b.add_argument('--assets', type=Path, required=True)
     b.add_argument('--dedup', type=Path, required=True)
     b.add_argument('--decisions', type=Path)
+    b.add_argument('--geometry', type=Path)
+    b.add_argument('--components', type=Path)
+    b.add_argument('--extras', type=Path)
     b.add_argument('--out', type=Path, required=True)
     b.add_argument('--report', type=Path, default=Path('library/catalog-index-report.md'))
     b.set_defaults(func=build)
