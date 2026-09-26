@@ -23,6 +23,9 @@ type TextZoneFit struct {
 }
 
 func FixedTextFitReport(spec Spec, measured Measurements) []TextZoneFit {
+	if expanded, err := ExpandLayouts(spec, measured); err == nil {
+		spec = expanded
+	}
 	var rows []TextZoneFit
 	add := func(slide, id, request string, width, height, tolerance float64) {
 		m, ok := measured.ByRequestID[request]

@@ -89,3 +89,21 @@ Apply padding exactly once: either a text frame covering the cell with native
 insets, or a frame already inset into the panel with zero native margins. In
 multiline lists, separate bullet and text frames can preserve hanging alignment;
 these remain plain native text shapes, not semantic PowerPoint bullet paragraphs.
+
+## Measured grids and panels
+
+Use `layouts` for named container/cell/block composition. Read
+`library/layout-components/README.md` before authoring: child coordinates are
+relative to the parent's padded content origin, row capacity uses native
+measurements, and explicit limits reject overflow. `fit-report` separates
+`layout_failures` from fixed text-zone failures. Inspect both plus `planner_passed`.
+Do not change padding by applying it both to a cell and its already inset text.
+
+For copy iteration, `probe --cache DIR`, `measure --cache DIR` and
+`build --cache DIR` validate and reuse observations by complete rendering contract
+and environment fingerprint. When probe returns an all-cached report, skip measure.
+Recompiled CLI binaries invalidate cache compatibility. Final native verify and
+render review are mandatory even when every probe was cached. Cache entries must
+retain the original evidence/bundle artifacts; never manually upgrade old evidence
+with a new environment stamp. Named layout text slots support the existing bounded
+`recover-text --text-only` path; layout/formatting changes remain unsupported.

@@ -324,3 +324,63 @@ The code audit found that a valid deck hash alone did not validate the manifest'
 ## QA67 — Fit-report tolerances differed from planner contracts
 
 The fixed-zone report previously used one tolerance for different component contracts and handled whitespace-only titles differently from probe generation. It now uses each contract's tolerance, trims title presence consistently, and reports the tolerance per zone. All 244 fixed zones in the final dense sample fit; the complete planner also covers dynamic zones, collisions and routes.
+
+## QA68 — Reusable layout expansion mutated its input
+
+A shallow slice copy let probe expansion remove layouts from the caller's original
+spec. Layout lowering now copies the slide and canvas slices; a permanent
+regression checks source bytes before and after probing and planning.
+
+## QA69 — Generated overlap permissions were too broad
+
+Initial lowering allowed every generated layout object to overlap every other
+one, which could hide text collisions across nested panels. Automatic exemptions
+now cover owning/ancestor backgrounds only. A regression rejects nested text
+collisions. Descendants must stay inside padded parent content.
+
+## QA70 — Contrast used the wrong background
+
+Transparent blue output labels on the dense control's gray panel had only 4.33:1
+contrast. The old canvas validator assumed white. Layouts now inherit the actual
+cell/ancestor surface through `contrast_background`; opaque fills take precedence.
+The five output labels are navy in the new controls; copy and font sizes are
+preserved. This intentional visual correction is excluded from pixel-identity claims.
+
+## QA71 — Dynamic failure reporting hid later failures
+
+A row resolver stopped at the first overfull row, while a fallback could treat
+1pt probe placeholders as dynamic capacity. Each bounded cell now reports its own
+overflow. Failed expansion reports original fixed zones separately from layout
+failures. Deliberately overfull multi-cell fixtures must identify both cells.
+
+## QA72 — Layer controls could hide descendants
+
+Team phase surfaces previously rendered after canvas labels. Final ordering now
+places phase backgrounds first and honors canvas layers; generated layout layer
+offsets are bounded and nonnegative. Regression coverage checks phase/background
+ordering and rejects negative child offsets that would put text behind its surface.
+
+## QA73 — Roster inventory missed the partial final row
+
+The first Wave 2 audit counted nine core profiles on UHG 44. Root visual review
+found the tenth in a partial fourth row. The corrected record lists all 10 core
+and 9 specialist portrait/card pairs with source object IDs and asset hashes.
+
+## QA74 — Partial review preview mistaken for slide clipping
+
+The independent reviewer initially rejected the six-row fixture after seeing only
+the lower portion of its PNG preview. The primary review contradicted that claim.
+Reopening the exact absolute file at original detail, checking 1920×1080 dimensions
+and SHA-256, confirmed intact title, headers and all six rows. The reviewer retracted
+the rejection. Resolve display discrepancies against the actual full artifact;
+never edit a deck to fix a cropped tool preview.
+
+## QA75 — Layer and fit-report limits found in final code review
+
+No finding invalidates the six tested layout fixtures. Before broader API release,
+validate direct canvas/row-rule layers and accumulated nested layers, not only each
+container/cell/block offset. Row-rule layers currently remain explicit unchecked
+values. Cache-backed fit reports have empty legacy top-level probe/evidence hashes;
+use their per-contract `cache_uses` evidence paths and SHA-256 values. A follow-up
+should omit or replace the empty legacy fields. Neither limitation is hidden by
+claiming general layout or provenance approval.

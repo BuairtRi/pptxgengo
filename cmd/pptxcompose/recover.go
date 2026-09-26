@@ -255,6 +255,23 @@ func setRecoveredText(s *compose.SlideSpec, name, value string) error {
 				return nil
 			}
 		}
+		for i := range s.Layouts {
+			c := &s.Layouts[i]
+			for j := range c.Cells {
+				cell := &c.Cells[j]
+				for k := range cell.Blocks {
+					b := &cell.Blocks[k]
+					key := c.ID + "/" + cell.ID + "/" + b.ID
+					if b.Marker != "" {
+						key += "/text"
+					}
+					if key == id {
+						b.Text = value
+						return nil
+					}
+				}
+			}
+		}
 	}
 	if strings.HasPrefix(name, "role:") {
 		id := decode(strings.TrimPrefix(name, "role:"))

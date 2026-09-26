@@ -25,6 +25,11 @@ Do not claim pixel identity for intentionally changed-content variants.
 
 ## Wave 1 — Layout ownership, spacing and layering
 
+Checkpoint: the first three dense patterns and three stress variants have passed
+native verification and visual review. See [implementation and limits](WAVE1_CHECKPOINT.md).
+Named fixture tokens are resolved by the authoring helper; runtime token inheritance
+and broader validation/variant coverage remain future work.
+
 **References:** EnableComp 3/4, UHG 24/28, current dense slides 1–3.
 
 **Build:**

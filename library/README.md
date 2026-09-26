@@ -187,3 +187,12 @@ unchanged. Current previews are pinned in `render-manifest.json`.
 The [roles and pods workflow](dynamic-components/README.md) provides measured
 variable-role composition through `pptxcompose`. Its fixtures and native QA are
 tracked separately from the frozen source contracts and catalog approval counts.
+
+## Measured layout implementation
+
+The [Wave 1 layouts](layout-components/README.md) add named panel/grid ownership
+for three dense proposal patterns, with changed-copy, row-count and parent-movement
+fixtures. Their acceptance is recorded separately from source-library approval and
+catalog counts. The [Wave 2 candidate inventory](component-contracts/visual-wave2-candidates.json)
+pins source objects and assets for richer visual components; those candidates are
+not yet implemented or approved for adaptation.

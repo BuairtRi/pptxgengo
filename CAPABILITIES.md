@@ -17,10 +17,28 @@ UHG 28/38/43 as structural references. All five final slides passed native verif
 and visual review: 318 objects, 258 text blocks, and zero fixed-zone fit failures.
 The [proof](library/showcase/dense-proof.json) also records a five-slide scene
 roundtrip and recovery of one actual PowerPoint text edit. Dense content can be authored with the
-current native primitives; reusable measured grid/panel contracts and rich
-diagram geometry remain gaps. See the [reference benchmark](planning/COMPLEXITY_BENCHMARK.md)
+current native primitives. Measured grid/panel contracts are now implemented;
+rich diagram geometry remains a gap. See the [reference benchmark](planning/COMPLEXITY_BENCHMARK.md)
 and [implementation review](planning/DENSE_LAYOUT_GAPS.md). Historical survey
 entries below describe their original checkpoint, not current absence of those tools.
+
+## Measured layout update — Wave 1
+
+`pptxcompose` now expands named grids and nested panels using native measured
+text heights, shared row boundaries, explicit gutters/padding and stable slot IDs.
+Layer ordering keeps surfaces behind their content. `fit-report` identifies all
+cells that exceed bounded row heights. Known-deck text recovery maps generated
+layout text back to the named block.
+
+The local measurement cache revalidates original native evidence and binds text,
+width, styling and the recorded PowerPoint/font/tool environment. One changed
+contract creates one new probe; unchanged contracts can be reused across slides.
+It does not replace final native verification or visual review. See the
+[layout contract and fixtures](library/layout-components/README.md) and
+[checkpoint](planning/WAVE1_CHECKPOINT.md) for acceptance status and limitations.
+The [six-slide proof](library/layout-components/proof.json) covers 423 objects and
+298 text blocks; all 174 control glyph bounds exactly match the prior dense deck.
+Uniform-style Arial blocks and explicit bounded tracks remain the supported scope.
 
 ## Reconstruction experiment update
 

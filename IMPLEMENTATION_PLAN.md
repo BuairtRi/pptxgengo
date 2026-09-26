@@ -23,9 +23,24 @@ Implemented during this wave: explicit canvas primitives, measured numbered and
 metric cards, pinned artwork, single-line accents, narrative notes, diagnostic
 `fit-report`, full-contract measurement reuse, and bounded known-deck text recovery.
 The repository skill documents their limits. The next implementation priorities
-are reusable grid/panel contracts, source-shaped diagram/ribbon geometry, rich-text
-paragraph semantics, and broader revision reconciliation. These remain pending;
+were reusable grid/panel contracts, source-shaped diagram/ribbon geometry, rich-text
+paragraph semantics, and broader revision reconciliation. The grid/panel implementation
+has passed native and visual acceptance for six bounded examples; the other priorities remain pending;
 explicitly authored geometry is not a general automatic visual designer.
+
+### Wave 1 implementation checkpoint
+
+The three dense controls now use measured named cells and parent panels. The
+six-slide comparison adds a longer-copy four-row matrix, a six-row matrix and a
+parent-movement fixture. All 298 text zones pass planning; both deliberately
+oversized cells are identified and rejected. Geometry checks confirm common row
+heights and movement of all 75 descendants. Cache integrity and single-copy-edit
+reuse checks pass. Final acceptance is recorded in
+[the Wave 1 checkpoint](planning/WAVE1_CHECKPOINT.md).
+
+Wave 2 has a [source/asset inventory](planning/WAVE2_VISUAL_COMPONENTS.md), including
+all 19 portrait/card pairs on UHG 44. Its visual components and rich typography
+remain to be implemented.
 
 ### Next fidelity gates
 
@@ -33,7 +48,7 @@ The detailed [six-wave implementation sequence](planning/FIDELITY_IMPLEMENTATION
 defines reference slides, deliverables, dependencies and acceptance fixtures. It is
 the execution order for the gaps below.
 
-1. **Measured grids and panels:** turn the five dense examples into reusable row/column and nested-panel contracts. Preserve aligned activity/evidence rows, explicit gutters and safe zones; report all overflowing cells before build. Re-run changed-copy and added-row variants against native PowerPoint.
+1. **Measured grids and panels — first slice complete:** the first three dense examples now use reusable row/column and nested-panel contracts; six control/stress pages passed native and visual QA. Broader pattern coverage remains future work. Preserve aligned activity/evidence rows, explicit gutters and safe zones; report all overflowing cells before build. Re-run changed-copy and added-row variants against native PowerPoint.
 2. **Visual evidence and source geometry:** build one deliverable-thumbnail montage and one phase ribbon/hatched roadmap extension using inventoried source graphics. Preserve editable text and pinned asset provenance, then compare against the relevant reference crop.
 3. **Rich text and architecture:** add run-level emphasis with native phrase anchors, then a nested architecture diagram with captions, icons and routed relationships. Verify attachment positions after line-wrap changes.
 4. **Revision scope:** extend the proven known-deck text-only recovery fixture to agreed formatting/layout changes, retaining a visible conflict report. General PPTX-to-semantic-YAML reconciliation remains a separate feature.

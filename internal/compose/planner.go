@@ -72,6 +72,7 @@ type SlideSpec struct {
 	Phases          []PhaseSpec          `json:"phases,omitempty"`
 	Legend          *LegendSpec          `json:"legend,omitempty"`
 	Connections     []ConnectionSpec     `json:"connections,omitempty"`
+	Layouts         []ContainerSpec      `json:"layouts,omitempty"`
 }
 
 type PodSpec struct {
@@ -318,6 +319,16 @@ func titleProbe(s SlideSpec) ProbeRequest {
 // ProbeRequests returns all text measurements needed to evaluate every allowed
 // column count. The caller must key its measurements by each returned ID.
 func ProbeRequests(spec Spec) ([]ProbeRequest, error) {
+	expanded, err := ExpandLayoutsForProbes(spec)
+	if err != nil {
+		return nil, err
+	}
+	return probeRequestsExpanded(expanded)
+}
+
+// probeRequestsExpanded operates on a spec whose declarative layouts have
+// already been lowered. Keeping this separate prevents recursive expansion.
+func probeRequestsExpanded(spec Spec) ([]ProbeRequest, error) {
 	if err := validateSpec(spec); err != nil {
 		return nil, err
 	}
@@ -547,7 +558,11 @@ type candidatePlan struct {
 // malformed evidence is an error; candidate-specific width or height failures
 // simply disqualify that auto-column candidate.
 func Plan(spec Spec, measurements Measurements) (PlanResult, error) {
-	requests, err := ProbeRequests(spec)
+	probeSpec, err := ExpandLayoutsForProbes(spec)
+	if err != nil {
+		return PlanResult{}, err
+	}
+	requests, err := probeRequestsExpanded(probeSpec)
 	if err != nil {
 		return PlanResult{}, err
 	}
@@ -567,6 +582,10 @@ func Plan(spec Spec, measurements Measurements) (PlanResult, error) {
 		if _, ok := measurements.ByRequestID[id]; !ok {
 			return PlanResult{}, fmt.Errorf("missing measurement %s", id)
 		}
+	}
+	spec, err = ExpandLayouts(spec, measurements)
+	if err != nil {
+		return PlanResult{}, err
 	}
 	result := PlanResult{Schema: PlanSchema}
 	for _, s := range spec.Slides {

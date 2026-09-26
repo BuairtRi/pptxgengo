@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -20,14 +21,16 @@ import (
 )
 
 type manifest struct {
-	DeckFile          string                 `json:"deck_file"`
-	Schema            string                 `json:"schema"`
-	SpecSHA           string                 `json:"spec_sha256"`
-	DeckSHA           string                 `json:"deck_sha256"`
-	Slides            []renderSlide          `json:"slides"`
-	Requests          []compose.ProbeRequest `json:"requests,omitempty"`
-	ReusedFromSpecSHA string                 `json:"reused_from_spec_sha256,omitempty"`
-	Plan              *compose.PlanResult    `json:"plan,omitempty"`
+	Environment       *measurementEnvironment `json:"environment,omitempty"`
+	CacheUses         []cacheUse              `json:"cache_uses,omitempty"`
+	DeckFile          string                  `json:"deck_file"`
+	Schema            string                  `json:"schema"`
+	SpecSHA           string                  `json:"spec_sha256"`
+	DeckSHA           string                  `json:"deck_sha256"`
+	Slides            []renderSlide           `json:"slides"`
+	Requests          []compose.ProbeRequest  `json:"requests,omitempty"`
+	ReusedFromSpecSHA string                  `json:"reused_from_spec_sha256,omitempty"`
+	Plan              *compose.PlanResult     `json:"plan,omitempty"`
 }
 type nativeRect struct {
 	Left, Top, Width, Height float64
@@ -66,14 +69,15 @@ type nativeResult struct {
 	Rows   []nativeRow `json:"measurements"`
 }
 type evidence struct {
-	AdapterSHA   string               `json:"adapter_sha256"`
-	Schema       string               `json:"schema"`
-	SpecSHA      string               `json:"spec_sha256"`
-	DeckSHA      string               `json:"deck_sha256"`
-	ManifestSHA  string               `json:"manifest_sha256"`
-	MeasuredAt   string               `json:"measured_at"`
-	Measurements compose.Measurements `json:"measurements"`
-	Native       json.RawMessage      `json:"native"`
+	Environment  *measurementEnvironment `json:"environment,omitempty"`
+	AdapterSHA   string                  `json:"adapter_sha256"`
+	Schema       string                  `json:"schema"`
+	SpecSHA      string                  `json:"spec_sha256"`
+	DeckSHA      string                  `json:"deck_sha256"`
+	ManifestSHA  string                  `json:"manifest_sha256"`
+	MeasuredAt   string                  `json:"measured_at"`
+	Measurements compose.Measurements    `json:"measurements"`
+	Native       json.RawMessage         `json:"native"`
 }
 
 func hash(b []byte) string { h := sha256.Sum256(b); return hex.EncodeToString(h[:]) }
@@ -186,6 +190,43 @@ func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
 				rs.Elements = append(rs.Elements, element{Name: name + "-label", Kind: "text", Frame: rect(item.LabelBounds), Text: item.Label, FontFace: item.FontFace, FontSize: item.FontSizePt, Bold: item.Bold, Foreground: color(item.Foreground), Align: "left", MeasurementID: item.MeasurementID})
 			}
 		}
+		// Explicit canvas layers are ordered globally; within a layer surfaces sit
+		// behind accents and text. Team phase backgrounds precede canvas annotations.
+		type drawKey struct{ layer, rank int }
+		keys := map[string]drawKey{}
+		targetLayers := map[string]int{}
+		for _, c := range s.Canvas {
+			rank := 2
+			if c.Kind == "surface" {
+				rank = 0
+			}
+			keys["canvas:"+base64.RawURLEncoding.EncodeToString([]byte(c.ID))] = drawKey{c.Layer, rank}
+			targetLayers[c.ID] = c.Layer
+		}
+		for _, a := range s.Accents {
+			keys["accent:"+base64.RawURLEncoding.EncodeToString([]byte(a.ID))] = drawKey{targetLayers[a.Target], 1}
+		}
+		phaseSurfaces := map[string]bool{}
+		for _, ph := range s.Phases {
+			phaseSurfaces["phase:"+base64.RawURLEncoding.EncodeToString([]byte(ph.ID))+"-surface"] = true
+		}
+		key := func(name string) drawKey {
+			if k, ok := keys[name]; ok {
+				return k
+			}
+			return drawKey{0, 3}
+		}
+		sort.SliceStable(rs.Elements, func(i, j int) bool {
+			a, b := rs.Elements[i].Name, rs.Elements[j].Name
+			if phaseSurfaces[a] != phaseSurfaces[b] {
+				return phaseSurfaces[a]
+			}
+			ka, kb := key(a), key(b)
+			if ka.layer != kb.layer {
+				return ka.layer < kb.layer
+			}
+			return ka.rank < kb.rank
+		})
 		out = append(out, rs)
 	}
 	return out
@@ -331,6 +372,26 @@ end run`
 	}
 	return b, nil
 }
+
+func probeSlides(requests []compose.ProbeRequest) []renderSlide {
+	var slides []renderSlide
+	for i, q := range requests {
+		// One isolated text box per probe avoids layout interactions and keeps the
+		// calibration frame in slide points. The tall frame does not autofit text.
+		width := math.Max(960, q.TextWidthPt+72)
+		slides = append(slides, renderSlide{ID: q.ID, Width: width, Height: 540, Elements: []element{{Name: fmt.Sprintf("probe-%04d", i+1), Kind: "text", Frame: frame{36, 36, q.TextWidthPt, 450}, Text: q.Text, FontFace: q.FontFace, FontSize: q.FontSizePt, Bold: q.Bold, Foreground: "070154", Align: q.Align, MeasurementID: q.ID}}})
+	}
+	// The writer requires one common page size.
+	maxW := 960.0
+	for _, s := range slides {
+		maxW = math.Max(maxW, s.Width)
+	}
+	for i := range slides {
+		slides[i].Width = maxW
+	}
+	return slides
+}
+
 func main() {
 	if e := run(os.Args[1:]); e != nil {
 		fmt.Fprintln(os.Stderr, "pptxcompose:", e)
@@ -339,9 +400,10 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxcompose probe|measure|fit-report|build|verify|recover-text [flags]")
+		return fmt.Errorf("usage: pptxcompose probe|measure|fit-report|build|verify|recover-text|cache-import [flags]")
 	}
 	fs := flag.NewFlagSet(args[0], flag.ContinueOnError)
+	cacheDir := fs.String("cache", "", "native measurement cache directory; missing or stale contracts are never guessed")
 	returned := fs.String("returned", "", "colleague-edited generated PPTX for recover-text")
 	textOnly := fs.Bool("text-only", false, "recover text while restoring original spec styling; geometry changes require scene extraction")
 	specPath := fs.String("spec", "", "composition spec JSON")
@@ -357,6 +419,19 @@ func run(args []string) error {
 		return fmt.Errorf("--out is required; positional arguments unsupported")
 	}
 	switch args[0] {
+	case "cache-import":
+		if *cacheDir == "" {
+			return fmt.Errorf("--cache required")
+		}
+		env, e := currentEnvironment(*script)
+		if e != nil {
+			return e
+		}
+		count, e := cacheImport(*cacheDir, *dir, *evPath, env)
+		if e != nil {
+			return e
+		}
+		return writeNew(*out, jsonBytes(map[string]any{"imported": count, "environment": env}))
 	case "recover-text":
 		if *returned == "" {
 			return fmt.Errorf("--returned required")
@@ -377,66 +452,95 @@ func run(args []string) error {
 			return e
 		}
 		m := manifest{Schema: "pptxgengo.compose-bundle.v1", SpecSHA: hash(raw)}
+		var cached compose.Measurements
+		var missing []compose.ProbeRequest
+		if *cacheDir != "" {
+			if *dir != "" || *evPath != "" || *reuse {
+				return fmt.Errorf("--cache is exclusive with --bundle, --evidence and --reuse-measurements for probe/build/fit-report")
+			}
+			env, err := currentEnvironment(*script)
+			if err != nil {
+				return err
+			}
+			m.Environment = env
+			cached, missing, m.CacheUses, err = cacheLookup(*cacheDir, env, requests)
+			if err != nil {
+				return err
+			}
+		}
 		if args[0] == "probe" {
-			m.Requests = requests
-			for i, q := range requests {
-				// One isolated text box per probe avoids layout interactions and keeps the
-				// calibration frame in slide points. The tall frame does not autofit text.
-				width := math.Max(960, q.TextWidthPt+72)
-				m.Slides = append(m.Slides, renderSlide{ID: q.ID, Width: width, Height: 540, Elements: []element{{Name: fmt.Sprintf("probe-%04d", i+1), Kind: "text", Frame: frame{36, 36, q.TextWidthPt, 450}, Text: q.Text, FontFace: q.FontFace, FontSize: q.FontSizePt, Bold: q.Bold, Foreground: "070154", Align: q.Align, MeasurementID: q.ID}}})
-			}
-			// The writer requires one common page size.
-			maxW := 960.0
-			for _, s := range m.Slides {
-				maxW = math.Max(maxW, s.Width)
-			}
-			for i := range m.Slides {
-				m.Slides[i].Width = maxW
-			}
-		} else {
-			var ev evidence
-			if _, e = readJSON(*evPath, &ev); e != nil {
-				return e
-			}
-			var pm manifest
-			mb, e := readJSON(filepath.Join(*dir, "manifest.json"), &pm)
-			if e != nil {
-				return e
-			}
-			dp, e := deckPath(*dir, pm)
-			if e != nil {
-				return e
-			}
-			db, e := os.ReadFile(dp)
-			if e != nil {
-				return e
-			}
-			if pm.Schema != "pptxgengo.compose-bundle.v1" || pm.Plan != nil || ev.Schema != "pptxgengo.compose-evidence.v1" || ev.SpecSHA != pm.SpecSHA || (!*reuse && pm.SpecSHA != hash(raw)) || ev.ManifestSHA != hash(mb) || ev.DeckSHA != hash(db) || pm.DeckSHA != hash(db) || len(pm.Requests) == 0 {
-				return fmt.Errorf("stale or mismatched probe evidence")
-			}
-			if !bytes.Equal(jsonBytes(pm.Requests), jsonBytes(requests)) {
-				return fmt.Errorf("probe requests do not match current spec")
-			}
-			var nr nativeResult
-			if e = json.Unmarshal(ev.Native, &nr); e != nil {
-				return e
-			}
-			for _, s := range spec.Slides {
-				if len(s.Accents) > 0 && nr.Schema != "pptxgengo.compose-text-measurement.v4" && nr.Schema != "pptxgengo.compose-text-measurement.v5" {
-					return fmt.Errorf("measured accents require v4/v5 native character-bound evidence")
+			if *cacheDir != "" {
+				if len(missing) == 0 {
+					if _, err := os.Lstat(*out); !os.IsNotExist(err) {
+						return fmt.Errorf("output must be a new directory")
+					}
+					if err := os.MkdirAll(*out, 0755); err != nil {
+						return err
+					}
+					err := writeNew(filepath.Join(*out, "cache-report.json"), jsonBytes(map[string]any{"status": "all_requests_cached", "requests": len(requests), "environment": m.Environment, "cache_uses": m.CacheUses}))
+					if err != nil {
+						return err
+					}
+					fmt.Println(*out + " (all requests cached; no probe deck needed)")
+					return nil
 				}
+				requests = missing
 			}
-			measured, e := checkNative(pm, nr, false)
-			if e != nil {
-				return e
-			}
-			if ev.SpecSHA != hash(raw) {
-				m.ReusedFromSpecSHA = ev.SpecSHA
+			m.Requests = requests
+			m.Slides = probeSlides(requests)
+		} else {
+			var measured compose.Measurements
+			var ev evidence
+			if *cacheDir != "" {
+				if len(missing) > 0 {
+					return fmt.Errorf("%d uncached text contracts; run probe --cache and measure --cache first", len(missing))
+				}
+				measured = cached
+			} else {
+				if _, e = readJSON(*evPath, &ev); e != nil {
+					return e
+				}
+				var pm manifest
+				mb, e := readJSON(filepath.Join(*dir, "manifest.json"), &pm)
+				if e != nil {
+					return e
+				}
+				dp, e := deckPath(*dir, pm)
+				if e != nil {
+					return e
+				}
+				db, e := os.ReadFile(dp)
+				if e != nil {
+					return e
+				}
+				if pm.Schema != "pptxgengo.compose-bundle.v1" || pm.Plan != nil || ev.Schema != "pptxgengo.compose-evidence.v1" || ev.SpecSHA != pm.SpecSHA || (!*reuse && pm.SpecSHA != hash(raw)) || ev.ManifestSHA != hash(mb) || ev.DeckSHA != hash(db) || pm.DeckSHA != hash(db) || len(pm.Requests) == 0 {
+					return fmt.Errorf("stale or mismatched probe evidence")
+				}
+				if !bytes.Equal(jsonBytes(pm.Requests), jsonBytes(requests)) {
+					return fmt.Errorf("probe requests do not match current spec")
+				}
+				var nr nativeResult
+				if e = json.Unmarshal(ev.Native, &nr); e != nil {
+					return e
+				}
+				for _, s := range spec.Slides {
+					if len(s.Accents) > 0 && nr.Schema != "pptxgengo.compose-text-measurement.v4" && nr.Schema != "pptxgengo.compose-text-measurement.v5" {
+						return fmt.Errorf("measured accents require v4/v5 native character-bound evidence")
+					}
+				}
+				measured, e = checkNative(pm, nr, false)
+				if e != nil {
+					return e
+				}
+				if ev.SpecSHA != hash(raw) {
+					m.ReusedFromSpecSHA = ev.SpecSHA
+				}
 			}
 			// Reconstruct dimensions from raw native evidence instead of trusting an editable summary.
 			plan, e := compose.Plan(spec, measured)
 			if args[0] == "fit-report" {
 				rows := compose.FixedTextFitReport(spec, measured)
+				layoutFailures := compose.LayoutFitReport(spec, measured)
 				failures := 0
 				for _, row := range rows {
 					if !row.Fits {
@@ -447,7 +551,7 @@ func run(args []string) error {
 				if e != nil {
 					planError = e.Error()
 				}
-				report := map[string]any{"schema": "pptxgengo.fixed-text-fit.v1", "spec_sha256": hash(raw), "probe_spec_sha256": ev.SpecSHA, "evidence_deck_sha256": ev.DeckSHA, "fixed_zone_count": len(rows), "overflow_count": failures, "zones": rows, "planner_passed": e == nil, "planner_error": planError, "scope": "All fixed title/canvas/role/card text zones. Dynamic pod/phase/legend layout, collisions and routes are covered by the planner result. Native final verification and visual review are still required."}
+				report := map[string]any{"schema": "pptxgengo.fixed-text-fit.v1", "spec_sha256": hash(raw), "probe_spec_sha256": ev.SpecSHA, "evidence_deck_sha256": ev.DeckSHA, "fixed_zone_count": len(rows), "overflow_count": failures, "layout_failure_count": len(layoutFailures), "layout_failures": layoutFailures, "zones": rows, "planner_passed": e == nil, "planner_error": planError, "cache_uses": m.CacheUses, "environment": m.Environment, "scope": "All fixed title/canvas/role/card text zones. Dynamic pod/phase/legend layout, collisions and routes are covered by the planner result. Native final verification and visual review are still required."}
 				if err := writeNew(*out, jsonBytes(report)); err != nil {
 					return err
 				}
@@ -466,6 +570,9 @@ func run(args []string) error {
 		fmt.Println(*out)
 		return nil
 	case "measure", "verify":
+		if args[0] == "verify" && *cacheDir != "" {
+			return fmt.Errorf("--cache is supported for probe measurements, not final verification")
+		}
 		if _, e := os.Lstat(*out); !os.IsNotExist(e) {
 			return fmt.Errorf("output must be a new file: %s", *out)
 		}
@@ -493,9 +600,23 @@ func run(args []string) error {
 		if e != nil {
 			return e
 		}
+		env, e := currentEnvironment(*script)
+		if e != nil {
+			return e
+		}
+		if m.Environment != nil && environmentKey(m.Environment) != environmentKey(env) {
+			return fmt.Errorf("native environment changed after probe/build; regenerate the bundle")
+		}
 		b, e := nativeMeasure(dp, *script)
 		if e != nil {
 			return e
+		}
+		afterEnv, e := currentEnvironment(*script)
+		if e != nil {
+			return e
+		}
+		if environmentKey(env) != environmentKey(afterEnv) {
+			return fmt.Errorf("native environment changed during measurement")
 		}
 		afterBytes, e := os.ReadFile(dp)
 		if e != nil {
@@ -516,9 +637,17 @@ func run(args []string) error {
 			}
 			return e
 		}
-		ev := evidence{AdapterSHA: hash(adapterBytes), Schema: "pptxgengo.compose-evidence.v1", SpecSHA: m.SpecSHA, DeckSHA: m.DeckSHA, ManifestSHA: hash(mb), MeasuredAt: time.Now().UTC().Format(time.RFC3339), Measurements: measured, Native: b}
+		ev := evidence{Environment: env, AdapterSHA: hash(adapterBytes), Schema: "pptxgengo.compose-evidence.v1", SpecSHA: m.SpecSHA, DeckSHA: m.DeckSHA, ManifestSHA: hash(mb), MeasuredAt: time.Now().UTC().Format(time.RFC3339), Measurements: measured, Native: b}
 		if e = writeNew(*out, jsonBytes(ev)); e != nil {
 			return e
+		}
+		if *cacheDir != "" {
+			if isFinal {
+				return fmt.Errorf("--cache imports probe observations only; final evidence was saved")
+			}
+			if _, e = cacheImport(*cacheDir, *dir, *out, env); e != nil {
+				return fmt.Errorf("evidence saved but cache import failed: %w", e)
+			}
 		}
 		fmt.Println(*out)
 		return nil

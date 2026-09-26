@@ -9,24 +9,28 @@ import (
 // peers; this makes backgrounds/accents intentional rather than silent collisions.
 // Asset bytes are verified by the CLI against SHA256 before rendering.
 type CanvasSpec struct {
-	ID           string   `json:"id"`
-	Kind         string   `json:"kind"` // text, surface, line, image
-	Bounds       Rect     `json:"bounds"`
-	Text         string   `json:"text,omitempty"`
-	FontFace     string   `json:"font_face,omitempty"`
-	FontSizePt   float64  `json:"font_size_pt,omitempty"`
-	Bold         bool     `json:"bold,omitempty"`
-	Foreground   string   `json:"foreground,omitempty"`
-	Background   string   `json:"background,omitempty"`
-	InsetX       float64  `json:"inset_x,omitempty"`
-	InsetY       float64  `json:"inset_y,omitempty"`
-	Align        string   `json:"align,omitempty"`
-	Valign       string   `json:"valign,omitempty"`
-	LineWidthPt  float64  `json:"line_width_pt,omitempty"`
-	AssetPath    string   `json:"asset_path,omitempty"`
-	AssetSHA256  string   `json:"asset_sha256,omitempty"`
-	AltText      string   `json:"alt_text,omitempty"`
-	AllowOverlap []string `json:"allow_overlap,omitempty"`
+	ID         string  `json:"id"`
+	Layer      int     `json:"layer,omitempty"`
+	Kind       string  `json:"kind"` // text, surface, line, image
+	Bounds     Rect    `json:"bounds"`
+	Text       string  `json:"text,omitempty"`
+	FontFace   string  `json:"font_face,omitempty"`
+	FontSizePt float64 `json:"font_size_pt,omitempty"`
+	Bold       bool    `json:"bold,omitempty"`
+	Foreground string  `json:"foreground,omitempty"`
+	Background string  `json:"background,omitempty"`
+	// ContrastBackground supplies the effective inherited surface used for
+	// color validation and measurement without painting a text-box fill.
+	ContrastBackground string   `json:"contrast_background,omitempty"`
+	InsetX             float64  `json:"inset_x,omitempty"`
+	InsetY             float64  `json:"inset_y,omitempty"`
+	Align              string   `json:"align,omitempty"`
+	Valign             string   `json:"valign,omitempty"`
+	LineWidthPt        float64  `json:"line_width_pt,omitempty"`
+	AssetPath          string   `json:"asset_path,omitempty"`
+	AssetSHA256        string   `json:"asset_sha256,omitempty"`
+	AltText            string   `json:"alt_text,omitempty"`
+	AllowOverlap       []string `json:"allow_overlap,omitempty"`
 }
 type PlannedCanvas struct {
 	CanvasSpec
@@ -61,6 +65,9 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 				return fmt.Errorf("canvas text %s requires top/middle valign", c.ID)
 			}
 			bg := c.Background
+			if bg == "" {
+				bg = c.ContrastBackground
+			}
 			if bg == "" {
 				bg = white
 			}
@@ -104,6 +111,9 @@ func canvasProbes(s SlideSpec) []ProbeRequest {
 		if c.Kind == "text" {
 			bg := c.Background
 			if bg == "" {
+				bg = c.ContrastBackground
+			}
+			if bg == "" {
 				bg = white
 			}
 			fg, _ := foreground(c.Foreground, bg)
@@ -118,9 +128,15 @@ func planCanvas(s SlideSpec, p *PlannedSlide, m Measurements) error {
 		if c.Background != "" {
 			pc.Background, _ = resolveColor(c.Background)
 		}
+		if c.ContrastBackground != "" {
+			pc.ContrastBackground, _ = resolveColor(c.ContrastBackground)
+		}
 		if c.Foreground != "" {
 			if c.Kind == "text" {
 				bg := c.Background
+				if bg == "" {
+					bg = c.ContrastBackground
+				}
 				if bg == "" {
 					bg = white
 				}
