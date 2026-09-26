@@ -58,3 +58,37 @@ shapes remain native objects. No slide is replaced by a full-slide screenshot.
   review inspected each slide's `p:sld` root and found two hidden parts. Hidden
   status must come from the slide part and then be mapped into presentation order.
   The underlying raw inventory already retains these root attributes.
+
+## Catalog execution findings
+
+- **QA-16 — Hidden slides shift exported page numbers, fixed for review:** the
+  first modernization PDF had 81 pages for 83 source slides. Added a task-copy
+  preparer that unhides slides and records a source/page map; exported copies
+  now have all 83 modernization and 35 EnableComp pages. The initial modernization
+  `samples/catalog/render/software-modernization/png/` files are excluded from
+  the reviewed manifest; `all-slides-png/` is the corrected source-indexed set.
+- **QA-17 — Table fingerprints omitted internal structure, fixed:** outer table
+  frames alone produced misleading candidate matches. Added column widths, row
+  heights and cell merge attributes. Root also corrected the graphic-frame
+  transform lookup to include `p:xfrm`. Geometry remains candidate evidence.
+- **QA-18 — SVG viewBox is not pixel size, fixed:** the asset importer now keeps
+  coordinate bounds separate from explicit pixel dimensions. Unknown dimensions
+  remain null.
+- **QA-19 — Repeated unreliable delegated visual descriptions, corrected:**
+  draft reports invented missing table text and a nonexistent unboxed guide
+  variant. Root opened the exact previews and corrected the reports before
+  accepting family decisions. File references or confident descriptions alone
+  are not visual evidence. Root review covered all 51 candidate previews.
+- **QA-20 — Matching geometry can hide different roles, retained separately:**
+  modernization 42 is blank while 77/80 contain titles. Their candidate geometry
+  matches, but the blank slide stays separate and is not an approved template.
+- **QA-21 — Native export timeout is not an output verdict:** PowerPoint waited
+  for task-folder access and the AppleEvent timed out. After folder access was
+  granted, export completed. Review checked actual PDF existence and page count
+  before using previews, rather than treating the timeout as success or failure.
+
+- **QA-22 — Aggregated slide search text was a list, fixed:** the first rebuild
+  after adding descendant-text aggregation raised a type error before publishing
+  a database. Joining text blocks fixed the build; a body-only COBOL search then
+  returned source slides with readiness labels. Layout IDs are also searchable
+  so useful names such as timeline are not lost when rationale wording differs.

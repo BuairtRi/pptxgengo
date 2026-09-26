@@ -15,6 +15,7 @@ document-style decks.
 - [Product architecture, experiments, and implementation sequence](PRODUCT_PLAN.md)
 - [Current remaining-work plan and library inventory/curation sequence](IMPLEMENTATION_PLAN.md)
 - [SQLite catalog, narrative model, composition, and design passes](DESIGN_WORKFLOW.md)
+- [Searchable library checkpoint, deduplication decisions and commands](library/README.md)
 - [Source corpus and inventory policy](planning/README.md)
 - [UHG reconstruction results, native placement experiments, and QA evidence](planning/RECONSTRUCTION_CHECKPOINT.md)
 - [Go port conventions](PORTING.md)

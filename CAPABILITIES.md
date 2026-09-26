@@ -11,6 +11,15 @@ measurements, image alpha bounds, and rendered QA controls. See the
 authoring CLI, semantic deck schema, library database and skill pack remain
 planned. The table below records the initial survey before this spike.
 
+## Catalog execution update
+
+The first catalog wave adds Python inspection commands for hash-verified source
+occurrences, conservative layout deduplication, local/hosted asset manifests,
+SQLite FTS5 search, explicit visual-family decisions and review previews. See the
+[library checkpoint](library/README.md). These helpers do not yet provide approved
+semantic layout contracts or an integrated Go authoring command. The historical
+survey below remains a record of the pre-experiment baseline.
+
 ## Initial findings
 
 This repository has a substantial Go presentation writer. It does not yet have the CLI or agent skill pack described in the product vision. Its historical objective was fidelity to PptxGenJS 4.0.1; the next objective should be dependable authoring and revision of branded, editable presentations.

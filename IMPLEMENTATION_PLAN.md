@@ -29,7 +29,13 @@ Completed foundations:
 - Native phrase measurement, visible-art bounds, calibrated underline and
   highlight placement, native rendering and pixel/structural QA tools.
 
-Not yet completed: a curated searchable library, semantic slide authoring,
+Execution has begun: the [first catalog checkpoint](library/README.md) adds raw
+occurrence and asset ingestion, SQLite search, and visual deduplication decisions.
+The next enrichment work must consume its representative worklist and preserve
+variants. Raw searchable records are available; reusable semantic contracts remain
+unimplemented.
+
+Not yet completed: a curated approved library, semantic slide authoring,
 general fit/collision checks, narrative generation, colleague-edit reconciliation,
 or the distributed agent skill pack. The experiments retain source topology and
 resources; they do not prove independent layout generation from a brief.
