@@ -16,17 +16,32 @@ with `pptxcomponent`; native rendering and frame measurement demonstrate normal
 edits and a deliberate overflow failure. No styles or components are broadly
 adaptation-approved yet.
 
+### User review incorporated — 2026-09-26
+
+The [review export](library/reference-preferences.json) contains two preferred,
+six alternate, one avoided and one unreviewed reference. Preferred N2 becomes the
+numbered-card priority; N4 is excluded from default reference recommendations.
+M1 remains the first metric candidate based on the user's note while preserving
+its selected “alternate” status. N5 retains its segmented layout with a typography
+and density refinement backlog.
+
+The central architectural change is **role tile → dynamic pod container → team
+composition**. P1/P2's fixed cardinalities describe source edit fixtures. The
+product must accept a variable list of roles, support several columns and compute
+height from measured content. See the [decisions, proposed API and acceptance
+fixtures](planning/dynamic-components.md).
+
 Next gates, in order:
 
-1. Make native measurement and collision/safe-zone checks a reproducible CLI gate,
-   covering short, typical and boundary copy for each contract.
-2. Resolve effective typography, insets, fills and theme expressions before
-   enabling neutral/subtle/inverse profiles. Preserve staffing and data semantics.
-3. Expand to the general explanation row N2 and specialized evidence variants,
-   guided by the user's reference preferences.
-4. Transplant approved components, preserve relationships/resources, then compose
-   one new slide with native QA. General authoring must prove this independently
-   of source-preserving edits.
+1. Resolve effective typography, insets and colors; integrate native fit and
+   contrast checks into a reusable role tile.
+2. Implement pod layout for variable role counts and one/multiple columns within
+   explicit slide bounds. Return anchors for enclosing connectors and phase bands.
+3. Prove a new editable team slide using differently sized pods and native QA.
+4. Implement preferred N2; retain M1/M3 metric work with composition-owned
+   dividers; experiment with N5 typography and content capacity.
+5. Expand approved semantic styles and other component families from these
+   measured implementations. Design preference and technical approval stay separate.
 
 ## 1. Current position
 

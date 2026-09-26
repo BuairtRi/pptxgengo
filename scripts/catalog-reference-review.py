@@ -19,9 +19,54 @@ def esc(value):
     return html.escape(str(value), quote=True)
 
 
+PREFERENCES = ('preferred', 'alternate', 'unreviewed', 'avoid')
+
+
+def load_preferences(path, shortlist_path, refs):
+    data = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(data, dict) or data.get('schema') != 'pptxgengo.reference-preferences.v1':
+        raise ValueError('unsupported preference schema')
+    if data.get('shortlist_sha256') != digest(shortlist_path):
+        raise ValueError('preferences refer to a different shortlist; explicit reconciliation required')
+    if data.get('technical_approval') is not False:
+        raise ValueError('design preferences cannot grant technical approval')
+    by_ref = {r['ref']: r for r in refs}
+    choices = data.get('choices')
+    if not isinstance(choices, list) or not choices:
+        raise ValueError('preferences must contain at least one choice')
+    reviewed = {}
+    for choice in choices:
+        if not isinstance(choice, dict):
+            raise ValueError('invalid preference choice')
+        ref = choice.get('ref')
+        if not isinstance(ref, str) or ref not in by_ref or ref in reviewed:
+            raise ValueError(f'unknown or duplicate preference reference: {ref}')
+        if choice.get('component_id') != by_ref[ref]['component_id']:
+            raise ValueError(f'component identity mismatch: {ref}')
+        if choice.get('preference') not in PREFERENCES or not isinstance(choice.get('note'), str):
+            raise ValueError(f'invalid preference or note: {ref}')
+        reviewed[ref] = choice
+    return reviewed
+
+
+def install_new(path, content):
+    if path.exists():
+        raise ValueError(f'refusing to overwrite {path}')
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp = tempfile.mkstemp(dir=path.parent, prefix='.reference-', suffix='.tmp')
+    try:
+        with os.fdopen(fd, 'wb') as stream:
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.link(temp, path)
+    finally:
+        os.unlink(temp)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('command', choices=['find', 'gallery'])
+    ap.add_argument('command', choices=['find', 'gallery', 'import-preferences'])
     ap.add_argument('--shortlist', type=Path, default=Path('library/reference-shortlist.json'))
     ap.add_argument('--family', help='metric-panel, numbered-card, or team-pod')
     ap.add_argument('--query', default='', help='all words must match reviewed descriptions')
@@ -30,6 +75,9 @@ def main():
     ap.add_argument('--previews', type=Path, default=Path('library/render-manifest.json'))
     ap.add_argument('--sources', type=Path, default=Path('planning/source-registry.json'))
     ap.add_argument('--out', type=Path)
+    ap.add_argument('--preferences', type=Path, help='review overlay; defaults to library/reference-preferences.json when present')
+    ap.add_argument('--import-file', type=Path, help='exported review JSON for import-preferences')
+    ap.add_argument('--include-avoided', action='store_true', help='include avoided references in find results')
     args = ap.parse_args()
     shortlist = json.loads(args.shortlist.read_text())
     if shortlist['schema'] != 'pptxgengo.reference-shortlist.v1':
@@ -37,13 +85,35 @@ def main():
     refs = shortlist['references']
     if len({r['ref'] for r in refs}) != len(refs) or len({r['component_id'] for r in refs}) != len(refs):
         raise ValueError('duplicate reference or component')
+    if args.command == 'import-preferences':
+        if not args.import_file or not args.out:
+            raise ValueError('import-preferences requires --import-file and a new --out')
+        choices = load_preferences(args.import_file, args.shortlist, refs)
+        # Preserve the user's exact export, including notes and selected enums.
+        install_new(args.out, args.import_file.read_bytes())
+        print(json.dumps({'choices':len(choices), 'counts':{p:sum(c['preference']==p for c in choices.values()) for p in PREFERENCES}, 'technical_approval':False, 'sha256':digest(args.out), 'output':str(args.out)}))
+        return
+    if args.import_file:
+        raise ValueError('--import-file is only supported by import-preferences')
+    preferences_path = args.preferences or Path('library/reference-preferences.json')
+    reviewed = {}
+    if args.preferences or preferences_path.exists():
+        reviewed = load_preferences(preferences_path, args.shortlist, refs)
+    for r in refs:
+        choice = reviewed.get(r['ref'])
+        r['user_preference'] = choice['preference'] if choice else 'unreviewed'
+        r['user_note'] = choice['note'] if choice else ''
+    if args.command == 'find':
+        if not args.include_avoided:
+            refs = [r for r in refs if r['user_preference'] != 'avoid']
+        refs.sort(key=lambda r: PREFERENCES.index(r['user_preference']))
     if args.family:
         family = args.family.removeprefix('component-family:')
         refs = [r for r in refs if r['family_id'] == 'component-family:' + family]
     terms = args.query.lower().split()
     refs = [r for r in refs if all(t in json.dumps(r).lower() for t in terms)]
     if args.command == 'find':
-        print(json.dumps({'shortlist_sha256':digest(args.shortlist), 'references': refs}, indent=2))
+        print(json.dumps({'shortlist_sha256':digest(args.shortlist), 'preferences_sha256':digest(preferences_path) if reviewed else None, 'references': refs}, indent=2))
         return
     if not args.out or args.out.exists():
         raise ValueError('--out must name a new HTML file')
@@ -99,13 +169,15 @@ def main():
         frame = f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="none" stroke="#F900D3" stroke-width="22000"/>'
         slots = ''.join(f'<tr><td>{esc(s["name"])}</td><td>{esc(s.get("observed_text",""))}</td></tr>' for s in c['slots'])
         constraints = ''.join(f'<li>{esc(v)}</li>' for v in c.get('adaptation_constraints',[]))
-        badge = '<span class="badge">First implementation fixture</span>' if r['implementation_start'] else ''
+        badge = '<span class="badge">Source edit fixture</span>' if r['implementation_start'] else ''
+        labels = {'unreviewed':'Unreviewed', 'preferred':'Prefer', 'alternate':'Keep as alternate', 'avoid':'Avoid'}
+        options = ''.join(f'<option value="{value}"'+(' selected' if r['user_preference']==value else '')+f'>{label}</option>' for value,label in labels.items())
         cards.append(f'''<article id="{esc(r['ref'])}" data-ref="{esc(r['ref'])}" data-id="{esc(c['id'])}" data-family="{esc(r['family_id'])}" data-search="{esc(json.dumps(r).lower())}">
 <header><h2>{esc(r['ref'])} · {esc(r['title'])}</h2>{badge}<p>{esc(c['source_id'])} · source slide {c['slide_number']}</p></header>
 <div class="crop"><svg viewBox="{viewport}" role="img" aria-label="Enlarged source region for {esc(r['title'])}"><use href="#image-{esc(key)}"/></svg></div>
-<div class="content"><p><strong>Use for:</strong> {esc(r['use_when'])}</p><p>{esc(r['visual_structure'])}</p><p><strong>Content:</strong> {esc(r['content_density'])}. Capacity is not yet measured.</p><p class="recommendation">{esc(r['recommendation'])}</p>
-<label>Preference <select class="preference"><option value="unreviewed">Unreviewed</option><option value="preferred">Prefer</option><option value="alternate">Keep as alternate</option><option value="avoid">Avoid</option></select></label>
-<label class="note-label">Your note <textarea class="note" rows="2" placeholder="e.g. Use this for dense proposals"></textarea></label>
+<div class="content"><p><strong>Use for:</strong> {esc(r['use_when'])}</p><p>{esc(r['visual_structure'])}</p><p><strong>Source content:</strong> {esc(r['content_density'])}. Capacity is not yet measured.</p><p class="recommendation"><strong>Initial reference rationale:</strong> {esc(r['recommendation'])}</p>
+<label>Preference <select class="preference">{options}</select></label>
+<label class="note-label">Your note <textarea class="note" rows="2" placeholder="e.g. Use this for dense proposals">{esc(r['user_note'])}</textarea></label>
 <details><summary>Full slide and component details</summary><svg class="context" viewBox="0 0 {sw} {sh}" role="img" aria-label="Full source slide; magenta frame marks component"><use href="#image-{esc(key)}"/>{frame}</svg>
 <p>The enlarged region includes original pixels from surrounding slide objects. It is not an isolated or newly rendered component.</p><table><thead><tr><th>Catalog slot</th><th>Source content</th></tr></thead><tbody>{slots}</tbody></table><ul>{constraints}</ul><p><a href="{esc(source_href)}">Open source deck</a> (source position {c['slide_number']}; footer numbering may differ)</p><p class="identifier">{esc(c['id'])}</p></details></div></article>''')
     definitions = []

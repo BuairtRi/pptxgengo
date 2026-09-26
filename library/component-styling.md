@@ -91,3 +91,13 @@ The first [reference shortlist](reference-variants.md) and four
 profile is enabled in the four contracts: the source objects include inherited
 fills, theme expressions and typography that need explicit resolution before
 neutral/subtle/inverse variants can be safely applied.
+
+## User review: dynamic composition
+
+The [imported design review](reference-preferences.json) makes the role tile a
+reusable primitive with explicit background and foreground styling. A pod contains
+a variable ordered list of roles and can use multiple columns. The original P1/P2
+text contracts retain their source cardinalities as reconstruction fixtures.
+Foreground overrides must be checked against the effective background; semantic
+staffing colors retain their meaning. M3 dividers belong to the enclosing metric
+composition. See the [updated implementation design](../planning/dynamic-components.md).

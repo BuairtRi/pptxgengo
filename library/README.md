@@ -32,6 +32,16 @@ shows its full-slide context and supports exporting design preferences.
 contracts. Source styling and geometry are preserved; semantic style application,
 measured capacity and adaptation approval remain pending.
 
+## User design preferences
+
+The first [review export](reference-preferences.json) is imported and read by the
+reference finder/gallery. Preferred results rank first; avoided references are
+excluded from default finder results. The [dynamic-component plan](../planning/dynamic-components.md)
+records the user's request for reusable role tiles inside variable-size,
+potentially multi-column pods, plus M3 divider ownership and N5 typography work.
+The underlying SQLite snapshot is unchanged; preference-aware selection currently
+uses `catalog-reference-review.py find`.
+
 ## Review and reports
 
 - [Expanded component findings](component-expansion-report.md), [canonical families](component-families.jsonl),
