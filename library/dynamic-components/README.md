@@ -1,4 +1,4 @@
-# Dynamic roles and pods
+# Dynamic roles, pods and team compositions
 
 This is the first dynamic implementation of the user's P1 direction. A pod accepts
 an arbitrary nonempty `roles[]` list, with stable IDs independent of its labels.
@@ -27,8 +27,8 @@ save source decks. Supply `--adapter` if running outside the repository root.
 1. **Probe:** validates the spec, resolves semantic colors/contrast and emits an
    isolated text shape for every feasible role width and title. Fonts, weight,
    paragraph spacing, insets and wrapping are explicit.
-2. **Measure:** opens the generated probe deck in PowerPoint; measures whole text
-   ranges; checks text, actual font and known shape frames; records raw native
+2. **Measure:** opens the generated probe deck in PowerPoint; measures the union
+   of native character bounds (retaining whole-range bounds for diagnosis); checks text, actual font and known shape frames; records raw native
    measurements and hashes of the spec, PPTX and manifest. Known frame dimensions
    calibrate the returned geometry to points.
 3. **Build:** requires matching evidence, reconstructs dimensions from its raw
@@ -51,9 +51,9 @@ files. A custom adapter is a trusted local integration.
 - Row-major ordering preserves roles as declared. An uneven final row starts at
   the left. Pod height is content-dependent, capped by `max_height_pt`.
 - The plan records outer bounds and five midpoint anchors for each role and pod.
-  The v1 spec exposes roles through pods; standalone top-level roles remain a
-  team-composition extension. Connectors, shared phase bands and staffing legends belong to the enclosing
-  team composition; automatic connector routing is not implemented here.
+  The optional [team composition fields](team.md) add standalone roles, shared
+  phase backgrounds, a derived staffing legend and obstacle-aware reporting lines.
+  Native line segments are editable but do not reroute when manually moved.
 - `staffing.wm_full_time` is navy `#070154`; `staffing.wm_part_time` is blue
   `#0047FF`; `staffing.client_part_time` is magenta `#F900D3`. These tokens encode
   staffing meaning and must be accompanied by a legend in a client-facing deck.
@@ -75,3 +75,11 @@ two columns, auto layout under a height constraint, and wrapped role/pod titles.
 The [P1 source evidence](source-reference.json) retains the original XML and source
 hash for the container and two roles. [Native QA results](proof-report.json)
 record the exact reviewed artifacts.
+
+## Team composition fixture
+
+Use [team.json](team.json) in the same workflow for two additional examples: a
+three-pod reporting tree with a shared phase surface, and a reporting path around
+standalone specialists. See [the team contract and limits](team.md) and
+[its separate native proof](team-proof.json). The earlier pod proof remains a
+historical record of its exact code and measurement adapter.

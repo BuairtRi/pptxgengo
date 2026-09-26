@@ -12,20 +12,22 @@ type frame struct {
 	Height float64 `json:"height"`
 }
 type element struct {
-	Name          string  `json:"name"`
-	Kind          string  `json:"kind"`
-	Frame         frame   `json:"frame"`
-	Text          string  `json:"text,omitempty"`
-	FontFace      string  `json:"font_face,omitempty"`
-	FontSize      float64 `json:"font_size,omitempty"`
-	Bold          bool    `json:"bold,omitempty"`
-	Foreground    string  `json:"foreground,omitempty"`
-	Background    string  `json:"background,omitempty"`
-	InsetX        float64 `json:"inset_x"`
-	InsetY        float64 `json:"inset_y"`
-	Align         string  `json:"align,omitempty"`
-	Valign        string  `json:"valign,omitempty"`
-	MeasurementID string  `json:"measurement_id,omitempty"`
+	Name          string   `json:"name"`
+	Kind          string   `json:"kind"`
+	Frame         frame    `json:"frame"`
+	Text          string   `json:"text,omitempty"`
+	FontFace      string   `json:"font_face,omitempty"`
+	FontSize      float64  `json:"font_size,omitempty"`
+	Bold          bool     `json:"bold,omitempty"`
+	Foreground    string   `json:"foreground,omitempty"`
+	Background    string   `json:"background,omitempty"`
+	InsetX        float64  `json:"inset_x"`
+	InsetY        float64  `json:"inset_y"`
+	Align         string   `json:"align,omitempty"`
+	Valign        string   `json:"valign,omitempty"`
+	MeasurementID string   `json:"measurement_id,omitempty"`
+	LineWidth     float64  `json:"line_width,omitempty"`
+	ConnectionIDs []string `json:"connection_ids,omitempty"`
 }
 type renderSlide struct {
 	ID       string    `json:"id"`
@@ -63,6 +65,13 @@ func render(slides []renderSlide) ([]byte, error) {
 		s.Background(&pptx.BackgroundProps{Color: "FFFFFF"})
 		s.AddNotes("Illustrative roles for component development. Semantic IDs, measurements and fit status are recorded in the adjacent composition report. These roles are not a client staffing proposal.")
 		for _, e := range rs.Elements {
+			if e.Kind == "line" {
+				if err := s.AddShape(pptx.ShapeTypeLine, &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Fill: &pptx.ShapeFillProps{Type: "none"}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: e.Foreground}, Width: e.LineWidth, BeginArrowType: "none", EndArrowType: "none"}}); err != nil {
+					return nil, err
+				}
+				continue
+			}
+
 			if e.Kind == "surface" {
 				if err := s.AddShape(pptx.ShapeTypeRect, &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Fill: &pptx.ShapeFillProps{Color: e.Background}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}}); err != nil {
 					return nil, err

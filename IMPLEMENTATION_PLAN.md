@@ -8,7 +8,7 @@ in [PRODUCT_PLAN.md](PRODUCT_PLAN.md); that document and
 schemas, library counts and acceptance gates below are proposed unless explicitly
 described as completed.
 
-## Current slice — dynamic roles and pods
+## Current slice — dynamic roles, pods and teams
 
 2026-09-26: [Ten reference variants](library/reference-variants.md) now have a
 visual shortlist and exact IDs. Four source-bound text contracts are executable
@@ -39,15 +39,20 @@ See [workflow and limits](library/dynamic-components/README.md) and the
 implementation uses explicit Arial styles; arbitrary source-theme inheritance is
 still pending.
 
+The enclosing [team composition](library/dynamic-components/team.md) now adds
+standalone roles, a derived staffing legend, shared phase surfaces and routed
+reporting relationships. Native character-bound measurement also avoids a
+whole-range bounding-box anomaly without altering copy or typography. See the
+[team fixture proof](library/dynamic-components/team-proof.json); lines remain
+editable segments and do not follow shapes moved manually in PowerPoint.
+
 Next gates, in order:
 
-1. Build the enclosing team composition: staffing legend, shared phase surfaces,
-   reporting relationships and routed connectors around the returned anchors.
-2. Prove source-sized P1 variants alongside the new dynamic examples; establish
+1. Prove source-sized P1 variants alongside the new dynamic examples; establish
    supported style profiles from native measurements and visual review.
-3. Implement preferred N2; retain M1/M3 metric work with composition-owned
+2. Implement preferred N2; retain M1/M3 metric work with composition-owned
    dividers; experiment with N5 typography and content capacity.
-4. Integrate technically supported dynamic variants into catalog retrieval and
+3. Integrate technically supported dynamic variants into catalog retrieval and
    the distributable skill. Keep design preference and technical approval separate.
 
 ## 1. Current position

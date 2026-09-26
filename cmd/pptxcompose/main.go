@@ -33,6 +33,14 @@ type nativeRect struct {
 	Rotation                 float64 `json:"rotation_degrees"`
 }
 type nativeRow struct {
+	Line struct {
+		Visible      bool    `json:"visible"`
+		RGB          []int   `json:"rgb"`
+		WidthPt      float64 `json:"width_pt"`
+		Transparency float64 `json:"transparency"`
+		BeginArrow   string  `json:"begin_arrow"`
+		EndArrow     string  `json:"end_arrow"`
+	} `json:"line"`
 	Fill struct {
 		Visible      bool    `json:"visible"`
 		RGB          []int   `json:"rgb"`
@@ -136,6 +144,13 @@ func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
 	var out []renderSlide
 	for i, s := range p.Slides {
 		rs := renderSlide{ID: s.ID, Width: spec.Slides[i].WidthPt, Height: spec.Slides[i].HeightPt}
+
+		for _, ph := range s.Phases {
+			name := "phase:" + base64.RawURLEncoding.EncodeToString([]byte(ph.ID))
+			rs.Elements = append(rs.Elements, element{Name: name + "-surface", Kind: "surface", Frame: rect(ph.Bounds), Background: color(ph.Surface)})
+			rs.Elements = append(rs.Elements, element{Name: name + "-label", Kind: "text", Frame: rect(ph.TitleRect), Text: ph.Title, FontFace: ph.TitleFontFace, FontSize: ph.TitleFontSizePt, Bold: ph.TitleBold, Foreground: color(ph.Foreground), MeasurementID: ph.TitleMeasurementID})
+		}
+		rs.Elements = append(rs.Elements, connectorElements(s.Connections)...)
 		if s.Title != "" {
 			rs.Elements = append(rs.Elements, element{Name: "slide-title", Kind: "text", Frame: rect(s.TitleBounds), Text: s.Title, FontFace: s.TitleFontFace, FontSize: s.TitleFontSizePt, Bold: s.TitleBold, Foreground: color(s.TitleForeground), Align: "left", MeasurementID: s.TitleMeasurementID})
 		}
@@ -148,6 +163,16 @@ func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
 				rs.Elements = append(rs.Elements, element{Name: "role:" + base64.RawURLEncoding.EncodeToString([]byte(r.ID)), Kind: "text", Frame: rect(r.Bounds), Text: r.Label, FontFace: r.FontFace, FontSize: r.FontSizePt, Bold: r.Bold, Foreground: color(r.Foreground), Background: color(r.Background), InsetX: st.HorizontalInsetPt, InsetY: st.VerticalInsetPt + st.ParagraphGapPt, Valign: "middle", MeasurementID: r.MeasurementID})
 			}
 		}
+		for _, r := range s.Roles {
+			rs.Elements = append(rs.Elements, roleElement(r))
+		}
+		if s.Legend != nil {
+			for _, item := range s.Legend.Entries {
+				name := "legend:" + base64.RawURLEncoding.EncodeToString([]byte(item.Token))
+				rs.Elements = append(rs.Elements, element{Name: name + "-swatch", Kind: "surface", Frame: rect(item.SwatchBounds), Background: color(item.Color)})
+				rs.Elements = append(rs.Elements, element{Name: name + "-label", Kind: "text", Frame: rect(item.LabelBounds), Text: item.Label, FontFace: item.FontFace, FontSize: item.FontSizePt, Bold: item.Bold, Foreground: color(item.Foreground), Align: "left", MeasurementID: item.MeasurementID})
+			}
+		}
 		out = append(out, rs)
 	}
 	return out
@@ -156,7 +181,7 @@ func finite(v float64) bool  { return !math.IsNaN(v) && !math.IsInf(v, 0) }
 func near(a, b float64) bool { return finite(a) && finite(b) && math.Abs(a-b) <= 0.12 }
 func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, error) {
 	result := compose.Measurements{ByRequestID: map[string]compose.Measurement{}}
-	if n.Schema != "pptxgengo.compose-text-measurement.v2" || n.Count != len(m.Slides) {
+	if (n.Schema != "pptxgengo.compose-text-measurement.v2" && n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4") || n.Count != len(m.Slides) {
 		return result, fmt.Errorf("native schema or slide count mismatch")
 	}
 	rows := map[string]nativeRow{}
@@ -177,6 +202,19 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 			delete(rows, k)
 			if !near(r.Frame.Left, e.Frame.X) || !near(r.Frame.Top, e.Frame.Y) || !near(r.Frame.Width, e.Frame.Width) || !near(r.Frame.Height, e.Frame.Height) || !near(r.Frame.Rotation, 0) {
 				return result, fmt.Errorf("native frame mismatch %s: %+v expected %+v", k, r.Frame, e.Frame)
+			}
+
+			if e.Kind == "line" {
+				if (n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4") || !r.Line.Visible || rgbHex(r.Line.RGB) != e.Foreground || !near(r.Line.WidthPt, e.LineWidth) || math.Abs(r.Line.Transparency) > 1e-6 || !finite(r.Line.Transparency) || r.Line.BeginArrow != "no arrowhead" || r.Line.EndArrow != "no arrowhead" {
+					return result, fmt.Errorf("native line mismatch %s: %+v", k, r.Line)
+				}
+				if r.Text != nil && *r.Text != "" {
+					return result, fmt.Errorf("unexpected connector text %s", k)
+				}
+				continue
+			}
+			if (n.Schema == "pptxgengo.compose-text-measurement.v3" || n.Schema == "pptxgengo.compose-text-measurement.v4") && r.Line.Visible {
+				return result, fmt.Errorf("unexpected outline %s", k)
 			}
 
 			if e.Background != "" {

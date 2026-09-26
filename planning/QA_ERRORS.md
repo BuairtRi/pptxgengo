@@ -222,3 +222,36 @@ The generated engineering examples have their own dimensions and content. They
 are not a claim of pixel-perfect reconstruction or general catalog adaptation
 approval. Native proof results and artifact hashes are recorded in
 [dynamic component proof](../library/dynamic-components/proof-report.json).
+
+## Team composition and reporting routes — 2026-09-26
+
+- **QA-47 — Shared-source exemption allowed branch crossings, fixed in review:**
+  allowing every intersection between routes from one manager was too broad.
+  Routes may now share one continuous prefix, then diverge without crossing or
+  rejoining. Shared collinear strokes are emitted once with their relationship IDs.
+- **QA-48 — A shared endpoint could hide overlapping approaches, fixed:** a check
+  accepted any intersection if both segments included a shared endpoint. It now
+  requires that the intersection collapse to that single point. The converging
+  approach fixture is rejected; unrelated strokes also receive an ink-separation check.
+- **QA-49 — Legend frames must keep their measured width, corrected:** shrinking
+  label frames to the measured glyph width could introduce new wrapping. Final
+  legend label frames now retain their exact probe widths and use equal slots.
+- **QA-50 — Whole-range bounds produced a false overflow warning, corrected:**
+  PowerPoint returned width 93.5pt at x37.625 for “Quality engineer” in a probe
+  beginning at x36 with width 93.5pt. Its individual characters occupy about
+  90.255pt and actually fit. The v4 adapter unions native character bounds and
+  retains whole-range bounds as diagnostics. No copy, font size or container
+  position was changed to suppress the warning.
+- **QA-51 — Straight lines legitimately have one zero dimension, supported:** the
+  adapter accepts horizontal/vertical lines but still rejects point-sized shapes.
+  Native line color, width, transparency and absence of arrowheads are verified;
+  unintended borders on text/surface shapes are rejected.
+- **QA-52 — Phase membership and staffing legends need semantic checks:** phases
+  cannot cover undeclared components or the legend. Team roles require canonical
+  staffing tokens, and legend entries derive from tokens actually used. Missing
+  legends, unknown phase members and literal colors impersonating semantic roles
+  fail before native measurement.
+
+See [team proof](../library/dynamic-components/team-proof.json). The examples use
+new geometry and content informed by UHG43; the source-sized reconstruction gate
+and PowerPoint-glued connector behavior remain separate work.

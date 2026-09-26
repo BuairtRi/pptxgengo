@@ -1,0 +1,417 @@
+{
+  "schema": "pptxgengo.dynamic-component-proof.v1",
+  "date": "2026-09-26",
+  "status": "native_fixture_proof_not_general_catalog_approval",
+  "component_kinds": [
+    "standalone role tile",
+    "variable-role pod",
+    "shared phase surface and caption",
+    "semantic staffing legend",
+    "orthogonal reporting tree"
+  ],
+  "slides": 2,
+  "roles": 18,
+  "standalone_roles": 6,
+  "pods": 4,
+  "phases": 1,
+  "reporting_relationships": 5,
+  "probe_text_shapes": 31,
+  "final_native_shapes": 52,
+  "final_shape_kinds": {
+    "surface": 11,
+    "text": 31,
+    "line": 10
+  },
+  "unit": "pt",
+  "native_measurement_schema": "pptxgengo.compose-text-measurement.v4",
+  "native_checks": [
+    "missing/extra shapes",
+    "shape frames and rotation",
+    "exact text",
+    "uniform visible-character font name, size, bold and RGB",
+    "native character bounds inside inner safe zone",
+    "shape fill RGB and opacity",
+    "text margins",
+    "absence of unexpected outlines",
+    "line RGB, weight, opacity and absence of arrowheads"
+  ],
+  "max_frame_delta_pt": 6.1035156022626325e-05,
+  "max_text_overflow_pt": 2.0345052234915784e-05,
+  "geometry_tolerance_pt": 0.12,
+  "fit_tolerance_pt": 0.15,
+  "routes": [
+    {
+      "slide": "team",
+      "connections": [
+        {
+          "id": "engagement-platform",
+          "from": "engagement-lead",
+          "to": "platform-architect",
+          "relationship": "reporting",
+          "color": "#070154",
+          "width_pt": 1.25,
+          "clearance_pt": 7,
+          "points": [
+            {
+              "x": 480,
+              "y": 146
+            },
+            {
+              "x": 480,
+              "y": 184
+            }
+          ],
+          "strategy": "clear_candidate"
+        },
+        {
+          "id": "platform-foundation",
+          "from": "platform-architect",
+          "to": "foundation",
+          "relationship": "reporting",
+          "color": "#070154",
+          "width_pt": 1.25,
+          "clearance_pt": 7,
+          "points": [
+            {
+              "x": 480,
+              "y": 226
+            },
+            {
+              "x": 480,
+              "y": 248
+            },
+            {
+              "x": 173,
+              "y": 248
+            },
+            {
+              "x": 173,
+              "y": 270
+            }
+          ],
+          "strategy": "clear_candidate"
+        },
+        {
+          "id": "platform-delivery",
+          "from": "platform-architect",
+          "to": "delivery",
+          "relationship": "reporting",
+          "color": "#070154",
+          "width_pt": 1.25,
+          "clearance_pt": 7,
+          "points": [
+            {
+              "x": 480,
+              "y": 226
+            },
+            {
+              "x": 480,
+              "y": 270
+            }
+          ],
+          "strategy": "clear_candidate"
+        },
+        {
+          "id": "platform-expansion",
+          "from": "platform-architect",
+          "to": "expansion",
+          "relationship": "reporting",
+          "color": "#070154",
+          "width_pt": 1.25,
+          "clearance_pt": 7,
+          "points": [
+            {
+              "x": 480,
+              "y": 226
+            },
+            {
+              "x": 480,
+              "y": 248
+            },
+            {
+              "x": 787,
+              "y": 248
+            },
+            {
+              "x": 787,
+              "y": 270
+            }
+          ],
+          "strategy": "clear_candidate"
+        }
+      ]
+    },
+    {
+      "slide": "routing",
+      "connections": [
+        {
+          "id": "delivery-implementation",
+          "from": "delivery-manager",
+          "to": "implementation",
+          "relationship": "reporting",
+          "color": "#070154",
+          "width_pt": 1.25,
+          "clearance_pt": 7,
+          "points": [
+            {
+              "x": 240,
+              "y": 180
+            },
+            {
+              "x": 247.625,
+              "y": 180
+            },
+            {
+              "x": 247.625,
+              "y": 222.375
+            },
+            {
+              "x": 692.375,
+              "y": 222.375
+            },
+            {
+              "x": 692.375,
+              "y": 402.8999996185305
+            },
+            {
+              "x": 700,
+              "y": 402.8999996185305
+            }
+          ],
+          "strategy": "visibility_grid"
+        }
+      ]
+    }
+  ],
+  "visual_checks": [
+    {
+      "slide": 1,
+      "visually_reviewed": true,
+      "notes": "Clear reporting bus; common trunk rendered once; aligned pod tops; labels contained including Quality engineer; phase covers only declared pods with caption below; three semantic legend entries. Native editable engineering example, not a UHG43 clone."
+    },
+    {
+      "slide": 2,
+      "visually_reviewed": true,
+      "notes": "Grid route avoids all three intervening specialist roles and enters the implementation pod at its left anchor. Role text and legend are readable. Deliberately sparse routing stress example, not a polished client layout."
+    }
+  ],
+  "negative_cli_checks": [
+    {
+      "case": "missing-legend",
+      "exit_code": 1,
+      "error": "pptxcompose: slide team semantic staffing colors in a team composition require an auto-generated legend",
+      "no_output": true
+    },
+    {
+      "case": "literal-staffing-color",
+      "exit_code": 1,
+      "error": "pptxcompose: slide team standalone role engagement-lead must use a staffing semantic background",
+      "no_output": true
+    },
+    {
+      "case": "unknown-endpoint",
+      "exit_code": 1,
+      "error": "pptxcompose: connection engagement-platform unknown root target \"missing\" (nested roles are unsupported)",
+      "no_output": true
+    },
+    {
+      "case": "nested-role-endpoint",
+      "exit_code": 1,
+      "error": "pptxcompose: connection engagement-platform unknown root target \"foundation-1\" (nested roles are unsupported)",
+      "no_output": true
+    },
+    {
+      "case": "invalid-anchor",
+      "exit_code": 1,
+      "error": "pptxcompose: anchor must be top, bottom, left or right: \"center\"",
+      "no_output": true
+    },
+    {
+      "case": "low-contrast-line",
+      "exit_code": 1,
+      "error": "pptxcompose: connection engagement-platform stroke contrast on white must be >=3:1",
+      "no_output": true
+    },
+    {
+      "case": "missing-phase-member",
+      "exit_code": 1,
+      "error": "pptxcompose: slide team phase phase-2 has unknown or duplicate member \"missing\"",
+      "no_output": true
+    },
+    {
+      "case": "reporting-cycle",
+      "exit_code": 1,
+      "error": "pptxcompose: slide team reporting relationships contain a cycle",
+      "no_output": true
+    }
+  ],
+  "negative_planner_checks": [
+    {
+      "case": "phase-member-outside",
+      "error": "slide team phase phase-2 member delivery is not contained above footer",
+      "passed": true
+    },
+    {
+      "case": "legend-on-phase",
+      "error": "slide team phase phase-2 collides with legend",
+      "passed": true
+    },
+    {
+      "case": "blocked-endpoint",
+      "error": "connection delivery-implementation endpoint clearance is blocked",
+      "passed": true
+    },
+    {
+      "case": "phase-footer-too-short",
+      "error": "slide team phase phase-2 footer label does not fit fixed bounds",
+      "passed": true
+    },
+    {
+      "case": "overlapping-final-approach",
+      "error": "connection other-source endpoint clearance is blocked",
+      "passed": true
+    }
+  ],
+  "planner_evidence_reuse": "Placement-only negative fixtures assert probe requests remain identical before reusing v4 native text measurements. CLI whole-spec hash restrictions remain enforced.",
+  "measurement_correction": {
+    "label": "Quality engineer",
+    "initial_schema": "pptxgengo.compose-text-measurement.v3",
+    "issue": "Native whole-range width included paragraph-box excess and triggered a false final fit rejection.",
+    "resolution": "v4 uses union of individual non-line-break character bounds, retaining range_bounds for diagnosis.",
+    "content_fonts_and_requested_geometry_changed": false,
+    "scope": "Native glyph advances, not raster ink. Render review is still required."
+  },
+  "compilation": "go build ./... passed",
+  "unit_suite": "not run",
+  "assistance": "Two GPT-6-Luna agents implemented team geometry and the native adapter, then reviewed routing. Root integrated routing/rendering, resolved review findings, ran native QA, inspected both final renders and recorded evidence.",
+  "limits": [
+    "New engineering examples; no pixel-perfect source-reconstruction claim",
+    "Explicit Arial styles only; source-sized variants and theme inheritance pending",
+    "Editable line segments are not PowerPoint-glued connectors; manual moves do not reroute",
+    "Reporting only; no arrowheads, peer relationships, nested-role endpoints or hand-drawn artwork",
+    "Bounded order-sensitive router may reject a layout that a different route ordering could solve",
+    "No automatic role repositioning",
+    "No general catalog adaptation approval"
+  ],
+  "inputs": [
+    {
+      "path": "library/dynamic-components/team.json",
+      "sha256": "c83a53cb622abd00e3e0c1780b526db9023ce8f77cbdcb0e62f639491a2634b5",
+      "size_bytes": 12668
+    },
+    {
+      "path": "library/dynamic-components/team-source-reference.json",
+      "sha256": "81d46a6778efb44ff93663bf631ef4a71f5152a5f455382ca2981653f3939f48",
+      "size_bytes": 945
+    }
+  ],
+  "code": [
+    {
+      "path": "internal/compose/planner.go",
+      "sha256": "dacfea6002ee597d70153ac8bad35a4a123590af575dd524d5a8d23210c24f10",
+      "size_bytes": 25393
+    },
+    {
+      "path": "internal/compose/team.go",
+      "sha256": "01e91214c5d7e26f50fde78f5fcbad829ce217432ad0cd9d7566d16b104233bd",
+      "size_bytes": 14286
+    },
+    {
+      "path": "internal/compose/routes.go",
+      "sha256": "7f683c626a61e0613eca917ff7bdac98027fef1e0b21af1d81664f02e103e41f",
+      "size_bytes": 16695
+    },
+    {
+      "path": "cmd/pptxcompose/main.go",
+      "sha256": "313d334ba069a825059ecfff1dbe4eee0988d3fcdc11c70a96d460ffb65ccb95",
+      "size_bytes": 18079
+    },
+    {
+      "path": "cmd/pptxcompose/render.go",
+      "sha256": "bf6d644922db290eb104fd14469616f4b1c34c66f5a0fc4d8b0d280b755a5075",
+      "size_bytes": 4541
+    },
+    {
+      "path": "cmd/pptxcompose/team_render.go",
+      "sha256": "bbf4399c02e86955e80efe573040aa2bc03e235f2670d4bb3f4e28f4301fe844",
+      "size_bytes": 2685
+    },
+    {
+      "path": "scripts/measure-compose-text.applescript",
+      "sha256": "845b0be97402dc03158b8bd313868b1a5f02ee9291e35a00215eceeea205a9f4",
+      "size_bytes": 15029
+    },
+    {
+      "path": "pptx/xml.go",
+      "sha256": "02c5706937ae65abbbcec4c24584b970a7682c85d3f576d2a054800e579df8b5",
+      "size_bytes": 117176
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-probes-v1/manifest.json",
+      "sha256": "2c16f98077567c5f2aa71b48e3fb2e5f4586fbeb95ec577ccbbfb8597e5d95cc",
+      "size_bytes": 35491
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-probes-v1/team-probes-v1.pptx",
+      "sha256": "d1c5699c6d8a387b3b85e98a7ef356ae73e03f9ee56cddddf13462476b6f7781",
+      "size_bytes": 208663
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-evidence-v2.json",
+      "sha256": "47e9aa011e031439e2c4f3bfd8d20f2b96e9d001b37abd49496143fdc0b72486",
+      "size_bytes": 45513
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-v2/manifest.json",
+      "sha256": "e7d1c8d2e1fb9c64eff3dd2d560656de22c20cc8eab99ee4b253c52ec81eb2f2",
+      "size_bytes": 64440
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-v2/team-v2.pptx",
+      "sha256": "7ab382f19f2df37cac58f527a3c7e8cb92b9a6feef39af23e555580295258372",
+      "size_bytes": 84281
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-v2-verification.json",
+      "sha256": "6d4fe98ad5be11f9093161672e3a03db5c4cae6a75f79be6be0f8882bf9f3ffd",
+      "size_bytes": 68402
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-v2.pdf",
+      "sha256": "6e1668144941cd0663a3116c5505ac03ec525092fa3abc7c011b2d58757b6e09",
+      "size_bytes": 20646
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-render-v2/slide-001.png",
+      "sha256": "d9d4e4e393d6bdc3a097dc52bf1bd8370ae9325e9dbfd64c893dd41763e59250",
+      "size_bytes": 106214
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-render-v2/slide-002.png",
+      "sha256": "e0fe7bc273d8a8a570fa8331af217d3356a91872949803372b99c03551d4dd22",
+      "size_bytes": 89363
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-negative-results.json",
+      "sha256": "70f61ce88773f58ffa4c6973eb8fe115a0b018eaaaa89e3009d8a6e69fd34686",
+      "size_bytes": 1520
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-plan-negative-results.json",
+      "sha256": "bd4843f8a8250a2bc45f3ebe5472df988f0700dfa6e92fe89703170d19e9e646",
+      "size_bytes": 702
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-plan-qa.go",
+      "sha256": "d4c443386ffe9533ab284803437f54c92ff785d9aa301943ccddfb8539a4ce34",
+      "size_bytes": 2581
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/team-v1-verification.json.failed.json",
+      "sha256": "fae6ebc66ebd17e24bb65d8b0b3f32f820ab2dc8bb6c596dfedff15ca12af0bf",
+      "size_bytes": 56895
+    }
+  ]
+}

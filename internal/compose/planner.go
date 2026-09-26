@@ -52,16 +52,20 @@ type Spec struct {
 }
 
 type SlideSpec struct {
-	ID              string    `json:"id"`
-	Title           string    `json:"title"`
-	WidthPt         float64   `json:"width_pt"`
-	HeightPt        float64   `json:"height_pt"`
-	TitleBounds     Rect      `json:"title_bounds"`
-	TitleFontFace   string    `json:"title_font_face"`
-	TitleFontSizePt float64   `json:"title_font_size_pt"`
-	TitleBold       bool      `json:"title_bold"`
-	TitleForeground string    `json:"title_foreground"`
-	Pods            []PodSpec `json:"pods"`
+	ID              string               `json:"id"`
+	Title           string               `json:"title"`
+	WidthPt         float64              `json:"width_pt"`
+	HeightPt        float64              `json:"height_pt"`
+	TitleBounds     Rect                 `json:"title_bounds"`
+	TitleFontFace   string               `json:"title_font_face"`
+	TitleFontSizePt float64              `json:"title_font_size_pt"`
+	TitleBold       bool                 `json:"title_bold"`
+	TitleForeground string               `json:"title_foreground"`
+	Pods            []PodSpec            `json:"pods"`
+	Roles           []StandaloneRoleSpec `json:"roles,omitempty"`
+	Phases          []PhaseSpec          `json:"phases,omitempty"`
+	Legend          *LegendSpec          `json:"legend,omitempty"`
+	Connections     []ConnectionSpec     `json:"connections,omitempty"`
 }
 
 type PodSpec struct {
@@ -112,6 +116,8 @@ type ProbeRequest struct {
 	SlideID           string  `json:"slide_id"`
 	PodID             string  `json:"pod_id,omitempty"`
 	RoleID            string  `json:"role_id,omitempty"`
+	PhaseID           string  `json:"phase_id,omitempty"`
+	LegendToken       string  `json:"legend_token,omitempty"`
 	Kind              string  `json:"kind"` // slide_title, pod_title, role
 	Columns           int     `json:"columns"`
 	Text              string  `json:"text"`
@@ -140,17 +146,21 @@ type PlanResult struct {
 }
 
 type PlannedSlide struct {
-	ID                 string       `json:"id"`
-	Title              string       `json:"title"`
-	TitleFontFace      string       `json:"title_font_face"`
-	TitleFontSizePt    float64      `json:"title_font_size_pt"`
-	TitleBold          bool         `json:"title_bold"`
-	TitleForeground    string       `json:"title_foreground"`
-	TitleBounds        Rect         `json:"title_bounds"`
-	WidthPt            float64      `json:"width_pt"`
-	HeightPt           float64      `json:"height_pt"`
-	TitleMeasurementID string       `json:"title_measurement_id,omitempty"`
-	Pods               []PlannedPod `json:"pods"`
+	ID                 string              `json:"id"`
+	Title              string              `json:"title"`
+	TitleFontFace      string              `json:"title_font_face"`
+	TitleFontSizePt    float64             `json:"title_font_size_pt"`
+	TitleBold          bool                `json:"title_bold"`
+	TitleForeground    string              `json:"title_foreground"`
+	TitleBounds        Rect                `json:"title_bounds"`
+	WidthPt            float64             `json:"width_pt"`
+	HeightPt           float64             `json:"height_pt"`
+	TitleMeasurementID string              `json:"title_measurement_id,omitempty"`
+	Pods               []PlannedPod        `json:"pods"`
+	Roles              []PlannedRole       `json:"roles,omitempty"`
+	Phases             []PlannedPhase      `json:"phases,omitempty"`
+	Legend             *PlannedLegend      `json:"legend,omitempty"`
+	Connections        []PlannedConnection `json:"connections,omitempty"`
 }
 
 type PlannedPod struct {
@@ -326,6 +336,11 @@ func ProbeRequests(spec Spec) ([]ProbeRequest, error) {
 				}
 			}
 		}
+		team, err := teamProbes(s)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, team...)
 	}
 	return out, nil
 }
@@ -458,6 +473,12 @@ func validateSpec(spec Spec) error {
 			if len(candidateColumns(p)) == 0 || tileWidth(p, candidateColumns(p)[0])-2*st.HorizontalInsetPt <= 0 {
 				return fmt.Errorf("slide %s pod %s cannot fit a role tile", s.ID, p.ID)
 			}
+		}
+		if err := validateTeam(s, componentIDs); err != nil {
+			return err
+		}
+		if err := validateConnectionSpecs(s); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -645,6 +666,12 @@ func Plan(spec Spec, measurements Measurements) (PlanResult, error) {
 			if ps.TitleMeasurementID != "" && overlap(a.Bounds, ps.TitleBounds) {
 				return PlanResult{}, fmt.Errorf("slide %s title and pod %s overlap", s.ID, a.ID)
 			}
+		}
+		if err := planTeam(s, &ps, measurements); err != nil {
+			return PlanResult{}, err
+		}
+		if err := planConnections(s, &ps); err != nil {
+			return PlanResult{}, err
 		}
 		result.Slides = append(result.Slides, ps)
 	}

@@ -119,5 +119,12 @@ text, frames, typography, fills, foregrounds and margins.
 
 See [workflow and limits](library/dynamic-components/README.md) and the
 [fixture proof report](library/dynamic-components/proof-report.json). Explicit
-Arial styles are supported; arbitrary source typography inheritance, full team
-connectors/legends and broad component adaptation remain future work.
+Arial styles are supported; arbitrary source typography inheritance and broad
+component adaptation remain future work.
+
+The [team extension](library/dynamic-components/team.md) adds standalone roles,
+phase membership and padded containment, a semantic staffing legend, and routed
+orthogonal reporting lines. Native QA also checks stroke color, weight, opacity
+and arrowhead absence. Lines are editable segments, not PowerPoint-glued
+connectors. The two-slide fixture and negative cases are recorded in the
+[team proof](library/dynamic-components/team-proof.json).

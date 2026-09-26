@@ -41,8 +41,29 @@ on run argv
 						set frameWidth to width of sh
 						set frameHeight to height of sh
 						set shapeRotation to rotation of sh
-						if frameWidth ≤ 0 or frameHeight ≤ 0 then error "Visible shape has nonpositive frame on slide " & slideIndex & ", shape " & shapeIndex number 68
+						if frameWidth < 0 or frameHeight < 0 or (frameWidth is 0 and frameHeight is 0) then error "Visible shape has invalid frame on slide " & slideIndex & ", shape " & shapeIndex number 68
 						if my absoluteValue(shapeRotation) > rotationEpsilon then error "Rotated shape is outside this adapter's supported measurements: " & shapeName & " on slide " & slideIndex number 69
+						set shapeLine to line format of sh
+						-- MsoLineFormat has no documented `visible` member in the
+						-- installed sdef. Treat `line style unset` as no border.
+						set lineStyleValue to line style of shapeLine
+						set lineStyleText to lineStyleValue as text
+						set lineVisibleValue to lineStyleText is not "line style unset"
+						set lineRGBValue to missing value
+						set lineWidthValue to missing value
+						set lineTransparencyValue to missing value
+						set beginArrowValue to missing value
+						set endArrowValue to missing value
+						if lineVisibleValue then
+							set lineRGBValue to fore color of shapeLine
+							if (count of lineRGBValue) is not 3 then error "Visible line has no resolved RGB color: " & shapeName number 81
+							set lineWidthValue to line weight of shapeLine
+							set lineTransparencyValue to transparency of shapeLine
+							set beginArrowValue to my arrowheadName(begin arrowhead style of shapeLine)
+							set endArrowValue to my arrowheadName(end arrowhead style of shapeLine)
+							if lineWidthValue ≤ 0 then error "Visible line has nonpositive width: " & shapeName number 82
+						end if
+						set lineJSON to "{\"visible\":" & my jsonBoolean(lineVisibleValue) & ",\"rgb\":" & my jsonRGB(lineRGBValue) & ",\"width_pt\":" & my jsonNullableNumber(lineWidthValue) & ",\"transparency\":" & my jsonNullableNumber(lineTransparencyValue) & ",\"begin_arrow\":" & my jsonNullableString(beginArrowValue) & ",\"end_arrow\":" & my jsonNullableString(endArrowValue) & "}"
 						set fillVisibleValue to false
 						set fillRGBValue to missing value
 						set fillTransparencyValue to missing value
@@ -57,6 +78,7 @@ on run argv
 
 						set textValue to missing value
 						set textBoundsValue to missing value
+						set rangeBoundsValue to missing value
 						set fontNameValue to missing value
 						set fontSizeValue to missing value
 						set boldValue to missing value
@@ -72,20 +94,23 @@ on run argv
 							set marginsValue to "{\"left\":" & my jsonNumber(marginLeftValue) & ",\"right\":" & my jsonNumber(marginRightValue) & ",\"top\":" & my jsonNumber(marginTopValue) & ",\"bottom\":" & my jsonNumber(marginBottomValue) & "}"
 							set textValue to content of tr
 							if textValue is not "" then
-								set textLeft to left bounds of tr
-								set textTop to top bounds of tr
-								set textWidth to bounds width of tr
-								set textHeight to bounds height of tr
-								if textWidth ≤ 0 or textHeight ≤ 0 then error "Text range has nonpositive bounds: " & shapeName & " on slide " & slideIndex number 71
-								set textBoundsValue to "{\"left\":" & my jsonNumber(textLeft) & ",\"top\":" & my jsonNumber(textTop) & ",\"width\":" & my jsonNumber(textWidth) & ",\"height\":" & my jsonNumber(textHeight) & "}"
+								set rangeLeft to left bounds of tr
+								set rangeTop to top bounds of tr
+								set rangeWidth to bounds width of tr
+								set rangeHeight to bounds height of tr
+								set rangeBoundsValue to "{\"left\":" & my jsonNumber(rangeLeft) & ",\"top\":" & my jsonNumber(rangeTop) & ",\"width\":" & my jsonNumber(rangeWidth) & ",\"height\":" & my jsonNumber(rangeHeight) & "}"
 							-- Whole-range font/color can resolve to paragraph defaults. Read
 							-- visible characters and require one uniform effective style.
 							set uniformFontName to missing value
 							set uniformFontSize to missing value
 							set uniformBold to missing value
-							set uniformTextColor to missing value
-							set measuredCharacterCount to 0
-							set fullTextLength to text length of tr
+								set uniformTextColor to missing value
+								set measuredCharacterCount to 0
+								set unionLeft to missing value
+								set unionTop to missing value
+								set unionRight to missing value
+								set unionBottom to missing value
+								set fullTextLength to text length of tr
 							repeat with charIndex from 1 to fullTextLength
 								set charRange to character charIndex of tr
 								set charText to content of charRange
@@ -94,12 +119,32 @@ on run argv
 										set charFont to font of charRange
 										set charFontName to font name of charFont
 										set charFontSize to font size of charFont
-										set charBold to bold of charFont
+											set charBold to bold of charFont
 										set charFontColor to font color of charFont
+										set charLeft to left bounds of charRange
+										set charTop to top bounds of charRange
+										set charWidth to bounds width of charRange
+										set charHeight to bounds height of charRange
 									on error
 										error "Font attributes unavailable for character " & charIndex & " in " & shapeName number 75
 									end try
 									if charFontName is missing value or charFontSize is missing value or charBold is missing value or charFontColor is missing value or (count of charFontColor) is not 3 then error "Mixed or unresolved character font/color in " & shapeName number 76
+									if charWidth < 0 or charHeight < 0 then error "Character has negative bounds: " & shapeName & " character " & charIndex number 83
+									if charWidth > 0 and charHeight > 0 then
+										set charRight to charLeft + charWidth
+										set charBottom to charTop + charHeight
+										if unionLeft is missing value then
+											set unionLeft to charLeft
+											set unionTop to charTop
+											set unionRight to charRight
+											set unionBottom to charBottom
+										else
+											if charLeft < unionLeft then set unionLeft to charLeft
+											if charTop < unionTop then set unionTop to charTop
+											if charRight > unionRight then set unionRight to charRight
+											if charBottom > unionBottom then set unionBottom to charBottom
+										end if
+									end if
 									if measuredCharacterCount is 0 then
 										set uniformFontName to charFontName
 										set uniformFontSize to charFontSize
@@ -112,6 +157,8 @@ on run argv
 								end if
 							end repeat
 							if measuredCharacterCount is 0 then error "Text range contains no measurable characters: " & shapeName number 78
+								if unionLeft is missing value then error "Text has no nonzero character bounds: " & shapeName number 84
+								set textBoundsValue to "{\"left\":" & my jsonNumber(unionLeft) & ",\"top\":" & my jsonNumber(unionTop) & ",\"width\":" & my jsonNumber(unionRight - unionLeft) & ",\"height\":" & my jsonNumber(unionBottom - unionTop) & "}"
 							set fontNameValue to uniformFontName
 							set fontSizeValue to uniformFontSize
 							set boldValue to uniformBold
@@ -121,7 +168,7 @@ on run argv
 
 						set fontJSON to "null"
 						if textValue is not missing value and textValue is not "" then set fontJSON to "{\"name\":" & my jsonNullableString(fontNameValue) & ",\"size_pt\":" & my jsonNullableNumber(fontSizeValue) & ",\"bold\":" & my jsonNullableBoolean(boldValue) & "}"
-						set rowJSON to "{\"slide_index\":" & slideIndex & ",\"shape_name\":" & my jsonString(shapeName) & ",\"shape_index\":" & shapeIndex & ",\"text\":" & my jsonNullableContent(textValue) & ",\"shape_frame\":{\"left\":" & my jsonNumber(frameLeft) & ",\"top\":" & my jsonNumber(frameTop) & ",\"width\":" & my jsonNumber(frameWidth) & ",\"height\":" & my jsonNumber(frameHeight) & ",\"rotation_degrees\":" & my jsonNumber(shapeRotation) & "},\"text_bounds\":" & my jsonRawOrNull(textBoundsValue) & ",\"fill\":" & fillJSON & ",\"text_color\":" & my jsonRGB(textColorValue) & ",\"margins\":" & my jsonRawOrNull(marginsValue) & ",\"font\":" & fontJSON & "}"
+						set rowJSON to "{\"slide_index\":" & slideIndex & ",\"shape_name\":" & my jsonString(shapeName) & ",\"shape_index\":" & shapeIndex & ",\"text\":" & my jsonNullableContent(textValue) & ",\"shape_frame\":{\"left\":" & my jsonNumber(frameLeft) & ",\"top\":" & my jsonNumber(frameTop) & ",\"width\":" & my jsonNumber(frameWidth) & ",\"height\":" & my jsonNumber(frameHeight) & ",\"rotation_degrees\":" & my jsonNumber(shapeRotation) & "},\"text_bounds\":" & my jsonRawOrNull(textBoundsValue) & ",\"range_bounds\":" & my jsonRawOrNull(rangeBoundsValue) & ",\"fill\":" & fillJSON & ",\"line\":" & lineJSON & ",\"text_color\":" & my jsonRGB(textColorValue) & ",\"margins\":" & my jsonRawOrNull(marginsValue) & ",\"font\":" & fontJSON & "}"
 						if outputRows is not "" then set outputRows to outputRows & ","
 						set outputRows to outputRows & rowJSON
 					end if
@@ -132,7 +179,7 @@ on run argv
 
 	if visibleSlideCount is 0 then error "Presentation has no visible slides" number 72
 	if outputRows is "" then error "Presentation has no visible shapes to measure" number 73
-	return "{\"schema\":\"pptxgengo.compose-text-measurement.v2\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"text_bounds_source\":\"PowerPoint text range bounds for the complete text range; no per-character sampling\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
+	return "{\"schema\":\"pptxgengo.compose-text-measurement.v4\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-line-break character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
 end run
 
 on absoluteValue(valueNumber)
@@ -164,6 +211,12 @@ on jsonRGB(rgbList)
 	if (count of rgbList) is not 3 then error "Expected an RGB triplet" number 80
 	return "[" & my jsonNumber(item 1 of rgbList) & "," & my jsonNumber(item 2 of rgbList) & "," & my jsonNumber(item 3 of rgbList) & "]"
 end jsonRGB
+
+on arrowheadName(arrowValue)
+	-- AppleScript coerces these MsoArrowheadStyle enumerators to the listed
+	-- scripting-dictionary names. Unknown values remain explicit via coercion.
+	return arrowValue as text
+end arrowheadName
 
 on jsonNullableString(valueText)
 	if valueText is missing value then return "null"
