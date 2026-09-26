@@ -29,6 +29,10 @@ explicitly authored geometry is not a general automatic visual designer.
 
 ### Next fidelity gates
 
+The detailed [six-wave implementation sequence](planning/FIDELITY_IMPLEMENTATION_WAVES.md)
+defines reference slides, deliverables, dependencies and acceptance fixtures. It is
+the execution order for the gaps below.
+
 1. **Measured grids and panels:** turn the five dense examples into reusable row/column and nested-panel contracts. Preserve aligned activity/evidence rows, explicit gutters and safe zones; report all overflowing cells before build. Re-run changed-copy and added-row variants against native PowerPoint.
 2. **Visual evidence and source geometry:** build one deliverable-thumbnail montage and one phase ribbon/hatched roadmap extension using inventoried source graphics. Preserve editable text and pinned asset provenance, then compare against the relevant reference crop.
 3. **Rich text and architecture:** add run-level emphasis with native phrase anchors, then a nested architecture diagram with captions, icons and routed relationships. Verify attachment positions after line-wrap changes.
