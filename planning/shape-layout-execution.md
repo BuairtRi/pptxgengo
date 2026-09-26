@@ -39,9 +39,12 @@ or alternate colorway requires an explicit variant relationship.
 ## First bounded batch
 
 1. Freeze the source/item manifest schema and source allowlist.
-2. Render all stock slides through one PowerPoint queue; retain failure records.
-3. Classify the first 10–15 stock slides selected to cover cards, columns,
-   tables and diagrams; include every underlying object in the raw inventory.
+2. Deduplicate across all 369 source slides using canonical dependency-aware
+   fingerprints and structural comparison. Review uncertain candidates with native
+   previews; retain reversible membership, variants and unresolved singletons.
+3. Render/classify the first 10–15 canonical layouts/variants covering cards,
+   columns, tables and diagrams. Process each confirmed design once; retain all
+   source occurrences and their distinct content/fit review requirements.
 4. Propose 25–40 component candidates with source locators and in-context previews.
    Review grouping, duplicate variants and design preference before promotion.
 5. Bind one phase-detail and one pod/team layout. Exercise content lengths and

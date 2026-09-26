@@ -111,19 +111,70 @@ particular staffing assumptions remain specific to that proposal.
 
 ## 3. Inventory and curation pipeline
 
-### Pass A — Discover and render
+### Pass A0 — Discover and deduplicate before expensive processing
 
-Register immutable originals; extract objects and dependencies; generate native
-slide previews and contact sheets; mark hidden slides, font issues, embedded
-objects and unsupported representations. Render all registered slides: 369 slides, including modernization. Inventory the
-broader asset collection immediately and enrich the most useful assets first.
+Register every source slide and its objects, then deduplicate across **all four
+sources** before assigning visual classification, component extraction or layout
+binding work. Keep all 369 occurrence records; report the measured number of
+unique layouts separately. A reduction to 250–300 is a hypothesis, not a quota.
 
-**Deliverable:** a browsable catalog with source coverage and explicit missing
-previews. Rendering failures remain visible; file presence is not success.
+Use a staged comparison:
+
+1. **Exact duplicates:** canonicalize slide objects and resolved dependencies,
+   ignoring incidental package IDs/paths while retaining text, effective styles,
+   geometry, crops, layer order and media hashes. Matching slide XML or native
+   layout names alone cannot establish equivalence across decks. Record notes,
+   links and source-specific metadata separately even when visible designs match.
+2. **Shared layouts with different content:** derive structural fingerprints from
+   object roles, normalized slide-space geometry, groups, text zones, typography,
+   margins, table/diagram structure and image frames. Abstract literal copy and
+   replaceable image identity only for layout comparison. Keep content-specific
+   records and distinguish actual differences in style, crop or composition.
+3. **Near-duplicate candidates:** bucket similar structures, compare within those
+   buckets and review ambiguous pairs using representative/variant previews.
+   Small decorative changes can be variants; materially different zones,
+   cardinality, hierarchy or fit behavior remain distinct layouts. Similarity
+   only proposes a merge. Each member must match the canonical contract; chains
+   of pairwise similarity must not silently collapse different end members.
+
+Use deterministic package/geometry processing first. The existing inventories
+are a starting point; incomplete style inheritance or unresolved group transforms
+must mark a comparison uncertain rather than produce an automatic merge. Render
+ambiguous candidates before merging and inspect a sample of accepted matches.
+
+**Deliverable / gate:** a deduplication manifest mapping every source slide to a
+canonical layout, explicit variant or unresolved singleton, with representative
+selection, comparison method/confidence and merge/split rationale. Show counts
+for input occurrences, exact duplicates, confirmed shared layouts, variants and
+unresolved candidates; distinguish overlapping categories. Preserve reversible
+membership decisions. Cache by source/dependency hash and algorithm version.
+
+Only then dispatch expensive layout-level work, once per confirmed canonical
+layout/variant. Prefer the cleanest editable representative, respecting the
+user's preferred exemplars. Reuse component extraction, descriptions and bindings
+across confirmed members. Unique content, factual reuse and rendered fit still
+need occurrence-level checks when wording or assets differ. A shared layout does
+not make two polished content slides interchangeable.
+
+### Pass A1 — Render representatives and inspect variants
+
+Generate native previews/contact sheets for canonical representatives, meaningful
+variants and uncertain candidates first. Reuse already valid renders where
+possible. Every source slide retains an explicit preview/review state; do not
+label unrendered members visually verified through cluster membership. Render
+additional occurrences on demand for content/fit review and broader fidelity
+coverage. Brand asset inventory and description reuse proceed independently.
+
+**Deliverable:** a browsable deduplicated design catalog with expandable source
+occurrences, variants and explicit missing/failed previews. Native export may
+process a whole deck cheaply in one batch; expensive agent review and enrichment
+still operate on the deduplicated worklist.
 
 ### Pass B — Classify and identify reusable parts
 
-For each slide, identify its role, takeaway, family, density and major components.
+For each canonical layout and meaningful variant, identify its family, density
+and major components once. Record slide role/takeaway against each distinct
+content example and retain occurrence-level exceptions.
 Produce component previews in context and isolated where possible. Link repeated
 patterns across slides; keep meaningful variants. Resolve inherited typography
 and group coordinates before treating extracted dimensions as reusable geometry.
@@ -290,7 +341,7 @@ pack separately. Evaluate from a clean checkout without hidden session knowledge
 | Milestone | Work | Exit evidence |
 | --- | --- | --- |
 | M0: Harden the successful experiment | Reproducible renderer/measurement adapters, stable IDs/source maps, immutable inputs, machine-readable diagnostics and environment checks | Existing reconstruction/accent fixtures remain reproducible; source preserved; supported/opaque operations explicit |
-| M1: Make the corpus discoverable | Source registry, all-slide rendering, SQLite/manifests, visual catalog, taxonomy and initial component candidates | All registered slides accounted for, including modernization; 166/166 stock slides classified; all native layouts tracked; missing/failed items explicit; useful search across current sources |
+| M1: Make the corpus discoverable | Source registry, cross-source deduplication, representative/variant rendering, SQLite/manifests, taxonomy and initial component candidates | All 369 source occurrences mapped to confirmed canonical layouts/variants or explicit unresolved singletons; dedup counts reported; 166/166 stock slides have a disposition; all native layouts tracked; missing/failed items explicit; useful search across current sources |
 | M2: Deliver the first agent-ready library | Semantic schema, initial component/layout/slide candidates, slot contracts, fit fixtures, dependency-safe reuse and thin skill | New content builds through named slots and one custom component composition; each promoted item has a rendered adaptation example; simple colleague text edit survives import and rebuild |
 | M3: Build a new proposal end to end | Narrative/evidence/voice workflow, candidate selection, fit repair, assets and dedicated accent pass | A 10–15-slide document proposal from a fresh source packet; per-slide evidence and fit checks; review records human edits and remaining issues |
 | M4: Make revision dependable | Wider change detection, three-way reconciliation, identity-loss and conflict fixtures | Supported colleague edits survive; ambiguity reported; repeated import is idempotent; original handoff and returned PPTX retained |
@@ -309,12 +360,15 @@ objects will affect the cost per family substantially.
 
 1. Create the source registry and item-manifest schema, including separate
    readiness/design/content states and explicit exclusion of experiment outputs.
-2. Render Graphics and Layouts and generate a browsable contact-sheet catalog of
-   all 166 stock slides; preserve and report failures.
-3. Classify each stock slide and record every shape/group plus candidate reusable components. Track all
-   33 native layouts and their dependencies separately.
+2. Deduplicate layouts across all 369 slides using exact and structural
+   fingerprints plus targeted review; publish canonical/variant membership and
+   measured counts before expensive classification.
+3. Render and classify canonical representatives and meaningful variants; record
+   each source occurrence and its shapes/groups. Generate a gallery with duplicate
+   occurrences collapsed. Track native layouts/dependencies separately.
 4. Join the proposal, modernization and branding asset inventories into one rebuildable
-   SQLite index; render the remaining proposal slides for visual classification.
+   SQLite index; inspect remaining occurrences as needed for distinct content,
+   fit and unresolved variant decisions.
 5. Present a shortlist for the first library release with actual previews and
    source links. Prioritize phase detail, timeline, pod/team, roster, bio and
    executive framing because these have both proven fixtures and clear demand.
@@ -341,8 +395,8 @@ integration, readiness claims, final visual QA and commits.
 | Wave | Parallel worker assignments | Dependency and integration gate |
 | --- | --- | --- |
 | 0 — Checkpoint and audit (current) | Luna: modernization inventory; Luna: existing asset/description audit; Luna: shape/layout and grid plan | Architect commits code, one authorized source deck and durable findings; all other samples ignored |
-| 1 — Complete raw catalog | Sol/Terra: inventory/schema and dependency-resolution code; Luna: Graphics and Layouts batches; Luna: asset source/description joins | Freeze manifest v1 before independent writers produce records; render requests go through one native PowerPoint queue |
-| 2 — Curate and make searchable | Luna: component candidates; Luna: slide/layout ratings and slots; Sol/Terra: SQLite/FTS import and search | Workers emit separate manifests; a single integrator validates/indexes them, avoiding shared DB write conflicts |
+| 1 — Inventory and deduplicate | Sol/Terra: schema, dependency resolution and fingerprints; Luna: candidate-cluster/variant review; Luna: asset source/description joins | Publish cross-source canonical membership before layout classification; uncertain matches remain separate; native previews use one queue |
+| 2 — Curate and make searchable | Luna: canonical component candidates; Luna: unique layout/variant ratings and slots; Sol/Terra: SQLite/FTS import and search | Workers emit separate manifests; a single integrator validates/indexes them, avoiding shared DB write conflicts |
 | 3 — Prove reuse and composition | Sol/Terra: slot/fit/grid implementation; Luna: adaptation content and edge cases; Luna: accent-family fixtures and graphics matching | Components/layouts/assets must have stable IDs; architect reviews native renders and explicit failure cases |
 | 4 — Prove revision and narrative | Sol/Terra: narrow import/reconcile support; Luna: narrative/evidence and voice cases; Luna: skill instructions and clean-session evaluation | Preserve handoff baseline and source map before colleague edits; independent agent must use documented commands |
 | 5 — Scale approved coverage | Mostly Luna batches for inventory enrichment, curation, variants and QA; targeted coding workers fix demonstrated gaps | Promote each item independently; unresolved items remain searchable with honest limitations |
@@ -350,13 +404,13 @@ integration, readiness claims, final visual QA and commits.
 The initial waves temporarily use a higher coding proportion. The much larger
 classification/enrichment/fixture workload supplies the intended overall Luna
 share. Reuse workers for bounded follow-ups instead of spawning an agent per
-slide. A typical curation batch is 10–15 slides or 25–40 component candidates;
+slide. A typical curation batch is 10–15 canonical layouts/variants or 25–40 component candidates;
 reduce it for dense diagrams. Each handoff supplies exact input paths, schema,
 owned output directory, expected counts, evidence requirements and uncertainties.
 
 Dependency chain:
 
-`checkpoint → source registry/schema → raw inventory + render queue → classification`
+`checkpoint → source registry/schema → raw inventory → cross-source deduplication + targeted previews → canonical layout/variant classification`
 
 `asset audit → preserved metadata + verified file mapping → asset index`
 
@@ -377,6 +431,10 @@ integration are serialized; descriptions and manifests can be prepared in parall
   allowed ingestion scope; modernization included; experiment outputs excluded.
 - Raw inventory: slide, shape, nested group, layout and master counts reconcile
   against each source. Mark missing previews, opaque objects and unresolved styles.
+- Deduplication: every source occurrence has a reversible cluster assignment or
+  unresolved status; report canonical counts and avoided repeated work. Preserve
+  source-specific content/fit checks and never equate shared masters with shared
+  layouts. Cache layout-level results against canonical versions.
 - Component candidates: preserve native group membership and support inferred
   compositions of ungrouped objects. Record grouping rationale; do not merge
   shapes solely because their bounding boxes touch.
