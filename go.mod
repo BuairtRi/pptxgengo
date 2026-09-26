@@ -1,3 +1,3 @@
 module github.com/buairtri/pptxgengo
 
-go 1.24.7
+go 1.27.1

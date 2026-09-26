@@ -1,4 +1,57 @@
-# PptxGenJS
+# pptxgengo
+
+Go library for generating editable PowerPoint presentations, ported from
+PptxGenJS 4.0.1. The Go implementation is in [`pptx/`](pptx/).
+Requires **Go 1.27.1 or newer**.
+
+The planned product is a CLI and agent skill pack for branded presentation
+authoring, quality checks, reusable slide libraries, and revisions after
+colleagues edit a deck in PowerPoint. **Experimental reconstruction and QA CLIs
+now exist; the complete authoring CLI and skill pack are still planned.**
+The first target is detailed West Monroe proposal and
+document-style decks.
+
+- [Current capabilities and verified baseline](CAPABILITIES.md)
+- [Product architecture, experiments, and implementation sequence](PRODUCT_PLAN.md)
+- [Current remaining-work plan and library inventory/curation sequence](IMPLEMENTATION_PLAN.md)
+- [SQLite catalog, narrative model, composition, and design passes](DESIGN_WORKFLOW.md)
+- [Source corpus and inventory policy](planning/README.md)
+- [UHG reconstruction results, native placement experiments, and QA evidence](planning/RECONSTRUCTION_CHECKPOINT.md)
+- [Go port conventions](PORTING.md)
+- [Historical code review and resolution log](REVIEW.md)
+
+```sh
+go build ./...
+go test -race -cover ./...
+```
+
+### Native reconstruction experiment
+
+```sh
+go run ./cmd/pptxscene extract \
+  --source "samples/software modernization campaign pick deck v1 - Repaired.pptx" \
+  --slides 1 --out /tmp/modernization-scene
+
+go run ./cmd/pptxscene build \
+  --project /tmp/modernization-scene \
+  --freeze-slide-numbers --out /tmp/modernization-rebuilt.pptx
+
+go run ./cmd/pptxdiff --reference reference.png \
+  --candidate candidate.png --out /tmp/pixel-comparison
+```
+
+The scene compiler regenerates native objects from extracted value bindings
+while retaining source topology, layouts, masters, themes and assets. It is
+an experimental path for reuse and revision, not a new-content design engine.
+[`pptxanchor`](cmd/pptxanchor/README.md) calculates visible-art placement from
+measured phrase bounds. Native rendering and text measurement currently use
+the macOS PowerPoint adapter in `scripts/`.
+
+The TypeScript source, distributions, demos, and documentation below are retained
+from upstream for reference and golden-output comparisons. They describe
+PptxGenJS, not the planned Go CLI.
+
+## Upstream PptxGenJS documentation
 
 ![PptxGenJS Sample Slides](https://raw.githubusercontent.com/gitbrent/PptxGenJS/gh-pages/img/readme_banner.png)
 

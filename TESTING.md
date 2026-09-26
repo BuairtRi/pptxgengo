@@ -1,4 +1,31 @@
-# PptxGenJS Testing Guide
+# Testing pptxgengo
+
+Use Go 1.27.1 or newer:
+
+```sh
+go build ./...
+go test -race -cover ./...
+```
+
+Writer tests live in `pptx/`; eight golden cases compare generated package parts with
+the retained PptxGenJS 4.0.1 output, including embedded workbooks. See
+[`pptx/testdata/golden/README.md`](pptx/testdata/golden/README.md).
+
+The 2026-09-25 baseline passed both commands on Go 1.27.1, darwin/arm64,
+with 78.1% statement coverage. These are code and XML checks, not rendered
+presentation acceptance. See [PRODUCT_PLAN.md](PRODUCT_PLAN.md) for proposed
+visual, narrative, reuse, and round-trip experiments.
+
+The experimental scene, anchor and pixel tools also have tests under
+`internal/nativepkg/` and `cmd/`. Their latest prior `go test -race ./...`
+run passed after the highlight implementation. The 78.1% figure above belongs
+to the earlier writer baseline, not an updated aggregate for these tools.
+Native UHG benchmark scripts require separately supplied local sources and
+ignored scene/measurement artifacts; see [the checkpoint](planning/RECONSTRUCTION_CHECKPOINT.md).
+
+## Inherited PptxGenJS testing guide
+
+The following instructions apply to the retained JavaScript project.
 
 This document outlines how to manually test PptxGenJS across supported platforms and environments prior to release.
 
