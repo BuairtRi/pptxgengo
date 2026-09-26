@@ -8,7 +8,7 @@ in [PRODUCT_PLAN.md](PRODUCT_PLAN.md); that document and
 schemas, library counts and acceptance gates below are proposed unless explicitly
 described as completed.
 
-## Current slice — reference selection and bounded edits
+## Current slice — dynamic roles and pods
 
 2026-09-26: [Ten reference variants](library/reference-variants.md) now have a
 visual shortlist and exact IDs. Four source-bound text contracts are executable
@@ -31,17 +31,24 @@ product must accept a variable list of roles, support several columns and comput
 height from measured content. See the [decisions, proposed API and acceptance
 fixtures](planning/dynamic-components.md).
 
+Implemented in this slice: `pptxcompose probe|measure|build|verify`, native
+measurement evidence tied to exact input hashes, variable-role pods, deterministic
+column selection, semantic colors, contrast checks, and connector anchor geometry.
+See [workflow and limits](library/dynamic-components/README.md) and the
+[native proof report](library/dynamic-components/proof-report.json). This first
+implementation uses explicit Arial styles; arbitrary source-theme inheritance is
+still pending.
+
 Next gates, in order:
 
-1. Resolve effective typography, insets and colors; integrate native fit and
-   contrast checks into a reusable role tile.
-2. Implement pod layout for variable role counts and one/multiple columns within
-   explicit slide bounds. Return anchors for enclosing connectors and phase bands.
-3. Prove a new editable team slide using differently sized pods and native QA.
-4. Implement preferred N2; retain M1/M3 metric work with composition-owned
+1. Build the enclosing team composition: staffing legend, shared phase surfaces,
+   reporting relationships and routed connectors around the returned anchors.
+2. Prove source-sized P1 variants alongside the new dynamic examples; establish
+   supported style profiles from native measurements and visual review.
+3. Implement preferred N2; retain M1/M3 metric work with composition-owned
    dividers; experiment with N5 typography and content capacity.
-5. Expand approved semantic styles and other component families from these
-   measured implementations. Design preference and technical approval stay separate.
+4. Integrate technically supported dynamic variants into catalog retrieval and
+   the distributable skill. Keep design preference and technical approval separate.
 
 ## 1. Current position
 

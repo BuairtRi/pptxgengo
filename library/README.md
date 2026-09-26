@@ -173,3 +173,9 @@ unchanged. Current previews are pinned in `render-manifest.json`.
    joined to local assets by guessed filenames.
 5. Integrate the catalog with authoring commands and the skill pack, then prove
    colleague-edit reconciliation on a small set of supported designs.
+
+## Dynamic component implementation
+
+The [roles and pods workflow](dynamic-components/README.md) provides measured
+variable-role composition through `pptxcompose`. Its fixtures and native QA are
+tracked separately from the frozen source contracts and catalog approval counts.

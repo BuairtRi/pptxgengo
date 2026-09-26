@@ -1434,19 +1434,18 @@ func genXmlBodyProperties(typ SlideObjectType, opts *ObjectOptions) string {
 		} else {
 			bodyProperties += ` wrap="none"`
 		}
-		// NOTE: TS emits these when the inset is any number incl. 0 (only skips
-		// when undefined). BodyProps has no "unset" sentinel for float64, so we
-		// emit on != 0; a caller-set inset of exactly 0 is therefore omitted.
-		if bp.LIns != 0 {
+		// An explicit margin, including zero, must override OOXML's default
+		// insets. Omitting a zero adds invisible padding in native PowerPoint.
+		if bp.LIns != 0 || opts.Margin != nil {
 			bodyProperties += ` lIns="` + ftoa(bp.LIns) + `"`
 		}
-		if bp.TIns != 0 {
+		if bp.TIns != 0 || opts.Margin != nil {
 			bodyProperties += ` tIns="` + ftoa(bp.TIns) + `"`
 		}
-		if bp.RIns != 0 {
+		if bp.RIns != 0 || opts.Margin != nil {
 			bodyProperties += ` rIns="` + ftoa(bp.RIns) + `"`
 		}
-		if bp.BIns != 0 {
+		if bp.BIns != 0 || opts.Margin != nil {
 			bodyProperties += ` bIns="` + ftoa(bp.BIns) + `"`
 		}
 		bodyProperties += ` rtlCol="0"`

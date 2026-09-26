@@ -1,0 +1,432 @@
+package main
+
+import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"io"
+	"math"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
+	"time"
+
+	"github.com/buairtri/pptxgengo/internal/compose"
+)
+
+type manifest struct {
+	DeckFile string                 `json:"deck_file"`
+	Schema   string                 `json:"schema"`
+	SpecSHA  string                 `json:"spec_sha256"`
+	DeckSHA  string                 `json:"deck_sha256"`
+	Slides   []renderSlide          `json:"slides"`
+	Requests []compose.ProbeRequest `json:"requests,omitempty"`
+	Plan     *compose.PlanResult    `json:"plan,omitempty"`
+}
+type nativeRect struct {
+	Left, Top, Width, Height float64
+	Rotation                 float64 `json:"rotation_degrees"`
+}
+type nativeRow struct {
+	Fill struct {
+		Visible      bool    `json:"visible"`
+		RGB          []int   `json:"rgb"`
+		Transparency float64 `json:"transparency"`
+	} `json:"fill"`
+	TextColor []int                                       `json:"text_color"`
+	Margins   *struct{ Left, Right, Top, Bottom float64 } `json:"margins"`
+	Slide     int                                         `json:"slide_index"`
+	Name      string                                      `json:"shape_name"`
+	Text      *string                                     `json:"text"`
+	Frame     nativeRect                                  `json:"shape_frame"`
+	Bounds    *nativeRect                                 `json:"text_bounds"`
+	Font      struct {
+		Name *string  `json:"name"`
+		Size *float64 `json:"size_pt"`
+		Bold *bool    `json:"bold"`
+	} `json:"font"`
+}
+type nativeResult struct {
+	Schema string      `json:"schema"`
+	Count  int         `json:"visible_slide_count"`
+	Rows   []nativeRow `json:"measurements"`
+}
+type evidence struct {
+	AdapterSHA   string               `json:"adapter_sha256"`
+	Schema       string               `json:"schema"`
+	SpecSHA      string               `json:"spec_sha256"`
+	DeckSHA      string               `json:"deck_sha256"`
+	ManifestSHA  string               `json:"manifest_sha256"`
+	MeasuredAt   string               `json:"measured_at"`
+	Measurements compose.Measurements `json:"measurements"`
+	Native       json.RawMessage      `json:"native"`
+}
+
+func hash(b []byte) string { h := sha256.Sum256(b); return hex.EncodeToString(h[:]) }
+func readJSON(path string, v any) ([]byte, error) {
+	b, e := os.ReadFile(path)
+	if e != nil {
+		return nil, e
+	}
+	d := json.NewDecoder(bytes.NewReader(b))
+	d.DisallowUnknownFields()
+	if e = d.Decode(v); e != nil {
+		return nil, fmt.Errorf("%s: %w", path, e)
+	}
+	if e = d.Decode(new(any)); e != io.EOF {
+		return nil, fmt.Errorf("%s: trailing JSON", path)
+	}
+	return b, nil
+}
+func jsonBytes(v any) []byte {
+	b, e := json.MarshalIndent(v, "", "  ")
+	if e != nil {
+		panic(e)
+	}
+	return append(b, '\n')
+}
+func writeNew(path string, b []byte) error {
+	f, e := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
+	if e != nil {
+		return e
+	}
+	_, e = f.Write(b)
+	ce := f.Close()
+	if e != nil {
+		os.Remove(path)
+		return e
+	}
+	return ce
+}
+func bundle(dir string, m manifest) (err error) {
+	if _, e := os.Lstat(dir); !os.IsNotExist(e) {
+		return fmt.Errorf("output must be a new directory: %s", dir)
+	}
+	parent := filepath.Dir(dir)
+	if err = os.MkdirAll(parent, 0755); err != nil {
+		return
+	}
+	tmp, e := os.MkdirTemp(parent, ".compose-")
+	if e != nil {
+		return e
+	}
+	defer os.RemoveAll(tmp)
+	b, e := render(m.Slides)
+	if e != nil {
+		return e
+	}
+	m.DeckSHA = hash(b)
+	m.DeckFile = filepath.Base(dir) + ".pptx"
+	if e = writeNew(filepath.Join(tmp, m.DeckFile), b); e != nil {
+		return e
+	}
+	if e = writeNew(filepath.Join(tmp, "manifest.json"), jsonBytes(m)); e != nil {
+		return e
+	}
+	return os.Rename(tmp, dir)
+}
+func color(s string) string     { return strings.TrimPrefix(s, "#") }
+func rect(r compose.Rect) frame { return frame{r.X, r.Y, r.Width, r.Height} }
+func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
+	var out []renderSlide
+	for i, s := range p.Slides {
+		rs := renderSlide{ID: s.ID, Width: spec.Slides[i].WidthPt, Height: spec.Slides[i].HeightPt}
+		if s.Title != "" {
+			rs.Elements = append(rs.Elements, element{Name: "slide-title", Kind: "text", Frame: rect(s.TitleBounds), Text: s.Title, FontFace: s.TitleFontFace, FontSize: s.TitleFontSizePt, Bold: s.TitleBold, Foreground: color(s.TitleForeground), Align: "left", MeasurementID: s.TitleMeasurementID})
+		}
+		for j, pod := range s.Pods {
+			st := spec.Slides[i].Pods[j].Style
+			name := "pod:" + base64.RawURLEncoding.EncodeToString([]byte(pod.ID))
+			rs.Elements = append(rs.Elements, element{Name: name + "-surface", Kind: "surface", Frame: rect(pod.Bounds), Background: color(pod.Surface)})
+			rs.Elements = append(rs.Elements, element{Name: name + "-title", Kind: "text", Frame: rect(pod.TitleRect), Text: pod.Title, FontFace: pod.TitleFontFace, FontSize: pod.TitleFontSizePt, Bold: pod.TitleBold, Foreground: color(pod.TitleForeground), MeasurementID: pod.TitleMeasurementID})
+			for _, r := range pod.Roles {
+				rs.Elements = append(rs.Elements, element{Name: "role:" + base64.RawURLEncoding.EncodeToString([]byte(r.ID)), Kind: "text", Frame: rect(r.Bounds), Text: r.Label, FontFace: r.FontFace, FontSize: r.FontSizePt, Bold: r.Bold, Foreground: color(r.Foreground), Background: color(r.Background), InsetX: st.HorizontalInsetPt, InsetY: st.VerticalInsetPt + st.ParagraphGapPt, Valign: "middle", MeasurementID: r.MeasurementID})
+			}
+		}
+		out = append(out, rs)
+	}
+	return out
+}
+func finite(v float64) bool  { return !math.IsNaN(v) && !math.IsInf(v, 0) }
+func near(a, b float64) bool { return finite(a) && finite(b) && math.Abs(a-b) <= 0.12 }
+func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, error) {
+	result := compose.Measurements{ByRequestID: map[string]compose.Measurement{}}
+	if n.Schema != "pptxgengo.compose-text-measurement.v2" || n.Count != len(m.Slides) {
+		return result, fmt.Errorf("native schema or slide count mismatch")
+	}
+	rows := map[string]nativeRow{}
+	for _, r := range n.Rows {
+		k := fmt.Sprintf("%d:%s", r.Slide, r.Name)
+		if _, ok := rows[k]; ok {
+			return result, fmt.Errorf("duplicate native shape %s", k)
+		}
+		rows[k] = r
+	}
+	for i, s := range m.Slides {
+		for _, e := range s.Elements {
+			k := fmt.Sprintf("%d:%s", i+1, e.Name)
+			r, ok := rows[k]
+			if !ok {
+				return result, fmt.Errorf("missing native shape %s", k)
+			}
+			delete(rows, k)
+			if !near(r.Frame.Left, e.Frame.X) || !near(r.Frame.Top, e.Frame.Y) || !near(r.Frame.Width, e.Frame.Width) || !near(r.Frame.Height, e.Frame.Height) || !near(r.Frame.Rotation, 0) {
+				return result, fmt.Errorf("native frame mismatch %s: %+v expected %+v", k, r.Frame, e.Frame)
+			}
+
+			if e.Background != "" {
+				if !r.Fill.Visible || (!finite(r.Fill.Transparency) || math.Abs(r.Fill.Transparency) > 1e-6) || rgbHex(r.Fill.RGB) != e.Background {
+					return result, fmt.Errorf("native fill mismatch %s: %+v expected %s", k, r.Fill, e.Background)
+				}
+			} else if r.Fill.Visible {
+				return result, fmt.Errorf("unexpected native fill %s", k)
+			}
+			if e.Kind == "surface" {
+				if r.Text != nil && *r.Text != "" {
+					return result, fmt.Errorf("unexpected surface text %s", k)
+				}
+				continue
+			}
+			norm := func(v string) string { return strings.ReplaceAll(strings.ReplaceAll(v, "\r\n", "\n"), "\r", "\n") }
+			if r.Text == nil || norm(*r.Text) != norm(e.Text) {
+				return result, fmt.Errorf("native text mismatch %s", k)
+			}
+			if r.Font.Name == nil || *r.Font.Name != e.FontFace || r.Font.Size == nil || !near(*r.Font.Size, e.FontSize) || r.Font.Bold == nil || *r.Font.Bold != e.Bold {
+				return result, fmt.Errorf("native font mismatch %s: %+v", k, r.Font)
+			}
+			if rgbHex(r.TextColor) != e.Foreground {
+				return result, fmt.Errorf("native text color mismatch %s: %v expected %s", k, r.TextColor, e.Foreground)
+			}
+			if r.Margins == nil || !near(r.Margins.Left, e.InsetX) || !near(r.Margins.Right, e.InsetX) || !near(r.Margins.Top, e.InsetY) || !near(r.Margins.Bottom, e.InsetY) {
+				return result, fmt.Errorf("native margins mismatch %s: %+v", k, r.Margins)
+			}
+			b := r.Bounds
+			if b == nil || !finite(b.Left) || !finite(b.Top) || !finite(b.Width) || !finite(b.Height) || b.Width <= 0 || b.Height <= 0 {
+				return result, fmt.Errorf("invalid native text bounds %s", k)
+			}
+			// Probe overflow is recorded for candidate rejection. Final text must fit its inner safe zone.
+			if fit && (b.Left < e.Frame.X+e.InsetX-0.15 || b.Top < e.Frame.Y+e.InsetY-0.15 || b.Left+b.Width > e.Frame.X+e.Frame.Width-e.InsetX+0.15 || b.Top+b.Height > e.Frame.Y+e.Frame.Height-e.InsetY+0.15) {
+				return result, fmt.Errorf("native text outside safe zone %s: %+v frame %+v insets %.2f,%.2f", k, *b, e.Frame, e.InsetX, e.InsetY)
+			}
+			result.ByRequestID[e.MeasurementID] = compose.Measurement{RenderedWidthPt: b.Width, RenderedHeightPt: b.Height}
+		}
+	}
+	if len(rows) != 0 {
+		return result, fmt.Errorf("unexpected native shapes: %d", len(rows))
+	}
+	return result, nil
+}
+func rgbHex(v []int) string {
+	if len(v) != 3 {
+		return ""
+	}
+	for _, c := range v {
+		if c < 0 || c > 255 {
+			return ""
+		}
+	}
+	return fmt.Sprintf("%02X%02X%02X", v[0], v[1], v[2])
+}
+func deckPath(dir string, m manifest) (string, error) {
+	if m.DeckFile == "" || m.DeckFile != filepath.Base(m.DeckFile) || filepath.Ext(m.DeckFile) != ".pptx" {
+		return "", fmt.Errorf("invalid bundle deck filename")
+	}
+	p := filepath.Join(dir, m.DeckFile)
+	st, e := os.Lstat(p)
+	if e != nil {
+		return "", e
+	}
+	if !st.Mode().IsRegular() {
+		return "", fmt.Errorf("bundle deck must be a regular file")
+	}
+	return p, nil
+}
+func nativeMeasure(deck, script string) ([]byte, error) {
+	abs, e := filepath.Abs(deck)
+	if e != nil {
+		return nil, e
+	}
+	// Never silently measure an unsaved, already-open copy of the same filename.
+	openScript := `on run argv
+set sourceFile to POSIX file (item 1 of argv)
+set sourceName to name of (info for sourceFile)
+tell application "Microsoft PowerPoint"
+set openNames to name of every presentation
+if openNames contains sourceName then error "Close the existing presentation named " & sourceName & " before measuring this file."
+open sourceFile
+end tell
+end run`
+	c := exec.Command("osascript", "-", abs)
+	c.Stdin = strings.NewReader(openScript)
+	b, e := c.CombinedOutput()
+	if e != nil {
+		return nil, fmt.Errorf("PowerPoint open: %w: %s", e, b)
+	}
+	c = exec.Command("osascript", script, filepath.Base(abs))
+	b, e = c.CombinedOutput()
+	if e != nil {
+		return nil, fmt.Errorf("PowerPoint measure: %w: %s", e, b)
+	}
+	return b, nil
+}
+func main() {
+	if e := run(os.Args[1:]); e != nil {
+		fmt.Fprintln(os.Stderr, "pptxcompose:", e)
+		os.Exit(1)
+	}
+}
+func run(args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("usage: pptxcompose probe|measure|build|verify [flags]")
+	}
+	fs := flag.NewFlagSet(args[0], flag.ContinueOnError)
+	specPath := fs.String("spec", "", "composition spec JSON")
+	out := fs.String("out", "", "new output directory (probe/build) or JSON file (measure/verify)")
+	dir := fs.String("bundle", "", "probe or output bundle directory")
+	evPath := fs.String("evidence", "", "native probe evidence JSON")
+	script := fs.String("adapter", "scripts/measure-compose-text.applescript", "native PowerPoint measurement adapter")
+	if e := fs.Parse(args[1:]); e != nil {
+		return e
+	}
+	if fs.NArg() != 0 || *out == "" {
+		return fmt.Errorf("--out is required; positional arguments unsupported")
+	}
+	switch args[0] {
+	case "probe", "build":
+		var spec compose.Spec
+		raw, e := readJSON(*specPath, &spec)
+		if e != nil {
+			return e
+		}
+		requests, e := compose.ProbeRequests(spec)
+		if e != nil {
+			return e
+		}
+		m := manifest{Schema: "pptxgengo.compose-bundle.v1", SpecSHA: hash(raw)}
+		if args[0] == "probe" {
+			m.Requests = requests
+			for i, q := range requests {
+				// One isolated text box per probe avoids layout interactions and keeps the
+				// calibration frame in slide points. The tall frame does not autofit text.
+				width := math.Max(960, q.TextWidthPt+72)
+				m.Slides = append(m.Slides, renderSlide{ID: q.ID, Width: width, Height: 540, Elements: []element{{Name: fmt.Sprintf("probe-%04d", i+1), Kind: "text", Frame: frame{36, 36, q.TextWidthPt, 450}, Text: q.Text, FontFace: q.FontFace, FontSize: q.FontSizePt, Bold: q.Bold, Foreground: "070154", MeasurementID: q.ID}}})
+			}
+			// The writer requires one common page size.
+			maxW := 960.0
+			for _, s := range m.Slides {
+				maxW = math.Max(maxW, s.Width)
+			}
+			for i := range m.Slides {
+				m.Slides[i].Width = maxW
+			}
+		} else {
+			var ev evidence
+			if _, e = readJSON(*evPath, &ev); e != nil {
+				return e
+			}
+			var pm manifest
+			mb, e := readJSON(filepath.Join(*dir, "manifest.json"), &pm)
+			if e != nil {
+				return e
+			}
+			dp, e := deckPath(*dir, pm)
+			if e != nil {
+				return e
+			}
+			db, e := os.ReadFile(dp)
+			if e != nil {
+				return e
+			}
+			if ev.Schema != "pptxgengo.compose-evidence.v1" || ev.SpecSHA != hash(raw) || pm.SpecSHA != hash(raw) || ev.ManifestSHA != hash(mb) || ev.DeckSHA != hash(db) || pm.DeckSHA != hash(db) || len(pm.Requests) == 0 {
+				return fmt.Errorf("stale or mismatched probe evidence")
+			}
+			if !bytes.Equal(jsonBytes(pm.Requests), jsonBytes(requests)) {
+				return fmt.Errorf("probe requests do not match current spec")
+			}
+			var nr nativeResult
+			if e = json.Unmarshal(ev.Native, &nr); e != nil {
+				return e
+			}
+			measured, e := checkNative(pm, nr, false)
+			if e != nil {
+				return e
+			}
+			// Reconstruct dimensions from raw native evidence instead of trusting an editable summary.
+			plan, e := compose.Plan(spec, measured)
+			if e != nil {
+				return e
+			}
+			m.Plan = &plan
+			m.Slides = finalSlides(spec, plan)
+		}
+		if e = bundle(*out, m); e != nil {
+			return e
+		}
+		fmt.Println(*out)
+		return nil
+	case "measure", "verify":
+		if _, e := os.Lstat(*out); !os.IsNotExist(e) {
+			return fmt.Errorf("output must be a new file: %s", *out)
+		}
+		var m manifest
+		mb, e := readJSON(filepath.Join(*dir, "manifest.json"), &m)
+		if e != nil {
+			return e
+		}
+		dp, e := deckPath(*dir, m)
+		if e != nil {
+			return e
+		}
+		db, e := os.ReadFile(dp)
+		if e != nil {
+			return e
+		}
+		if m.Schema != "pptxgengo.compose-bundle.v1" || hash(db) != m.DeckSHA {
+			return fmt.Errorf("bundle hash mismatch")
+		}
+		isFinal := args[0] == "verify"
+		if isFinal != (m.Plan != nil) {
+			return fmt.Errorf("measure requires probe bundle; verify requires built bundle")
+		}
+		adapterBytes, e := os.ReadFile(*script)
+		if e != nil {
+			return e
+		}
+		b, e := nativeMeasure(dp, *script)
+		if e != nil {
+			return e
+		}
+		afterBytes, e := os.ReadFile(dp)
+		if e != nil {
+			return e
+		}
+		if hash(afterBytes) != m.DeckSHA {
+			return fmt.Errorf("deck changed during native measurement")
+		}
+		var nr nativeResult
+		if e = json.Unmarshal(b, &nr); e != nil {
+			return fmt.Errorf("native JSON: %w: %s", e, b)
+		}
+		measured, e := checkNative(m, nr, isFinal)
+		if e != nil {
+			failure := map[string]any{"status": "failed", "reason": e.Error(), "native": json.RawMessage(b), "deck_sha256": m.DeckSHA}
+			if we := writeNew(*out+".failed.json", jsonBytes(failure)); we != nil {
+				return fmt.Errorf("%w; failed to retain native evidence: %v", e, we)
+			}
+			return e
+		}
+		ev := evidence{AdapterSHA: hash(adapterBytes), Schema: "pptxgengo.compose-evidence.v1", SpecSHA: m.SpecSHA, DeckSHA: m.DeckSHA, ManifestSHA: hash(mb), MeasuredAt: time.Now().UTC().Format(time.RFC3339), Measurements: measured, Native: b}
+		if e = writeNew(*out, jsonBytes(ev)); e != nil {
+			return e
+		}
+		fmt.Println(*out)
+		return nil
+	default:
+		return fmt.Errorf("unknown command %q", args[0])
+	}
+}

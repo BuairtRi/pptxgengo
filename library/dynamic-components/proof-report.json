@@ -1,0 +1,257 @@
+{
+  "schema": "pptxgengo.dynamic-component-proof.v1",
+  "date": "2026-09-26",
+  "status": "native_fixture_proof_not_general_catalog_approval",
+  "component_kinds": [
+    "role tile",
+    "variable-role pod"
+  ],
+  "slides": 3,
+  "pods": 7,
+  "roles": 27,
+  "probe_text_shapes": 47,
+  "final_native_shapes": 44,
+  "final_native_text_shapes": 37,
+  "unit": "pt",
+  "native_checks": [
+    "declared shape frames",
+    "exact text",
+    "uniform visible-character font name, size, bold and RGB",
+    "shape fill RGB and transparency",
+    "actual text-frame insets",
+    "text bounds inside inner safe zone",
+    "missing/extra shapes"
+  ],
+  "max_frame_delta_pt": 1.525878803931846e-05,
+  "max_text_overflow_pt": 1.525878803931846e-05,
+  "geometry_tolerance_pt": 0.12,
+  "fit_tolerance_pt": 0.15,
+  "numerical_note": "The ~0.000015pt differences are floating-point serialization noise within the declared tolerances.",
+  "layouts": [
+    {
+      "slide": "cardinality",
+      "pods": [
+        {
+          "id": "one",
+          "columns": 1,
+          "roles": 1,
+          "height_pt": 92.799999237061
+        },
+        {
+          "id": "two",
+          "columns": 1,
+          "roles": 2,
+          "height_pt": 138.799999237061
+        },
+        {
+          "id": "three",
+          "columns": 1,
+          "roles": 3,
+          "height_pt": 184.799999237061
+        }
+      ]
+    },
+    {
+      "slide": "columns",
+      "pods": [
+        {
+          "id": "five",
+          "columns": 2,
+          "roles": 5,
+          "height_pt": 184.799999237061
+        },
+        {
+          "id": "eight",
+          "columns": 2,
+          "roles": 8,
+          "height_pt": 230.799999237061
+        }
+      ]
+    },
+    {
+      "slide": "automatic",
+      "pods": [
+        {
+          "id": "auto-wide",
+          "columns": 2,
+          "roles": 5,
+          "height_pt": 184.799999237061
+        },
+        {
+          "id": "auto-narrow",
+          "columns": 1,
+          "roles": 3,
+          "height_pt": 215.999996185304
+        }
+      ]
+    }
+  ],
+  "visual_checks": [
+    {
+      "slide": 1,
+      "visually_reviewed": true,
+      "final_render_matches_reviewed_render": true
+    },
+    {
+      "slide": 2,
+      "visually_reviewed": true,
+      "final_render_matches_reviewed_render": true
+    },
+    {
+      "slide": 3,
+      "visually_reviewed": true,
+      "final_render_matches_reviewed_render": true
+    }
+  ],
+  "negative_checks": [
+    {
+      "case": "contrast",
+      "exit_code": 1,
+      "error": "pptxcompose: slide cardinality pod one role one-1: foreground #070154 on #070154 has 1.00:1 contrast; minimum is 4.5:1",
+      "no_output": true
+    },
+    {
+      "case": "duplicate-id",
+      "exit_code": 1,
+      "error": "pptxcompose: slide cardinality role IDs must be nonempty and unique across slide: \"one-1\"",
+      "no_output": true
+    },
+    {
+      "case": "invalid-columns",
+      "exit_code": 1,
+      "error": "pptxcompose: slide cardinality pod one explicit columns exceed role count",
+      "no_output": true
+    },
+    {
+      "case": "out-of-slide",
+      "exit_code": 1,
+      "error": "pptxcompose: slide cardinality pod one bounds exceed slide",
+      "no_output": true
+    },
+    {
+      "case": "stale-evidence",
+      "exit_code": 1,
+      "error": "pptxcompose: stale or mismatched probe evidence",
+      "no_output": true
+    },
+    {
+      "case": "native-measured-overflow",
+      "exit_code": 1,
+      "error": "pptxcompose: slide overflow pod one has no fitting column layout for 1 roles within 250.00 \u00d7 110.00pt at 12.00pt text; increase bounds, allow more columns, or revise labels",
+      "no_output": true
+    }
+  ],
+  "compilation": "go build ./... passed",
+  "unit_suite": "not run",
+  "assistance": "Two GPT-6-Luna agents: pure geometry/contrast planner and native adapter/code review. Root integrated CLI, corrected reviewed issues, ran native QA and inspected every rendered slide.",
+  "limits": [
+    "New engineering compositions, not pixel-perfect source reconstructions",
+    "Explicit Arial styles only; no general source typography inheritance",
+    "No top-level standalone role schema yet",
+    "No team-level connector routing, phase bands or staffing legend yet",
+    "No catalog adaptation approval inferred",
+    "Evidence guards accidental staleness; local adapters and stored raw observations remain trusted"
+  ],
+  "artifacts": [
+    {
+      "path": "library/dynamic-components/pods.json",
+      "sha256": "60e4600ccd42d65cdfd24f4fdb0007eb776880296633cf3bdd60494685fe486f",
+      "size_bytes": 13101
+    },
+    {
+      "path": "library/dynamic-components/overflow.json",
+      "sha256": "a66dc5fe25ac0b2811c89891b0e865c2e0713f1480f23abca29911cadec7d6d1",
+      "size_bytes": 1817
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/probes-v2/manifest.json",
+      "sha256": "c2a3f75bcb776fa761b96b3ebf56c4cceaf315ff25ff9a14afb7a5108fc27993",
+      "size_bytes": 53114
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/probes-v2/probes-v2.pptx",
+      "sha256": "f22a12d46ab00f6e00b636d1a0a968f9a5a03f9f2566014a89767da2300bd85e",
+      "size_bytes": 297417
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/probes-v3-evidence.json",
+      "sha256": "ae5581af748eb23645f8afb111e024b68945d0bd50faadbf952826fd8014e7e5",
+      "size_bytes": 50402
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/pods-v2/manifest.json",
+      "sha256": "a35796dc63e12a22ed7cfd34cabf6291c3f1fcae16b7e26a081ddba1427ebbbc",
+      "size_bytes": 70174
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/pods-v2/pods-v2.pptx",
+      "sha256": "2572774fe738fe150168a1f211771865b879637861432a774544a1fa7d5ae19d",
+      "size_bytes": 89381
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/pods-v2-verification.json",
+      "sha256": "e53c01c405162c52959f5a89e215a55dad1e3d6c5e5e5983850c449194098c55",
+      "size_bytes": 47368
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/pods-v2.pdf",
+      "sha256": "d26e6b22cadbc0a49dec0b5c40d243c299ed20c1ceda0408e0aa464f1904026e",
+      "size_bytes": 17940
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/overflow-evidence.json",
+      "sha256": "ec99e5c3b9508871543b6af122f148a79feb79ea98c92080bff75adc1c5886e7",
+      "size_bytes": 4405
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/overflow-probes/manifest.json",
+      "sha256": "82ae6f1b8083871f67d756875747684e2cd5ff7a8f672cb956d1b5febd5ee4d3",
+      "size_bytes": 3992
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/overflow-probes/overflow-probes.pptx",
+      "sha256": "eaa400971e9b86fe065a9646f52f74889b7afa2576dd5611ac2f7abf54c07a2e",
+      "size_bytes": 54755
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/render-v2/slide-001.png",
+      "sha256": "8d43c97e812f7700fa47a221ad4ab50dda9df7182f656703b42d5c6bc1c87b70",
+      "size_bytes": 81767
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/render-v2/slide-002.png",
+      "sha256": "21b763e628bbd2f32117eb965b84cba27e853ef8eda2e7a7bf241ec5e1b4e14f",
+      "size_bytes": 104432
+    },
+    {
+      "path": "samples/component-adaptation/dynamic-pods/render-v2/slide-003.png",
+      "sha256": "40752447ca5898829722d5261c08eca5f2bbeb24a08fb510c18ed5c0377ebaec",
+      "size_bytes": 115155
+    },
+    {
+      "path": "cmd/pptxcompose/main.go",
+      "sha256": "2d7f9ebb85ca60fff5584919b41a31dda96af49e7e3a344b1ac061c3aeef345e",
+      "size_bytes": 15607
+    },
+    {
+      "path": "cmd/pptxcompose/render.go",
+      "sha256": "2fdd0b8472cb928dbb069972c2678c73b94113a8aed1e0cae81c8d8f61f2600c",
+      "size_bytes": 3985
+    },
+    {
+      "path": "internal/compose/planner.go",
+      "sha256": "33d534a4d4b826df44fd4f61f78dadb738ec21c956d53aabe21fb1abbaeed96f",
+      "size_bytes": 24149
+    },
+    {
+      "path": "scripts/measure-compose-text.applescript",
+      "sha256": "7f66bde7b9bd4840c3287b72b34085008aaed935f2652c15e02fdcecc2bcb1fd",
+      "size_bytes": 11172
+    },
+    {
+      "path": "pptx/xml.go",
+      "sha256": "02c5706937ae65abbbcec4c24584b970a7682c85d3f576d2a054800e579df8b5",
+      "size_bytes": 117176
+    }
+  ]
+}

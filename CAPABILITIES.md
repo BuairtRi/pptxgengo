@@ -108,3 +108,16 @@ The existing slide skill prefers new body designs and permits cloning only for s
 These checks establish a usable library baseline under the new toolchain. They do not prove attractive design, no PowerPoint repair prompts, correct SVG previews, font fidelity, or safe import/re-export. Those are explicit experiments in [PRODUCT_PLAN.md](PRODUCT_PLAN.md).
 
 Survey outputs now also include `scripts/inventory-pptx.py`, 286 per-slide sidecars, three JSON inventories, and complete proposal/layout ledgers. The script was exercised on all three supplied decks. These are structural discovery artifacts, not an importer or renderer. The CLI, SQLite catalog and skill design remain proposed work.
+
+## Dynamic role and pod composition (2026-09-26)
+
+`cmd/pptxcompose` adds a bounded new-content path: `probe`, `measure`, `build`
+and `verify`. It composes native editable role rectangles into variable-role pods,
+selects fitting columns deterministically from native text measurements, checks
+semantic colors/contrast, and returns geometry anchors. Final native QA compares
+text, frames, typography, fills, foregrounds and margins.
+
+See [workflow and limits](library/dynamic-components/README.md) and the
+[fixture proof report](library/dynamic-components/proof-report.json). Explicit
+Arial styles are supported; arbitrary source typography inheritance, full team
+connectors/legends and broad component adaptation remain future work.

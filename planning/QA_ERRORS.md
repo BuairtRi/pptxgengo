@@ -189,3 +189,36 @@ The native render review covers those particular fixtures, not arbitrary content
 or full pixel-diff certification. No unit suite was run. Two Luna agents assisted
 with reference/semantic/code review; the primary agent independently inspected
 all nine shortlist source slides and all five generated fixture images.
+
+## Dynamic roles and pods — 2026-09-26
+
+- **QA-41 — Explicit zero insets disappeared in writer XML, fixed:** the writer
+  omitted zero-valued margins, allowing PowerPoint's default padding to reappear.
+  Explicit margin arrays now emit all four values, including zeros. Measurement
+  probes use zero margins; final roles use declared horizontal/vertical insets.
+- **QA-42 — Native presentation filters gave misleading results, fixed:**
+  `every presentation whose name is ...` did not reliably filter open decks;
+  iterating presentation references also stalled. The adapter reads the name
+  list once, matches literal strings, and then obtains the named presentation.
+- **QA-43 — Paragraph defaults contaminated font observations, fixed:** the
+  complete text range could return no font name for multiline text or black
+  font color for visible white text. Uniform font/style properties are checked across every non-break character,
+  while text bounds use one whole-range measurement.
+- **QA-44 — Geometry-only QA could miss styling defects, strengthened:** final
+  verification now also compares native fills, foreground colors and text-frame
+  margins to the generated plan. Planned contrast alone cannot prove the writer
+  emitted the intended native colors.
+- **QA-45 — Planner review caught row and color bugs before native acceptance:**
+  initial row placement reused the same Y coordinate; row Y now accumulates row
+  heights and gaps. RGB decoding now parses integer hex components; automatic
+  foreground selection compares numeric ratios before selecting a color string.
+- **QA-46 — Bundle boundary and freshness checks strengthened:** manifest deck
+  names must be local PPTX basenames, deck symlinks are rejected, new-only output
+  directory checks use `Lstat`, and native measurement checks that deck bytes did
+  not change during the observation. Already-open same-name decks are rejected
+  to avoid measuring unsaved state.
+
+The generated engineering examples have their own dimensions and content. They
+are not a claim of pixel-perfect reconstruction or general catalog adaptation
+approval. Native proof results and artifact hashes are recorded in
+[dynamic component proof](../library/dynamic-components/proof-report.json).
