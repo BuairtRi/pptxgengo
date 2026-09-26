@@ -154,3 +154,38 @@ bounds. SQLite has 17,451 items. The gallery verifies 61 source previews; the fu
 preview manifest has 144 entries. Native source review, ingestion and search were
 performed; no unit suite was run. Gallery HTML UI remains unverified because the
 previous browser security review blocked opening local HTML; no bypass was used.
+
+
+## Reference selection and contract application — 2026-09-26
+
+- **QA-35 — Component bounds need ownership review, corrected:** UHG43's individual
+  pale pod container is included in the selected label shape. Only the shared
+  Phase 2 backdrop and reporting connectors are excluded. The two- and three-role
+  structures are distinct; a different third-role label is a content example.
+- **QA-36 — A visible number was absent from catalog slots, corrected in contract:**
+  stock109 path14 (native shape ID22) holds `01`. N1 explicitly binds it alongside
+  title and three body paragraphs; the legacy catalog has not been silently changed.
+- **QA-37 — Source links can drift from rendered references, fixed:** the shortlist
+  gallery now hashes linked source PPTX files as well as PNGs, validates source
+  identities and pins both component and geometry inputs.
+- **QA-38 — Output containment through a symlink, fixed:** contract application
+  resolves existing parent aliases before rejecting destinations inside the source
+  project. The negative fixture failed without writing output.
+- **QA-39 — Successful native text replacement can overflow, detected:** the metric
+  long-label fixture spans 12 lines and exceeds its outer text frame by 114.55pt
+  vertically, overlapping surrounding content. Four normal fixtures/14 text segments
+  stayed inside their frames. The application command still requires post-build
+  native measurement; it does not automatically reject this long-copy case yet.
+- **QA-40 — Export readiness must be checked, recovered:** the first native PDF
+  export waited on PowerPoint's task-folder access prompt and timed out. The prompt
+  was resolved for the task folder; the resulting PDF and all subsequent exports
+  were successfully rasterized and visually reviewed. A premature raster attempt
+  before PDF availability failed; it was rerun after export completion.
+
+Evidence: [contract checks and native proof](../library/component-contracts/proof-report.json).
+Five negative input/output-boundary checks passed. Four edited scene trees and
+all retained resources were unchanged except authorized text-binding values.
+The native render review covers those particular fixtures, not arbitrary content
+or full pixel-diff certification. No unit suite was run. Two Luna agents assisted
+with reference/semantic/code review; the primary agent independently inspected
+all nine shortlist source slides and all five generated fixture images.

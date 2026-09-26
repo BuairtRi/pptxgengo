@@ -1,0 +1,122 @@
+{
+  "schema": "pptxgengo.component-proof.v1",
+  "status": "source_bound_text_fixture_proof_not_general_adaptation_approval",
+  "contracts": 4,
+  "normal_text_segments_within_outer_frames": 14,
+  "normal_text_segments_measured": 14,
+  "overflow_fixture": {
+    "lines": 12,
+    "bottom_overflow_points": 114.54544386645912
+  },
+  "checks": {
+    "negative_cases": [
+      {
+        "case": "unknown-slot",
+        "exit_code": 1,
+        "error": "error: unknown slot \"unknown\"",
+        "expected_error": "unknown slot",
+        "passed": true
+      },
+      {
+        "case": "wrong-cardinality",
+        "exit_code": 1,
+        "error": "error: slot value needs exactly 1 text segments; received 2",
+        "expected_error": "exactly 1 text segments",
+        "passed": true
+      },
+      {
+        "case": "newline",
+        "exit_code": 1,
+        "error": "error: slot value contains control/newline characters; use existing paragraph segments",
+        "expected_error": "control/newline",
+        "passed": true
+      },
+      {
+        "case": "unapproved-style",
+        "exit_code": 1,
+        "error": "error: unsupported profile \"inverse\"",
+        "expected_error": "unsupported profile",
+        "passed": true
+      },
+      {
+        "case": "symlink-output-inside-source",
+        "exit_code": 1,
+        "error": "error: output must be outside input project",
+        "passed": true
+      }
+    ],
+    "applications": [
+      {
+        "fixture": "metric",
+        "changed_bindings": 2,
+        "only_authorized_bindings_changed": true,
+        "scene_topology_unchanged": true,
+        "original_files_changed_in_clone": [
+          "slides/uhg-057.json"
+        ],
+        "all_other_resources_unchanged": true
+      },
+      {
+        "fixture": "numbered",
+        "changed_bindings": 4,
+        "only_authorized_bindings_changed": true,
+        "scene_topology_unchanged": true,
+        "original_files_changed_in_clone": [
+          "slides/uhg-109.json"
+        ],
+        "all_other_resources_unchanged": true
+      },
+      {
+        "fixture": "pod-two",
+        "changed_bindings": 1,
+        "only_authorized_bindings_changed": true,
+        "scene_topology_unchanged": true,
+        "original_files_changed_in_clone": [
+          "slides/uhg-043.json"
+        ],
+        "all_other_resources_unchanged": true
+      },
+      {
+        "fixture": "pod-three",
+        "changed_bindings": 2,
+        "only_authorized_bindings_changed": true,
+        "scene_topology_unchanged": true,
+        "original_files_changed_in_clone": [
+          "slides/uhg-043.json"
+        ],
+        "all_other_resources_unchanged": true
+      }
+    ],
+    "unit_test_suite_run": false
+  },
+  "evidence": {
+    "samples/component-adaptation/contract-checks.json": {
+      "sha256": "f1ddd75ee68ed3526ac7c887b33cce7704c99579d5e391a2ed75655af65a8900"
+    },
+    "samples/component-adaptation/native-fit-report.json": {
+      "sha256": "bad04042e570e6b9f2d503f33c74d70b75631c5214fdcc9d48ab26c8a576c2ec"
+    },
+    "samples/component-adaptation/metric-render/slide-001.png": {
+      "sha256": "a74d530353d4d81c41dea9cab9878574efbcb29d9c1b48a664898f2494114ec0"
+    },
+    "samples/component-adaptation/numbered-render/slide-001.png": {
+      "sha256": "b077d7f741a8292b7766bd30d87010b9028164b19a9072918c3d6f7f29f4f886"
+    },
+    "samples/component-adaptation/pod-two-render/slide-001.png": {
+      "sha256": "afabdec52a085135ff27b8e49b714ac8fdeb235d4837c96c68b7ed3dae191e59"
+    },
+    "samples/component-adaptation/pod-three-render/slide-001.png": {
+      "sha256": "b5fecaa87b1f5a6f744f8e1f737703ad12963f50945f4553a31ec04ce0861520"
+    },
+    "samples/component-adaptation/metric-overflow-render/slide-001.png": {
+      "sha256": "8647ad9d8fb7550a9abed11a75ff20c0ce78871cc4b461b621b40e3f598865e2"
+    }
+  },
+  "limitations": [
+    "No enabled semantic style profiles.",
+    "No arbitrary component relocation or transplantation.",
+    "No automatic apply-time overflow gate.",
+    "Outer-frame checks do not prove inner safe zones, collisions, or capacity for arbitrary text.",
+    "Gallery browser interaction remains unverified."
+  ]
+}

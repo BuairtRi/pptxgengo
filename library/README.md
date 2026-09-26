@@ -23,6 +23,15 @@ The local current database is `samples/component-expansion/catalog-v2.sqlite`.
 output paths/hashes. Large generated records, previews and databases stay local.
 Only the modernization source deck is tracked under `samples/`.
 
+## Reference selection and first text contracts
+
+A [10-reference visual shortlist](reference-variants.md) now covers metric panels,
+numbered cards and delivery pods. The local gallery enlarges each source region,
+shows its full-slide context and supports exporting design preferences.
+[`pptxcomponent`](../cmd/pptxcomponent/README.md) exposes four source-bound text
+contracts. Source styling and geometry are preserved; semantic style application,
+measured capacity and adaptation approval remain pending.
+
 ## Review and reports
 
 - [Expanded component findings](component-expansion-report.md), [canonical families](component-families.jsonl),

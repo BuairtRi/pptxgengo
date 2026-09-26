@@ -82,3 +82,12 @@ Start with metric panels, numbered cards and delivery pods. For each:
 
 Then compose a new slide from approved components on the slide grid. The current
 catalog is broader and searchable, but no candidate is yet adaptation-approved.
+
+## 2026-09-26 implementation update
+
+The first [reference shortlist](reference-variants.md) and four
+[source-bound text contracts](component-contracts/) are available through
+`pptxcomponent inspect|apply`. These fixtures preserve source styling. No style
+profile is enabled in the four contracts: the source objects include inherited
+fills, theme expressions and typography that need explicit resolution before
+neutral/subtle/inverse variants can be safely applied.

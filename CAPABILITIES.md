@@ -23,6 +23,18 @@ units, 24 shared layout families, 244 selected component examples in 74 source p
 semantic layout contracts or an integrated Go authoring command. The historical
 survey below remains a record of the pre-experiment baseline.
 
+## Reference and component contract update — 2026-09-26
+
+A [10-reference shortlist](library/reference-variants.md) adds visual comparison,
+use-case descriptions, full-slide context and preference export. The new
+`cmd/pptxcomponent inspect|apply` edits explicitly bound text slots in four pinned
+source scenes. Four normal fixtures were rendered in native PowerPoint; 14 text
+segments stayed within their outer frames. A long-copy fixture visibly overflowed
+and native measurement detected it. See the
+[proof report](library/component-contracts/proof-report.json). No component has
+been promoted to general adaptation approval; automatic fit gating, effective
+style resolution and cross-slide composition remain pending.
+
 ## Initial findings
 
 This repository has a substantial Go presentation writer. It does not yet have the CLI or agent skill pack described in the product vision. Its historical objective was fidelity to PptxGenJS 4.0.1; the next objective should be dependable authoring and revision of branded, editable presentations.

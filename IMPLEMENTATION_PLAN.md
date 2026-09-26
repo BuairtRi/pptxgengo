@@ -8,6 +8,26 @@ in [PRODUCT_PLAN.md](PRODUCT_PLAN.md); that document and
 schemas, library counts and acceptance gates below are proposed unless explicitly
 described as completed.
 
+## Current slice — reference selection and bounded edits
+
+2026-09-26: [Ten reference variants](library/reference-variants.md) now have a
+visual shortlist and exact IDs. Four source-bound text contracts are executable
+with `pptxcomponent`; native rendering and frame measurement demonstrate normal
+edits and a deliberate overflow failure. No styles or components are broadly
+adaptation-approved yet.
+
+Next gates, in order:
+
+1. Make native measurement and collision/safe-zone checks a reproducible CLI gate,
+   covering short, typical and boundary copy for each contract.
+2. Resolve effective typography, insets, fills and theme expressions before
+   enabling neutral/subtle/inverse profiles. Preserve staffing and data semantics.
+3. Expand to the general explanation row N2 and specialized evidence variants,
+   guided by the user's reference preferences.
+4. Transplant approved components, preserve relationships/resources, then compose
+   one new slide with native QA. General authoring must prove this independently
+   of source-preserving edits.
+
 ## 1. Current position
 
 Completed foundations:
