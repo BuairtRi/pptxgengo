@@ -8,7 +8,35 @@ in [PRODUCT_PLAN.md](PRODUCT_PLAN.md); that document and
 schemas, library counts and acceptance gates below are proposed unless explicitly
 described as completed.
 
-## Current slice — dynamic roles, pods and teams
+## Current slice — detailed proposal composition
+
+The first mechanics showcase was insufficiently complex in user review. The
+immediate acceptance gate is now the five-page dense proposal benchmark:
+EnableComp 3/4 and UHG 28/38/43 patterns with substantial text, aligned evidence
+relationships, shared specialists and client ownership. Keep the sparse showcase
+as a regression/example baseline. Dense layouts must pass native measurement,
+native final verification and per-slide visual inspection before catalog indexing.
+The five-slide fixture has now passed those gates and is indexed with exact
+spec/proof hashes; that acceptance applies to the authored examples only.
+
+Implemented during this wave: explicit canvas primitives, measured numbered and
+metric cards, pinned artwork, single-line accents, narrative notes, diagnostic
+`fit-report`, full-contract measurement reuse, and bounded known-deck text recovery.
+The repository skill documents their limits. The next implementation priorities
+are reusable grid/panel contracts, source-shaped diagram/ribbon geometry, rich-text
+paragraph semantics, and broader revision reconciliation. These remain pending;
+explicitly authored geometry is not a general automatic visual designer.
+
+### Next fidelity gates
+
+1. **Measured grids and panels:** turn the five dense examples into reusable row/column and nested-panel contracts. Preserve aligned activity/evidence rows, explicit gutters and safe zones; report all overflowing cells before build. Re-run changed-copy and added-row variants against native PowerPoint.
+2. **Visual evidence and source geometry:** build one deliverable-thumbnail montage and one phase ribbon/hatched roadmap extension using inventoried source graphics. Preserve editable text and pinned asset provenance, then compare against the relevant reference crop.
+3. **Rich text and architecture:** add run-level emphasis with native phrase anchors, then a nested architecture diagram with captions, icons and routed relationships. Verify attachment positions after line-wrap changes.
+4. **Revision scope:** extend the proven known-deck text-only recovery fixture to agreed formatting/layout changes, retaining a visible conflict report. General PPTX-to-semantic-YAML reconciliation remains a separate feature.
+
+For each gate, delegate reference/asset review and bounded fixtures to Luna; keep compiler changes, integration and final visual acceptance with the lead or a coding specialist. Promote only the exact passing variants into retrieval.
+
+## Completed foundation — dynamic roles, pods and teams
 
 2026-09-26: [Ten reference variants](library/reference-variants.md) now have a
 visual shortlist and exact IDs. Four source-bound text contracts are executable
@@ -46,14 +74,15 @@ whole-range bounding-box anomaly without altering copy or typography. See the
 [team fixture proof](library/dynamic-components/team-proof.json); lines remain
 editable segments and do not follow shapes moved manually in PowerPoint.
 
-Next gates, in order:
+Earlier gates and current status:
 
 1. Prove source-sized P1 variants alongside the new dynamic examples; establish
    supported style profiles from native measurements and visual review.
-2. Implement preferred N2; retain M1/M3 metric work with composition-owned
-   dividers; experiment with N5 typography and content capacity.
-3. Integrate technically supported dynamic variants into catalog retrieval and
-   the distributable skill. Keep design preference and technical approval separate.
+2. N2-inspired numbered cards and M1/M3-inspired metric compositions are
+   implemented with native measurement; N5 refinement remains pending.
+3. The distributable skill is present. Index only native-verified, visually
+   reviewed recipes, retaining their precise spec/proof hashes. Keep design
+   preference and technical approval separate.
 
 ## 1. Current position
 
@@ -85,10 +114,11 @@ capacity and adaptation remain unproven. The next work uses the representative
 worklist, reviews the remaining dedup candidates, and develops measured contracts
 for pods, identity cards and metric pairs.
 
-Not yet completed: a curated approved library, semantic slide authoring,
-general fit/collision checks, narrative generation, colleague-edit reconciliation,
-or the distributed agent skill pack. The experiments retain source topology and
-resources; they do not prove independent layout generation from a brief.
+Not yet completed: a curated broadly approved library, general semantic slide
+authoring, narrative generation, arbitrary layout fit/reflow or colleague-edit
+reconciliation. Bounded fit/collision checks and a repository skill now exist;
+they do not prove independent visual design from a brief or arbitrary PPTX-to-YAML
+recovery.
 
 **Next product milestone:** an agent can find a suitable approved design, explain
 the choice, supply new content through named slots, build and inspect the slide,

@@ -1,6 +1,6 @@
 # Presentation library — expanded component checkpoint
 
-2026-09-25. The catalog retains all **369 source slides**. Reviewed layout
+2026-09-26. The catalog retains all **369 source slides**. Reviewed layout
 families reduce classification to **306 work units**, avoiding 63 repeated
 classifications. This is not the final unique-layout count or an approved
 reusable library.
@@ -15,13 +15,21 @@ reusable library.
 | Component candidates | 315 native-group occurrences plus 244 selected source examples in 74 source patterns, consolidated into 31 semantic families; 572 named slot candidates |
 | Assets | 2,169 image/vector asset records, including 521 existing photo descriptions preserved verbatim |
 | Fonts | 58 local font files with family/style/hash metadata; these are IBM Plex variants, not a system-wide font availability audit |
-| Search | SQLite FTS5 over 17,451 items (including component families and six proposed style profiles), with source identity and readiness retained |
+| Search | SQLite FTS5 over 17,456 items (including component families and six proposed style profiles), with source identity and readiness retained |
 | Visual evidence | 144 source-indexed native previews with hashes |
 
-The local current database is `samples/component-expansion/catalog-v2.sqlite`.
+The local current database is `samples/showcase/catalog-v3.sqlite`.
 [Catalog manifest](catalog-manifest.json) records the exact current input and
 output paths/hashes. Large generated records, previews and databases stay local.
 Only the modernization source deck is tracked under `samples/`.
+
+## Dense proposal recipes
+
+Five [dense proposal recipes](showcase/README.md) are indexed as `dynamic_recipe`,
+with exact spec/proof hashes and accepted native-render reviews. These exercise
+five-phase approach, phase detail, workflow matrix, delivery organization and
+release roadmap compositions. New copy requires measurement and review; none is
+broadly adaptation-approved. The v1 mechanics showcase remains unpromoted.
 
 ## Reference selection and first text contracts
 
@@ -78,19 +86,19 @@ Run from the repository root. Python needs SQLite FTS5 support.
 
 ```sh
 python3 scripts/catalog-index.py search \
-  --db samples/component-expansion/catalog-v2.sqlite --kind component_family --query metric --limit 5
+  --db samples/showcase/catalog-v3.sqlite --kind component_family --query metric --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/component-expansion/catalog-v2.sqlite --kind style_profile --query neutral --limit 5
+  --db samples/showcase/catalog-v3.sqlite --kind style_profile --query neutral --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/component-expansion/catalog-v2.sqlite --kind component --query pod --limit 5
+  --db samples/showcase/catalog-v3.sqlite --kind component --query pod --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/component-expansion/catalog-v2.sqlite --kind font --query 'IBM Plex Mono' --limit 5
+  --db samples/showcase/catalog-v3.sqlite --kind font --query 'IBM Plex Mono' --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/component-expansion/catalog-v2.sqlite --kind layout_family --query bio --limit 5
+  --db samples/showcase/catalog-v3.sqlite --kind layout_family --query bio --limit 5
 python3 scripts/catalog-index.py search \
-  --db samples/component-expansion/catalog-v2.sqlite --kind asset --query 'glass atrium' --limit 5
+  --db samples/showcase/catalog-v3.sqlite --kind asset --query 'glass atrium' --limit 5
 python3 scripts/catalog-index.py inspect \
-  --db samples/component-expansion/catalog-v2.sqlite \
+  --db samples/showcase/catalog-v3.sqlite \
   --id component:delivery-pod-three-roles:instance-001
 ```
 

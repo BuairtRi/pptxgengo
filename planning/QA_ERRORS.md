@@ -255,3 +255,72 @@ approval. Native proof results and artifact hashes are recorded in
 See [team proof](../library/dynamic-components/team-proof.json). The examples use
 new geometry and content informed by UHG43; the source-sized reconstruction gate
 and PowerPoint-glued connector behavior remain separate work.
+
+## Autonomous showcase wave — 2026-09-26
+
+- **QA-53 — Accent collision coverage was incomplete, fixed in review:** initial
+  checks covered canvas text/images only. They now include slide title, cards,
+  pods, standalone roles, phase surfaces, legend and reporting strokes. Accents
+  require an unfilled target so a text-box fill cannot hide the artwork.
+- **QA-54 — Surface stacking could hide a highlight, fixed:** canvas backgrounds
+  now precede accents; text follows them. Surfaces have background semantics in
+  this bounded compositor. Render review still decides whether emphasis works.
+- **QA-55 — Alpha crop threshold could discard faint edge pixels, fixed:** tight
+  derived assets now include every nonzero alpha pixel. Original PNGs, dimensions,
+  source hashes and derivation records are retained in the selected asset catalog.
+- **QA-56 — Connected diagram strokes need explicit endpoint relationships:** the
+  canvas collision checker includes stroke width, so line ends touching a box are
+  intentional overlaps and must name the connected boxes in `allow_overlap`.
+- **QA-57 — Reusing text evidence needs a full measurement-contract comparison:**
+  the explicit reuse flag still requires source manifest/deck/evidence hashes and
+  exact equality of all text probe requests. It records the old spec hash and
+  never removes final native verification. Changed text or inner width needs new
+  evidence; geometry-only edits do not require measuring identical text again.
+- **QA-58 — Wrapped trailing spaces can exceed a text frame without visible
+  overflow, corrected:** native probe `ask` reported width 370.565pt in a 370pt
+  frame. A character-level inspection found only character 92, a space, outside
+  the frame (left 401.810pt, width 4.755pt, right edge 406.565pt versus 406pt).
+  The v5 adapter excludes whitespace from visible bounds while still checking
+  its font/color. No copy, font size or layout was changed to hide this warning.
+  Character/font property snapshots reduce native automation round trips.
+- **QA-59 — Text recovery ignored the slide root coordinate transform, fixed:**
+  a task-copy mutation shifted the root frame while leaving child coordinates
+  unchanged. Recovery now compares root coordinates, rejects nonzero root
+  rotation/reflection and checks source deck/bundle slide counts. The shifted-root
+  negative fixture is retained; arbitrary imported layout reconciliation is still
+  outside text-only recovery.
+- **QA-60 — The first showcase did not exercise proposal complexity:** user review
+  found it too sparse. It is retained as a mechanics baseline. The new five-page
+  benchmark follows EnableComp 3/4 and UHG 28/38/43, with full activity/output rows,
+  workflow relationships, dense phase detail, client ownership and shared roles.
+  Word/object counts are diagnostics; native and visual review remain separate.
+- **QA-61 — Filled labels lacked deliberate padding:** showcase-v1's comparison
+  headers and architecture bars have zero internal margins. The dense generator
+  defines padded cells and separately inset panel text, avoiding double padding.
+  The v1 artifact is preserved as reviewed, not silently overwritten.
+- **QA-62 — First-error fit diagnostics made dense-page iteration inefficient:**
+  `fit-report` now records every fixed zone's measured and available width/height,
+  overflow in points, and the full planner outcome. A two-overflow fixture reports
+  both independently; 119 fixed zones from the existing measured baseline fit.
+- **QA-63 — Dense layout native fit rejected nine zones:** the first 258-probe
+  pass found one activity bullet, four matrix cells, the team assumptions copy
+  and three roadmap labels outside their allocated heights. Reallocated bullet
+  heights, adjusted matrix row height/padding and enlarged the team copy frame
+  without shrinking fonts. The roadmap correction replaced redundant long bar
+  labels with explicit month labels. Original failure report is retained.
+- **QA-64 — Schedule pages contradicted one another:** the phase narrative targeted
+  a first release in weeks 1–12 while the first roadmap placed release in months
+  5–7. Revised the month-level roadmap to a first release by month 3 and expansion
+  afterwards. Changed labels and widths require fresh native measurements.
+- **QA-65 — Dense team routing was legal but visually crowded:** the program
+  analyst branch ran 4pt from the pod trunk. Exchanged the horizontal positions
+  of Program manager and Change lead so the analyst reports vertically. Copy,
+  fonts, widths, role IDs and measurement request order remain unchanged.
+
+## QA66 — Recovery trusted manifest fields without checking the original scene
+
+The code audit found that a valid deck hash alone did not validate the manifest's object frames/text. Recovery now checks the original shape tree against the manifest, then checks returned object types, slide size, frames and reflection state. A real text edit saved by PowerPoint still recovers as exactly one change. Focused negative fixtures record the rejected structural edits.
+
+## QA67 — Fit-report tolerances differed from planner contracts
+
+The fixed-zone report previously used one tolerance for different component contracts and handled whitespace-only titles differently from probe generation. It now uses each contract's tolerance, trims title presence consistently, and reports the tolerance per zone. All 244 fixed zones in the final dense sample fit; the complete planner also covers dynamic zones, collisions and routes.

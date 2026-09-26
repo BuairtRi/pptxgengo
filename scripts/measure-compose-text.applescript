@@ -1,4 +1,5 @@
--- Read-only whole-text-range measurement for generated composition probes.
+-- Read-only native character-bound measurement for generated compositions.
+-- Read character/font property snapshots to reduce AppleEvent round trips.
 -- The probe presentation must already be open in PowerPoint. This script never
 -- edits, saves, exports, or closes a presentation.
 use scripting additions
@@ -113,24 +114,25 @@ on run argv
 								set fullTextLength to text length of tr
 							repeat with charIndex from 1 to fullTextLength
 								set charRange to character charIndex of tr
-								set charText to content of charRange
+								set charProperties to properties of charRange
+								set charText to content of charProperties
 								if charText is not return and charText is not linefeed then
 									try
-										set charFont to font of charRange
+										set charFont to properties of font of charRange
 										set charFontName to font name of charFont
 										set charFontSize to font size of charFont
 											set charBold to bold of charFont
 										set charFontColor to font color of charFont
-										set charLeft to left bounds of charRange
-										set charTop to top bounds of charRange
-										set charWidth to bounds width of charRange
-										set charHeight to bounds height of charRange
+										set charLeft to left bounds of charProperties
+										set charTop to top bounds of charProperties
+										set charWidth to bounds width of charProperties
+										set charHeight to bounds height of charProperties
 									on error
 										error "Font attributes unavailable for character " & charIndex & " in " & shapeName number 75
 									end try
 									if charFontName is missing value or charFontSize is missing value or charBold is missing value or charFontColor is missing value or (count of charFontColor) is not 3 then error "Mixed or unresolved character font/color in " & shapeName number 76
 									if charWidth < 0 or charHeight < 0 then error "Character has negative bounds: " & shapeName & " character " & charIndex number 83
-									if charWidth > 0 and charHeight > 0 then
+									if charWidth > 0 and charHeight > 0 and charText is not " " and charText is not tab then
 										set charRight to charLeft + charWidth
 										set charBottom to charTop + charHeight
 										if unionLeft is missing value then
@@ -179,7 +181,7 @@ on run argv
 
 	if visibleSlideCount is 0 then error "Presentation has no visible slides" number 72
 	if outputRows is "" then error "Presentation has no visible shapes to measure" number 73
-	return "{\"schema\":\"pptxgengo.compose-text-measurement.v4\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-line-break character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
+	return "{\"schema\":\"pptxgengo.compose-text-measurement.v5\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-whitespace character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
 end run
 
 on absoluteValue(valueNumber)

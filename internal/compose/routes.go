@@ -112,6 +112,14 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 	for _, q := range p.Roles {
 		obs = append(obs, obstacle{requestID("route-root", q.ID), q.Bounds})
 	}
+	for _, c := range p.Cards {
+		obs = append(obs, obstacle{requestID("route-card", c.ID), c.Bounds})
+	}
+	for _, c := range p.Canvas {
+		if c.Kind == "text" || c.Kind == "image" {
+			obs = append(obs, obstacle{requestID("route-canvas", c.ID), c.Bounds})
+		}
+	}
 	if p.TitleMeasurementID != "" {
 		obs = append(obs, obstacle{requestID("route-title"), p.TitleBounds})
 	}

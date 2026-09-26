@@ -52,6 +52,12 @@ type Spec struct {
 }
 
 type SlideSpec struct {
+	Accents         []AccentSpec         `json:"accents,omitempty"`
+	Role            string               `json:"role,omitempty"`
+	Takeaway        string               `json:"takeaway,omitempty"`
+	Notes           string               `json:"notes,omitempty"`
+	Canvas          []CanvasSpec         `json:"canvas,omitempty"`
+	Cards           []CardSpec           `json:"cards,omitempty"`
 	ID              string               `json:"id"`
 	Title           string               `json:"title"`
 	WidthPt         float64              `json:"width_pt"`
@@ -112,6 +118,7 @@ type RoleSpec struct {
 // usable inner width; the caller should measure the text with zero textbox
 // margins. Insets are returned separately for tile geometry and auditability.
 type ProbeRequest struct {
+	Align             string  `json:"align,omitempty"`
 	ID                string  `json:"id"`
 	SlideID           string  `json:"slide_id"`
 	PodID             string  `json:"pod_id,omitempty"`
@@ -132,6 +139,8 @@ type ProbeRequest struct {
 }
 
 type Measurement struct {
+	OffsetXPt        float64 `json:"offset_x_pt,omitempty"`
+	OffsetYPt        float64 `json:"offset_y_pt,omitempty"`
 	RenderedWidthPt  float64 `json:"rendered_width_pt"`
 	RenderedHeightPt float64 `json:"rendered_height_pt"`
 }
@@ -146,6 +155,9 @@ type PlanResult struct {
 }
 
 type PlannedSlide struct {
+	Accents            []PlannedAccent     `json:"accents,omitempty"`
+	Canvas             []PlannedCanvas     `json:"canvas,omitempty"`
+	Cards              []PlannedCard       `json:"cards,omitempty"`
 	ID                 string              `json:"id"`
 	Title              string              `json:"title"`
 	TitleFontFace      string              `json:"title_font_face"`
@@ -341,6 +353,19 @@ func ProbeRequests(spec Spec) ([]ProbeRequest, error) {
 			return nil, err
 		}
 		out = append(out, team...)
+		cards, err := cardProbes(s)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, cards...)
+		out = append(out, canvasProbes(s)...)
+	}
+	for _, q := range out {
+		for _, r := range q.Text {
+			if (r < 0x20 && r != '\t' && r != '\n' && r != '\r') || r == 0xFFFE || r == 0xFFFF {
+				return nil, fmt.Errorf("measurement %s contains an unsupported XML text character", q.ID)
+			}
+		}
 	}
 	return out, nil
 }
@@ -475,6 +500,15 @@ func validateSpec(spec Spec) error {
 			}
 		}
 		if err := validateTeam(s, componentIDs); err != nil {
+			return err
+		}
+		if err := validateCards(s, componentIDs); err != nil {
+			return err
+		}
+		if err := validateAccents(s, componentIDs); err != nil {
+			return err
+		}
+		if err := validateCanvas(s, componentIDs); err != nil {
 			return err
 		}
 		if err := validateConnectionSpecs(s); err != nil {
@@ -670,7 +704,16 @@ func Plan(spec Spec, measurements Measurements) (PlanResult, error) {
 		if err := planTeam(s, &ps, measurements); err != nil {
 			return PlanResult{}, err
 		}
+		if err := planCards(s, &ps, measurements); err != nil {
+			return PlanResult{}, err
+		}
+		if err := planCanvas(s, &ps, measurements); err != nil {
+			return PlanResult{}, err
+		}
 		if err := planConnections(s, &ps); err != nil {
+			return PlanResult{}, err
+		}
+		if err := planAccents(s, &ps, measurements); err != nil {
 			return PlanResult{}, err
 		}
 		result.Slides = append(result.Slides, ps)

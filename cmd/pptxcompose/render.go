@@ -1,8 +1,15 @@
 package main
 
 import (
+	"bytes"
+	"encoding/base64"
 	"fmt"
 	"github.com/buairtri/pptxgengo/pptx"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
+	"math"
+	"os"
 )
 
 type frame struct {
@@ -12,6 +19,10 @@ type frame struct {
 	Height float64 `json:"height"`
 }
 type element struct {
+	AssetMode     string   `json:"asset_mode,omitempty"`
+	AssetPath     string   `json:"asset_path,omitempty"`
+	AssetSHA256   string   `json:"asset_sha256,omitempty"`
+	AltText       string   `json:"alt_text,omitempty"`
 	Name          string   `json:"name"`
 	Kind          string   `json:"kind"`
 	Frame         frame    `json:"frame"`
@@ -30,6 +41,7 @@ type element struct {
 	ConnectionIDs []string `json:"connection_ids,omitempty"`
 }
 type renderSlide struct {
+	Notes    string    `json:"notes,omitempty"`
 	ID       string    `json:"id"`
 	Width    float64   `json:"width"`
 	Height   float64   `json:"height"`
@@ -54,17 +66,44 @@ func render(slides []renderSlide) ([]byte, error) {
 	}
 	p.Author = "pptxgengo"
 	p.Company = "West Monroe"
-	p.Title = "Editable role and pod compositions"
-	p.Subject = "Illustrative component fixtures; no staffing commitments"
+	p.Title = "Editable PowerPoint compositions"
+	p.Subject = "Illustrative proposal and component examples"
 	p.Theme = pptx.ThemeProps{HeadFontFace: "Arial", BodyFontFace: "Arial"}
 	for _, rs := range slides {
 		if rs.Width != slides[0].Width || rs.Height != slides[0].Height {
 			return nil, fmt.Errorf("mixed slide sizes unsupported")
 		}
 		s := p.AddSlide()
+		s.PresSlide().Name = "compose:" + base64.RawURLEncoding.EncodeToString([]byte(rs.ID))
 		s.Background(&pptx.BackgroundProps{Color: "FFFFFF"})
-		s.AddNotes("Illustrative roles for component development. Semantic IDs, measurements and fit status are recorded in the adjacent composition report. These roles are not a client staffing proposal.")
+		if rs.Notes != "" {
+			s.AddNotes(rs.Notes)
+		}
 		for _, e := range rs.Elements {
+			if e.Kind == "image" {
+				b, err := os.ReadFile(e.AssetPath)
+				if err != nil {
+					return nil, err
+				}
+				if len(b) > 50*1024*1024 {
+					return nil, fmt.Errorf("asset exceeds 50MB")
+				}
+				if hash(b) != e.AssetSHA256 {
+					return nil, fmt.Errorf("asset hash mismatch: %s", e.AssetPath)
+				}
+				cfg, format, err := image.DecodeConfig(bytes.NewReader(b))
+				if err != nil {
+					return nil, err
+				}
+				if e.AssetMode != "stretch" && math.Abs((e.Frame.Width/e.Frame.Height)/(float64(cfg.Width)/float64(cfg.Height))-1) > 0.005 {
+					return nil, fmt.Errorf("image %s aspect ratio differs from source; supply a preserved-aspect frame", e.Name)
+				}
+				err = s.AddImage(&pptx.ImageProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, DataOrPathProps: pptx.DataOrPathProps{Data: "image/" + format + ";base64," + base64.StdEncoding.EncodeToString(b)}, AltText: e.AltText})
+				if err != nil {
+					return nil, err
+				}
+				continue
+			}
 			if e.Kind == "line" {
 				if err := s.AddShape(pptx.ShapeTypeLine, &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Fill: &pptx.ShapeFillProps{Type: "none"}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: e.Foreground}, Width: e.LineWidth, BeginArrowType: "none", EndArrowType: "none"}}); err != nil {
 					return nil, err

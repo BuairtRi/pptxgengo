@@ -363,6 +363,26 @@ def build(args):
                 if row['source_hashes'].get(component['source_id']) != component['source_sha256']:
                     raise ValueError('Family source hash mismatch: '+row['id'])
             extras_items.append(semantic_item(row))
+        elif row.get('kind') == 'dynamic_recipe':
+            if row.get('readiness') != 'native_fixture_verified' or row.get('adaptation_approved') is not False:
+                raise ValueError('Dynamic recipe must retain bounded fixture status: '+str(row.get('id')))
+            spec_path = Path(row.get('spec_path', ''))
+            proof_path = Path(row.get('proof_path', ''))
+            if not spec_path.is_file() or file_hash(spec_path) != row.get('spec_sha256'):
+                raise ValueError('Dynamic recipe spec hash mismatch: '+str(row.get('id')))
+            if not proof_path.is_file() or file_hash(proof_path) != row.get('proof_sha256'):
+                raise ValueError('Dynamic recipe proof hash mismatch: '+str(row.get('id')))
+            spec = json.loads(spec_path.read_text())
+            if row.get('slide_id') not in {x.get('id') for x in spec.get('slides', [])}:
+                raise ValueError('Dynamic recipe slide is missing: '+str(row.get('id')))
+            proof = json.loads(proof_path.read_text())
+            if proof.get('status') != 'native_fixture_proof_not_general_catalog_approval':
+                raise ValueError('Dynamic recipe proof status invalid: '+str(row.get('id')))
+            if not any(x.get('path') == row['spec_path'] and x.get('sha256') == row['spec_sha256'] for x in proof.get('inputs', [])):
+                raise ValueError('Dynamic recipe proof belongs to another spec: '+str(row.get('id')))
+            if not any(x.get('id') == row['slide_id'] and x.get('reviewed') is True and x.get('accepted') is True for x in proof.get('visual_review', [])):
+                raise ValueError('Dynamic recipe slide has no accepted visual review: '+str(row.get('id')))
+            extras_items.append(semantic_item(row))
         elif row.get('kind') == 'style_profile':
             if not row.get('tokens') or row.get('readiness') != 'proposed_contract':
                 raise ValueError('Malformed style contract: '+str(row.get('id')))

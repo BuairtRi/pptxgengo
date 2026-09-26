@@ -28,7 +28,7 @@ save source decks. Supply `--adapter` if running outside the repository root.
    isolated text shape for every feasible role width and title. Fonts, weight,
    paragraph spacing, insets and wrapping are explicit.
 2. **Measure:** opens the generated probe deck in PowerPoint; measures the union
-   of native character bounds (retaining whole-range bounds for diagnosis); checks text, actual font and known shape frames; records raw native
+   of native non-whitespace character bounds (retaining whole-range bounds for diagnosis); checks text, actual font and known shape frames; records raw native
    measurements and hashes of the spec, PPTX and manifest. Known frame dimensions
    calibrate the returned geometry to points.
 3. **Build:** requires matching evidence, reconstructs dimensions from its raw
@@ -83,3 +83,11 @@ three-pod reporting tree with a shared phase surface, and a reporting path aroun
 standalone specialists. See [the team contract and limits](team.md) and
 [its separate native proof](team-proof.json). The earlier pod proof remains a
 historical record of its exact code and measurement adapter.
+
+## Additional authoring components
+
+[Numbered rows and metrics](cards.md) add measured card contracts with light/dark
+profiles. [Canvas elements and accents](canvas.md) support varied new layouts,
+pinned PNG/JPEG assets, measured whole-text emphasis, and bounded recovery of
+colleague text edits. The [showcase](../showcase/README.md) combines these paths
+into a proposal-style review deck.

@@ -7,7 +7,8 @@ Requires **Go 1.27.1 or newer**.
 The planned product is a CLI and agent skill pack for branded presentation
 authoring, quality checks, reusable slide libraries, and revisions after
 colleagues edit a deck in PowerPoint. **Experimental reconstruction and QA CLIs
-now exist; the complete authoring CLI and skill pack are still planned.**
+now exist, alongside measured composition and a repository agent skill pack.
+The full product remains under development.**
 The first target is detailed West Monroe proposal and
 document-style decks.
 
@@ -16,7 +17,9 @@ document-style decks.
 - [Current remaining-work plan and library inventory/curation sequence](IMPLEMENTATION_PLAN.md)
 - [SQLite catalog, narrative model, composition, and design passes](DESIGN_WORKFLOW.md)
 - [Searchable library checkpoint, deduplication decisions and commands](library/README.md)
-- [Dynamic editable role and pod composition](library/dynamic-components/README.md)
+- [Measured roles, pods, teams, cards and canvas composition](library/dynamic-components/README.md)
+- [Capability review deck and reproducible spec](library/showcase/README.md)
+- [Agent skill pack](skills/pptxgengo/SKILL.md)
 - [Source corpus and inventory policy](planning/README.md)
 - [UHG reconstruction results, native placement experiments, and QA evidence](planning/RECONSTRUCTION_CHECKPOINT.md)
 - [Go port conventions](PORTING.md)

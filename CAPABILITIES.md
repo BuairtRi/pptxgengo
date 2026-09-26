@@ -2,6 +2,26 @@
 
 Survey date: 2026-09-25. Baseline: local `master`, commit `82b44057`, plus the Go version change described below. This is a code and workflow survey, not a visual certification of generated presentations. Remote branch observations use locally available refs.
 
+## Current authoring work — 2026-09-26
+
+The latest `pptxcompose` path includes measured numbered/metric cards, native
+canvas text/surfaces/rules, pinned PNG/JPEG imports, narrative notes, single-line
+highlight/underline anchors, a complete fixed-zone `fit-report`, and bounded
+`recover-text --text-only` for known generated decks. Explicit measurement reuse
+requires the entire probe contract to remain unchanged. The repository now has
+an [agent skill pack](skills/pptxgengo/SKILL.md).
+
+The user found the first 11-slide showcase too sparse. The follow-up
+[dense proposal benchmark](library/showcase/README.md) uses EnableComp 3/4 and
+UHG 28/38/43 as structural references. All five final slides passed native verification
+and visual review: 318 objects, 258 text blocks, and zero fixed-zone fit failures.
+The [proof](library/showcase/dense-proof.json) also records a five-slide scene
+roundtrip and recovery of one actual PowerPoint text edit. Dense content can be authored with the
+current native primitives; reusable measured grid/panel contracts and rich
+diagram geometry remain gaps. See the [reference benchmark](planning/COMPLEXITY_BENCHMARK.md)
+and [implementation review](planning/DENSE_LAYOUT_GAPS.md). Historical survey
+entries below describe their original checkpoint, not current absence of those tools.
+
 ## Reconstruction experiment update
 
 The subsequent UHG experiment added `cmd/pptxscene`, `cmd/pptxdiff` and

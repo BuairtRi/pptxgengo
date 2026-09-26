@@ -20,13 +20,14 @@ import (
 )
 
 type manifest struct {
-	DeckFile string                 `json:"deck_file"`
-	Schema   string                 `json:"schema"`
-	SpecSHA  string                 `json:"spec_sha256"`
-	DeckSHA  string                 `json:"deck_sha256"`
-	Slides   []renderSlide          `json:"slides"`
-	Requests []compose.ProbeRequest `json:"requests,omitempty"`
-	Plan     *compose.PlanResult    `json:"plan,omitempty"`
+	DeckFile          string                 `json:"deck_file"`
+	Schema            string                 `json:"schema"`
+	SpecSHA           string                 `json:"spec_sha256"`
+	DeckSHA           string                 `json:"deck_sha256"`
+	Slides            []renderSlide          `json:"slides"`
+	Requests          []compose.ProbeRequest `json:"requests,omitempty"`
+	ReusedFromSpecSHA string                 `json:"reused_from_spec_sha256,omitempty"`
+	Plan              *compose.PlanResult    `json:"plan,omitempty"`
 }
 type nativeRect struct {
 	Left, Top, Width, Height float64
@@ -143,7 +144,19 @@ func rect(r compose.Rect) frame { return frame{r.X, r.Y, r.Width, r.Height} }
 func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
 	var out []renderSlide
 	for i, s := range p.Slides {
-		rs := renderSlide{ID: s.ID, Width: spec.Slides[i].WidthPt, Height: spec.Slides[i].HeightPt}
+		rs := renderSlide{ID: s.ID, Width: spec.Slides[i].WidthPt, Height: spec.Slides[i].HeightPt, Notes: spec.Slides[i].Notes}
+		for _, e := range canvasElements(s.Canvas) {
+			if e.Kind == "surface" {
+				rs.Elements = append(rs.Elements, e)
+			}
+		}
+		rs.Elements = append(rs.Elements, accentElements(s.Accents)...)
+		for _, e := range canvasElements(s.Canvas) {
+			if e.Kind != "surface" {
+				rs.Elements = append(rs.Elements, e)
+			}
+		}
+		rs.Elements = append(rs.Elements, cardElements(s.Cards)...)
 
 		for _, ph := range s.Phases {
 			name := "phase:" + base64.RawURLEncoding.EncodeToString([]byte(ph.ID))
@@ -151,7 +164,7 @@ func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
 			rs.Elements = append(rs.Elements, element{Name: name + "-label", Kind: "text", Frame: rect(ph.TitleRect), Text: ph.Title, FontFace: ph.TitleFontFace, FontSize: ph.TitleFontSizePt, Bold: ph.TitleBold, Foreground: color(ph.Foreground), MeasurementID: ph.TitleMeasurementID})
 		}
 		rs.Elements = append(rs.Elements, connectorElements(s.Connections)...)
-		if s.Title != "" {
+		if s.TitleMeasurementID != "" {
 			rs.Elements = append(rs.Elements, element{Name: "slide-title", Kind: "text", Frame: rect(s.TitleBounds), Text: s.Title, FontFace: s.TitleFontFace, FontSize: s.TitleFontSizePt, Bold: s.TitleBold, Foreground: color(s.TitleForeground), Align: "left", MeasurementID: s.TitleMeasurementID})
 		}
 		for j, pod := range s.Pods {
@@ -181,7 +194,7 @@ func finite(v float64) bool  { return !math.IsNaN(v) && !math.IsInf(v, 0) }
 func near(a, b float64) bool { return finite(a) && finite(b) && math.Abs(a-b) <= 0.12 }
 func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, error) {
 	result := compose.Measurements{ByRequestID: map[string]compose.Measurement{}}
-	if (n.Schema != "pptxgengo.compose-text-measurement.v2" && n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4") || n.Count != len(m.Slides) {
+	if (n.Schema != "pptxgengo.compose-text-measurement.v2" && n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5") || n.Count != len(m.Slides) {
 		return result, fmt.Errorf("native schema or slide count mismatch")
 	}
 	rows := map[string]nativeRow{}
@@ -204,8 +217,14 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				return result, fmt.Errorf("native frame mismatch %s: %+v expected %+v", k, r.Frame, e.Frame)
 			}
 
+			if e.Kind == "image" {
+				if r.Text != nil && *r.Text != "" {
+					return result, fmt.Errorf("unexpected image text %s", k)
+				}
+				continue
+			}
 			if e.Kind == "line" {
-				if (n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4") || !r.Line.Visible || rgbHex(r.Line.RGB) != e.Foreground || !near(r.Line.WidthPt, e.LineWidth) || math.Abs(r.Line.Transparency) > 1e-6 || !finite(r.Line.Transparency) || r.Line.BeginArrow != "no arrowhead" || r.Line.EndArrow != "no arrowhead" {
+				if (n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5") || !r.Line.Visible || rgbHex(r.Line.RGB) != e.Foreground || !near(r.Line.WidthPt, e.LineWidth) || math.Abs(r.Line.Transparency) > 1e-6 || !finite(r.Line.Transparency) || r.Line.BeginArrow != "no arrowhead" || r.Line.EndArrow != "no arrowhead" {
 					return result, fmt.Errorf("native line mismatch %s: %+v", k, r.Line)
 				}
 				if r.Text != nil && *r.Text != "" {
@@ -213,7 +232,7 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				}
 				continue
 			}
-			if (n.Schema == "pptxgengo.compose-text-measurement.v3" || n.Schema == "pptxgengo.compose-text-measurement.v4") && r.Line.Visible {
+			if (n.Schema == "pptxgengo.compose-text-measurement.v3" || n.Schema == "pptxgengo.compose-text-measurement.v4" || n.Schema == "pptxgengo.compose-text-measurement.v5") && r.Line.Visible {
 				return result, fmt.Errorf("unexpected outline %s", k)
 			}
 
@@ -251,7 +270,7 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 			if fit && (b.Left < e.Frame.X+e.InsetX-0.15 || b.Top < e.Frame.Y+e.InsetY-0.15 || b.Left+b.Width > e.Frame.X+e.Frame.Width-e.InsetX+0.15 || b.Top+b.Height > e.Frame.Y+e.Frame.Height-e.InsetY+0.15) {
 				return result, fmt.Errorf("native text outside safe zone %s: %+v frame %+v insets %.2f,%.2f", k, *b, e.Frame, e.InsetX, e.InsetY)
 			}
-			result.ByRequestID[e.MeasurementID] = compose.Measurement{RenderedWidthPt: b.Width, RenderedHeightPt: b.Height}
+			result.ByRequestID[e.MeasurementID] = compose.Measurement{RenderedWidthPt: b.Width, RenderedHeightPt: b.Height, OffsetXPt: b.Left - e.Frame.X - e.InsetX, OffsetYPt: b.Top - e.Frame.Y - e.InsetY}
 		}
 	}
 	if len(rows) != 0 {
@@ -320,12 +339,15 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxcompose probe|measure|build|verify [flags]")
+		return fmt.Errorf("usage: pptxcompose probe|measure|fit-report|build|verify|recover-text [flags]")
 	}
 	fs := flag.NewFlagSet(args[0], flag.ContinueOnError)
+	returned := fs.String("returned", "", "colleague-edited generated PPTX for recover-text")
+	textOnly := fs.Bool("text-only", false, "recover text while restoring original spec styling; geometry changes require scene extraction")
 	specPath := fs.String("spec", "", "composition spec JSON")
 	out := fs.String("out", "", "new output directory (probe/build) or JSON file (measure/verify)")
 	dir := fs.String("bundle", "", "probe or output bundle directory")
+	reuse := fs.Bool("reuse-measurements", false, "explicitly reuse native measurements when every text probe request is unchanged")
 	evPath := fs.String("evidence", "", "native probe evidence JSON")
 	script := fs.String("adapter", "scripts/measure-compose-text.applescript", "native PowerPoint measurement adapter")
 	if e := fs.Parse(args[1:]); e != nil {
@@ -335,7 +357,16 @@ func run(args []string) error {
 		return fmt.Errorf("--out is required; positional arguments unsupported")
 	}
 	switch args[0] {
-	case "probe", "build":
+	case "recover-text":
+		if *returned == "" {
+			return fmt.Errorf("--returned required")
+		}
+		if e := recoverText(*specPath, *dir, *returned, *out, *textOnly); e != nil {
+			return e
+		}
+		fmt.Println(*out)
+		return nil
+	case "probe", "build", "fit-report":
 		var spec compose.Spec
 		raw, e := readJSON(*specPath, &spec)
 		if e != nil {
@@ -352,7 +383,7 @@ func run(args []string) error {
 				// One isolated text box per probe avoids layout interactions and keeps the
 				// calibration frame in slide points. The tall frame does not autofit text.
 				width := math.Max(960, q.TextWidthPt+72)
-				m.Slides = append(m.Slides, renderSlide{ID: q.ID, Width: width, Height: 540, Elements: []element{{Name: fmt.Sprintf("probe-%04d", i+1), Kind: "text", Frame: frame{36, 36, q.TextWidthPt, 450}, Text: q.Text, FontFace: q.FontFace, FontSize: q.FontSizePt, Bold: q.Bold, Foreground: "070154", MeasurementID: q.ID}}})
+				m.Slides = append(m.Slides, renderSlide{ID: q.ID, Width: width, Height: 540, Elements: []element{{Name: fmt.Sprintf("probe-%04d", i+1), Kind: "text", Frame: frame{36, 36, q.TextWidthPt, 450}, Text: q.Text, FontFace: q.FontFace, FontSize: q.FontSizePt, Bold: q.Bold, Foreground: "070154", Align: q.Align, MeasurementID: q.ID}}})
 			}
 			// The writer requires one common page size.
 			maxW := 960.0
@@ -380,7 +411,7 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			if ev.Schema != "pptxgengo.compose-evidence.v1" || ev.SpecSHA != hash(raw) || pm.SpecSHA != hash(raw) || ev.ManifestSHA != hash(mb) || ev.DeckSHA != hash(db) || pm.DeckSHA != hash(db) || len(pm.Requests) == 0 {
+			if pm.Schema != "pptxgengo.compose-bundle.v1" || pm.Plan != nil || ev.Schema != "pptxgengo.compose-evidence.v1" || ev.SpecSHA != pm.SpecSHA || (!*reuse && pm.SpecSHA != hash(raw)) || ev.ManifestSHA != hash(mb) || ev.DeckSHA != hash(db) || pm.DeckSHA != hash(db) || len(pm.Requests) == 0 {
 				return fmt.Errorf("stale or mismatched probe evidence")
 			}
 			if !bytes.Equal(jsonBytes(pm.Requests), jsonBytes(requests)) {
@@ -390,12 +421,39 @@ func run(args []string) error {
 			if e = json.Unmarshal(ev.Native, &nr); e != nil {
 				return e
 			}
+			for _, s := range spec.Slides {
+				if len(s.Accents) > 0 && nr.Schema != "pptxgengo.compose-text-measurement.v4" && nr.Schema != "pptxgengo.compose-text-measurement.v5" {
+					return fmt.Errorf("measured accents require v4/v5 native character-bound evidence")
+				}
+			}
 			measured, e := checkNative(pm, nr, false)
 			if e != nil {
 				return e
 			}
+			if ev.SpecSHA != hash(raw) {
+				m.ReusedFromSpecSHA = ev.SpecSHA
+			}
 			// Reconstruct dimensions from raw native evidence instead of trusting an editable summary.
 			plan, e := compose.Plan(spec, measured)
+			if args[0] == "fit-report" {
+				rows := compose.FixedTextFitReport(spec, measured)
+				failures := 0
+				for _, row := range rows {
+					if !row.Fits {
+						failures++
+					}
+				}
+				planError := ""
+				if e != nil {
+					planError = e.Error()
+				}
+				report := map[string]any{"schema": "pptxgengo.fixed-text-fit.v1", "spec_sha256": hash(raw), "probe_spec_sha256": ev.SpecSHA, "evidence_deck_sha256": ev.DeckSHA, "fixed_zone_count": len(rows), "overflow_count": failures, "zones": rows, "planner_passed": e == nil, "planner_error": planError, "scope": "All fixed title/canvas/role/card text zones. Dynamic pod/phase/legend layout, collisions and routes are covered by the planner result. Native final verification and visual review are still required."}
+				if err := writeNew(*out, jsonBytes(report)); err != nil {
+					return err
+				}
+				fmt.Println(*out)
+				return nil
+			}
 			if e != nil {
 				return e
 			}
