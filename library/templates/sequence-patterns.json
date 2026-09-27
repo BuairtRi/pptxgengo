@@ -1,0 +1,206 @@
+{
+  "schema": "pptxgengo.sequence-patterns.v1",
+  "patterns": [
+    {
+      "id": "sequence:phase-expansion",
+      "name": "Phase overview and repeated phase detail",
+      "steps": [
+        {
+          "role": "frame",
+          "altitude": "framing",
+          "repeat": "once",
+          "optional": true
+        },
+        {
+          "role": "phase-overview",
+          "altitude": "overview",
+          "repeat": "once"
+        },
+        {
+          "role": "phase-detail",
+          "altitude": "detail",
+          "repeat": "per_phase",
+          "min_pages": 1,
+          "max_pages": 3
+        },
+        {
+          "role": "synthesis",
+          "altitude": "overview",
+          "repeat": "once",
+          "optional": true
+        }
+      ],
+      "continuity_rules": [
+        "Stable phase IDs, order, labels and color meanings across every page.",
+        "Each detail page names its phase and maps back to one overview item.",
+        "One-to-three detail pages per phase express distinct roles: explanation, activity/output, evidence or decision.",
+        "Repeated detail pages must not silently duplicate or omit required content."
+      ],
+      "status": "proposed_sequence_contract_not_executable",
+      "source_examples": [
+        {
+          "source_id": "uhg",
+          "overview": [
+            22
+          ],
+          "detail": [
+            24,
+            28,
+            34
+          ],
+          "relationship": "Three-phase overview followed by recurring phase activity/output detail; supporting pages occur between phase detail pages.",
+          "reviewer": "root",
+          "review_scope": "Root individually inspected overview 22 and recurring phase detail pages 24, 28 and 34; three phase identities and activity/work-product structure align.",
+          "source_sha256": "b0f254ed7739768d0f345257689264393049d06cdd3849a177fc764f3d348d99"
+        }
+      ],
+      "supported_automatic_expansion": false
+    },
+    {
+      "id": "sequence:product-expansion",
+      "name": "Product proposition to capability detail",
+      "steps": [
+        {
+          "role": "product-frame",
+          "altitude": "framing",
+          "repeat": "once"
+        },
+        {
+          "role": "product-overview",
+          "altitude": "overview",
+          "repeat": "once"
+        },
+        {
+          "role": "capability-map",
+          "altitude": "explanation",
+          "repeat": "once"
+        },
+        {
+          "role": "capability-detail",
+          "altitude": "detail",
+          "repeat": "per_capability",
+          "min_pages": 1,
+          "max_pages": 3
+        },
+        {
+          "role": "proof-and-decision",
+          "altitude": "explanation",
+          "repeat": "once"
+        }
+      ],
+      "continuity_rules": [
+        "Carry product identity and value proposition through capability pages.",
+        "Use stable capability IDs and distinguish business outcomes from technical features.",
+        "A detail page must name its parent product/capability and required evidence."
+      ],
+      "status": "proposed_sequence_contract_not_executable",
+      "source_examples": [
+        {
+          "source_id": "software-modernization",
+          "source_sha256": "c732e693a6370a0abdf3b54f34ff456304a4a25025303c508a48559f1bee73e6",
+          "overview": [
+            44,
+            45
+          ],
+          "detail": [
+            46,
+            47
+          ],
+          "relationship": "Technical and business product-overview variants lead into evidence-to-action detail and phase-by-phase evidence/decision detail.",
+          "reviewer": "root",
+          "review_scope": "All four images individually inspected; 44/45 share the main arrangement and should not inflate template count."
+        }
+      ],
+      "supported_automatic_expansion": false
+    },
+    {
+      "id": "sequence:architecture-expansion",
+      "name": "Architecture context to layer detail",
+      "steps": [
+        {
+          "role": "business-context",
+          "altitude": "framing",
+          "repeat": "once"
+        },
+        {
+          "role": "architecture-overview",
+          "altitude": "overview",
+          "repeat": "once"
+        },
+        {
+          "role": "layer-or-component-detail",
+          "altitude": "detail",
+          "repeat": "per_layer",
+          "min_pages": 1,
+          "max_pages": 3
+        },
+        {
+          "role": "cross-cutting-decisions",
+          "altitude": "explanation",
+          "repeat": "once"
+        }
+      ],
+      "continuity_rules": [
+        "Preserve layer/component identities, hierarchy and relationship meaning.",
+        "Declare whether each page is business, logical technical, or physical/deployment architecture.",
+        "Show scope and boundary changes explicitly when zooming into a component.",
+        "Do not imply a component detail implements unproven automatic diagram routing."
+      ],
+      "status": "proposed_sequence_contract_not_executable",
+      "source_examples": [
+        {
+          "source_id": "uhg",
+          "overview": [
+            13
+          ],
+          "detail": [
+            14,
+            15,
+            16
+          ],
+          "relationship": "Layer/component overview introduces the populated architecture and subsequent layer-focused detail; recurring colors and miniature overview preserve context.",
+          "reviewer": "root",
+          "review_scope": "Root individually inspected the overview, populated architecture and two layer-focus detail pages.",
+          "source_sha256": "b0f254ed7739768d0f345257689264393049d06cdd3849a177fc764f3d348d99"
+        }
+      ],
+      "supported_automatic_expansion": false
+    },
+    {
+      "id": "sequence:evidence-argument",
+      "name": "Frame, claim, evidence and decision",
+      "steps": [
+        {
+          "role": "decision-frame",
+          "altitude": "framing",
+          "repeat": "once"
+        },
+        {
+          "role": "recommendation",
+          "altitude": "overview",
+          "repeat": "once"
+        },
+        {
+          "role": "supporting-evidence",
+          "altitude": "detail",
+          "repeat": "per_claim",
+          "min_pages": 1,
+          "max_pages": 3
+        },
+        {
+          "role": "decision-and-next-steps",
+          "altitude": "explanation",
+          "repeat": "once"
+        }
+      ],
+      "continuity_rules": [
+        "Each evidence page links to a claim ID.",
+        "Carry qualifications and source locators through summary and detailed versions.",
+        "Final decision follows the evidence without adding unsupported claims."
+      ],
+      "status": "proposed_sequence_contract_not_executable",
+      "source_examples": [],
+      "supported_automatic_expansion": false
+    }
+  ]
+}

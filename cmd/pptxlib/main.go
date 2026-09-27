@@ -24,6 +24,9 @@ func run(args []string) error {
 	state := fs.String("state", "", "qualification state")
 	pref := fs.String("preference", "", "preference")
 	source := fs.String("source", "", "source ID")
+	category := fs.String("category", "", "template category (inventory only)")
+	altitude := fs.String("altitude", "", "framing, overview, explanation, detail or reference (inventory only)")
+	density := fs.String("density", "", "sparse, medium or dense (inventory only)")
 	limit := fs.Int("limit", 20, "maximum results (1..100)")
 	inventory := fs.Bool("inventory", false, "search exploratory inventory")
 	includeAvoid := fs.Bool("include-avoid", false, "include avoided references")
@@ -62,7 +65,7 @@ func run(args []string) error {
 		}
 		printJSON(r)
 	case "find":
-		r, err := s.Find(idx, library.FindOptions{Query: *query, Kind: *kind, State: *state, Preference: *pref, Source: *source, Limit: *limit, Inventory: *inventory, IncludeAvoid: *includeAvoid})
+		r, err := s.Find(idx, library.FindOptions{Query: *query, Kind: *kind, State: *state, Preference: *pref, Source: *source, Category: *category, Altitude: *altitude, Density: *density, Limit: *limit, Inventory: *inventory, IncludeAvoid: *includeAvoid})
 		if err != nil {
 			return err
 		}
@@ -70,6 +73,14 @@ func run(args []string) error {
 	case "inspect":
 		if *id == "" {
 			return fmt.Errorf("--id required")
+		}
+		if *inventory {
+			r, err := s.InspectInventory(idx, *id)
+			if err != nil {
+				return err
+			}
+			printJSON(r)
+			return nil
 		}
 		r, err := s.Inspect(idx, *id)
 		if err != nil {
@@ -79,6 +90,17 @@ func run(args []string) error {
 	case "preview":
 		if *id == "" {
 			return fmt.Errorf("--id required")
+		}
+		if *inventory {
+			if *variant != "" {
+				return fmt.Errorf("inventory preview has no qualified style variants")
+			}
+			r, err := s.PreviewInventory(idx, *id)
+			if err != nil {
+				return err
+			}
+			printJSON(r)
+			return nil
 		}
 		r, err := s.Preview(idx, *id, *variant)
 		if err != nil {

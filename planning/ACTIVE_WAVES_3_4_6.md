@@ -1,5 +1,16 @@
 # Active objective: Waves 3, 4 and 6
 
+## Superseding priorities — template expansion
+
+The user's latest direction prioritizes a 50–75-template library, component
+adaptation, semantic styling and useful arrow families. Architecture, product,
+layers/components, altitude/density and multi-slide sequences are explicit scope.
+See `TEMPLATE_LIBRARY_EXPANSION.md` for active execution and current evidence.
+The earlier acceptance ledger below remains historical unfinished work; it is not
+the current scheduling order. Colleague-edit reconciliation and advanced complex
+diagram routing are lower priority. The reviewed proposal visuals are an accepted
+baseline, while their outstanding native qualification gates remain recorded.
+
 User direction: complete Waves 3 and 4, then Wave 6. Defer Wave 5.
 The source requirements remain `FIDELITY_IMPLEMENTATION_WAVES.md`; this ledger
 tracks evidence against them without replacing the scope with smaller fixtures.

@@ -775,3 +775,37 @@ The initial 451-request / 23,902-character native measurement took 24m15s.
 A changed-text delta was measured separately and cached. Final native verification
 was not started within the user's 40-minute wrap window and remains explicit
 unfinished work; successful fit and rendered review do not imply verification.
+
+## QA119 — Inventory review status must follow actual image inspection
+
+Parallel inventory drafts included incomplete visual coverage and prematurely
+marked review states. Required individual image inspection across every assigned
+slice before integration. The final compiler requires all 369 source occurrences,
+matching preview paths/hashes and `visual_reviewed` records. Hash validation proves
+artifact identity, not review quality; root and independent visual checks remain
+necessary.
+
+## QA120 — Topic similarity produced false layout duplicates
+
+A modernization draft grouped an appendix divider, metric case study and
+metric/quote case study under one family, and mixed a product workflow with
+unrelated case-study layouts. A second reviewer inspected all 43 slides in that
+slice and split arrangements by actual zones/components. Existing canonical
+family IDs were retained. The current 280 families remain provisional pending
+further cross-family review; the shortlist is not an adaptation-qualified count.
+
+## QA121 — Architecture subject does not always mean architecture layout
+
+UHG 52 includes architecture artwork but primarily communicates case-study proof
+through narrative and metrics. Root review reclassified it as dense detailed
+evidence. Altitude, density and purpose remain separate dimensions. Product and
+layer-detail patterns are now explicit instead of being hidden in broad buckets.
+
+## QA122 — Copy-derived slots and opaque artwork limit reuse
+
+The first binding draft used source text as slot names. Replaced those with stable
+roles (layer heading/description, feature heading/body, pillar details, risk text)
+and retained rich-text binding order. Corrected the constraint language to allow
+multiple original runs in a logical slot. UHG 13's architecture map is opaque
+artwork, so only adjacent layer text is currently exposed. All five contracts
+report fit as unmeasured and declare no supported semantic style profiles.

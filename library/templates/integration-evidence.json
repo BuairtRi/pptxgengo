@@ -1,0 +1,85 @@
+{
+  "schema": "pptxgengo.template-integration-evidence.v1",
+  "scope": "CLI compilation, catalog validation and real inventory operations; no test suite or native adaptation qualification.",
+  "inventory_count": 17740,
+  "existing_contract_count": 13,
+  "operations": [
+    {
+      "operation": "architecture-overview",
+      "command": [
+        "/tmp/pptxlib-template-expansion",
+        "find",
+        "--index",
+        "samples/template-expansion/library.sqlite",
+        "--inventory",
+        "--kind",
+        "template_family",
+        "--category",
+        "technical_architecture",
+        "--altitude",
+        "overview"
+      ],
+      "result_count": 6,
+      "output": {
+        "path": "samples/template-expansion/cli-evidence/architecture-overview.json",
+        "sha256": "da03e63b0e2bc40955a37c2dcbf5175b0ecb5c4fa98eba4dbdc1cdbe1a6cbc2c"
+      }
+    },
+    {
+      "operation": "product-detail",
+      "command": [
+        "/tmp/pptxlib-template-expansion",
+        "find",
+        "--index",
+        "samples/template-expansion/library.sqlite",
+        "--inventory",
+        "--kind",
+        "template_family",
+        "--category",
+        "product_detail",
+        "--density",
+        "dense"
+      ],
+      "result_count": 5,
+      "output": {
+        "path": "samples/template-expansion/cli-evidence/product-detail.json",
+        "sha256": "1332563ba1bcf46afa3e96f8e0036e3cd8ec8c4ab30be7dcc2523110e587d089"
+      }
+    },
+    {
+      "operation": "phase-sequence",
+      "command": [
+        "/tmp/pptxlib-template-expansion",
+        "inspect",
+        "--index",
+        "samples/template-expansion/library.sqlite",
+        "--inventory",
+        "--id",
+        "sequence:phase-expansion"
+      ],
+      "result_count": null,
+      "output": {
+        "path": "samples/template-expansion/cli-evidence/phase-sequence.json",
+        "sha256": "06186397879e269eb0460ff6e548b955059b43cc23f030fa6519bc9deeff744f"
+      }
+    },
+    {
+      "operation": "architecture-preview",
+      "command": [
+        "/tmp/pptxlib-template-expansion",
+        "preview",
+        "--index",
+        "samples/template-expansion/library.sqlite",
+        "--inventory",
+        "--id",
+        "template-family:candidate:c-architecture-013"
+      ],
+      "result_count": null,
+      "output": {
+        "path": "samples/template-expansion/cli-evidence/architecture-preview.json",
+        "sha256": "07e08fa731bcca1aeae88e912a11a6e4324ebc2985c56a992be6d6c2d001940e"
+      }
+    }
+  ],
+  "browser_visual_review": "unavailable: no browser surfaces and native pipe startup failed"
+}

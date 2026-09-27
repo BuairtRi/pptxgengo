@@ -13,6 +13,9 @@ type FindOptions struct {
 	State        string
 	Preference   string
 	Source       string
+	Category     string
+	Altitude     string
+	Density      string
 	Limit        int
 	Inventory    bool
 	IncludeAvoid bool
@@ -53,7 +56,7 @@ func (s Store) indexReady(path string) error {
 	if rows[0].Value != h {
 		return fmt.Errorf("library index references stale catalog")
 	}
-	return nil
+	return s.templateIndexReady(path)
 }
 func (s Store) Find(path string, o FindOptions) ([]FindHit, error) {
 	if path == "" {
@@ -73,7 +76,11 @@ func (s Store) Find(path string, o FindOptions) ([]FindHit, error) {
 		filters = append(filters, "kind="+sql(o.Kind))
 	}
 	if o.Source != "" {
-		filters = append(filters, "source_id="+sql(o.Source))
+		if o.Inventory {
+			filters = append(filters, "(source_id="+sql(o.Source)+" OR EXISTS (SELECT 1 FROM json_each(inventory.json,'$.source_ids') WHERE value="+sql(o.Source)+"))")
+		} else {
+			filters = append(filters, "source_id="+sql(o.Source))
+		}
 	}
 	if o.Preference != "" {
 		filters = append(filters, "preference="+sql(o.Preference))
@@ -82,6 +89,14 @@ func (s Store) Find(path string, o FindOptions) ([]FindHit, error) {
 	}
 	query := strings.TrimSpace(o.Query)
 	if o.Inventory {
+		if o.State != "" && o.State != "inventory" {
+			return nil, fmt.Errorf("inventory records have qualification state inventory")
+		}
+		for _, dimension := range []struct{ value, field string }{{o.Category, "categories"}, {o.Altitude, "altitudes"}, {o.Density, "densities"}} {
+			if dimension.value != "" {
+				filters = append(filters, "EXISTS (SELECT 1 FROM json_each(inventory.json,'$."+dimension.field+"') WHERE value="+sql(dimension.value)+")")
+			}
+		}
 		q := "SELECT id,kind,title AS name,source_id,preference FROM inventory WHERE " + strings.Join(filters, " AND ")
 		if query != "" {
 			q += " AND id IN (SELECT id FROM inventory_fts WHERE inventory_fts MATCH " + sql(query) + ")"
@@ -106,6 +121,9 @@ func (s Store) Find(path string, o FindOptions) ([]FindHit, error) {
 			out = append(out, FindHit{ID: r.ID, Kind: r.Kind, Name: r.Name, SourceID: r.SourceID, State: "inventory", Preference: r.Preference, Why: "catalog inventory match; adaptation unproven"})
 		}
 		return out, nil
+	}
+	if o.Category != "" || o.Altitude != "" || o.Density != "" {
+		return nil, fmt.Errorf("category, altitude and density filters currently require --inventory; template candidates are not qualified contracts")
 	}
 	if o.State != "" {
 		filters = append(filters, "state="+sql(o.State))

@@ -114,6 +114,10 @@ func (s Store) BuildIndex(out string) (IndexReport, error) {
 	if err != nil {
 		return IndexReport{}, err
 	}
+	templateSQL, templateHash, err := s.templateInventorySQL()
+	if err != nil {
+		return IndexReport{}, err
+	}
 	// Canonicalize duplicate geometry, slot and behavior signatures while keeping
 	// every alias addressable by exact contract ID.
 	canonical := map[string]string{}
@@ -137,6 +141,8 @@ func (s Store) BuildIndex(out string) (IndexReport, error) {
 	b.WriteString("CREATE TABLE meta(key TEXT PRIMARY KEY,value TEXT NOT NULL); CREATE TABLE inventory(id TEXT PRIMARY KEY,kind TEXT,source_id TEXT,category TEXT,title TEXT,body TEXT,json TEXT,preference TEXT NOT NULL DEFAULT 'unreviewed'); CREATE VIRTUAL TABLE inventory_fts USING fts5(id UNINDEXED,title,body,tokenize='unicode61'); CREATE TABLE contracts(id TEXT PRIMARY KEY,version TEXT,kind TEXT,name TEXT,purpose TEXT,roles TEXT,state TEXT,preference TEXT,source_id TEXT,path TEXT,sha256 TEXT,fingerprint TEXT,canonical_id TEXT,preview_count INTEGER); CREATE VIRTUAL TABLE contracts_fts USING fts5(id UNINDEXED,name,purpose,roles,tokenize='unicode61'); ")
 	b.WriteString("ATTACH DATABASE " + sql(s.CatalogPath) + " AS src; INSERT INTO inventory(id,kind,source_id,category,title,body,json) SELECT id,kind,source_id,category,title,body,json FROM src.items; INSERT INTO inventory_fts(id,title,body) SELECT id,title,body FROM inventory; ")
 	b.WriteString("INSERT INTO meta VALUES('schema','pptxgengo.library-index.v1'); INSERT INTO meta VALUES('catalog_sha256'," + sql(catalogHash) + "); ")
+	b.WriteString("INSERT INTO meta VALUES('template_catalog_sha256'," + sql(templateHash) + "); ")
+	b.WriteString(templateSQL)
 	prefIDs := make([]string, 0, len(prefs))
 	for id := range prefs {
 		prefIDs = append(prefIDs, id)
