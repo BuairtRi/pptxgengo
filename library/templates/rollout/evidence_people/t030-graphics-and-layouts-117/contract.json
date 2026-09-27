@@ -7,6 +7,8 @@
   "scene_sha256": "fb8f7666e599befb9c11aebd139a65706070ec81a43bd4f94250711eb4d83061",
   "object_ids": [
     "4",
+    "7",
+    "8",
     "10"
   ],
   "slots": {
@@ -14,7 +16,7 @@
       "binding_ids": [
         "b/4/text/0.0.4.2.2.0.1.0/text"
       ],
-      "description": "Main title; two of three source speech bubbles have no editable text."
+      "description": "Main title; two additional questions can be placed in the existing empty speech bubbles."
     },
     "planning_statement": {
       "binding_ids": [
@@ -23,7 +25,8 @@
         "b/10/text/0.0.9.2.2.4.1.0/text",
         "b/10/text/0.0.9.2.2.5.1.0/text"
       ],
-      "description": "Uncredited planning question in the single editable speech bubble."
+      "description": "Planning question in the left speech bubble, retaining the source four-run style.",
+      "value_format": "paragraphs"
     }
   },
   "roles": {},
@@ -33,6 +36,55 @@
     "Exact text-binding cardinality is preserved; each semantic slot retains ordered existing text bindings.",
     "Footer, legal line, and slide number remain source-bound and are excluded from editable slots.",
     "Text fit and capacity are unmeasured; source character counts are not capacity claims.",
-    "Native PowerPoint rendering and visual QA remain separate qualification gates."
-  ]
+    "Native PowerPoint rendering and visual QA remain separate qualification gates.",
+    "Zone text uses upright donor-style textbox overlays with explicit frames inside two existing empty speech bubbles; the bubble artwork is unchanged and native fit requires review."
+  ],
+  "zones": {
+    "middle_question": {
+      "paragraph_path": [
+        0,
+        0,
+        7,
+        2,
+        2
+      ],
+      "style_donor_binding_id": "b/10/text/0.0.9.2.2.1.1.0/text",
+      "style": {
+        "font_size": 1400,
+        "color_rgb": "0047FF"
+      },
+      "description": "Short planning question inside the existing empty pale speech bubble.",
+      "mode": "overlay_textbox",
+      "overlay_object_id": "1001",
+      "frame_emu": [
+        4983278,
+        2153991,
+        1945638,
+        1169551
+      ]
+    },
+    "right_question": {
+      "paragraph_path": [
+        0,
+        0,
+        8,
+        2,
+        2
+      ],
+      "style_donor_binding_id": "b/10/text/0.0.9.2.2.1.1.0/text",
+      "style": {
+        "font_size": 1400,
+        "color_rgb": "FFFFFF"
+      },
+      "description": "Short planning question inside the existing empty dark speech bubble.",
+      "mode": "overlay_textbox",
+      "overlay_object_id": "1002",
+      "frame_emu": [
+        7320293,
+        2178594,
+        1945638,
+        1169551
+      ]
+    }
+  }
 }

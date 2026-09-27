@@ -252,8 +252,14 @@ func copyTree(src, dst string) error {
 }
 
 func run(args []string) error {
+	if len(args) > 0 && args[0] == "apply-accent" {
+		return applyAccent(args[1:])
+	}
+	if len(args) > 0 && args[0] == "adapt-accents" {
+		return adaptAccents(args[1:])
+	}
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxtemplate list|inspect|build-review [--id ID] [--lane LANE] [--category CATEGORY] [--out NEW_DIR]")
+		return fmt.Errorf("usage: pptxtemplate list|inspect|build-review|adapt-accents|apply-accent [--id ID] [--lane LANE] [--category CATEGORY] [--out NEW_DIR]")
 	}
 	cmd := args[0]
 	f := flag.NewFlagSet(cmd, flag.ContinueOnError)
@@ -545,6 +551,62 @@ func build(root, out string, assignmentBytes []byte, items []implementation, ski
 			changeLog := map[string]any{}
 			if err = read(filepath.Join(applied, "component-application.json"), &changeLog); err != nil {
 				return err
+			}
+			// Component applications can edit retained chart/user-shape resources.
+			// Copy only reported, hash-pinned resource outputs into this aggregate.
+			resourceChanges, _ := changeLog["resource_color_changes"].([]any)
+			copiedResources := map[string]bool{}
+			for _, raw := range resourceChanges {
+				r, ok := raw.(map[string]any)
+				if !ok {
+					return fmt.Errorf("invalid resource change")
+				}
+				part, _ := r["part"].(string)
+				sourceHash, _ := r["source_sha256"].(string)
+				outputHash, _ := r["output_sha256"].(string)
+				if !filepath.IsLocal(part) || !strings.HasPrefix(filepath.ToSlash(part), "resources/") {
+					return fmt.Errorf("invalid resource path")
+				}
+				if copiedResources[part] {
+					continue
+				}
+				copiedResources[part] = true
+				before := filepath.Join(project, part)
+				after := filepath.Join(applied, part)
+				h, e := hashFile(before)
+				if e != nil {
+					return e
+				}
+				if h != sourceHash {
+					return fmt.Errorf("aggregate resource changed: %s", part)
+				}
+				h, e = hashFile(after)
+				if e != nil {
+					return e
+				}
+				if h != outputHash {
+					return fmt.Errorf("applied resource changed: %s", part)
+				}
+				data, e := os.ReadFile(before)
+				if e != nil {
+					return e
+				}
+				snapshotRel := filepath.Join("inputs", i.ID, part)
+				snapshot := filepath.Join(stage, snapshotRel)
+				if e = os.MkdirAll(filepath.Dir(snapshot), 0755); e != nil {
+					return e
+				}
+				if e = os.WriteFile(snapshot, data, 0644); e != nil {
+					return e
+				}
+				inputs = append(inputs, artifact{Path: snapshotRel, SHA: sourceHash})
+				data, e = os.ReadFile(after)
+				if e != nil {
+					return e
+				}
+				if e = os.WriteFile(before, data, 0644); e != nil {
+					return e
+				}
 			}
 			logDir := filepath.Join(stage, "applications")
 			if err = os.MkdirAll(logDir, 0755); err != nil {

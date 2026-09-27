@@ -6,7 +6,15 @@ candidates were assigned across three disjoint workstreams: architecture/product
 binding work; Sol and root repaired difficult rich-text examples and reviewed
 shared code. Native PowerPoint export remained serialized.
 
-## Final review tally
+## Current review tally
+
+Shared-gap follow-up: see [SHARED_GAPS_IMPLEMENTATION.md](SHARED_GAPS_IMPLEMENTATION.md).
+The latest gallery is `samples/template-expansion/rollout/gallery-v3/index.html`.
+All 65 specific examples now have visual review: 60 direct native open/export
+checks and five native geometry replay checks. Reopening the five newly generated
+accent examples remains pending. No arbitrary-content capacity is qualified.
+
+## Previous checkpoint tally (before shared-gap fixes)
 
 58 of 65 examples are visually reviewed; seven need revision. The 65 contracts
 expose 895 named text slots covering 1,570 text bindings. These are editing
@@ -63,7 +71,7 @@ contacts or product claims. The review decks are editing examples and require
 content/asset review before use with a client. A retained complex architecture
 image is not evidence of a newly composed editable architecture model.
 
-## Open work, in priority order
+## Previous gap list (implementation status superseded by shared-gap report)
 
 1. **Measured accents in the template build path.** Five examples expose fixed
    accent failures: t002 underline, t004 highlight width, t014 title highlight,

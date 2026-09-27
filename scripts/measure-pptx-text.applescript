@@ -25,6 +25,11 @@ on run argv
 		set sh to shape shapeIndex of sl
 		if (has text frame of sh) is false then error "Selected shape has no text frame" number 68
 		set shapeRotation to rotation of sh
+		set shapeName to name of sh
+		set shapeLeft to left position of sh
+		set shapeTop to top of sh
+		set shapeWidth to width of sh
+		set shapeHeight to height of sh
 		set tr to text range of text frame of sh
 		set fullText to content of tr
 		set textLength to text length of tr
@@ -113,7 +118,7 @@ on run argv
 		end repeat
 	end tell
 
-	set outputJSON to "{\"presentation\":" & my jsonString(presentationName) & ",\"slide\":" & slideNumber & ",\"shape_index\":" & shapeIndex & ",\"phrase\":" & my jsonString(requestedPhrase) & ",\"text\":" & my jsonString(fullText) & ",\"start_character\":" & matchStart & ",\"end_character\":" & matchEnd & ",\"coordinates\":\"raw PowerPoint text-range units; scripting dictionary does not specify units\",\"bounds\":{\"left\":" & my jsonNumber(unionLeft) & ",\"top\":" & my jsonNumber(unionTop) & ",\"width\":" & my jsonNumber(unionRight - unionLeft) & ",\"height\":" & my jsonNumber(unionBottom - unionTop) & "},\"line_top_epsilon\":" & my jsonNumber(lineTopEpsilon) & ",\"rotation_handled\":false,\"rotation_degrees\":" & my jsonNumber(shapeRotation) & ",\"lines\":["
+	set outputJSON to "{\"shape_name\":" & my jsonString(shapeName) & ",\"shape_bounds\":{\"left\":" & my jsonNumber(shapeLeft) & ",\"top\":" & my jsonNumber(shapeTop) & ",\"width\":" & my jsonNumber(shapeWidth) & ",\"height\":" & my jsonNumber(shapeHeight) & "},\"presentation\":" & my jsonString(presentationName) & ",\"slide\":" & slideNumber & ",\"shape_index\":" & shapeIndex & ",\"phrase\":" & my jsonString(requestedPhrase) & ",\"text\":" & my jsonString(fullText) & ",\"start_character\":" & matchStart & ",\"end_character\":" & matchEnd & ",\"coordinates\":\"raw PowerPoint text-range units; scripting dictionary does not specify units\",\"bounds\":{\"left\":" & my jsonNumber(unionLeft) & ",\"top\":" & my jsonNumber(unionTop) & ",\"width\":" & my jsonNumber(unionRight - unionLeft) & ",\"height\":" & my jsonNumber(unionBottom - unionTop) & "},\"line_top_epsilon\":" & my jsonNumber(lineTopEpsilon) & ",\"rotation_handled\":false,\"rotation_degrees\":" & my jsonNumber(shapeRotation) & ",\"lines\":["
 	repeat with lineIndex from 1 to (count of lineRows)
 		if lineIndex > 1 then set outputJSON to outputJSON & ","
 		set lineRow to item lineIndex of lineRows
@@ -135,6 +140,7 @@ on absoluteValue(valueNumber)
 end absoluteValue
 
 on jsonNumber(valueNumber)
+	if valueNumber is missing value then return "null"
 	return valueNumber as text
 end jsonNumber
 

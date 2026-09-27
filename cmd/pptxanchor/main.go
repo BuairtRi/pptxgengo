@@ -153,7 +153,7 @@ func main() {
 	if *mode == "highlight" {
 		out, err = calculateHighlight(measurement, asset, *horizontalPadding, *verticalPadding, *horizontalOffset, *verticalOffset, *assetRotation)
 	} else {
-		out, err = calculate(measurement, asset, *padding, *horizontalOffset, *verticalOffset, *containerAspect)
+		out, err = calculateRotatedUnderline(measurement, asset, *padding, *horizontalOffset, *verticalOffset, *containerAspect, *assetRotation)
 	}
 	if err != nil {
 		fail(err)
@@ -239,6 +239,39 @@ func calculate(m phraseMeasurement, a assetBounds, padding, horizontalOffset, ve
 	base.Status = "placed"
 	base.Placement = &placement
 	base.OperatorNote = fmt.Sprintf("Container aspect %.9g (width/height); alpha-visible bounds aligned with %.6g pt padding per side, %.6g pt horizontal offset, and %.6g pt vertical offset. The geometry is in PowerPoint points, converted at 12,700 EMU/point. Rotation is not applied.", aspect, padding, horizontalOffset, verticalOffset)
+	return base, nil
+}
+
+// calculateRotatedUnderline preserves the image aspect and rotation while fitting
+// the rotated alpha rectangle's width below a horizontal measured phrase.
+func calculateRotatedUnderline(m phraseMeasurement, a assetBounds, padding, dx, dy, aspect, degrees float64) (result, error) {
+	base, err := calculate(m, a, padding, dx, dy, aspect)
+	if err != nil || base.Status != "placed" {
+		return base, err
+	}
+	if !finite(degrees) {
+		return result{}, errors.New("asset rotation must be finite")
+	}
+	v := base.VisibleFraction
+	angle := degrees * math.Pi / 180
+	c, s := math.Cos(angle), math.Sin(angle)
+	targetWidth := m.Bounds.Width + 2*padding
+	w := targetWidth / (v.Width*math.Abs(c) + v.Height/aspect*math.Abs(s))
+	h := w / aspect
+	visibleHeight := v.Width*w*math.Abs(s) + v.Height*h*math.Abs(c)
+	target := rect{X: m.Bounds.Left - padding + dx, Y: m.Bounds.Top + m.Bounds.Height + dy, Width: targetWidth, Height: visibleHeight}
+	ax, ay := (v.X+v.Width/2-.5)*w, (v.Y+v.Height/2-.5)*h
+	x := target.X + target.Width/2 - (ax*c - ay*s) - w/2
+	y := target.Y + target.Height/2 - (ax*s + ay*c) - h/2
+	if !finite(x) || !finite(y) || !finite(w) || !finite(h) || w <= 0 || h <= 0 {
+		return result{}, errors.New("invalid rotated underline geometry")
+	}
+	base.Placement = &placementEMU{X: int64(math.Round(x * emuPerPoint)), Y: int64(math.Round(y * emuPerPoint)), Width: int64(math.Round(w * emuPerPoint)), Height: int64(math.Round(h * emuPerPoint))}
+	rotation := int64(math.Round(degrees * 60000))
+	base.RotationDegrees = &degrees
+	base.RotationOOXML = &rotation
+	base.TargetVisible = &target
+	base.OperatorNote = fmt.Sprintf("Preserve %.6g degree artwork rotation and %.9g container aspect; fit rotated alpha width with %.6g pt padding and %.6g/%.6g pt optical offsets. Native visual review remains required.", degrees, aspect, padding, dx, dy)
 	return base, nil
 }
 

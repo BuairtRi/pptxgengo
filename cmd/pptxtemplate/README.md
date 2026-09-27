@@ -42,8 +42,11 @@ with its source. No native renderer is invoked automatically by this CLI.
 ## Supported boundary
 
 These implementations preserve fixed source geometry, rich-text segmentation and
-item counts. Named content slots and explicit RGB style roles are editable. Native
-charts, embedded diagrams, images and inherited/theme styles require separate
+item counts. Named content slots, structured paragraphs/runs, explicit RGB and theme-token
+style roles are editable. Contracts can target exact, hash-pinned color nodes in
+retained chart artwork and declare bounded text zones in empty shapes. Upright
+text overlays support rotated freeform artwork without rotating its text. Native
+chart data, arbitrary diagrams, images and inherited styles still require separate
 support where disclosed. Character counts are not measured fit limits.
 
 `list` reports technical binding/value readiness, not editorial or visual acceptance.
@@ -55,7 +58,7 @@ New content can overflow or conflict with retained art even when application suc
 `pptxcomponent check --project DIR --contract FILE --values FILE` performs the
 same contract/value/binding checks as application without creating a project. It
 reports requested and actually changed bindings and always reports fit unmeasured.
-Values accept only `slots` and optional `profile`; descriptive metadata belongs in
+Values accept `slots`, optional `zones`, and optional `profile`; descriptive metadata belongs in
 the implementation record.
 
 ## Native review and gallery
@@ -84,3 +87,66 @@ values, retained-asset disclosures and open findings.
 
 The legacy West Monroe slide skill supplies historical reference only. Contracts,
 CLI code and native evidence in this repository define this implementation.
+
+## Measured accent pass
+
+After content replacement, `adapt-accents` creates a new subset review bundle.
+It measures the exact intended phrase in native PowerPoint, reads the embedded
+artwork's visible alpha bounds, calls `pptxanchor`, and applies picture geometry.
+It preserves text content and text-frame placement. The existing picture stays
+embedded; highlights are ordered behind their target text. Underline image aspect
+and source rotation are preserved; highlights fit their rotated visible bounds.
+
+```sh
+go build -o /tmp/pptxanchor ./cmd/pptxanchor
+/tmp/pptxtemplate-rollout adapt-accents --bundle /path/to/review-bundle \
+  --intents library/templates/rollout/accent-intents.json \
+  --out /path/to/new-accent-review --name unique-accent-version \
+  --anchor-bin /tmp/pptxanchor --scene-bin /tmp/pptxscene-rollout
+python3 scripts/render-template-review.py /path/to/new-accent-review \
+  --name unique-final-render
+```
+
+Intent rows identify template, text object, picture object, exact phrase, mode and
+explicit optical offsets/padding. The shipped phrases target the illustrative
+values; authors must select phrases for new content. The tool does not select
+emphasis semantically. Native operations are serial and reuse an already-open,
+hash-verified input deck when possible; new copies use `samples/visual-wave3`.
+
+The adapter rebuilds the input project and checks it against the pinned deck,
+then checks measured text/name/order/frame against scene and native OOXML. It
+pins measurements, original artwork, solver output and resulting scene. Native
+rotation missing from AppleScript is resolved only against matching OOXML.
+Supported artwork: SVG, PNG and a narrow full-frame EMF+ bitmap extraction.
+Cropped/flipped images, nested objects, rotated text and multiline phrases require
+manual placement. Ambiguity produces an operator instruction and retains the
+original artwork; visible on-slide parking/annotation is not implemented yet.
+Every applied result still requires native rendering and visual review.
+
+`apply-accent --evidence proof.json --out new-scene.json` is the lower-level Go
+application step. It rejects changed evidence and requires the asset to be linked
+by the measured picture in both scene and native deck.
+
+## Native geometric fit
+
+```sh
+osascript scripts/measure-template-frames.applescript open-review.pptx > frames.json
+python3 scripts/check-template-fit.py frames.json \
+  --native-deck samples/visual-wave3/open-review.pptx --out fit.json
+```
+
+The checker reports `fits`, `overflow`, or `inconclusive` per measured text shape.
+It verifies top-level native identity/text/geometry before using OOXML rotation,
+compares text bounds with inner frames and records evidence hashes. Group/table
+coordinate chains and inherited geometry remain inconclusive where unverified.
+`--strict` returns nonzero for definite overflow. This check does not establish
+copy capacity, detect every collision, or replace visual inspection.
+
+For the limited case where PowerPoint can export an open task review but rejects
+new opens, `scripts/render-open-accent-review.py` records a separate native geometry
+replay. It checks picture-only changes against pinned scenes, uses unique names
+through z-order changes, exports a PDF, and restores the task session. It does not
+save or close the source presentation. It is restricted to established review
+copies; unsaved sessions are refused by default. The explicit restored-task-session
+option is only for this helper's own prior, verified restoration. This fallback
+is visual geometry evidence, **not** proof that the new PPTX opens without repair.

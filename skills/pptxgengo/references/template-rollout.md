@@ -15,8 +15,7 @@ go build -o /tmp/pptxtemplate ./cmd/pptxtemplate
 ```
 
 Inspect the contract, example values, source preview, retained-content disclosures
-and latest native review before selecting a design. Values contain only `slots`
-and optional `profile`. Keep each slot's exact run count and paragraph membership.
+and latest native review before selecting a design. Values contain `slots`, optional `zones`, and optional `profile`. Keep each slot's exact run count and paragraph membership.
 A rich-text paragraph can span several runs; preserve word boundaries and spaces
 at style transitions. Superscript trademark runs must not receive ordinary prose.
 
@@ -39,7 +38,22 @@ changed authoring inputs and displays unresolved findings.
 
 Fixed accents require a separate check after editing text. A highlight may cover
 part of the next word and an underline may detach from its phrase even when every
-text box fits. `pptxanchor` computes placements from native phrase measurements;
-the template contract path does not yet apply those geometry changes. Keep such
-examples marked as needing revision. Do not rewrite the user's approved copy just
+text box fits. `pptxtemplate adapt-accents` measures the exact phrase, calls `pptxanchor`, and
+applies the existing picture geometry in a new review bundle. See the CLI README
+for intent rows, supported assets and explicit optical offsets. Phrases must match
+the new copy; the illustrative intent file is not a semantic emphasis policy.
+Keep unmeasured or visually unresolved examples marked as needing revision. Do not rewrite the user's approved copy just
 to make a fixed accent appear correct.
+
+For mixed-style text, prefer structured paragraph/run values with binding IDs.
+`value_format: paragraphs` can require that format. Inspect exposes paragraph
+membership and run style attributes; preserve emphasis and superscript semantics.
+Theme roles declare `color_kind: scheme`; pin exact theme tokens instead of
+replacing unrelated theme colors. Empty-shape zones may insert text or add an
+upright native textbox with an explicit, source-bounded interior frame. These
+capabilities are opt-in contract features, not automatic layout inference.
+
+Run the native frame checker after changed copy, then inspect the rendered slide.
+An inconclusive grouped/inherited frame is not a pass. Specific reviewed examples
+do not qualify arbitrary lengths or variable item counts. Preserve failed review
+versions and record the correction in an evidence-bound QA ledger.

@@ -7,6 +7,7 @@
   "scene_sha256": "38da546aeb43bf444ac60d8c25c6e0c5c1269d6b973a487c4753ecfb4aa37e9d",
   "object_ids": [
     "4",
+    "15",
     "16",
     "18"
   ],
@@ -30,8 +31,38 @@
       "description": "Target profile label for this semantic region; exact source bindings retained."
     }
   },
-  "roles": {},
-  "profiles": {},
+  "roles": {
+    "chart_current_series_legend": {
+      "binding_ids": [
+        "b/15/fill.schemeClr.val/0.0.8.1.2.0.0/val"
+      ],
+      "description": "Both current-state legend lines: right connector in slide scene, left chart user-shapes XML. Each exact theme-color node is source pinned.",
+      "color_kind": "scheme",
+      "resource_targets": [
+        {
+          "part": "resources/ppt/drawings/drawing1.xml",
+          "sha256": "e5e6917da355420432dcd5176c935904822186010ea20e20a43407bb340ce086",
+          "node_path": [
+            0,
+            2,
+            1,
+            2,
+            0,
+            0
+          ],
+          "source_value": "tx2"
+        }
+      ]
+    }
+  },
+  "profiles": {
+    "source": {
+      "chart_current_series_legend": "tx2"
+    },
+    "series_match": {
+      "chart_current_series_legend": "accent1"
+    }
+  },
   "constraints": [
     "Source-bound edit only: retain original slide geometry, order, relationships, imagery, theme, and assets. No shape may move, resize, or reflow.",
     "Exact text-binding cardinality is preserved; each semantic slot retains ordered existing text bindings.",

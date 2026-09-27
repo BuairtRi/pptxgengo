@@ -28,6 +28,13 @@
         "18"
       ],
       "semantic_purpose": "Two radar charts side by side for current and future capability profiles. Non-text diagrams, imagery, data marks, and logo remain preserved."
+    },
+    {
+      "id": "current_series_legend_color",
+      "object_ids": [
+        "15"
+      ],
+      "semantic_purpose": "Both current-state legend lines: object 15 in slide scene and a user-shape line in the first chart drawing resource. Both exact theme-color nodes are pinned."
     }
   ],
   "slot_notes": {
@@ -36,9 +43,9 @@
     "target_profile_label": "Target profile label for this semantic region; exact source bindings retained."
   },
   "style_notes": [
-    "Chart series colors are source-themed: current-state series uses accent1 = F900D3; future-state series uses accent5 = 00E8FA.",
-    "Current-state legend swatches are source connector objects 15 and their line uses fill.schemeClr.val = tx2, resolving to 0047FF. Future-state connector objects 17 use accent5 and remain cyan.",
-    "The component profile API permits only explicit fill.srgbClr.val bindings. Both legend swatches expose scheme-color bindings, so a bounded current-series legend RGB role cannot be declared without changing shared code or source representation."
+    "Current-state radar series use theme accent1, resolving to F900D3; future-state series use accent5, resolving to 00E8FA.",
+    "The source blue current legend lines are two distinct OOXML targets: slide connector object 15 and the chart5 user-shapes drawing1.xml line, both source token tx2 (0047FF). The series_match profile sets only these targets to accent1.",
+    "The source profile restores both targets to tx2. Future-state connector object 17 remains accent5; chart series and all other colors are retained."
   ],
   "opaque_areas": [
     "Both radar plots, polygon outlines, axis labels, rating values, and series geometry are opaque chart artwork and retain source assessments."
@@ -48,8 +55,8 @@
   ],
   "limitations": [
     "Fixed text-binding cardinality and opaque source charts; chart values and geometry remain unchanged.",
-    "Current-state legend swatches are blue while their retained chart series is magenta; the mismatch remains open because scheme-color connectors are outside the existing profile API.",
-    "Current example was natively rendered in evidence v2; this metadata does not qualify arbitrary content fit or adaptation."
+    "Both current legend color targets pass structural validation and copy-on-apply checks. Native rendering must confirm appearance and text fit.",
+    "The chart drawing resource is intentionally modified only at the pinned color node; input resource hash and output hash are logged."
   ],
   "status": "implemented",
   "adaptation_mode": "fixed_source_geometry",

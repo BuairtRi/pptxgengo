@@ -21,10 +21,28 @@ import (
 type Slot struct {
 	BindingIDs  []string `json:"binding_ids"`
 	Description string   `json:"description"`
+	ValueFormat string   `json:"value_format,omitempty"`
 }
 type Role struct {
-	BindingIDs  []string `json:"binding_ids"`
-	Description string   `json:"description"`
+	BindingIDs      []string              `json:"binding_ids"`
+	Description     string                `json:"description"`
+	ColorKind       string                `json:"color_kind,omitempty"`
+	ResourceTargets []ResourceColorTarget `json:"resource_targets,omitempty"`
+}
+type Zone struct {
+	ParagraphPath       []int      `json:"paragraph_path"`
+	StyleDonorBindingID string     `json:"style_donor_binding_id,omitempty"`
+	Style               *ZoneStyle `json:"style,omitempty"`
+	Mode                string     `json:"mode,omitempty"`
+	OverlayObjectID     string     `json:"overlay_object_id,omitempty"`
+	FrameEMU            []int64    `json:"frame_emu,omitempty"`
+	Description         string     `json:"description,omitempty"`
+}
+type ZoneStyle struct {
+	FontSize int    `json:"font_size"`
+	Typeface string `json:"typeface"`
+	ColorRGB string `json:"color_rgb"`
+	Bold     bool   `json:"bold,omitempty"`
 }
 type Contract struct {
 	Schema       string                       `json:"schema"`
@@ -36,12 +54,14 @@ type Contract struct {
 	ObjectIDs    []string                     `json:"object_ids"`
 	Slots        map[string]Slot              `json:"slots"`
 	Roles        map[string]Role              `json:"roles"`
+	Zones        map[string]Zone              `json:"zones,omitempty"`
 	Profiles     map[string]map[string]string `json:"profiles"`
 	Constraints  []string                     `json:"constraints"`
 }
 type Values struct {
-	Slots   map[string][]string `json:"slots"`
-	Profile string              `json:"profile,omitempty"`
+	Slots   map[string]json.RawMessage `json:"slots"`
+	Zones   map[string]string          `json:"zones,omitempty"`
+	Profile string                     `json:"profile,omitempty"`
 }
 
 func read(path string, out any) error {
@@ -193,7 +213,7 @@ func Run(args []string, stdout io.Writer) error {
 		return fmt.Errorf("component contract must declare at least one text slot")
 	}
 	used := map[string]bool{}
-	validate := func(name string, ids []string, color bool) error {
+	validate := func(name string, ids []string, property string) error {
 		if name == "" || len(ids) == 0 {
 			return fmt.Errorf("empty slot/role")
 		}
@@ -206,37 +226,79 @@ func Run(args []string, stdout io.Writer) error {
 			if !objects[b.ObjectID] || used[id] {
 				return fmt.Errorf("unowned or reused binding %s", id)
 			}
-			want := "text"
-			if color {
-				want = "fill.srgbClr.val"
-			}
-			if b.Property != want {
-				return fmt.Errorf("%s requires %s; got %s", name, want, b.Property)
+			if b.Property != property {
+				return fmt.Errorf("%s requires %s; got %s", name, property, b.Property)
 			}
 			used[id] = true
 		}
 		return nil
 	}
 	for name, slot := range c.Slots {
-		if err := validate(name, slot.BindingIDs, false); err != nil {
+		if slot.ValueFormat != "" && slot.ValueFormat != "paragraphs" {
+			return fmt.Errorf("slot %s has unsupported value_format", name)
+		}
+		if err := validate(name, slot.BindingIDs, "text"); err != nil {
 			return err
 		}
 	}
 	for name, role := range c.Roles {
-		if err := validate(name, role.BindingIDs, true); err != nil {
-			return err
+		if len(role.BindingIDs) == 0 && len(role.ResourceTargets) == 0 {
+			return fmt.Errorf("role %s has no targets", name)
+		}
+		property := "fill.srgbClr.val"
+		if role.ColorKind == "scheme" {
+			property = "fill.schemeClr.val"
+		} else if role.ColorKind != "" && role.ColorKind != "rgb" {
+			return fmt.Errorf("role %s has unsupported color_kind", name)
+		}
+		if len(role.BindingIDs) > 0 {
+			if err := validate(name, role.BindingIDs, property); err != nil {
+				return err
+			}
 		}
 	}
 	hexColor := regexp.MustCompile(`^[A-Fa-f0-9]{6}$`)
+	schemeColor := regexp.MustCompile(`^(accent[1-6]|dk[12]|lt[12]|tx[12]|bg[12]|hlink|folHlink)$`)
 	for name, profile := range c.Profiles {
 		if name == "" || len(profile) == 0 || len(profile) != len(c.Roles) {
 			return fmt.Errorf("profile %q must bind every declared role", name)
 		}
 		for role, value := range profile {
-			if _, ok := c.Roles[role]; !ok || !hexColor.MatchString(value) {
+			r, ok := c.Roles[role]
+			if !ok || (r.ColorKind == "scheme" && !schemeColor.MatchString(value)) || (r.ColorKind != "scheme" && !hexColor.MatchString(value)) {
 				return fmt.Errorf("invalid role/color in profile %q", name)
 			}
 		}
+	}
+	hasScheme := false
+	for _, role := range c.Roles {
+		if role.ColorKind == "scheme" {
+			hasScheme = true
+			break
+		}
+	}
+	if hasScheme {
+		source, ok := c.Profiles["source"]
+		if !ok {
+			return fmt.Errorf("scheme-color roles require a source profile")
+		}
+		for name, role := range c.Roles {
+			if role.ColorKind != "scheme" {
+				continue
+			}
+			for _, id := range role.BindingIDs {
+				if source[name] != s.Bindings[bindings[id]].Value {
+					return fmt.Errorf("source scheme profile role %s differs from pinned source", name)
+				}
+			}
+		}
+	}
+	resourceTargets, err := validateResourceTargets(*project, c.Roles, c.Profiles, hexColor, schemeColor)
+	if err != nil {
+		return err
+	}
+	if err := validateZones(c.Zones, s.Scene, s.Bindings, bindings, objects, hexColor); err != nil {
+		return err
 	}
 	// Validate a separate decoded scene: ApplyBindings consumes its sentinels.
 	var checked nativepkg.Slide
@@ -256,7 +318,11 @@ func Run(args []string, stdout io.Writer) error {
 				selected = append(selected, b)
 			}
 		}
-		report := map[string]any{"contract": c, "explicit_bindings": selected, "fit_status": "not_measured", "typography_status": "explicit values; inheritance unresolved"}
+		paragraphs, err := inspectParagraphs(c.Slots, s.Scene, s.Bindings, bindings)
+		if err != nil {
+			return err
+		}
+		report := map[string]any{"contract": c, "explicit_bindings": selected, "slot_paragraphs": paragraphs, "fit_status": "not_measured", "typography_status": "explicit values; inheritance unresolved"}
 		b, e := json.MarshalIndent(report, "", "  ")
 		if e != nil {
 			return e
@@ -278,7 +344,7 @@ func Run(args []string, stdout io.Writer) error {
 	if err = decode(valuesData, &values); err != nil {
 		return err
 	}
-	if len(values.Slots) == 0 && values.Profile == "" {
+	if len(values.Slots) == 0 && len(values.Zones) == 0 && values.Profile == "" {
 		return fmt.Errorf("no edits requested")
 	}
 	changes := []map[string]string{}
@@ -288,10 +354,14 @@ func Run(args []string, stdout io.Writer) error {
 		changes = append(changes, map[string]string{"binding_id": id, "role": role, "before": b.Value, "after": value})
 		b.Value = value
 	}
-	for name, parts := range values.Slots {
+	for name, raw := range values.Slots {
 		slot, ok := c.Slots[name]
 		if !ok {
 			return fmt.Errorf("unknown slot %q", name)
+		}
+		parts, err := parseSlotValue(raw, slot, s.Scene, s.Bindings, bindings)
+		if err != nil {
+			return fmt.Errorf("slot %s: %w", name, err)
 		}
 		if len(parts) != len(slot.BindingIDs) {
 			return fmt.Errorf("slot %s needs exactly %d text segments; received %d", name, len(slot.BindingIDs), len(parts))
@@ -311,6 +381,10 @@ func Run(args []string, stdout io.Writer) error {
 			set(slot.BindingIDs[i], value, "slot:"+name)
 		}
 	}
+	zoneChanges, err := applyZones(values.Zones, c.Zones, s.Scene, s.Bindings, bindings)
+	if err != nil {
+		return err
+	}
 	if values.Profile != "" {
 		profile, ok := c.Profiles[values.Profile]
 		if !ok {
@@ -318,7 +392,11 @@ func Run(args []string, stdout io.Writer) error {
 		}
 		for role, value := range profile {
 			for _, id := range c.Roles[role].BindingIDs {
-				set(id, strings.ToUpper(value), "style:"+role)
+				if c.Roles[role].ColorKind == "scheme" {
+					set(id, value, "style:"+role)
+				} else {
+					set(id, strings.ToUpper(value), "style:"+role)
+				}
 			}
 		}
 	}
@@ -340,7 +418,8 @@ func Run(args []string, stdout io.Writer) error {
 				actual++
 			}
 		}
-		report := map[string]any{"contract_id": c.ID, "values_valid": true, "requested_bindings": len(changes), "changed_bindings": actual, "fit_status": "not_measured", "adaptation_approved": false}
+		resourceChanges := resourceProfileChanges(values.Profile, c.Roles, c.Profiles, resourceTargets)
+		report := map[string]any{"contract_id": c.ID, "values_valid": true, "requested_bindings": len(changes), "changed_bindings": actual, "created_zones": len(zoneChanges), "resource_color_changes": resourceChanges, "fit_status": "not_measured", "adaptation_approved": false}
 		b, err := json.MarshalIndent(report, "", "  ")
 		if err != nil {
 			return err
@@ -420,7 +499,11 @@ func Run(args []string, stdout io.Writer) error {
 	if err = write(filepath.Join(stage, sceneFile), s); err != nil {
 		return err
 	}
-	report := map[string]any{"schema": "pptxgengo.component-application.v1", "contract_id": c.ID, "component_id": c.ComponentID, "source_sha256": c.SourceSHA256, "reference_scene_sha256": c.SceneSHA256, "contract_sha256": hash(contractData), "values_sha256": hash(valuesData), "project_manifest_sha256": hash(manifestData), "changes": changes, "profile": values.Profile, "fit_status": "requires_native_measurement_and_visual_review", "adaptation_approved": false}
+	resourceChanges, err := applyResourceProfile(stage, values.Profile, c.Roles, c.Profiles, resourceTargets)
+	if err != nil {
+		return err
+	}
+	report := map[string]any{"schema": "pptxgengo.component-application.v1", "contract_id": c.ID, "component_id": c.ComponentID, "source_sha256": c.SourceSHA256, "reference_scene_sha256": c.SceneSHA256, "contract_sha256": hash(contractData), "values_sha256": hash(valuesData), "project_manifest_sha256": hash(manifestData), "changes": changes, "created_zones": zoneChanges, "resource_color_changes": resourceChanges, "profile": values.Profile, "fit_status": "requires_native_measurement_and_visual_review", "adaptation_approved": false}
 	if err = write(filepath.Join(stage, "component-application.json"), report); err != nil {
 		return err
 	}

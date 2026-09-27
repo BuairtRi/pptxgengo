@@ -47,7 +47,7 @@ def main():
                 evidence[page['template_id']] = dict(
                     png=str(png), pdf=deck['native_pdf'], pptx=deck['native_pptx'],
                     pdf_page=page['pdf_page'], manifest=str(path),
-                    snapshot=templates[page['template_id']], review=review)
+                    snapshot=templates[page['template_id']], review=review, render_limitations=manifest.get('render_limitations', []))
     def link(p):
         return os.path.relpath(root / p, out)
     data = []
@@ -78,7 +78,7 @@ def main():
             item.update(adapted_png=link(e['png']), pptx=link(e['pptx']), pdf=link(e['pdf']) + '#page=' + str(e['pdf_page']),
                         manifest=link(e['manifest']), status=review.get('status', 'pending_visual_review'),
                         findings=review.get('findings', []), resolved_findings=review.get('resolved_findings', []),
-                        limitations=snapshot['limitations'] + snapshot.get('opaque_areas', []) + snapshot.get('retained_source_content', []), current_inputs_match=len(matches) == 2 and all(matches),
+                        limitations=snapshot['limitations'] + snapshot.get('opaque_areas', []) + snapshot.get('retained_source_content', []) + e.get('render_limitations', []), current_inputs_match=len(matches) == 2 and all(matches),
                         input_directory=link(native_dir / 'inputs' / row['template_id']))
         data.append(item)
     (out / 'index.json').write_text(json.dumps({'schema':'pptxgengo.template-gallery.v1', 'adaptation_qualified':False, 'templates':data}, indent=2) + '\n')
