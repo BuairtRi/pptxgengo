@@ -22,23 +22,27 @@ type CanvasSpec struct {
 	Background string          `json:"background,omitempty"`
 	// ContrastBackground supplies the effective inherited surface used for
 	// color validation and measurement without painting a text-box fill.
-	ContrastBackground string         `json:"contrast_background,omitempty"`
-	InsetX             float64        `json:"inset_x,omitempty"`
-	InsetY             float64        `json:"inset_y,omitempty"`
-	Align              string         `json:"align,omitempty"`
-	Valign             string         `json:"valign,omitempty"`
-	LineWidthPt        float64        `json:"line_width_pt,omitempty"`
-	AssetPath          string         `json:"asset_path,omitempty"`
-	AssetSHA256        string         `json:"asset_sha256,omitempty"`
-	AltText            string         `json:"alt_text,omitempty"`
-	ImageFit           string         `json:"image_fit,omitempty"`
-	ImageCrop          *ImageCropSpec `json:"image_crop,omitempty"`
-	FocalX             *float64       `json:"focal_x,omitempty"`
-	FocalY             *float64       `json:"focal_y,omitempty"`
-	Preset             string         `json:"preset,omitempty"`
-	Adjustments        map[string]int `json:"adjustments,omitempty"`
-	Pattern            *PatternSpec   `json:"pattern,omitempty"`
-	AllowOverlap       []string       `json:"allow_overlap,omitempty"`
+	ContrastBackground  string         `json:"contrast_background,omitempty"`
+	InsetX              float64        `json:"inset_x,omitempty"`
+	InsetY              float64        `json:"inset_y,omitempty"`
+	Align               string         `json:"align,omitempty"`
+	Valign              string         `json:"valign,omitempty"`
+	LineWidthPt         float64        `json:"line_width_pt,omitempty"`
+	AssetPath           string         `json:"asset_path,omitempty"`
+	AssetSHA256         string         `json:"asset_sha256,omitempty"`
+	FallbackAssetPath   string         `json:"fallback_asset_path,omitempty"`
+	FallbackAssetSHA256 string         `json:"fallback_asset_sha256,omitempty"`
+	AltText             string         `json:"alt_text,omitempty"`
+	OutlineColor        string         `json:"outline_color,omitempty"`
+	OutlineWidthPt      float64        `json:"outline_width_pt,omitempty"`
+	ImageFit            string         `json:"image_fit,omitempty"`
+	ImageCrop           *ImageCropSpec `json:"image_crop,omitempty"`
+	FocalX              *float64       `json:"focal_x,omitempty"`
+	FocalY              *float64       `json:"focal_y,omitempty"`
+	Preset              string         `json:"preset,omitempty"`
+	Adjustments         map[string]int `json:"adjustments,omitempty"`
+	Pattern             *PatternSpec   `json:"pattern,omitempty"`
+	AllowOverlap        []string       `json:"allow_overlap,omitempty"`
 }
 type PlannedCanvas struct {
 	CanvasSpec
@@ -87,6 +91,9 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 				if e := validateRichText(c.Paragraphs, bg); e != nil {
 					return fmt.Errorf("canvas %s: %w", c.ID, e)
 				}
+				if e := validateRichBulletWidth(c.Paragraphs, c.Bounds.Width-2*c.InsetX); e != nil {
+					return fmt.Errorf("canvas %s: %w", c.ID, e)
+				}
 			} else if _, e := foreground(c.Foreground, bg); e != nil {
 				return fmt.Errorf("canvas %s: %w", c.ID, e)
 			}
@@ -108,6 +115,21 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 			}
 			if strings.Contains(c.AssetPath, "://") {
 				return fmt.Errorf("canvas image %s requires a local pinned file", c.ID)
+			}
+			isSVG := strings.HasSuffix(strings.ToLower(c.AssetPath), ".svg")
+			if isSVG != (c.FallbackAssetPath != "" || c.FallbackAssetSHA256 != "") {
+				return fmt.Errorf("canvas image %s requires a pinned PNG fallback exactly for SVG", c.ID)
+			}
+			if isSVG && (len(c.FallbackAssetSHA256) != 64 || strings.Contains(c.FallbackAssetPath, "://") || !strings.HasSuffix(strings.ToLower(c.FallbackAssetPath), ".png")) {
+				return fmt.Errorf("canvas image %s requires local PNG fallback path and SHA256", c.ID)
+			}
+			if (c.OutlineColor == "") != (c.OutlineWidthPt == 0) || c.OutlineWidthPt < 0 || c.OutlineWidthPt > 6 {
+				return fmt.Errorf("canvas image %s outline requires color and width in (0,6]", c.ID)
+			}
+			if c.OutlineColor != "" {
+				if _, err := resolveColor(c.OutlineColor); err != nil {
+					return fmt.Errorf("canvas image %s outline: %w", c.ID, err)
+				}
 			}
 			if err := validateImagePlacement(c); err != nil {
 				return err

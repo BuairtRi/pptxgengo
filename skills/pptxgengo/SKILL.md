@@ -23,7 +23,9 @@ not move related shapes as a group.
 
 For mixed typography, image crops, and roadmap presets, read
 `library/visual-components/README.md` and its qualification checkpoint. These are
-bounded Wave 2 features: Arial paragraphs/runs, pinned PNG/JPEG assets, and four
-editable shape presets. Rich bullets and rich-text recovery are not supported.
+bounded Wave 2 features: Arial paragraphs/runs and three native bullet glyphs,
+pinned PNG/JPEG or static SVG with a pinned PNG fallback, picture outlines, and
+four editable shape presets. Read the follow-up qualification status before
+promoting new variants. Rich-text recovery is not supported.
 Keep source geometry controls distinct from changed-content designs; fixture
 generation and passing unit tests alone do not establish visual fidelity.

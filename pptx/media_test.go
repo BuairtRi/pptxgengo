@@ -361,6 +361,17 @@ func TestResolveSlideMediaRels_SvgPngPreencoded_BecomesImgBroken(t *testing.T) {
 	}
 }
 
+func TestResolveSlideMediaRels_ExplicitSvgPngFallbackIsPreserved(t *testing.T) {
+	png := "image/png;base64,iVBORw0KGgo="
+	layout := &SlideBaseProps{RelsMedia: []SlideRelMedia{{Type: "image/png", Data: png, IsSvgPng: ptr(true), ExplicitSvgFallback: true, RID: 1, Target: "../media/image-1-1.png"}}}
+	if errs := resolveSlideMediaRels(layout); len(errs) != 0 {
+		t.Fatalf("unexpected errors: %v", errs)
+	}
+	if got := layout.RelsMedia[0].Data; got != png {
+		t.Fatalf("explicit fallback replaced: %v", got)
+	}
+}
+
 func TestResolveSlideMediaRels_SvgPngFromPath_NotBroken(t *testing.T) {
 	// Path-based SVGs (no preencoded data) never trip the Node "SVG not
 	// supported" fallback in real PptxGenJS output, because the STEP-5

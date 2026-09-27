@@ -18,10 +18,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("render_dir", type=Path)
     parser.add_argument("out", type=Path)
+    parser.add_argument("--spec", type=Path, default=ROOT / "library/visual-components/review.json")
     args = parser.parse_args()
     if args.out.exists():
         parser.error("output must be a new directory")
-    spec = json.loads((ROOT / "library/visual-components/review.json").read_text())
+    spec = json.loads(args.spec.read_text())
     fixtures = {slide["id"]: (i + 1, slide) for i, slide in enumerate(spec["slides"])}
     page, control = fixtures["source-deliverable-panel"]
     source_path = ROOT / "samples/reconstruction/reference/png/slide-028.png"

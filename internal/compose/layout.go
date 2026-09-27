@@ -551,6 +551,11 @@ func blockHeight(slide string, c ContainerSpec, cell CellSpec, b BlockSpec, widt
 	if textW <= 0 {
 		return 0, []LayoutZoneFit{fail(slide, c.ID, cell.ID, b.ID, "block has no usable text width")}
 	}
+	if rich {
+		if err := validateRichBulletWidth(b.Paragraphs, textW); err != nil {
+			return 0, []LayoutZoneFit{fail(slide, c.ID, cell.ID, b.ID, err.Error())}
+		}
+	}
 	h := b.MinHeightPt
 	if mode == layoutProbe {
 		if h <= 0 {

@@ -96,3 +96,92 @@ func TestImageContainPreservesRatio(t *testing.T) {
 		}
 	}
 }
+
+func TestRenderSVGPreservesSourceAndPngFallback(t *testing.T) {
+	dir := t.TempDir()
+	svg := []byte(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0 0h100v100z"/></svg>`)
+	svgPath := filepath.Join(dir, "source.svg")
+	if err := os.WriteFile(svgPath, svg, 0600); err != nil {
+		t.Fatal(err)
+	}
+	var pngData bytes.Buffer
+	if err := png.Encode(&pngData, image.NewRGBA(image.Rect(0, 0, 100, 100))); err != nil {
+		t.Fatal(err)
+	}
+	pngPath := filepath.Join(dir, "fallback.png")
+	if err := os.WriteFile(pngPath, pngData.Bytes(), 0600); err != nil {
+		t.Fatal(err)
+	}
+	e := element{Name: "svg", Kind: "image", Frame: frame{Width: 100, Height: 100}, AssetPath: svgPath, AssetSHA256: hash(svg), FallbackAssetPath: pngPath, FallbackAssetSHA256: hash(pngData.Bytes()), AltText: "svg", OutlineColor: "112233", OutlineWidthPt: 1}
+	deck, err := render([]renderSlide{{ID: "svg", Width: 960, Height: 540, Elements: []element{e}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := validateImageStructure(deck, []renderSlide{{ID: "svg", Width: 960, Height: 540, Elements: []element{e}}}); err != nil {
+		t.Fatal(err)
+	}
+	for _, mutate := range []func(string, []byte) []byte{
+		func(name string, body []byte) []byte {
+			if name == "ppt/slides/slide1.xml" {
+				return bytes.Replace(body, []byte(`<a:blip r:embed=`), []byte(`<a:blip r:link="external" r:embed=`), 1)
+			}
+			return body
+		},
+		func(name string, body []byte) []byte {
+			if name == "ppt/slides/slide1.xml" {
+				return bytes.Replace(body, []byte(`<asvg:svgBlip `), []byte(`<asvg:svgBlip r:link="external" `), 1)
+			}
+			return body
+		},
+
+		func(name string, body []byte) []byte {
+			if name == "ppt/slides/slide1.xml" {
+				return bytes.Replace(body, []byte(`</a:ln>`), []byte(`</a:ln><a:ln w="12700"><a:solidFill><a:srgbClr val="112233"/></a:solidFill></a:ln>`), 1)
+			}
+			return body
+		},
+		func(name string, body []byte) []byte {
+			if name == "ppt/slides/slide1.xml" {
+				return bytes.Replace(body, []byte(`<a:srgbClr val="112233"/>`), []byte(`<a:srgbClr val="112233"><a:alpha val="50000"/></a:srgbClr>`), 1)
+			}
+			return body
+		},
+	} {
+		if err := validateImageStructure(rewriteImageFixture(t, deck, mutate), []renderSlide{{ID: "svg", Width: 960, Height: 540, Elements: []element{e}}}); err == nil {
+			t.Fatal("accepted invalid picture outline")
+		}
+	}
+}
+
+func TestSVGIntrinsicSizeFailsClosedOnExternalReference(t *testing.T) {
+	if _, _, err := svgIntrinsicSize([]byte(`<svg viewBox="0 0 10 10"><image href="https://example.test/x.png"/></svg>`)); err == nil {
+		t.Fatal("external SVG reference accepted")
+	}
+}
+
+func TestSVGIntrinsicSizeRejectsUnsupportedStaticContract(t *testing.T) {
+	for _, body := range []string{
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><svg viewBox="0 0 10 10"/></svg>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path xmlns="urn:foreign"/></svg>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="NaN 0 10 10"/>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" width="" height="10" viewBox="0 0 10 10"/>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 10 10"/>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="urn:x" x:width="10" height="10" viewBox="0 0 10 10"/>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><style>.a{fill:u\72l(https://example.test/a)}</style></svg>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>trailing`,
+
+		`<svg xmlns="http://www.w3.org/2000/svg" width="10%" height="10" viewBox="0 0 10 10"/>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="NaN 0 10 10"/>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><animateMotion/></svg>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" onclick="x()"/>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect/></svg>trailing`,
+		`<?xml-stylesheet href="https://example.test/x.css"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>`,
+	} {
+		if _, _, err := svgIntrinsicSize([]byte(body)); err == nil {
+			t.Fatalf("accepted unsupported SVG: %s", body)
+		}
+	}
+	if w, h, err := svgIntrinsicSize([]byte(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10.1 1.1"><path d="M0 0"/></svg>`)); err != nil || w != 10.1 || h != 1.1 {
+		t.Fatalf("fractional viewBox = %v,%v %v", w, h, err)
+	}
+}

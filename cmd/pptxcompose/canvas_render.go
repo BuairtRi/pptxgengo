@@ -8,7 +8,7 @@ import (
 func canvasElements(items []compose.PlannedCanvas) []element {
 	var out []element
 	for _, c := range items {
-		out = append(out, element{Name: "canvas:" + base64.RawURLEncoding.EncodeToString([]byte(c.ID)), Kind: c.Kind, Frame: rect(c.Bounds), Text: c.Text, Paragraphs: c.Paragraphs, FontFace: c.FontFace, FontSize: c.FontSizePt, Bold: c.Bold, Foreground: color(c.Foreground), Background: color(c.Background), InsetX: c.InsetX, InsetY: c.InsetY, Align: c.Align, Valign: c.Valign, MeasurementID: c.MeasurementID, LineWidth: c.LineWidthPt, AssetPath: c.AssetPath, AssetSHA256: c.AssetSHA256, AltText: c.AltText, ImageFit: c.ImageFit, ImageCrop: c.ImageCrop, FocalX: c.FocalX, FocalY: c.FocalY, Preset: c.Preset, Adjustments: c.Adjustments, Pattern: c.Pattern})
+		out = append(out, element{Name: "canvas:" + base64.RawURLEncoding.EncodeToString([]byte(c.ID)), Kind: c.Kind, Frame: rect(c.Bounds), Text: c.Text, Paragraphs: c.Paragraphs, FontFace: c.FontFace, FontSize: c.FontSizePt, Bold: c.Bold, Foreground: color(c.Foreground), Background: color(c.Background), InsetX: c.InsetX, InsetY: c.InsetY, Align: c.Align, Valign: c.Valign, MeasurementID: c.MeasurementID, LineWidth: c.LineWidthPt, AssetPath: c.AssetPath, AssetSHA256: c.AssetSHA256, FallbackAssetPath: c.FallbackAssetPath, FallbackAssetSHA256: c.FallbackAssetSHA256, AltText: c.AltText, OutlineColor: color(c.OutlineColor), OutlineWidthPt: c.OutlineWidthPt, ImageFit: c.ImageFit, ImageCrop: c.ImageCrop, FocalX: c.FocalX, FocalY: c.FocalY, Preset: c.Preset, Adjustments: c.Adjustments, Pattern: c.Pattern})
 	}
 	return out
 }

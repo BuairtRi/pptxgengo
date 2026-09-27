@@ -456,3 +456,45 @@ are now explicit and visually reviewed; label boxes remain outside the artwork.
 The response arrow also requires explicit overlap with both the foreground need
 tile and its label. A separate accidental overlap between comparison labels was
 fixed by narrowing the oversized source-bio label box, then remeasuring its width.
+
+## QA85 — Bulk character queries collapse to an aggregate range
+
+The PowerPoint AppleScript `every character` request returned a single combined
+range rather than a list of individual observations. It cannot replace the
+per-character checks. Retained exact character inspection and batched paragraph
+properties only. The six-object smoke retained exact historical native values.
+See `WAVE2_VERIFIER_SPIKE.md`; no large performance improvement is claimed.
+
+## QA86 — Unequal biography bullet pitch and sparse responsibilities
+
+Independent Wave 2 review identified uneven sidebar spacing and a lower panel
+with only three responsibilities. The generator now uses a consistent 23pt
+minimum for each sidebar item and five proposed responsibility items. Source
+portrait/card controls are unchanged. Native follow-up fit and visual review
+remain the acceptance gate.
+
+## QA87 — SVG media needs a genuine fallback and a separate media check
+
+The underlying image writer's legacy SVG path could place broken placeholder or
+SVG bytes in the PNG fallback relationship. Native SVG support now requires an
+explicit pinned PNG fallback in the compose contract, preserving both media
+hashes. Structural validation must check the SVG extension relationship and the
+PNG relationship independently; successful picture-frame measurement alone does
+not prove visible artwork.
+
+## QA88 — Four independent border lines leave corner residuals
+
+UHG28 source picture borders are native picture outlines. The v7 approximation
+used four separate line objects, with measurable residuals near the edges.
+The follow-up introduces native picture outlines with explicit color and width;
+source-region comparisons determine the remaining difference without declaring
+whole-slide identity.
+
+
+## QA89 — Successful automation return does not prove an export exists
+
+The follow-up PDF export timed out. A subsequent save command returned success
+but created no file; a file-existence check caught this before any visual proof
+was accepted. Later PowerPoint opens returned -9074. Preserve unsaved decks and
+require the actual PDF plus successful rasterization before reporting an export.
+Final Wave 2 follow-up visual QA is pending application/file-access recovery.

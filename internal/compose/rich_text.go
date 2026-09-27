@@ -8,12 +8,21 @@ import (
 // ParagraphSpec is one native PowerPoint paragraph. Rich paragraphs are
 // intentionally bounded to explicit Arial runs and point paragraph spacing.
 type ParagraphSpec struct {
-	ID                  string    `json:"id"`
-	Align               string    `json:"align"` // left, center, right
-	SpaceBeforePt       float64   `json:"space_before_pt,omitempty"`
-	SpaceAfterPt        float64   `json:"space_after_pt,omitempty"`
-	LineSpacingMultiple float64   `json:"line_spacing_multiple,omitempty"`
-	Runs                []RunSpec `json:"runs"`
+	ID                  string      `json:"id"`
+	Align               string      `json:"align"` // left, center, right
+	SpaceBeforePt       float64     `json:"space_before_pt,omitempty"`
+	SpaceAfterPt        float64     `json:"space_after_pt,omitempty"`
+	LineSpacingMultiple float64     `json:"line_spacing_multiple,omitempty"`
+	Bullet              *BulletSpec `json:"bullet,omitempty"`
+	Runs                []RunSpec   `json:"runs"`
+}
+
+// BulletSpec is a single editable, unnumbered PowerPoint bullet. MarginLeftPt
+// positions the text; HangingPt moves the bullet left from that text position.
+type BulletSpec struct {
+	Character    string  `json:"character"`
+	MarginLeftPt float64 `json:"margin_left_pt"`
+	HangingPt    float64 `json:"hanging_pt"`
 }
 
 type RunSpec struct {
@@ -75,6 +84,17 @@ func validateRichTextStructure(paragraphs []ParagraphSpec) error {
 		if len(p.Runs) == 0 {
 			return fmt.Errorf("paragraph %s requires at least one run", p.ID)
 		}
+		if p.Bullet != nil {
+			if p.Align != "left" {
+				return fmt.Errorf("paragraph %s bullets require left alignment", p.ID)
+			}
+			if p.Bullet.Character != "•" && p.Bullet.Character != "–" && p.Bullet.Character != "▪" {
+				return fmt.Errorf("paragraph %s bullet character must be one of •, –, or ▪", p.ID)
+			}
+			if !finite(p.Bullet.MarginLeftPt) || p.Bullet.MarginLeftPt < 1 || p.Bullet.MarginLeftPt > 144 || !finite(p.Bullet.HangingPt) || p.Bullet.HangingPt < .75*p.Runs[0].FontSizePt || p.Bullet.HangingPt > p.Bullet.MarginLeftPt {
+				return fmt.Errorf("paragraph %s bullet margin must be in [1,144]pt and hanging indent at least 75%% of the first run font size and no greater than the margin", p.ID)
+			}
+		}
 		runIDs := map[string]bool{}
 		for _, r := range p.Runs {
 			if !validID(r.ID) || runIDs[r.ID] || !validID(r.Text) {
@@ -113,10 +133,23 @@ func paragraphLineSpacing(p ParagraphSpec) float64 {
 	return p.LineSpacingMultiple
 }
 
+func validateRichBulletWidth(paragraphs []ParagraphSpec, width float64) error {
+	for _, p := range paragraphs {
+		if p.Bullet != nil && p.Bullet.MarginLeftPt >= width {
+			return fmt.Errorf("paragraph %s bullet margin %.2fpt leaves no usable width in %.2fpt frame", p.ID, p.Bullet.MarginLeftPt, width)
+		}
+	}
+	return nil
+}
+
 func resolveRichText(paragraphs []ParagraphSpec, background string) []ParagraphSpec {
 	out := make([]ParagraphSpec, len(paragraphs))
 	for i, p := range paragraphs {
 		out[i] = p
+		if p.Bullet != nil {
+			bullet := *p.Bullet
+			out[i].Bullet = &bullet
+		}
 		out[i].Runs = make([]RunSpec, len(p.Runs))
 		for j, r := range p.Runs {
 			out[i].Runs[j] = r

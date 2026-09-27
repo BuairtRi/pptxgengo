@@ -172,6 +172,10 @@ type BulletProps struct {
 	Type          string // "bullet" | "number"
 	CharacterCode string
 	Indent        float64
+	// MarginLeftPt and HangingPt allow an exact native hanging indent. When
+	// omitted, legacy Indent continues to control both values.
+	MarginLeftPt  float64
+	HangingPt     float64
 	NumberType    string
 	NumberStartAt int
 	// Deprecated (v3.3.0) aliases:
@@ -238,6 +242,14 @@ type ImageProps struct {
 	Shadow       *ShadowProps
 	Sizing       *ImageSizing
 	Transparency float64
+	// SVGFallbackData is an explicit PNG data URI used as the DrawingML
+	// fallback when Data contains SVG. Leaving it empty preserves the legacy
+	// PptxGenJS-compatible fallback behavior.
+	SVGFallbackData string
+	// Line draws a bounded picture outline. Only solid color/width callers are
+	// supported by compose; the broader ShapeLineProps remains consistent with
+	// the rest of the public API.
+	Line *ShapeLineProps
 }
 
 // MediaProps are options for added audio/video/online media.
@@ -452,6 +464,9 @@ type TextPropsOptions struct {
 	ObjectNameProps
 	BodyProp *BodyProps // internal `_bodyProp`
 	LineIdx  int        // internal `_lineIdx`
+	// ParagraphContinuation suppresses duplicate paragraph properties on a
+	// later rich run in the same paragraph.
+	ParagraphContinuation bool
 
 	Baseline            float64
 	CharSpacing         float64
@@ -810,9 +825,12 @@ type SlideRelMedia struct {
 	Data        any // string | []byte
 	IsDuplicate *bool
 	IsSvgPng    *bool
-	SvgSize     *SlideRelMediaSize
-	RID         int
-	Target      string
+	// ExplicitSvgFallback bypasses the legacy Node-compatible SVG preview
+	// placeholder and preserves caller-provided PNG bytes.
+	ExplicitSvgFallback bool
+	SvgSize             *SlideRelMediaSize
+	RID                 int
+	Target              string
 }
 
 // ---------------------------------------------------------------------------
@@ -884,29 +902,30 @@ type ObjectOptions struct {
 	RowH               []float64
 
 	// text:
-	BodyProp            *BodyProps
-	LineIdx             int
-	Baseline            float64
-	CharSpacing         float64
-	Fit                 string
-	Glow                *TextGlowProps
-	IndentLevel         int
-	IsTextBox           *bool
-	LineSpacing         float64
-	LineSpacingMultiple float64
-	Outline             *OutlineProps
-	ParaSpaceAfter      *float64
-	ParaSpaceBefore     *float64
-	Shape               ShapeType
-	Strike              string
-	Subscript           *bool
-	Superscript         *bool
-	Vert                string
-	Wrap                *bool
-	AutoFit             *bool
-	ShrinkText          *bool
-	Inset               float64
-	RtlMode             *bool
+	BodyProp              *BodyProps
+	LineIdx               int
+	ParagraphContinuation bool
+	Baseline              float64
+	CharSpacing           float64
+	Fit                   string
+	Glow                  *TextGlowProps
+	IndentLevel           int
+	IsTextBox             *bool
+	LineSpacing           float64
+	LineSpacingMultiple   float64
+	Outline               *OutlineProps
+	ParaSpaceAfter        *float64
+	ParaSpaceBefore       *float64
+	Shape                 ShapeType
+	Strike                string
+	Subscript             *bool
+	Superscript           *bool
+	Vert                  string
+	Wrap                  *bool
+	AutoFit               *bool
+	ShrinkText            *bool
+	Inset                 float64
+	RtlMode               *bool
 
 	// position aliases used by tables:
 	Cx *Coord

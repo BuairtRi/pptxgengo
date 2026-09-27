@@ -274,6 +274,21 @@ func TestAddImageDefinition_SvgTwoRels(t *testing.T) {
 	}
 }
 
+func TestAddImageDefinition_SvgUsesExplicitPngFallback(t *testing.T) {
+	s := newTestSlide()
+	svg := "data:image/svg+xml;base64,PHN2Zy8+"
+	png := "data:image/png;base64,iVBORw0KGgo="
+	if err := addImageDefinition(s, &ImageProps{DataOrPathProps: DataOrPathProps{Data: svg}, SVGFallbackData: png}); err != nil {
+		t.Fatal(err)
+	}
+	if got := s.RelsMedia[0].Data; got != png {
+		t.Fatalf("fallback data = %v, want explicit PNG", got)
+	}
+	if got := s.RelsMedia[1].Data; got != svg {
+		t.Fatalf("SVG data = %v, want original SVG", got)
+	}
+}
+
 func TestAddImageDefinition_Hyperlink(t *testing.T) {
 	s := newTestSlide()
 	addImageDefinition(s, &ImageProps{

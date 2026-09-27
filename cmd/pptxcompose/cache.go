@@ -150,8 +150,8 @@ func validateProbeSource(dir, evPath string) (validatedSource, error) {
 	if e = json.Unmarshal(ev.Native, &native); e != nil {
 		return result, e
 	}
-	if native.Schema != "pptxgengo.compose-text-measurement.v7" {
-		return result, fmt.Errorf("cache requires v7 native character/paragraph/style evidence")
+	if native.Schema != "pptxgengo.compose-text-measurement.v8" {
+		return result, fmt.Errorf("cache requires v8 native character/paragraph/style/bullet evidence")
 	}
 	result.measurements, e = checkNative(pm, native, false)
 	if e != nil {

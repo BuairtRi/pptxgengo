@@ -36,9 +36,13 @@ measured line spacing: UHG28 captions use 0.9. Newlines belong between paragraph
 not inside runs. Font files and
 every run/paragraph property bind the native measurement cache.
 
-Mixed formatting is supported on canvas text and layout blocks. Rich native
-bullets and hanging indentation remain unsupported; existing separate uniform
-marker/text layout blocks remain available. Do not flatten rich text through
+Mixed formatting is supported on canvas text and layout blocks. Native bullet
+paragraphs support `bullet: {character: "•", margin_left_pt: 23.04, hanging_pt: 22.5}`
+with glyphs `•`, `–`, and `▪`, left alignment and first-run Arial/color at 100% size.
+Hanging indentation must reserve at least 0.75 times the first-run point size.
+Numbering and custom bullet fonts are unsupported. Indentation is structurally
+verified; native character bounds exclude the bullet glyph, so visual review is
+required. Existing separate uniform marker/text blocks remain available. Do not flatten rich text through
 `recover-text`: rich text edits need regeneration or the scene workflow.
 
 ## Pictures
@@ -58,9 +62,10 @@ its actual identity; synthetic people use initials/placeholders. UHG deliverable
 screenshots are labeled illustrative source examples. They are not evidence of
 completed work for a new proposal.
 
-The current deliverable fixture approximates picture borders with four native
-lines. Do not claim that their corner joins are pixel-identical to a native
-picture outline. Caption/picture pairing is a spec transform, not a native group.
+The original v7 deliverable fixture approximates picture borders with four native
+lines. The follow-up uses `outline_color` plus `outline_width_pt` for a native
+picture outline (width up to 6pt). Do not treat a structural pass as proof of
+pixel identity. Caption/picture pairing is a spec transform, not a native group.
 
 ## Roadmaps
 
@@ -74,3 +79,19 @@ The source roadmap groups are flattened into editable native objects. Its month
 header is rectangles/text, not a table. Exact source bar geometry does not imply
 exact source glyph placement or general date-driven scheduling. The fixture
 generator demonstrates declared interval and milestone transforms only.
+
+## Wave 2 follow-up
+
+See [follow-up qualification](../../planning/WAVE2_FOLLOWUP.md) for the four-page
+review covering bullets, biography spacing, native outlines, and SVG icons.
+Regenerate with `python3 scripts/build-wave2-followup-spec.py`. The original
+`proof.json` remains historical v7 evidence; `followup-proof.json` records the
+new fixture evidence after native/visual qualification.
+
+Static SVG pictures require `asset_path`/`asset_sha256` for the original plus
+`fallback_asset_path`/`fallback_asset_sha256` for a reviewed PNG fallback. Both
+media are embedded without changing their bytes. This keeps the vector artwork
+as an SVG picture; it does not convert paths into editable PowerPoint shapes.
+Unsupported external/font dependencies, active content and dimensional ambiguity
+are rejected. The fallback's aspect ratio must match within 0.5%. Visual review
+must confirm that the fallback depicts the same artwork.

@@ -123,21 +123,62 @@ func validateImageNode(parts map[string][]byte, slidePart string, n *nativepkg.N
 		return fmt.Errorf("invalid picture fill structure")
 	}
 	blip := fill.Child("blip")
-	if blip == nil || len(namedChildren(blip)) != 0 {
-		return fmt.Errorf("unsupported picture blip effects")
+	if blip == nil || len(blip.Attrs) != 1 || blip.Attr("r:embed") == "" {
+		return fmt.Errorf("picture blip requires only a pinned embedded relationship")
 	}
 	media, err := relatedImage(parts, slidePart, blip.Attr("r:embed"))
 	if err != nil {
 		return err
 	}
-	if hash(media) != want.AssetSHA256 {
-		return fmt.Errorf("embedded media hash mismatch")
+	width, height := 0.0, 0.0
+	isSVG := strings.HasSuffix(strings.ToLower(want.AssetPath), ".svg")
+	if isSVG {
+		ext := childNamed(blip, "extLst")
+		if ext == nil || len(namedChildren(blip)) != 1 || len(namedChildren(ext)) != 1 {
+			return fmt.Errorf("invalid SVG picture extension")
+		}
+		extension := childNamed(ext, "ext")
+		if extension == nil || len(extension.Attrs) != 1 || extension.Attr("uri") != "{96DAC541-7B7A-43D3-8B79-37D633B846F1}" {
+			return fmt.Errorf("invalid SVG extension URI")
+		}
+		svgBlip := childNamed(extension, "svgBlip")
+		if svgBlip == nil || svgBlip.Name != "asvg:svgBlip" || len(namedChildren(extension)) != 1 || len(namedChildren(svgBlip)) != 0 || len(svgBlip.Attrs) != 2 || svgBlip.Attr("xmlns:asvg") != "http://schemas.microsoft.com/office/drawing/2016/SVG/main" || svgBlip.Attr("r:embed") == "" {
+			return fmt.Errorf("missing SVG blip extension")
+		}
+		svg, err := relatedImage(parts, slidePart, svgBlip.Attr("r:embed"))
+		if err != nil || hash(svg) != want.AssetSHA256 {
+			return fmt.Errorf("embedded SVG hash mismatch")
+		}
+		if width, height, err = svgIntrinsicSize(svg); err != nil {
+			return fmt.Errorf("embedded SVG dimensions: %w", err)
+		}
+		if hash(media) != want.FallbackAssetSHA256 {
+			return fmt.Errorf("embedded SVG fallback hash mismatch")
+		}
+		cfg, format, err := image.DecodeConfig(bytes.NewReader(media))
+		if err != nil || format != "png" {
+			return fmt.Errorf("embedded SVG fallback decode")
+		}
+		if float64(cfg.Width)/float64(cfg.Height) != 0 && math.Abs((float64(cfg.Width)/float64(cfg.Height))/(width/height)-1) > .005 {
+			return fmt.Errorf("embedded SVG fallback aspect mismatch")
+		}
+	} else {
+		if len(namedChildren(blip)) != 0 {
+			return fmt.Errorf("unsupported picture blip effects")
+		}
+		if hash(media) != want.AssetSHA256 {
+			return fmt.Errorf("embedded media hash mismatch")
+		}
+		cfg, _, err := image.DecodeConfig(bytes.NewReader(media))
+		if err != nil {
+			return fmt.Errorf("embedded media decode: %w", err)
+		}
+		width, height = float64(cfg.Width), float64(cfg.Height)
 	}
-	cfg, _, err := image.DecodeConfig(bytes.NewReader(media))
-	if err != nil {
-		return fmt.Errorf("embedded media decode: %w", err)
+	if err := validatePictureOutline(spPr, want); err != nil {
+		return err
 	}
-	crop, err := imageCrop(want, cfg.Width, cfg.Height)
+	crop, err := imageCropAspect(want, width, height)
 	if err != nil {
 		return err
 	}
@@ -167,6 +208,31 @@ func validateImageNode(parts map[string][]byte, slidePart string, n *nativepkg.N
 		if err != nil || src.Attr(name) != strconv.Itoa(got) || got != wantValue {
 			return fmt.Errorf("srcRect %s=%q expected %d", name, src.Attr(name), wantValue)
 		}
+	}
+	return nil
+}
+
+func validatePictureOutline(spPr *nativepkg.Node, want element) error {
+	ln := childNamed(spPr, "ln")
+	if countNamed(spPr, "ln") > 1 {
+		return fmt.Errorf("duplicate picture outline")
+	}
+	if want.OutlineColor == "" {
+		if ln != nil {
+			return fmt.Errorf("unexpected picture outline")
+		}
+		return nil
+	}
+	if ln == nil || len(ln.Attrs) != 1 || ln.Attr("w") != strconv.Itoa(int(math.Floor(want.OutlineWidthPt*12700+0.5))) {
+		return fmt.Errorf("picture outline width mismatch")
+	}
+	solid := childNamed(ln, "solidFill")
+	if solid == nil || len(namedChildren(ln)) != 1 {
+		return fmt.Errorf("picture outline color mismatch")
+	}
+	clr := childNamed(solid, "srgbClr")
+	if clr == nil || len(clr.Attrs) != 1 || len(namedChildren(clr)) != 0 || clr.Attr("val") != want.OutlineColor || len(namedChildren(solid)) != 1 {
+		return fmt.Errorf("picture outline color mismatch")
 	}
 	return nil
 }
@@ -255,4 +321,28 @@ func countNamed(n *nativepkg.Node, name string) int {
 		}
 	}
 	return count
+}
+
+func childNamed(n *nativepkg.Node, name string) *nativepkg.Node {
+	if n == nil {
+		return nil
+	}
+	for _, child := range n.Children {
+		if localName(child.Name) == name {
+			return child
+		}
+	}
+	return nil
+}
+
+func nodeNames(n *nativepkg.Node) []string {
+	var out []string
+	if n != nil {
+		for _, c := range n.Children {
+			if c.Name != "" {
+				out = append(out, c.Name)
+			}
+		}
+	}
+	return out
 }

@@ -1,5 +1,8 @@
 # Wave 2 — rich typography and visual components
 
+Historical v7 checkpoint at commit `7090db77`. See the
+[follow-up status](WAVE2_FOLLOWUP.md) for newer code and its pending visual gate.
+
 2026-09-26. Eight bounded fixtures passed native verification and two visual
 reviews. This is not blanket approval of the Wave 2 library or a whole-slide
 pixel-identity claim. Evidence is bound in

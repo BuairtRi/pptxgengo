@@ -2,8 +2,8 @@
 
 Status: the native rich-text smoke probe and final smoke-deck verification passed
 the v6 character and paragraph checks. That result is historical evidence for
-runs and point spacing. The current contract is v7 because it also binds native
-paragraph line spacing. Full fixture qualification is tracked in
+runs and point spacing. The current contract is v8 because it also binds native
+paragraph line spacing and editable character bullets. Full fixture qualification is tracked in
 [the Wave 2 checkpoint](WAVE2_CHECKPOINT.md). Keep one frozen CLI binary per
 qualification run; the measurement cache intentionally rejects changed binaries.
 
@@ -46,6 +46,11 @@ explicit paragraphs and runs:
       "align": "left",
       "space_before_pt": 2,
       "line_spacing_multiple": 0.9,
+      "bullet": {
+        "character": "•",
+        "margin_left_pt": 12,
+        "hanging_pt": 9
+      },
       "runs": [
         {
           "id": "link-style",
@@ -73,6 +78,13 @@ PowerPoint within-line multiplier from 0.5 through 4; omission means 1. The
 legacy uniform `text` schema remains supported; one element cannot mix legacy
 text fields with `paragraphs`.
 
+An optional paragraph `bullet` emits one editable native character bullet.
+Supported characters are `•`, `–`, and `▪`. Bulleted paragraphs require left
+alignment and a text margin from 1pt through 144pt. The hanging indent must be
+no greater than that margin and at least 75% of the first run's font size,
+reserving bounded room for the marker. The bullet is 100% of the paragraph text
+size and inherits the first run's Arial face and color.
+
 ## Native and cache contract
 
 Probe generation carries the complete paragraph and run structure. The cache key
@@ -85,7 +97,7 @@ the PowerPoint version/build; the operating system; and the file hashes for Aria
 regular, bold, italic, and bold italic. A missing face or a substituted family
 fails environment inspection.
 
-Cache import requires `pptxgengo.compose-text-measurement.v7`. The v7 native
+Cache import requires `pptxgengo.compose-text-measurement.v8`. The v8 native
 adapter records each character's text, font name, point size, bold, italic,
 underline enum, and RGB value, plus each paragraph's alignment and point spacing.
 It also records PowerPoint's within-line rule and unitless spacing value. The
@@ -93,6 +105,11 @@ checker requires the within-line rule and compares its multiplier exactly apart
 from floating-point representation noise. It compares all records to the spec
 and reconstructs measured bounds from native observations. There is no
 uniform-style fallback for rich text.
+
+For bullets, native evidence binds visibility, unnumbered type, character,
+100% relative size, and text font/color inheritance. A package structural check
+binds the exact paragraph `marL` and negative `indent` values because the native
+ruler API cannot report distinct margins for paragraphs at the same list level.
 
 ## Commands
 
@@ -140,8 +157,9 @@ git diff --check
   checks for two widths, two paragraphs, Arial bold italic, single underline,
   RGB color, and 2pt/6pt paragraph spacing.
 - Source-deck QA found 0.9 within-line spacing on compact captions. This property
-  materially changes native measured height, so v7 binds the rule and multiplier;
+  materially changes native measured height, so v7 added the rule and multiplier;
   older rich evidence cannot enter the current cache.
+- v8 adds editable unnumbered bullets and exact structural hanging-indent checks.
 - The generated OOXML contains distinct native paragraphs and editable runs.
 - Layout blocks retain stable measurement IDs while lowering rich paragraphs to
   canvas text.
@@ -154,8 +172,10 @@ git diff --check
 ## Explicit limits
 
 - Rich runs support Arial only. Other font families fail validation.
-- Rich native bullets and hanging indentation are deferred. Layouts continue to
-  support the existing measured marker/text block pair.
+- Bullets are unnumbered, use one of three supported Arial characters, and have
+  one explicit margin/hanging level. Numbering, nested list levels, separate
+  bullet fonts/colors/sizes, tabs, and right/center aligned bullets are outside
+  this contract.
 - Runs cannot contain carriage returns or line feeds; use another paragraph.
 - Non-BMP characters are rejected because the native character index contract is
   bounded to matching Go and PowerPoint character positions.

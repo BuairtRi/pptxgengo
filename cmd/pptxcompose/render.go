@@ -14,34 +14,38 @@ type frame struct {
 	Height float64 `json:"height"`
 }
 type element struct {
-	AssetMode     string                  `json:"asset_mode,omitempty"`
-	AssetPath     string                  `json:"asset_path,omitempty"`
-	AssetSHA256   string                  `json:"asset_sha256,omitempty"`
-	AltText       string                  `json:"alt_text,omitempty"`
-	ImageFit      string                  `json:"image_fit,omitempty"`
-	ImageCrop     *compose.ImageCropSpec  `json:"image_crop,omitempty"`
-	FocalX        *float64                `json:"focal_x,omitempty"`
-	FocalY        *float64                `json:"focal_y,omitempty"`
-	Preset        string                  `json:"preset,omitempty"`
-	Adjustments   map[string]int          `json:"adjustments,omitempty"`
-	Pattern       *compose.PatternSpec    `json:"pattern,omitempty"`
-	Name          string                  `json:"name"`
-	Kind          string                  `json:"kind"`
-	Frame         frame                   `json:"frame"`
-	Text          string                  `json:"text,omitempty"`
-	Paragraphs    []compose.ParagraphSpec `json:"paragraphs,omitempty"`
-	FontFace      string                  `json:"font_face,omitempty"`
-	FontSize      float64                 `json:"font_size,omitempty"`
-	Bold          bool                    `json:"bold,omitempty"`
-	Foreground    string                  `json:"foreground,omitempty"`
-	Background    string                  `json:"background,omitempty"`
-	InsetX        float64                 `json:"inset_x"`
-	InsetY        float64                 `json:"inset_y"`
-	Align         string                  `json:"align,omitempty"`
-	Valign        string                  `json:"valign,omitempty"`
-	MeasurementID string                  `json:"measurement_id,omitempty"`
-	LineWidth     float64                 `json:"line_width,omitempty"`
-	ConnectionIDs []string                `json:"connection_ids,omitempty"`
+	AssetMode           string                  `json:"asset_mode,omitempty"`
+	AssetPath           string                  `json:"asset_path,omitempty"`
+	AssetSHA256         string                  `json:"asset_sha256,omitempty"`
+	FallbackAssetPath   string                  `json:"fallback_asset_path,omitempty"`
+	FallbackAssetSHA256 string                  `json:"fallback_asset_sha256,omitempty"`
+	AltText             string                  `json:"alt_text,omitempty"`
+	OutlineColor        string                  `json:"outline_color,omitempty"`
+	OutlineWidthPt      float64                 `json:"outline_width_pt,omitempty"`
+	ImageFit            string                  `json:"image_fit,omitempty"`
+	ImageCrop           *compose.ImageCropSpec  `json:"image_crop,omitempty"`
+	FocalX              *float64                `json:"focal_x,omitempty"`
+	FocalY              *float64                `json:"focal_y,omitempty"`
+	Preset              string                  `json:"preset,omitempty"`
+	Adjustments         map[string]int          `json:"adjustments,omitempty"`
+	Pattern             *compose.PatternSpec    `json:"pattern,omitempty"`
+	Name                string                  `json:"name"`
+	Kind                string                  `json:"kind"`
+	Frame               frame                   `json:"frame"`
+	Text                string                  `json:"text,omitempty"`
+	Paragraphs          []compose.ParagraphSpec `json:"paragraphs,omitempty"`
+	FontFace            string                  `json:"font_face,omitempty"`
+	FontSize            float64                 `json:"font_size,omitempty"`
+	Bold                bool                    `json:"bold,omitempty"`
+	Foreground          string                  `json:"foreground,omitempty"`
+	Background          string                  `json:"background,omitempty"`
+	InsetX              float64                 `json:"inset_x"`
+	InsetY              float64                 `json:"inset_y"`
+	Align               string                  `json:"align,omitempty"`
+	Valign              string                  `json:"valign,omitempty"`
+	MeasurementID       string                  `json:"measurement_id,omitempty"`
+	LineWidth           float64                 `json:"line_width,omitempty"`
+	ConnectionIDs       []string                `json:"connection_ids,omitempty"`
 }
 type renderSlide struct {
 	Notes    string    `json:"notes,omitempty"`
@@ -142,7 +146,11 @@ func render(slides []renderSlide) ([]byte, error) {
 						if lineSpacing == 0 {
 							lineSpacing = 1
 						}
-						runOpts := &pptx.TextPropsOptions{TextBaseProps: pptx.TextBaseProps{FontFace: run.FontFace, FontSize: run.FontSizePt, Bold: pointer(run.Bold), Italic: pointer(run.Italic), Color: color(run.Foreground), Align: pptx.HAlign(paragraph.Align), BreakLine: pointer(breakLine)}, ParaSpaceBefore: pointer(paragraph.SpaceBeforePt), ParaSpaceAfter: pointer(paragraph.SpaceAfterPt), LineSpacingMultiple: lineSpacing}
+						runOpts := &pptx.TextPropsOptions{TextBaseProps: pptx.TextBaseProps{FontFace: run.FontFace, FontSize: run.FontSizePt, Bold: pointer(run.Bold), Italic: pointer(run.Italic), Color: color(run.Foreground), Align: pptx.HAlign(paragraph.Align), BreakLine: pointer(breakLine)}, ParagraphContinuation: ri > 0, ParaSpaceBefore: pointer(paragraph.SpaceBeforePt), ParaSpaceAfter: pointer(paragraph.SpaceAfterPt), LineSpacingMultiple: lineSpacing}
+						if ri == 0 && paragraph.Bullet != nil {
+							runes := []rune(paragraph.Bullet.Character)
+							runOpts.Bullet = &pptx.BulletProps{CharacterCode: fmt.Sprintf("%04X", runes[0]), MarginLeftPt: paragraph.Bullet.MarginLeftPt, HangingPt: paragraph.Bullet.HangingPt}
+						}
 						if run.Underline {
 							runOpts.Underline = &pptx.UnderlineProps{Style: "sng"}
 						}

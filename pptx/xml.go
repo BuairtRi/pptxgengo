@@ -688,6 +688,11 @@ func slideObjectImageToXml(slideItemObj *SlideObject, slide *SlideBaseProps, pla
 		prst = "ellipse"
 	}
 	s.WriteString(` <a:prstGeom prst="` + prst + `"><a:avLst/></a:prstGeom>`)
+	if opts.Line != nil && opts.Line.Type != "none" && opts.Line.Color != "" && opts.Line.Width > 0 {
+		s.WriteString(`<a:ln w="` + itoa(valToPts(opts.Line.Width)) + `">`)
+		s.WriteString(genXmlColorSelection(&opts.Line.ShapeFillProps))
+		s.WriteString(`</a:ln>`)
+	}
 
 	if opts.Shadow != nil && opts.Shadow.Type != "none" {
 		s.WriteString(shadowImageXml(opts.Shadow))
@@ -1237,14 +1242,21 @@ func genXmlParagraphProperties(opts *ObjectOptions, isDefault bool) string {
 	}
 
 	// bullet
-	marLIndent := func() string {
+	marLIndent := func(bl *BulletProps) string {
 		var marL int
 		if opts.IndentLevel > 0 {
 			marL = bulletMarL + bulletMarL*opts.IndentLevel
 		} else {
 			marL = bulletMarL
 		}
-		return ` marL="` + itoa(marL) + `" indent="-` + itoa(bulletMarL) + `"`
+		hanging := bulletMarL
+		if bl.MarginLeftPt != 0 {
+			marL = valToPts(bl.MarginLeftPt)
+		}
+		if bl.HangingPt != 0 {
+			hanging = valToPts(bl.HangingPt)
+		}
+		return ` marL="` + itoa(marL) + `" indent="-` + itoa(hanging) + `"`
 	}
 	if opts.Bullet != nil {
 		bl := opts.Bullet
@@ -1253,7 +1265,7 @@ func genXmlParagraphProperties(opts *ObjectOptions, isDefault bool) string {
 		}
 		if bl.Type != "" {
 			if strings.ToLower(bl.Type) == "number" {
-				paragraphPropXml += marLIndent()
+				paragraphPropXml += marLIndent(bl)
 				startAt := bl.NumberStartAt
 				if startAt == 0 {
 					startAt = bl.StartAt
@@ -1270,17 +1282,17 @@ func genXmlParagraphProperties(opts *ObjectOptions, isDefault bool) string {
 			if !isHex4(bl.CharacterCode) {
 				bulletCode = string(BulletTypeDefault)
 			}
-			paragraphPropXml += marLIndent()
+			paragraphPropXml += marLIndent(bl)
 			strXmlBullet = `<a:buSzPct val="100000"/><a:buChar char="` + bulletCode + `"/>`
 		} else if bl.Code != "" {
 			bulletCode := "&#x" + bl.Code + ";"
 			if !isHex4(bl.Code) {
 				bulletCode = string(BulletTypeDefault)
 			}
-			paragraphPropXml += marLIndent()
+			paragraphPropXml += marLIndent(bl)
 			strXmlBullet = `<a:buSzPct val="100000"/><a:buChar char="` + bulletCode + `"/>`
 		} else {
-			paragraphPropXml += marLIndent()
+			paragraphPropXml += marLIndent(bl)
 			strXmlBullet = `<a:buSzPct val="100000"/><a:buChar char="` + string(BulletTypeDefault) + `"/>`
 		}
 	} else {
@@ -1630,8 +1642,10 @@ func genXmlTextBodyCore(typ SlideObjectType, opts *ObjectOptions, tmpTextObjects
 			if fptrOr(textObj.options.ParaSpaceAfter, 0) == 0 {
 				textObj.options.ParaSpaceAfter = opts.ParaSpaceAfter
 			}
-			paragraphPropXml := genXmlParagraphProperties(textObj.options, false)
-			strSlideXml += strings.ReplaceAll(paragraphPropXml, "<a:pPr></a:pPr>", "")
+			if !textObj.options.ParagraphContinuation {
+				paragraphPropXml := genXmlParagraphProperties(textObj.options, false)
+				strSlideXml += strings.ReplaceAll(paragraphPropXml, "<a:pPr></a:pPr>", "")
+			}
 
 			// Inherit run-level options from shape opts (except bullet; and color
 			// is not inherited when the run has a hyperlink).
@@ -1815,6 +1829,7 @@ func objOptsFromTextProps(tp *TextPropsOptions) *ObjectOptions {
 	o.ObjectNameProps = tp.ObjectNameProps
 	o.BodyProp = tp.BodyProp
 	o.LineIdx = tp.LineIdx
+	o.ParagraphContinuation = tp.ParagraphContinuation
 	o.Baseline = tp.Baseline
 	o.CharSpacing = tp.CharSpacing
 	o.Fit = tp.Fit

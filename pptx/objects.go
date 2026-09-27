@@ -129,6 +129,7 @@ func objectOptionsFromTextPropsOptions(t *TextPropsOptions) *ObjectOptions {
 	o.ObjectNameProps = t.ObjectNameProps
 	o.BodyProp = t.BodyProp
 	o.LineIdx = t.LineIdx
+	o.ParagraphContinuation = t.ParagraphContinuation
 	o.Baseline = t.Baseline
 	o.CharSpacing = t.CharSpacing
 	o.Fit = t.Fit
@@ -186,6 +187,7 @@ func textPropsOptionsFromObjectOptions(o *ObjectOptions) *TextPropsOptions {
 	t.ObjectNameProps = o.ObjectNameProps
 	t.BodyProp = o.BodyProp
 	t.LineIdx = o.LineIdx
+	t.ParagraphContinuation = o.ParagraphContinuation
 	t.Baseline = o.Baseline
 	t.CharSpacing = o.CharSpacing
 	t.Fit = o.Fit
@@ -874,6 +876,7 @@ func addImageDefinition(target *PresSlide, opt *ImageProps) error {
 		FlipV:           ptr(opt.FlipV != nil && *opt.FlipV),
 		FlipH:           ptr(opt.FlipH != nil && *opt.FlipH),
 		Shadow:          correctShadowOptions(opt.Shadow),
+		Line:            opt.Line,
 	}
 	newObject.Options.Transparency = opt.Transparency
 
@@ -881,14 +884,19 @@ func addImageDefinition(target *PresSlide, opt *ImageProps) error {
 	if strImgExtn == "svg" {
 		// SVG consumes TWO rIds: a PNG fallback + the SVG itself.
 		t1 := fmt.Sprintf("../media/image-%d-%d.png", target.SlideNum, len(target.RelsMedia)+1)
+		fallbackData := strImageData
+		if opt.SVGFallbackData != "" {
+			fallbackData = opt.SVGFallbackData
+		}
 		target.RelsMedia = append(target.RelsMedia, SlideRelMedia{
-			Path:     orStr(strImagePath, strImageData+"png"),
-			Type:     "image/png",
-			Extn:     "png",
-			Data:     strImageData,
-			RID:      imageRelID,
-			Target:   t1,
-			IsSvgPng: ptr(true),
+			Path:                orStr(strImagePath, strImageData+"png"),
+			Type:                "image/png",
+			Extn:                "png",
+			Data:                fallbackData,
+			RID:                 imageRelID,
+			Target:              t1,
+			IsSvgPng:            ptr(true),
+			ExplicitSvgFallback: opt.SVGFallbackData != "",
 			SvgSize: &SlideRelMediaSize{
 				W: float64(getSmartParseNumber(*newObject.Options.W, "X", target.PresLayout)),
 				H: float64(getSmartParseNumber(*newObject.Options.H, "Y", target.PresLayout)),

@@ -176,7 +176,7 @@ on run argv
 								set paragraphCount to count of paragraphs of tr
 								repeat with paragraphIndex from 1 to paragraphCount
 									set paragraphRange to paragraph paragraphIndex of tr
-									set paragraphFormatValue to paragraph format of paragraphRange
+									set paragraphFormatValue to properties of paragraph format of paragraphRange
 									set paragraphAlignmentValue to alignment of paragraphFormatValue
 									set paragraphSpaceBeforeValue to space before of paragraphFormatValue
 									set paragraphSpaceAfterValue to space after of paragraphFormatValue
@@ -184,6 +184,15 @@ on run argv
 									set paragraphSpaceWithinValue to space within of paragraphFormatValue
 									if paragraphAlignmentValue is missing value or paragraphSpaceBeforeValue is missing value or paragraphSpaceAfterValue is missing value or paragraphLineRuleWithinValue is missing value or paragraphSpaceWithinValue is missing value then error "Unresolved paragraph style in " & shapeName number 85
 									set paragraphJSON to "{\"alignment\":" & my jsonString(paragraphAlignmentValue as text) & ",\"space_before_pt\":" & my jsonNumber(paragraphSpaceBeforeValue) & ",\"space_after_pt\":" & my jsonNumber(paragraphSpaceAfterValue) & ",\"line_rule_within\":" & my jsonBoolean(paragraphLineRuleWithinValue) & ",\"space_within\":" & my jsonNumber(paragraphSpaceWithinValue) & "}"
+									set bulletProperties to properties of bullet format of paragraph format of paragraphRange
+									set bulletVisibleValue to visible of bulletProperties
+									set bulletTypeValue to bullet type of bulletProperties
+									set bulletCharacterValue to bullet character of bulletProperties
+									set bulletSizeValue to relative size of bulletProperties
+									set bulletTextColorValue to use text color of bulletProperties
+									set bulletTextFontValue to use text font of bulletProperties
+									if bulletVisibleValue is missing value or bulletTypeValue is missing value or bulletCharacterValue is missing value or bulletSizeValue is missing value or bulletTextColorValue is missing value or bulletTextFontValue is missing value then error "Unresolved native bullet style in " & shapeName number 86
+									set paragraphJSON to text 1 thru -2 of paragraphJSON & ",\"bullet_visible\":" & my jsonBoolean(bulletVisibleValue) & ",\"bullet_type\":" & my jsonString(bulletTypeValue as text) & ",\"bullet_character\":" & my jsonString(bulletCharacterValue) & ",\"bullet_relative_size\":" & my jsonNumber(bulletSizeValue) & ",\"bullet_use_text_color\":" & my jsonBoolean(bulletTextColorValue) & ",\"bullet_use_text_font\":" & my jsonBoolean(bulletTextFontValue) & "}"
 									if paragraphRows is not "" then set paragraphRows to paragraphRows & ","
 									set paragraphRows to paragraphRows & paragraphJSON
 								end repeat
@@ -204,7 +213,7 @@ on run argv
 
 	if visibleSlideCount is 0 then error "Presentation has no visible slides" number 72
 	if outputRows is "" then error "Presentation has no visible shapes to measure" number 73
-	return "{\"schema\":\"pptxgengo.compose-text-measurement.v7\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-whitespace character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
+	return "{\"schema\":\"pptxgengo.compose-text-measurement.v8\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-whitespace character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
 end run
 
 on absoluteValue(valueNumber)

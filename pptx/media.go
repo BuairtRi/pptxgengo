@@ -170,7 +170,7 @@ func resolveSlideMediaRels(layout *SlideBaseProps) []error {
 func svgPngNodeFallback(rels []SlideRelMedia) []int {
 	var out []int
 	for i := range rels {
-		if boolDeref(rels[i].IsSvgPng) && dataString(rels[i].Data) != "" {
+		if boolDeref(rels[i].IsSvgPng) && !rels[i].ExplicitSvgFallback && dataString(rels[i].Data) != "" {
 			out = append(out, i)
 		}
 	}

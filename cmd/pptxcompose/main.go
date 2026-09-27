@@ -76,11 +76,17 @@ type nativeCharacter struct {
 	Color      []int   `json:"color"`
 }
 type nativeParagraph struct {
-	Alignment      string  `json:"alignment"`
-	SpaceBeforePt  float64 `json:"space_before_pt"`
-	SpaceAfterPt   float64 `json:"space_after_pt"`
-	LineRuleWithin bool    `json:"line_rule_within"`
-	SpaceWithin    float64 `json:"space_within"`
+	Alignment          string   `json:"alignment"`
+	SpaceBeforePt      float64  `json:"space_before_pt"`
+	SpaceAfterPt       float64  `json:"space_after_pt"`
+	LineRuleWithin     bool     `json:"line_rule_within"`
+	SpaceWithin        float64  `json:"space_within"`
+	BulletVisible      *bool    `json:"bullet_visible"`
+	BulletType         string   `json:"bullet_type"`
+	BulletCharacter    string   `json:"bullet_character"`
+	BulletRelativeSize *float64 `json:"bullet_relative_size"`
+	BulletUseTextColor *bool    `json:"bullet_use_text_color"`
+	BulletUseTextFont  *bool    `json:"bullet_use_text_font"`
 }
 type nativeResult struct {
 	Schema string      `json:"schema"`
@@ -156,6 +162,9 @@ func bundle(dir string, m manifest) (err error) {
 		return e
 	}
 	if e = validateImageStructure(b, m.Slides); e != nil {
+		return e
+	}
+	if e = validateRichBulletStructure(b, m.Slides); e != nil {
 		return e
 	}
 	m.DeckSHA = hash(b)
@@ -268,7 +277,7 @@ func nearLineSpacing(a, b float64) bool {
 }
 func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, error) {
 	result := compose.Measurements{ByRequestID: map[string]compose.Measurement{}}
-	if (n.Schema != "pptxgengo.compose-text-measurement.v2" && n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5" && n.Schema != "pptxgengo.compose-text-measurement.v6" && n.Schema != "pptxgengo.compose-text-measurement.v7") || n.Count != len(m.Slides) {
+	if (n.Schema != "pptxgengo.compose-text-measurement.v2" && n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5" && n.Schema != "pptxgengo.compose-text-measurement.v6" && n.Schema != "pptxgengo.compose-text-measurement.v7" && n.Schema != "pptxgengo.compose-text-measurement.v8") || n.Count != len(m.Slides) {
 		return result, fmt.Errorf("native schema or slide count mismatch")
 	}
 	rows := map[string]nativeRow{}
@@ -295,10 +304,17 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				if r.Text != nil && *r.Text != "" {
 					return result, fmt.Errorf("unexpected image text %s", k)
 				}
+				if e.OutlineColor == "" {
+					if r.Line.Visible {
+						return result, fmt.Errorf("unexpected image outline %s", k)
+					}
+				} else if !r.Line.Visible || rgbHex(r.Line.RGB) != e.OutlineColor || !near(r.Line.WidthPt, e.OutlineWidthPt) || !finite(r.Line.Transparency) || math.Abs(r.Line.Transparency) > 1e-6 {
+					return result, fmt.Errorf("native image outline mismatch %s: %+v", k, r.Line)
+				}
 				continue
 			}
 			if e.Kind == "shape" {
-				if (n.Schema == "pptxgengo.compose-text-measurement.v3" || n.Schema == "pptxgengo.compose-text-measurement.v4" || n.Schema == "pptxgengo.compose-text-measurement.v5" || n.Schema == "pptxgengo.compose-text-measurement.v6" || n.Schema == "pptxgengo.compose-text-measurement.v7") && r.Line.Visible {
+				if (n.Schema == "pptxgengo.compose-text-measurement.v3" || n.Schema == "pptxgengo.compose-text-measurement.v4" || n.Schema == "pptxgengo.compose-text-measurement.v5" || n.Schema == "pptxgengo.compose-text-measurement.v6" || n.Schema == "pptxgengo.compose-text-measurement.v7" || n.Schema == "pptxgengo.compose-text-measurement.v8") && r.Line.Visible {
 					return result, fmt.Errorf("unexpected shape outline %s", k)
 				}
 				if e.Pattern == nil && (!r.Fill.Visible || !finite(r.Fill.Transparency) || math.Abs(r.Fill.Transparency) > 1e-6 || rgbHex(r.Fill.RGB) != e.Background) {
@@ -310,7 +326,7 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				continue
 			}
 			if e.Kind == "line" {
-				if (n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5" && n.Schema != "pptxgengo.compose-text-measurement.v6" && n.Schema != "pptxgengo.compose-text-measurement.v7") || !r.Line.Visible || rgbHex(r.Line.RGB) != e.Foreground || !near(r.Line.WidthPt, e.LineWidth) || math.Abs(r.Line.Transparency) > 1e-6 || !finite(r.Line.Transparency) || r.Line.BeginArrow != "no arrowhead" || r.Line.EndArrow != "no arrowhead" {
+				if (n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5" && n.Schema != "pptxgengo.compose-text-measurement.v6" && n.Schema != "pptxgengo.compose-text-measurement.v7" && n.Schema != "pptxgengo.compose-text-measurement.v8") || !r.Line.Visible || rgbHex(r.Line.RGB) != e.Foreground || !near(r.Line.WidthPt, e.LineWidth) || math.Abs(r.Line.Transparency) > 1e-6 || !finite(r.Line.Transparency) || r.Line.BeginArrow != "no arrowhead" || r.Line.EndArrow != "no arrowhead" {
 					return result, fmt.Errorf("native line mismatch %s: %+v", k, r.Line)
 				}
 				if r.Text != nil && *r.Text != "" {
@@ -318,7 +334,7 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				}
 				continue
 			}
-			if (n.Schema == "pptxgengo.compose-text-measurement.v3" || n.Schema == "pptxgengo.compose-text-measurement.v4" || n.Schema == "pptxgengo.compose-text-measurement.v5" || n.Schema == "pptxgengo.compose-text-measurement.v6" || n.Schema == "pptxgengo.compose-text-measurement.v7") && r.Line.Visible {
+			if (n.Schema == "pptxgengo.compose-text-measurement.v3" || n.Schema == "pptxgengo.compose-text-measurement.v4" || n.Schema == "pptxgengo.compose-text-measurement.v5" || n.Schema == "pptxgengo.compose-text-measurement.v6" || n.Schema == "pptxgengo.compose-text-measurement.v7" || n.Schema == "pptxgengo.compose-text-measurement.v8") && r.Line.Visible {
 				return result, fmt.Errorf("unexpected outline %s", k)
 			}
 
@@ -340,8 +356,8 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				return result, fmt.Errorf("native text mismatch %s", k)
 			}
 			if len(e.Paragraphs) > 0 {
-				if n.Schema != "pptxgengo.compose-text-measurement.v7" {
-					return result, fmt.Errorf("rich text requires v7 native paragraph/style evidence: %s", k)
+				if n.Schema != "pptxgengo.compose-text-measurement.v8" {
+					return result, fmt.Errorf("rich text requires v8 native paragraph/style/bullet evidence: %s", k)
 				}
 				if err := checkNativeRichText(k, e.Paragraphs, r); err != nil {
 					return result, err
@@ -387,6 +403,16 @@ func checkNativeRichText(shape string, expected []compose.ParagraphSpec, row nat
 		}
 		if np.Alignment != align[p.Align] || !near(np.SpaceBeforePt, p.SpaceBeforePt) || !near(np.SpaceAfterPt, p.SpaceAfterPt) || !np.LineRuleWithin || !nearLineSpacing(np.SpaceWithin, lineSpacing) {
 			return fmt.Errorf("native paragraph style mismatch %s paragraph %s: %+v", shape, p.ID, np)
+		}
+		if np.BulletVisible == nil {
+			return fmt.Errorf("native paragraph bullet evidence missing %s paragraph %s", shape, p.ID)
+		}
+		if p.Bullet == nil {
+			if *np.BulletVisible || np.BulletType != "ppBulletNone" {
+				return fmt.Errorf("native unexpected bullet %s paragraph %s: %+v", shape, p.ID, np)
+			}
+		} else if !*np.BulletVisible || np.BulletType != "ppBulletUnnumbered" || np.BulletCharacter != p.Bullet.Character || np.BulletRelativeSize == nil || !nearLineSpacing(*np.BulletRelativeSize, 1) || np.BulletUseTextColor == nil || !*np.BulletUseTextColor || np.BulletUseTextFont == nil || !*np.BulletUseTextFont {
+			return fmt.Errorf("native bullet style mismatch %s paragraph %s: %+v", shape, p.ID, np)
 		}
 		for _, run := range p.Runs {
 			for _, ch := range run.Text {
@@ -632,8 +658,8 @@ func run(args []string) error {
 					return e
 				}
 				for _, s := range spec.Slides {
-					if len(s.Accents) > 0 && nr.Schema != "pptxgengo.compose-text-measurement.v4" && nr.Schema != "pptxgengo.compose-text-measurement.v5" && nr.Schema != "pptxgengo.compose-text-measurement.v6" && nr.Schema != "pptxgengo.compose-text-measurement.v7" {
-						return fmt.Errorf("measured accents require v4/v5/v6/v7 native character-bound evidence")
+					if len(s.Accents) > 0 && nr.Schema != "pptxgengo.compose-text-measurement.v4" && nr.Schema != "pptxgengo.compose-text-measurement.v5" && nr.Schema != "pptxgengo.compose-text-measurement.v6" && nr.Schema != "pptxgengo.compose-text-measurement.v7" && nr.Schema != "pptxgengo.compose-text-measurement.v8" {
+						return fmt.Errorf("measured accents require v4/v5/v6/v7/v8 native character-bound evidence")
 					}
 				}
 				measured, e = checkNative(pm, nr, false)
@@ -704,6 +730,9 @@ func run(args []string) error {
 			return e
 		}
 		if e = validateImageStructure(db, m.Slides); e != nil {
+			return e
+		}
+		if e = validateRichBulletStructure(db, m.Slides); e != nil {
 			return e
 		}
 		isFinal := args[0] == "verify"

@@ -93,7 +93,7 @@ def main():
             "title_bounds": rect(36, 44, 888, 52), "title_font_size_pt": 23,
             "role": "ILLUSTRATIVE CHANGED-CONTENT FIXTURE",
             "takeaway": "Five paired needs and responses demonstrate icon-led rows, rich copy, separators and an editable directional shape.",
-            "notes": "Illustrative changed-content fixture based on EnableComp source slide 5 (source deck SHA-256 " + SOURCE_SHA + "). Source visual uses a rotated triangle behind five need tiles; this fixture uses an editable rightArrow as a source-like directional treatment. Five source SVG icons are preserved as pinned originals and rendered to 8x AppKit PNG previews because the current compose image decoder accepts PNG/JPEG, not SVG. Derived PNGs are raster previews, not editable vectors; see samples/visual-wave2/response-assets.json for original and derived hashes. Need labels and response titles/body are adapted sample copy; source panel geometry is retained approximately. This is a nonnative probe fixture and not native PowerPoint rendering evidence.",
+            "notes": "Illustrative changed-content fixture based on EnableComp source slide 5 (source deck SHA-256 " + SOURCE_SHA + "). Source visual uses a rotated triangle behind five need tiles; this fixture uses an editable rightArrow as a source-like directional treatment. Five source SVG icons are preserved as pinned originals with pinned AppKit PNG fallbacks. Derived PNGs provide Office fallback rendering; see samples/visual-wave2/response-assets.json for original and derived hashes. Need labels and response titles/body are adapted sample copy; source panel geometry is retained approximately.",
             "canvas": []}
     canvas = page["canvas"]
     # Keep branded footer and suppress layout-specific engagement strip.
@@ -122,14 +122,16 @@ def main():
         need_text["contrast_background"] = NAVY
         need_text["allow_overlap"] = [f"need-tile-{i+1}", "direction-arrow"]
         canvas.append(need_text)
-        # Pale response row and original icon raster preview in source proportions.
+        # Pale response row and a native SVG icon with a pinned PNG fallback.
         canvas.append({"id": f"response-row-{i+1}", "kind": "surface", "bounds": rect(row_x, y, row_w, row_h),
                        "background": PALE, "layer": 5,
                        "allow_overlap": [f"row-icon-{i+1}", f"row-divider-{i+1}", f"row-copy-{i+1}"]})
         png = ids[i][1]
+        svg = ids[i][0]
         canvas.append({"id": f"row-icon-{i+1}", "kind": "image", "bounds": rect(row_x+13, y+7.2, 32.2, 32.2),
-                       "asset_path": str(png.relative_to(ROOT)), "asset_sha256": ids[i][2],
-                       "alt_text": f"Pinned EnableComp source icon for response row {i+1}; raster preview of original SVG", "image_fit": "contain", "layer": 10,
+                       "asset_path": str(svg.relative_to(ROOT)), "asset_sha256": source_hash,
+                       "fallback_asset_path": str(png.relative_to(ROOT)), "fallback_asset_sha256": ids[i][2],
+                       "alt_text": f"Pinned EnableComp source icon for response row {i+1}", "image_fit": "contain", "layer": 10,
                        "allow_overlap": [f"response-row-{i+1}"]})
         canvas.append({"id": f"row-divider-{i+1}", "kind": "line", "bounds": rect(row_x+58, y+6.5, 0, 33.8),
                        "foreground": NAVY, "line_width_pt": 1.2, "layer": 10, "allow_overlap": [f"response-row-{i+1}"]})
