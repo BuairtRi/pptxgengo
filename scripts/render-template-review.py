@@ -19,6 +19,7 @@ def digest(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("bundle", type=Path)
+    parser.add_argument("--native-workspace", type=Path, help="Existing PowerPoint-approved staging directory")
     parser.add_argument("--name", required=True, help="Unique native filename prefix")
     args = parser.parse_args()
     if not args.name or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in args.name):
@@ -29,7 +30,9 @@ def main():
     output = bundle / "native-render.json"
     if output.exists():
         parser.error("native-render.json already exists; use a new immutable bundle")
-    native = root / "samples/visual-wave3"
+    native = args.native_workspace.resolve() if args.native_workspace else root / "samples/visual-wave3"
+    def artifact_path(path):
+        return str(path.relative_to(root)) if path.is_relative_to(root) else str(path.resolve())
     if not native.is_dir():
         parser.error("the established PowerPoint working directory is missing")
     jobs = []
@@ -63,10 +66,10 @@ def main():
             if page_count != deck["expected_pdf_pages"]:
                 raise ValueError(f"Expected {deck['expected_pdf_pages']} pages, got {page_count}")
             subprocess.run(["swift", str(root / "scripts/render-pdf.swift"), str(pdf), str(render), *map(str, range(1, page_count + 1))], check=True, timeout=150, stdout=subprocess.DEVNULL)
-            deck.update(native_pptx=str(pptx.relative_to(root)), native_pdf=str(pdf.relative_to(root)), native_pdf_sha256=digest(pdf), render_directory=str(render.relative_to(root)), actual_pdf_pages=page_count)
+            deck.update(native_pptx=artifact_path(pptx), native_pdf=artifact_path(pdf), native_pdf_sha256=digest(pdf), render_directory=artifact_path(render), actual_pdf_pages=page_count)
             for page in deck["pages"]:
                 png = render / f"slide-{page['pdf_page']:03d}.png"
-                page.update(png=str(png.relative_to(root)), png_sha256=digest(png))
+                page.update(png=artifact_path(png), png_sha256=digest(png))
             save()
             print(f"Rendered {page_count} pages", flush=True)
     except Exception as error:

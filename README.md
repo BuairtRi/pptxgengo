@@ -12,6 +12,8 @@ The full product remains under development.**
 The first target is detailed West Monroe proposal and
 document-style decks.
 
+- [Local CLI release and Codex installation](release/README.md)
+- [West Monroe authoring skill with progressive references](skills/west-monroe-presentations/SKILL.md)
 - [Current capabilities and verified baseline](CAPABILITIES.md)
 - [Product architecture, experiments, and implementation sequence](PRODUCT_PLAN.md)
 - [Current remaining-work plan and library inventory/curation sequence](IMPLEMENTATION_PLAN.md)

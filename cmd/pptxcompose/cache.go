@@ -30,7 +30,7 @@ type measurementEnvironment struct {
 }
 
 func currentEnvironment(adapter string) (*measurementEnvironment, error) {
-	inspector := "scripts/compose-environment.swift"
+	inspector := releaseScript("compose-environment.swift")
 	source, e := os.ReadFile(inspector)
 	if e != nil {
 		return nil, e

@@ -583,7 +583,7 @@ func run(args []string) error {
 	dir := fs.String("bundle", "", "probe or output bundle directory")
 	reuse := fs.Bool("reuse-measurements", false, "explicitly reuse native measurements when every text probe request is unchanged")
 	evPath := fs.String("evidence", "", "native probe evidence JSON")
-	script := fs.String("adapter", "scripts/measure-compose-text.applescript", "native PowerPoint measurement adapter")
+	script := fs.String("adapter", releaseScript("measure-compose-text.applescript"), "native PowerPoint measurement adapter")
 	nativeWorkspace := fs.String("native-workspace", "", "existing directory for a staged PowerPoint measurement copy (measure/verify only)")
 	if e := fs.Parse(args[1:]); e != nil {
 		return e

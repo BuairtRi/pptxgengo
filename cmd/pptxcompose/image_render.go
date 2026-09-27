@@ -10,7 +10,6 @@ import (
 	_ "image/png"
 	"io"
 	"math"
-	"os"
 	"strconv"
 	"strings"
 
@@ -84,7 +83,7 @@ func imageCropAspect(e element, width, height float64) (*compose.ImageCropSpec, 
 }
 
 func renderImage(s *pptx.Slide, e element) error {
-	b, err := os.ReadFile(e.AssetPath)
+	b, err := readAsset(e.AssetPath)
 	if err != nil {
 		return err
 	}
@@ -116,7 +115,7 @@ func renderImage(s *pptx.Slide, e element) error {
 	o := &pptx.ImageProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, DataOrPathProps: pptx.DataOrPathProps{Data: "image/" + format + ";base64," + base64.StdEncoding.EncodeToString(b)}, AltText: e.AltText}
 	o.Rotate = e.RotationDeg
 	if isSVG {
-		fallback, err := os.ReadFile(e.FallbackAssetPath)
+		fallback, err := readAsset(e.FallbackAssetPath)
 		if err != nil {
 			return fmt.Errorf("read SVG fallback: %w", err)
 		}

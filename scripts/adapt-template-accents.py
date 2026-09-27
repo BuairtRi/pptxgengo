@@ -119,6 +119,7 @@ def main():
     ap.add_argument('--intents', type=Path, required=True)
     ap.add_argument('--out', type=Path, required=True)
     ap.add_argument('--name', required=True)
+    ap.add_argument('--native-workspace', type=Path, help='Existing PowerPoint-approved staging directory')
     ap.add_argument('--template-bin', required=True)
     ap.add_argument('--anchor-bin', required=True)
     ap.add_argument('--scene-bin', required=True)
@@ -144,7 +145,7 @@ def main():
         p = (src / d['path']).resolve()
         if not p.is_relative_to(src) or sha(p) != d['sha256']:
             raise ValueError('Frozen native deck changed')
-    native_dir = root / 'samples/visual-wave3'
+    native_dir = args.native_workspace.resolve() if args.native_workspace else root / 'samples/visual-wave3'
     if not native_dir.is_dir():
         raise ValueError('Established PowerPoint working folder is missing')
     # Copy provenance and editable native projects; publish the manifest last.
