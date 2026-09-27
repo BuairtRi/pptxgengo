@@ -46,7 +46,8 @@ type CanvasSpec struct {
 }
 type PlannedCanvas struct {
 	CanvasSpec
-	MeasurementID string `json:"measurement_id,omitempty"`
+	MeasurementID  string          `json:"measurement_id,omitempty"`
+	PhraseRequests []PhraseRequest `json:"phrase_requests,omitempty"`
 }
 
 func validateCanvas(s SlideSpec, ids map[string]bool) error {
@@ -94,7 +95,7 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 				if e := validateRichBulletWidth(c.Paragraphs, c.Bounds.Width-2*c.InsetX); e != nil {
 					return fmt.Errorf("canvas %s: %w", c.ID, e)
 				}
-			} else if _, e := foreground(c.Foreground, bg); e != nil {
+			} else if _, e := foregroundAtSize(c.Foreground, bg, c.FontSizePt, c.Bold); e != nil {
 				return fmt.Errorf("canvas %s: %w", c.ID, e)
 			}
 		case "surface":
@@ -168,16 +169,26 @@ func canvasProbes(s SlideSpec) []ProbeRequest {
 				paragraphs = resolveRichText(paragraphs, bg)
 				text = richText(paragraphs)
 			} else {
-				fg, _ = foreground(c.Foreground, bg)
+				fg, _ = foregroundAtSize(c.Foreground, bg, c.FontSizePt, c.Bold)
 			}
-			q = append(q, ProbeRequest{ID: requestID(s.ID, "canvas", c.ID), SlideID: s.ID, Kind: "canvas_text", Text: text, Paragraphs: paragraphs, TextWidthPt: c.Bounds.Width - 2*c.InsetX, FontFace: c.FontFace, FontSizePt: c.FontSizePt, Bold: c.Bold, Foreground: fg, Background: bg, Align: c.Align})
+			q = append(q, ProbeRequest{ID: requestID(s.ID, "canvas", c.ID), SlideID: s.ID, Kind: "canvas_text", PhraseRequests: accentPhraseRequests(s, c.ID), Text: text, Paragraphs: paragraphs, TextWidthPt: c.Bounds.Width - 2*c.InsetX, FontFace: c.FontFace, FontSizePt: c.FontSizePt, Bold: c.Bold, Foreground: fg, Background: bg, Align: c.Align})
+		}
+	}
+	for _, a := range s.Accents {
+		if a.Staging != nil {
+			q = append(q, accentNoteProbe(s, a))
+		}
+	}
+	for _, a := range s.ArtworkArrows {
+		if a.Staging != nil {
+			q = append(q, arrowNoteProbe(s, a))
 		}
 	}
 	return q
 }
 func planCanvas(s SlideSpec, p *PlannedSlide, m Measurements) error {
 	for _, c := range s.Canvas {
-		pc := PlannedCanvas{CanvasSpec: c}
+		pc := PlannedCanvas{CanvasSpec: c, PhraseRequests: accentPhraseRequests(s, c.ID)}
 		if len(c.Adjustments) != 0 {
 			pc.Adjustments = make(map[string]int, len(c.Adjustments))
 			for name, value := range c.Adjustments {
@@ -200,7 +211,7 @@ func planCanvas(s SlideSpec, p *PlannedSlide, m Measurements) error {
 				if bg == "" {
 					bg = white
 				}
-				pc.Foreground, _ = foreground(c.Foreground, bg)
+				pc.Foreground, _ = foregroundAtSize(c.Foreground, bg, c.FontSizePt, c.Bold)
 			} else {
 				pc.Foreground, _ = resolveColor(c.Foreground)
 			}

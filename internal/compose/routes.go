@@ -5,35 +5,45 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 )
 
-// Connections target root roles or complete pods. Nested role routing is not
-// supported: the enclosing pod must own routing through its internal content.
+// Connections target root roles, pods, or resolved layout container/cell ports.
 type ConnectionSpec struct {
-	ID           string  `json:"id"`
-	From         string  `json:"from"`
-	To           string  `json:"to"`
-	Relationship string  `json:"relationship"`
-	FromAnchor   string  `json:"from_anchor"`
-	ToAnchor     string  `json:"to_anchor"`
-	Color        string  `json:"color"`
-	WidthPt      float64 `json:"width_pt"`
-	ClearancePt  float64 `json:"clearance_pt"`
+	ID                 string  `json:"id"`
+	From               string  `json:"from"`
+	To                 string  `json:"to"`
+	Relationship       string  `json:"relationship"`
+	FromAnchor         string  `json:"from_anchor"`
+	ToAnchor           string  `json:"to_anchor"`
+	Color              string  `json:"color"`
+	WidthPt            float64 `json:"width_pt"`
+	ClearancePt        float64 `json:"clearance_pt"`
+	BendPenaltyPt      float64 `json:"bend_penalty_pt,omitempty"`
+	PreferredDirection string  `json:"preferred_direction,omitempty"` // horizontal, vertical, auto
+	FromOffsetPt       float64 `json:"from_offset_pt,omitempty"`
+	ToOffsetPt         float64 `json:"to_offset_pt,omitempty"`
+	ArrowHeightPt      float64 `json:"arrow_height_pt,omitempty"` // direct flow only
+	GapMarginPt        float64 `json:"gap_margin_pt,omitempty"`   // direct flow only
 }
 type PlannedConnection struct {
-	ID           string  `json:"id"`
-	From         string  `json:"from"`
-	To           string  `json:"to"`
-	Relationship string  `json:"relationship"`
-	Color        string  `json:"color"`
-	WidthPt      float64 `json:"width_pt"`
-	ClearancePt  float64 `json:"clearance_pt"`
-	Points       []Point `json:"points"`
-	Strategy     string  `json:"strategy"`
+	ID               string  `json:"id"`
+	From             string  `json:"from"`
+	To               string  `json:"to"`
+	Relationship     string  `json:"relationship"`
+	Color            string  `json:"color"`
+	WidthPt          float64 `json:"width_pt"`
+	ClearancePt      float64 `json:"clearance_pt"`
+	Points           []Point `json:"points"`
+	Strategy         string  `json:"strategy"`
+	EndpointBehavior string  `json:"endpoint_behavior"`
+	LineDash         string  `json:"line_dash,omitempty"`
+	EndArrow         string  `json:"end_arrow,omitempty"`
 }
 type obstacle struct {
-	id   string
-	rect Rect
+	id    string
+	rect  Rect
+	owner string
 }
 
 func expand(r Rect, d float64) Rect { return Rect{r.X - d, r.Y - d, r.Width + 2*d, r.Height + 2*d} }
@@ -104,31 +114,37 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 		roots[r.ID] = r.Bounds
 		ids[r.ID] = true
 	}
+	for _, port := range p.LayoutPorts {
+		roots[port.ID] = port.Bounds
+		ids[port.ID] = true
+	}
 	var obs []obstacle
 	// Stable obstacle order, independent of map iteration.
 	for _, q := range p.Pods {
-		obs = append(obs, obstacle{requestID("route-root", q.ID), q.Bounds})
+		obs = append(obs, obstacle{id: requestID("route-root", q.ID), rect: q.Bounds})
 	}
 	for _, q := range p.Roles {
-		obs = append(obs, obstacle{requestID("route-root", q.ID), q.Bounds})
+		obs = append(obs, obstacle{id: requestID("route-root", q.ID), rect: q.Bounds})
 	}
 	for _, c := range p.Cards {
-		obs = append(obs, obstacle{requestID("route-card", c.ID), c.Bounds})
+		ids[c.ID] = true
+		obs = append(obs, obstacle{id: requestID("route-card", c.ID), rect: c.Bounds})
 	}
 	for _, c := range p.Canvas {
+		ids[c.ID] = true
 		if c.Kind == "text" || c.Kind == "image" {
-			obs = append(obs, obstacle{requestID("route-canvas", c.ID), c.Bounds})
+			obs = append(obs, obstacle{id: requestID("route-canvas", c.ID), rect: c.Bounds, owner: c.ID})
 		}
 	}
 	if p.TitleMeasurementID != "" {
-		obs = append(obs, obstacle{requestID("route-title"), p.TitleBounds})
+		obs = append(obs, obstacle{id: requestID("route-title"), rect: p.TitleBounds})
 	}
 	for _, ph := range p.Phases {
 		ids[ph.ID] = true
-		obs = append(obs, obstacle{requestID("route-phase", ph.ID), ph.TitleRect})
+		obs = append(obs, obstacle{id: requestID("route-phase", ph.ID), rect: ph.TitleRect})
 	}
 	if p.Legend != nil {
-		obs = append(obs, obstacle{requestID("route-legend"), p.Legend.Bounds})
+		obs = append(obs, obstacle{id: requestID("route-legend"), rect: p.Legend.Bounds})
 	}
 	if err := validateConnectionGraph(s, roots, ids); err != nil {
 		return err
@@ -142,8 +158,20 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 		if e != nil {
 			return e
 		}
+		if c.Relationship == "flow" && c.FromAnchor == "right" && c.ToAnchor == "left" && math.Abs(a.Y-b.Y) < 1e-6 {
+			if err := planDirectFlow(c, a, b, p); err != nil {
+				return err
+			}
+			arrow := p.Canvas[len(p.Canvas)-1]
+			obs = append(obs, obstacle{id: requestID("route-arrow", arrow.ID), rect: arrow.Bounds})
+			continue
+		}
+		if c.Relationship == "flow" {
+			return fmt.Errorf("connection %s flow requires aligned right-to-left ports for editable rightArrow", c.ID)
+		}
 		clearance := c.ClearancePt + c.WidthPt/2
-		start, end := Point{a.X + da.X*clearance, a.Y + da.Y*clearance}, Point{b.X + db.X*clearance, b.Y + db.Y*clearance}
+		startOffset, endOffset := clearance+c.FromOffsetPt, clearance+c.ToOffsetPt
+		start, end := Point{a.X + da.X*startOffset, a.Y + da.Y*startOffset}, Point{b.X + db.X*endOffset, b.Y + db.Y*endOffset}
 		canvas := Rect{c.WidthPt / 2, c.WidthPt / 2, s.WidthPt - c.WidthPt, s.HeightPt - c.WidthPt}
 		inCanvas := func(q Point) bool {
 			return q.X >= canvas.X && q.X <= canvas.X+canvas.Width && q.Y >= canvas.Y && q.Y <= canvas.Y+canvas.Height
@@ -153,7 +181,7 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 		}
 		var expanded []obstacle
 		for _, o := range obs {
-			expanded = append(expanded, obstacle{o.id, expand(o.rect, clearance)})
+			expanded = append(expanded, obstacle{id: o.id, rect: expand(o.rect, clearance), owner: o.owner})
 		}
 		priorOK := func(x, y Point) bool {
 			for _, prev := range p.Connections {
@@ -189,13 +217,14 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 				return false
 			}
 			for _, o := range expanded {
-				if o.id != skip && segmentHits(x, y, o.rect) {
+				ownedEndpoint := skip != "" && o.owner != "" && (o.owner == skip || strings.HasPrefix(o.owner, skip+"/"))
+				if o.id != requestID("route-root", skip) && !ownedEndpoint && segmentHits(x, y, o.rect) {
 					return false
 				}
 			}
 			return priorOK(x, y)
 		}
-		if !clear(a, start, requestID("route-root", c.From)) || !clear(end, b, requestID("route-root", c.To)) {
+		if !clear(a, start, c.From) || !clear(end, b, c.To) {
 			return fmt.Errorf("connection %s endpoint clearance is blocked", c.ID)
 		}
 		valid := func(path []Point) bool {
@@ -225,6 +254,18 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 			candidates = append(candidates, []Point{start, {midX, start.Y}, {midX, end.Y}, end})
 		}
 		candidates = append(candidates, []Point{start, {start.X, end.Y}, end}, []Point{start, {end.X, start.Y}, end})
+		if c.PreferredDirection == "horizontal" || c.PreferredDirection == "vertical" {
+			sort.SliceStable(candidates, func(i, j int) bool {
+				first := func(path []Point) bool {
+					if len(path) < 2 {
+						return false
+					}
+					h := math.Abs(path[0].Y-path[1].Y) < 1e-7
+					return (c.PreferredDirection == "horizontal" && h) || (c.PreferredDirection == "vertical" && !h)
+				}
+				return first(candidates[i]) && !first(candidates[j])
+			})
+		}
 		strategy := "clear_candidate"
 		var route []Point
 		for _, candidate := range candidates {
@@ -235,7 +276,11 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 		}
 		if route == nil {
 			strategy = "visibility_grid"
-			route = gridRoute(start, end, canvas, expanded, func(x, y Point) bool { return clear(x, y, "") })
+			bend := c.BendPenaltyPt
+			if bend == 0 {
+				bend = 24
+			}
+			route = gridRouteWithPenalty(start, end, canvas, expanded, func(x, y Point) bool { return clear(x, y, "") }, bend, c.PreferredDirection)
 		}
 		if route == nil || !valid(route) {
 			return fmt.Errorf("connection %s has no clear orthogonal route; move components or reserve a routing lane", c.ID)
@@ -257,9 +302,110 @@ func planConnections(s SlideSpec, p *PlannedSlide) error {
 				}
 			}
 		}
+		for _, surface := range p.Canvas {
+			if surface.Kind != "surface" {
+				continue
+			}
+			touches := false
+			for i := 1; i < len(points); i++ {
+				if segmentHits(points[i-1], points[i], surface.Bounds) {
+					touches = true
+					break
+				}
+			}
+			if touches {
+				ratio, _ := ContrastRatio(c.Color, surface.Background)
+				if ratio < 3 {
+					return fmt.Errorf("connection %s stroke contrast on surface %s must be >=3:1", c.ID, surface.ID)
+				}
+			}
+		}
 
-		p.Connections = append(p.Connections, PlannedConnection{ID: c.ID, From: c.From, To: c.To, Relationship: c.Relationship, Color: mustColor(c.Color), WidthPt: c.WidthPt, ClearancePt: c.ClearancePt, Points: points, Strategy: strategy})
+		dash, arrow := connectionTreatment(c.Relationship)
+		p.Connections = append(p.Connections, PlannedConnection{ID: c.ID, From: c.From, To: c.To, Relationship: c.Relationship, Color: mustColor(c.Color), WidthPt: c.WidthPt, ClearancePt: c.ClearancePt, Points: points, Strategy: strategy, EndpointBehavior: "editable_segment", LineDash: dash, EndArrow: arrow})
 	}
+	return nil
+}
+
+func connectionTreatment(relationship string) (dash, endArrow string) {
+	switch relationship {
+	case "dependency":
+		return "solid", "triangle"
+	case "advisory":
+		return "dash", "none"
+	case "annotation":
+		return "dot", "none"
+	default:
+		return "solid", "none"
+	}
+}
+
+func planDirectFlow(c ConnectionSpec, a, b Point, p *PlannedSlide) error {
+	margin := c.GapMarginPt
+	if margin == 0 {
+		margin = 2
+	}
+	margin = math.Max(margin, c.ClearancePt+c.WidthPt/2)
+	height := c.ArrowHeightPt
+	if height == 0 {
+		height = 13.724
+	}
+	x1, x2 := a.X+c.FromOffsetPt+margin, b.X-c.ToOffsetPt-margin
+	if x2-x1 < 4 || height <= 0 || a.Y-height/2 < 0 || a.Y+height/2 > p.HeightPt {
+		return fmt.Errorf("connection %s flow gap cannot hold rightArrow with declared margins/height", c.ID)
+	}
+	arrowBounds := Rect{X: x1, Y: a.Y - height/2, Width: x2 - x1, Height: height}
+	if arrowBounds.X < 0 || arrowBounds.X+arrowBounds.Width > p.WidthPt {
+		return fmt.Errorf("connection %s flow arrow exceeds slide", c.ID)
+	}
+	for _, prev := range p.Connections {
+		if prev.Strategy == "direct_right_arrow" {
+			continue
+		}
+		ink := expand(arrowBounds, c.ClearancePt+prev.WidthPt/2)
+		for i := 1; i < len(prev.Points); i++ {
+			if segmentHits(prev.Points[i-1], prev.Points[i], ink) {
+				return fmt.Errorf("connection %s flow arrow overlaps connection %s", c.ID, prev.ID)
+			}
+		}
+	}
+	if p.TitleMeasurementID != "" && overlap(arrowBounds, p.TitleBounds) {
+		return fmt.Errorf("connection %s flow arrow overlaps slide title", c.ID)
+	}
+	for _, q := range p.Cards {
+		if overlap(arrowBounds, q.Bounds) {
+			return fmt.Errorf("connection %s flow arrow overlaps card %s", c.ID, q.ID)
+		}
+	}
+	for _, q := range p.Roles {
+		if overlap(arrowBounds, q.Bounds) {
+			return fmt.Errorf("connection %s flow arrow overlaps role %s", c.ID, q.ID)
+		}
+	}
+	for _, q := range p.Pods {
+		if overlap(arrowBounds, q.Bounds) {
+			return fmt.Errorf("connection %s flow arrow overlaps pod %s", c.ID, q.ID)
+		}
+	}
+	for _, q := range p.Canvas {
+		if q.ID == c.ID+"/arrow" {
+			return fmt.Errorf("connection %s generated arrow ID collides with canvas %s", c.ID, q.ID)
+		}
+		if q.Kind == "surface" && overlap(arrowBounds, q.Bounds) {
+			ratio, _ := ContrastRatio(c.Color, q.Background)
+			if ratio < 3 {
+				return fmt.Errorf("connection %s arrow contrast on surface %s must be >=3:1", c.ID, q.ID)
+			}
+		}
+		if q.Kind == "text" || q.Kind == "image" || (q.Kind == "shape" && q.Preset == "rightArrow") {
+			if overlap(arrowBounds, q.Bounds) {
+				return fmt.Errorf("connection %s flow arrow overlaps measured %s", c.ID, q.ID)
+			}
+		}
+	}
+	shape := CanvasSpec{ID: c.ID + "/arrow", Kind: "shape", Preset: "rightArrow", Bounds: arrowBounds, Background: mustColor(c.Color)}
+	p.Canvas = append(p.Canvas, PlannedCanvas{CanvasSpec: shape})
+	p.Connections = append(p.Connections, PlannedConnection{ID: c.ID, From: c.From, To: c.To, Relationship: c.Relationship, Color: mustColor(c.Color), WidthPt: c.WidthPt, ClearancePt: c.ClearancePt, Points: []Point{a, b}, Strategy: "direct_right_arrow", EndpointBehavior: "editable_segment"})
 	return nil
 }
 func mustColor(s string) string { v, _ := resolveColor(s); return v }
@@ -296,6 +442,9 @@ func sortedUnique(v []float64, lo, hi float64) []float64 {
 	return out
 }
 func gridRoute(a, b Point, canvas Rect, obs []obstacle, clear func(Point, Point) bool) []Point {
+	return gridRouteWithPenalty(a, b, canvas, obs, clear, 24, "")
+}
+func gridRouteWithPenalty(a, b Point, canvas Rect, obs []obstacle, clear func(Point, Point) bool, bendPenalty float64, preferred string) []Point {
 	xs, ys := []float64{a.X, b.X, canvas.X, canvas.X + canvas.Width}, []float64{a.Y, b.Y, canvas.Y, canvas.Y + canvas.Height}
 	for _, o := range obs {
 		xs = append(xs, o.rect.X, o.rect.X+o.rect.Width)
@@ -383,7 +532,10 @@ func gridRoute(a, b Point, canvas Rect, obs []obstacle, clear func(Point, Point)
 			}
 			cost := cur.cost + math.Abs(points[n].X-points[v].X) + math.Abs(points[n].Y-points[v].Y)
 			if cur.state.dir != 0 && dir != cur.state.dir {
-				cost += 24
+				cost += bendPenalty
+			}
+			if cur.state.dir == 0 && ((preferred == "horizontal" && dir == 2) || (preferred == "vertical" && dir == 1)) {
+				cost += bendPenalty
 			}
 			next := routeState{v, dir}
 			old, ok := dist[next]
@@ -411,13 +563,15 @@ func validateConnectionGraph(s SlideSpec, roots map[string]Rect, ids map[string]
 			return fmt.Errorf("connection %s cannot connect a component to itself", c.ID)
 		}
 		if _, ok := roots[c.From]; !ok {
-			return fmt.Errorf("connection %s unknown root source %q (nested roles are unsupported)", c.ID, c.From)
+			return fmt.Errorf("connection %s unknown source %q", c.ID, c.From)
 		}
 		if _, ok := roots[c.To]; !ok {
-			return fmt.Errorf("connection %s unknown root target %q (nested roles are unsupported)", c.ID, c.To)
+			return fmt.Errorf("connection %s unknown target %q", c.ID, c.To)
 		}
-		if c.Relationship != "reporting" {
-			return fmt.Errorf("connection %s relationship must be reporting", c.ID)
+		switch c.Relationship {
+		case "reporting", "flow", "dependency", "advisory", "annotation":
+		default:
+			return fmt.Errorf("connection %s relationship must be reporting, flow, dependency, advisory or annotation", c.ID)
 		}
 		key := requestID(c.From, c.To, c.Relationship)
 		if pairs[key] {
@@ -429,6 +583,12 @@ func validateConnectionGraph(s SlideSpec, roots map[string]Rect, ids map[string]
 		}
 		if !positive(c.WidthPt) || c.WidthPt > 6 || !positive(c.ClearancePt) || c.ClearancePt < 2 {
 			return fmt.Errorf("connection %s requires width (0,6]pt and clearance >=2pt", c.ID)
+		}
+		if !nonnegative(c.BendPenaltyPt) || !nonnegative(c.FromOffsetPt) || !nonnegative(c.ToOffsetPt) || !nonnegative(c.GapMarginPt) || !nonnegative(c.ArrowHeightPt) {
+			return fmt.Errorf("connection %s route controls must be finite and nonnegative", c.ID)
+		}
+		if c.PreferredDirection != "" && c.PreferredDirection != "auto" && c.PreferredDirection != "horizontal" && c.PreferredDirection != "vertical" {
+			return fmt.Errorf("connection %s preferred_direction must be auto, horizontal or vertical", c.ID)
 		}
 		if _, e := resolveColor(c.Color); e != nil {
 			return fmt.Errorf("connection %s: %w", c.ID, e)
@@ -487,6 +647,19 @@ func validateConnectionSpecs(s SlideSpec) error {
 	}
 	for _, p := range s.Phases {
 		ids[p.ID] = true
+	}
+	for _, layout := range s.Layouts {
+		roots[layout.ID] = layout.Bounds
+		ids[layout.ID] = true
+		for _, cell := range layout.Cells {
+			id := layout.ID + "/" + cell.ID
+			roots[id] = Rect{}
+			ids[id] = true
+		}
+	}
+	for _, port := range s.resolvedLayoutPorts {
+		roots[port.ID] = port.Bounds
+		ids[port.ID] = true
 	}
 	return validateConnectionGraph(s, roots, ids)
 }

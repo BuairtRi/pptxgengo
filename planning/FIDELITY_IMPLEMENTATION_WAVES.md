@@ -4,6 +4,13 @@
 This expands the next fidelity gates in IMPLEMENTATION_PLAN.md. Future capabilities
 and acceptance criteria below are planned, not implemented or approved.
 
+## Active execution order
+
+The user has directed Waves 3 → 4 → 6, deferring Wave 5. For this execution,
+Wave 6’s returned-deck variant and recovery gate are deferred with Wave 5; normal,
+content/cardinality stress and repeatable configuration rebuild remain required.
+See [the requirement/evidence ledger](ACTIVE_WAVES_3_4_6.md).
+
 ## Outcome and working method
 
 An agent should take a brief plus supporting material, find an appropriate WM

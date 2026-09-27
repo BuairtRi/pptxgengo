@@ -41,6 +41,18 @@ func FixedTextFitReport(spec Spec, measured Measurements) []TextZoneFit {
 				add(s.ID, c.ID, requestID(s.ID, "canvas", c.ID), c.Bounds.Width-2*c.InsetX, c.Bounds.Height-2*c.InsetY, .01)
 			}
 		}
+		for _, a := range s.Accents {
+			if a.Staging != nil {
+				q := accentNoteProbe(s, a)
+				add(s.ID, a.ID+"/manual-note", q.ID, a.Staging.NoteBounds.Width, a.Staging.NoteBounds.Height, .01)
+			}
+		}
+		for _, a := range s.ArtworkArrows {
+			if a.Staging != nil {
+				q := arrowNoteProbe(s, a)
+				add(s.ID, a.ID+"/manual-note", q.ID, a.Staging.NoteBounds.Width, a.Staging.NoteBounds.Height, .01)
+			}
+		}
 		for _, r := range s.Roles {
 			add(s.ID, r.ID, requestID(s.ID, "standalone_role", r.ID), r.Bounds.Width-2*r.HorizontalInsetPt, r.Bounds.Height-2*r.VerticalInsetPt, 1e-6)
 		}

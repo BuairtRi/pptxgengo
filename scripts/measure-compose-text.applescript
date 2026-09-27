@@ -43,7 +43,8 @@ on run argv
 						set frameHeight to height of sh
 						set shapeRotation to rotation of sh
 						if frameWidth < 0 or frameHeight < 0 or (frameWidth is 0 and frameHeight is 0) then error "Visible shape has invalid frame on slide " & slideIndex & ", shape " & shapeIndex number 68
-						if my absoluteValue(shapeRotation) > rotationEpsilon then error "Rotated shape is outside this adapter's supported measurements: " & shapeName & " on slide " & slideIndex number 69
+						-- Rotation is recorded here and compared to the exact manifest by the CLI.
+						-- Only accent pictures can currently request a nonzero rotation.
 						set shapeLine to line format of sh
 						-- MsoLineFormat has no documented `visible` member in the
 						-- installed sdef. Treat `line style unset` as no border.
@@ -52,6 +53,7 @@ on run argv
 						set lineVisibleValue to lineStyleText is not "line style unset"
 						set lineRGBValue to missing value
 						set lineWidthValue to missing value
+						set dashStyleValue to missing value
 						set lineTransparencyValue to missing value
 						set beginArrowValue to missing value
 						set endArrowValue to missing value
@@ -59,12 +61,13 @@ on run argv
 							set lineRGBValue to fore color of shapeLine
 							if (count of lineRGBValue) is not 3 then error "Visible line has no resolved RGB color: " & shapeName number 81
 							set lineWidthValue to line weight of shapeLine
+							set dashStyleValue to dash style of shapeLine as text
 							set lineTransparencyValue to transparency of shapeLine
 							set beginArrowValue to my arrowheadName(begin arrowhead style of shapeLine)
 							set endArrowValue to my arrowheadName(end arrowhead style of shapeLine)
 							if lineWidthValue ≤ 0 then error "Visible line has nonpositive width: " & shapeName number 82
 						end if
-						set lineJSON to "{\"visible\":" & my jsonBoolean(lineVisibleValue) & ",\"rgb\":" & my jsonRGB(lineRGBValue) & ",\"width_pt\":" & my jsonNullableNumber(lineWidthValue) & ",\"transparency\":" & my jsonNullableNumber(lineTransparencyValue) & ",\"begin_arrow\":" & my jsonNullableString(beginArrowValue) & ",\"end_arrow\":" & my jsonNullableString(endArrowValue) & "}"
+						set lineJSON to "{\"visible\":" & my jsonBoolean(lineVisibleValue) & ",\"rgb\":" & my jsonRGB(lineRGBValue) & ",\"width_pt\":" & my jsonNullableNumber(lineWidthValue) & ",\"transparency\":" & my jsonNullableNumber(lineTransparencyValue) & ",\"begin_arrow\":" & my jsonNullableString(beginArrowValue) & ",\"end_arrow\":" & my jsonNullableString(endArrowValue) & ",\"dash_style\":" & my jsonNullableString(dashStyleValue) & "}"
 						set fillVisibleValue to false
 						set fillRGBValue to missing value
 						set fillTransparencyValue to missing value
@@ -136,7 +139,7 @@ on run argv
 										error "Font attributes unavailable for character " & charIndex & " in " & shapeName number 75
 									end try
 									if charFontName is missing value or charFontSize is missing value or charBold is missing value or charItalic is missing value or charUnderline is missing value or charFontColor is missing value or (count of charFontColor) is not 3 then error "Unresolved character style in " & shapeName number 76
-									set charJSON to "{\"text\":" & my jsonString(charText) & ",\"font_name\":" & my jsonString(charFontName as text) & ",\"font_size_pt\":" & my jsonNumber(charFontSize) & ",\"bold\":" & my jsonBoolean(charBold) & ",\"italic\":" & my jsonBoolean(charItalic) & ",\"underline\":" & my jsonString(charUnderline as text) & ",\"color\":" & my jsonRGB(charFontColor) & "}"
+									set charJSON to "{\"text\":" & my jsonString(charText) & ",\"font_name\":" & my jsonString(charFontName as text) & ",\"font_size_pt\":" & my jsonNumber(charFontSize) & ",\"bold\":" & my jsonBoolean(charBold) & ",\"italic\":" & my jsonBoolean(charItalic) & ",\"underline\":" & my jsonString(charUnderline as text) & ",\"color\":" & my jsonRGB(charFontColor) & ",\"bounds\":{\"left\":" & my jsonNumber(charLeft) & ",\"top\":" & my jsonNumber(charTop) & ",\"width\":" & my jsonNumber(charWidth) & ",\"height\":" & my jsonNumber(charHeight) & "}}"
 									if characterRows is not "" then set characterRows to characterRows & ","
 									set characterRows to characterRows & charJSON
 									if charWidth < 0 or charHeight < 0 then error "Character has negative bounds: " & shapeName & " character " & charIndex number 83

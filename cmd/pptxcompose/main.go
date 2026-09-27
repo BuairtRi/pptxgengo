@@ -39,6 +39,7 @@ type nativeRect struct {
 }
 type nativeRow struct {
 	Line struct {
+		DashStyle    string  `json:"dash_style,omitempty"`
 		Visible      bool    `json:"visible"`
 		RGB          []int   `json:"rgb"`
 		WidthPt      float64 `json:"width_pt"`
@@ -67,13 +68,14 @@ type nativeRow struct {
 	Paragraphs []nativeParagraph `json:"paragraphs,omitempty"`
 }
 type nativeCharacter struct {
-	Text       string  `json:"text"`
-	FontName   string  `json:"font_name"`
-	FontSizePt float64 `json:"font_size_pt"`
-	Bold       bool    `json:"bold"`
-	Italic     bool    `json:"italic"`
-	Underline  string  `json:"underline"`
-	Color      []int   `json:"color"`
+	Bounds     *nativeRect `json:"bounds,omitempty"`
+	Text       string      `json:"text"`
+	FontName   string      `json:"font_name"`
+	FontSizePt float64     `json:"font_size_pt"`
+	Bold       bool        `json:"bold"`
+	Italic     bool        `json:"italic"`
+	Underline  string      `json:"underline"`
+	Color      []int       `json:"color"`
 }
 type nativeParagraph struct {
 	Alignment          string   `json:"alignment"`
@@ -182,13 +184,14 @@ func rect(r compose.Rect) frame { return frame{r.X, r.Y, r.Width, r.Height} }
 func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
 	var out []renderSlide
 	for i, s := range p.Slides {
-		rs := renderSlide{ID: s.ID, Width: spec.Slides[i].WidthPt, Height: spec.Slides[i].HeightPt, Notes: spec.Slides[i].Notes}
+		rs := renderSlide{ID: s.ID, Width: spec.Slides[i].WidthPt, Height: spec.Slides[i].HeightPt, Notes: spec.Slides[i].Notes + manualPlacementNotes(s.ManualRequired)}
 		for _, e := range canvasElements(s.Canvas) {
 			if e.Kind == "surface" || e.Kind == "shape" {
 				rs.Elements = append(rs.Elements, e)
 			}
 		}
 		rs.Elements = append(rs.Elements, accentElements(s.Accents)...)
+		rs.Elements = append(rs.Elements, artworkArrowElements(s.ArtworkArrows)...)
 		for _, e := range canvasElements(s.Canvas) {
 			if e.Kind != "surface" && e.Kind != "shape" {
 				rs.Elements = append(rs.Elements, e)
@@ -296,7 +299,7 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				return result, fmt.Errorf("missing native shape %s", k)
 			}
 			delete(rows, k)
-			if !near(r.Frame.Left, e.Frame.X) || !near(r.Frame.Top, e.Frame.Y) || !near(r.Frame.Width, e.Frame.Width) || !near(r.Frame.Height, e.Frame.Height) || !near(r.Frame.Rotation, 0) {
+			if !near(r.Frame.Left, e.Frame.X) || !near(r.Frame.Top, e.Frame.Y) || !near(r.Frame.Width, e.Frame.Width) || !near(r.Frame.Height, e.Frame.Height) || !near(math.Remainder(r.Frame.Rotation-e.RotationDeg, 360), 0) {
 				return result, fmt.Errorf("native frame mismatch %s: %+v expected %+v", k, r.Frame, e.Frame)
 			}
 
@@ -326,7 +329,7 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 				continue
 			}
 			if e.Kind == "line" {
-				if (n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5" && n.Schema != "pptxgengo.compose-text-measurement.v6" && n.Schema != "pptxgengo.compose-text-measurement.v7" && n.Schema != "pptxgengo.compose-text-measurement.v8") || !r.Line.Visible || rgbHex(r.Line.RGB) != e.Foreground || !near(r.Line.WidthPt, e.LineWidth) || math.Abs(r.Line.Transparency) > 1e-6 || !finite(r.Line.Transparency) || r.Line.BeginArrow != "no arrowhead" || r.Line.EndArrow != "no arrowhead" {
+				if (n.Schema != "pptxgengo.compose-text-measurement.v3" && n.Schema != "pptxgengo.compose-text-measurement.v4" && n.Schema != "pptxgengo.compose-text-measurement.v5" && n.Schema != "pptxgengo.compose-text-measurement.v6" && n.Schema != "pptxgengo.compose-text-measurement.v7" && n.Schema != "pptxgengo.compose-text-measurement.v8") || !r.Line.Visible || rgbHex(r.Line.RGB) != e.Foreground || !near(r.Line.WidthPt, e.LineWidth) || math.Abs(r.Line.Transparency) > 1e-6 || !finite(r.Line.Transparency) || r.Line.BeginArrow != nativeArrow(e.BeginArrow) || r.Line.EndArrow != nativeArrow(e.EndArrow) || (e.LineDash != "" && r.Line.DashStyle != nativeDash(e.LineDash)) {
 					return result, fmt.Errorf("native line mismatch %s: %+v", k, r.Line)
 				}
 				if r.Text != nil && *r.Text != "" {
@@ -381,7 +384,42 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 			if fit && (b.Left < e.Frame.X+e.InsetX-0.15 || b.Top < e.Frame.Y+e.InsetY-0.15 || b.Left+b.Width > e.Frame.X+e.Frame.Width-e.InsetX+0.15 || b.Top+b.Height > e.Frame.Y+e.Frame.Height-e.InsetY+0.15) {
 				return result, fmt.Errorf("native text outside safe zone %s: %+v frame %+v insets %.2f,%.2f", k, *b, e.Frame, e.InsetX, e.InsetY)
 			}
-			result.ByRequestID[e.MeasurementID] = compose.Measurement{RenderedWidthPt: b.Width, RenderedHeightPt: b.Height, OffsetXPt: b.Left - e.Frame.X - e.InsetX, OffsetYPt: b.Top - e.Frame.Y - e.InsetY}
+			phrases, err := nativePhraseBounds(e, r)
+			if err != nil {
+				return result, fmt.Errorf("native phrase %s: %w", k, err)
+			}
+			result.ByRequestID[e.MeasurementID] = compose.Measurement{PhraseBounds: phrases, RenderedWidthPt: b.Width, RenderedHeightPt: b.Height, OffsetXPt: b.Left - e.Frame.X - e.InsetX, OffsetYPt: b.Top - e.Frame.Y - e.InsetY}
+		}
+	}
+	if fit && m.Plan != nil {
+		frames := map[string]element{}
+		for _, slide := range m.Slides {
+			for _, e := range slide.Elements {
+				if e.MeasurementID != "" {
+					frames[e.MeasurementID] = e
+				}
+			}
+		}
+		for _, slide := range m.Plan.Slides {
+			if err := compose.VerifyArtworkAnchors(&slide, result, .15); err != nil {
+				return result, err
+			}
+			for _, a := range slide.Accents {
+				if a.Status != "placed" || a.Phrase == "" {
+					continue
+				}
+				e := frames[a.TargetMeasurementID]
+				fragments := result.ByRequestID[a.TargetMeasurementID].PhraseBounds[a.SourceAccentID]
+				if a.FragmentIndex < 0 || a.FragmentIndex >= len(fragments) {
+					return result, fmt.Errorf("native accent %s fragment missing", a.ID)
+				}
+				r := fragments[a.FragmentIndex]
+				r.X += e.Frame.X + e.InsetX
+				r.Y += e.Frame.Y + e.InsetY
+				if !near(r.X, a.TargetBounds.X) || !near(r.Y, a.TargetBounds.Y) || !near(r.Width, a.TargetBounds.Width) || !near(r.Height, a.TargetBounds.Height) {
+					return result, fmt.Errorf("native accent %s target shifted after measurement: %+v expected %+v", a.ID, r, a.TargetBounds)
+				}
+			}
 		}
 	}
 	if len(rows) != 0 {
@@ -513,7 +551,7 @@ func probeSlides(requests []compose.ProbeRequest) []renderSlide {
 		// One isolated text box per probe avoids layout interactions and keeps the
 		// calibration frame in slide points. The tall frame does not autofit text.
 		width := math.Max(960, q.TextWidthPt+72)
-		slides = append(slides, renderSlide{ID: q.ID, Width: width, Height: 540, Elements: []element{{Name: fmt.Sprintf("probe-%04d", i+1), Kind: "text", Frame: frame{36, 36, q.TextWidthPt, 450}, Text: q.Text, Paragraphs: q.Paragraphs, FontFace: q.FontFace, FontSize: q.FontSizePt, Bold: q.Bold, Foreground: "070154", Align: q.Align, MeasurementID: q.ID}}})
+		slides = append(slides, renderSlide{ID: q.ID, Width: width, Height: 540, Elements: []element{{Name: fmt.Sprintf("probe-%04d", i+1), Kind: "text", Frame: frame{36, 36, q.TextWidthPt, 450}, Text: q.Text, Paragraphs: q.Paragraphs, PhraseRequests: q.PhraseRequests, FontFace: q.FontFace, FontSize: q.FontSizePt, Bold: q.Bold, Foreground: "070154", Align: q.Align, MeasurementID: q.ID}}})
 	}
 	// The writer requires one common page size.
 	maxW := 960.0
@@ -797,4 +835,11 @@ func run(args []string) error {
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
+}
+
+func manualPlacementNotes(notes []string) string {
+	if len(notes) == 0 {
+		return ""
+	}
+	return "\nUNFINISHED — MANUAL PLACEMENT REQUIRED:\n" + strings.Join(notes, "\n")
 }

@@ -1,0 +1,171 @@
+{
+  "schema": "pptxgengo.library-component.v1",
+  "id": "wm/parallel-process",
+  "version": "0.1.0",
+  "kind": "layout",
+  "name": "Parallel governed process paths",
+  "purpose": "Compare two sequenced workflows with explicit decision and ownership steps.",
+  "content_roles": [
+    "process",
+    "flow",
+    "parallel-paths",
+    "decision"
+  ],
+  "source": {
+    "source_id": "authored-fixture:process-changed-content",
+    "path": "library/diagram-components/review.json",
+    "source_sha256": "f4c9b193d35d2d710118e74e173197b9b8a89c4d91be02e90d57d0613fa1a8dd",
+    "slide": 2
+  },
+  "composition": {
+    "spec_path": "library/diagram-components/review.json",
+    "spec_sha256": "f4c9b193d35d2d710118e74e173197b9b8a89c4d91be02e90d57d0613fa1a8dd",
+    "slide_id": "process-changed-content",
+    "slots": [
+      {
+        "name": "process-changed-content/synthetic-kicker/text",
+        "role": "text",
+        "pointer": "/canvas/3/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 39
+      },
+      {
+        "name": "process-changed-content/synthetic-title/text",
+        "role": "text",
+        "pointer": "/canvas/4/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 62
+      },
+      {
+        "name": "process-changed-content/synthetic-one/text",
+        "role": "text",
+        "pointer": "/canvas/5/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 35
+      },
+      {
+        "name": "process-changed-content/synthetic-two/text",
+        "role": "text",
+        "pointer": "/canvas/6/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 33
+      },
+      {
+        "name": "process-changed-content/illustrative-result-text/text",
+        "role": "text",
+        "pointer": "/canvas/8/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 95
+      },
+      {
+        "name": "process-changed-content/request/steps",
+        "role": "process_steps",
+        "pointer": "/paths/0/labels",
+        "value_type": "string_array",
+        "required": true,
+        "min_items": 4,
+        "max_items": 6,
+        "max_chars": 32
+      },
+      {
+        "name": "process-changed-content/change/steps",
+        "role": "process_steps",
+        "pointer": "/paths/1/labels",
+        "value_type": "string_array",
+        "required": true,
+        "min_items": 4,
+        "max_items": 6,
+        "max_chars": 32
+      },
+      {
+        "name": "slide/role",
+        "role": "role",
+        "pointer": "/role",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 2048
+      },
+      {
+        "name": "slide/takeaway",
+        "role": "takeaway",
+        "pointer": "/takeaway",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 2048
+      }
+    ],
+    "narrative_bindings": {
+      "assertion_title": "/canvas/4/text",
+      "role": "/role",
+      "takeaway": "/takeaway"
+    },
+    "pagination_binding": "/canvas/2/text"
+  },
+  "assets": [
+    {
+      "path": "samples/showcase/assets/wm_h_pos_clr_rgb_august2024.png",
+      "sha256": "47a4eaa1be957777d3e106f5c1cc9f67dbfcda79d74fe7a7f2bcbb88b13fa341",
+      "role": "artwork"
+    }
+  ],
+  "cardinality": {
+    "process-changed-content/request/steps": {
+      "min": 4,
+      "max": 6
+    },
+    "process-changed-content/change/steps": {
+      "min": 4,
+      "max": 6
+    }
+  },
+  "fit_envelope": {
+    "measured": [],
+    "unsupported": [
+      "Arbitrary geometry edits.",
+      "Automatic font shrinking or content truncation.",
+      "Character caps are editorial input guardrails, not measured fit guarantees.",
+      "New content is unqualified until native measurement, final verification, and visual review."
+    ],
+    "font_policy": "no_silent_shrink"
+  },
+  "transforms": {
+    "translation": "unsupported",
+    "resize": "unsupported",
+    "rotation": "unsupported"
+  },
+  "style_variants": [
+    {
+      "id": "source",
+      "semantic_profile": "wm.fixture-original",
+      "tokens": {},
+      "qualified": false
+    }
+  ],
+  "preference": {
+    "value": "unreviewed",
+    "note": "No user preference for this complete layout; do not infer preference from related components."
+  },
+  "qualification": {
+    "state": "reviewed",
+    "evidence": [],
+    "failures": [
+      "Candidate semantic bindings have not completed changed-content end-to-end qualification."
+    ]
+  },
+  "previews": [],
+  "provenance": {
+    "created_from": [
+      "library/diagram-components/review.json",
+      "Synthetic illustration using the UHG36 two-path geometry. Labels and outcome are illustrative; no UHG business result is asserted."
+    ],
+    "review_history": [
+      "Candidate contract generated from existing authored fixture. Original sample provenance remains in fixture notes and referenced proof.",
+      "This does not promote the source deck, unrelated layouts, or unrestricted slot values."
+    ]
+  }
+}

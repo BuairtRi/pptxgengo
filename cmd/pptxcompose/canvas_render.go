@@ -8,7 +8,7 @@ import (
 func canvasElements(items []compose.PlannedCanvas) []element {
 	var out []element
 	for _, c := range items {
-		out = append(out, element{Name: "canvas:" + base64.RawURLEncoding.EncodeToString([]byte(c.ID)), Kind: c.Kind, Frame: rect(c.Bounds), Text: c.Text, Paragraphs: c.Paragraphs, FontFace: c.FontFace, FontSize: c.FontSizePt, Bold: c.Bold, Foreground: color(c.Foreground), Background: color(c.Background), InsetX: c.InsetX, InsetY: c.InsetY, Align: c.Align, Valign: c.Valign, MeasurementID: c.MeasurementID, LineWidth: c.LineWidthPt, AssetPath: c.AssetPath, AssetSHA256: c.AssetSHA256, FallbackAssetPath: c.FallbackAssetPath, FallbackAssetSHA256: c.FallbackAssetSHA256, AltText: c.AltText, OutlineColor: color(c.OutlineColor), OutlineWidthPt: c.OutlineWidthPt, ImageFit: c.ImageFit, ImageCrop: c.ImageCrop, FocalX: c.FocalX, FocalY: c.FocalY, Preset: c.Preset, Adjustments: c.Adjustments, Pattern: c.Pattern})
+		out = append(out, element{Name: "canvas:" + base64.RawURLEncoding.EncodeToString([]byte(c.ID)), Kind: c.Kind, PhraseRequests: c.PhraseRequests, Frame: rect(c.Bounds), Text: c.Text, Paragraphs: c.Paragraphs, FontFace: c.FontFace, FontSize: c.FontSizePt, Bold: c.Bold, Foreground: color(c.Foreground), Background: color(c.Background), InsetX: c.InsetX, InsetY: c.InsetY, Align: c.Align, Valign: c.Valign, MeasurementID: c.MeasurementID, LineWidth: c.LineWidthPt, AssetPath: c.AssetPath, AssetSHA256: c.AssetSHA256, FallbackAssetPath: c.FallbackAssetPath, FallbackAssetSHA256: c.FallbackAssetSHA256, AltText: c.AltText, OutlineColor: color(c.OutlineColor), OutlineWidthPt: c.OutlineWidthPt, ImageFit: c.ImageFit, ImageCrop: c.ImageCrop, FocalX: c.FocalX, FocalY: c.FocalY, Preset: c.Preset, Adjustments: c.Adjustments, Pattern: c.Pattern})
 	}
 	return out
 }
@@ -30,7 +30,20 @@ func cardElements(cards []compose.PlannedCard) []element {
 func accentElements(items []compose.PlannedAccent) []element {
 	var out []element
 	for _, a := range items {
-		out = append(out, element{Name: "accent:" + base64.RawURLEncoding.EncodeToString([]byte(a.ID)), Kind: "image", Frame: rect(a.Bounds), AssetPath: a.AssetPath, AssetSHA256: a.AssetSHA256, AltText: a.Mode + " for " + a.Target, AssetMode: "stretch"})
+		out = append(out, element{Name: "accent:" + base64.RawURLEncoding.EncodeToString([]byte(a.ID)), Kind: "image", Frame: rect(a.Bounds), AssetPath: a.AssetPath, AssetSHA256: a.AssetSHA256, FallbackAssetPath: a.FallbackAssetPath, FallbackAssetSHA256: a.FallbackAssetSHA256, RotationDeg: a.RotationDeg, AltText: a.Mode + " for " + a.Target, AssetMode: "stretch"})
+	}
+	return out
+}
+
+func artworkArrowElements(items []compose.PlannedArtworkArrow) []element {
+	var out []element
+	for _, a := range items {
+		art := a.Artwork
+		fit := "preserve"
+		if a.Status == "manual_required" {
+			fit = "contain"
+		}
+		out = append(out, element{Name: "artwork-arrow:" + base64.RawURLEncoding.EncodeToString([]byte(a.ID)), Kind: "image", Frame: rect(a.Bounds), RotationDeg: a.RotationDeg, AssetPath: art.AssetPath, AssetSHA256: art.AssetSHA256, FallbackAssetPath: art.FallbackAssetPath, FallbackAssetSHA256: art.FallbackAssetSHA256, AltText: "Hand-drawn arrow from " + a.From.Target + " to " + a.To.Target, ImageFit: fit})
 	}
 	return out
 }

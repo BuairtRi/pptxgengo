@@ -1,0 +1,437 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pptxgengo.local/library-component.v1.schema.json",
+  "title": "pptxgengo portable library component",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "version",
+    "kind",
+    "name",
+    "purpose",
+    "content_roles",
+    "source",
+    "composition",
+    "fit_envelope",
+    "transforms",
+    "preference",
+    "qualification",
+    "provenance"
+  ],
+  "properties": {
+    "schema": {
+      "const": "pptxgengo.library-component.v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "kind": {
+      "enum": [
+        "layout",
+        "component",
+        "recipe",
+        "asset"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "source_id",
+        "source_sha256",
+        "slide"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string"
+        },
+        "component_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "slide": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_part": {
+          "type": "string"
+        },
+        "source_object_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scene_sha256": {
+          "$ref": "#/$defs/sha"
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "required": [
+        "spec_path",
+        "spec_sha256",
+        "slide_id",
+        "slots"
+      ],
+      "properties": {
+        "spec_path": {
+          "type": "string"
+        },
+        "spec_sha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "slide_id": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "slots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/slot"
+          }
+        },
+        "narrative_bindings": {
+          "type": "object",
+          "properties": {
+            "assertion_title": {
+              "type": "string",
+              "pattern": "^/"
+            },
+            "role": {
+              "type": "string",
+              "pattern": "^/"
+            },
+            "takeaway": {
+              "type": "string",
+              "pattern": "^/"
+            }
+          },
+          "additionalProperties": false
+        },
+        "pagination_binding": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "cardinality": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "min",
+          "max"
+        ],
+        "properties": {
+          "min": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "fit_envelope": {
+      "type": "object",
+      "required": [
+        "font_policy"
+      ],
+      "properties": {
+        "measured": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unsupported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "font_policy": {
+          "const": "no_silent_shrink"
+        }
+      }
+    },
+    "transforms": {
+      "type": "object",
+      "required": [
+        "translation",
+        "resize",
+        "rotation"
+      ],
+      "properties": {
+        "translation": {
+          "enum": [
+            "tested",
+            "unsupported"
+          ]
+        },
+        "resize": {
+          "enum": [
+            "tested",
+            "unsupported"
+          ]
+        },
+        "rotation": {
+          "enum": [
+            "tested",
+            "unsupported"
+          ]
+        }
+      }
+    },
+    "style_variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "semantic_profile",
+          "qualified"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "semantic_profile": {
+            "type": "string"
+          },
+          "tokens": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "qualified": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "preference": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "enum": [
+            "preferred",
+            "alternate",
+            "avoid",
+            "unreviewed"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "inventory",
+            "reviewed",
+            "measured_fixture",
+            "adaptation_qualified"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          }
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reviewed_at": {
+          "type": "string"
+        }
+      }
+    },
+    "previews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "source_link": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "created_from": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "review_history": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "required": [
+        "name",
+        "role",
+        "pointer",
+        "value_type",
+        "required"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "value_type": {
+          "enum": [
+            "string",
+            "string_array"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "max_chars": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "min_items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "item_template": {
+          "type": "object"
+        },
+        "item_value_pointer": {
+          "type": "string"
+        },
+        "item_id_pointer": {
+          "type": "string"
+        },
+        "item_id_prefix": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

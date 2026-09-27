@@ -97,7 +97,7 @@ func validateImageNode(parts map[string][]byte, slidePart string, n *nativepkg.N
 		return fmt.Errorf("missing explicit picture transform")
 	}
 	xfrm := spPr.Child("xfrm")
-	if err := validatePictureTransformAttrs(xfrm); err != nil {
+	if err := validatePictureTransformRotation(xfrm, want.RotationDeg); err != nil {
 		return err
 	}
 	off, ext := xfrm.Child("off"), xfrm.Child("ext")
@@ -238,18 +238,27 @@ func validatePictureOutline(spPr *nativepkg.Node, want element) error {
 }
 
 func validatePictureTransformAttrs(xfrm *nativepkg.Node) error {
+	return validatePictureTransformRotation(xfrm, 0)
+}
+
+func validatePictureTransformRotation(xfrm *nativepkg.Node, expected float64) error {
+	rotation := int64(0)
 	for _, attr := range xfrm.Attrs {
 		switch localName(attr.Name) {
 		case "rot":
 			v, err := strconv.ParseInt(attr.Value, 10, 64)
-			if err != nil || strconv.FormatInt(v, 10) != attr.Value || v != 0 {
-				return fmt.Errorf("picture rotation is unsupported: %q", attr.Value)
+			if err != nil || strconv.FormatInt(v, 10) != attr.Value || math.Abs(float64(v)/60000-expected) > 0.00002 {
+				return fmt.Errorf("picture rotation mismatch: %q expected %.6f", attr.Value, expected)
 			}
+			rotation = v
 		case "flipH", "flipV":
 			if attr.Value != "0" && attr.Value != "false" {
 				return fmt.Errorf("picture flip is unsupported: %s=%q", localName(attr.Name), attr.Value)
 			}
 		}
+	}
+	if math.Abs(float64(rotation)/60000-expected) > 0.00002 {
+		return fmt.Errorf("picture rotation missing/mismatched")
 	}
 	return nil
 }

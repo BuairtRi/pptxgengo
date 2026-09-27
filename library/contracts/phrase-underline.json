@@ -1,0 +1,136 @@
+{
+  "schema": "pptxgengo.library-component.v1",
+  "id": "wm/phrase-underline",
+  "version": "0.1.0",
+  "kind": "layout",
+  "name": "Assertion with phrase underline",
+  "purpose": "Emphasize the exact takeaway phrase using native glyph bounds and preserved WM underline artwork.",
+  "content_roles": [
+    "assertion",
+    "takeaway",
+    "emphasis",
+    "underline"
+  ],
+  "source": {
+    "source_id": "authored-fixture:underline-source-copy",
+    "path": "library/diagram-components/accent-review.json",
+    "source_sha256": "a37466bc730d5bdf584359dee45a0d6232f65e7ed1dd9b23f7d3cdeb05f47783",
+    "slide": 1
+  },
+  "composition": {
+    "spec_path": "library/diagram-components/accent-review.json",
+    "spec_sha256": "a37466bc730d5bdf584359dee45a0d6232f65e7ed1dd9b23f7d3cdeb05f47783",
+    "slide_id": "underline-source-copy",
+    "slots": [
+      {
+        "name": "underline-source-copy/claim/text",
+        "role": "text",
+        "pointer": "/canvas/4/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 198
+      },
+      {
+        "name": "underline-source-copy/explanation/text",
+        "role": "text",
+        "pointer": "/canvas/5/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 336
+      },
+      {
+        "name": "slide/role",
+        "role": "role",
+        "pointer": "/role",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 2048
+      },
+      {
+        "name": "slide/takeaway",
+        "role": "takeaway",
+        "pointer": "/takeaway",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 2048
+      },
+      {
+        "name": "emphasis/emphasis/phrase",
+        "role": "emphasis_target",
+        "pointer": "/accents/0/phrase",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 32
+      }
+    ],
+    "narrative_bindings": {
+      "assertion_title": "/canvas/4/text",
+      "role": "/role",
+      "takeaway": "/takeaway"
+    },
+    "pagination_binding": "/canvas/3/text"
+  },
+  "assets": [
+    {
+      "path": "samples/showcase/assets/wm_h_pos_clr_rgb_august2024.png",
+      "sha256": "47a4eaa1be957777d3e106f5c1cc9f67dbfcda79d74fe7a7f2bcbb88b13fa341",
+      "role": "artwork"
+    },
+    {
+      "path": "samples/visual-wave3/assets/image77.svg",
+      "sha256": "2926b957ab364340e4f1f2e5b9bad1ff9ef1258aef8241d731bf6551b422cef3",
+      "role": "artwork"
+    },
+    {
+      "path": "samples/reconstruction/work/underline-source.svg.png",
+      "sha256": "f2c1d45d0fab80c37c94157ae8cf542bf08a48e76e0b093a9ab6e01d75da7af2",
+      "role": "fallback"
+    }
+  ],
+  "cardinality": {},
+  "fit_envelope": {
+    "measured": [],
+    "unsupported": [
+      "Arbitrary geometry edits.",
+      "Automatic font shrinking or content truncation.",
+      "Character caps are editorial input guardrails, not measured fit guarantees.",
+      "New content is unqualified until native measurement, final verification, and visual review."
+    ],
+    "font_policy": "no_silent_shrink"
+  },
+  "transforms": {
+    "translation": "unsupported",
+    "resize": "unsupported",
+    "rotation": "unsupported"
+  },
+  "style_variants": [
+    {
+      "id": "source",
+      "semantic_profile": "wm.fixture-original",
+      "tokens": {},
+      "qualified": false
+    }
+  ],
+  "preference": {
+    "value": "unreviewed",
+    "note": "No user preference for this complete layout; do not infer preference from related components."
+  },
+  "qualification": {
+    "state": "reviewed",
+    "evidence": [],
+    "failures": [
+      "Candidate semantic bindings have not completed changed-content end-to-end qualification."
+    ]
+  },
+  "previews": [],
+  "provenance": {
+    "created_from": [
+      "library/diagram-components/accent-review.json",
+      "UHG5 underline / UHG6 highlight optical calibration. Source SHA256 b0f254ed7739768d0f345257689264393049d06cdd3849a177fc764f3d348d99. This is a component control, not whole-slide identity."
+    ],
+    "review_history": [
+      "Candidate contract generated from existing authored fixture. Original sample provenance remains in fixture notes and referenced proof.",
+      "This does not promote the source deck, unrelated layouts, or unrestricted slot values."
+    ]
+  }
+}

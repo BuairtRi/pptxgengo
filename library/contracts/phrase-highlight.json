@@ -1,0 +1,131 @@
+{
+  "schema": "pptxgengo.library-component.v1",
+  "id": "wm/phrase-highlight",
+  "version": "0.1.0",
+  "kind": "layout",
+  "name": "Assertion with phrase highlight",
+  "purpose": "Highlight a selected phrase behind native editable text, using optical calibration and measured glyph bounds.",
+  "content_roles": [
+    "assertion",
+    "takeaway",
+    "emphasis",
+    "highlight"
+  ],
+  "source": {
+    "source_id": "authored-fixture:highlight-source-copy",
+    "path": "library/diagram-components/accent-review.json",
+    "source_sha256": "a37466bc730d5bdf584359dee45a0d6232f65e7ed1dd9b23f7d3cdeb05f47783",
+    "slide": 5
+  },
+  "composition": {
+    "spec_path": "library/diagram-components/accent-review.json",
+    "spec_sha256": "a37466bc730d5bdf584359dee45a0d6232f65e7ed1dd9b23f7d3cdeb05f47783",
+    "slide_id": "highlight-source-copy",
+    "slots": [
+      {
+        "name": "highlight-source-copy/claim/text",
+        "role": "text",
+        "pointer": "/canvas/4/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 50
+      },
+      {
+        "name": "highlight-source-copy/explanation/text",
+        "role": "text",
+        "pointer": "/canvas/5/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 336
+      },
+      {
+        "name": "slide/role",
+        "role": "role",
+        "pointer": "/role",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 2048
+      },
+      {
+        "name": "slide/takeaway",
+        "role": "takeaway",
+        "pointer": "/takeaway",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 2048
+      },
+      {
+        "name": "emphasis/emphasis/phrase",
+        "role": "emphasis_target",
+        "pointer": "/accents/0/phrase",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 32
+      }
+    ],
+    "narrative_bindings": {
+      "assertion_title": "/canvas/4/text",
+      "role": "/role",
+      "takeaway": "/takeaway"
+    },
+    "pagination_binding": "/canvas/3/text"
+  },
+  "assets": [
+    {
+      "path": "samples/showcase/assets/wm_h_pos_clr_rgb_august2024.png",
+      "sha256": "47a4eaa1be957777d3e106f5c1cc9f67dbfcda79d74fe7a7f2bcbb88b13fa341",
+      "role": "artwork"
+    },
+    {
+      "path": "samples/visual-wave3/assets/image90.png",
+      "sha256": "b0048aa39744978d339a9910f5cc1482814a8a0eae4c5a63e1f80d6a2885b314",
+      "role": "artwork"
+    }
+  ],
+  "cardinality": {},
+  "fit_envelope": {
+    "measured": [],
+    "unsupported": [
+      "Arbitrary geometry edits.",
+      "Automatic font shrinking or content truncation.",
+      "Character caps are editorial input guardrails, not measured fit guarantees.",
+      "New content is unqualified until native measurement, final verification, and visual review."
+    ],
+    "font_policy": "no_silent_shrink"
+  },
+  "transforms": {
+    "translation": "unsupported",
+    "resize": "unsupported",
+    "rotation": "unsupported"
+  },
+  "style_variants": [
+    {
+      "id": "source",
+      "semantic_profile": "wm.fixture-original",
+      "tokens": {},
+      "qualified": false
+    }
+  ],
+  "preference": {
+    "value": "unreviewed",
+    "note": "No user preference for this complete layout; do not infer preference from related components."
+  },
+  "qualification": {
+    "state": "reviewed",
+    "evidence": [],
+    "failures": [
+      "Candidate semantic bindings have not completed changed-content end-to-end qualification."
+    ]
+  },
+  "previews": [],
+  "provenance": {
+    "created_from": [
+      "library/diagram-components/accent-review.json",
+      "UHG5 underline / UHG6 highlight optical calibration. Source SHA256 b0f254ed7739768d0f345257689264393049d06cdd3849a177fc764f3d348d99. This is a component control, not whole-slide identity."
+    ],
+    "review_history": [
+      "Candidate contract generated from existing authored fixture. Original sample provenance remains in fixture notes and referenced proof.",
+      "This does not promote the source deck, unrelated layouts, or unrestricted slot values."
+    ]
+  }
+}

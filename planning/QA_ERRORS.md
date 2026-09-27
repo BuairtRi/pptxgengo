@@ -518,3 +518,108 @@ cross-reference. The follow-up generator now describes the native picture-outlin
 change instead. Reused components require narrative review as well as geometry QA.
 The corrected v2 render removes the stale reference and retains source thumbnail
 and caption positions.
+
+## QA92 — Path declarations disappeared during layout expansion
+
+The first path primitive expanded into layouts, but the layout copier then
+replaced expanded slides with the original slide array. A process-path test
+caught an empty plan. Expansion now retains the lowered slides, and tests verify
+node ports and arrow counts before and after cardinality changes.
+
+## QA93 — Connector obstacles must include the whole arrow
+
+Root review found that direct flow arrows checked labels but not prior routed
+strokes, and later routes only saw the arrow's semantic centerline. Full arrow
+ink frames now participate in obstacle checks with declared clearance; source
+IDs and contrast on traversed surfaces are checked. Focused tests cover both
+connection orders and generated-ID collisions.
+
+## QA94 — Large source typography was rejected by a blanket contrast threshold
+
+UHG36 uses original #F900D3 numerals at 16pt bold. The engine's blanket 4.5:1
+check rejected them. The proposed color darkening was rejected during integration.
+Uniform canvas text now applies 3:1 for >=18pt regular or >=14pt bold, retaining
+4.5:1 for smaller text. Source colors remain unchanged. This is a typography
+rule, not a claim of whole-slide accessibility certification.
+
+## QA95 — Repeated phrase selection can still wrap
+
+A fixture explicitly selected the second occurrence of “pivotal moment,” but
+native character measurement showed the phrase split across two lines. The
+planner correctly rejected automatic union-box placement. The experiment now
+explicitly requests one underline per measured line, without rewriting the text.
+Native visual acceptance remains pending.
+
+## QA96 — Arrow catalog geometry and identity require independent inspection
+
+Root inspection rejected the initial connecting-arrow tip: its annotated dot
+sat on the separate return stroke, visibly beyond the actual arrowhead. Root
+also found the claimed UHG byte identity contradicted the local/source SHA values
+in the same draft record. The catalog audit is being corrected; no candidate
+was promoted or accepted for native use on the basis of that draft.
+
+## QA97 — Wave 3 export is blocked again after successful measurement
+
+The seven-case phrase probe measured successfully in 64.14 seconds. PDF export
+of the six regular cases then timed out (-1712); a subsequent open returned
+-9074. Desktop inspection failed to start. The user was asked to inspect/grant
+any repository file-access prompt. No PDF was produced, no native visual result
+is claimed, and unsaved presentations remain open. File-only implementation and
+qualification preparation continue while access is unresolved.
+
+## QA98 — Accent and artwork checks omitted other decorative ink
+
+Root review found that ordinary text/image collisions were checked but overlapping
+accents and prior staged arrows could be missed. Both now participate in the
+shared collision check. Final native verification also rechecks arrow phrase
+endpoints against final character bounds. Regression tests cover shifted/missing
+phrase geometry and decorative overlaps. Rich-text phrase resolution now uses
+its actual paragraph/run content rather than the empty plain-text field.
+
+## QA99 — Rotated curved-arrow rectangles reject clear empty corners
+
+The initial ±15° arrow experiments failed on source/target labels because the
+rotated alpha bounding box included empty corners. Simply increasing endpoint
+clearance would have required roughly 45–63pt source gaps in two cases. Candidate
+arrows now carry conservative occupied alpha tiles derived from pinned source
+SVG rasters; the solver rotates these with the artwork for collision checks.
+Nine candidates pass structural planning. Native optical acceptance is pending.
+
+## QA100 — Stock SVG/PNG names do not guarantee identical image canvases
+
+Package tests and independent review found that the single-arrow SVG is about
+30.14:1 but its stock PNG is square; the right-angle PNG is 150×186 while its SVG
+canvas is square. These are not interchangeable fallbacks. The candidate builder
+now rasterizes the exact SVG at the original aspect and pins those derived PNG
+bytes. The original SVG is preserved. The narrow static-SVG lane also now permits
+plain title/description metadata while rejecting nested content and active SVG.
+
+## QA101 — Narrative and style metadata must bind to the produced slide
+
+Library review found that a narrative could be attached without checking its
+assertion title/role/takeaway against output, and token replacement could rewrite
+arbitrary strings. Contracts now own explicit narrative bindings; required detail
+and qualifications must be present in supplied copy. Style replacements affect
+only declared color fields. Tests cover mismatched narrative and unchanged
+content/IDs/asset paths. A deterministic assembler validates each instance and
+sets only declared slide IDs/page labels, publishing atomically after all pass.
+
+## QA102 — A single accent study is too sparse for the proposal opening
+
+Narrative review found that the opening was mapped to an accent-only mechanics
+fixture. A new dense-argument candidate now keeps an assertion/highlight, synthetic
+baseline, three detailed mechanism/boundary/evidence panels, and a visible
+qualification. It remains unqualified until native measurement and visual review.
+The roster and full biography are split into separate pages, giving a 13-page
+proposal narrative rather than discarding their required detail.
+
+## QA103 — Source-length caps were applied to nonvisual narrative metadata
+
+The independent authoring check rejected an architecture takeaway and later team
+and decision-page role metadata because caps had been scaled from terse source
+labels. These fields are slide notes/narrative metadata, not rendered text zones.
+They now have an explicit 2048-character metadata bound. Top-level assertion title
+input caps have a 128-character editorial floor; for example the needs template
+has an 888×52pt, 23pt title frame but its old 65-character guard came only from
+source copy length. No native maximum was measured. New title copy remains
+unqualified until actual native fit; fonts and geometry are unchanged.

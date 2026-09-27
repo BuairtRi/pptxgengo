@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -37,6 +38,26 @@ func structuralImageFixture(t *testing.T, mode string) ([]byte, []renderSlide) {
 		t.Fatal(err)
 	}
 	return deck, slides
+}
+
+func TestImageStructureBindsDeclaredRotation(t *testing.T) {
+	for _, rotation := range []float64{1, -15, 90} {
+		t.Run(strconv.FormatFloat(rotation, 'f', -1, 64), func(t *testing.T) {
+			_, slides := structuralImageFixture(t, "stretch")
+			slides[0].Elements[0].RotationDeg = rotation
+			deck, err := render(slides)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := validateImageStructure(deck, slides); err != nil {
+				t.Fatal(err)
+			}
+			slides[0].Elements[0].RotationDeg += 1
+			if err := validateImageStructure(deck, slides); err == nil {
+				t.Fatal("unexpected image rotation accepted")
+			}
+		})
+	}
 }
 
 func TestImageStructureBindsCropModes(t *testing.T) {

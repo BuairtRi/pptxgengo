@@ -103,6 +103,16 @@ type LayoutZoneFit struct {
 	Reason            string  `json:"reason,omitempty"`
 }
 
+// ResolvedLayoutPort records a stable container or cell edge in slide points.
+// Its ID is the container ID, or container/cell for a cell.
+type ResolvedLayoutPort struct {
+	ID       string    `json:"id"`
+	Kind     string    `json:"kind"`
+	ParentID string    `json:"parent_id,omitempty"`
+	Bounds   Rect      `json:"bounds"`
+	Anchors  AnchorSet `json:"anchors"`
+}
+
 type layoutMode int
 
 const (
@@ -158,22 +168,28 @@ type resolvedContainer struct {
 }
 
 func expandLayoutsDetailed(spec Spec, measured Measurements, mode layoutMode) (Spec, []LayoutZoneFit) {
-	out := spec
+	out, pathFailures := expandProcessPaths(spec)
 	// SlideSpec contains slices, but lowering only replaces the slide-level
 	// Canvas and Layouts headers. Copy the slide array so probe expansion never
 	// mutates the caller's reusable source spec through a shared backing array.
-	out.Slides = append([]SlideSpec(nil), spec.Slides...)
+	out.Slides = append([]SlideSpec(nil), out.Slides...)
 	var failures []LayoutZoneFit
+	failures = append(failures, pathFailures...)
+	if len(pathFailures) > 0 {
+		return out, failures
+	}
 	for si := range out.Slides {
 		s := &out.Slides[si]
 		s.Canvas = append([]CanvasSpec(nil), s.Canvas...)
 		if len(s.Layouts) == 0 {
 			continue
 		}
-		generated, fs := lowerSlideLayouts(*s, measured, mode)
+		var ports []ResolvedLayoutPort
+		generated, fs := lowerSlideLayouts(*s, measured, mode, &ports)
 		failures = append(failures, fs...)
 		if len(fs) == 0 {
 			s.Canvas = append(s.Canvas, generated...)
+			s.resolvedLayoutPorts = ports
 			s.Layouts = nil
 		}
 	}
@@ -185,7 +201,7 @@ func expandLayoutsDetailed(spec Spec, measured Measurements, mode layoutMode) (S
 	return out, failures
 }
 
-func lowerSlideLayouts(s SlideSpec, measured Measurements, mode layoutMode) ([]CanvasSpec, []LayoutZoneFit) {
+func lowerSlideLayouts(s SlideSpec, measured Measurements, mode layoutMode, ports *[]ResolvedLayoutPort) ([]CanvasSpec, []LayoutZoneFit) {
 	var failures []LayoutZoneFit
 	ids := map[string]bool{}
 	for _, c := range s.Canvas {
@@ -405,6 +421,20 @@ func lowerSlideLayouts(s SlideSpec, measured Measurements, mode layoutMode) ([]C
 	}
 
 	var out []CanvasSpec
+	for _, c := range s.Layouts {
+		r := resolved[c.ID]
+		*ports = append(*ports, ResolvedLayoutPort{ID: c.ID, Kind: "container", ParentID: c.ParentID, Bounds: r.bounds, Anchors: rectAnchors(r.bounds)})
+		for _, cell := range c.Cells {
+			if cell.RowSpan == 0 {
+				cell.RowSpan = 1
+			}
+			if cell.ColumnSpan == 0 {
+				cell.ColumnSpan = 1
+			}
+			b := Rect{X: r.colX[cell.Column], Y: r.rowY[cell.Row], Width: spanSizeGaps(r.cols, columnGaps(c), cell.Column, cell.ColumnSpan), Height: spanSize(r.rows, c.RowGapPt, cell.Row, cell.RowSpan)}
+			*ports = append(*ports, ResolvedLayoutPort{ID: c.ID + "/" + cell.ID, Kind: "cell", ParentID: c.ID, Bounds: b, Anchors: rectAnchors(b)})
+		}
+	}
 	type ownership struct{ container, cell, kind string }
 	owned := map[string]ownership{}
 	containerBackground := func(id string) string {

@@ -76,21 +76,22 @@ func environmentKey(env *measurementEnvironment) string { return hash(jsonBytes(
 // Every value that can affect the probe rendering belongs here. IDs locate
 // observations but do not alter glyph geometry. This version supports Arial only.
 type textContract struct {
-	Text       string                  `json:"text"`
-	Paragraphs []compose.ParagraphSpec `json:"paragraphs,omitempty"`
-	Width      float64                 `json:"width_pt"`
-	InsetX     float64                 `json:"inset_x"`
-	InsetY     float64                 `json:"inset_y"`
-	FontFace   string                  `json:"font_face"`
-	FontSize   float64                 `json:"font_size_pt"`
-	Bold       bool                    `json:"bold"`
-	Align      string                  `json:"align"`
-	Foreground string                  `json:"foreground"`
-	Background string                  `json:"background"`
+	PhraseRequests []compose.PhraseRequest `json:"phrase_requests,omitempty"`
+	Text           string                  `json:"text"`
+	Paragraphs     []compose.ParagraphSpec `json:"paragraphs,omitempty"`
+	Width          float64                 `json:"width_pt"`
+	InsetX         float64                 `json:"inset_x"`
+	InsetY         float64                 `json:"inset_y"`
+	FontFace       string                  `json:"font_face"`
+	FontSize       float64                 `json:"font_size_pt"`
+	Bold           bool                    `json:"bold"`
+	Align          string                  `json:"align"`
+	Foreground     string                  `json:"foreground"`
+	Background     string                  `json:"background"`
 }
 
 func contract(q compose.ProbeRequest) textContract {
-	return textContract{q.Text, q.Paragraphs, q.TextWidthPt, q.HorizontalInsetPt, q.VerticalInsetPt, q.FontFace, q.FontSizePt, q.Bold, q.Align, q.Foreground, q.Background}
+	return textContract{q.PhraseRequests, q.Text, q.Paragraphs, q.TextWidthPt, q.HorizontalInsetPt, q.VerticalInsetPt, q.FontFace, q.FontSizePt, q.Bold, q.Align, q.Foreground, q.Background}
 }
 func contractKey(q compose.ProbeRequest) string { return hash(jsonBytes(contract(q))) }
 

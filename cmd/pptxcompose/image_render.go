@@ -114,6 +114,7 @@ func renderImage(s *pptx.Slide, e element) error {
 		return err
 	}
 	o := &pptx.ImageProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, DataOrPathProps: pptx.DataOrPathProps{Data: "image/" + format + ";base64," + base64.StdEncoding.EncodeToString(b)}, AltText: e.AltText}
+	o.Rotate = e.RotationDeg
 	if isSVG {
 		fallback, err := os.ReadFile(e.FallbackAssetPath)
 		if err != nil {
@@ -166,6 +167,9 @@ func svgIntrinsicSize(data []byte) (float64, float64, error) {
 		}
 		switch v := token.(type) {
 		case xml.StartElement:
+			if len(stack) > 0 && (stack[len(stack)-1] == "title" || stack[len(stack)-1] == "desc") {
+				return 0, 0, fmt.Errorf("SVG metadata must contain plain text only")
+			}
 			if v.Name.Space != "http://www.w3.org/2000/svg" || !staticSVGElement(v.Name.Local) {
 				return 0, 0, fmt.Errorf("unsupported SVG element or namespace %s", v.Name.Local)
 			}
@@ -214,6 +218,9 @@ func svgIntrinsicSize(data []byte) (float64, float64, error) {
 		case xml.CharData:
 			value := strings.TrimSpace(string(v))
 			if value == "" {
+				continue
+			}
+			if len(stack) > 0 && (stack[len(stack)-1] == "title" || stack[len(stack)-1] == "desc") {
 				continue
 			}
 			if len(stack) == 0 || stack[len(stack)-1] != "style" {
@@ -268,7 +275,7 @@ func svgRootDimensions(attrs map[string]string) (float64, float64, error) {
 }
 
 func staticSVGElement(name string) bool {
-	return name == "svg" || name == "defs" || name == "g" || name == "path" || name == "style"
+	return name == "svg" || name == "defs" || name == "g" || name == "path" || name == "style" || name == "title" || name == "desc"
 }
 
 func validateSVGAttribute(name, value string) error {

@@ -52,27 +52,30 @@ type Spec struct {
 }
 
 type SlideSpec struct {
-	Accents         []AccentSpec         `json:"accents,omitempty"`
-	Role            string               `json:"role,omitempty"`
-	Takeaway        string               `json:"takeaway,omitempty"`
-	Notes           string               `json:"notes,omitempty"`
-	Canvas          []CanvasSpec         `json:"canvas,omitempty"`
-	Cards           []CardSpec           `json:"cards,omitempty"`
-	ID              string               `json:"id"`
-	Title           string               `json:"title"`
-	WidthPt         float64              `json:"width_pt"`
-	HeightPt        float64              `json:"height_pt"`
-	TitleBounds     Rect                 `json:"title_bounds"`
-	TitleFontFace   string               `json:"title_font_face"`
-	TitleFontSizePt float64              `json:"title_font_size_pt"`
-	TitleBold       bool                 `json:"title_bold"`
-	TitleForeground string               `json:"title_foreground"`
-	Pods            []PodSpec            `json:"pods"`
-	Roles           []StandaloneRoleSpec `json:"roles,omitempty"`
-	Phases          []PhaseSpec          `json:"phases,omitempty"`
-	Legend          *LegendSpec          `json:"legend,omitempty"`
-	Connections     []ConnectionSpec     `json:"connections,omitempty"`
-	Layouts         []ContainerSpec      `json:"layouts,omitempty"`
+	Accents             []AccentSpec         `json:"accents,omitempty"`
+	ArtworkArrows       []ArtworkArrowSpec   `json:"artwork_arrows,omitempty"`
+	Role                string               `json:"role,omitempty"`
+	Takeaway            string               `json:"takeaway,omitempty"`
+	Notes               string               `json:"notes,omitempty"`
+	Canvas              []CanvasSpec         `json:"canvas,omitempty"`
+	Cards               []CardSpec           `json:"cards,omitempty"`
+	ID                  string               `json:"id"`
+	Title               string               `json:"title"`
+	WidthPt             float64              `json:"width_pt"`
+	HeightPt            float64              `json:"height_pt"`
+	TitleBounds         Rect                 `json:"title_bounds"`
+	TitleFontFace       string               `json:"title_font_face"`
+	TitleFontSizePt     float64              `json:"title_font_size_pt"`
+	TitleBold           bool                 `json:"title_bold"`
+	TitleForeground     string               `json:"title_foreground"`
+	Pods                []PodSpec            `json:"pods"`
+	Roles               []StandaloneRoleSpec `json:"roles,omitempty"`
+	Phases              []PhaseSpec          `json:"phases,omitempty"`
+	Legend              *LegendSpec          `json:"legend,omitempty"`
+	Connections         []ConnectionSpec     `json:"connections,omitempty"`
+	Layouts             []ContainerSpec      `json:"layouts,omitempty"`
+	Paths               []ProcessPathSpec    `json:"paths,omitempty"`
+	resolvedLayoutPorts []ResolvedLayoutPort
 }
 
 type PodSpec struct {
@@ -119,6 +122,7 @@ type RoleSpec struct {
 // usable inner width; the caller should measure the text with zero textbox
 // margins. Insets are returned separately for tile geometry and auditability.
 type ProbeRequest struct {
+	PhraseRequests    []PhraseRequest `json:"phrase_requests,omitempty"`
 	Align             string          `json:"align,omitempty"`
 	ID                string          `json:"id"`
 	SlideID           string          `json:"slide_id"`
@@ -141,10 +145,11 @@ type ProbeRequest struct {
 }
 
 type Measurement struct {
-	OffsetXPt        float64 `json:"offset_x_pt,omitempty"`
-	OffsetYPt        float64 `json:"offset_y_pt,omitempty"`
-	RenderedWidthPt  float64 `json:"rendered_width_pt"`
-	RenderedHeightPt float64 `json:"rendered_height_pt"`
+	PhraseBounds     map[string][]Rect `json:"phrase_bounds,omitempty"`
+	OffsetXPt        float64           `json:"offset_x_pt,omitempty"`
+	OffsetYPt        float64           `json:"offset_y_pt,omitempty"`
+	RenderedWidthPt  float64           `json:"rendered_width_pt"`
+	RenderedHeightPt float64           `json:"rendered_height_pt"`
 }
 
 type Measurements struct {
@@ -157,24 +162,27 @@ type PlanResult struct {
 }
 
 type PlannedSlide struct {
-	Accents            []PlannedAccent     `json:"accents,omitempty"`
-	Canvas             []PlannedCanvas     `json:"canvas,omitempty"`
-	Cards              []PlannedCard       `json:"cards,omitempty"`
-	ID                 string              `json:"id"`
-	Title              string              `json:"title"`
-	TitleFontFace      string              `json:"title_font_face"`
-	TitleFontSizePt    float64             `json:"title_font_size_pt"`
-	TitleBold          bool                `json:"title_bold"`
-	TitleForeground    string              `json:"title_foreground"`
-	TitleBounds        Rect                `json:"title_bounds"`
-	WidthPt            float64             `json:"width_pt"`
-	HeightPt           float64             `json:"height_pt"`
-	TitleMeasurementID string              `json:"title_measurement_id,omitempty"`
-	Pods               []PlannedPod        `json:"pods"`
-	Roles              []PlannedRole       `json:"roles,omitempty"`
-	Phases             []PlannedPhase      `json:"phases,omitempty"`
-	Legend             *PlannedLegend      `json:"legend,omitempty"`
-	Connections        []PlannedConnection `json:"connections,omitempty"`
+	Accents            []PlannedAccent       `json:"accents,omitempty"`
+	ArtworkArrows      []PlannedArtworkArrow `json:"artwork_arrows,omitempty"`
+	Canvas             []PlannedCanvas       `json:"canvas,omitempty"`
+	Cards              []PlannedCard         `json:"cards,omitempty"`
+	ID                 string                `json:"id"`
+	Title              string                `json:"title"`
+	TitleFontFace      string                `json:"title_font_face"`
+	TitleFontSizePt    float64               `json:"title_font_size_pt"`
+	TitleBold          bool                  `json:"title_bold"`
+	TitleForeground    string                `json:"title_foreground"`
+	TitleBounds        Rect                  `json:"title_bounds"`
+	WidthPt            float64               `json:"width_pt"`
+	HeightPt           float64               `json:"height_pt"`
+	TitleMeasurementID string                `json:"title_measurement_id,omitempty"`
+	Pods               []PlannedPod          `json:"pods"`
+	Roles              []PlannedRole         `json:"roles,omitempty"`
+	Phases             []PlannedPhase        `json:"phases,omitempty"`
+	Legend             *PlannedLegend        `json:"legend,omitempty"`
+	Connections        []PlannedConnection   `json:"connections,omitempty"`
+	LayoutPorts        []ResolvedLayoutPort  `json:"layout_ports,omitempty"`
+	ManualRequired     []string              `json:"manual_required,omitempty"`
 }
 
 type PlannedPod struct {
@@ -284,6 +292,20 @@ func ContrastRatio(a, b string) (float64, error) {
 }
 
 func foreground(requested, bg string) (string, error) {
+	return foregroundWithThreshold(requested, bg, 4.5)
+}
+
+// WCAG large text permits 3:1 at >=18pt regular or >=14pt bold. This only
+// applies to a uniform text shape; mixed runs keep their own stricter checks.
+func foregroundAtSize(requested, bg string, size float64, bold bool) (string, error) {
+	threshold := 4.5
+	if size >= 18 || (bold && size >= 14) {
+		threshold = 3
+	}
+	return foregroundWithThreshold(requested, bg, threshold)
+}
+
+func foregroundWithThreshold(requested, bg string, threshold float64) (string, error) {
 	b, err := resolveColor(bg)
 	if err != nil {
 		return "", err
@@ -295,8 +317,8 @@ func foreground(requested, bg string) (string, error) {
 		if whiteRatio > navyRatio {
 			fg, ratio = white, whiteRatio
 		}
-		if ratio < 4.5 {
-			return "", fmt.Errorf("no automatic brand foreground reaches 4.5:1 contrast")
+		if ratio < threshold {
+			return "", fmt.Errorf("no automatic brand foreground reaches %.1f:1 contrast", threshold)
 		}
 		return fg, nil
 	}
@@ -305,8 +327,8 @@ func foreground(requested, bg string) (string, error) {
 		return "", err
 	}
 	ratio, _ := ContrastRatio(f, b)
-	if ratio < 4.5 {
-		return "", fmt.Errorf("foreground %s on %s has %.2f:1 contrast; minimum is 4.5:1", f, b, ratio)
+	if ratio < threshold {
+		return "", fmt.Errorf("foreground %s on %s has %.2f:1 contrast; minimum is %.1f:1", f, b, ratio, threshold)
 	}
 	return f, nil
 }
@@ -520,6 +542,9 @@ func validateSpec(spec Spec) error {
 		if err := validateAccents(s, componentIDs); err != nil {
 			return err
 		}
+		if err := validateArtworkArrows(s, componentIDs); err != nil {
+			return err
+		}
 		if err := validateCanvas(s, componentIDs); err != nil {
 			return err
 		}
@@ -595,6 +620,7 @@ func Plan(spec Spec, measurements Measurements) (PlanResult, error) {
 			titleFg, _ = foreground(s.TitleForeground, white)
 		}
 		ps := PlannedSlide{ID: s.ID, Title: s.Title, TitleFontFace: s.TitleFontFace, TitleFontSizePt: s.TitleFontSizePt, TitleBold: s.TitleBold, TitleForeground: titleFg, TitleBounds: s.TitleBounds, WidthPt: s.WidthPt, HeightPt: s.HeightPt}
+		ps.LayoutPorts = append(ps.LayoutPorts, s.resolvedLayoutPorts...)
 		if strings.TrimSpace(s.Title) != "" {
 			id := titleProbe(s).ID
 			m := measurements.ByRequestID[id]
@@ -734,6 +760,9 @@ func Plan(spec Spec, measurements Measurements) (PlanResult, error) {
 			return PlanResult{}, err
 		}
 		if err := planAccents(s, &ps, measurements); err != nil {
+			return PlanResult{}, err
+		}
+		if err := planArtworkArrows(s, &ps, measurements); err != nil {
 			return PlanResult{}, err
 		}
 		result.Slides = append(result.Slides, ps)

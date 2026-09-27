@@ -14,6 +14,11 @@ type frame struct {
 	Height float64 `json:"height"`
 }
 type element struct {
+	LineDash            string                  `json:"line_dash,omitempty"`
+	BeginArrow          string                  `json:"begin_arrow,omitempty"`
+	EndArrow            string                  `json:"end_arrow,omitempty"`
+	RotationDeg         float64                 `json:"rotation_deg,omitempty"`
+	PhraseRequests      []compose.PhraseRequest `json:"phrase_requests,omitempty"`
 	AssetMode           string                  `json:"asset_mode,omitempty"`
 	AssetPath           string                  `json:"asset_path,omitempty"`
 	AssetSHA256         string                  `json:"asset_sha256,omitempty"`
@@ -94,7 +99,7 @@ func render(slides []renderSlide) ([]byte, error) {
 				continue
 			}
 			if e.Kind == "line" {
-				if err := s.AddShape(pptx.ShapeTypeLine, &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Fill: &pptx.ShapeFillProps{Type: "none"}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: e.Foreground}, Width: e.LineWidth, BeginArrowType: "none", EndArrowType: "none"}}); err != nil {
+				if err := s.AddShape(pptx.ShapeTypeLine, &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Fill: &pptx.ShapeFillProps{Type: "none"}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: e.Foreground}, Width: e.LineWidth, DashType: lineDash(e.LineDash), BeginArrowType: lineArrow(e.BeginArrow), EndArrowType: lineArrow(e.EndArrow)}}); err != nil {
 					return nil, err
 				}
 				continue
@@ -164,4 +169,33 @@ func render(slides []renderSlide) ([]byte, error) {
 		}
 	}
 	return p.Write()
+}
+
+func lineDash(v string) string {
+	if v == "" {
+		return "solid"
+	}
+	return v
+}
+func lineArrow(v string) string {
+	if v == "" {
+		return "none"
+	}
+	return v
+}
+func nativeArrow(v string) string {
+	if v == "triangle" {
+		return "triangle arrowhead"
+	}
+	return "no arrowhead"
+}
+func nativeDash(v string) string {
+	switch v {
+	case "dash":
+		return "line dash style dash"
+	case "dot":
+		return "line dash style square dot"
+	default:
+		return "line dash style solid"
+	}
 }

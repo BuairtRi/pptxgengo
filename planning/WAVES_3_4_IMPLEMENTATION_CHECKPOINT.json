@@ -1,0 +1,165 @@
+{
+  "schema": "pptxgengo.implementation-checkpoint.v1",
+  "status": "structural_candidate_checkpoint_not_native_visual_qualification",
+  "contracts": [
+    {
+      "id": "wm/biography",
+      "path": "library/contracts/biography.json",
+      "sha256": "38fbff6b5e7b8478b7cec5ff07dcb30670b6ab209b90a4777b2ba160022fb814",
+      "state": "measured_fixture",
+      "slots": 28
+    },
+    {
+      "id": "wm/delivery-team",
+      "path": "library/contracts/delivery-team.json",
+      "sha256": "15e67e48af63551ea637a3e5f3f6f74ee86ddd86ebc9bf03b448aee15f93f4da",
+      "state": "reviewed",
+      "slots": 39
+    },
+    {
+      "id": "wm/dense-argument",
+      "path": "library/contracts/dense-argument.json",
+      "sha256": "1a3306bc2bbe73b6f91611414465db4089401b430b1935eb2520e14d18c5ad56",
+      "state": "reviewed",
+      "slots": 22
+    },
+    {
+      "id": "wm/dense-roster",
+      "path": "library/contracts/dense-roster.json",
+      "sha256": "4a48d503a4f5296b2d0968bdf8772c6586a5ebe33ffb39eb575a8e0118f6091c",
+      "state": "measured_fixture",
+      "slots": 53
+    },
+    {
+      "id": "wm/five-phase",
+      "path": "library/contracts/five-phase.json",
+      "sha256": "0cafe26ff4bbf7c6c2a078069df22ef7282a2214f6b237a6bf22bf6a8e3d8cb9",
+      "state": "measured_fixture",
+      "slots": 46
+    },
+    {
+      "id": "wm/layered-architecture",
+      "path": "library/contracts/layered-architecture.json",
+      "sha256": "4e22877daadca585f29faf6dac45d170610451b0645536edae03b7607dcf16d5",
+      "state": "reviewed",
+      "slots": 30
+    },
+    {
+      "id": "wm/needs-response",
+      "path": "library/contracts/needs-response.json",
+      "sha256": "d05fff0de3695611b452df22a7b595c7d78b5368c1a37672394556649143d6de",
+      "state": "measured_fixture",
+      "slots": 20
+    },
+    {
+      "id": "wm/parallel-process",
+      "path": "library/contracts/parallel-process.json",
+      "sha256": "15cb5b20ffac8ded2e68b1c20a20337a380aab613721116c55dd573864d7d578",
+      "state": "reviewed",
+      "slots": 9
+    },
+    {
+      "id": "wm/phase-detail",
+      "path": "library/contracts/phase-detail.json",
+      "sha256": "f9daad62a9a9028b361c76682436b82eee8f05478019f64c4e673b8a0f8cc809",
+      "state": "measured_fixture",
+      "slots": 51
+    },
+    {
+      "id": "wm/phrase-highlight",
+      "path": "library/contracts/phrase-highlight.json",
+      "sha256": "8b5bdbc9d56116552032f6242c47776164b4098a15513c5f5094720baf45d933",
+      "state": "reviewed",
+      "slots": 5
+    },
+    {
+      "id": "wm/phrase-underline",
+      "path": "library/contracts/phrase-underline.json",
+      "sha256": "665a98a9543135dd54a5d01650f827ed35a0918b9561e8ecd015d17315349ab6",
+      "state": "reviewed",
+      "slots": 5
+    },
+    {
+      "id": "wm/release-roadmap",
+      "path": "library/contracts/release-roadmap.json",
+      "sha256": "8b901a7b67ac4fc71991d4f4186992ebc9557a1e5cc09eb764ae0a9b5d87e8fc",
+      "state": "measured_fixture",
+      "slots": 28
+    },
+    {
+      "id": "wm/workflow-matrix",
+      "path": "library/contracts/workflow-matrix.json",
+      "sha256": "c6e5b59b40b0ce951fd05c107405d58fa110d07f8e57c63b107338b545da8d93",
+      "state": "measured_fixture",
+      "slots": 29
+    }
+  ],
+  "inventory_count": 17456,
+  "semantic_slot_count": 365,
+  "assembly": {
+    "slides": 13,
+    "repeat_spec_identical": true,
+    "artifacts": [
+      {
+        "path": "library/contract-examples/assembly.json",
+        "sha256": "84c71b12f329367cadd2e3626c6839a6c4a28be3cd5c04ee03e582b5bd2c47b1"
+      },
+      {
+        "path": "samples/library-wave4/integration-13-a/spec.json",
+        "sha256": "96b56672c3706409eb223ec2d4b0a54a194b762b88c91098c3e45120301642a2"
+      },
+      {
+        "path": "samples/library-wave4/integration-13-a/assembly-trace.json",
+        "sha256": "1f0c8f3e8263a44c25eac08ec58b66ee50a0dd9c1197f5960f900adc35154fec"
+      },
+      {
+        "path": "samples/library-wave4/integration-13-b/spec.json",
+        "sha256": "96b56672c3706409eb223ec2d4b0a54a194b762b88c91098c3e45120301642a2"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "command": "go test ./...",
+      "result": "passed"
+    },
+    {
+      "command": "pptxcompose probe --spec samples/library-wave4/integration-13-a/spec.json",
+      "result": "passed; structural preparation, no native fit claim"
+    },
+    {
+      "command": "quick_validate.py skills/pptxgengo",
+      "result": "passed with PyYAML via uv"
+    },
+    {
+      "command": "pptxlib find --query workflow",
+      "result": "no qualified hits; measured_fixture search returns wm/workflow-matrix"
+    }
+  ],
+  "native_status": {
+    "phrase_probe": "Earlier seven-case probe measured; original spike bundles retained.",
+    "pdf_export": "No PDF produced; timed out -1712.",
+    "final_verify_attempt": "Failed opening saved task copy with -9074; no final measurement produced.",
+    "visual_acceptance": false
+  },
+  "remaining": [
+    "Native fit and rendered visual qualification of all new diagram/accent/arrow/dense candidates.",
+    "Full Wave3 expanded review deck and source comparisons.",
+    "Contract adaptation promotion after changed-content and negative stress proof.",
+    "Independent agent forward check completion.",
+    "Fresh 13-page proposal values, normal/stress/repeatability native QA."
+  ],
+  "deferred": "Wave5 and returned-deck reconciliation.",
+  "independent_forward_check": {
+    "agent": "fresh GPT-6-Luna; brief + documented skill/CLI only",
+    "slides": 3,
+    "report_path": "samples/library-forward-check/report.md",
+    "report_sha256": "e1175eaaa87dd41d7b1e68a078706e58e4b297d61620d4f6686a18b73ae90fb2",
+    "spec_path": "samples/library-forward-check/assembled/spec.json",
+    "spec_sha256": "60fe3fd9508e4acbfb1644df9e8c71fbb1c3362308acffad5056f3044f4438cd",
+    "semantic_assembly": "passed with candidate override and documented authoring corrections",
+    "root_structural_probe": "passed",
+    "native_fit_and_visual_review": "not run; required before qualification"
+  },
+  "dedup": "Targeted equivalence and negative tests pass; equivalent aliases preserve source-specific preference and qualification. No duplicate full layouts among these13 candidate contracts."
+}

@@ -12,19 +12,32 @@ import (
 // Merge overlapping collinear strokes. Shared reporting trunks are rendered
 // once, while the manifest retains every relationship contributing to a stroke.
 type routeSegment struct {
-	vertical            bool
-	axis, lo, hi, width float64
-	color               string
-	ids                 []string
+	vertical             bool
+	axis, lo, hi, width  float64
+	color                string
+	dash                 string
+	beginArrow, endArrow string
+	relationship         string
+	ids                  []string
 }
 
 func connectorElements(cs []compose.PlannedConnection) []element {
 	var segs []routeSegment
 	for _, c := range cs {
+		if c.Strategy == "direct_right_arrow" {
+			continue
+		}
 		for i := 1; i < len(c.Points); i++ {
 			a, b := c.Points[i-1], c.Points[i]
 			v := math.Abs(a.X-b.X) < 1e-7
-			sg := routeSegment{vertical: v, width: c.WidthPt, color: color(c.Color), ids: []string{c.ID}}
+			sg := routeSegment{vertical: v, width: c.WidthPt, color: color(c.Color), dash: c.LineDash, relationship: c.Relationship, ids: []string{c.ID}}
+			if i == len(c.Points)-1 && c.EndArrow == "triangle" {
+				if (!v && b.X > a.X) || (v && b.Y > a.Y) {
+					sg.endArrow = "triangle"
+				} else {
+					sg.beginArrow = "triangle"
+				}
+			}
 			if v {
 				sg.axis = a.X
 				sg.lo = math.Min(a.Y, b.Y)
@@ -53,13 +66,25 @@ func connectorElements(cs []compose.PlannedConnection) []element {
 		if a.width != b.width {
 			return a.width < b.width
 		}
+		if a.relationship != b.relationship {
+			return a.relationship < b.relationship
+		}
+		if a.dash != b.dash {
+			return a.dash < b.dash
+		}
+		if a.beginArrow != b.beginArrow {
+			return a.beginArrow < b.beginArrow
+		}
+		if a.endArrow != b.endArrow {
+			return a.endArrow < b.endArrow
+		}
 		return a.lo < b.lo
 	})
 	var merged []routeSegment
 	for _, s := range segs {
 		if len(merged) > 0 {
 			m := &merged[len(merged)-1]
-			if m.vertical == s.vertical && math.Abs(m.axis-s.axis) < 1e-7 && m.color == s.color && m.width == s.width && s.lo <= m.hi+1e-7 {
+			if m.relationship == "reporting" && s.relationship == "reporting" && m.beginArrow == "" && m.endArrow == "" && s.beginArrow == "" && s.endArrow == "" && m.vertical == s.vertical && math.Abs(m.axis-s.axis) < 1e-7 && m.color == s.color && m.width == s.width && m.dash == s.dash && s.lo <= m.hi+1e-7 {
 				m.hi = math.Max(m.hi, s.hi)
 				for _, id := range s.ids {
 					found := false
@@ -84,7 +109,7 @@ func connectorElements(cs []compose.PlannedConnection) []element {
 		if s.vertical {
 			f = frame{X: s.axis, Y: s.lo, Width: 0, Height: s.hi - s.lo}
 		}
-		result = append(result, element{Name: fmt.Sprintf("connection-segment-%03d", i+1), Kind: "line", Frame: f, Foreground: s.color, LineWidth: s.width, ConnectionIDs: s.ids})
+		result = append(result, element{Name: fmt.Sprintf("connection-segment-%03d", i+1), Kind: "line", Frame: f, Foreground: s.color, LineWidth: s.width, LineDash: s.dash, BeginArrow: s.beginArrow, EndArrow: s.endArrow, ConnectionIDs: s.ids})
 	}
 	return result
 }

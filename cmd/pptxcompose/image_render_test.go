@@ -159,6 +159,19 @@ func TestSVGIntrinsicSizeFailsClosedOnExternalReference(t *testing.T) {
 	}
 }
 
+func TestSVGPreservesPlainTextAccessibilityMetadata(t *testing.T) {
+	svg := `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1193.6 39.6"><title>Handdrawn single arrow</title><desc>Contact name@example.test; not CSS @rules.</desc><path d="M0 0"/></svg>`
+	if w, h, err := svgIntrinsicSize([]byte(svg)); err != nil || w != 1193.6 || h != 39.6 {
+		t.Fatalf("metadata rejected: %g %g %v", w, h, err)
+	}
+	for _, child := range []string{`<path d="M0 0"/>`, `<script>alert(1)</script>`, `<image href="https://example.test"/>`} {
+		svg := `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><desc>` + child + `</desc></svg>`
+		if _, _, err := svgIntrinsicSize([]byte(svg)); err == nil {
+			t.Fatal("nested metadata accepted")
+		}
+	}
+}
+
 func TestSVGIntrinsicSizeRejectsUnsupportedStaticContract(t *testing.T) {
 	for _, body := range []string{
 		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><svg viewBox="0 0 10 10"/></svg>`,
