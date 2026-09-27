@@ -11,6 +11,7 @@ Use the narrowest workflow that fits the requested change:
 - Use `pptxcomponent` to inspect or apply reviewed text/color contracts in an extracted scene.
 - Use `pptxcompose` for measured, editable compositions from JSON. Pods/team, cards, canvas, measured grids/panels, and accents have bounded support; the newer cards/canvas/accent surface is alpha.
 - Use `pptxlib` to find/inspect/preview library contracts, instantiate semantic slots, and assemble a deck from saved values and narrative. Read [library authoring](references/library-authoring.md) for this route. The initial thirteen portable contracts are candidates awaiting changed-content native qualification.
+- Use `pptxtemplate` to list, inspect and build changed-content review decks from the 65 shortlisted source designs. Read [template adaptation](references/template-rollout.md). These fixed-geometry examples have separate native visual review states; they are not arbitrary-content qualified templates.
 - Use `pptxcompose recover-text --text-only` for bounded text recovery from a generated deck with its original spec/bundle. Original styling is restored; changed geometry or unknown objects require the scene workflow.
 - Use `pptxanchor` to calculate phrase-level raster/SVG accent placement from native measurement evidence. It emits placement JSON; it does not edit a deck.
 

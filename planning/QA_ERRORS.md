@@ -809,3 +809,29 @@ and retained rich-text binding order. Corrected the constraint language to allow
 multiple original runs in a logical slot. UHG 13's architecture map is opaque
 artwork, so only adjacent layer text is currently exposed. All five contracts
 report fit as unmeasured and declare no supported semantic style profiles.
+
+
+## Full-shortlist native rollout — 2026-09-27
+
+- **Paragraph/run mapping:** distributing a sentence across binding IDs without
+  checking paragraph boundaries put the first word of t018's fifth body prompt
+  into its second heading run. Fixed by preserving both heading runs and placing
+  the full statement in the next paragraph; native v3 confirmed.
+- **Rich-text joins and superscripts:** missing spaces at bold/plain boundaries
+  and prose assigned to trademark runs damaged dense examples. Repaired by
+  semantic paragraph mapping and preserving trademark-only superscript runs.
+- **Fixed accents after changed copy:** t002/t004/t014/t048/t054 still need native
+  phrase measurement integrated with asset transform application. Correct text
+  fit alone does not establish correct accent placement.
+- **Theme color mismatch:** t008 retained a blue current-state legend against a
+  magenta chart series. Existing explicit-RGB roles cannot bind its scheme-color
+  swatches; theme-aware styling remains open.
+- **Unpopulated source zones:** t030's two empty speech bubbles are not editable
+  text slots. Source-preserving reconstruction cannot be described as a complete
+  three-quote adaptation until supported text insertion exists.
+- **Small fixed labels:** t007 needed a short center label; MODERNIZATION and
+  MODERNIZE both wrapped mid-word. CHANGE fits in native v4. This does not justify
+  a general character-limit claim or changing approved user copy.
+
+Final native evidence: `library/templates/rollout/checkpoint.json` (58 reviewed,
+7 needing revision). Historical per-version findings remain in `rollout/reviews`.

@@ -19,6 +19,7 @@ document-style decks.
 - [Searchable library checkpoint, deduplication decisions and commands](library/README.md)
 - [Measured roles, pods, teams, cards and canvas composition](library/dynamic-components/README.md)
 - [Capability review deck and reproducible spec](library/showcase/README.md)
+- [65-template implementation and native review workflow](cmd/pptxtemplate/README.md)
 - [Agent skill pack](skills/pptxgengo/SKILL.md)
 - [Source corpus and inventory policy](planning/README.md)
 - [UHG reconstruction results, native placement experiments, and QA evidence](planning/RECONSTRUCTION_CHECKPOINT.md)

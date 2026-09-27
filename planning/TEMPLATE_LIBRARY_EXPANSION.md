@@ -61,10 +61,11 @@ rows, stale hashes, and missing family definitions. Cross-slice merges need an
 explicit reviewed decision with rationale. User design preferences remain separate
 from an agent's nomination to the implementation queue.
 
-## Next delivery batches
+## Implementation scheduling — superseded by full-shortlist rollout
 
-Build related batches of five templates so shared components and styling are
-implemented once. Every accepted template needs named slots, realistic changed
+Assign all 65 candidates across disjoint parallel workstreams. Group related
+implementations for shared components and styles without a five-template scheduling
+gate. Every accepted template needs named slots, realistic changed
 content, explicit constraints and supported style options, native fit/render review,
 and recorded failure behavior. Architecture/product/layers and multi-slide patterns
 must appear in coverage rather than being squeezed into generic narrative buckets.
@@ -114,8 +115,9 @@ native render or qualification claim is made for the five editing contracts.
 
 Workers should own disjoint contract/component files. Shared schema/CLI changes
 go to one coding owner. Most analysis and binding tasks remain with Luna; bounded
-shared-code work and independent difficult reviews use Sol. Batch size remains
-five so integration and visual QA do not accumulate behind a large inventory.
+shared-code work and independent difficult reviews use Sol. All 65 candidates are assigned concurrently. Native PowerPoint export is serialized
+because it uses one application; this is not a limit on parallel implementation.
+See `TEMPLATE_ROLLOUT_CHECKPOINT.md` for the subsequent implementation milestone.
 
 See `library/templates/README.md`, `library/templates/release-shortlist.json` and
 `library/templates/batch-01/README.md` for artifacts and reproduction commands.
