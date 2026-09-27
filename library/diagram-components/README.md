@@ -60,3 +60,33 @@ serialization; it is **not** native text fit or visual approval. The phrase spik
 has native probe measurements. Final export/visual qualification remains pending
 because PowerPoint PDF export is timing out. The application is not restarted,
 and unsaved user decks are preserved.
+
+## Expanded qualification inputs
+
+Run `python3 scripts/build-wave3-expanded-review.py --proposal-bundle samples/proposal-authoring/full-capacity-v9`
+after assembling the current normal proposal. The generator checks assembly,
+narrative, values, contract and template hashes before deriving review inputs.
+
+- `expanded-review.json`: 15 review pages covering seven dense patterns, phrase
+  emphasis, three arrow styles and two explicit unfinished examples.
+- `source-controls.json`: three bounded process/art-placement controls.
+- `accent-arrow-qualification.json`: 29 cases, including unchanged-copy
+  translations, second-occurrence selection, Unicode ranges, rich runs,
+  per-line highlights, changed arrow endpoints and a dense team accent.
+- `expanded-review-plan.json`: source hashes, intended comparisons and rejection
+  expectations. Every native acceptance gate remains pending.
+- `accent-ambiguous-negative.json`: repeated phrase without an occurrence/range
+  or staging; public `probe` must reject it.
+
+The new `artwork_arrows[].manual_only` option always stages the original pinned
+artwork with a visible target note. It requires valid source/target identities,
+a reserved staging area and measured note fit, but does not require invented
+endpoint calibration or automatic span limits. `loop-manual.json` exercises this
+policy with the WM return-loop asset. Even a calibrated asset stays manual when
+this option is set. The result remains unfinished until placement is reviewed.
+
+Structural tests use synthetic glyph bounds exclusively for geometry algebra;
+they do not establish typography, native fit or optical quality. Current probe
+bundles are `samples/visual-wave3/extended-accents-v3-probe`,
+`source-controls-v2-probe` and `expanded-review-v2-probe`. They contain measurement
+inputs, not finished presentation deliverables.

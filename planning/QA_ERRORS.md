@@ -701,3 +701,30 @@ responsibilities with explicit qualification zones. Matrix headers and rows were
 also refined so discovery outputs, target populations, decision rules and global
 platform qualifications appear under appropriate labels. Original historical
 fixtures are retained; these changes are unqualified candidate adaptations.
+
+
+## QA111 — Manual artwork should not require fictitious automatic calibration
+
+The return-loop asset has a small endpoint span and a large surrounding curve.
+Requiring automatic min/max spans merely to stage it would imply unsupported
+calibration. The explicit `manual_only` policy now requires pinned artwork, valid
+target identities and reserved artwork/note frames, always emits manual-required,
+and retains note-fit and collision checks. Tests cover missing staging/targets,
+measured-note overflow, staging collision and the inability of valid calibration
+to override a manual choice. Native rendering remains pending.
+
+## QA112 — Stress copy needed renewed editorial review
+
+Additional situation copy contained a sentence-boundary error; the team legend
+addition incorrectly described colors as role coverage rather than allocation
+categories. Both were corrected before the current stress assembly. Required
+narrative detail remains present. Increased character counts and successful
+semantic assembly establish input coverage, not rendered fit.
+
+## QA113 — Native access diagnostics still deny desktop inspection
+
+A fresh read-only check reports Accessibility false, Screen Recording false and
+PowerPoint window query -25211; PowerPoint remains running. CUA reports its native
+pipe startup failure. No export was queued in this check, no application was
+restarted and no user presentation was closed. File-based qualification continues;
+no visual acceptance is inferred from these diagnostics.

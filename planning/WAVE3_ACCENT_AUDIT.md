@@ -1,5 +1,17 @@
 # Wave 3 accent audit: phrase anchors and arrow assets
 
+## Implementation update after the initial audit
+
+The observations below describe the initial audit, not the current compose API.
+The compose path now supports occurrence/range selectors, rich-run phrases,
+explicit `multiline: "per_line"` underline/highlight placement, moved anchors,
+and pinned arrow endpoint contracts. `manual_only` arrows always stage artwork
+without requiring automatic calibration. The 29-case qualification set at
+`library/diagram-components/accent-arrow-qualification.json` covers these paths.
+Geometry tests and structural probes pass; native visual qualification of this
+expanded set remains pending. Earlier source-specific visual evidence does not
+qualify these new variations. See the diagram-components README for current inputs.
+
 ## Scope and evidence
 
 Read-only audit of the current phrase-anchor adapter, UHG5/6 experiments, and

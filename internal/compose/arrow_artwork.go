@@ -41,6 +41,7 @@ type ArtworkArrowSpec struct {
 	To          ArtworkAnchor  `json:"to"`
 	Artwork     ArrowArtwork   `json:"artwork"`
 	ClearancePt float64        `json:"clearance_pt"`
+	ManualOnly  bool           `json:"manual_only,omitempty"`
 	Staging     *AccentStaging `json:"staging,omitempty"`
 }
 type PlannedArtworkArrow struct {
@@ -78,13 +79,8 @@ func validateArtworkArrows(s SlideSpec, ids map[string]bool) error {
 		}
 		ids[a.ID] = true
 		art := a.Artwork
-		if art.ID == "" || art.AssetPath == "" || len(art.AssetSHA256) != 64 || art.EndpointProvenance == "" || !positive(art.IntrinsicWidth) || !positive(art.IntrinsicHeight) || !validRect(art.AlphaBounds) || !inside(art.AlphaBounds, Rect{Width: 1, Height: 1}) {
-			return fmt.Errorf("arrow %s requires pinned artwork and measured alpha/endpoint provenance", a.ID)
-		}
-		for _, v := range []Point{art.Tail, art.Tip} {
-			if !finite(v.X) || !finite(v.Y) || v.X < 0 || v.X > 1 || v.Y < 0 || v.Y > 1 {
-				return fmt.Errorf("arrow %s endpoint outside asset", a.ID)
-			}
+		if art.ID == "" || art.AssetPath == "" || len(art.AssetSHA256) != 64 || !positive(art.IntrinsicWidth) || !positive(art.IntrinsicHeight) || !validRect(art.AlphaBounds) || !inside(art.AlphaBounds, Rect{Width: 1, Height: 1}) {
+			return fmt.Errorf("arrow %s requires pinned artwork and measured alpha bounds", a.ID)
 		}
 		if len(art.InkRegions) > 4096 || (len(art.InkRegions) > 0 && art.InkRegionsProvenance == "") {
 			return fmt.Errorf("arrow %s ink regions need bounded count and source provenance", a.ID)
@@ -94,16 +90,33 @@ func validateArtworkArrows(s SlideSpec, ids map[string]bool) error {
 				return fmt.Errorf("arrow %s ink region outside artwork", a.ID)
 			}
 		}
-		if samePoint(art.Tail, art.Tip) || !positive(art.MinSpanPt) || !positive(art.MaxSpanPt) || art.MinSpanPt > art.MaxSpanPt || !nonnegative(art.MaxRotationDeltaDeg) || art.MaxRotationDeltaDeg > 180 || !nonnegative(a.ClearancePt) {
+		if !nonnegative(a.ClearancePt) {
 			return fmt.Errorf("arrow %s invalid span/rotation/clearance envelope", a.ID)
 		}
-		for _, v := range []Point{art.TailTangent, art.TipTangent} {
-			if !finite(v.X) || !finite(v.Y) || math.Abs(math.Hypot(v.X, v.Y)-1) > .01 {
-				return fmt.Errorf("arrow %s needs measured unit endpoint tangents", a.ID)
+		if a.ManualOnly {
+			if a.Staging == nil {
+				return fmt.Errorf("arrow %s manual_only requires staging", a.ID)
+			}
+		} else {
+			if art.EndpointProvenance == "" {
+				return fmt.Errorf("arrow %s requires measured endpoint provenance", a.ID)
+			}
+			for _, v := range []Point{art.Tail, art.Tip} {
+				if !finite(v.X) || !finite(v.Y) || v.X < 0 || v.X > 1 || v.Y < 0 || v.Y > 1 {
+					return fmt.Errorf("arrow %s endpoint outside asset", a.ID)
+				}
+			}
+			if samePoint(art.Tail, art.Tip) || !positive(art.MinSpanPt) || !positive(art.MaxSpanPt) || art.MinSpanPt > art.MaxSpanPt || !nonnegative(art.MaxRotationDeltaDeg) || art.MaxRotationDeltaDeg > 180 {
+				return fmt.Errorf("arrow %s invalid span/rotation/clearance envelope", a.ID)
+			}
+			for _, v := range []Point{art.TailTangent, art.TipTangent} {
+				if !finite(v.X) || !finite(v.Y) || math.Abs(math.Hypot(v.X, v.Y)-1) > .01 {
+					return fmt.Errorf("arrow %s needs measured unit endpoint tangents", a.ID)
+				}
 			}
 		}
 		for _, v := range []ArtworkAnchor{a.From, a.To} {
-			if v.Target == "" || !nonnegative(v.GapPt) || !finite(v.OffsetXPt) || !finite(v.OffsetYPt) {
+			if !validID(v.Target) || !nonnegative(v.GapPt) || !finite(v.OffsetXPt) || !finite(v.OffsetYPt) {
 				return fmt.Errorf("arrow %s invalid anchor", a.ID)
 			}
 			if _, _, err := anchor(Rect{}, v.Port); err != nil {
@@ -232,14 +245,25 @@ func artworkInkRegions(a PlannedArtworkArrow) []Rect {
 }
 func planArtworkArrows(s SlideSpec, p *PlannedSlide, m Measurements) error {
 	for _, a := range s.ArtworkArrows {
-		from, fn, err := artworkAnchorPoint(a, 0, p, m)
-		to, tn, toErr := artworkAnchorPoint(a, 1, p, m)
-		if err == nil {
-			err = toErr
-		}
+		var err error
 		var out PlannedArtworkArrow
-		if err == nil {
-			out, err = solveArtworkArrow(a, from, to, fn, tn)
+		if a.ManualOnly {
+			for _, v := range []ArtworkAnchor{a.From, a.To} {
+				if !artworkTargetExists(v.Target, p) {
+					return fmt.Errorf("arrow %s unknown arrow anchor %s", a.ID, v.Target)
+				}
+			}
+			err = fmt.Errorf("manual_only policy disables automatic endpoint placement; place from staging")
+		} else {
+			from, fn, fromErr := artworkAnchorPoint(a, 0, p, m)
+			to, tn, toErr := artworkAnchorPoint(a, 1, p, m)
+			err = fromErr
+			if err == nil {
+				err = toErr
+			}
+			if err == nil {
+				out, err = solveArtworkArrow(a, from, to, fn, tn)
+			}
 		}
 		if err == nil && !inside(out.VisibleBounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) {
 			err = fmt.Errorf("visible artwork exceeds slide")
@@ -272,6 +296,30 @@ func planArtworkArrows(s SlideSpec, p *PlannedSlide, m Measurements) error {
 		p.ArtworkArrows = append(p.ArtworkArrows, out)
 	}
 	return nil
+}
+
+func artworkTargetExists(id string, p *PlannedSlide) bool {
+	for _, c := range p.Canvas {
+		if c.ID == id {
+			return true
+		}
+	}
+	for _, c := range p.LayoutPorts {
+		if c.ID == id {
+			return true
+		}
+	}
+	for _, c := range p.Pods {
+		if c.ID == id {
+			return true
+		}
+	}
+	for _, c := range p.Roles {
+		if c.ID == id {
+			return true
+		}
+	}
+	return false
 }
 
 // VerifyArtworkAnchors rechecks planned endpoints against final native text

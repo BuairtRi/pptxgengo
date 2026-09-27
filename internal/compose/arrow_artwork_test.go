@@ -112,3 +112,115 @@ func TestArtworkArrowRejectsUnqualifiedPlacement(t *testing.T) {
 		t.Fatal("reverse-facing tail accepted")
 	}
 }
+
+func manualOnlyArrowFixture() (SlideSpec, *PlannedSlide, Measurements) {
+	a := arrowFixture()
+	a.ManualOnly = true
+	a.Artwork.AssetPath = "loop.svg"
+	a.Artwork.AssetSHA256 = strings.Repeat("a", 64)
+	a.Artwork.MinSpanPt = 0
+	a.Artwork.MaxSpanPt = 0
+	a.Artwork.Tail = Point{}
+	a.Artwork.Tip = Point{}
+	a.Artwork.TailTangent = Point{}
+	a.Artwork.TipTangent = Point{}
+	a.From = ArtworkAnchor{Target: "source", Port: "right"}
+	a.To = ArtworkAnchor{Target: "destination", Port: "left"}
+	a.Staging = &AccentStaging{
+		AssetBounds: Rect{X: 400, Y: 300, Width: 120, Height: 80},
+		NoteBounds:  Rect{X: 540, Y: 300, Width: 280, Height: 60},
+		Note:        "Place loop artwork manually after reviewing endpoints.",
+	}
+	s := SlideSpec{ID: "s", WidthPt: 960, HeightPt: 540, ArtworkArrows: []ArtworkArrowSpec{a}}
+	p := &PlannedSlide{Canvas: []PlannedCanvas{
+		{CanvasSpec: CanvasSpec{ID: "source", Bounds: Rect{X: 40, Y: 80, Width: 100, Height: 80}}},
+		{CanvasSpec: CanvasSpec{ID: "destination", Bounds: Rect{X: 250, Y: 80, Width: 100, Height: 80}}},
+	}}
+	m := Measurements{ByRequestID: map[string]Measurement{
+		arrowNoteProbe(s, a).ID: {RenderedWidthPt: 200, RenderedHeightPt: 30},
+	}}
+	return s, p, m
+}
+
+func TestManualOnlyArtworkArrowStagesWithoutCalibration(t *testing.T) {
+	s, p, m := manualOnlyArrowFixture()
+	if err := validateArtworkArrows(s, map[string]bool{}); err != nil {
+		t.Fatal(err)
+	}
+	if err := planArtworkArrows(s, p, m); err != nil {
+		t.Fatal(err)
+	}
+	if len(p.ArtworkArrows) != 1 || p.ArtworkArrows[0].Status != "manual_required" ||
+		p.ArtworkArrows[0].Bounds != s.ArtworkArrows[0].Staging.AssetBounds ||
+		!strings.Contains(p.ArtworkArrows[0].Reason, "manual_only policy disables automatic endpoint placement") ||
+		len(p.ManualRequired) != 1 || len(p.Canvas) != 3 {
+		t.Fatalf("uncalibrated arrow was not staged: %+v", p)
+	}
+}
+
+func TestManualOnlyArtworkArrowRequiresStagingAndValidTargets(t *testing.T) {
+	s, p, m := manualOnlyArrowFixture()
+	s.ArtworkArrows[0].Staging = nil
+	if err := validateArtworkArrows(s, map[string]bool{}); err == nil || !strings.Contains(err.Error(), "requires staging") {
+		t.Fatalf("missing staging accepted: %v", err)
+	}
+	s, p, m = manualOnlyArrowFixture()
+	s.ArtworkArrows[0].To.Target = "missing"
+	if err := planArtworkArrows(s, p, m); err == nil || !strings.Contains(err.Error(), "unknown arrow anchor") {
+		t.Fatalf("unknown target accepted: %v", err)
+	}
+}
+
+func TestAutomaticArtworkArrowStillRequiresSpanContract(t *testing.T) {
+	s, _, _ := manualOnlyArrowFixture()
+	a := &s.ArtworkArrows[0]
+	a.ManualOnly = false
+	a.Artwork.EndpointProvenance = "measured"
+	a.Artwork.Tail = Point{.1, .5}
+	a.Artwork.Tip = Point{.9, .5}
+	a.Artwork.TailTangent = Point{1, 0}
+	a.Artwork.TipTangent = Point{1, 0}
+	if err := validateArtworkArrows(s, map[string]bool{}); err == nil || !strings.Contains(err.Error(), "invalid span") {
+		t.Fatalf("automatic arrow without span contract accepted: %v", err)
+	}
+}
+
+func TestManualOnlyArtworkArrowNeverAutoPlaces(t *testing.T) {
+	s, p, m := manualOnlyArrowFixture()
+	// Even valid endpoint calibration cannot override an explicit manual choice.
+	art := arrowFixture().Artwork
+	art.AssetPath = "loop.svg"
+	art.AssetSHA256 = strings.Repeat("a", 64)
+	art.EndpointProvenance = "test calibration"
+	s.ArtworkArrows[0].Artwork = art
+	if err := validateArtworkArrows(s, map[string]bool{}); err != nil {
+		t.Fatal(err)
+	}
+	if err := planArtworkArrows(s, p, m); err != nil {
+		t.Fatal(err)
+	}
+	if p.ArtworkArrows[0].Status != "manual_required" {
+		t.Fatal("manual choice was overridden by calibration")
+	}
+}
+
+func TestManualOnlyArtworkArrowStillChecksStaging(t *testing.T) {
+	for _, mode := range []string{"collision", "note-overflow", "missing-measurement"} {
+		t.Run(mode, func(t *testing.T) {
+			s, p, m := manualOnlyArrowFixture()
+			a := s.ArtworkArrows[0]
+			switch mode {
+			case "collision":
+				p.Canvas[0].Kind = "text"
+				p.Canvas[0].Bounds = a.Staging.AssetBounds
+			case "note-overflow":
+				m.ByRequestID[arrowNoteProbe(s, a).ID] = Measurement{RenderedWidthPt: 281, RenderedHeightPt: 30}
+			case "missing-measurement":
+				delete(m.ByRequestID, arrowNoteProbe(s, a).ID)
+			}
+			if err := planArtworkArrows(s, p, m); err == nil {
+				t.Fatal("invalid manual staging accepted")
+			}
+		})
+	}
+}
