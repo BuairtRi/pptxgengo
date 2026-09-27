@@ -40,3 +40,29 @@ Sol implements diagram routing/ports/path foundation. Luna audits accents/assets
 then library readiness, then independent visual/skill reproduction checks. Keep
 all PowerPoint work serialized, source decks untouched and unsaved user decks open.
 Use fresh output bundles and retain rejected render evidence with the QA log.
+
+## Native qualification blocked — current audit
+
+Independent read-only review found no substantive remaining file-only implementation
+gap within Waves 3/4/6. The outstanding gates need native glyph measurements,
+fit reports, final builds, per-page renders, optical review and evidence-backed
+contract promotion. Wave 5 remains deferred.
+
+The latest prepared `source-controls-v2-probe.pptx` open failed with PowerPoint
+error -9074. Desktop inspection still reports native-pipe startup failure;
+Accessibility and Screen Recording are false, and the window query returns -25211.
+The existing `followup-review-v2.pptx` reports unsaved changes; its export guard
+stopped before export. No presentation was saved, closed or restarted.
+
+This is the same native blockage previously documented in QA105 and QA109 and
+revalidated in QA113. Further qualification needs the PowerPoint dialog/access
+state resolved. Obtain the current dialog text or screenshot before deciding how
+to recover; preserve unsaved work. Resume with a fresh presentation inventory,
+then native measurement of the prepared probes. Earlier timed-out requests must
+not be assumed to have completed or to be safe to repeat indiscriminately.
+
+Current diagnostics are retained under `samples/visual-wave3/`:
+`native-recovery-aeb18253.json` (unsaved guard) and
+`native-recovery-source-controls-v2-corrected.json` (-9074 open failure).
+The uncorrected open-check diagnostic records an AppleScript variable-scope error
+and is not evidence about PowerPoint availability.
