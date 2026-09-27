@@ -150,7 +150,7 @@ def main():
             evidence.append(dict(path=proofpath, sha256=sha(proofpath), role='historical_fixture'))
         contract = dict(
             schema='pptxgengo.library-component.v1', id='wm/'+ident,
-            version='0.2.0' if specpath == 'library/proposal/capacity-templates.json' else '0.1.0', kind='layout',
+            version='0.2.3' if specpath == 'library/proposal/capacity-templates.json' else '0.1.0', kind='layout',
             name=name, purpose=purpose, content_roles=roles,
             source=dict(source_id='authored-fixture:'+slideid, path=specpath,
                         source_sha256=sha(specpath), slide=index+1),

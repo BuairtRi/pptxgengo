@@ -728,3 +728,50 @@ PowerPoint window query -25211; PowerPoint remains running. CUA reports its nati
 pipe startup failure. No export was queued in this check, no application was
 restarted and no user presentation was closed. File-based qualification continues;
 no visual acceptance is inferred from these diagnostics.
+
+
+## QA114 — Reuse the PowerPoint folder that the user already approved
+
+Repeated native attempts opened PPTX files from newly generated output directories.
+The user confirmed the visible errors were access prompts and instructed us to
+reuse approved folders. On 2026-09-27, copying the prepared source-control probe
+directly into `samples/visual-wave3` allowed both native open and PDF export.
+Desktop inspection remained unavailable, but it was not required for those
+object-model operations. The earlier conclusion that no native progress was
+possible was premature without this same-folder retry.
+
+`measure` and `verify` now accept `--native-workspace` to stage identical bytes in
+an existing approved directory while retaining immutable bundle provenance. The
+flag rejects differing existing files, symlinks and an already-open name, and
+rechecks staged bytes after measurement. The documented workflow reuses the
+same approved directory for all PowerPoint-facing PPTX/PDF files. It does not
+create permission folders or overwrite unsaved decks.
+
+## QA115 — Sub-point team text overflow caught by native measurement
+
+Native measurement found 50.400003pt of text in a 50pt frame and 25.199999pt
+in a 25pt frame. Enlarged the reusable frames to 52pt and 27pt without shrinking
+fonts or deleting copy. The current 437-zone fit report has zero overflows.
+
+## QA116 — Fit checks missed panel coverage and hidden relationships
+
+Root visual review caught response text extending below gray row backgrounds
+and six architecture arrows hidden behind their parent surface. Increased row
+background height to 59pt and moved the parent surface to layer 0 behind the
+connectors. Final PNGs show all six arrows and contained row text. Initial
+independent reviews missed these defects: reviewers must count expected visible
+relationships and inspect text against its actual panel, not just its text box.
+
+## QA117 — Semantically wrong inherited artwork and staffing ambiguity
+
+Replaced financial-return/AI/head artwork with people/ownership, documentation,
+and organizational-change icons. Preserved official asset URLs and hashes.
+Staffing legend now explicitly describes illustrative colors; it makes no named
+staffing commitment. Independent reviewers inspected final slides 3, 7 and 10.
+
+## QA118 — Native measurement runtime must influence scheduling
+
+The initial 451-request / 23,902-character native measurement took 24m15s.
+A changed-text delta was measured separately and cached. Final native verification
+was not started within the user's 40-minute wrap window and remains explicit
+unfinished work; successful fit and rendered review do not imply verification.

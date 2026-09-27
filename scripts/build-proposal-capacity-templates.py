@@ -111,7 +111,7 @@ def team():
         'client-h-2':('Architecture and control decisions',rect(654,285,258,17)),
         'client-b-2':(d[2],rect(654,305,258,43)),
         'client-h-3':('Three delivery pods',rect(654,355,258,17)),
-        'client-b-3':(' '.join(d[3:5]),rect(654,375,258,50)),
+        'client-b-3':(' '.join(d[3:5]),rect(654,375,258,52)),
     }
     for c in s['canvas']:
         if c['id'] in edits:
@@ -122,7 +122,9 @@ def team():
     # The architect's route to shared roles crosses y289: reserve that corridor.
     # Qualifications below the two individual contributors stop before the legend.
     s['canvas'].append(text('client-readiness',q[1],rect(36,426,222,31),10.5))
-    s['canvas'].append(text('shared-specialists',d[5],rect(36,460,222,25),10.5))
+    s['canvas'].append(text('shared-specialists',d[5],rect(36,460,222,27),10.5))
+    for c in s['canvas']:
+        if c['id']=='staffing-body':c['text']=c['text'].replace('Staffing colors follow the legend.','Illustrative staffing colors follow the legend.')
     # Role boxes stay at their existing measured font. Pod three reflects the
     # narrative rather than inheriting an unrelated data-only role label.
     s['pods'][0]['title']='Journey pod';s['pods'][1]['title']='Integration pod';s['pods'][2]['title']='Platform pod'
@@ -232,7 +234,7 @@ def architecture():
         'engineering':('Identity and access','Apply identity, least privilege and retention controls across the case journey and its evidence.'),
         'operations':('Telemetry and support','Observe processing and recovery events; connect service evidence to accountable operations owners.')}
     for l in s['layouts']:
-        if l['id']=='platform':l['bounds']['height']-=18
+        if l['id']=='platform':l['bounds']['height']-=18;l['layer']=0
         elif l['id']=='security-band':l['bounds']['y']-=18;l['cells'][0]['blocks'][0]['text']=d[4]
         elif l['id']=='governance-band':l['cells'][0]['blocks'][0]['text']=d[3]
         elif l['id'] in ['experience','services','foundation']:
@@ -250,6 +252,7 @@ def needs_response():
            '3. Start with one supported integration','4. Separate evidence from exception reasons',
            '5. Agree support and transfer ownership']
     for c in s['canvas']:
+        if c['id'].startswith('response-row-'):c['bounds']['height']=59
         if c['id']=='section-response':c['text']='PROPOSED RESPONSE'
         if c['id']=='section-needs':c['text']='ILLUSTRATIVE NEEDS'
         for i in range(1,6):
@@ -258,6 +261,11 @@ def needs_response():
                 c['paragraphs'][0]['runs'][0]['text']=heads[i-1]
                 c['paragraphs'][1]['runs'][0]['text']=d[i-1]+(' '+d[5] if i==1 else '')
                 c['bounds']['height']=52
+    bindings=json.loads((ROOT/'library/proposal/asset-bindings.json').read_text())['needs_response']
+    for c in s['canvas']:
+        if c['id'] in bindings:
+            asset=bindings[c['id']]
+            c.update(asset_path=asset['path'],asset_sha256=asset['sha256'],alt_text=asset['purpose'])
     s['canvas'].append(text('requirements-qualification',' '.join(q),rect(36,467,888,32),10.5))
     return s,'needs-and-responses'
 

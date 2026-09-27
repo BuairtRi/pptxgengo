@@ -101,9 +101,16 @@ oversized inherited matrix copy; it is not PowerPoint evidence, skips rich text,
 and cannot qualify a slide or substitute for the native gate.
 
 Current artifacts and exact hashes are recorded in
-`planning/WAVES_3_4_IMPLEMENTATION_CHECKPOINT.json`. Native measurement, final
-verification, rendered review, stress and native repeatability remain pending.
-PowerPoint can return its presentation inventory but PDF export still times out
-with -1712; CUA desktop inspection and System Events window inspection are also
-unavailable. No unsaved user deck was closed or saved, and PowerPoint was not
-restarted.
+`planning/WAVES_3_4_IMPLEMENTATION_CHECKPOINT.json`. Native access was recovered
+by staging directly in the approved `samples/visual-wave3` folder. The complete
+13-page candidate is natively rendered and visually reviewed. All 437 fixed text
+zones pass native fit; final verification and expanded/stress qualification remain
+pending. See `planning/NATIVE_PROPOSAL_REVIEW_2026-09-27.md`.
+
+Reusable template corrections retain the content and font sizes: team text
+frames enlarged by 2pt, response row backgrounds expanded with their text zones,
+and the architecture parent surface moved behind its six connectors. Explicit
+asset bindings replace mismatched response icons with vetted WM artwork. Asset
+files remain local/ignored; the binding manifest records official download URLs
+and exact hashes for new artwork. Existing inventory assets must be hydrated
+before a fresh clone can build the proposal.
