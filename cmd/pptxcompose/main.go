@@ -584,8 +584,12 @@ func run(args []string) error {
 	reuse := fs.Bool("reuse-measurements", false, "explicitly reuse native measurements when every text probe request is unchanged")
 	evPath := fs.String("evidence", "", "native probe evidence JSON")
 	script := fs.String("adapter", "scripts/measure-compose-text.applescript", "native PowerPoint measurement adapter")
+	nativeWorkspace := fs.String("native-workspace", "", "existing directory for a staged PowerPoint measurement copy (measure/verify only)")
 	if e := fs.Parse(args[1:]); e != nil {
 		return e
+	}
+	if *nativeWorkspace != "" && args[0] != "measure" && args[0] != "verify" {
+		return fmt.Errorf("--native-workspace is supported for measure/verify only")
 	}
 	if fs.NArg() != 0 || *out == "" {
 		return fmt.Errorf("--out is required; positional arguments unsupported")
@@ -788,9 +792,21 @@ func run(args []string) error {
 		if m.Environment != nil && environmentKey(m.Environment) != environmentKey(env) {
 			return fmt.Errorf("native environment changed after probe/build; regenerate the bundle")
 		}
-		b, e := nativeMeasure(dp, *script)
-		if e != nil {
-			return e
+		measurePath := dp
+		if *nativeWorkspace != "" {
+			measurePath, e = stageNativeDeck(*nativeWorkspace, dp, db)
+			if e != nil {
+				return e
+			}
+		}
+		b, measureErr := nativeMeasure(measurePath, *script)
+		if *nativeWorkspace != "" {
+			if e = checkNativeDeckUnchanged(measurePath, m.DeckSHA); e != nil {
+				return e
+			}
+		}
+		if measureErr != nil {
+			return measureErr
 		}
 		afterEnv, e := currentEnvironment(*script)
 		if e != nil {

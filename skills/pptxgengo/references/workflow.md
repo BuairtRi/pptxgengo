@@ -45,7 +45,27 @@ go run ./cmd/pptxcompose build --spec library/showcase/deck.json --bundle sample
 go run ./cmd/pptxcompose verify --bundle samples/showcase-built --out samples/showcase-verification.json
 ```
 
-Outputs must be new. Measurement and verification use Microsoft PowerPoint via `scripts/measure-compose-text.applescript`; close an existing open presentation with the same filename first. Measurement evidence pins the spec, bundle manifest, deck, adapter, and raw native observations. Use actual native measurements for fit and placement. Character counts, rough estimates, or fitting based on a different font/width are not substitutes. A passing verify checks specified text/font/frame/color/margins and bounds; it does not establish visual quality. Export and inspect final slides at presentation size.
+Outputs must be new. Measurement and verification use Microsoft PowerPoint via `scripts/measure-compose-text.applescript`; an existing open presentation with the same filename is rejected. Close it only if it is a known saved task copy; preserve unsaved user work. Measurement evidence pins the spec, bundle manifest, deck, adapter, and raw native observations. Use actual native measurements for fit and placement. Character counts, rough estimates, or fitting based on a different font/width are not substitutes. A passing verify checks specified text/font/frame/color/margins and bounds; it does not establish visual quality. Export and inspect final slides at presentation size.
+
+### Reuse the approved PowerPoint folder
+
+Use `--native-workspace samples/visual-wave3` on `measure` and `verify` in this
+repository. The user has approved that existing folder. The CLI stages exact PPTX
+bytes there while retaining the original immutable bundle and evidence hashes.
+It rejects different existing bytes, symlinks and an already-open presentation
+with the same filename. It never creates a new native workspace or overwrites an
+existing deck. Keep PowerPoint PDF exports directly in this approved folder too.
+Specs, cache entries, manifests, and evidence may remain in separate output bundles;
+PowerPoint does not need access to those files. Do not cycle through new native
+folders and repeatedly ask the user to grant access.
+
+```sh
+/tmp/pptxcompose-native-fixed measure --bundle samples/NEW_PROBE --native-workspace samples/visual-wave3 --out samples/NEW_EVIDENCE.json
+/tmp/pptxcompose-native-fixed verify --bundle samples/NEW_BUILD --native-workspace samples/visual-wave3 --out samples/NEW_VERIFICATION.json
+```
+
+Compile a stable CLI binary before the qualification run and use it throughout;
+recompiling changes the native measurement environment fingerprint.
 
 By default, build requires the exact probed spec hash. `--reuse-measurements` permits a changed overall spec only when the complete ordered `ProbeRequests` are identical to the probed bundle and its evidence/deck/manifest and raw PowerPoint measurements remain valid. It does not allow changed text, font, weight, color, alignment, or usable width to reuse old measurements. Keep the default exact-hash behavior unless there is a concrete, reviewed reason to change only non-probed inputs such as placement or shapes.
 

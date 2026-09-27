@@ -41,7 +41,7 @@ then library readiness, then independent visual/skill reproduction checks. Keep
 all PowerPoint work serialized, source decks untouched and unsaved user decks open.
 Use fresh output bundles and retain rejected render evidence with the QA log.
 
-## Native qualification blocked — current audit
+## Prior native blockage — recovered 2026-09-27
 
 Independent read-only review found no substantive remaining file-only implementation
 gap within Waves 3/4/6. The outstanding gates need native glyph measurements,
@@ -66,3 +66,19 @@ Current diagnostics are retained under `samples/visual-wave3/`:
 `native-recovery-source-controls-v2-corrected.json` (-9074 open failure).
 The uncorrected open-check diagnostic records an AppleScript variable-scope error
 and is not evidence about PowerPoint availability.
+
+### Recovery and folder policy
+
+After the user confirmed granting access, the same prepared source-control probe
+was copied directly into the approved `samples/visual-wave3` directory as
+`source-controls-native.pptx`. PowerPoint opened it successfully and exported
+`source-controls-native.pdf` there. The source PPTX bytes match the prepared
+probe. This resolves the native open/export blocker; desktop inspection is not
+required for the native object-model pipeline.
+
+Reuse this approved directory for all PowerPoint-facing PPTX and PDF files.
+Keep immutable specs/manifests/evidence bundles separate, and stage exact PPTX
+bytes into the existing approved folder for native operations. Do not create a
+new PowerPoint working directory for each verification. An unsaved open file
+must not be silently overwritten or reopened. Native qualification resumes;
+none of the candidate acceptance gates is closed by this access recovery alone.
