@@ -650,3 +650,54 @@ closure occurred. The user was asked for the current dialog text/screenshot;
 independent code/content work continues. A pending Launch Services request could
 open the owned copy after the dialog is resolved, so inspect names before the
 next native operation.
+
+
+## QA106 — Exact-copy coverage did not prove correct semantic placement
+
+The first proposal draft could place every required sentence somewhere while
+keeping inherited, contradictory phase dates or putting facts under unrelated
+headings. Root found a 13-month roadmap against a 20-week narrative, phase outputs
+containing another phase's activity, and matrix columns with appended boilerplate.
+Eight versioned candidate layouts now provide suitable zones, phase dates agree,
+and the matrix values have page-specific headings and row arguments. Full 13-page
+assembly passes. Native and visual gates are still open; required-detail matching
+is a coverage check, not an editorial-quality test.
+
+## QA107 — An explanatory note obstructed a team route
+
+The first capacity variant placed a new role-count note at y275–308 in the
+architect-to-shared-role corridor. A synthetic-bound structural Plan test rejected
+`architect-infra` endpoint clearance. The note moved into the upper-left
+responsibility panel ending at y281; lower-left notes stop before the staffing
+legend. All eight changed-layout structural/package checks pass. Actual glyph
+bounds and native routing appearance remain unverified.
+
+## QA108 — Rich-run edits need sentence and responsibility review
+
+The biography's semantic string edits joined `baselinesThis page` without a word
+boundary. Root corrected the punctuation; independent Luna review also identified
+an unsupported baseline-establishment claim and a repeated qualification inside
+the job-responsibility list. Copy now says the role supports baseline validation,
+and the responsibility list refers to decision/dependency records. The required
+fictional-identity, scope and performance qualifications remain present.
+
+## QA109 — Native inspection remains unavailable after permission grant
+
+The current retry obtained PowerPoint's presentation names, but export of the
+already-open, previously verified follow-up deck to a new /tmp PDF timed out
+(-1712). CUA failed with the native-pipe startup error, and a read-only System
+Events window query also timed out. No PDF or final native evidence was produced.
+No app restart or unsaved-deck closure occurred. Independent layout/content work
+continued and no candidate was promoted on this basis.
+
+
+## QA110 — Source-topic labels survived semantic reuse
+
+Independent editorial review found RCM/provider-marketing labels in the fictional
+case-flow needs page, platform copy in the architecture governance band, and
+transaction-ownership restrictions under a communications node. The eight new
+capacity variants now include correct need/response pairs and layer/node/band
+responsibilities with explicit qualification zones. Matrix headers and rows were
+also refined so discovery outputs, target populations, decision rules and global
+platform qualifications appear under appropriate labels. Original historical
+fixtures are retained; these changes are unqualified candidate adaptations.

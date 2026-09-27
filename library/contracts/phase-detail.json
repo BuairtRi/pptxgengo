@@ -1,7 +1,7 @@
 {
   "schema": "pptxgengo.library-component.v1",
   "id": "wm/phase-detail",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "kind": "layout",
   "name": "Detailed phase with deliverable previews",
   "purpose": "Explain activities, outcomes, variable scope, and actual attributed deliverable examples.",
@@ -13,43 +13,27 @@
   ],
   "source": {
     "source_id": "authored-fixture:phase-detail-visual",
-    "path": "library/visual-components/review.json",
-    "source_sha256": "aa7a67180b95ca1b052a52ba12814c3120b1b5c806cc81d4c98b1856767f6de7",
-    "slide": 2
+    "path": "library/proposal/capacity-templates.json",
+    "source_sha256": "7789fe07a6d7c3c87f1159248857b3cd26d3a4ba100f4404a9a1d74d43fca7f2",
+    "slide": 6
   },
   "composition": {
-    "spec_path": "library/visual-components/review.json",
-    "spec_sha256": "aa7a67180b95ca1b052a52ba12814c3120b1b5c806cc81d4c98b1856767f6de7",
+    "spec_path": "library/proposal/capacity-templates.json",
+    "spec_sha256": "7789fe07a6d7c3c87f1159248857b3cd26d3a4ba100f4404a9a1d74d43fca7f2",
     "slide_id": "phase-detail-visual",
     "slots": [
       {
-        "name": "phase-detail-visual/deliverable-title/text",
-        "role": "text",
-        "pointer": "/canvas/0/text",
+        "name": "phase-detail-visual/title",
+        "role": "assertion_title",
+        "pointer": "/title",
         "value_type": "string",
         "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/scope-heading/text",
-        "role": "text",
-        "pointer": "/canvas/1/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/scope-text/text",
-        "role": "text",
-        "pointer": "/canvas/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 183
+        "max_chars": 128
       },
       {
         "name": "phase-detail-visual/adapted-caption-16/p1/text/text",
         "role": "text",
-        "pointer": "/canvas/28/paragraphs/0/runs/0/text",
+        "pointer": "/canvas/24/paragraphs/0/runs/0/text",
         "value_type": "string",
         "required": true,
         "max_chars": 57
@@ -57,13 +41,37 @@
       {
         "name": "phase-detail-visual/adapted-caption-18/p1/text/text",
         "role": "text",
-        "pointer": "/canvas/29/paragraphs/0/runs/0/text",
+        "pointer": "/canvas/25/paragraphs/0/runs/0/text",
         "value_type": "string",
         "required": true,
         "max_chars": 45
       },
       {
-        "name": "phase-detail-visual/phase-sidebar/content/phase-kicker/text",
+        "name": "phase-detail-visual/kicker/text",
+        "role": "text",
+        "pointer": "/canvas/27/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 51
+      },
+      {
+        "name": "phase-detail-visual/design-example-heading/text",
+        "role": "text",
+        "pointer": "/canvas/28/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 39
+      },
+      {
+        "name": "phase-detail-visual/design-example-attribution/text",
+        "role": "text",
+        "pointer": "/canvas/29/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 404
+      },
+      {
+        "name": "phase-detail-visual/phase-definition/content/heading/text",
         "role": "text",
         "pointer": "/layouts/0/cells/0/blocks/0/text",
         "value_type": "string",
@@ -71,79 +79,31 @@
         "max_chars": 32
       },
       {
-        "name": "phase-detail-visual/phase-sidebar/content/phase-number/text",
+        "name": "phase-detail-visual/phase-definition/content/detail-1/text",
         "role": "text",
         "pointer": "/layouts/0/cells/0/blocks/1/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 32
+        "max_chars": 149
       },
       {
-        "name": "phase-detail-visual/phase-sidebar/content/phase-title/text",
+        "name": "phase-detail-visual/phase-definition/content/detail-2/text",
         "role": "text",
         "pointer": "/layouts/0/cells/0/blocks/2/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 44
+        "max_chars": 281
       },
       {
-        "name": "phase-detail-visual/phase-sidebar/content/phase-dates/p1/text/text",
+        "name": "phase-detail-visual/phase-definition/content/detail-3/text",
         "role": "text",
-        "pointer": "/layouts/0/cells/0/blocks/3/paragraphs/0/runs/0/text",
+        "pointer": "/layouts/0/cells/0/blocks/3/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 32
+        "max_chars": 107
       },
       {
-        "name": "phase-detail-visual/phase-sidebar/content/objective-head/text",
-        "role": "text",
-        "pointer": "/layouts/0/cells/0/blocks/4/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/phase-sidebar/content/objective/text",
-        "role": "text",
-        "pointer": "/layouts/0/cells/0/blocks/5/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 408
-      },
-      {
-        "name": "phase-detail-visual/phase-sidebar/content/exit-head/text",
-        "role": "text",
-        "pointer": "/layouts/0/cells/0/blocks/6/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/phase-sidebar/content/exit-0/text",
-        "role": "text",
-        "pointer": "/layouts/0/cells/0/blocks/7/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 44
-      },
-      {
-        "name": "phase-detail-visual/phase-sidebar/content/exit-1/text",
-        "role": "text",
-        "pointer": "/layouts/0/cells/0/blocks/8/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 44
-      },
-      {
-        "name": "phase-detail-visual/phase-sidebar/content/exit-2/text",
-        "role": "text",
-        "pointer": "/layouts/0/cells/0/blocks/9/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 51
-      },
-      {
-        "name": "phase-detail-visual/workstream-headers/activities/heading/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-0-activities/heading/text",
         "role": "text",
         "pointer": "/layouts/1/cells/0/blocks/0/text",
         "value_type": "string",
@@ -151,7 +111,15 @@
         "max_chars": 32
       },
       {
-        "name": "phase-detail-visual/workstream-headers/products/heading/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-0-activities/detail/text",
+        "role": "text",
+        "pointer": "/layouts/1/cells/0/blocks/1/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 138
+      },
+      {
+        "name": "phase-detail-visual/discovery-workstreams/workstream-0-outputs/heading/text",
         "role": "text",
         "pointer": "/layouts/1/cells/1/blocks/0/text",
         "value_type": "string",
@@ -159,260 +127,108 @@
         "max_chars": 32
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-0-activities/heading/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-0-outputs/detail/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/0/blocks/0/text",
+        "pointer": "/layouts/1/cells/1/blocks/1/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 90
+      },
+      {
+        "name": "phase-detail-visual/discovery-workstreams/workstream-1-activities/heading/text",
+        "role": "text",
+        "pointer": "/layouts/1/cells/2/blocks/0/text",
         "value_type": "string",
         "required": true,
         "max_chars": 32
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-0-activities/activity-0/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-1-activities/detail/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/0/blocks/1/text",
+        "pointer": "/layouts/1/cells/2/blocks/1/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 102
+        "max_chars": 183
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-0-activities/activity-1/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-1-outputs/heading/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/0/blocks/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 114
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-0-activities/activity-2/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/0/blocks/3/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 105
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-0-products/heading/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/1/blocks/0/text",
+        "pointer": "/layouts/1/cells/3/blocks/0/text",
         "value_type": "string",
         "required": true,
         "max_chars": 32
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-0-products/product-0/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-1-outputs/detail/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/1/blocks/1/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 69
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-0-products/product-1/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/1/blocks/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 41
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-1-activities/heading/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/2/blocks/0/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-1-activities/activity-0/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/2/blocks/1/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 107
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-1-activities/activity-1/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/2/blocks/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 102
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-1-activities/activity-2/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/2/blocks/3/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 111
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-1-products/heading/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/3/blocks/0/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-1-products/product-0/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/3/blocks/1/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 66
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-1-products/product-1/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/3/blocks/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 47
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-2-activities/heading/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/4/blocks/0/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-2-activities/activity-0/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/4/blocks/1/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 108
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-2-activities/activity-1/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/4/blocks/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 105
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-2-activities/activity-2/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/4/blocks/3/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 107
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-2-products/heading/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/5/blocks/0/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-2-products/product-0/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/5/blocks/1/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 47
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-2-products/product-1/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/5/blocks/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 50
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-3-activities/heading/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/6/blocks/0/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 32
-      },
-      {
-        "name": "phase-detail-visual/workstream-detail/workstream-3-activities/activity-0/text",
-        "role": "text",
-        "pointer": "/layouts/2/cells/6/blocks/1/text",
+        "pointer": "/layouts/1/cells/3/blocks/1/text",
         "value_type": "string",
         "required": true,
         "max_chars": 95
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-3-activities/activity-1/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-2-activities/heading/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/6/blocks/2/text",
+        "pointer": "/layouts/1/cells/4/blocks/0/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 108
+        "max_chars": 36
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-3-activities/activity-2/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-2-activities/detail/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/6/blocks/3/text",
+        "pointer": "/layouts/1/cells/4/blocks/1/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 99
+        "max_chars": 135
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-3-products/heading/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-2-outputs/heading/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/7/blocks/0/text",
+        "pointer": "/layouts/1/cells/5/blocks/0/text",
         "value_type": "string",
         "required": true,
         "max_chars": 32
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-3-products/product-0/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-2-outputs/detail/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/7/blocks/1/text",
+        "pointer": "/layouts/1/cells/5/blocks/1/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 53
+        "max_chars": 96
       },
       {
-        "name": "phase-detail-visual/workstream-detail/workstream-3-products/product-1/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-3-activities/heading/text",
         "role": "text",
-        "pointer": "/layouts/2/cells/7/blocks/2/text",
+        "pointer": "/layouts/1/cells/6/blocks/0/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 53
+        "max_chars": 36
       },
       {
-        "name": "phase-detail-visual/scope-assumptions/content/heading/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-3-activities/detail/text",
         "role": "text",
-        "pointer": "/layouts/3/cells/0/blocks/0/text",
+        "pointer": "/layouts/1/cells/6/blocks/1/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 140
+      },
+      {
+        "name": "phase-detail-visual/discovery-workstreams/workstream-3-outputs/heading/text",
+        "role": "text",
+        "pointer": "/layouts/1/cells/7/blocks/0/text",
         "value_type": "string",
         "required": true,
         "max_chars": 32
       },
       {
-        "name": "phase-detail-visual/scope-assumptions/content/assumption-0/text",
+        "name": "phase-detail-visual/discovery-workstreams/workstream-3-outputs/detail/text",
         "role": "text",
-        "pointer": "/layouts/3/cells/0/blocks/1/text",
+        "pointer": "/layouts/1/cells/7/blocks/1/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 107
-      },
-      {
-        "name": "phase-detail-visual/scope-assumptions/content/assumption-1/text",
-        "role": "text",
-        "pointer": "/layouts/3/cells/0/blocks/2/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 96
-      },
-      {
-        "name": "phase-detail-visual/scope-assumptions/content/assumption-2/text",
-        "role": "text",
-        "pointer": "/layouts/3/cells/0/blocks/3/text",
-        "value_type": "string",
-        "required": true,
-        "max_chars": 96
+        "max_chars": 117
       },
       {
         "name": "slide/role",
@@ -432,11 +248,11 @@
       }
     ],
     "narrative_bindings": {
-      "assertion_title": "/layouts/0/cells/0/blocks/2/text",
+      "assertion_title": "/title",
       "role": "/role",
       "takeaway": "/takeaway"
     },
-    "pagination_binding": "/canvas/6/text"
+    "pagination_binding": "/canvas/3/text"
   },
   "assets": [
     {
@@ -467,9 +283,7 @@
   ],
   "cardinality": {},
   "fit_envelope": {
-    "measured": [
-      "Historical fixture copy only; see pinned proof."
-    ],
+    "measured": [],
     "unsupported": [
       "Arbitrary geometry edits.",
       "Automatic font shrinking or content truncation.",
@@ -488,7 +302,7 @@
       "id": "source",
       "semantic_profile": "wm.fixture-original",
       "tokens": {},
-      "qualified": true
+      "qualified": false
     }
   ],
   "preference": {
@@ -496,30 +310,17 @@
     "note": "No user preference for this complete layout; do not infer preference from related components."
   },
   "qualification": {
-    "state": "measured_fixture",
-    "evidence": [
-      {
-        "path": "library/visual-components/proof.json",
-        "sha256": "e99066b2e127e0e2fefe01af034ddf337b45aa97fd04eca4986aacf4d5d60f2a",
-        "role": "historical_fixture"
-      }
-    ],
+    "state": "reviewed",
+    "evidence": [],
     "failures": [
       "Candidate semantic bindings have not completed changed-content end-to-end qualification."
     ]
   },
-  "previews": [
-    {
-      "path": "samples/visual-wave2/wave2-render/slide-002.png",
-      "sha256": "dd40121dd347666b3175cb43292926015a3ab9be5fe1aba6092f5e6a5937b617",
-      "caption": "Reviewed historical fixture; changed copy requires new native fit and visual review.",
-      "variant": "fixture"
-    }
-  ],
+  "previews": [],
   "provenance": {
     "created_from": [
-      "library/visual-components/review.json",
-      "ILLUSTRATIVE PROPOSAL. UHG28 source artwork is shown as sample deliverable imagery, not as completed work for this illustrative engagement. Caption/image pairs are translated and uniformly scaled as one composition. Source picture19 stretch is intentionally retained."
+      "library/proposal/capacity-templates.json",
+      "Synthetic proposal capacity variant. Example copy is from library/proposal/brief.md. Native fit, final geometry and visual qualification pending; no source-fidelity claim."
     ],
     "review_history": [
       "Candidate contract generated from existing authored fixture. Original sample provenance remains in fixture notes and referenced proof.",

@@ -89,6 +89,16 @@ verbatim within supplied slot copy; do not split one required sentence across
 multiple slots. The visible assertion title and metadata role/takeaway must match
 at the contract-owned narrative bindings. Assembly rejects mismatches.
 
+Review the meaning of each filled slot before treating assembly as a useful
+draft. Exact required-detail matching proves coverage, not that the sentence
+belongs under its heading. Replace inherited source-topic labels and boilerplate;
+put evidence under evidence headings, decision requests under decision headings,
+and global qualifications in a suitable qualification zone. Check phase dates
+against the brief and the roadmap axis. Distinguish the decision requested now
+from later pilot/expansion gates. Read joined rich-text runs as whole sentences.
+If correct copy has no suitable zone, select or author a bounded layout variant
+and retain its unqualified status until measured and visually reviewed.
+
 ```sh
 /tmp/pptxlib-authoring assemble --index samples/NEW_LIBRARY.sqlite \
   --config library/proposal/assembly.json --out samples/NEW_ASSEMBLY \

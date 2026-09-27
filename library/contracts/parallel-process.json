@@ -1,7 +1,7 @@
 {
   "schema": "pptxgengo.library-component.v1",
   "id": "wm/parallel-process",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "kind": "layout",
   "name": "Parallel governed process paths",
   "purpose": "Compare two sequenced workflows with explicit decision and ownership steps.",
@@ -13,13 +13,13 @@
   ],
   "source": {
     "source_id": "authored-fixture:process-changed-content",
-    "path": "library/diagram-components/review.json",
-    "source_sha256": "f4c9b193d35d2d710118e74e173197b9b8a89c4d91be02e90d57d0613fa1a8dd",
-    "slide": 2
+    "path": "library/proposal/capacity-templates.json",
+    "source_sha256": "7789fe07a6d7c3c87f1159248857b3cd26d3a4ba100f4404a9a1d74d43fca7f2",
+    "slide": 1
   },
   "composition": {
-    "spec_path": "library/diagram-components/review.json",
-    "spec_sha256": "f4c9b193d35d2d710118e74e173197b9b8a89c4d91be02e90d57d0613fa1a8dd",
+    "spec_path": "library/proposal/capacity-templates.json",
+    "spec_sha256": "7789fe07a6d7c3c87f1159248857b3cd26d3a4ba100f4404a9a1d74d43fca7f2",
     "slide_id": "process-changed-content",
     "slots": [
       {
@@ -36,7 +36,7 @@
         "pointer": "/canvas/4/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 62
+        "max_chars": 98
       },
       {
         "name": "process-changed-content/synthetic-one/text",
@@ -44,7 +44,7 @@
         "pointer": "/canvas/5/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 35
+        "max_chars": 33
       },
       {
         "name": "process-changed-content/synthetic-two/text",
@@ -52,15 +52,23 @@
         "pointer": "/canvas/6/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 33
+        "max_chars": 41
       },
       {
-        "name": "process-changed-content/illustrative-result-text/text",
+        "name": "process-changed-content/case-controls/text",
+        "role": "text",
+        "pointer": "/canvas/7/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 360
+      },
+      {
+        "name": "process-changed-content/release-controls/text",
         "role": "text",
         "pointer": "/canvas/8/text",
         "value_type": "string",
         "required": true,
-        "max_chars": 95
+        "max_chars": 390
       },
       {
         "name": "process-changed-content/request/steps",
@@ -81,6 +89,54 @@
         "min_items": 4,
         "max_items": 6,
         "max_chars": 32
+      },
+      {
+        "name": "process-changed-content/decision-ownership/content/heading/text",
+        "role": "text",
+        "pointer": "/layouts/0/cells/0/blocks/0/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 32
+      },
+      {
+        "name": "process-changed-content/decision-ownership/content/detail-1/text",
+        "role": "text",
+        "pointer": "/layouts/0/cells/0/blocks/1/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 144
+      },
+      {
+        "name": "process-changed-content/decision-ownership/content/detail-2/text",
+        "role": "text",
+        "pointer": "/layouts/0/cells/0/blocks/2/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 80
+      },
+      {
+        "name": "process-changed-content/implementation-boundaries/content/heading/text",
+        "role": "text",
+        "pointer": "/layouts/1/cells/0/blocks/0/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 32
+      },
+      {
+        "name": "process-changed-content/implementation-boundaries/content/detail-1/text",
+        "role": "text",
+        "pointer": "/layouts/1/cells/0/blocks/1/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 138
+      },
+      {
+        "name": "process-changed-content/implementation-boundaries/content/detail-2/text",
+        "role": "text",
+        "pointer": "/layouts/1/cells/0/blocks/2/text",
+        "value_type": "string",
+        "required": true,
+        "max_chars": 105
       },
       {
         "name": "slide/role",
@@ -160,8 +216,8 @@
   "previews": [],
   "provenance": {
     "created_from": [
-      "library/diagram-components/review.json",
-      "Synthetic illustration using the UHG36 two-path geometry. Labels and outcome are illustrative; no UHG business result is asserted."
+      "library/proposal/capacity-templates.json",
+      "Synthetic proposal capacity variant. Example copy is from library/proposal/brief.md. Native fit, final geometry and visual qualification pending; no source-fidelity claim."
     ],
     "review_history": [
       "Candidate contract generated from existing authored fixture. Original sample provenance remains in fixture notes and referenced proof.",

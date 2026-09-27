@@ -8,6 +8,52 @@ import (
 	"github.com/buairtri/pptxgengo/internal/compose"
 )
 
+// Synthetic bounds exercise fixed geometry, ownership, route clearance and
+// package serialization only. Actual copy fit requires PowerPoint measurements.
+func TestProposalCapacityGeometry(t *testing.T) {
+	t.Chdir("../..")
+	b, err := os.ReadFile("library/proposal/capacity-templates.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var spec compose.Spec
+	if err := json.Unmarshal(b, &spec); err != nil {
+		t.Fatal(err)
+	}
+	for _, slide := range spec.Slides {
+		t.Run(slide.ID, func(t *testing.T) {
+			s := compose.Spec{Schema: spec.Schema, Slides: []compose.SlideSpec{slide}}
+			qs, err := compose.ProbeRequests(s)
+			if err != nil {
+				t.Fatal(err)
+			}
+			m := compose.Measurements{ByRequestID: map[string]compose.Measurement{}}
+			for _, q := range qs {
+				m.ByRequestID[q.ID] = compose.Measurement{RenderedWidthPt: 5, RenderedHeightPt: 5}
+			}
+			p, err := compose.Plan(s, m)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, c := range slide.Canvas {
+				if c.AssetPath != "" {
+					if _, err := os.Stat(c.AssetPath); os.IsNotExist(err) {
+						t.Skip("geometry passed; pinned local assets are not included in a fresh checkout")
+					}
+				}
+			}
+			es := finalSlides(s, p)
+			deck, err := render(es)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := validateImageStructure(deck, es); err != nil {
+				t.Fatal(err)
+			}
+		})
+	}
+}
+
 // Structural integration only: tiny synthetic text bounds exercise image
 // serialization, not native text fit or visual qualification.
 func TestWave3ArrowPackageStructure(t *testing.T) {
