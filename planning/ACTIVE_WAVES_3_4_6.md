@@ -21,7 +21,7 @@ tracks evidence against them without replacing the scope with smaller fixtures.
 | Go find/inspect/preview/instantiate | End-to-end CLI tests against actual portable contract/index artifacts | Implemented with deterministic assemble; 13 actual contract instances + combined spec pass structural probe; repeated assembly byte-identical; native QA pending |
 | Narrative and selection | Audience/role/takeaway/title/evidence/qualification/detail/emphasis/relationship; capacity failure or split; no silent cuts | Validated bindings, source hashes and exact required details; fresh brief + 13-page narrative drafted (roster/bio separated for density) |
 | Distributed skill and second-agent reproduction | Fresh proposal section from brief using only documented CLI/skill; recorded choices/evidence | Skill validated; fresh Luna three-slide semantic assembly + root structural probe passed; native qualification still required |
-| Wave 6 proposal | Approximately 12 complex pages spanning planned pattern coverage; library selected and skill authored | Pending |
+| Wave 6 proposal | Approximately 12 complex pages spanning planned pattern coverage; library selected and skill authored | 13-page brief/narrative/semantic values drafted; six isolated assemblies pass, seven need content-zone/capacity work; native QA pending |
 | Wave 6 stress/repeatability | Normal + increased text/cardinality; repeat from saved config; automatic failure, time/cache/manual correction logs | Pending |
 | Final qualification | Native per-page renders + independent review; fit/collision/typography/asset/evidence/date/allocation checks; exact limitations | Pending |
 

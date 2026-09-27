@@ -623,3 +623,30 @@ input caps have a 128-character editorial floor; for example the needs template
 has an 888×52pt, 23pt title frame but its old 65-character guard came only from
 source copy length. No native maximum was measured. New title copy remains
 unqualified until actual native fit; fonts and geometry are unchanged.
+
+## QA104 — Full proposal content exceeds the first semantic templates
+
+The independent agent authored 13 value files from the narrative. Six pages
+assemble in isolation; seven expose exact required-detail/capacity failures.
+See library/proposal/authoring-notes.md for the specific sentences and slots.
+The source process mechanics fixture is especially sparse: 264 characters of
+non-binding string capacity versus 807 characters of required explanation and
+qualifications. Roadmap labels and roster role tiles also cannot serve as long
+qualification paragraphs. These need designed explanatory/qualification zones,
+not silent text cuts or relaxed claims of fit. Full proposal assembly, native fit,
+and visual acceptance remain incomplete.
+
+## QA105 — Native open failure is not limited to the new accent deck
+
+After confirming its saved state, root closed only the owned accent-review-spike
+copy. Verification then failed opening that file with -9074. To isolate repository
+file access, saved task copies were placed in PowerPoint's own document container
+under `pptxgengo-wave3-export-probe`: accent-container-check.pptx and
+followup-known-good.pptx (the latter from the verified Wave2 follow-up). Both
+AppleScript opens failed with -9074. Launch Services accepted an open request for
+the known-good copy, but the subsequent presentation inventory showed no new
+presentation. No PDF was created. No app restart, source save, or unsaved-deck
+closure occurred. The user was asked for the current dialog text/screenshot;
+independent code/content work continues. A pending Launch Services request could
+open the owned copy after the dialog is resolved, so inspect names before the
+next native operation.
