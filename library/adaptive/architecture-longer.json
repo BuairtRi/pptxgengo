@@ -1,0 +1,80 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-long-component-labels",
+      "family": "architecture",
+      "title": "Validate long component labels and detailed cross-cutting concerns against measured text fit",
+      "role": "A deliberate long-copy stress case for bounded architecture cells",
+      "takeaway": "Longer descriptions should be shortened or split after reviewing actual measurement evidence.",
+      "content": {
+        "left_rail_title": "CROSS-CUTTING DECISIONS",
+        "left_rail": [
+          {
+            "label": "Access management",
+            "detail": "Confirm which business and support roles can read, change, approve, and audit each workflow."
+          },
+          {
+            "label": "Operational visibility",
+            "detail": "Define service ownership, actionable alerts, trace context, and support handoffs before expanding traffic."
+          }
+        ],
+        "layers": [
+          {
+            "id": "experience",
+            "heading": "EXPERIENCE",
+            "components": [
+              {
+                "id": "desktop",
+                "label": "Existing desktop experience",
+                "detail": "Retain while journey dependencies and user needs are assessed.",
+                "fill": "muted"
+              },
+              {
+                "id": "web-option",
+                "label": "Candidate browser experience",
+                "detail": "Consider only after workflow evidence and transition constraints are understood."
+              }
+            ]
+          },
+          {
+            "id": "services",
+            "heading": "SERVICE BOUNDARY",
+            "components": [
+              {
+                "id": "journey-api",
+                "label": "Journey-specific service contract",
+                "detail": "Owns a narrow set of business operations and avoids leaking persistence details to the client.",
+                "fill": "accent"
+              },
+              {
+                "id": "legacy-adapter",
+                "label": "Legacy integration adapter",
+                "detail": "Coordinates coexistence with existing procedures until replacement behavior is verified.",
+                "fill": "muted"
+              }
+            ]
+          },
+          {
+            "id": "data",
+            "heading": "DATA",
+            "components": [
+              {
+                "id": "repository",
+                "label": "Repository and transaction boundary",
+                "detail": "Encapsulates persistence operations, with consistency and recovery behavior to be confirmed."
+              },
+              {
+                "id": "current-store",
+                "label": "Current operational database",
+                "detail": "Migration target and sequence remain decisions for discovery.",
+                "fill": "muted"
+              }
+            ]
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    }
+  ]
+}

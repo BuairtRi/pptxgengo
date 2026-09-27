@@ -1,0 +1,160 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-expanded-architecture",
+      "family": "architecture",
+      "title": "Journey services isolate release risk while shared platform controls remain visible",
+      "role": "Exercise a five-layer board with several independently editable components per layer",
+      "takeaway": "The decomposition is a planning hypothesis; validate ownership, data boundaries and migration order.",
+      "content": {
+        "left_rail_title": "PLATFORM CONTROLS",
+        "left_rail": [
+          {
+            "label": "Identity",
+            "detail": "authentication and authorization policy"
+          },
+          {
+            "label": "Audit",
+            "detail": "traceable user and system actions"
+          },
+          {
+            "label": "Telemetry",
+            "detail": "service health and journey performance"
+          }
+        ],
+        "layers": [
+          {
+            "id": "users",
+            "heading": "USER CHANNELS",
+            "components": [
+              {
+                "id": "desktop-workflow",
+                "label": "Desktop workflow",
+                "fill": "muted"
+              },
+              {
+                "id": "browser-workflow",
+                "label": "Browser workflow"
+              },
+              {
+                "id": "staff-tools",
+                "label": "Staff tools",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "edge-services",
+            "heading": "EDGE",
+            "components": [
+              {
+                "id": "gateway",
+                "label": "API gateway",
+                "fill": "accent"
+              },
+              {
+                "id": "session-policy",
+                "label": "Session policy"
+              },
+              {
+                "id": "compat-facade",
+                "label": "Compatibility facade",
+                "fill": "muted"
+              },
+              {
+                "id": "notification-adapter",
+                "label": "Notification adapter"
+              }
+            ]
+          },
+          {
+            "id": "domain-services",
+            "heading": "JOURNEY SERVICES",
+            "components": [
+              {
+                "id": "scheduling",
+                "label": "Scheduling"
+              },
+              {
+                "id": "case-management",
+                "label": "Case management",
+                "fill": "active"
+              },
+              {
+                "id": "billing",
+                "label": "Billing"
+              },
+              {
+                "id": "records",
+                "label": "Records"
+              },
+              {
+                "id": "reporting",
+                "label": "Reporting"
+              }
+            ]
+          },
+          {
+            "id": "shared-platform",
+            "heading": "SHARED PLATFORM",
+            "components": [
+              {
+                "id": "workflow-events",
+                "label": "Workflow events",
+                "fill": "muted"
+              },
+              {
+                "id": "document-service",
+                "label": "Document service"
+              },
+              {
+                "id": "reference-data",
+                "label": "Reference data"
+              }
+            ]
+          },
+          {
+            "id": "persistence",
+            "heading": "PERSISTENCE",
+            "components": [
+              {
+                "id": "transaction-store",
+                "label": "Transaction store",
+                "fill": "muted",
+                "width_weight": 1.3
+              },
+              {
+                "id": "document-store",
+                "label": "Document store"
+              },
+              {
+                "id": "analytics-copy",
+                "label": "Analytics copy",
+                "fill": "surface"
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "from": "gateway",
+            "to": "case-management",
+            "relationship": "dependency"
+          },
+          {
+            "from": "case-management",
+            "to": "workflow-events",
+            "relationship": "dependency"
+          },
+          {
+            "from": "workflow-events",
+            "to": "transaction-store",
+            "relationship": "dependency"
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    }
+  ]
+}

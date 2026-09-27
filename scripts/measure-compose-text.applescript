@@ -37,6 +37,7 @@ on run argv
 						if shapeName is "" then error "Visible shape has no name on slide " & slideIndex & ", shape " & shapeIndex number 67
 						if seenShapeNames contains shapeName then error "Visible shape name is duplicated on slide " & slideIndex & ": " & shapeName number 74
 						set end of seenShapeNames to shapeName
+						set shapeTypeText to (shape type of sh) as text
 						set frameLeft to left position of sh
 						set frameTop to top of sh
 						set frameWidth to width of sh
@@ -65,9 +66,13 @@ on run argv
 							set lineTransparencyValue to transparency of shapeLine
 							set beginArrowValue to my arrowheadName(begin arrowhead style of shapeLine)
 							set endArrowValue to my arrowheadName(end arrowhead style of shapeLine)
-							if lineWidthValue ≤ 0 then error "Visible line has nonpositive width: " & shapeName number 82
+							-- PowerPoint reports the mixed/unavailable integer sentinel for
+							-- internal SVG strokes on a graphic picture, even when the outer
+							-- picture has no line. Preserve the raw values for the CLI to
+							-- compare with the structurally verified picture package.
+							if lineWidthValue ≤ 0 and not (shapeTypeText is "shape type graphic" and lineWidthValue is -2147483648) then error "Visible line has nonpositive width: " & shapeName number 82
 						end if
-						set lineJSON to "{\"visible\":" & my jsonBoolean(lineVisibleValue) & ",\"rgb\":" & my jsonRGB(lineRGBValue) & ",\"width_pt\":" & my jsonNullableNumber(lineWidthValue) & ",\"transparency\":" & my jsonNullableNumber(lineTransparencyValue) & ",\"begin_arrow\":" & my jsonNullableString(beginArrowValue) & ",\"end_arrow\":" & my jsonNullableString(endArrowValue) & ",\"dash_style\":" & my jsonNullableString(dashStyleValue) & "}"
+						set lineJSON to "{\"visible\":" & my jsonBoolean(lineVisibleValue) & ",\"style\":" & my jsonString(lineStyleText) & ",\"rgb\":" & my jsonRGB(lineRGBValue) & ",\"width_pt\":" & my jsonNullableNumber(lineWidthValue) & ",\"transparency\":" & my jsonNullableNumber(lineTransparencyValue) & ",\"begin_arrow\":" & my jsonNullableString(beginArrowValue) & ",\"end_arrow\":" & my jsonNullableString(endArrowValue) & ",\"dash_style\":" & my jsonNullableString(dashStyleValue) & "}"
 						set fillVisibleValue to false
 						set fillRGBValue to missing value
 						set fillTransparencyValue to missing value
@@ -205,7 +210,7 @@ on run argv
 
 						set fontJSON to "null"
 						if textValue is not missing value and textValue is not "" then set fontJSON to "{\"name\":" & my jsonNullableString(fontNameValue) & ",\"size_pt\":" & my jsonNullableNumber(fontSizeValue) & ",\"bold\":" & my jsonNullableBoolean(boldValue) & "}"
-						set rowJSON to "{\"slide_index\":" & slideIndex & ",\"shape_name\":" & my jsonString(shapeName) & ",\"shape_index\":" & shapeIndex & ",\"text\":" & my jsonNullableContent(textValue) & ",\"shape_frame\":{\"left\":" & my jsonNumber(frameLeft) & ",\"top\":" & my jsonNumber(frameTop) & ",\"width\":" & my jsonNumber(frameWidth) & ",\"height\":" & my jsonNumber(frameHeight) & ",\"rotation_degrees\":" & my jsonNumber(shapeRotation) & "},\"text_bounds\":" & my jsonRawOrNull(textBoundsValue) & ",\"range_bounds\":" & my jsonRawOrNull(rangeBoundsValue) & ",\"fill\":" & fillJSON & ",\"line\":" & lineJSON & ",\"text_color\":" & my jsonRGB(textColorValue) & ",\"margins\":" & my jsonRawOrNull(marginsValue) & ",\"font\":" & fontJSON & ",\"characters\":" & characterSnapshotsJSON & ",\"paragraphs\":" & paragraphSnapshotsJSON & "}"
+						set rowJSON to "{\"slide_index\":" & slideIndex & ",\"shape_name\":" & my jsonString(shapeName) & ",\"shape_type\":" & my jsonString(shapeTypeText) & ",\"shape_index\":" & shapeIndex & ",\"text\":" & my jsonNullableContent(textValue) & ",\"shape_frame\":{\"left\":" & my jsonNumber(frameLeft) & ",\"top\":" & my jsonNumber(frameTop) & ",\"width\":" & my jsonNumber(frameWidth) & ",\"height\":" & my jsonNumber(frameHeight) & ",\"rotation_degrees\":" & my jsonNumber(shapeRotation) & "},\"text_bounds\":" & my jsonRawOrNull(textBoundsValue) & ",\"range_bounds\":" & my jsonRawOrNull(rangeBoundsValue) & ",\"fill\":" & fillJSON & ",\"line\":" & lineJSON & ",\"text_color\":" & my jsonRGB(textColorValue) & ",\"margins\":" & my jsonRawOrNull(marginsValue) & ",\"font\":" & fontJSON & ",\"characters\":" & characterSnapshotsJSON & ",\"paragraphs\":" & paragraphSnapshotsJSON & "}"
 						if outputRows is not "" then set outputRows to outputRows & ","
 						set outputRows to outputRows & rowJSON
 					end if
@@ -216,7 +221,7 @@ on run argv
 
 	if visibleSlideCount is 0 then error "Presentation has no visible slides" number 72
 	if outputRows is "" then error "Presentation has no visible shapes to measure" number 73
-	return "{\"schema\":\"pptxgengo.compose-text-measurement.v8\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-whitespace character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; any other reported line style means visible\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
+	return "{\"schema\":\"pptxgengo.compose-text-measurement.v8\",\"presentation\":" & my jsonString(presentationName) & ",\"visible_slide_count\":" & visibleSlideCount & ",\"coordinates\":\"raw PowerPoint scripting object units; AppleScript dictionary does not specify units\",\"line_width_units\":\"PowerPoint line-weight points\",\"text_bounds_source\":\"union of native non-whitespace character bounds; glyph advances, not raster ink\",\"range_bounds_source\":\"PowerPoint text range bounds retained for diagnostics\",\"color_components\":\"PowerPoint AppleScript RGB list order as returned; integer components\",\"line_arrow_enum_source\":\"MsoArrowheadStyle: arrowhead style unset, no arrowhead, triangle arrowhead, open_arrowhead, stealth arrowhead, diamond arrowhead, oval arrowhead\",\"line_style_enum_source\":\"MsoLineStyle: line style unset, single line, thin thin line, thin thick line, thick thin line, thick between thin line\",\"line_visibility_rule\":\"line style unset means invisible; other styles retain their raw visible report; graphic SVG mixed-width sentinel requires independent no-outline package verification\",\"rotation_handled\":false,\"measurements\":[" & outputRows & "]}"
 end run
 
 on absoluteValue(valueNumber)

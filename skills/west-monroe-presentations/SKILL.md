@@ -10,6 +10,7 @@ Use the installed `pptxgengo` command. Do not assume repository-local Go binarie
 Choose the narrowest route:
 
 - `pptxgengo template` to adapt supported text/style bindings in one of the 65 source-bound template contracts and produce a review deck.
+- `pptxgengo adapt`, when listed by the installed CLI, to generate editable roadmap, architecture, process, team, or comparison compositions from semantic content and variable counts. Read the [adaptive family reference](references/adaptive-authoring.md) only for this route.
 - `pptxgengo compose` to author new editable slides from supported components, saved library contracts, or explicit composition specs. This supports genuinely new slides assembled from native editable components; it is bounded composition, not an unrestricted slide designer.
 - `pptxgengo scene` to extract and rebuild source slides while preserving supported native structure/resources.
 - `pptxgengo component` to inspect and apply reviewed source-bound text/color contracts in an extracted scene.

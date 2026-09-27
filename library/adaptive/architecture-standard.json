@@ -1,0 +1,113 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-architecture",
+      "family": "architecture",
+      "title": "A bounded service layer separates the product UI from legacy data access",
+      "role": "Show a plausible modernization boundary and cross-cutting controls",
+      "takeaway": "Incremental service ownership can isolate priority workflows while evidence is gathered.",
+      "style": {
+        "profile": "neutral",
+        "colors": {
+          "accent": "#0077A8",
+          "surface.muted": "#EAF2F6"
+        }
+      },
+      "content": {
+        "left_rail_title": "DESIGN GUARDRAILS",
+        "left_rail": [
+          {
+            "label": "Identity",
+            "detail": "authentication and session policy"
+          },
+          {
+            "label": "Observability",
+            "detail": "traces, logs and service health"
+          },
+          {
+            "label": "Release controls",
+            "detail": "compatibility and rollback checks"
+          }
+        ],
+        "layers": [
+          {
+            "id": "experience",
+            "heading": "USER EXPERIENCE",
+            "components": [
+              {
+                "id": "desktop-client",
+                "label": "Desktop client",
+                "detail": "retain current workflow",
+                "fill": "muted"
+              },
+              {
+                "id": "web-shell",
+                "label": "Web shell",
+                "detail": "future option",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "domain",
+            "heading": "DOMAIN SERVICES",
+            "components": [
+              {
+                "id": "journey-api",
+                "label": "Journey API",
+                "detail": "bounded service contract",
+                "fill": "accent",
+                "width_weight": 1.2
+              },
+              {
+                "id": "rules",
+                "label": "Business rules",
+                "detail": "owned by workflow",
+                "fill": "surface"
+              },
+              {
+                "id": "integration",
+                "label": "Integration adapter",
+                "detail": "legacy boundary",
+                "fill": "muted"
+              }
+            ]
+          },
+          {
+            "id": "data",
+            "heading": "DATA ACCESS",
+            "components": [
+              {
+                "id": "repository",
+                "label": "Repository",
+                "detail": "query and transaction seam",
+                "fill": "surface"
+              },
+              {
+                "id": "legacy-store",
+                "label": "Current store",
+                "detail": "retained pending migration evidence",
+                "fill": "muted",
+                "width_weight": 1.25
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "from": "desktop-client",
+            "to": "journey-api",
+            "relationship": "dependency"
+          },
+          {
+            "from": "journey-api",
+            "to": "repository",
+            "relationship": "dependency"
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    }
+  ]
+}

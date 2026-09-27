@@ -142,6 +142,9 @@ func validateProbeSource(dir, evPath string) (validatedSource, error) {
 	if pm.Schema != "pptxgengo.compose-bundle.v1" || pm.Plan != nil || len(pm.Requests) == 0 || ev.Schema != "pptxgengo.compose-evidence.v1" || ev.SpecSHA != pm.SpecSHA || ev.ManifestSHA != hash(mb) || ev.DeckSHA != hash(db) || pm.DeckSHA != hash(db) {
 		return result, fmt.Errorf("stale or mismatched cache source evidence")
 	}
+	if e = validateImageStructure(db, pm.Slides); e != nil {
+		return result, e
+	}
 	// Bind original requests to the actual probe manifest, not only to its hashes.
 	expected := probeSlides(pm.Requests)
 	if !bytes.Equal(jsonBytes(expected), jsonBytes(pm.Slides)) {

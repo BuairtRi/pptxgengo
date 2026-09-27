@@ -1,0 +1,103 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-team-inverse",
+      "family": "team",
+      "title": "Accountability links product direction to engineering delivery and operations",
+      "role": "Check role tiles and staffing legend against inverse styling",
+      "takeaway": "The synthetic roster shows role categories without implying named staff or allocations.",
+      "footer": "Illustrative example · R = Responsible; A = Accountable; C = Consulted; I = Informed",
+      "style": {
+        "profile": "inverse"
+      },
+      "content": {
+        "pods": [
+          {
+            "id": "product",
+            "title": "PRODUCT",
+            "roles": [
+              {
+                "id": "owner",
+                "label": "Product owner",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "engineering",
+            "title": "ENGINEERING",
+            "roles": [
+              {
+                "id": "architect",
+                "label": "Solution architect",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "engineer",
+                "label": "Application engineer",
+                "staffing": "staffing.wm_full_time"
+              }
+            ]
+          },
+          {
+            "id": "operations",
+            "title": "OPERATIONS",
+            "roles": [
+              {
+                "id": "service-owner",
+                "label": "Service owner",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          }
+        ],
+        "reporting_lines": [
+          {
+            "from": "product",
+            "to": "engineering",
+            "relationship": "dependency"
+          },
+          {
+            "from": "engineering",
+            "to": "operations",
+            "relationship": "dependency"
+          }
+        ],
+        "responsibilities": {
+          "columns": [
+            "Product",
+            "Engineering",
+            "Operations"
+          ],
+          "rows": [
+            {
+              "label": "Set outcome",
+              "values": [
+                "A/R",
+                "C",
+                "C"
+              ]
+            },
+            {
+              "label": "Choose design",
+              "values": [
+                "C",
+                "A/R",
+                "C"
+              ]
+            },
+            {
+              "label": "Accept release",
+              "values": [
+                "A",
+                "R",
+                "C"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

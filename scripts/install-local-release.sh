@@ -40,7 +40,7 @@ trap 'rm -rf "$stage"' EXIT
 mkdir -p "$stage/bin"
 
 cd "$repo_root"
-for tool in pptxgengo pptxtemplate pptxcompose pptxscene pptxcomponent pptxlib pptxanchor pptxdiff; do
+for tool in pptxgengo pptxtemplate pptxcompose pptxscene pptxcomponent pptxlib pptxanchor pptxdiff pptxadapt; do
   echo "building $tool" >&2
   if [[ "$tool" == pptxgengo ]]; then
     go build -trimpath -ldflags "-s -w -X main.version=$version" -o "$stage/bin/$tool" "./cmd/$tool"
@@ -50,6 +50,7 @@ for tool in pptxgengo pptxtemplate pptxcompose pptxscene pptxcomponent pptxlib p
 done
 
 python3 - "$repo_root" "$stage" "$version" <<'PY'
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -72,6 +73,7 @@ shutil.copytree(src / 'library', dst / 'library')
 shutil.copytree(src / 'release/catalog', dst / 'catalog')
 shutil.copytree(src / 'skills/west-monroe-presentations', dst / 'skills/west-monroe-presentations')
 shutil.copytree(src / 'planning/release-0.1', dst / 'planning/release-0.1')
+shutil.copytree(src / 'planning/adaptive', dst / 'planning/adaptive')
 for release_doc in ('release/README.md', 'release/cleanup.json'):
     if (src / release_doc).is_file():
         copy(release_doc)
@@ -112,6 +114,50 @@ for recipe in (src / 'library').rglob('*.json'):
     if isinstance(doc, dict) and doc.get('schema') == 'pptxgengo.compose-spec.v1':
         for path in artifact_paths(doc):
             copy(path)
+
+# Keep the exact accepted adaptive examples inspectable in the next release.
+# The checkpoint names the required evidence; no broad samples tree is copied.
+checkpoint = json.loads((src / 'library/adaptive/checkpoint.json').read_text())
+evidence_paths = {}
+def add_evidence(path, expected_hash=None):
+    if (not isinstance(path, str) or '\\' in path or
+            any(part in ('', '.', '..') for part in path.split('/')) or
+            not path.startswith(('library/', 'samples/adaptive/'))):
+        raise ValueError(f'invalid adaptive evidence path: {path!r}')
+    prior = evidence_paths.get(path)
+    if prior and expected_hash and prior != expected_hash:
+        raise ValueError(f'conflicting adaptive evidence hash: {path}')
+    evidence_paths[path] = expected_hash or prior
+
+example_groups = list(checkpoint['families'].values())
+example_groups.extend(checkpoint.get('accents', {}).values())
+for group in example_groups:
+    for example in group.get('examples', []):
+        hashes = example.get('hashes', {})
+        evidence = example.get('evidence', {})
+        add_evidence(example['spec_path'], hashes.get('spec_sha256'))
+        if example.get('values_path'):
+            add_evidence(example['values_path'], hashes.get('values_sha256'))
+        if example.get('render_png'):
+            add_evidence(example['render_png'], hashes.get('render_sha256'))
+        for name, path in evidence.items():
+            if isinstance(path, str):
+                add_evidence(path, hashes.get(name + '_sha256'))
+
+for path, expected_hash in sorted(evidence_paths.items()):
+    if expected_hash:
+        actual_hash = hashlib.sha256((src / path).read_bytes()).hexdigest()
+        if actual_hash != expected_hash:
+            raise ValueError(f'adaptive evidence hash mismatch: {path}')
+    copy(path)
+
+# The capability records link to these exact implementation schema sources.
+capabilities = json.loads((src / 'library/adaptive/capabilities.json').read_text())
+for family in capabilities['family_builders'].values():
+    path = family['schema_path']
+    if not isinstance(path, str) or not path.startswith('internal/adapt/') or not path.endswith('.go'):
+        raise ValueError(f'invalid adaptive schema source path: {path!r}')
+    copy(path)
 
 for path in [
     'scripts/adapt-template-accents.py',

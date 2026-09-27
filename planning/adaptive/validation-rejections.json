@@ -1,0 +1,68 @@
+{
+  "scope": "Manual CLI rejection checks; not a test suite or native/visual qualification.",
+  "cases": [
+    {
+      "case": "single_process_step",
+      "input_sha256": "728bfc657c59f7859f4223a9179efb99536ade0004d9e88760c28f8537c13d7a",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide process-normal: process requires 2..6 steps"
+    },
+    {
+      "case": "unknown_style_role",
+      "input_sha256": "ca0116e07a40cec5fa1fc47ab7be5651329a21b4ffbe121e89ca8385c2f846df",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide process-normal: unknown semantic color role \"text.body\""
+    },
+    {
+      "case": "unreadable_primary_ink",
+      "input_sha256": "7764773ca6192fc36d36aaa8ba88232f45867ec43766aca5fd495d78a3488b11",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide process-normal: text.primary contrast against surface is below 4.5:1"
+    },
+    {
+      "case": "unknown_field",
+      "input_sha256": "948361e82cd65b3f1d570f3cd026b86b9e716dc31993be49f47981c12531f5c9",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: json: unknown field \"pretend_auto_fit\""
+    },
+    {
+      "case": "unknown_team_relationship",
+      "input_sha256": "d92a326c2de98b94de6dae2907e9d745f4e3f23229eb39c4f321e8f3204c4aa1",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide illustrative-delivery-team: reporting line \"steering\" \u2192 \"missing-pod\" must reference distinct known pod IDs and use a supported relationship type"
+    },
+    {
+      "case": "unknown_architecture_endpoint",
+      "input_sha256": "162a3f3e69fcdcea8db00b86314a1c4a9f4633712db4bb1ad35880516e56316d",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide illustrative-architecture: relations must connect distinct known component ids and use reporting, dependency, advisory, or annotation"
+    },
+    {
+      "case": "out_of_scale_gauge",
+      "input_sha256": "78124884dc08f09503d08f10758ad15ca7ada940d93fe81b0ec12649a04a1cbd",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide comparison-normal: comparison criterion c1 has invalid gauge values or target range"
+    },
+    {
+      "case": "reversed_period_interval",
+      "input_sha256": "1c6f0ca23d57f689f7d9f0799c4d1e6e582b9f919e8b2cd30ec13eb1a47e0c13",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide roadmap-normal: roadmap w1 interval 1 ends before it starts"
+    },
+    {
+      "case": "unsupported_caption_period_span",
+      "input_sha256": "a83bb65fdbd630f6278b9c1c4930ca763e9dd2b2374d75d6a674f78933821690",
+      "exit_code": 1,
+      "rejected": true,
+      "diagnostic": "pptxadapt: slide roadmap-normal: roadmap w1 milestone 1 caption_periods must be 1..3 when set"
+    }
+  ]
+}

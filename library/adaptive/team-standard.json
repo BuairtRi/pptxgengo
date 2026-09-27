@@ -1,0 +1,148 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-delivery-team",
+      "family": "team",
+      "title": "Product, engineering and operations share ownership of a safe modernization path",
+      "role": "Show an illustrative delivery organization with clear workstream ownership",
+      "takeaway": "Named roles and a responsibility matrix make decision and execution paths explicit.",
+      "style": {
+        "profile": "neutral",
+        "colors": {
+          "accent": "#0077A8",
+          "surface.muted": "#EAF2F6"
+        }
+      },
+      "content": {
+        "pods": [
+          {
+            "id": "steering",
+            "title": "STEERING & PRODUCT",
+            "roles": [
+              {
+                "id": "sponsor",
+                "label": "Executive sponsor",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "product-owner",
+                "label": "Product owner",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "architecture-pod",
+            "title": "ARCHITECTURE & PLATFORM",
+            "roles": [
+              {
+                "id": "solution-lead",
+                "label": "Solution architect",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "platform-engineer",
+                "label": "Platform engineer",
+                "staffing": "staffing.wm_full_time"
+              },
+              {
+                "id": "security-partner",
+                "label": "Security partner",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "journey-pod",
+            "title": "JOURNEY DELIVERY",
+            "roles": [
+              {
+                "id": "delivery-lead",
+                "label": "Delivery lead",
+                "staffing": "staffing.wm_full_time"
+              },
+              {
+                "id": "workflow-analyst",
+                "label": "Workflow analyst",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "engineer",
+                "label": "Application engineer",
+                "staffing": "staffing.wm_full_time"
+              }
+            ]
+          },
+          {
+            "id": "quality-pod",
+            "title": "QUALITY & OPERATIONS",
+            "roles": [
+              {
+                "id": "qa-lead",
+                "label": "Quality lead",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "service-owner",
+                "label": "Service owner",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          }
+        ],
+        "reporting_lines": [
+          {
+            "from": "steering",
+            "to": "architecture-pod",
+            "relationship": "reporting"
+          },
+          {
+            "from": "architecture-pod",
+            "to": "journey-pod",
+            "relationship": "reporting"
+          },
+          {
+            "from": "journey-pod",
+            "to": "quality-pod",
+            "relationship": "reporting"
+          }
+        ],
+        "responsibilities": {
+          "columns": [
+            "Product",
+            "Engineering",
+            "Client ops"
+          ],
+          "rows": [
+            {
+              "label": "Journey priority",
+              "values": [
+                "A/R",
+                "C",
+                "C"
+              ]
+            },
+            {
+              "label": "Architecture decisions",
+              "values": [
+                "C",
+                "A/R",
+                "C"
+              ]
+            },
+            {
+              "label": "Release readiness",
+              "values": [
+                "C",
+                "R",
+                "A"
+              ]
+            }
+          ]
+        }
+      },
+      "footer": "Illustrative example · R = Responsible; A = Accountable; C = Consulted; I = Informed"
+    }
+  ]
+}

@@ -18,6 +18,9 @@ type element struct {
 	BeginArrow          string                  `json:"begin_arrow,omitempty"`
 	EndArrow            string                  `json:"end_arrow,omitempty"`
 	RotationDeg         float64                 `json:"rotation_deg,omitempty"`
+	ArcStartDeg         float64                 `json:"arc_start_deg,omitempty"`
+	ArcEndDeg           float64                 `json:"arc_end_deg,omitempty"`
+	ArcThicknessRatio   float64                 `json:"arc_thickness_ratio,omitempty"`
 	PhraseRequests      []compose.PhraseRequest `json:"phrase_requests,omitempty"`
 	AssetMode           string                  `json:"asset_mode,omitempty"`
 	AssetPath           string                  `json:"asset_path,omitempty"`
@@ -116,7 +119,12 @@ func render(slides []renderSlide) ([]byte, error) {
 				if e.Pattern != nil {
 					fill = &pptx.ShapeFillProps{Pattern: &pptx.ShapePatternFillProps{Preset: pptx.PatternType(e.Pattern.Preset), Foreground: color(e.Pattern.Foreground), Background: color(e.Pattern.Background)}}
 				}
-				if err := s.AddShape(pptx.ShapeType(e.Preset), &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Adjustments: e.Adjustments, Fill: fill, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}}); err != nil {
+				shape := &pptx.ShapeProps{PositionProps: pos(e.Frame), ObjectNameProps: pptx.ObjectNameProps{ObjectName: e.Name}, Adjustments: e.Adjustments, Rotate: e.RotationDeg, Fill: fill, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}}
+				if e.Preset == "blockArc" {
+					shape.AngleRange = &[2]float64{e.ArcStartDeg, e.ArcEndDeg}
+					shape.ArcThicknessRatio = e.ArcThicknessRatio
+				}
+				if err := s.AddShape(pptx.ShapeType(e.Preset), shape); err != nil {
 					return nil, err
 				}
 				continue

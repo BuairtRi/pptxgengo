@@ -101,6 +101,18 @@ func validateShapeNode(n *nativepkg.Node, want element) error {
 			return fmt.Errorf("transform mismatch: %q expected %.6fpt", v.got, v.want)
 		}
 	}
+	rotation := xfrm.Attr("rot")
+	wantRotation := int64(math.Floor(want.RotationDeg*60000 + .5))
+	if rotation == "" {
+		if wantRotation != 0 {
+			return fmt.Errorf("shape rotation missing; expected %.6f degrees", want.RotationDeg)
+		}
+	} else {
+		got, err := strconv.ParseInt(rotation, 10, 64)
+		if err != nil || got != wantRotation {
+			return fmt.Errorf("shape rotation %q expected %d", rotation, wantRotation)
+		}
+	}
 	geom := spPr.Child("prstGeom")
 	if geom.Attr("prst") != want.Preset {
 		return fmt.Errorf("preset %q expected %q", geom.Attr("prst"), want.Preset)
@@ -129,10 +141,18 @@ func validateShapeNode(n *nativepkg.Node, want element) error {
 			guides[name] = value
 		}
 	}
-	if len(guides) != len(want.Adjustments) {
-		return fmt.Errorf("adjustment count %d expected %d", len(guides), len(want.Adjustments))
+	expectedGuides := want.Adjustments
+	if want.Preset == "blockArc" {
+		expectedGuides = map[string]int{
+			"adj1": int(math.Floor(want.ArcStartDeg*60000 + .5)),
+			"adj2": int(math.Floor(want.ArcEndDeg*60000 + .5)),
+			"adj3": int(math.Floor(want.ArcThicknessRatio*50000 + .5)),
+		}
 	}
-	for name, value := range want.Adjustments {
+	if len(guides) != len(expectedGuides) {
+		return fmt.Errorf("adjustment count %d expected %d", len(guides), len(expectedGuides))
+	}
+	for name, value := range expectedGuides {
 		if guides[name] != value {
 			return fmt.Errorf("adjustment %s=%d expected %d", name, guides[name], value)
 		}

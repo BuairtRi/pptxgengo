@@ -1,0 +1,596 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-dense-architecture",
+      "family": "architecture",
+      "title": "A staged target model makes compatibility and ownership decisions visible",
+      "role": "Exercise more layers, unequal component widths and a larger cross-cut rail",
+      "takeaway": "Detailed service boundaries remain hypotheses until validated with workflow evidence.",
+      "style": {
+        "profile": "subtle",
+        "body_font_pt": 10,
+        "label_font_pt": 9
+      },
+      "content": {
+        "left_rail_title": "CROSS-CUTTING CONTROLS",
+        "left_rail": [
+          {
+            "label": "Security",
+            "detail": "identity, secrets, least privilege"
+          },
+          {
+            "label": "Operations",
+            "detail": "telemetry, alerting and support ownership"
+          },
+          {
+            "label": "Compatibility",
+            "detail": "versioned contracts and migration checks"
+          },
+          {
+            "label": "Delivery",
+            "detail": "small releases with rollback evidence"
+          }
+        ],
+        "layers": [
+          {
+            "id": "channels",
+            "heading": "CHANNELS",
+            "components": [
+              {
+                "id": "desktop",
+                "label": "Desktop workflow",
+                "detail": "existing client",
+                "fill": "muted"
+              },
+              {
+                "id": "browser",
+                "label": "Browser option",
+                "detail": "candidate experience",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "edge",
+            "heading": "EDGE SERVICES",
+            "components": [
+              {
+                "id": "gateway",
+                "label": "API gateway",
+                "detail": "routing and policy",
+                "fill": "accent"
+              },
+              {
+                "id": "session",
+                "label": "Session adapter",
+                "detail": "identity boundary",
+                "fill": "surface"
+              },
+              {
+                "id": "compat",
+                "label": "Compatibility facade",
+                "detail": "coexistence contract",
+                "fill": "muted",
+                "width_weight": 1.4
+              }
+            ]
+          },
+          {
+            "id": "workflows",
+            "heading": "WORKFLOWS",
+            "components": [
+              {
+                "id": "scheduling",
+                "label": "Scheduling",
+                "detail": "candidate journey",
+                "fill": "active"
+              },
+              {
+                "id": "billing",
+                "label": "Billing",
+                "detail": "candidate journey",
+                "fill": "surface"
+              },
+              {
+                "id": "records",
+                "label": "Records",
+                "detail": "candidate journey",
+                "fill": "surface"
+              },
+              {
+                "id": "audit",
+                "label": "Audit events",
+                "detail": "cross-journey evidence",
+                "fill": "muted"
+              }
+            ]
+          },
+          {
+            "id": "platform",
+            "heading": "PLATFORM",
+            "components": [
+              {
+                "id": "sql",
+                "label": "Current SQL store",
+                "detail": "migration decision pending",
+                "fill": "muted",
+                "width_weight": 1.5
+              },
+              {
+                "id": "files",
+                "label": "Document store",
+                "detail": "retention needs review",
+                "fill": "surface"
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "from": "gateway",
+            "to": "scheduling",
+            "relationship": "dependency"
+          },
+          {
+            "from": "scheduling",
+            "to": "sql",
+            "relationship": "dependency"
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    },
+    {
+      "id": "illustrative-two-layer",
+      "family": "architecture",
+      "title": "Separate the user interface from data access",
+      "role": "Show a concise two-layer starting point",
+      "takeaway": "Keep the initial separation explicit and testable.",
+      "content": {
+        "layers": [
+          {
+            "id": "interface",
+            "heading": "INTERFACE",
+            "components": [
+              {
+                "id": "client",
+                "label": "Desktop client"
+              }
+            ]
+          },
+          {
+            "id": "persistence",
+            "heading": "PERSISTENCE",
+            "components": [
+              {
+                "id": "data-store",
+                "label": "Current database",
+                "fill": "muted"
+              }
+            ]
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    },
+    {
+      "id": "illustrative-architecture-inverse",
+      "family": "architecture",
+      "title": "A service boundary separates user workflows from the current data store",
+      "role": "Check architecture-cell foregrounds against inverse surfaces",
+      "takeaway": "A small verified boundary can create room to modernize in measured increments.",
+      "footer": "Illustrative capability example",
+      "style": {
+        "profile": "inverse"
+      },
+      "content": {
+        "left_rail_title": "OPERATING CONTROLS",
+        "left_rail": [
+          {
+            "label": "Access",
+            "detail": "identity and policy"
+          },
+          {
+            "label": "Telemetry",
+            "detail": "health and traceability"
+          }
+        ],
+        "layers": [
+          {
+            "id": "client",
+            "heading": "CLIENT",
+            "components": [
+              {
+                "id": "desktop",
+                "label": "Desktop workflow",
+                "fill": "accent"
+              },
+              {
+                "id": "browser",
+                "label": "Browser option",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "service",
+            "heading": "SERVICES",
+            "components": [
+              {
+                "id": "journey-api",
+                "label": "Journey API",
+                "fill": "accent"
+              },
+              {
+                "id": "legacy-adapter",
+                "label": "Legacy adapter",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "store",
+            "heading": "DATA",
+            "components": [
+              {
+                "id": "repository",
+                "label": "Repository"
+              },
+              {
+                "id": "current-store",
+                "label": "Current store",
+                "fill": "muted"
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "from": "desktop",
+            "to": "journey-api",
+            "relationship": "dependency"
+          }
+        ]
+      }
+    },
+    {
+      "id": "illustrative-long-component-labels",
+      "family": "architecture",
+      "title": "Validate long component labels and detailed cross-cutting concerns against measured text fit",
+      "role": "A deliberate long-copy stress case for bounded architecture cells",
+      "takeaway": "Longer descriptions should be shortened or split after reviewing actual measurement evidence.",
+      "content": {
+        "left_rail_title": "CROSS-CUTTING DECISIONS",
+        "left_rail": [
+          {
+            "label": "Access management",
+            "detail": "Confirm which business and support roles can read, change, approve, and audit each workflow."
+          },
+          {
+            "label": "Operational visibility",
+            "detail": "Define service ownership, actionable alerts, trace context, and support handoffs before expanding traffic."
+          }
+        ],
+        "layers": [
+          {
+            "id": "experience",
+            "heading": "EXPERIENCE",
+            "components": [
+              {
+                "id": "desktop",
+                "label": "Existing desktop experience",
+                "detail": "Retain while journey dependencies and user needs are assessed.",
+                "fill": "muted"
+              },
+              {
+                "id": "web-option",
+                "label": "Candidate browser experience",
+                "detail": "Consider only after workflow evidence and transition constraints are understood."
+              }
+            ]
+          },
+          {
+            "id": "services",
+            "heading": "SERVICE BOUNDARY",
+            "components": [
+              {
+                "id": "journey-api",
+                "label": "Journey-specific service contract",
+                "detail": "Owns a narrow set of business operations and avoids leaking persistence details to the client.",
+                "fill": "accent"
+              },
+              {
+                "id": "legacy-adapter",
+                "label": "Legacy integration adapter",
+                "detail": "Coordinates coexistence with existing procedures until replacement behavior is verified.",
+                "fill": "muted"
+              }
+            ]
+          },
+          {
+            "id": "data",
+            "heading": "DATA",
+            "components": [
+              {
+                "id": "repository",
+                "label": "Repository and transaction boundary",
+                "detail": "Encapsulates persistence operations, with consistency and recovery behavior to be confirmed."
+              },
+              {
+                "id": "current-store",
+                "label": "Current operational database",
+                "detail": "Migration target and sequence remain decisions for discovery.",
+                "fill": "muted"
+              }
+            ]
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    },
+    {
+      "id": "illustrative-expanded-architecture",
+      "family": "architecture",
+      "title": "Journey services isolate release risk while shared platform controls remain visible",
+      "role": "Exercise a five-layer board with several independently editable components per layer",
+      "takeaway": "The decomposition is a planning hypothesis; validate ownership, data boundaries and migration order.",
+      "content": {
+        "left_rail_title": "PLATFORM CONTROLS",
+        "left_rail": [
+          {
+            "label": "Identity",
+            "detail": "authentication and authorization policy"
+          },
+          {
+            "label": "Audit",
+            "detail": "traceable user and system actions"
+          },
+          {
+            "label": "Telemetry",
+            "detail": "service health and journey performance"
+          }
+        ],
+        "layers": [
+          {
+            "id": "users",
+            "heading": "USER CHANNELS",
+            "components": [
+              {
+                "id": "desktop-workflow",
+                "label": "Desktop workflow",
+                "fill": "muted"
+              },
+              {
+                "id": "browser-workflow",
+                "label": "Browser workflow"
+              },
+              {
+                "id": "staff-tools",
+                "label": "Staff tools",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "edge-services",
+            "heading": "EDGE",
+            "components": [
+              {
+                "id": "gateway",
+                "label": "API gateway",
+                "fill": "accent"
+              },
+              {
+                "id": "session-policy",
+                "label": "Session policy"
+              },
+              {
+                "id": "compat-facade",
+                "label": "Compatibility facade",
+                "fill": "muted"
+              },
+              {
+                "id": "notification-adapter",
+                "label": "Notification adapter"
+              }
+            ]
+          },
+          {
+            "id": "domain-services",
+            "heading": "JOURNEY SERVICES",
+            "components": [
+              {
+                "id": "scheduling",
+                "label": "Scheduling"
+              },
+              {
+                "id": "case-management",
+                "label": "Case management",
+                "fill": "active"
+              },
+              {
+                "id": "billing",
+                "label": "Billing"
+              },
+              {
+                "id": "records",
+                "label": "Records"
+              },
+              {
+                "id": "reporting",
+                "label": "Reporting"
+              }
+            ]
+          },
+          {
+            "id": "shared-platform",
+            "heading": "SHARED PLATFORM",
+            "components": [
+              {
+                "id": "workflow-events",
+                "label": "Workflow events",
+                "fill": "muted"
+              },
+              {
+                "id": "document-service",
+                "label": "Document service"
+              },
+              {
+                "id": "reference-data",
+                "label": "Reference data"
+              }
+            ]
+          },
+          {
+            "id": "persistence",
+            "heading": "PERSISTENCE",
+            "components": [
+              {
+                "id": "transaction-store",
+                "label": "Transaction store",
+                "fill": "muted",
+                "width_weight": 1.3
+              },
+              {
+                "id": "document-store",
+                "label": "Document store"
+              },
+              {
+                "id": "analytics-copy",
+                "label": "Analytics copy",
+                "fill": "surface"
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "from": "gateway",
+            "to": "case-management",
+            "relationship": "dependency"
+          },
+          {
+            "from": "case-management",
+            "to": "workflow-events",
+            "relationship": "dependency"
+          },
+          {
+            "from": "workflow-events",
+            "to": "transaction-store",
+            "relationship": "dependency"
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    },
+    {
+      "id": "illustrative-architecture",
+      "family": "architecture",
+      "title": "A bounded service layer separates the product UI from legacy data access",
+      "role": "Show a plausible modernization boundary and cross-cutting controls",
+      "takeaway": "Incremental service ownership can isolate priority workflows while evidence is gathered.",
+      "style": {
+        "profile": "neutral",
+        "colors": {
+          "accent": "#0077A8",
+          "surface.muted": "#EAF2F6"
+        }
+      },
+      "content": {
+        "left_rail_title": "DESIGN GUARDRAILS",
+        "left_rail": [
+          {
+            "label": "Identity",
+            "detail": "authentication and session policy"
+          },
+          {
+            "label": "Observability",
+            "detail": "traces, logs and service health"
+          },
+          {
+            "label": "Release controls",
+            "detail": "compatibility and rollback checks"
+          }
+        ],
+        "layers": [
+          {
+            "id": "experience",
+            "heading": "USER EXPERIENCE",
+            "components": [
+              {
+                "id": "desktop-client",
+                "label": "Desktop client",
+                "detail": "retain current workflow",
+                "fill": "muted"
+              },
+              {
+                "id": "web-shell",
+                "label": "Web shell",
+                "detail": "future option",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "domain",
+            "heading": "DOMAIN SERVICES",
+            "components": [
+              {
+                "id": "journey-api",
+                "label": "Journey API",
+                "detail": "bounded service contract",
+                "fill": "accent",
+                "width_weight": 1.2
+              },
+              {
+                "id": "rules",
+                "label": "Business rules",
+                "detail": "owned by workflow",
+                "fill": "surface"
+              },
+              {
+                "id": "integration",
+                "label": "Integration adapter",
+                "detail": "legacy boundary",
+                "fill": "muted"
+              }
+            ]
+          },
+          {
+            "id": "data",
+            "heading": "DATA ACCESS",
+            "components": [
+              {
+                "id": "repository",
+                "label": "Repository",
+                "detail": "query and transaction seam",
+                "fill": "surface"
+              },
+              {
+                "id": "legacy-store",
+                "label": "Current store",
+                "detail": "retained pending migration evidence",
+                "fill": "muted",
+                "width_weight": 1.25
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "from": "desktop-client",
+            "to": "journey-api",
+            "relationship": "dependency"
+          },
+          {
+            "from": "journey-api",
+            "to": "repository",
+            "relationship": "dependency"
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    }
+  ]
+}

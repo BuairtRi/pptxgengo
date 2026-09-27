@@ -1,0 +1,220 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-expanded-team",
+      "family": "team",
+      "title": "Shared specialists connect two journey pods to release and service ownership",
+      "role": "Exercise six pods, multiple roles per pod, reporting lines and responsibility counts",
+      "takeaway": "The roster is synthetic and demonstrates component controls rather than staffing capacity.",
+      "style": {
+        "profile": "subtle",
+        "body_font_pt": 9.5,
+        "label_font_pt": 9
+      },
+      "content": {
+        "pods": [
+          {
+            "id": "sponsor",
+            "title": "SPONSORSHIP",
+            "roles": [
+              {
+                "id": "exec",
+                "label": "Executive sponsor",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "product-director",
+                "label": "Product director",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "architecture",
+            "title": "ARCHITECTURE",
+            "roles": [
+              {
+                "id": "architect",
+                "label": "Solution architect",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "security",
+                "label": "Security specialist",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "data-lead",
+                "label": "Data lead",
+                "staffing": "staffing.wm_part_time"
+              }
+            ]
+          },
+          {
+            "id": "journey-a",
+            "title": "JOURNEY POD A",
+            "roles": [
+              {
+                "id": "owner-a",
+                "label": "Product owner",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "analyst-a",
+                "label": "Workflow analyst",
+                "staffing": "staffing.wm_full_time"
+              },
+              {
+                "id": "engineer-a",
+                "label": "Application engineer",
+                "staffing": "staffing.wm_full_time"
+              }
+            ]
+          },
+          {
+            "id": "journey-b",
+            "title": "JOURNEY POD B",
+            "roles": [
+              {
+                "id": "owner-b",
+                "label": "Product owner",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "analyst-b",
+                "label": "Integration analyst",
+                "staffing": "staffing.wm_full_time"
+              },
+              {
+                "id": "engineer-b",
+                "label": "Integration engineer",
+                "staffing": "staffing.wm_full_time"
+              }
+            ]
+          },
+          {
+            "id": "quality",
+            "title": "QUALITY & RELEASE",
+            "roles": [
+              {
+                "id": "qa-lead",
+                "label": "Quality lead",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "release-lead",
+                "label": "Release owner",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "test-automation",
+                "label": "Automation engineer",
+                "staffing": "staffing.wm_part_time"
+              }
+            ]
+          },
+          {
+            "id": "operations",
+            "title": "SERVICE OPERATIONS",
+            "roles": [
+              {
+                "id": "service-owner",
+                "label": "Service owner",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "platform-ops",
+                "label": "Platform operations",
+                "staffing": "staffing.wm_part_time"
+              }
+            ]
+          }
+        ],
+        "reporting_lines": [
+          {
+            "from": "sponsor",
+            "to": "architecture",
+            "relationship": "reporting"
+          },
+          {
+            "from": "architecture",
+            "to": "journey-a",
+            "relationship": "dependency"
+          },
+          {
+            "from": "architecture",
+            "to": "journey-b",
+            "relationship": "dependency"
+          },
+          {
+            "from": "journey-a",
+            "to": "quality",
+            "relationship": "dependency"
+          },
+          {
+            "from": "quality",
+            "to": "operations",
+            "relationship": "reporting"
+          }
+        ],
+        "responsibilities": {
+          "columns": [
+            "Product",
+            "Architecture",
+            "Delivery",
+            "Operations"
+          ],
+          "rows": [
+            {
+              "label": "Journey outcomes",
+              "values": [
+                "A/R",
+                "C",
+                "C",
+                "I"
+              ]
+            },
+            {
+              "label": "Service boundary",
+              "values": [
+                "C",
+                "A/R",
+                "C",
+                "C"
+              ]
+            },
+            {
+              "label": "Acceptance evidence",
+              "values": [
+                "A",
+                "C",
+                "R",
+                "C"
+              ]
+            },
+            {
+              "label": "Release readiness",
+              "values": [
+                "C",
+                "C",
+                "R",
+                "A"
+              ]
+            },
+            {
+              "label": "Run ownership",
+              "values": [
+                "I",
+                "C",
+                "C",
+                "A/R"
+              ]
+            }
+          ]
+        }
+      },
+      "footer": "Illustrative example · R = Responsible; A = Accountable; C = Consulted; I = Informed"
+    }
+  ]
+}

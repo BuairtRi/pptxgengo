@@ -1,0 +1,98 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-long-role-copy",
+      "family": "team",
+      "title": "Long role labels and responsibility statements need native measurement before approval",
+      "role": "Exercise copy fit for a cross-functional delivery group",
+      "takeaway": "The sample uses synthetic roles and assignments; no real staffing commitment is implied.",
+      "content": {
+        "matrix_position": "bottom",
+        "pods": [
+          {
+            "id": "client-counterparts",
+            "title": "CLIENT COUNTERPARTS",
+            "roles": [
+              {
+                "id": "product-owner",
+                "label": "Business product owner responsible for priority and acceptance",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "service-owner",
+                "label": "Operations service owner responsible for support readiness",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "delivery-team",
+            "title": "ILLUSTRATIVE DELIVERY POD",
+            "roles": [
+              {
+                "id": "delivery-lead",
+                "label": "Delivery lead coordinating workflow, design and engineering decisions",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "engineer",
+                "label": "Application engineer validating a bounded workflow increment",
+                "staffing": "staffing.wm_full_time"
+              }
+            ]
+          }
+        ],
+        "reporting_lines": [
+          {
+            "from": "client-counterparts",
+            "to": "delivery-team",
+            "relationship": "reporting"
+          }
+        ],
+        "responsibilities": {
+          "columns": [
+            "Product",
+            "Engineering",
+            "Operations",
+            "Security",
+            "Quality"
+          ],
+          "rows": [
+            {
+              "label": "Define success and acceptance",
+              "values": [
+                "A/R",
+                "C",
+                "C",
+                "I",
+                "C"
+              ]
+            },
+            {
+              "label": "Select technical implementation",
+              "values": [
+                "C",
+                "A/R",
+                "C",
+                "C",
+                "C"
+              ]
+            },
+            {
+              "label": "Prepare measured release evidence",
+              "values": [
+                "C",
+                "R",
+                "C",
+                "C",
+                "A"
+              ]
+            }
+          ]
+        }
+      },
+      "footer": "Illustrative example · R = Responsible; A = Accountable; C = Consulted; I = Informed"
+    }
+  ]
+}

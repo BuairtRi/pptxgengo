@@ -1,0 +1,145 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-dense-architecture",
+      "family": "architecture",
+      "title": "A staged target model makes compatibility and ownership decisions visible",
+      "role": "Exercise more layers, unequal component widths and a larger cross-cut rail",
+      "takeaway": "Detailed service boundaries remain hypotheses until validated with workflow evidence.",
+      "style": {
+        "profile": "subtle",
+        "body_font_pt": 10,
+        "label_font_pt": 9
+      },
+      "content": {
+        "left_rail_title": "CROSS-CUTTING CONTROLS",
+        "left_rail": [
+          {
+            "label": "Security",
+            "detail": "identity, secrets, least privilege"
+          },
+          {
+            "label": "Operations",
+            "detail": "telemetry, alerting and support ownership"
+          },
+          {
+            "label": "Compatibility",
+            "detail": "versioned contracts and migration checks"
+          },
+          {
+            "label": "Delivery",
+            "detail": "small releases with rollback evidence"
+          }
+        ],
+        "layers": [
+          {
+            "id": "channels",
+            "heading": "CHANNELS",
+            "components": [
+              {
+                "id": "desktop",
+                "label": "Desktop workflow",
+                "detail": "existing client",
+                "fill": "muted"
+              },
+              {
+                "id": "browser",
+                "label": "Browser option",
+                "detail": "candidate experience",
+                "fill": "surface"
+              }
+            ]
+          },
+          {
+            "id": "edge",
+            "heading": "EDGE SERVICES",
+            "components": [
+              {
+                "id": "gateway",
+                "label": "API gateway",
+                "detail": "routing and policy",
+                "fill": "accent"
+              },
+              {
+                "id": "session",
+                "label": "Session adapter",
+                "detail": "identity boundary",
+                "fill": "surface"
+              },
+              {
+                "id": "compat",
+                "label": "Compatibility facade",
+                "detail": "coexistence contract",
+                "fill": "muted",
+                "width_weight": 1.4
+              }
+            ]
+          },
+          {
+            "id": "workflows",
+            "heading": "WORKFLOWS",
+            "components": [
+              {
+                "id": "scheduling",
+                "label": "Scheduling",
+                "detail": "candidate journey",
+                "fill": "active"
+              },
+              {
+                "id": "billing",
+                "label": "Billing",
+                "detail": "candidate journey",
+                "fill": "surface"
+              },
+              {
+                "id": "records",
+                "label": "Records",
+                "detail": "candidate journey",
+                "fill": "surface"
+              },
+              {
+                "id": "audit",
+                "label": "Audit events",
+                "detail": "cross-journey evidence",
+                "fill": "muted"
+              }
+            ]
+          },
+          {
+            "id": "platform",
+            "heading": "PLATFORM",
+            "components": [
+              {
+                "id": "sql",
+                "label": "Current SQL store",
+                "detail": "migration decision pending",
+                "fill": "muted",
+                "width_weight": 1.5
+              },
+              {
+                "id": "files",
+                "label": "Document store",
+                "detail": "retention needs review",
+                "fill": "surface"
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "from": "gateway",
+            "to": "scheduling",
+            "relationship": "dependency"
+          },
+          {
+            "from": "scheduling",
+            "to": "sql",
+            "relationship": "dependency"
+          }
+        ]
+      },
+      "footer": "Illustrative capability example"
+    }
+  ]
+}

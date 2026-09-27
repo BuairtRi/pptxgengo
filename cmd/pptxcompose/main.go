@@ -40,6 +40,7 @@ type nativeRect struct {
 type nativeRow struct {
 	Line struct {
 		DashStyle    string  `json:"dash_style,omitempty"`
+		Style        string  `json:"style,omitempty"`
 		Visible      bool    `json:"visible"`
 		RGB          []int   `json:"rgb"`
 		WidthPt      float64 `json:"width_pt"`
@@ -56,6 +57,7 @@ type nativeRow struct {
 	Margins   *struct{ Left, Right, Top, Bottom float64 } `json:"margins"`
 	Slide     int                                         `json:"slide_index"`
 	Name      string                                      `json:"shape_name"`
+	ShapeType string                                      `json:"shape_type,omitempty"`
 	Text      *string                                     `json:"text"`
 	Frame     nativeRect                                  `json:"shape_frame"`
 	Bounds    *nativeRect                                 `json:"text_bounds"`
@@ -271,6 +273,15 @@ func finalSlides(spec compose.Spec, p compose.PlanResult) []renderSlide {
 func finite(v float64) bool  { return !math.IsNaN(v) && !math.IsInf(v, 0) }
 func near(a, b float64) bool { return finite(a) && finite(b) && math.Abs(a-b) <= 0.12 }
 
+// PowerPoint exposes internal SVG strokes as a graphic's line format with a
+// mixed/unavailable width sentinel. The package validator must first prove
+// that this image has no outer <a:ln>; this does not make the raw line invisible.
+func nativeSVGGraphicLineSentinel(e element, r nativeRow) bool {
+	return e.Kind == "image" && strings.EqualFold(filepath.Ext(e.AssetPath), ".svg") &&
+		e.OutlineColor == "" && r.ShapeType == "shape type graphic" &&
+		r.Line.Visible && r.Line.Style == "single line" && r.Line.WidthPt == -2147483648
+}
+
 // Paragraph line spacing is a unitless multiplier reported by PowerPoint with
 // only floating-point representation noise. Keep this tighter than geometric
 // comparisons so materially different settings such as 0.9 and 1.0 cannot
@@ -308,7 +319,7 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 					return result, fmt.Errorf("unexpected image text %s", k)
 				}
 				if e.OutlineColor == "" {
-					if r.Line.Visible {
+					if r.Line.Visible && !nativeSVGGraphicLineSentinel(e, r) {
 						return result, fmt.Errorf("unexpected image outline %s", k)
 					}
 				} else if !r.Line.Visible || rgbHex(r.Line.RGB) != e.OutlineColor || !near(r.Line.WidthPt, e.OutlineWidthPt) || !finite(r.Line.Transparency) || math.Abs(r.Line.Transparency) > 1e-6 {
@@ -691,6 +702,9 @@ func run(args []string) error {
 				}
 				if pm.Schema != "pptxgengo.compose-bundle.v1" || pm.Plan != nil || ev.Schema != "pptxgengo.compose-evidence.v1" || ev.SpecSHA != pm.SpecSHA || (!*reuse && pm.SpecSHA != hash(raw)) || ev.ManifestSHA != hash(mb) || ev.DeckSHA != hash(db) || pm.DeckSHA != hash(db) || len(pm.Requests) == 0 {
 					return fmt.Errorf("stale or mismatched probe evidence")
+				}
+				if e = validateImageStructure(db, pm.Slides); e != nil {
+					return e
 				}
 				if !bytes.Equal(jsonBytes(pm.Requests), jsonBytes(requests)) {
 					return fmt.Errorf("probe requests do not match current spec")

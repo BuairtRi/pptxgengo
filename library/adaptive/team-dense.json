@@ -1,0 +1,215 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [
+    {
+      "id": "illustrative-multi-pod-team",
+      "family": "team",
+      "title": "Shared specialists connect platform decisions to journey delivery and support",
+      "role": "Exercise more pods, reporting relationships and a wider ownership matrix",
+      "takeaway": "The model assigns responsibilities while keeping staffing illustrative.",
+      "style": {
+        "profile": "subtle",
+        "body_font_pt": 10,
+        "label_font_pt": 9
+      },
+      "content": {
+        "pods": [
+          {
+            "id": "client-leadership",
+            "title": "CLIENT LEADERSHIP",
+            "roles": [
+              {
+                "id": "exec-sponsor",
+                "label": "Executive sponsor",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "product-director",
+                "label": "Product director",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "shared-architecture",
+            "title": "SHARED ARCHITECTURE",
+            "roles": [
+              {
+                "id": "architect",
+                "label": "Solution architect",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "security",
+                "label": "Security specialist",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "journey-one",
+            "title": "JOURNEY POD A",
+            "roles": [
+              {
+                "id": "product-owner-a",
+                "label": "Product owner",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "analyst-a",
+                "label": "Business analyst",
+                "staffing": "staffing.wm_full_time"
+              },
+              {
+                "id": "engineer-a",
+                "label": "Application engineer",
+                "staffing": "staffing.wm_full_time"
+              }
+            ]
+          },
+          {
+            "id": "journey-two",
+            "title": "JOURNEY POD B",
+            "roles": [
+              {
+                "id": "product-owner-b",
+                "label": "Product owner",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "analyst-b",
+                "label": "Business analyst",
+                "staffing": "staffing.wm_full_time"
+              },
+              {
+                "id": "engineer-b",
+                "label": "Integration engineer",
+                "staffing": "staffing.wm_full_time"
+              }
+            ]
+          },
+          {
+            "id": "quality-shared",
+            "title": "QUALITY & RELEASE",
+            "roles": [
+              {
+                "id": "qa",
+                "label": "Quality lead",
+                "staffing": "staffing.wm_part_time"
+              },
+              {
+                "id": "release-owner",
+                "label": "Release owner",
+                "staffing": "staffing.client_part_time"
+              }
+            ]
+          },
+          {
+            "id": "service-ops",
+            "title": "SERVICE OPERATIONS",
+            "roles": [
+              {
+                "id": "service-manager",
+                "label": "Service manager",
+                "staffing": "staffing.client_part_time"
+              },
+              {
+                "id": "platform-ops",
+                "label": "Platform operations",
+                "staffing": "staffing.wm_part_time"
+              }
+            ]
+          }
+        ],
+        "reporting_lines": [
+          {
+            "from": "client-leadership",
+            "to": "shared-architecture",
+            "relationship": "reporting"
+          },
+          {
+            "from": "shared-architecture",
+            "to": "journey-one",
+            "relationship": "reporting"
+          },
+          {
+            "from": "shared-architecture",
+            "to": "journey-two",
+            "relationship": "reporting"
+          },
+          {
+            "from": "journey-one",
+            "to": "quality-shared",
+            "relationship": "reporting"
+          },
+          {
+            "from": "journey-two",
+            "to": "quality-shared",
+            "relationship": "reporting"
+          },
+          {
+            "from": "quality-shared",
+            "to": "service-ops",
+            "relationship": "reporting"
+          }
+        ],
+        "responsibilities": {
+          "columns": [
+            "Product",
+            "Architecture",
+            "Delivery",
+            "Operations"
+          ],
+          "rows": [
+            {
+              "label": "Journey scope",
+              "values": [
+                "A/R",
+                "C",
+                "C",
+                "I"
+              ]
+            },
+            {
+              "label": "Service boundaries",
+              "values": [
+                "C",
+                "A/R",
+                "C",
+                "C"
+              ]
+            },
+            {
+              "label": "Acceptance evidence",
+              "values": [
+                "A",
+                "C",
+                "R",
+                "C"
+              ]
+            },
+            {
+              "label": "Release decision",
+              "values": [
+                "C",
+                "C",
+                "R",
+                "A"
+              ]
+            },
+            {
+              "label": "Run ownership",
+              "values": [
+                "I",
+                "C",
+                "C",
+                "A/R"
+              ]
+            }
+          ]
+        }
+      },
+      "footer": "Illustrative example · R = Responsible; A = Accountable; C = Consulted; I = Informed"
+    }
+  ]
+}

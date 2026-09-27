@@ -41,6 +41,10 @@ type CanvasSpec struct {
 	FocalY              *float64       `json:"focal_y,omitempty"`
 	Preset              string         `json:"preset,omitempty"`
 	Adjustments         map[string]int `json:"adjustments,omitempty"`
+	RotationDeg         float64        `json:"rotation_deg,omitempty"`
+	ArcStartDeg         float64        `json:"arc_start_deg,omitempty"`
+	ArcEndDeg           float64        `json:"arc_end_deg,omitempty"`
+	ArcThicknessRatio   float64        `json:"arc_thickness_ratio,omitempty"`
 	Pattern             *PatternSpec   `json:"pattern,omitempty"`
 	AllowOverlap        []string       `json:"allow_overlap,omitempty"`
 }
@@ -66,7 +70,7 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 		if !inside(c.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) {
 			return fmt.Errorf("canvas %s exceeds slide", c.ID)
 		}
-		if c.Kind != "shape" && (c.Preset != "" || len(c.Adjustments) != 0 || c.Pattern != nil) {
+		if c.Kind != "shape" && (c.Preset != "" || len(c.Adjustments) != 0 || c.Pattern != nil || c.RotationDeg != 0 || c.ArcStartDeg != 0 || c.ArcEndDeg != 0 || c.ArcThicknessRatio != 0) {
 			return fmt.Errorf("canvas %s shape fields require kind shape", c.ID)
 		}
 		switch c.Kind {

@@ -1,0 +1,34 @@
+{
+  "schema": "pptxgengo.adaptive-deck.v1",
+  "slides": [{
+    "id": "illustrative-architecture-inverse",
+    "family": "architecture",
+    "title": "A service boundary separates user workflows from the current data store",
+    "role": "Check architecture-cell foregrounds against inverse surfaces",
+    "takeaway": "A small verified boundary can create room to modernize in measured increments.",
+    "footer": "Illustrative capability example",
+    "style": {"profile": "inverse"},
+    "content": {
+      "left_rail_title": "OPERATING CONTROLS",
+      "left_rail": [
+        {"label": "Access", "detail": "identity and policy"},
+        {"label": "Telemetry", "detail": "health and traceability"}
+      ],
+      "layers": [
+        {"id": "client", "heading": "CLIENT", "components": [
+          {"id": "desktop", "label": "Desktop workflow", "fill": "accent"},
+          {"id": "browser", "label": "Browser option", "fill": "surface"}
+        ]},
+        {"id": "service", "heading": "SERVICES", "components": [
+          {"id": "journey-api", "label": "Journey API", "fill": "accent"},
+          {"id": "legacy-adapter", "label": "Legacy adapter", "fill": "surface"}
+        ]},
+        {"id": "store", "heading": "DATA", "components": [
+          {"id": "repository", "label": "Repository"},
+          {"id": "current-store", "label": "Current store", "fill": "muted"}
+        ]}
+      ],
+      "relations": [{"from": "desktop", "to": "journey-api", "relationship": "dependency"}]
+    }
+  }]
+}

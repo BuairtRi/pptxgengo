@@ -1,0 +1,20 @@
+# Adaptive visual review criteria
+
+Use these checks after native measurement and rendering. A fit report, absence of overflow, or containment within slide bounds is not sufficient for visual acceptance. Review every page at presentation size and record findings against the exact input, spec, deck, and render hashes.
+
+## Optical and semantic checks
+
+- **Markers and labels:** compare the visible centers of milestone stars, dots, or other markers with the centers of their captions. Verify the actual rendered alignment, not only that both objects lie within the same row or period span. Single-period captions should center on their marker. Explicit multi-period captions may use an edge-aligned frame when required; verify that the association with the marker remains clear and record that exception.
+- **Workstream-to-bar alignment:** the visible workstream label and its interval bar must share a vertical centerline. Check this across every row, including wrapped labels and rows with or without milestone captions. Captions occupy a separate area below that centerline; a full-row label must not be centered against the combined bar-plus-caption height. Native text fit cannot establish this relationship.
+- **Bars and intervals:** verify each interval begins and ends at its named period boundaries, remains continuous across included periods, and does not visually extend into adjacent periods. Confirm state fills or outlines remain distinguishable on alternating cells and inverse surfaces.
+- **Gauges:** check that displayed scale, actual value, and target range agree with the supplied numbers and unit. Confirm linear needle positions and dial needle angles track their supplied values, including minimum/maximum endpoints; verify the target band is positioned on that same scale. Ensure the scale/target labels and status legend are readable and explain the displayed colors.
+- **Connections:** check source and target connector anchors against the intended objects. Verify lines start and end on the correct sides, do not cross unrelated objects unnecessarily, and still point to the intended objects when endpoints are close or vertically ordered.
+- **Architecture labels and scope:** distinguish per-row layer labels from cross-cutting controls. A control panel that applies to all layers must say so and must not visually imply a one-to-one row mapping. Verify the actual layer labels and component rows share vertical centers.
+- **Repeated sections:** compare shared baselines across rows, panels, columns, and repeated cards. Titles, dividers, values, and output bands should align optically even when text wraps differently.
+- **Contrast and meaning:** review inverse and custom-color slides for readable text, labels, bars, markers, outlines, and legends. Confirm state colors and staffing tokens have an explicit legend and retain their intended meanings.
+- **Hand-drawn accents:** compare the artwork’s visible tail and tip (not just its image box) with the intended source and target, inspect both tangents, and judge clearance around the curve. Verify that the accent is legible, correctly oriented, and does not obscure content. A manual fallback must retain the actual asset and a specific visible placement note; it must not look like a completed automatic attachment.
+- **Density and edge clearance:** inspect tightest supported variants for neighboring labels that visually run together, captions near slide edges, collisions, clipped glyphs, and insufficient separation between repeated elements.
+
+## Evidence boundary
+
+Record each reviewed example by its exact source input, generated spec, deck, native verification, and render identities, together with controls and limitations. Review applies only to those exact examples and observed geometry/content. It does not qualify every permitted count, style, content combination, another source template, or arbitrary adaptation. Keep broader family qualification pending until its separately defined scope and all required review gates are satisfied.

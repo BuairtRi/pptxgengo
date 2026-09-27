@@ -1,6 +1,9 @@
 package compose
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // PatternSpec is the deliberately small editable DrawingML pattern vocabulary
 // qualified for roadmap extension tails.
@@ -12,7 +15,7 @@ type PatternSpec struct {
 
 func validateShape(c CanvasSpec) error {
 	switch c.Preset {
-	case "rect", "homePlate", "star5", "rightArrow":
+	case "rect", "homePlate", "star5", "rightArrow", "blockArc", "triangle":
 	default:
 		return fmt.Errorf("canvas shape %s has unsupported preset %q", c.ID, c.Preset)
 	}
@@ -40,6 +43,19 @@ func validateShape(c CanvasSpec) error {
 	}
 	if len(c.Adjustments) != 0 && c.Preset != "homePlate" && c.Preset != "rightArrow" {
 		return fmt.Errorf("canvas shape %s preset %s does not support adjustments", c.ID, c.Preset)
+	}
+	if math.IsNaN(c.RotationDeg) || math.IsInf(c.RotationDeg, 0) || c.RotationDeg < -180 || c.RotationDeg > 180 {
+		return fmt.Errorf("canvas shape %s rotation must be finite in [-180,180]", c.ID)
+	}
+	if c.Preset == "blockArc" {
+		if c.RotationDeg != 0 || math.IsNaN(c.ArcStartDeg) || math.IsNaN(c.ArcEndDeg) || math.IsNaN(c.ArcThicknessRatio) || math.IsInf(c.ArcStartDeg, 0) || math.IsInf(c.ArcEndDeg, 0) || math.IsInf(c.ArcThicknessRatio, 0) || c.ArcStartDeg < 0 || c.ArcEndDeg > 360 || c.ArcStartDeg >= c.ArcEndDeg || c.ArcThicknessRatio < .15 || c.ArcThicknessRatio > .7 {
+			return fmt.Errorf("canvas shape %s blockArc requires 0<=start<end<=360, thickness .15..0.70 and no rotation", c.ID)
+		}
+	} else if c.ArcStartDeg != 0 || c.ArcEndDeg != 0 || c.ArcThicknessRatio != 0 {
+		return fmt.Errorf("canvas shape %s arc fields require blockArc", c.ID)
+	}
+	if c.RotationDeg != 0 && c.Preset != "triangle" {
+		return fmt.Errorf("canvas shape %s rotation requires triangle", c.ID)
 	}
 	for name, value := range c.Adjustments {
 		if name != "adj" || value < 0 || value > 100000 {

@@ -15,11 +15,11 @@ var version = "dev"
 var tools = map[string]string{
 	"template": "pptxtemplate", "compose": "pptxcompose", "scene": "pptxscene",
 	"component": "pptxcomponent", "lib": "pptxlib", "anchor": "pptxanchor",
-	"diff": "pptxdiff",
+	"diff": "pptxdiff", "adapt": "pptxadapt",
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: pptxgengo <template|compose|scene|component|lib|anchor|diff> <command> [flags]")
+	fmt.Fprintln(os.Stderr, "usage: pptxgengo <template|compose|scene|component|lib|anchor|diff|adapt> <command> [flags]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--print|--open]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
@@ -107,7 +107,7 @@ func run() error {
 	}
 	path := filepath.Join(root, "bin", tool)
 	args := append([]string{}, os.Args[2:]...)
-	if (tool == "pptxtemplate" || tool == "pptxlib") && !hasRoot(args) && len(args) > 0 && !(tool == "pptxtemplate" && args[0] == "apply-accent") {
+	if (tool == "pptxtemplate" || tool == "pptxlib" || tool == "pptxadapt") && !hasRoot(args) && len(args) > 0 && !(tool == "pptxtemplate" && args[0] == "apply-accent") {
 		args = append(args, "--root", root)
 	}
 	cmd := exec.Command(path, args...)
