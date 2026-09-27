@@ -497,4 +497,24 @@ The follow-up PDF export timed out. A subsequent save command returned success
 but created no file; a file-existence check caught this before any visual proof
 was accepted. Later PowerPoint opens returned -9074. Preserve unsaved decks and
 require the actual PDF plus successful rasterization before reporting an export.
-Final Wave 2 follow-up visual QA is pending application/file-access recovery.
+The user granted repository file access, after which native export and rasterization
+succeeded. The exporter now rejects an existing destination and requires a PDF
+header, preventing stale or missing files from being accepted as new evidence.
+
+## QA90 — Native bullet metadata does not prove a visible glyph
+
+The v8b native inspector reported a visible 100% Arial `▪` bullet, but the PDF
+render showed no marker. Both primary and independent visual reviews rejected
+slide 1. Round `•` and dash `–` rendered visibly. The bounded compose contract now
+rejects the square glyph, and the fixture uses a round marker. A negative test
+prevents accidental reintroduction. Retain the initial render/review and native
+verification to demonstrate why metadata checks alone cannot approve a bullet.
+
+## QA91 — Reused explanatory copy referenced a slide absent from the deck
+
+The four-slide follow-up inherited a statement about a “following phase-detail
+page” from the eight-slide checkpoint. Visual/content review caught the stale
+cross-reference. The follow-up generator now describes the native picture-outline
+change instead. Reused components require narrative review as well as geometry QA.
+The corrected v2 render removes the stale reference and retains source thumbnail
+and caption positions.

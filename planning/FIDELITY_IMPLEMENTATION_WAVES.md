@@ -58,8 +58,8 @@ labels. Changing one text contract cannot reuse its old measurement.
 Checkpoint: eight bounded examples now pass native verification and independent
 visual review. See [the Wave 2 checkpoint](WAVE2_CHECKPOINT.md) for scope and proof.
 Native bullets, pinned SVG pictures and picture outlines are now implemented in
-the [follow-up](WAVE2_FOLLOWUP.md); its final native/visual gate is pending
-PowerPoint access recovery. Broader source-slide identity remains open; the
+the [follow-up](WAVE2_FOLLOWUP.md); four additional bounded fixtures passed
+native verification and primary/independent visual review. Broader source-slide identity remains open; the
 original full gate below is not yet closed.
 
 **References:** UHG 24/28 deliverable panels, UHG 38 phase bars/extensions,

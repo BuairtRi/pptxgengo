@@ -22,15 +22,15 @@ def record(path):
 def main():
     spec_path = LIBRARY / "followup-review.json"
     spec = read(spec_path)
-    bundle = LOCAL / "followup-review"
+    bundle = LOCAL / "followup-review-v2"
     manifest_path = bundle / "manifest.json"
     manifest = read(manifest_path)
     deck = bundle / manifest["deck_file"]
-    evidence_path = LOCAL / "verification.json"
+    evidence_path = LOCAL / "verification-v2.json"
     evidence = read(evidence_path)
-    fit_path = LOCAL / "fit.json"
+    fit_path = LOCAL / "fit-v2.json"
     fit = read(fit_path)
-    negative_path = LOCAL / "negative-fit.json"
+    negative_path = LOCAL / "negative-fit-v2.json"
     negative = read(negative_path)
     reviews_path = LOCAL / "visual-review.json"
     reviews = read(reviews_path)
@@ -42,10 +42,25 @@ def main():
     assert fit["spec_sha256"] == record(spec_path)["sha256"]
     assert not negative["planner_passed"] and negative["overflow_count"] > 0
     assert negative["spec_sha256"] == record(LIBRARY / "followup-negative.json")["sha256"]
+    negative_build = read(LOCAL / "negative-build-v2-check.json")
+    assert negative_build["rejected"] and not negative_build["output_created"]
+    assert not (LOCAL / "negative-build-v2").exists()
     assert [review["id"] for review in reviews] == [slide["id"] for slide in spec["slides"]]
     assert all(review["reviewed"] and review["accepted"] for review in reviews)
     for review in reviews:
         assert review["sha256"] == record(ROOT / review["artifact"])["sha256"]
+        assert review["primary_review"]["accepted"] and review["independent_review"]["accepted"]
+        assert review["independent_review"]["sha256"] == review["sha256"]
+    svg_selection = read(LOCAL / "svg-selection-check.json")
+    assert svg_selection["native_svg_primary_visible"]
+    assert svg_selection["sha256"] == record(ROOT / svg_selection["artifact"])["sha256"]
+    comparisons = {}
+    for kind in ("source", "bullet"):
+        comparison = read(LOCAL / f"{kind}-region-comparison-v2/comparison.json")
+        assert comparison["regions"], f"Missing {kind} comparison regions"
+        for role in ("source", "control"):
+            assert comparison[f"{role}_sha256"] == record(ROOT / comparison[f"{role}_render"])["sha256"]
+        comparisons[kind] = comparison
     native_rows = evidence["native"]["measurements"]
     rows = {(row["slide_index"], row["shape_name"]): row for row in native_rows}
     assert len(rows) == len(native_rows)
@@ -96,7 +111,9 @@ def main():
         "max_frame_delta_pt": max_frame, "max_text_bound_excursion_pt": max_overflow,
         "environment": evidence["environment"], "visual_review": reviews,
         "picture_layer_checks": picture_layer_checks,
-        "source_region_comparison": read(LOCAL / "source-region-comparison/comparison.json"),
+        "source_region_comparison": comparisons["source"],
+        "bullet_region_comparison": comparisons["bullet"],
+        "svg_selection_control": svg_selection,
         "adapter_regression": "Six-object historical smoke: all existing native fields exactly equal under v8",
         "code": [record(path) for path in sorted(
             list((ROOT / "cmd/pptxcompose").glob("*.go"))
@@ -107,10 +124,16 @@ def main():
                ROOT / "scripts/render-svg-preview.swift",
                ROOT / "scripts/build-wave2-response-spec.py",
                ROOT / "scripts/build-wave2-followup-spec.py",
-               ROOT / "scripts/build-wave2-people-spec.py"])],
+               ROOT / "scripts/build-wave2-people-spec.py",
+               ROOT / "scripts/export-powerpoint.applescript",
+               ROOT / "scripts/render-pdf.swift",
+               ROOT / "scripts/compare-wave2-regions.py",
+               ROOT / "scripts/build-svg-selection-control.go",
+               ROOT / "scripts/report-wave2-followup.py"])],
         "negative_case": {"overflow_count": negative["overflow_count"],
+                          "build_rejection": negative_build,
                           "failures": [zone for zone in negative["zones"] if not zone["fits"]]},
-        "limitations": ["Bullets limited to three glyphs; indentation structural, bullet glyph fit visually reviewed",
+        "limitations": ["Bullets limited to round and dash glyphs; indentation structural, bullet glyph fit visually reviewed",
                         "Source-derived component controls are not whole-slide pixel reconstructions",
                         "Native groups and tables are separate editable shapes in these fixtures",
                         "Native SVG fallback fidelity depends on explicitly reviewed pinned PNG assets",
@@ -118,9 +141,12 @@ def main():
                         "Rich-text recovery and automatic aesthetic layout selection remain unsupported"],
         "artifacts": [record(path) for path in [spec_path, deck, manifest_path, evidence_path,
                                                 fit_path, negative_path, reviews_path,
-                                                LOCAL / "source-region-comparison/comparison.json",
+                                                LOCAL / "negative-build-v2-check.json",
+                                                LOCAL / "source-region-comparison-v2/comparison.json",
+                                                LOCAL / "bullet-region-comparison-v2/comparison.json",
+                                                LOCAL / "svg-selection-check.json",
                                                 ROOT / "samples/visual-wave2/response-assets.json",
-                                                LOCAL / "followup-review.pdf"]],
+                                                LOCAL / "followup-review-v2.pdf"]],
     }
     (LIBRARY / "followup-proof.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({key: report[key] for key in ["slides", "objects", "text_objects", "rich_text_objects",

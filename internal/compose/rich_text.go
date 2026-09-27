@@ -88,8 +88,8 @@ func validateRichTextStructure(paragraphs []ParagraphSpec) error {
 			if p.Align != "left" {
 				return fmt.Errorf("paragraph %s bullets require left alignment", p.ID)
 			}
-			if p.Bullet.Character != "•" && p.Bullet.Character != "–" && p.Bullet.Character != "▪" {
-				return fmt.Errorf("paragraph %s bullet character must be one of •, –, or ▪", p.ID)
+			if p.Bullet.Character != "•" && p.Bullet.Character != "–" {
+				return fmt.Errorf("paragraph %s bullet character must be • or – (square bullets are not visually qualified)", p.ID)
 			}
 			if !finite(p.Bullet.MarginLeftPt) || p.Bullet.MarginLeftPt < 1 || p.Bullet.MarginLeftPt > 144 || !finite(p.Bullet.HangingPt) || p.Bullet.HangingPt < .75*p.Runs[0].FontSizePt || p.Bullet.HangingPt > p.Bullet.MarginLeftPt {
 				return fmt.Errorf("paragraph %s bullet margin must be in [1,144]pt and hanging indent at least 75%% of the first run font size and no greater than the margin", p.ID)

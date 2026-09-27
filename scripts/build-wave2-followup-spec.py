@@ -45,6 +45,10 @@ def main():
         if c['id'].startswith('source-pic-'):
             c.update(outline_color='#CED7E6', outline_width_pt=.75)
     deliverable['notes'] += ' Follow-up: pictures use native 0.75pt #CED7E6 outlines rather than four separate line objects.'
+    explanation = next(c for c in deliverable['canvas'] if c['id'] == 'control-notes')
+    explanation['paragraphs'][2]['runs'][0]['text'] = 'Native picture outlines'
+    explanation['paragraphs'][2]['runs'][1]['text'] = ' replace the four separate border lines used in the earlier checkpoint. The source thumbnails and captions retain their original positions.'
+
     manifest = json.loads((ROOT / 'samples/visual-wave2/response-assets.json').read_text())
     assets = manifest['items']
     for c in response['canvas']:
@@ -59,7 +63,7 @@ def main():
     base.update(id='native-rich-bullet-control', title='Native bullets preserve structure through wrapping',
                 role='SOURCE BULLET CONTROL AND CHANGED-CONTENT VARIANT',
                 takeaway='A hanging indent keeps continuation lines aligned with the text while emphasis remains editable.',
-                notes='Right: UHG67 industries panel source text, 12pt Arial, 23.04pt text margin and 22.5pt hanging indent, 3pt paragraph spacing. Heading 14pt with 6pt after. Panel geometry from layout 80; source has explicit Arial bullet font, this fixture follows Arial text font. Left: changed content with inline emphasis and three supported glyph variants. Not a whole-slide identity claim.')
+                notes='Right: UHG67 industries panel source text, 12pt Arial, 23.04pt text margin and 22.5pt hanging indent, 3pt paragraph spacing. Heading 14pt with 6pt after. Panel geometry from layout 80; source has explicit Arial bullet font, this fixture follows Arial text font. Left: changed content with inline emphasis and round and dash bullet variants. Not a whole-slide identity claim.')
     base['title_bounds']['width'] = 888
     base['canvas'] = [x for x in base['canvas'] if x['id'] in ['footer-band', 'wm-logo', 'footer-copy', 'page']]
     with zipfile.ZipFile(ROOT / 'samples/UHG Fabric Platforming RFP Response - July 2026.pptx') as z:
@@ -77,7 +81,7 @@ def main():
                  paragraph('variant-heading', [run('Proposed delivery responsibilities', 'text', True, size=14)], after=10),
                  paragraph('variant-1', [run('Establish evidence: ', 'lead', True), run('agree baseline measures, document their source and define how each measure informs a delivery decision.', 'body')], '•', after=9),
                  paragraph('variant-2', [run('Manage dependencies: ', 'lead', True, '#0047FF'), run('connect service ownership, access requirements and integration decisions before committing to the pilot sequence.', 'body')], '–', after=9),
-                 paragraph('variant-3', [run('Review and adapt: ', 'lead', True), run('carry inline emphasis across wrapped lines while keeping the bullet and continuation text on their declared columns.', 'body')], '▪', after=9),
+                 paragraph('variant-3', [run('Review and adapt: ', 'lead', True), run('carry inline emphasis across wrapped lines while keeping the bullet and continuation text on their declared columns.', 'body')], '•', after=9),
              ]),
         dict(id='source-label', kind='text', bounds=rect(635.951, 300, 272.424, 42), text='UHG67 source industries panel\nExact copy and indent geometry', font_face='Arial', font_size_pt=10, foreground='#50658E', align='left', valign='top'),
         dict(id='fixture-note', kind='text', bounds=rect(36, 398, 870, 55), text='The left panel is illustrative proposed content. The right panel reproduces a source component for typography comparison. Bullets and inline emphasis are native editable text; unsupported numbering and custom bullet fonts are rejected.', font_face='Arial', font_size_pt=11, foreground='#070154', align='left', valign='top'),

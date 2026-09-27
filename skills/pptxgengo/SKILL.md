@@ -23,7 +23,7 @@ not move related shapes as a group.
 
 For mixed typography, image crops, and roadmap presets, read
 `library/visual-components/README.md` and its qualification checkpoint. These are
-bounded Wave 2 features: Arial paragraphs/runs and three native bullet glyphs,
+bounded Wave 2 features: Arial paragraphs/runs and two native bullet glyphs,
 pinned PNG/JPEG or static SVG with a pinned PNG fallback, picture outlines, and
 four editable shape presets. Read the follow-up qualification status before
 promoting new variants. Rich-text recovery is not supported.

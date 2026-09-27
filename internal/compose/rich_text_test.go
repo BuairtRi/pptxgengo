@@ -74,7 +74,7 @@ func TestRichBulletValidationAndProbeIsolation(t *testing.T) {
 	if err := validateRichTextStructure(p); err != nil {
 		t.Fatal(err)
 	}
-	for _, character := range []string{"•", "–", "▪"} {
+	for _, character := range []string{"•", "–"} {
 		candidate := richParagraphFixture()
 		candidate[0].Bullet = &BulletSpec{Character: character, MarginLeftPt: 12, HangingPt: 9}
 		if err := validateRichTextStructure(candidate); err != nil {
@@ -92,6 +92,7 @@ func TestRichBulletValidationAndProbeIsolation(t *testing.T) {
 		t.Fatal("probe result aliases source bullet")
 	}
 	invalid := []BulletSpec{
+		{Character: "▪", MarginLeftPt: 23.04, HangingPt: 22.5},
 		{Character: "*", MarginLeftPt: 12, HangingPt: 9},
 		{Character: "••", MarginLeftPt: 12, HangingPt: 9},
 		{Character: "•", MarginLeftPt: 0, HangingPt: 0},

@@ -79,7 +79,7 @@ legacy uniform `text` schema remains supported; one element cannot mix legacy
 text fields with `paragraphs`.
 
 An optional paragraph `bullet` emits one editable native character bullet.
-Supported characters are `•`, `–`, and `▪`. Bulleted paragraphs require left
+Supported characters are `•` and `–`. Bulleted paragraphs require left
 alignment and a text margin from 1pt through 144pt. The hanging indent must be
 no greater than that margin and at least 75% of the first run's font size,
 reserving bounded room for the marker. The bullet is 100% of the paragraph text
@@ -172,7 +172,7 @@ git diff --check
 ## Explicit limits
 
 - Rich runs support Arial only. Other font families fail validation.
-- Bullets are unnumbered, use one of three supported Arial characters, and have
+- Bullets are unnumbered, use one of two supported Arial characters, and have
   one explicit margin/hanging level. Numbering, nested list levels, separate
   bullet fonts/colors/sizes, tabs, and right/center aligned bullets are outside
   this contract.

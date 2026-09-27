@@ -19,13 +19,19 @@ def main():
     parser.add_argument("render_dir", type=Path)
     parser.add_argument("out", type=Path)
     parser.add_argument("--spec", type=Path, default=ROOT / "library/visual-components/review.json")
+    parser.add_argument("--component", choices=["deliverables", "bullets"], default="deliverables")
     args = parser.parse_args()
     if args.out.exists():
         parser.error("output must be a new directory")
     spec = json.loads(args.spec.read_text())
     fixtures = {slide["id"]: (i + 1, slide) for i, slide in enumerate(spec["slides"])}
-    page, control = fixtures["source-deliverable-panel"]
-    source_path = ROOT / "samples/reconstruction/reference/png/slide-028.png"
+    fixture_id, source_number, prefixes = (
+        ("source-deliverable-panel", 28, ("source-pic-", "source-caption-"))
+        if args.component == "deliverables" else
+        ("native-rich-bullet-control", 67, ("source-panel",))
+    )
+    page, control = fixtures[fixture_id]
+    source_path = ROOT / f"samples/reconstruction/reference/png/slide-{source_number:03d}.png"
     target_path = args.render_dir / f"slide-{page:03d}.png"
     source = Image.open(source_path).convert("RGB")
     target = Image.open(target_path).convert("RGB")
@@ -34,7 +40,7 @@ def main():
     args.out.mkdir(parents=True)
     rows = []
     for item in control["canvas"]:
-        if not item["id"].startswith(("source-pic-", "source-caption-")):
+        if not item["id"].startswith(prefixes):
             continue
         b = item["bounds"]
         # Rounded crop edges include no extra region outside the declared frame.
@@ -56,7 +62,7 @@ def main():
                      "mean_absolute_rgb_error_0_255": sum(stats.mean) / 3,
                      "maximum_channel_error": max(high for _, high in stats.extrema)})
     report = {"schema": "pptxgengo.wave2-region-comparison.v1",
-              "scope": "UHG28 original geometry control, overlapping artwork included; no global pixel-fidelity claim",
+              "scope": f"UHG{source_number} {args.component} source component control; no global pixel-fidelity claim",
               "source_render": str(source_path.relative_to(ROOT)), "source_sha256": sha(source_path),
               "control_render": str(target_path), "control_sha256": sha(target_path),
               "regions": rows}

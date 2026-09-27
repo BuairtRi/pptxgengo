@@ -38,7 +38,7 @@ every run/paragraph property bind the native measurement cache.
 
 Mixed formatting is supported on canvas text and layout blocks. Native bullet
 paragraphs support `bullet: {character: "•", margin_left_pt: 23.04, hanging_pt: 22.5}`
-with glyphs `•`, `–`, and `▪`, left alignment and first-run Arial/color at 100% size.
+with glyphs `•` and `–`, left alignment and first-run Arial/color at 100% size.
 Hanging indentation must reserve at least 0.75 times the first-run point size.
 Numbering and custom bullet fonts are unsupported. Indentation is structurally
 verified; native character bounds exclude the bullet glyph, so visual review is

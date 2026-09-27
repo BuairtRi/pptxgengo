@@ -14,11 +14,11 @@ Both reference slides are from `UHG Fabric Platforming RFP Response - July 2026.
 
 ## Smallest API additions
 
-Current `ContainerSpec`/`CellSpec` grids already support nesting, padding, weighted/fixed tracks, row rules, and measured text-fit reporting. Layout lowering resolves parent-relative geometry, but does not expose stable resolved anchors for containers/cells. Current connections target only root roles or whole pods, accept only the `reporting` relationship, and use orthogonal line routes. Canvas lines are straight horizontal/vertical rules; no editable arrow preset or arrowhead is emitted.
+Current `ContainerSpec`/`CellSpec` grids already support nesting, padding, weighted/fixed tracks, row rules, and measured text-fit reporting. Layout lowering resolves parent-relative geometry, but does not expose stable resolved anchors for containers/cells. Current connections target only root roles or whole pods, accept only the `reporting` relationship, and use orthogonal line routes. Canvas lines are straight horizontal/vertical rules. Wave 2 already emits editable `rightArrow` preset shapes with bounded adjustments; reuse that renderer. The missing capability is resolving a flow relationship into positioned arrow geometry between layout ports, not adding another arrow preset.
 
 Add only the following for this slice:
 
-1. **Resolved layout ports.** Give a container and cell stable IDs plus named edge ports (`left`, `right`, `top`, `bottom`, optionally centered). Resolve these after measured layout and parent translation; report their final slide-space coordinates in the plan/fit evidence. Reject unknown targets and ports.
+1. **Resolved layout ports.** Use the existing stable container/cell IDs and add named edge ports (`left`, `right`, `top`, `bottom`, optionally centered). Resolve these after measured layout and parent translation; report their final slide-space coordinates in the plan/fit evidence. Reject unknown targets and ports.
 2. **Direct flow connectors.** Add a typed `flow` connector that can target those ports, with native editable right-arrow geometry. First-slice routing is direct edge-to-edge within a declared inter-node gap; it must fail clearly when the gap cannot hold the declared arrow/margins. Keep general obstacle routing, curves, and SVG-like hand-drawn paths out of scope.
 3. **Path row primitive.** A path is an ordered node list plus explicit inter-node connectors, contained by a parent panel. Node count and content may vary; geometry is resolved from measured node widths/gaps and returns per-node fit evidence. Parent translation moves nodes and connectors together.
 
