@@ -66,8 +66,8 @@ does not specify.
 There are two materially different paths today:
 
 - The T045 source-bound comparison template retains its five native semicircular
-  gauges and offers a separate gauge customization operation when that operation
-  appears in the installed template help. Per gauge, it accepts a list of
+  gauges and offers a separate `pptxgengo template apply-gauge` operation. Per
+  gauge, it accepts a list of
   highlighted cells and a pointer cell. By default, one highlighted cell also
   selects the pointer cell; an explicit `pointer_cell` can place the pointer
   elsewhere. Highlight color can be gray, navy, blue, or pink; the five cells and

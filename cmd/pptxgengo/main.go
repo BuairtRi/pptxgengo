@@ -20,7 +20,7 @@ var tools = map[string]string{
 
 func usage() {
 	fmt.Fprintln(os.Stderr, "usage: pptxgengo <template|compose|scene|component|lib|anchor|diff|adapt> <command> [flags]")
-	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--print|--open]")
+	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--components] [--print|--open]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
 }
@@ -65,30 +65,55 @@ func run() error {
 		return err
 	}
 	if name == "catalog" {
-		path := filepath.Join(root, "catalog", "index.html")
+		page := "index.html"
+		open := false
+		seenPage := false
+		seenAction := false
+		for _, arg := range os.Args[2:] {
+			switch arg {
+			case "--templates", "--components":
+				if seenPage {
+					return fmt.Errorf("choose one catalog gallery")
+				}
+				seenPage = true
+				if arg == "--templates" {
+					page = "templates.html"
+				} else {
+					page = "components.html"
+				}
+			case "--open", "--print":
+				if seenAction {
+					return fmt.Errorf("choose --open or --print")
+				}
+				seenAction = true
+				open = arg == "--open"
+			default:
+				return fmt.Errorf("usage: pptxgengo catalog [--templates|--components] [--print|--open]")
+			}
+		}
+		path := filepath.Join(root, "catalog", page)
 		if _, err := os.Stat(path); err != nil {
 			return fmt.Errorf("catalog unavailable: %w", err)
 		}
-		if len(os.Args) == 2 || (len(os.Args) == 3 && os.Args[2] == "--print") {
+		if !open {
 			fmt.Println(path)
 			return nil
 		}
-		if len(os.Args) == 3 && os.Args[2] == "--open" {
-			cmd := exec.Command("open", path)
-			return cmd.Run()
-		}
-		return fmt.Errorf("usage: pptxgengo catalog [--print|--open]")
+		cmd := exec.Command("open", path)
+		return cmd.Run()
 	}
 	if name == "paths" {
 		if len(os.Args) != 2 {
 			return fmt.Errorf("usage: pptxgengo paths")
 		}
 		paths := map[string]string{
-			"root":    root,
-			"library": filepath.Join(root, "library"),
-			"scripts": filepath.Join(root, "scripts"),
-			"catalog": filepath.Join(root, "catalog", "index.html"),
-			"skill":   filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
+			"root":               root,
+			"library":            filepath.Join(root, "library"),
+			"scripts":            filepath.Join(root, "scripts"),
+			"catalog":            filepath.Join(root, "catalog", "index.html"),
+			"catalog_templates":  filepath.Join(root, "catalog", "templates.html"),
+			"catalog_components": filepath.Join(root, "catalog", "components.html"),
+			"skill":              filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
 		}
 		return json.NewEncoder(os.Stdout).Encode(paths)
 	}

@@ -34,9 +34,40 @@ Every canvas ID must be unique, and text frames must remain within slide bounds.
 
 ```sh
 pptxgengo paths
+pptxgengo catalog --components
+pptxgengo catalog --components --print
 ```
 
-Use the returned `root` as the base for `library/` resources and `scripts/`; route output does not require knowledge of the frozen release directory. Packaged recipes include:
+Open the component gallery to browse previews and source provenance; use
+`--print` when you need the gallery's installed path. `paths` returns
+`catalog_templates` and `catalog_components` as well as the installed `root`,
+`library`, and `scripts`. Use `root` as the base for packaged resources; do not
+depend on a particular frozen release directory. The gallery distinguishes
+fixed-source groups from new-slide composition patterns. A visual-only source
+group is a reference to the source artwork, not an executable component.
+
+The supported new-slide paths fall into five semantic families through `adapt`
+and the following bounded component recipe areas through `compose`:
+
+- Adaptive family specs cover roadmaps, architecture, processes, teams, and
+  comparisons. They create new semantic compositions; they do not structurally
+  adapt every source template classified with the same category hint.
+- `library/dynamic-components/` provides variable role pods and team structures,
+  numbered and metric cards, and explicitly positioned canvas primitives.
+- `library/layout-components/controls.json` contains measured grid and panel
+  patterns, including phase, phase-detail, and workflow-matrix examples.
+- `library/diagram-components/` describes bounded diagram/artwork-arrow cases;
+  some arrow placement remains manual and must be explicitly authored.
+- `library/showcase/dense-deck.json` is an exact-copy, visually reviewed set of
+  five dense proposal specimens. It is a reviewed example set, not a reusable
+  generic template contract.
+
+Use each area's README/schema and the current component gallery to confirm
+which operation is executable and what evidence/qualification exists. Do not
+assume a catalog grouping shares one schema, or that a reviewed specimen
+qualifies changed copy.
+
+Additional packaged recipes include:
 
 - `library/dynamic-components/pods.json` and `team.json`: variable role pods and team structures.
 - `library/dynamic-components/cards.json` and `cards.md`: a working two-slide compose spec with three numbered rows and three illustrative metric cards. It uses Arial, fixed 960 × 540 point slides, `surface.light`, explicit `#0047FF` side rules, editable text blocks, and measured fixed slots. Metric values are explicitly sample values, not client results.

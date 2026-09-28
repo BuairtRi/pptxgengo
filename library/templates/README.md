@@ -28,6 +28,20 @@ It does **not** turn every inspected slide into an executable template.
 A family's categories/altitudes/densities preserve the observed uses of its members.
 A color or text change does not create another template.
 
+## Installed release discovery
+
+Use `pptxgengo catalog --templates --open`, `pptxgengo template list`, and
+`pptxgengo template inspect --id TEMPLATE_ID` for the frozen executable library.
+`pptxgengo catalog --components --open` shows source groups and supported new
+composition routes. `pptxgengo paths` locates their packaged resources. The
+historical census and family counts below are discovery metadata, not additional
+executable templates.
+
+## Repository maintenance only
+
+The following regeneration commands require the source checkout and its local
+inspection artifacts; they are not installed authoring commands.
+
 Compile only after workers have completed their records:
 
 ```sh
@@ -74,9 +88,10 @@ current session because the computer-use browser connection was unavailable.
 
 ## Changed-content review workflow
 
-Use [`pptxtemplate`](../../cmd/pptxtemplate/README.md) to inspect a contract and
-build a source-preserving review bundle from illustrative or custom values.
-See the [rollout checkpoint](../../planning/TEMPLATE_ROLLOUT_CHECKPOINT.md) for
-latest artifacts, support boundaries, corrected QA failures and remaining work.
-The local source/adaptation gallery is
-`samples/template-expansion/rollout/gallery-v2/index.html`.
+Use `pptxgengo template inspect --id TEMPLATE_ID` and `pptxgengo template
+build-review --id TEMPLATE_ID --values /absolute/path/values.json --out
+/absolute/path/new-review` to inspect a contract and build a source-preserving
+review bundle. The installed skill's template-authoring reference describes the
+native fit/render review. The current galleries are exposed by `pptxgengo
+catalog`; historical source-checkout gallery paths above are not the release
+entry points.

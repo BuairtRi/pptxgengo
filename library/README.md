@@ -1,5 +1,13 @@
 # Presentation library — expanded component checkpoint
 
+> Historical inventory checkpoint (2026-09-26). For the current installed
+> executable library, use `pptxgengo catalog --templates --open` and
+> `pptxgengo catalog --components --open`. The release now contains 101 template
+> contracts and 124 editable source component occurrences. Source-checkout
+> regeneration commands and development links below require the repository;
+> use the packaged Codex skill for installed authoring instructions.
+
+
 2026-09-26. The catalog retains all **369 source slides**. Reviewed layout
 families reduce classification to **306 work units**, avoiding 63 repeated
 classifications. This is not the final unique-layout count or an approved

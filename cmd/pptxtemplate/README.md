@@ -166,8 +166,10 @@ go run ./cmd/pptxtemplate build-review --ids t066-ai-accelerator-002,t077-uhg-00
 ```
 
 `values --source-values` emits exact native run content. It preserves whitespace,
-existing tabs and embedded line breaks. Replacements retain the source control
-sequence and run cardinality; they are not measured capacity claims. Download
+existing tabs and embedded line breaks. Replacements retain run cardinality. Within a run they can use plain text
+without tabs/line breaks, or preserve the original control sequence; new or
+reordered controls are rejected. Removing line breaks changes visual wrapping
+and still requires native fit review. These are not measured capacity claims. Download
 original values from the requested-layout gallery, edit only intended fields,
 and supply them with `--values` for a single template.
 

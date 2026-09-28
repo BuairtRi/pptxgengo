@@ -4,28 +4,34 @@ Use this route when a source slide's retained structure and fixed layout already
 
 ## Locate and inspect
 
-Start by resolving packaged paths, list the available source contracts, and inspect a likely match:
+Open the packaged template gallery, choose an exact source layout, then inspect its contract and controls:
 
 ```sh
 pptxgengo paths
-pptxgengo template list
+pptxgengo catalog --templates
 pptxgengo template inspect --id t053-graphics-and-layouts-049
+pptxgengo template components --id t053-graphics-and-layouts-049
 ```
 
-`paths` returns JSON fields `root`, `library`, `scripts`, `catalog`, and `skill`. The inspected contract and values are under `library/templates/rollout/<lane>/<id>/` beneath that root. `inspect` reports slot names, each slot's ordered source binding IDs, profiles, and source identity. Choose based on purpose and geometry, not only visual resemblance.
+`paths` returns JSON keys `root`, `library`, `scripts`, `catalog`,
+`catalog_templates`, `catalog_components`, and `skill`. Open a gallery with
+`pptxgengo catalog --templates` or `pptxgengo catalog --components`; add
+`--open` to open it or `--print` to print its packaged path. The current package
+catalog contains 101 source contracts, 124 executable source component groups,
+8 visual-only groups, and 132 component occurrences. Occurrences are repeated
+uses, not unique designs; totals can change with package releases. The inspected
+contract and values are under `library/templates/rollout/<lane>/<id>/` beneath
+the installed root. `inspect` reports slot names, each slot's ordered source
+binding IDs, profiles, and source identity. `components --id` reports grouped
+controls for that source slide. A listed group may be visual-only; use its
+contract to confirm executable status, exact bindings, and bounds. Choose based
+on purpose and geometry, not only visual resemblance.
 
 To retrieve baseline values, use `pptxgengo template values --id ID` for the
 registered illustrative example, or add `--source-values` for the original
 source-run contents. `build-review --ids ID1,ID2 --source-values` creates a
 source-content reference bundle for selected contracts. That bundle is useful
 for preserving and comparing the original design; it is not custom client copy.
-
-In source checkouts that expose the `components` subcommand, inspect grouped
-source controls with `pptxgengo template components --id ID`. This reports the
-groups, roles, and profiles associated with that slide; it does not mean every
-group is independently editable. Confirm exact bindings and executable scope
-in that ID's contract. This command is a newer source-checkout feature and may
-not exist in frozen installed releases.
 
 To inspect the record's exact editable field count and illustrative values, open `contract.json` and `example-values.json` from the reported package path. The values shape is:
 

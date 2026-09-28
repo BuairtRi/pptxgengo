@@ -2,9 +2,9 @@
 
 ## Availability and route choice
 
-This route is in development after 0.1.0-local.3. Check `pptxgengo --help` before
-using it; the frozen .3 installation does not have `adapt`. Do not replace the
-user's installed release merely to access a development command.
+The stable 0.1.0-local.4 release includes this installed `adapt` route. Use
+`pptxgengo --help` and `pptxgengo adapt --help` for the syntax exposed by the
+active package; do not use repository-local Go commands as a runtime fallback.
 
 Use `adapt` when counts, relationships, or semantic states should drive new
 editable geometry. Use `template` for the existing source-bound text/style
@@ -67,16 +67,10 @@ bundle and continue using its old evidence.
 
 ## Compile and review
 
-On a release whose help lists `adapt`:
+Compile a new semantic slide bundle:
 
 ```sh
 pptxgengo adapt compile --spec /path/to/content.json --out /path/to/new-compilation
-```
-
-For repository development before such a release, run from the repository root:
-
-```sh
-go run ./cmd/pptxadapt compile --spec /path/to/content.json --out /path/to/new-compilation
 ```
 
 The new bundle contains the semantic input, generated `spec.json`, resolved

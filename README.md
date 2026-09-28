@@ -12,6 +12,11 @@ The full product remains under development.**
 The first target is detailed West Monroe proposal and
 document-style decks.
 
+Local release **0.1.0-local.4** includes 101 source-template contracts and separate
+searchable template/component galleries. Open them with `pptxgengo catalog
+--templates --open` and `pptxgengo catalog --components --open`. Gallery entries
+state the supported controls and distinguish source editing from new composition.
+
 - [Local CLI release and Codex installation](release/README.md)
 - [West Monroe authoring skill with progressive references](skills/west-monroe-presentations/SKILL.md)
 - [Current capabilities and verified baseline](CAPABILITIES.md)
@@ -21,7 +26,7 @@ document-style decks.
 - [Searchable library checkpoint, deduplication decisions and commands](library/README.md)
 - [Measured roles, pods, teams, cards and canvas composition](library/dynamic-components/README.md)
 - [Capability review deck and reproducible spec](library/showcase/README.md)
-- [65-template implementation and native review workflow](cmd/pptxtemplate/README.md)
+- [101-template implementation and native review workflow](cmd/pptxtemplate/README.md)
 - [Agent skill pack](skills/pptxgengo/SKILL.md)
 - [Source corpus and inventory policy](planning/README.md)
 - [UHG reconstruction results, native placement experiments, and QA evidence](planning/RECONSTRUCTION_CHECKPOINT.md)

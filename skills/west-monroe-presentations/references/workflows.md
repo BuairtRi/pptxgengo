@@ -1,6 +1,6 @@
 # Workflow routes and current boundaries
 
-Use the `pptxgengo` dispatcher shipped with the skill/package. Syntax is versioned; inspect `pptxgengo --help`, the selected route's help, and `pptxgengo catalog` before relying on a flag or assuming a resource path. The package version is frozen by the installer; do not hardcode its release directory into task artifacts. `pptxgengo paths` returns JSON with the absolute installed `root`, `library`, `scripts`, `catalog`, and `skill` locations. The individual route binaries are implementation details, not required global commands.
+Use the `pptxgengo` dispatcher shipped with the skill/package. Syntax is versioned; inspect `pptxgengo --help`, the selected route's help, and the current catalog before relying on a flag or assuming a resource path. `pptxgengo catalog --templates` and `--components` print the corresponding gallery path; add `--open` to display that gallery. `pptxgengo paths` returns JSON with the absolute installed `root`, `library`, `scripts`, catalog landing/templates/components pages, and `skill` locations. Do not hardcode the frozen release directory into task artifacts. The individual route binaries are implementation details, not required global commands.
 
 ## Template review (`template`)
 

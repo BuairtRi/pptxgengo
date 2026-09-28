@@ -42,7 +42,9 @@ The original text, typography, image crops, native groups, geometry and master
 resources remain the default. Source values retain names, claims, metrics,
 testimonials and source typos, which an author must review when repurposing a
 slide. Existing line breaks and tabs now survive source-bound editing. A changed
-run must preserve its control sequence and rich-run cardinality.
+run must preserve rich-run cardinality. It may use plain text without controls
+or retain the original tab/line-break sequence; it cannot add or reorder those
+controls. Preserve source breaks by default and review changed wrapping natively.
 
 ## Original gauge customization
 

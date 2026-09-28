@@ -10,21 +10,21 @@ Use the installed `pptxgengo` command. Do not assume repository-local Go binarie
 Choose the narrowest route:
 
 - `pptxgengo template` to adapt supported text/style bindings in an available source-bound template contract and produce a review deck.
-- `pptxgengo adapt`, when listed by the installed CLI, to generate editable roadmap, architecture, process, team, or comparison compositions from semantic content and variable counts. Read the [adaptive family reference](references/adaptive-authoring.md) only for this route.
+- `pptxgengo adapt` to generate editable roadmap, architecture, process, team, or comparison compositions from semantic content and variable counts. Read the [adaptive family reference](references/adaptive-authoring.md) only for this route.
 - `pptxgengo compose` to author new editable slides from supported components, saved library contracts, or explicit composition specs. This supports genuinely new slides assembled from native editable components; it is bounded composition, not an unrestricted slide designer.
 - `pptxgengo scene` to extract and rebuild source slides while preserving supported native structure/resources.
 - `pptxgengo component` to inspect and apply reviewed source-bound text/color contracts in an extracted scene.
 - `pptxgengo lib` to find, inspect, preview, instantiate, or assemble saved semantic library contracts. Qualification state matters; candidates are not approved templates.
 - `pptxgengo anchor` to calculate measured placement for supported phrase accents. It emits placement data and does not independently author slide content.
 - `pptxgengo diff` to compare two same-sized rendered PNGs; it writes a pixel-difference report and overlay, not a structural PPTX diff.
-- Use `pptxgengo catalog` to inspect available packaged resources; `--open` and `--print` can expose package paths/content as supported.
+- Use `pptxgengo catalog --templates` or `pptxgengo catalog --components` to print the matching packaged gallery path; add `--open` to open it. `pptxgengo paths` reports the installed gallery/resource paths.
 
 If needed, consult `pptxgengo --help` and `pptxgengo <route> --help` for installed syntax. Read only the relevant route reference:
 
 - [Workflow routes and limits](references/workflows.md)
 - [Fixed-source template authoring](references/template-authoring.md)
 - [Component and template customization](references/component-customization.md), when a request includes palette, gauge, or accent choices
-- [New slide composition](references/compose-authoring.md)
+- [New slide composition](references/compose-authoring.md), when selecting between supported editable recipes
 - [West Monroe content and narrative guidance](references/content.md)
 - [Component composition and visual review](references/composition-and-review.md)
 

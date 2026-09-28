@@ -510,8 +510,9 @@ func Run(args []string, stdout io.Writer) error {
 }
 
 // Source runs may contain whitespace, tabs or embedded line breaks. Retaining
-// them verbatim is valid; replacements must retain their control sequence so
-// this fixed-layout operation cannot silently introduce/remove line structure.
+// them verbatim is valid. A replacement may use a single plain-text run (as
+// historical reviewed examples do), or preserve the source control sequence.
+// It cannot introduce new control characters or a different line/tab sequence.
 func validateSourceRun(value, source string) error {
 	if strings.HasPrefix(value, "__BINDING:") {
 		return fmt.Errorf("reserved sentinel text")
@@ -542,8 +543,8 @@ func validateSourceRun(value, source string) error {
 	if err != nil {
 		return err
 	}
-	if got != want {
-		return fmt.Errorf("replacement must preserve source tab/line-break sequence; use existing paragraph segments")
+	if got != "" && got != want {
+		return fmt.Errorf("replacement must use plain text or preserve source tab/line-break sequence; use existing paragraph segments")
 	}
 	return nil
 }

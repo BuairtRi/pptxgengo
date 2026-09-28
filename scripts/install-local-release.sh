@@ -1,40 +1,56 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-version=0.1.0-local.3
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+version="$(cat "$repo_root/release/VERSION")"
+if [[ ! "$version" =~ ^0\.1\.0-local\.[0-9]+$ ]]; then
+  echo "invalid release/VERSION: $version" >&2
+  exit 1
+fi
 release_parent="${HOME}/.local/share/pptxgengo/releases"
 release_dir="${release_parent}/${version}"
 launcher="${HOME}/.local/bin/pptxgengo"
 skill_link="${HOME}/.codex/skills/west-monroe-presentations"
+stage_only=false
+if [[ $# -gt 0 ]]; then
+  if [[ $# -ne 2 || "$1" != "--stage-only" ]]; then
+    echo "usage: scripts/install-local-release.sh [--stage-only NEW_DIRECTORY]" >&2
+    exit 1
+  fi
+  stage_only=true
+  release_dir="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$2")"
+  release_parent="$(dirname "$release_dir")"
+fi
 
-if [[ -e "$release_dir" ]]; then
+if [[ -e "$release_dir" || -L "$release_dir" ]]; then
   echo "release already exists: $release_dir" >&2
   exit 1
 fi
-if [[ -e "$launcher" && ! -L "$launcher" ]]; then
+if [[ "$stage_only" == false && -e "$launcher" && ! -L "$launcher" ]]; then
   echo "launcher exists and is not a symlink: $launcher" >&2
   exit 1
 fi
-if [[ -e "$skill_link" && ! -L "$skill_link" ]]; then
+if [[ "$stage_only" == false && -e "$skill_link" && ! -L "$skill_link" ]]; then
   echo "skill path exists and is not a symlink: $skill_link" >&2
   exit 1
 fi
-if [[ ! -f "$repo_root/release/catalog/index.html" ]]; then
-  echo "missing release/catalog/index.html" >&2
-  exit 1
-fi
-python3 - "$repo_root/release/catalog/index.json" "$repo_root/release/catalog/index.html" "$repo_root/release/README.md" "$version" <<'PY'
+python3 - "$repo_root/release/catalog" "$repo_root/release/README.md" "$version" <<'PY'
 import json
 from pathlib import Path
 import sys
-index, html, readme = map(Path, sys.argv[1:4])
-version = sys.argv[4]
-if json.loads(index.read_text()).get('version') != version or version not in html.read_text() or version not in readme.read_text():
+catalog, readme = map(Path, sys.argv[1:3])
+version = sys.argv[3]
+pages = [catalog / name for name in ('index.html', 'templates.html', 'components.html')]
+if any(not p.is_file() for p in [catalog / 'index.json', *pages]):
+    raise SystemExit('catalog landing, both galleries, and index.json are required')
+if json.loads((catalog / 'index.json').read_text()).get('version') != version or any(version not in p.read_text() for p in pages) or version not in readme.read_text():
     raise SystemExit(f'catalog and release README must declare {version}')
 PY
 
-mkdir -p "$release_parent" "$(dirname "$launcher")"
+mkdir -p "$release_parent"
+if [[ "$stage_only" == false ]]; then
+  mkdir -p "$(dirname "$launcher")"
+fi
 stage="$(mktemp -d "$release_parent/.${version}.stage.XXXXXXXX")"
 trap 'rm -rf "$stage"' EXIT
 mkdir -p "$stage/bin"
@@ -74,7 +90,8 @@ shutil.copytree(src / 'release/catalog', dst / 'catalog')
 shutil.copytree(src / 'skills/west-monroe-presentations', dst / 'skills/west-monroe-presentations')
 shutil.copytree(src / 'planning/release-0.1', dst / 'planning/release-0.1')
 shutil.copytree(src / 'planning/adaptive', dst / 'planning/adaptive')
-for release_doc in ('release/README.md', 'release/cleanup.json'):
+shutil.copytree(src / 'planning/requested-templates', dst / 'planning/requested-templates')
+for release_doc in ('release/README.md', 'release/cleanup.json', 'release/verification.json'):
     if (src / release_doc).is_file():
         copy(release_doc)
 
@@ -84,6 +101,21 @@ for project in sorted({row['source_project'] for row in assignments}):
 for row in assignments:
     metadata = json.loads((src / row['implementation_directory'] / 'implementation.json').read_text())
     copy(metadata['preview']['path'])
+
+# Retain the exact two user-requested sources and the reviewed native gauge
+# example as hash-pinned evidence, without copying entire samples trees.
+request = json.loads((src / 'planning/requested-templates/request.json').read_text())
+for source in request['sources']:
+    path = source['path']
+    if hashlib.sha256((src / path).read_bytes()).hexdigest() != source['sha256']:
+        raise ValueError(f'requested source hash mismatch: {path}')
+    copy(path)
+gauge_review = json.loads((src / 'planning/requested-templates/gauge-review.json').read_text())
+for artifact in gauge_review['artifacts']:
+    path = artifact['path']
+    if hashlib.sha256((src / path).read_bytes()).hexdigest() != artifact['sha256']:
+        raise ValueError(f'gauge evidence hash mismatch: {path}')
+    copy(path)
 
 manifest = json.loads((src / 'library/catalog-manifest.json').read_text())
 for artifact in manifest['artifacts'].values():
@@ -173,6 +205,9 @@ for path in [
     'scripts/build-template-review-gallery.py',
     'scripts/render-open-accent-review.py',
     'scripts/render-pdf.swift',
+    'scripts/build-release-catalog.py',
+    'scripts/build-requested-template-gallery.py',
+    'scripts/import-requested-templates.py',
 ]:
     copy(path)
 (dst / 'VERSION').write_text(version + '\n')
@@ -180,8 +215,112 @@ PY
 
 "$stage/bin/pptxlib" index --root "$stage" --out "$stage/library/catalog-library.sqlite" >/dev/null
 
+python3 - "$stage" "$version" <<'PY'
+import hashlib
+from html.parser import HTMLParser
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+from urllib.parse import unquote, urlsplit
+
+root = Path(sys.argv[1])
+version = sys.argv[2]
+assignments = json.loads((root / 'library/templates/rollout/assignments.json').read_text())
+if assignments['target'] != 101 or len(assignments['entries']) != 101:
+    raise SystemExit('release requires exactly 101 registered templates')
+catalog = root / 'catalog'
+index = json.loads((catalog / 'index.json').read_text())
+if index.get('version') != version or len(index.get('templates', [])) != 101 or len(index.get('components', [])) != 132:
+    raise SystemExit('release catalog version/template/component count mismatch')
+if sum(row.get('contract_available') is True for row in index['components']) != 124:
+    raise SystemExit('release gallery must identify all 124 executable component contracts')
+requested = json.loads((root / 'library/templates/requested-templates.json').read_text())
+components = json.loads((root / 'library/templates/requested-components.json').read_text())
+if len(requested['templates']) != 44 or len(components['components']) != 132:
+    raise SystemExit('requested template/component catalog mismatch')
+if sum('contract' in row for row in components['components']) != 124:
+    raise SystemExit('release requires 124 executable component subcontracts')
+for row in components['components']:
+    if row.get('contract') and not (root / row['contract']).is_file():
+        raise SystemExit(f"missing component contract: {row['contract']}")
+result = subprocess.run([str(root / 'bin/pptxtemplate'), 'list', '--root', str(root)], capture_output=True, text=True, check=True)
+rows = json.loads(result.stdout)
+bad = [row for row in rows if row.get('status') != 'bindings_inspected' or row.get('issue')]
+if len(rows) != 101 or bad:
+    details = '; '.join(f"{row.get('id')}: {row.get('status')}: {row.get('issue')}" for row in bad[:12])
+    raise SystemExit(f'packaged template discovery is incomplete ({len(rows)}/101; {len(bad)} invalid): {details}')
+
+class LocalLinks(HTMLParser):
+    def __init__(self, page):
+        super().__init__()
+        self.page = page
+    def handle_starttag(self, tag, attrs):
+        for key, value in attrs:
+            if key not in ('href', 'src') or not value:
+                continue
+            parsed = urlsplit(value)
+            if parsed.scheme or parsed.netloc or value.startswith('#'):
+                continue
+            target = (self.page.parent / unquote(parsed.path)).resolve()
+            if not target.is_relative_to(catalog.resolve()) or not target.is_file():
+                raise SystemExit(f'broken catalog local asset: {self.page.name}: {value}')
+
+for name in ('index.html', 'templates.html', 'components.html'):
+    page = catalog / name
+    if not page.is_file():
+        raise SystemExit(f'missing gallery page {name}')
+    LocalLinks(page).feed(page.read_text())
+def catalog_assets(value):
+    if isinstance(value, dict):
+        for child in value.values():
+            yield from catalog_assets(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from catalog_assets(child)
+    elif isinstance(value, str) and value.startswith(('templates/', 'components/', 'assets/', 'compose/', 'recipes/')):
+        yield value
+
+for value in catalog_assets(index):
+    path = value.split('?', 1)[0].split('#', 1)[0]
+    if not (catalog / path).is_file():
+        raise SystemExit(f'broken catalog index asset: {path}')
+
+skill = root / 'skills/west-monroe-presentations'
+if not (skill / 'SKILL.md').is_file():
+    raise SystemExit('missing packaged skill')
+for name in ('template-authoring.md', 'component-customization.md', 'compose-authoring.md'):
+    if not (skill / 'references' / name).is_file():
+        raise SystemExit(f'missing skill reference {name}')
+for doc in skill.rglob('*.md'):
+    for link in re.findall(r'\]\(([^)]+)\)', doc.read_text()):
+        parsed = urlsplit(link)
+        if parsed.scheme or parsed.netloc or link.startswith('#'):
+            continue
+        target = (doc.parent / unquote(parsed.path)).resolve()
+        if not target.is_relative_to(skill.resolve()) or not target.is_file():
+            raise SystemExit(f'broken skill link: {doc.relative_to(root)}: {link}')
+
+files = {}
+for path in sorted(root.rglob('*')):
+    if path.is_file():
+        files[str(path.relative_to(root))] = hashlib.sha256(path.read_bytes()).hexdigest()
+(root / 'release-manifest.json').write_text(json.dumps({
+    'schema': 'pptxgengo.local-release-manifest.v1',
+    'version': version,
+    'file_count': len(files),
+    'files_sha256': files,
+}, indent=2) + '\n')
+print(f'validated {len(rows)} templates, {len(components["components"])} component occurrences, {len(files)} release files')
+PY
+
 mv "$stage" "$release_dir"
 trap - EXIT
+if [[ "$stage_only" == true ]]; then
+  echo "staged $version at $release_dir"
+  exit 0
+fi
 link_stage="${launcher}.tmp.$$"
 ln -s "$release_dir/bin/pptxgengo" "$link_stage"
 mv -f "$link_stage" "$launcher"

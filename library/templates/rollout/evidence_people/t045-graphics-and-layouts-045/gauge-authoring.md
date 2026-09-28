@@ -22,27 +22,30 @@ the highlighted cells. `highlight_color` is `pink` (default), `blue`, `navy`, or
 visibly darker `#7F7F7F`. The other exact colors are source pink `#F900D3`,
 source navy `#070154`, and standard blue `#0047FF`.
 
-From a source checkout, create a text-applied project, then a gauge-applied
-project, then build a new deck. Use new output paths for each command:
+In local release `0.1.0-local.4`, find the frozen resource root with
+`pptxgengo paths`. Create a text-applied project, then a gauge-applied project,
+then build a new deck. Use new output paths for each command:
 
 ```sh
-go run ./cmd/pptxcomponent apply \
-  --project samples/template-expansion/rollout/sources/graphics-and-layouts \
-  --contract library/templates/rollout/evidence_people/t045-graphics-and-layouts-045/contract.json \
-  --values library/templates/rollout/evidence_people/t045-graphics-and-layouts-045/example-values.json \
-  --out /path/to/new-text-project
-go run ./cmd/pptxtemplate apply-gauge \
-  --project /path/to/new-text-project \
-  --reference samples/template-expansion/rollout/sources/graphics-and-layouts/slides/uhg-045.json \
-  --values library/templates/rollout/evidence_people/t045-graphics-and-layouts-045/gauge-values.json \
-  --out /path/to/new-gauge-project
-go run ./cmd/pptxscene build --project /path/to/new-gauge-project --slides 45 --out /path/to/new-gauge-deck.pptx
+release_root="$(pptxgengo paths | python3 -c 'import json,sys; print(json.load(sys.stdin)["root"])')"
+pptxgengo component apply \
+  --project "$release_root/samples/template-expansion/rollout/sources/graphics-and-layouts" \
+  --contract "$release_root/library/templates/rollout/evidence_people/t045-graphics-and-layouts-045/contract.json" \
+  --values /absolute/path/edited-text-values.json \
+  --out /absolute/path/new-text-project
+pptxgengo template apply-gauge \
+  --project /absolute/path/new-text-project \
+  --reference "$release_root/samples/template-expansion/rollout/sources/graphics-and-layouts/slides/uhg-045.json" \
+  --values /absolute/path/edited-gauge-values.json \
+  --out /absolute/path/new-gauge-project
+pptxgengo scene build --project /absolute/path/new-gauge-project --slides 45 --out /absolute/path/new-gauge-deck.pptx
 ```
 
-In a future installed release with this command, use the equivalent
-`pptxgengo component`, `pptxgengo template apply-gauge`, and
-`pptxgengo scene` routes with paths from `pptxgengo paths`. The frozen
-0.1.0-local.3 release does not include `apply-gauge`.
+Start the text file from `pptxgengo template values --id
+t045-graphics-and-layouts-045 --source-values` and the gauge file from the
+packaged `gauge-values.json` in this directory. To change only gauges, pass the
+packaged source project directly to `apply-gauge` and omit the text-edit step.
+The previous `0.1.0-local.3` release does not include this operation.
 
 The pointer targets are discrete source exemplar positions 1–5. This command
 does not calculate continuous scores, change the number or shape of cells,
