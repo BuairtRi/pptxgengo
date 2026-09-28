@@ -24,7 +24,7 @@ family fixture and schema guidance under `library/adaptive/`:
 | Comparison | Options, criteria, supplied gauge values/targets, findings/statuses | `roadmap-comparison.md`, `comparison-illustrative.json` |
 
 Inspect `library/adaptive/checkpoint.json` for exact reviewed examples. The
-capability catalog keeps 65 source editing contracts separate from semantic
+capability catalog keeps source editing contracts separate from semantic
 family discovery hints. A category hint requires structural inspection and does not qualify that source template
 for structural adaptation or arbitrary copy. Only the recorded input, geometry,
 style, and render have been reviewed.

@@ -4,7 +4,7 @@ Use this route when a source slide's retained structure and fixed layout already
 
 ## Locate and inspect
 
-Start by resolving packaged paths, then list the 65 source contracts and inspect a likely match:
+Start by resolving packaged paths, list the available source contracts, and inspect a likely match:
 
 ```sh
 pptxgengo paths
@@ -13,6 +13,19 @@ pptxgengo template inspect --id t053-graphics-and-layouts-049
 ```
 
 `paths` returns JSON fields `root`, `library`, `scripts`, `catalog`, and `skill`. The inspected contract and values are under `library/templates/rollout/<lane>/<id>/` beneath that root. `inspect` reports slot names, each slot's ordered source binding IDs, profiles, and source identity. Choose based on purpose and geometry, not only visual resemblance.
+
+To retrieve baseline values, use `pptxgengo template values --id ID` for the
+registered illustrative example, or add `--source-values` for the original
+source-run contents. `build-review --ids ID1,ID2 --source-values` creates a
+source-content reference bundle for selected contracts. That bundle is useful
+for preserving and comparing the original design; it is not custom client copy.
+
+In source checkouts that expose the `components` subcommand, inspect grouped
+source controls with `pptxgengo template components --id ID`. This reports the
+groups, roles, and profiles associated with that slide; it does not mean every
+group is independently editable. Confirm exact bindings and executable scope
+in that ID's contract. This command is a newer source-checkout feature and may
+not exist in frozen installed releases.
 
 To inspect the record's exact editable field count and illustrative values, open `contract.json` and `example-values.json` from the reported package path. The values shape is:
 
@@ -43,7 +56,7 @@ After build, render each page in PowerPoint using the packaged native review wor
 
 ## Boundaries
 
-The 65 contracts have named text slots, selected rich text/run structure, and some explicit RGB/theme color roles or text zones. They retain fixed source geometry and do not qualify variable item count, automatic reflow, universal font/style behavior, or arbitrary content capacity. A corrected illustrative example is still evidence for that example only. The packaged release checkpoint reports 60 direct native PowerPoint open/export visual checks and five accent geometry replays; reopening those five generated accent decks remained pending. No arbitrary-content capacity is qualified.
+Contracts have named text slots, selected rich text/run structure, and sometimes explicit RGB/theme color roles or text zones. They retain fixed source geometry and do not qualify variable item count, automatic reflow, universal font/style behavior, or arbitrary content capacity. A corrected illustrative example is still evidence for that example only. Use the packaged release checkpoint for the current per-item open/export and accent evidence; those checks do not establish arbitrary-content capacity.
 
 When the ask requires substantially different hierarchy, added rows, or a combined story from different source decks, use `compose` for new component-built slides or `scene` for source-preserving edits. If slides from several source decks must be inserted into an existing proposal, the current CLI does not perform a cross-source native merge; create and inspect the source-specific outputs, then use PowerPoint's copy/import flow as a separate reviewed authoring step.
 
@@ -62,6 +75,12 @@ python3 "$release_root/scripts/render-template-review.py" /path/to/new-review-bu
 The output's `native-render.json` links exact native artifacts and PNGs. Render
 success still requires visual review. Native exports are serial and can require
 PowerPoint access to the established workspace.
+
+For T045's bounded native gauge styling, read the contract's packaged
+`gauge-authoring.md`. `apply-gauge` changes per-gauge cell highlights and a
+discrete source pointer while preserving the original gauge artwork. It is a
+separate source-specific component operation, not a template-wide palette. Use
+only the installed route and values schema shown in that guide.
 
 For supported phrase accents, copy and edit the intent file at
 `library/templates/rollout/accent-intents.json`. Its shipped phrases target the

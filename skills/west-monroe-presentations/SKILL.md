@@ -9,7 +9,7 @@ Use the installed `pptxgengo` command. Do not assume repository-local Go binarie
 
 Choose the narrowest route:
 
-- `pptxgengo template` to adapt supported text/style bindings in one of the 65 source-bound template contracts and produce a review deck.
+- `pptxgengo template` to adapt supported text/style bindings in an available source-bound template contract and produce a review deck.
 - `pptxgengo adapt`, when listed by the installed CLI, to generate editable roadmap, architecture, process, team, or comparison compositions from semantic content and variable counts. Read the [adaptive family reference](references/adaptive-authoring.md) only for this route.
 - `pptxgengo compose` to author new editable slides from supported components, saved library contracts, or explicit composition specs. This supports genuinely new slides assembled from native editable components; it is bounded composition, not an unrestricted slide designer.
 - `pptxgengo scene` to extract and rebuild source slides while preserving supported native structure/resources.
@@ -23,6 +23,7 @@ If needed, consult `pptxgengo --help` and `pptxgengo <route> --help` for install
 
 - [Workflow routes and limits](references/workflows.md)
 - [Fixed-source template authoring](references/template-authoring.md)
+- [Component and template customization](references/component-customization.md), when a request includes palette, gauge, or accent choices
 - [New slide composition](references/compose-authoring.md)
 - [West Monroe content and narrative guidance](references/content.md)
 - [Component composition and visual review](references/composition-and-review.md)
@@ -31,6 +32,6 @@ If needed, consult `pptxgengo --help` and `pptxgengo <route> --help` for install
 
 - Keep evidence-backed claims, hypotheses, assumptions, and synthetic examples distinct. Do not invent client facts, metrics, commitments, or quotations.
 - Write a decision-led story for the stated audience. Preserve substantive details, qualifications, ownership, dependencies, acceptance conditions, and evidence; resolve overflow by improving the argument, choosing a suitable composition, or splitting a slide.
-- The 65 source-template contracts support bounded changes while preserving fixed source geometry and many source details. Their successful build does not show that arbitrary replacement content fits or that the original layout structurally adapts.
+- Source-template contracts support bounded changes while preserving fixed source geometry and many source details. Their successful build does not show that arbitrary replacement content fits or that the original layout structurally adapts.
 - Packaged library contracts and component examples have distinct qualification states. Do not imply general template approval from a catalog hit, a successful build, or a passing fixture.
 - Measure and inspect final decks in PowerPoint at presentation size. A structural check or measurement alone does not establish visual quality.

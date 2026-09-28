@@ -252,6 +252,9 @@ func copyTree(src, dst string) error {
 }
 
 func run(args []string) error {
+	if len(args) > 0 && args[0] == "apply-gauge" {
+		return applyGauge(args[1:])
+	}
 	if len(args) > 0 && args[0] == "apply-accent" {
 		return applyAccent(args[1:])
 	}
@@ -259,12 +262,14 @@ func run(args []string) error {
 		return adaptAccents(args[1:])
 	}
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxtemplate list|inspect|build-review|adapt-accents|apply-accent [--id ID] [--lane LANE] [--category CATEGORY] [--out NEW_DIR]")
+		return fmt.Errorf("usage: pptxtemplate list|inspect|values|components|build-review|adapt-accents|apply-accent|apply-gauge [--id ID] [--lane LANE] [--category CATEGORY] [--out NEW_DIR]")
 	}
 	cmd := args[0]
 	f := flag.NewFlagSet(cmd, flag.ContinueOnError)
 	rootFlag := f.String("root", ".", "repository root")
 	id := f.String("id", "", "exact template ID")
+	ids := f.String("ids", "", "comma-separated exact template IDs")
+	sourceValues := f.Bool("source-values", false, "use original source content, preserving the layout as a reference")
 	lane := f.String("lane", "", "workstream")
 	category := f.String("category", "", "primary category")
 	out := f.String("out", "", "new review bundle directory")
@@ -276,8 +281,17 @@ func run(args []string) error {
 	if f.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
 	}
-	if cmd != "list" && cmd != "inspect" && cmd != "build-review" {
+	if cmd != "list" && cmd != "inspect" && cmd != "build-review" && cmd != "values" && cmd != "components" {
 		return fmt.Errorf("unknown command %s", cmd)
+	}
+	if *values != "" && cmd != "build-review" {
+		return fmt.Errorf("--values is only supported by build-review")
+	}
+	if *sourceValues && cmd != "build-review" && cmd != "values" {
+		return fmt.Errorf("--source-values is supported by values and build-review")
+	}
+	if *out != "" && cmd != "build-review" {
+		return fmt.Errorf("--out is only supported by build-review")
 	}
 	root, err := filepath.Abs(*rootFlag)
 	if err != nil {
@@ -299,6 +313,22 @@ func run(args []string) error {
 	if assignments.Schema != "pptxgengo.template-rollout.v1" || len(assignments.Entries) != assignments.Target {
 		return fmt.Errorf("invalid assignment coverage")
 	}
+	selected := map[string]bool{}
+	if *ids != "" {
+		if *id != "" {
+			return fmt.Errorf("choose --id or --ids")
+		}
+		for _, ident := range strings.Split(*ids, ",") {
+			ident = strings.TrimSpace(ident)
+			if ident == "" || selected[ident] {
+				return fmt.Errorf("empty/duplicate --ids member")
+			}
+			selected[ident] = true
+		}
+	}
+	if *sourceValues && *values != "" {
+		return fmt.Errorf("choose --values or --source-values")
+	}
 	var chosen []entry
 	seen := map[string]bool{}
 	for _, e := range assignments.Entries {
@@ -306,8 +336,13 @@ func run(args []string) error {
 			return fmt.Errorf("missing/duplicate template ID")
 		}
 		seen[e.ID] = true
-		if (*id == "" || e.ID == *id) && (*lane == "" || e.Lane == *lane) && (*category == "" || e.Category == *category) {
+		if (*id == "" || e.ID == *id) && (len(selected) == 0 || selected[e.ID]) && (*lane == "" || e.Lane == *lane) && (*category == "" || e.Category == *category) {
 			chosen = append(chosen, e)
+		}
+	}
+	for ident := range selected {
+		if !seen[ident] {
+			return fmt.Errorf("unknown template ID %s", ident)
 		}
 	}
 	if len(chosen) == 0 {
@@ -331,9 +366,46 @@ func run(args []string) error {
 					problem = loadErr.Error()
 				}
 			}
-			rows = append(rows, map[string]any{"id": e.ID, "family_id": e.Family, "name": e.Name, "category": e.Category, "lane": e.Lane, "status": status, "counts": counts, "issue": problem, "adaptation_qualified": false})
+			rows = append(rows, map[string]any{"id": e.ID, "family_id": e.Family, "name": e.Name, "source": e.Source, "category": e.Category, "lane": e.Lane, "status": status, "counts": counts, "issue": problem, "adaptation_qualified": false})
 		}
 		return printJSON(rows)
+	}
+	if cmd == "components" {
+		if *id == "" || len(chosen) != 1 {
+			return fmt.Errorf("components requires --id")
+		}
+		i, err := load(root, chosen[0])
+		if err != nil {
+			return err
+		}
+		var v any
+		path := filepath.Join(root, i.Directory, "customization.json")
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			return printJSON(map[string]any{"template_id": i.ID, "components": i.Metadata["components"], "roles": i.Contract.Roles, "profiles": i.Contract.Profiles, "scope": "Source groups; inspect the contract for exact editable bindings."})
+		}
+		if err := read(path, &v); err != nil {
+			return err
+		}
+		return printJSON(v)
+	}
+	if cmd == "values" {
+		if *id == "" || len(chosen) != 1 {
+			return fmt.Errorf("values requires --id")
+		}
+		i, err := load(root, chosen[0])
+		if err != nil {
+			return err
+		}
+		var v any
+		if *sourceValues {
+			v, err = originalValues(root, i)
+		} else {
+			err = read(i.ValuesPath, &v)
+		}
+		if err != nil {
+			return err
+		}
+		return printJSON(v)
 	}
 	if cmd == "inspect" {
 		if *id == "" || len(chosen) != 1 {
@@ -385,10 +457,10 @@ func run(args []string) error {
 	if len(ready) == 0 {
 		return fmt.Errorf("no complete implementations to build")
 	}
-	return build(root, *out, assignmentBytes, ready, skipped)
+	return build(root, *out, assignmentBytes, ready, skipped, *sourceValues)
 }
 
-func build(root, out string, assignmentBytes []byte, items []implementation, skipped []string) error {
+func build(root, out string, assignmentBytes []byte, items []implementation, skipped []string, sourceValues bool) error {
 	dest, err := filepath.Abs(out)
 	if err != nil {
 		return err
@@ -436,6 +508,13 @@ func build(root, out string, assignmentBytes []byte, items []implementation, ski
 			{i.ContractPath, "contract.json"}, {i.ValuesPath, "values.json"}, {i.MetadataPath, "implementation.json"},
 		} {
 			b, err := os.ReadFile(p.original)
+			if sourceValues && p.name == "values.json" {
+				var v any
+				v, err = originalValues(root, *i)
+				if err == nil {
+					b, err = json.MarshalIndent(v, "", "  ")
+				}
+			}
 			if err != nil {
 				return err
 			}
@@ -623,7 +702,7 @@ func build(root, out string, assignmentBytes []byte, items []implementation, ski
 					actual++
 				}
 			}
-			if actual == 0 {
+			if actual == 0 && !sourceValues && i.Metadata["example_kind"] != "source_reference" {
 				return fmt.Errorf("%s example makes no actual text or style change", i.ID)
 			}
 			records = append(records, map[string]any{"template_id": i.ID, "family_id": i.Family, "source": i.Source, "inputs": inputs, "actual_binding_changes": actual, "selected_source_was_hidden": wasHidden, "native_fit": "not_measured", "adaptation_qualified": false, "limitations": i.Metadata["limitations"], "opaque_areas": i.Metadata["opaque_areas"], "retained_source_content": i.Metadata["retained_source_content"]})
@@ -665,7 +744,7 @@ func build(root, out string, assignmentBytes []byte, items []implementation, ski
 		return err
 	}
 	a.Path = filepath.Join("inputs", "assignments.json")
-	report := map[string]any{"schema": "pptxgengo.template-review-bundle.v1", "assignments": a, "template_count": len(items), "skipped_incomplete": skipped, "decks": decks, "templates": records, "status": "built_pending_native_render_and_review", "adaptation_qualified": false, "disclosure": "Illustrative editing fixtures retain source assets and may retain source facts. Fixed source geometry/cardinality; not client-ready proposals or qualified dynamic templates."}
+	report := map[string]any{"schema": "pptxgengo.template-review-bundle.v1", "assignments": a, "template_count": len(items), "source_values": sourceValues, "skipped_incomplete": skipped, "decks": decks, "templates": records, "status": "built_pending_native_render_and_review", "adaptation_qualified": false, "disclosure": "Source or edited review copies retain original assets and may retain source facts. source_values=true preserves original copy. Fixed source geometry/cardinality; not client-ready proposals or qualified dynamic templates."}
 	if err = write(filepath.Join(stage, "review-bundle.json"), report); err != nil {
 		return err
 	}
@@ -676,4 +755,48 @@ func build(root, out string, assignmentBytes []byte, items []implementation, ski
 		return err
 	}
 	return printJSON(map[string]any{"out": dest, "template_count": len(items), "source_decks": len(decks), "status": "built_pending_native_render_and_review"})
+}
+
+// originalValues copies native run contents, including their rich-run order.
+// It never synthesizes copy or rewrites source facts as illustrative claims.
+func originalValues(root string, i implementation) (any, error) {
+	var scene nativepkg.Slide
+	if err := read(filepath.Join(root, i.Scene), &scene); err != nil {
+		return nil, err
+	}
+	bindings := map[string]nativepkg.Binding{}
+	for _, b := range scene.Bindings {
+		bindings[b.BindingID] = b
+	}
+	slots := map[string]any{}
+	for name, slot := range i.Contract.Slots {
+		parts := []string{}
+		paras := []map[string]any{}
+		last := ""
+		for _, id := range slot.BindingIDs {
+			b, ok := bindings[id]
+			if !ok {
+				return nil, fmt.Errorf("missing source binding %s", id)
+			}
+			parts = append(parts, b.Value)
+			if slot.ValueFormat == "paragraphs" {
+				if len(b.NodePath) < 3 {
+					return nil, fmt.Errorf("invalid paragraph binding %s", id)
+				}
+				key := fmt.Sprint(b.NodePath[:len(b.NodePath)-3])
+				if key != last || len(paras) == 0 {
+					paras = append(paras, map[string]any{"runs": []map[string]string{}})
+					last = key
+				}
+				p := paras[len(paras)-1]
+				p["runs"] = append(p["runs"].([]map[string]string), map[string]string{"binding_id": id, "text": b.Value})
+			}
+		}
+		if slot.ValueFormat == "paragraphs" {
+			slots[name] = map[string]any{"paragraphs": paras}
+		} else {
+			slots[name] = parts
+		}
+	}
+	return map[string]any{"slots": slots}, nil
 }

@@ -1,6 +1,8 @@
 # Template discovery and release queue
 
-This catalog expands coverage across the full 369-slide source corpus. It records
+The original discovery catalog covers the 369-slide source corpus. The explicit
+Lab/UHG selections extend the executable library separately; the original census
+and its review evidence are retained. It records
 source designs, their business purpose, altitude, density and reusable arrangements.
 It does **not** turn every inspected slide into an executable template.
 
@@ -12,8 +14,12 @@ It does **not** turn every inspected slide into an executable template.
   sequence expansion is not implemented.
 - `REVIEW_PROTOCOL.md`: visual inspection and grouping rules.
 - `curation-decisions.json`: root visual-review corrections with preview hashes.
-- `rollout/`: all 65 source-bound editing contracts, illustrative values, parallel
-  assignments, inspection reports and hash-pinned native review ledgers.
+- `rollout/`: 101 source-bound editing contracts, original or illustrative values,
+  assignments, component controls and native review ledgers.
+- `requested-templates.json`: the 44 explicitly selected UHG/Lab source layouts
+  (8 existing contracts plus 36 added); see `planning/requested-templates/README.md`.
+- `requested-components.json`: 132 curated source component occurrences, including
+  124 executable text/style subcontracts. These are not unique-design counts.
 - `batch-01/`: five inspected source-bound editing contracts; native adaptation
   and semantic styling remain pending.
 

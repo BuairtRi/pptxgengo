@@ -209,8 +209,8 @@ func Run(args []string, stdout io.Writer) error {
 			return fmt.Errorf("contract declares absent object %s", id)
 		}
 	}
-	if len(c.Slots) == 0 {
-		return fmt.Errorf("component contract must declare at least one text slot")
+	if len(c.Slots) == 0 && len(c.Roles) == 0 {
+		return fmt.Errorf("component contract must declare at least one text slot or style role")
 	}
 	used := map[string]bool{}
 	validate := func(name string, ids []string, property string) error {
@@ -367,16 +367,8 @@ func Run(args []string, stdout io.Writer) error {
 			return fmt.Errorf("slot %s needs exactly %d text segments; received %d", name, len(slot.BindingIDs), len(parts))
 		}
 		for i, value := range parts {
-			if strings.TrimSpace(value) == "" {
-				return fmt.Errorf("empty text in slot %s", name)
-			}
-			for _, r := range value {
-				if r < 32 || r == 127 {
-					return fmt.Errorf("slot %s contains control/newline characters; use existing paragraph segments", name)
-				}
-			}
-			if strings.HasPrefix(value, "__BINDING:") {
-				return fmt.Errorf("reserved sentinel text")
+			if err := validateSourceRun(value, s.Bindings[bindings[slot.BindingIDs[i]]].Value); err != nil {
+				return fmt.Errorf("slot %s: %w", name, err)
 			}
 			set(slot.BindingIDs[i], value, "slot:"+name)
 		}
@@ -514,5 +506,44 @@ func Run(args []string, stdout io.Writer) error {
 		return err
 	}
 	fmt.Fprintln(stdout, dest)
+	return nil
+}
+
+// Source runs may contain whitespace, tabs or embedded line breaks. Retaining
+// them verbatim is valid; replacements must retain their control sequence so
+// this fixed-layout operation cannot silently introduce/remove line structure.
+func validateSourceRun(value, source string) error {
+	if strings.HasPrefix(value, "__BINDING:") {
+		return fmt.Errorf("reserved sentinel text")
+	}
+	if value == source {
+		return nil
+	}
+	if strings.TrimSpace(value) == "" {
+		return fmt.Errorf("empty replacement text")
+	}
+	controls := func(s string) (string, error) {
+		var out strings.Builder
+		for _, r := range s {
+			if r < 32 || r == 127 {
+				if r != '\n' && r != '\t' {
+					return "", fmt.Errorf("unsupported control character")
+				}
+				out.WriteRune(r)
+			}
+		}
+		return out.String(), nil
+	}
+	got, err := controls(value)
+	if err != nil {
+		return err
+	}
+	want, err := controls(source)
+	if err != nil {
+		return err
+	}
+	if got != want {
+		return fmt.Errorf("replacement must preserve source tab/line-break sequence; use existing paragraph segments")
+	}
 	return nil
 }

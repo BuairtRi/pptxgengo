@@ -1,6 +1,6 @@
 # Template implementation and review CLI
 
-`pptxtemplate` operates the complete 65-item implementation queue. It uses the same
+`pptxtemplate` operates the registered source-template library (currently 101 contracts). It uses the same
 component validation/application engine as `pptxcomponent`, followed by the native
 scene builder. It does not grant adaptation qualification or bypass `pptxlib`'s
 qualified-contract gate.
@@ -19,7 +19,7 @@ Run from the repository root, or use `--root`. Outputs must be new paths.
 By default, every selected implementation must be complete and valid. `--available`
 skips items with missing files for continuous review while other workers continue;
 it does not skip malformed contracts or values. `--category` and `--lane` narrow
-the selection. `--id` selects one template. `--values path.json` with `--id` supplies
+the selection. `--id` selects one template; `--ids id1,id2` selects an exact set. `--values path.json` with `--id` supplies
 new content instead of the illustrative example.
 
 The bundle contains:
@@ -50,7 +50,7 @@ chart data, arbitrary diagrams, images and inherited styles still require separa
 support where disclosed. Character counts are not measured fit limits.
 
 `list` reports technical binding/value readiness, not editorial or visual acceptance.
-`build-review` requires at least one actual binding change per selected template.
+`build-review` normally requires an actual binding change. Explicit `--source-values` and newly imported source-reference examples permit unchanged content so the exact original layout can be reproduced.
 New content can overflow or conflict with retained art even when application succeeds.
 
 ## Component values check
@@ -150,3 +150,28 @@ save or close the source presentation. It is restricted to established review
 copies; unsaved sessions are refused by default. The explicit restored-task-session
 option is only for this helper's own prior, verified restoration. This fallback
 is visual geometry evidence, **not** proof that the new PPTX opens without repair.
+
+## Explicit source selections and components
+
+The 44 user-selected Lab/UHG layouts are indexed at
+`library/templates/requested-templates.json`; source component occurrences and
+executable subcontracts are at `library/templates/requested-components.json`.
+Eight reuse existing IDs, 36 are new. These are source variants, not 101
+independently qualified dynamic layouts.
+
+```sh
+go run ./cmd/pptxtemplate values --id t066-ai-accelerator-002 --source-values
+go run ./cmd/pptxtemplate components --id t066-ai-accelerator-002
+go run ./cmd/pptxtemplate build-review --ids t066-ai-accelerator-002,t077-uhg-005 --source-values --out /absolute/path/new-reference
+```
+
+`values --source-values` emits exact native run content. It preserves whitespace,
+existing tabs and embedded line breaks. Replacements retain the source control
+sequence and run cardinality; they are not measured capacity claims. Download
+original values from the requested-layout gallery, edit only intended fields,
+and supply them with `--values` for a single template.
+
+For original T045 discrete gauges use `apply-gauge`, described in
+`library/templates/rollout/evidence_people/t045-graphics-and-layouts-045/gauge-authoring.md`.
+This changes the existing cells/pointer, preserving surrounding design. Generic
+`adapt comparison` designs are separate, optional new compositions.

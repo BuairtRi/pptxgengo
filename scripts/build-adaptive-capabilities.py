@@ -68,7 +68,7 @@ def family_choice(entry):
     cat=entry['category']
     for name, spec in FAMILIES.items():
         if cat in spec['source_categories']:
-            return {'status':'category_candidate_requires_review','family':name,'rationale':f"Source taxonomy category `{cat}` is a discovery hint for the `{name}` family only. Structural suitability is unreviewed; inspect the source before choosing an adaptive builder.",'semantic_only':True,'source_fidelity_claimed':False,'proposed_controls':spec['proposed_controls']}
+            return {'status':'category_candidate_requires_review','family':name,'rationale':f"Source taxonomy category `{cat}` is a discovery hint for the `{name}` family only. Structural suitability is unreviewed; inspect the source before choosing an adaptive builder.",'semantic_only':True,'source_fidelity_claimed':False,'requires_explicit_redesign_intent':True,'proposed_controls':spec['proposed_controls']}
     return {'status':'unmapped','family':None,'rationale':UNMAPPED,'semantic_only':True,'source_fidelity_claimed':False,'proposed_controls':[]}
 
 def reviewed_family_examples(checkpoint, root):
@@ -108,6 +108,8 @@ def build(root: Path, checkpoint_path: Path | None = None):
           'source_identity':{'package_sha256':contract.get('source_sha256'),'scene_sha256':contract.get('scene_sha256'),'source_slide':contract.get('slide'),'source_project':e['source_project'],'source_scene':e['source_scene'],'preview':impl.get('preview')},
           'semantic_summary':{'role':impl.get('role',e['name']),'takeaway':impl.get('takeaway',''),'visibility':'role and takeaway are placed in speaker notes; they are not visible slide text'},
           'fixed_source':{'adaptation_mode':'fixed_source_geometry','qualification':'source-bound editing contract; not arbitrary-content qualified','source_bound_slots':slots,'source_bound_color_roles':contract.get('roles',{}),'source_bound_style_profiles':contract.get('profiles',{}),'text_zones':contract.get('zones',{}),'contract_constraints':contract.get('constraints',[]),'fixed_areas':impl.get('opaque_areas',[]),'retained_source_content':impl.get('retained_source_content',[]),'fixed_arrangement_and_item_count':True},
+          'preferred_authoring_route':'template_preserve_source',
+          'source_gauge_controls':({'command':'template apply-gauge','cells':5,'rows':5,'highlight_and_pointer_independent':True,'pointer_default':'sole highlighted cell','colors':['gray','navy','blue','pink'],'reference':'library/templates/rollout/evidence_people/t045-graphics-and-layouts-045/gauge-authoring.md'} if template_id=='t045-graphics-and-layouts-045' else None),
           'adaptive_family_recommendation':family_choice(e),
           'adaptive_family_qualification':{'state':'pending_native_review','implementation_state':'semantic family compiler implemented; native qualification pending','source_fidelity_claimed':False,'changed_content_capacity_qualified':False,'native_fit':'pending','visual_review':'pending','pptx_open_repair':'pending'},
           'current_bounded_engine_capabilities':['native editable text and shapes','explicit canvas text, surfaces, lines, images and bounded shape presets','measured numbered and metric cards','measured variable-role pods and bounded team/reporting compositions','measured named grids and panels for specific accepted patterns','PNG/JPEG images with pinned hashes','bounded phrase accents using measured native character bounds'],

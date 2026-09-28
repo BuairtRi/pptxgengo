@@ -107,7 +107,7 @@ func run() error {
 	}
 	path := filepath.Join(root, "bin", tool)
 	args := append([]string{}, os.Args[2:]...)
-	if (tool == "pptxtemplate" || tool == "pptxlib" || tool == "pptxadapt") && !hasRoot(args) && len(args) > 0 && !(tool == "pptxtemplate" && args[0] == "apply-accent") {
+	if (tool == "pptxtemplate" || tool == "pptxlib" || tool == "pptxadapt") && !hasRoot(args) && len(args) > 0 && !(tool == "pptxtemplate" && (args[0] == "apply-accent" || args[0] == "apply-gauge")) {
 		args = append(args, "--root", root)
 	}
 	cmd := exec.Command(path, args...)
