@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "status": "proposal_for_discussion",
+  "sources": [
+    {
+      "path": "external local source: branding/DESIGN.md (not in repository)",
+      "sha256": "f219bfdcd1f8f5b8eb3eb9094600f178b3188b2168ecbed37531790cefa3461d",
+      "scope": "Authoritative local WM palette and role-use guidance"
+    },
+    {
+      "path": "library/component-taxonomy.json",
+      "sha256": "see_repository_file",
+      "scope": "Proposed catalog profiles and component families"
+    },
+    {
+      "path": "library/component-styling.md",
+      "scope": "Current library role-binding boundary"
+    },
+    {
+      "paths": [
+        "internal/adapt/style.go",
+        "internal/adapt/roadmap.go",
+        "internal/adapt/comparison.go",
+        "internal/adapt/team.go",
+        "internal/compose/cards.go",
+        "cmd/pptxtemplate/gauge.go",
+        "library/component-contracts/metric-card.json",
+        "library/component-contracts/pod-two.json"
+      ],
+      "scope": "Observed implementation and sampled source contracts"
+    }
+  ],
+  "brand_tokens": {
+    "wm": {
+      "grounded_blue": "#070154",
+      "white": "#FFFFFF",
+      "highlight_yellow": "#F6EB21",
+      "highlight_magenta": "#F900D3",
+      "highlight_blue": "#0047FF",
+      "dark_gray": "#50658E",
+      "medium_gray": "#CED7E6",
+      "light_gray": "#E8EEF8"
+    }
+  },
+  "role_namespaces": {
+    "presentation": ["surface", "surface.muted", "text.primary", "text.secondary", "accent", "border", "headline.marker"],
+    "status": ["status.planned", "status.active", "status.complete", "status.atRisk", "status.blocked"],
+    "actor": ["actor.client", "actor.consultant", "actor.joint"],
+    "data": ["series.<stable-id>", "intensity.<ordered-value>"],
+    "phase": ["phase.current", "phase.future", "phase.complete"]
+  },
+  "application_modes": {
+    "preserve_reference": "Retain pinned source colors, theme expressions, transforms and semantic encodings as evidenced.",
+    "wm_current": "Overlay WM tokens only onto explicitly bound presentation roles. Preserve status, actor, phase and data roles unless a separate semantic remap contract is supplied.",
+    "rule": "Mode selection is per component contract; no global hex replacement or automatic recoloring by color resemblance."
+  },
+  "profiles": [
+    {
+      "id": "wm-neutral",
+      "roles": {"surface": "wm.white", "surface.muted": "wm.light_gray", "text.primary": "wm.grounded_blue", "text.secondary": "wm.dark_gray", "accent": "wm.grounded_blue", "border": "wm.medium_gray"},
+      "policy": "Default white/grounded-blue pair; gray only for dense quiet structure."
+    },
+    {
+      "id": "wm-subtle",
+      "roles": {"surface": "wm.light_gray", "surface.muted": "wm.medium_gray", "text.primary": "wm.grounded_blue", "text.secondary": "wm.dark_gray", "accent": "wm.grounded_blue", "border": "wm.medium_gray"},
+      "policy": "Quiet content surface; must not be confused with data/status gray."
+    },
+    {
+      "id": "wm-inverse",
+      "roles": {"surface": "wm.grounded_blue", "surface.muted": "wm.grounded_blue", "text.primary": "wm.white", "text.secondary": "wm.white", "accent": "wm.white", "border": "wm.white"},
+      "policy": "Bounded inverse region; validate each text/background pair."
+    },
+    {
+      "id": "wm-blue-emphasis",
+      "roles": {"surface": "wm.white", "text.primary": "wm.grounded_blue", "text.secondary": "wm.dark_gray", "accent": "wm.highlight_blue", "border": "wm.medium_gray"},
+      "policy": "Accent applies to small text or rules, never a generic background."
+    },
+    {
+      "id": "wm-magenta-callout",
+      "roles": {"surface": "wm.white", "text.primary": "wm.grounded_blue", "text.secondary": "wm.dark_gray", "accent": "wm.highlight_magenta", "border": "wm.medium_gray"},
+      "policy": "Sparing large callout/rule emphasis. If magenta is a fill, prefer grounded-blue ink; white is only for >=18pt regular or >=14pt bold."
+    },
+    {
+      "id": "wm-headline-marker",
+      "roles": {"surface": "wm.white", "text.primary": "wm.grounded_blue", "text.secondary": "wm.dark_gray", "headline.marker": "wm.highlight_yellow", "border": "wm.medium_gray"},
+      "policy": "Dedicated headline marker role only: 1-4 words, one line, >=20pt per source preview; never generic accent/surface/data."
+    }
+  ],
+  "binding_contract": {
+    "shape": {
+      "component_family": "metric-panel",
+      "brand": "wm",
+      "profile": "wm-neutral",
+      "role_bindings": [
+        {"source_hash": "<pinned-source-sha256>", "object_id": "<verified-shape-id>", "property": "fill", "namespace": "presentation", "role": "surface", "preserve_transforms": true},
+        {"source_hash": "<pinned-source-sha256>", "object_id": "<verified-shape-id>", "property": "text-run", "run_path": "<paragraph/run path>", "namespace": "presentation", "role": "text.primary", "preserve_transforms": true}
+      ]
+    },
+    "rules": [
+      "Resolve role to profile token to concrete color; bind only verified source object/property or run.",
+      "Unknown or inherited effective source colors remain unresolved; do not infer a target by matching RGB globally.",
+      "Presentation profile changes cannot mutate status, actor, phase, or data roles.",
+      "Preserve source geometry, theme expressions, alpha/tint transforms, and semantic legends unless explicitly adapted."
+    ]
+  },
+  "semantic_mapping_examples": {
+    "status": {
+      "roadmap_status_values": ["planned", "active", "complete", "at_risk", "blocked"],
+      "comparison_values": ["strong", "mixed", "limited", "unknown"],
+      "policy": "Keep mappings family-specific and invariant under presentation profile changes; pair color with label/icon/pattern."
+    },
+    "actor": {
+      "examples": ["client", "consultant", "joint"],
+      "policy": "Retain actor mapping and generated legend in team compositions."
+    },
+    "data": {
+      "examples": ["gauge intensity cell 1..5", "chart series stable ids"],
+      "policy": "Retain source ordering, legends and contrast; do not map by coincidence to brand accent tokens."
+    },
+    "gauge_observed": {
+      "options": ["gray", "navy", "blue", "pink"],
+      "selected_gray": "#7F7F7F",
+      "inactive_source": "#CED7E6",
+      "navy_source": "#070154",
+      "blue": "#0047FF",
+      "pink_source": "#F900D3",
+      "pointer": "Discrete intensity position",
+      "policy": "Verified source mapping from gauge-authoring.md and gauge-review.json; keep inactive and selected gray distinct."
+    }
+  },
+  "implementation_inventory": {
+    "implemented": [
+      "internal/adapt/style.go accepts text.primary, text.secondary, surface, surface.muted, accent, state.active, state.inactive, border.",
+      "ResolveStyle implements neutral, subtle and inverse only; subtle surface is #F4F6FA.",
+      "Style.Ink selects a readable ink fallback; primary text versus surface is checked at 4.5:1.",
+      "Roadmap/comparison adaptors have family-specific status mappings; team composition requires a semantic-color legend.",
+      "Headline underline/highlight anchoring is implemented in cmd/pptxanchor and cmd/pptxtemplate/accents.go, with bounded source-backed evidence."
+    ],
+    "proposed_only_or_missing": [
+      "Taxonomy blue-accent, magenta-accent and headline-highlight profiles are not universal runtime profiles.",
+      "No unified multibrand token registry or presentation-to-semantic namespace resolver.",
+      "Repository census supplied for this survey: 101 template contracts, 11 with roles/profiles; 124 source subcontracts, 20 with roles/profiles. Profile names include source, series_match, cool_emphasis, blue_emphasis and source accent profiles gray/navy/blue/pink (profile names alone do not establish gauge semantics).",
+      "Sample portable metric-card and pod-two source contracts have empty roles/profiles, although selected rollout contracts declare both.",
+      "No role-wide cross-contract policy validator or universal dynamic headline profile API; bounded headline anchoring is already implemented."
+    ],
+    "observed_conflicts": [
+      "cards.go defaults numbered-card side rule to #0047FF, compatible with blue-as-small-emphasis; inspect other fills independently.",
+      "Adaptors use state.active as blue fill, but active may be information semantics and needs per-family classification.",
+      "Gauge selected gray #7F7F7F and inactive #CED7E6 are deliberately distinct; pink #F900D3 is verified source magenta.",
+      "Taxonomy inverse secondary is white; runtime inverse secondary is #CED7E6.",
+      "WM brand Light Gray #E8EEF8 differs from runtime subtle #F4F6FA."
+    ]
+  },
+  "priority_decisions": [
+    "Adopt separate presentation/status/actor/data/phase role namespaces and explicit per-object/run bindings.",
+    "Distinguish preserve_reference contracts from wm_current branding overlays; apply brand roles only to explicitly bound presentation objects and leave data roles unchanged.",
+    "Classify current blue card and active fills by component family before changing any colors.",
+    "Preserve the verified gauge mapping and selected versus inactive gray distinction; any changed data palette requires an explicit overlay contract.",
+    "Align canonical WM tokens before promoting profiles; gate magenta and headline marker on contrast/geometry policy.",
+    "Keep source-preserving contracts explicitly distinct from adapted profile-enabled contracts."
+  ]
+}

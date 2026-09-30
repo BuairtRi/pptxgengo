@@ -1,0 +1,4008 @@
+{
+  "schema": "pptxgengo.component-family-survey.v2",
+  "status": "discussion_proposal_no_contract_migration",
+  "sources": [
+    {
+      "path": "library/component-families.jsonl",
+      "sha256": "e24f726e12bd63edaafb42d50acca75790808c2d548b047c6d879d6944b3d69b"
+    },
+    {
+      "path": "library/component-seeds-expanded.json",
+      "sha256": "0043568cd8a300c820c4ec90f3b2498d7c8c8e975c9e89808c2c45e75dee677a"
+    },
+    {
+      "path": "library/templates/requested-components.json",
+      "sha256": "0dc71b4ae077dcf276518a2f9ccd3534cdb9905b4f46919f31e2108fc406f86b"
+    },
+    {
+      "path": "library/templates/rollout/assignments.json",
+      "sha256": "4d7046e8962c567f977846157ef362621f83895b883b0bbdab5106554123e393"
+    }
+  ],
+  "counts": {
+    "proposed_building_block_families": 21,
+    "historical_retrieval_families": 31,
+    "historical_compositions": 244,
+    "requested_occurrences": 132,
+    "requested_executable": 124,
+    "requested_visual_only": 8,
+    "counting_note": "244 and132 overlap; memberships are multi-label and cannot be summed into unique components."
+  },
+  "families": [
+    {
+      "id": "heading",
+      "name": "Heading block",
+      "content_zones": "Eyebrow, title, optional section number",
+      "variant_boundary": "Hierarchy, title width and line count; divider pages are recipes",
+      "requested_memberships": 20,
+      "historical_memberships": 2,
+      "representative_template_ids": [
+        "t077-uhg-005",
+        "t078-uhg-007",
+        "t079-uhg-008",
+        "t080-uhg-010",
+        "t086-uhg-024",
+        "t051-uhg-025"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "textpanel",
+      "name": "Text/list/callout panel",
+      "content_zones": "Heading, paragraphs or ordered bullet groups",
+      "variant_boundary": "Border, surface, emphasis and density; retain paragraph/list structure",
+      "requested_memberships": 53,
+      "historical_memberships": 69,
+      "representative_template_ids": [
+        "t077-uhg-005",
+        "t078-uhg-007",
+        "t079-uhg-008",
+        "t005-uhg-012",
+        "t010-uhg-015",
+        "t081-uhg-016"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "icon-text",
+      "name": "Icon with content",
+      "content_zones": "Icon, label and supporting text",
+      "variant_boundary": "Icon position and optical size; keep icon-to-copy association",
+      "requested_memberships": 3,
+      "historical_memberships": 8,
+      "representative_template_ids": [
+        "t077-uhg-005",
+        "t078-uhg-007",
+        "t013-uhg-031"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "numbereditem",
+      "name": "Numbered item/card",
+      "content_zones": "Number, heading and description",
+      "variant_boundary": "Horizontal/vertical arrangements and badge placement; keep numbering semantic",
+      "requested_memberships": 4,
+      "historical_memberships": 29,
+      "representative_template_ids": [
+        "t005-uhg-012",
+        "t091-uhg-033",
+        "t066-ai-accelerator-002"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "metric",
+      "name": "Metric display",
+      "content_zones": "Value, unit, label and optional source",
+      "variant_boundary": "Single/multiple metric arrangement; preserve value/label/source association",
+      "requested_memberships": 5,
+      "historical_memberships": 37,
+      "representative_template_ids": [
+        "t079-uhg-008",
+        "t069-ai-accelerator-006",
+        "t072-ai-accelerator-018"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "quote",
+      "name": "Quotation",
+      "content_zones": "Quotation, attribution and optional portrait",
+      "variant_boundary": "Quote length and attribution position; source claims remain explicit",
+      "requested_memberships": 2,
+      "historical_memberships": 11,
+      "representative_template_ids": [
+        "t079-uhg-008",
+        "t069-ai-accelerator-006"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "personprofile",
+      "name": "Person profile",
+      "content_zones": "Portrait, name, role and optional biography",
+      "variant_boundary": "Compact identity versus detailed biography variants",
+      "requested_memberships": 9,
+      "historical_memberships": 4,
+      "representative_template_ids": [
+        "t100-uhg-044",
+        "t068-ai-accelerator-004",
+        "t073-ai-accelerator-019"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "roletile",
+      "name": "Role tile",
+      "content_zones": "Role label, owner and optional allocation",
+      "variant_boundary": "Staffing/ownership colors and explicit legend; distinct from a person biography",
+      "requested_memberships": 2,
+      "historical_memberships": 7,
+      "representative_template_ids": [
+        "t028-uhg-043",
+        "t070-ai-accelerator-013"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "podcontainer",
+      "name": "Pod container",
+      "content_zones": "Pod title and ordered role tiles",
+      "variant_boundary": "Role count, columns and spacing; parent owns inter-pod relationships",
+      "requested_memberships": 1,
+      "historical_memberships": 7,
+      "representative_template_ids": [
+        "t028-uhg-043"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "table-row",
+      "name": "Aligned table/evidence row",
+      "content_zones": "Named columns, row heading and cell content",
+      "variant_boundary": "Column widths, row count and row/cell styling; headers remain aligned",
+      "requested_memberships": 22,
+      "historical_memberships": 4,
+      "representative_template_ids": [
+        "t078-uhg-007",
+        "t086-uhg-024",
+        "t051-uhg-025",
+        "t087-uhg-027",
+        "t088-uhg-028",
+        "t092-uhg-034"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "processstep",
+      "name": "Process step",
+      "content_zones": "Step label, activities, outputs and connection ports",
+      "variant_boundary": "Step count/order belong to parent flow; local slot hierarchy stays explicit",
+      "requested_memberships": 21,
+      "historical_memberships": 30,
+      "representative_template_ids": [
+        "t085-uhg-022",
+        "t090-uhg-032",
+        "t093-uhg-035",
+        "t094-uhg-036",
+        "t095-uhg-037",
+        "t070-ai-accelerator-013"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "architecturetile",
+      "name": "Architecture node/tile",
+      "content_zones": "Capability/product/system label and optional detail",
+      "variant_boundary": "Node role, width and ports; do not infer arbitrary graph topology",
+      "requested_memberships": 6,
+      "historical_memberships": 11,
+      "representative_template_ids": [
+        "t010-uhg-015",
+        "t051-uhg-025",
+        "t060-uhg-026",
+        "t089-uhg-029"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "architecturelayer",
+      "name": "Architecture layer",
+      "content_zones": "Layer label plus ordered capability tiles",
+      "variant_boundary": "Label and tiles share row geometry; repeatable layer owns its segmentation",
+      "requested_memberships": 3,
+      "historical_memberships": 0,
+      "representative_template_ids": [
+        "t020-graphics-and-layouts-062",
+        "t010-uhg-015",
+        "t060-uhg-026",
+        "t089-uhg-029"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "crosscutrail",
+      "name": "Cross-cutting rail",
+      "content_zones": "Shared-control labels and declared scope",
+      "variant_boundary": "Separate from layer labels; divider and all-layer scope must remain clear",
+      "requested_memberships": 3,
+      "historical_memberships": 0,
+      "representative_template_ids": [
+        "t060-uhg-026",
+        "t010-uhg-015",
+        "t089-uhg-029"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "timeaxis",
+      "name": "Time axis",
+      "content_zones": "Ordered period labels and ticks",
+      "variant_boundary": "Period count/width; shared axis coordinates used by all lanes",
+      "requested_memberships": 3,
+      "historical_memberships": 0,
+      "representative_template_ids": [
+        "t015-graphics-and-layouts-083",
+        "t051-uhg-025",
+        "t095-uhg-037",
+        "t039-uhg-038"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "ganttlane",
+      "name": "Gantt workstream lane",
+      "content_zones": "Workstream label, activity intervals and status",
+      "variant_boundary": "Label/bar vertical alignment, period endpoints and explicit status colors",
+      "requested_memberships": 1,
+      "historical_memberships": 3,
+      "representative_template_ids": [
+        "t015-graphics-and-layouts-083",
+        "t039-uhg-038"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "milestone",
+      "name": "Milestone/annotation",
+      "content_zones": "Marker, date/period and caption",
+      "variant_boundary": "Anchor and caption placement; belongs to a timeline or event sequence",
+      "requested_memberships": 1,
+      "historical_memberships": 26,
+      "representative_template_ids": [
+        "t039-uhg-038"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "rating-indicator",
+      "name": "Gauge or discrete rating",
+      "content_zones": "Selected cell/range, pointer and scale/legend",
+      "variant_boundary": "Renderer geometry stays locked; do not substitute progress bars for source gauges",
+      "requested_memberships": 0,
+      "historical_memberships": 3,
+      "representative_template_ids": [
+        "t045-graphics-and-layouts-045"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "legend",
+      "name": "Legend/key item",
+      "content_zones": "Swatch/mark and meaning label",
+      "variant_boundary": "Actor/status/series meaning stays stable across presentation profiles",
+      "requested_memberships": 1,
+      "historical_memberships": 5,
+      "representative_template_ids": [
+        "t028-uhg-043"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "mediaframe",
+      "name": "Media frame",
+      "content_zones": "Image/artifact plus optional caption",
+      "variant_boundary": "Separate photo, portrait, icon, logo and thumbnail aspect/crop policies",
+      "requested_memberships": 7,
+      "historical_memberships": 6,
+      "representative_template_ids": [
+        "t083-uhg-018",
+        "t086-uhg-024",
+        "t088-uhg-028",
+        "t026-uhg-030",
+        "t092-uhg-034",
+        "t093-uhg-035"
+      ],
+      "status": "proposed_reuse_boundary"
+    },
+    {
+      "id": "accent",
+      "name": "Anchored design accent",
+      "content_zones": "Target phrase or source/target objects and approved artwork",
+      "variant_boundary": "Underline, marker and arrow have different placement rules; no standalone slide template",
+      "requested_memberships": 4,
+      "historical_memberships": 4,
+      "representative_template_ids": [
+        "t095-uhg-037",
+        "t096-uhg-039",
+        "t070-ai-accelerator-013",
+        "t076-ai-accelerator-023"
+      ],
+      "status": "proposed_reuse_boundary"
+    }
+  ],
+  "recipes": [
+    "architecture-comparison",
+    "architecture-map",
+    "artifact-gallery",
+    "case-study",
+    "comparison",
+    "evidence-narrative",
+    "icon-content-panel",
+    "organization-chart",
+    "phase-detail",
+    "process-flow",
+    "radial-benefits",
+    "scope-options",
+    "section-divider",
+    "table-matrix",
+    "team-roster",
+    "timeline",
+    "workshop"
+  ],
+  "historical_mapping": [
+    {
+      "historical_family_id": "component-family:callout",
+      "name": "Takeaway callout",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 6,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:case-study-card",
+      "name": "Case study panel",
+      "family_ids": [
+        "textpanel",
+        "metric"
+      ],
+      "historical_compositions": 6,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:comparison-card",
+      "name": "Comparison panel",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 6,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:comparison-row",
+      "name": "Comparison or evidence row",
+      "family_ids": [
+        "table-row"
+      ],
+      "historical_compositions": 4,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:diagram-node",
+      "name": "Diagram node",
+      "family_ids": [
+        "architecturetile"
+      ],
+      "historical_compositions": 11,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:gantt-row",
+      "name": "Gantt workstream row",
+      "family_ids": [
+        "ganttlane"
+      ],
+      "historical_compositions": 3,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:headline-emphasis",
+      "name": "Headline emphasis",
+      "family_ids": [
+        "accent"
+      ],
+      "historical_compositions": 4,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:hierarchy-tier",
+      "name": "Hierarchy tier",
+      "family_ids": [
+        "roletile",
+        "podcontainer"
+      ],
+      "historical_compositions": 4,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:icon-panel",
+      "name": "Icon and content panel",
+      "family_ids": [
+        "icon-text"
+      ],
+      "historical_compositions": 8,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:image-caption",
+      "name": "Image with caption",
+      "family_ids": [
+        "mediaframe"
+      ],
+      "historical_compositions": 5,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:image-comparison",
+      "name": "Image comparison",
+      "family_ids": [
+        "mediaframe"
+      ],
+      "historical_compositions": 1,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:legend-item",
+      "name": "Legend item",
+      "family_ids": [
+        "legend"
+      ],
+      "historical_compositions": 5,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:list-panel",
+      "name": "List panel",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 2,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:map-label",
+      "name": "Geographic label",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 8,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:metric-panel",
+      "name": "Metric panel",
+      "family_ids": [
+        "metric"
+      ],
+      "historical_compositions": 28,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:numbered-card",
+      "name": "Numbered card",
+      "family_ids": [
+        "numbereditem"
+      ],
+      "historical_compositions": 19,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:numbered-item",
+      "name": "Numbered list item",
+      "family_ids": [
+        "numbereditem"
+      ],
+      "historical_compositions": 10,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:person-card",
+      "name": "Person identity",
+      "family_ids": [
+        "personprofile"
+      ],
+      "historical_compositions": 4,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:phase-column",
+      "name": "Phase detail column",
+      "family_ids": [
+        "processstep",
+        "textpanel"
+      ],
+      "historical_compositions": 6,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:pricing-option",
+      "name": "Pricing option",
+      "family_ids": [
+        "textpanel",
+        "metric"
+      ],
+      "historical_compositions": 3,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:process-ribbon",
+      "name": "Process ribbon",
+      "family_ids": [
+        "processstep"
+      ],
+      "historical_compositions": 4,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:process-step",
+      "name": "Process step",
+      "family_ids": [
+        "processstep"
+      ],
+      "historical_compositions": 20,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:prompt-panel",
+      "name": "Prompt panel",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 1,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:quote",
+      "name": "Quotation",
+      "family_ids": [
+        "quote"
+      ],
+      "historical_compositions": 11,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:rating-scale",
+      "name": "Rating or intensity scale",
+      "family_ids": [
+        "rating-indicator"
+      ],
+      "historical_compositions": 3,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:section-header",
+      "name": "Section header",
+      "family_ids": [
+        "heading"
+      ],
+      "historical_compositions": 2,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:service-panel",
+      "name": "Service panel",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 2,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:status-band",
+      "name": "Status band",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 1,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:team-pod",
+      "name": "Delivery pod",
+      "family_ids": [
+        "podcontainer",
+        "roletile"
+      ],
+      "historical_compositions": 3,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:text-card",
+      "name": "Text card",
+      "family_ids": [
+        "textpanel"
+      ],
+      "historical_compositions": 28,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    },
+    {
+      "historical_family_id": "component-family:timeline-event",
+      "name": "Timeline event",
+      "family_ids": [
+        "milestone"
+      ],
+      "historical_compositions": 26,
+      "migration": "Retain retrieval label and source variants; shared implementation needs geometric qualification."
+    }
+  ],
+  "requested_mapping": [
+    {
+      "source_id": "t077-uhg-005:executive_message",
+      "template_id": "t077-uhg-005",
+      "source": "uhg:005",
+      "purpose": "title and section eyebrow",
+      "object_ids": [
+        "7",
+        "9"
+      ],
+      "slots": [
+        "title",
+        "text_placeholder_8"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t077-uhg-005:understanding_panel",
+      "template_id": "t077-uhg-005",
+      "source": "uhg:005",
+      "purpose": "intro and four illustrated strategic priorities",
+      "object_ids": [
+        "13",
+        "15"
+      ],
+      "slots": [
+        "understanding_points",
+        "understanding_heading"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "icon-text",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "icon-content-panel"
+    },
+    {
+      "source_id": "t077-uhg-005:partner_takeaway",
+      "template_id": "t077-uhg-005",
+      "source": "uhg:005",
+      "purpose": "closing dark-band takeaway",
+      "object_ids": [
+        "36"
+      ],
+      "slots": [
+        "partner_takeaway"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t078-uhg-007:comparison_panels",
+      "template_id": "t078-uhg-007",
+      "source": "uhg:007",
+      "purpose": "paired six-item other-firms and delivery-model lists",
+      "object_ids": [
+        "13",
+        "15"
+      ],
+      "slots": [
+        "other_firms_comparison",
+        "how_we_work_comparison"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel",
+        "table-row"
+      ],
+      "granularity": "recipe",
+      "recipe": "comparison"
+    },
+    {
+      "source_id": "t078-uhg-007:lead_and_proof_heading",
+      "template_id": "t078-uhg-007",
+      "source": "uhg:007",
+      "purpose": "opening narrative and lower proof section",
+      "object_ids": [
+        "18",
+        "25"
+      ],
+      "slots": [
+        "proof_points_heading",
+        "lead_narrative"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t078-uhg-007:proof_cards",
+      "template_id": "t078-uhg-007",
+      "source": "uhg:007",
+      "purpose": "six icon-led outcome statements",
+      "object_ids": [
+        "20",
+        "22",
+        "23",
+        "24",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "36"
+      ],
+      "slots": [
+        "proof_outcome_1",
+        "proof_outcome_2",
+        "proof_outcome_3",
+        "proof_outcome_4",
+        "proof_outcome_5",
+        "proof_outcome_6"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "icon-text"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t079-uhg-008:case_study_one",
+      "template_id": "t079-uhg-008",
+      "source": "uhg:008",
+      "purpose": "client segment, two metrics and narrative",
+      "object_ids": [
+        "32",
+        "35",
+        "34",
+        "12"
+      ],
+      "slots": [
+        "case_one_metric_savings",
+        "case_one_client_label",
+        "case_one_story",
+        "case_one_metric_effort"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel",
+        "metric"
+      ],
+      "granularity": "recipe",
+      "recipe": "case-study"
+    },
+    {
+      "source_id": "t079-uhg-008:case_study_two",
+      "template_id": "t079-uhg-008",
+      "source": "uhg:008",
+      "purpose": "client segment, two metrics and narrative",
+      "object_ids": [
+        "51",
+        "49",
+        "61",
+        "59"
+      ],
+      "slots": [
+        "case_two_metric_cost",
+        "case_two_client_label",
+        "case_two_story",
+        "case_two_metric_time"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel",
+        "metric"
+      ],
+      "granularity": "recipe",
+      "recipe": "case-study"
+    },
+    {
+      "source_id": "t079-uhg-008:relationship_metrics",
+      "template_id": "t079-uhg-008",
+      "source": "uhg:008",
+      "purpose": "two survey metrics and footnote",
+      "object_ids": [
+        "26",
+        "27",
+        "29",
+        "40",
+        "41",
+        "42",
+        "43"
+      ],
+      "slots": [
+        "value_delivered_label",
+        "value_delivered_percent",
+        "trusted_advisor_label",
+        "trusted_advisor_percent",
+        "trusted_advisor_caption",
+        "value_delivered_caption",
+        "2026_client_relationships_survey"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "metric"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t079-uhg-008:client_quotes",
+      "template_id": "t079-uhg-008",
+      "source": "uhg:008",
+      "purpose": "four testimonial blocks with attributions",
+      "object_ids": [
+        "67"
+      ],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "quote"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t080-uhg-010:divider_panel",
+      "template_id": "t080-uhg-010",
+      "source": "uhg:010",
+      "purpose": "section number and label",
+      "object_ids": [
+        "5",
+        "10"
+      ],
+      "slots": [
+        "section_title",
+        "section_number"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "recipe",
+      "recipe": "section-divider"
+    },
+    {
+      "source_id": "t005-uhg-012:five_capability_columns",
+      "template_id": "t005-uhg-012",
+      "source": "uhg:012",
+      "purpose": "numbered capability headers with activity lists",
+      "object_ids": [
+        "2",
+        "5",
+        "9",
+        "11",
+        "13",
+        "15",
+        "18",
+        "22",
+        "27",
+        "31",
+        "35",
+        "36",
+        "37",
+        "39",
+        "41",
+        "43"
+      ],
+      "slots": [
+        "title",
+        "service_scope_activities",
+        "architecture_activities",
+        "delivery_activities",
+        "governance_activities",
+        "adoption_activities",
+        "service_scope_heading",
+        "architecture_heading",
+        "delivery_heading",
+        "governance_heading",
+        "adoption_heading"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "numbereditem",
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t005-uhg-012:closing_alignment",
+      "template_id": "t005-uhg-012",
+      "source": "uhg:012",
+      "purpose": "single summary statement",
+      "object_ids": [
+        "44"
+      ],
+      "slots": [
+        "framing_statement"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t005-uhg-012:risk_band",
+      "template_id": "t005-uhg-012",
+      "source": "uhg:012",
+      "purpose": "four risks if capability work is incomplete",
+      "object_ids": [
+        "48",
+        "53",
+        "55",
+        "57",
+        "59"
+      ],
+      "slots": [
+        "risk_strip_heading",
+        "isolation_risk",
+        "ownership_risk",
+        "cost_risk",
+        "adoption_risk"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t010-uhg-015:experience_groups",
+      "template_id": "t010-uhg-015",
+      "source": "uhg:015",
+      "purpose": "four named experience families split across two text groups; each has short description bullets",
+      "object_ids": [
+        "23",
+        "25"
+      ],
+      "slots": [
+        "bi_heading",
+        "bi_bullets",
+        "developer_heading",
+        "developer_bullets",
+        "sharing_heading",
+        "sharing_bullets",
+        "ai_heading",
+        "ai_bullets"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t010-uhg-015:architecture_inset",
+      "template_id": "t010-uhg-015",
+      "source": "uhg:015",
+      "purpose": "retained miniature component architecture",
+      "object_ids": [],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "architecturetile",
+        "architecturelayer",
+        "crosscutrail"
+      ],
+      "granularity": "recipe",
+      "recipe": "architecture-map"
+    },
+    {
+      "source_id": "t081-uhg-016:service_categories",
+      "template_id": "t081-uhg-016",
+      "source": "uhg:016",
+      "purpose": "runtime/persistence, platform engineering/operations and networking/connectivity categories with supporting bullets",
+      "object_ids": [
+        "23",
+        "6"
+      ],
+      "slots": [
+        "runtime_and_operations_groups",
+        "networking_connectivity_group"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t082-uhg-017:governance_domains",
+      "template_id": "t082-uhg-017",
+      "source": "uhg:017",
+      "purpose": "identity/access and data governance/protection groups",
+      "object_ids": [
+        "23"
+      ],
+      "slots": [
+        "governance_domains"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t082-uhg-017:network_and_assurance",
+      "template_id": "t082-uhg-017",
+      "source": "uhg:017",
+      "purpose": "network/workspace isolation and control-enforcement groups",
+      "object_ids": [
+        "6"
+      ],
+      "slots": [
+        "connectivity_controls"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t083-uhg-018:placement_criteria",
+      "template_id": "t083-uhg-018",
+      "source": "uhg:018",
+      "purpose": "workload-placement decision bullets and platform hypotheses",
+      "object_ids": [
+        "23"
+      ],
+      "slots": [
+        "decision_and_platform_hypotheses"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t083-uhg-018:platform_thumbnail",
+      "template_id": "t083-uhg-018",
+      "source": "uhg:018",
+      "purpose": "retained ecosystem diagram image",
+      "object_ids": [],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "mediaframe"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t084-uhg-020:readiness_statement",
+      "template_id": "t084-uhg-020",
+      "source": "uhg:020",
+      "purpose": "short central GA-readiness statement",
+      "object_ids": [
+        "5"
+      ],
+      "slots": [
+        "readiness_statement"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t084-uhg-020:six_readiness_gates",
+      "template_id": "t084-uhg-020",
+      "source": "uhg:020",
+      "purpose": "six checkbox criteria groups with headings and three short checks",
+      "object_ids": [
+        "13",
+        "17"
+      ],
+      "slots": [
+        "architecture_gate",
+        "security_gate"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t085-uhg-022:phase_1",
+      "template_id": "t085-uhg-022",
+      "source": "uhg:022",
+      "purpose": "weeks 0\u201316 phase, activities and outcome",
+      "object_ids": [
+        "70",
+        "76"
+      ],
+      "slots": [
+        "arrow_right_69",
+        "phase_1_summary"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t085-uhg-022:phase_2",
+      "template_id": "t085-uhg-022",
+      "source": "uhg:022",
+      "purpose": "weeks 17\u201334 phase, activities and outcome",
+      "object_ids": [
+        "72",
+        "62"
+      ],
+      "slots": [
+        "phase_2_summary",
+        "arrow_notched_right_71"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t085-uhg-022:phase_3",
+      "template_id": "t085-uhg-022",
+      "source": "uhg:022",
+      "purpose": "weeks 30\u201342 phase, activities and outcome",
+      "object_ids": [
+        "74",
+        "124"
+      ],
+      "slots": [
+        "phase_3_summary",
+        "arrow_notched_right_73"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t086-uhg-024:phase_rail",
+      "template_id": "t086-uhg-024",
+      "source": "uhg:024",
+      "purpose": "phase label, objective and four exit criteria",
+      "object_ids": [
+        "7",
+        "11"
+      ],
+      "slots": [
+        "phase_label",
+        "objective_and_phase_exit"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "phase-detail"
+    },
+    {
+      "source_id": "t086-uhg-024:workstream_matrix",
+      "template_id": "t086-uhg-024",
+      "source": "uhg:024",
+      "purpose": "activities/work-products table grouped by architecture, engineering, governance and platform product",
+      "object_ids": [
+        "14"
+      ],
+      "slots": [
+        "activities_work_products_table"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "recipe",
+      "recipe": "table-matrix"
+    },
+    {
+      "source_id": "t086-uhg-024:right_support_panels",
+      "template_id": "t086-uhg-024",
+      "source": "uhg:024",
+      "purpose": "two deliverable thumbnails, assumptions and variable-scope list",
+      "object_ids": [
+        "16",
+        "18",
+        "20",
+        "32",
+        "34"
+      ],
+      "slots": [
+        "service_catalog_onboarding_framework",
+        "target_architecture_reference_design",
+        "deliverables_heading",
+        "assumptions",
+        "variable_scope"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "mediaframe",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "phase-detail"
+    },
+    {
+      "source_id": "t051-uhg-025:three_pattern_rows",
+      "template_id": "t051-uhg-025",
+      "source": "uhg:025",
+      "purpose": "three architecture-pattern flows, Fabric-role explanations and decision questions",
+      "object_ids": [
+        "11"
+      ],
+      "slots": [
+        "fabric_pattern_matrix"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row",
+        "architecturetile",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "architecture-comparison"
+    },
+    {
+      "source_id": "t051-uhg-025:phase_indicator",
+      "template_id": "t051-uhg-025",
+      "source": "uhg:025",
+      "purpose": "phase and weeks",
+      "object_ids": [
+        "7",
+        "9"
+      ],
+      "slots": [
+        "phase_title",
+        "section_label"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "timeaxis"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t060-uhg-026:crosscut_controls",
+      "template_id": "t060-uhg-026",
+      "source": "uhg:026",
+      "purpose": "platform-wide security, governance, network, observability, capacity and DevOps controls",
+      "object_ids": [
+        "8",
+        "13",
+        "16",
+        "18",
+        "21",
+        "23",
+        "25",
+        "27"
+      ],
+      "slots": [
+        "modern_data_platform",
+        "governance_hcp",
+        "identity_access",
+        "network_connectivity",
+        "security_compliance",
+        "observability",
+        "finops_capacity",
+        "devops_artifacts"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "crosscutrail"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t060-uhg-026:source_systems",
+      "template_id": "t060-uhg-026",
+      "source": "uhg:026",
+      "purpose": "source-system input area",
+      "object_ids": [
+        "34"
+      ],
+      "slots": [
+        "ingestion_description"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "architecturetile"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t060-uhg-026:enterprise_platform_layers",
+      "template_id": "t060-uhg-026",
+      "source": "uhg:026",
+      "purpose": "enterprise platform and data lifecycle layers",
+      "object_ids": [
+        "38",
+        "48"
+      ],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "architecturelayer",
+        "architecturetile"
+      ],
+      "granularity": "recipe",
+      "recipe": "architecture-map"
+    },
+    {
+      "source_id": "t060-uhg-026:consumer_platforms",
+      "template_id": "t060-uhg-026",
+      "source": "uhg:026",
+      "purpose": "BI and downstream consumers",
+      "object_ids": [],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "architecturetile"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t060-uhg-026:value_strip",
+      "template_id": "t060-uhg-026",
+      "source": "uhg:026",
+      "purpose": "four governance/platform value statements",
+      "object_ids": [],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t087-uhg-027:ea_selection_scorecard",
+      "template_id": "t087-uhg-027",
+      "source": "uhg:027",
+      "purpose": "five selection dimensions",
+      "object_ids": [
+        "17"
+      ],
+      "slots": [
+        "ea_scorecard"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "recipe",
+      "recipe": "table-matrix"
+    },
+    {
+      "source_id": "t087-uhg-027:three_early_adopter_cards",
+      "template_id": "t087-uhg-027",
+      "source": "uhg:027",
+      "purpose": "Snowflake-to-Fabric, Databricks-to-Fabric and end-to-end workloads, each with use case and learning outcome",
+      "object_ids": [
+        "50",
+        "52",
+        "55",
+        "57",
+        "59",
+        "61",
+        "63",
+        "66",
+        "68"
+      ],
+      "slots": [
+        "cohort_1",
+        "cohort_1_validation",
+        "cohort_2",
+        "cohort_2_validation",
+        "cohort_3",
+        "cohort_3_validation",
+        "snowflake_fabric",
+        "databricks_fabric",
+        "end_to_end_fabric"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t088-uhg-028:phase_rail",
+      "template_id": "t088-uhg-028",
+      "source": "uhg:028",
+      "purpose": "phase label, objective and four exit criteria",
+      "object_ids": [
+        "7",
+        "2",
+        "12"
+      ],
+      "slots": [
+        "phase_label",
+        "objective",
+        "phase_exit_criteria"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "phase-detail"
+    },
+    {
+      "source_id": "t088-uhg-028:workstream_matrix",
+      "template_id": "t088-uhg-028",
+      "source": "uhg:028",
+      "purpose": "four workstream rows of activities and work products",
+      "object_ids": [
+        "14"
+      ],
+      "slots": [
+        "activities_work_products_table"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "recipe",
+      "recipe": "table-matrix"
+    },
+    {
+      "source_id": "t088-uhg-028:right_support_panels",
+      "template_id": "t088-uhg-028",
+      "source": "uhg:028",
+      "purpose": "deliverables, assumptions and variable-scope additions",
+      "object_ids": [
+        "16",
+        "18",
+        "20",
+        "32",
+        "34"
+      ],
+      "slots": [
+        "variable_scope",
+        "operating_model_governance_framework",
+        "support_model_service_levels",
+        "deliverables_heading",
+        "assumptions"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "mediaframe",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "phase-detail"
+    },
+    {
+      "source_id": "t089-uhg-029:early_adopter_cards",
+      "template_id": "t089-uhg-029",
+      "source": "uhg:029",
+      "purpose": "three workload-to-adopter cards",
+      "object_ids": [
+        "32",
+        "33",
+        "34"
+      ],
+      "slots": [
+        "adopter_1",
+        "adopter_2",
+        "adopter_3"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t089-uhg-029:highlighted_architecture_map",
+      "template_id": "t089-uhg-029",
+      "source": "uhg:029",
+      "purpose": "architecture overview with per-adopter component highlights and connectors",
+      "object_ids": [
+        "35"
+      ],
+      "slots": [
+        "architecture_map_intro"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "architecturetile",
+        "architecturelayer",
+        "crosscutrail"
+      ],
+      "granularity": "recipe",
+      "recipe": "architecture-map"
+    },
+    {
+      "source_id": "t026-uhg-030:six_accelerator_cards",
+      "template_id": "t026-uhg-030",
+      "source": "uhg:030",
+      "purpose": "six fixed columns with product stage, card headline, description, supported platform tags and thumbnail",
+      "object_ids": [
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "13",
+        "14",
+        "229"
+      ],
+      "slots": [
+        "title",
+        "section_label"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel",
+        "mediaframe"
+      ],
+      "granularity": "recipe",
+      "recipe": "artifact-gallery"
+    },
+    {
+      "source_id": "t013-uhg-031:center_value",
+      "template_id": "t013-uhg-031",
+      "source": "uhg:031",
+      "purpose": "central benefit label and icon",
+      "object_ids": [
+        "11"
+      ],
+      "slots": [
+        "benefits_center"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t013-uhg-031:eight_benefit_spokes",
+      "template_id": "t013-uhg-031",
+      "source": "uhg:031",
+      "purpose": "eight perimeter benefit headings and descriptions with radial connectors",
+      "object_ids": [
+        "63",
+        "88",
+        "93",
+        "98",
+        "103",
+        "108",
+        "113",
+        "121"
+      ],
+      "slots": [
+        "prebuilt_ingestion",
+        "configured_pipelines",
+        "metadata_tracking",
+        "ai_data_modeling",
+        "analytics_integration",
+        "low_code_notebook",
+        "reusable_assets",
+        "microsoft_familiarity"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "icon-text",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "radial-benefits"
+    },
+    {
+      "source_id": "t090-uhg-032:six_workflow_stages",
+      "template_id": "t090-uhg-032",
+      "source": "uhg:032",
+      "purpose": "six fixed stage columns, each with service, activity and evidence",
+      "object_ids": [
+        "13",
+        "17",
+        "20",
+        "22",
+        "24"
+      ],
+      "slots": [
+        "stage_assess",
+        "stage_provision",
+        "stage_enable",
+        "stage_validate",
+        "stage_operate"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "recipe",
+      "recipe": "process-flow"
+    },
+    {
+      "source_id": "t090-uhg-032:shared_services_ribbon",
+      "template_id": "t090-uhg-032",
+      "source": "uhg:032",
+      "purpose": "fixed shared-platform-services row",
+      "object_ids": [
+        "30",
+        "31"
+      ],
+      "slots": [
+        "rectangle_29"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t090-uhg-032:variable_delivery_footer",
+      "template_id": "t090-uhg-032",
+      "source": "uhg:032",
+      "purpose": "workload-specific variable delivery activities",
+      "object_ids": [],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t091-uhg-033:five_exit_gate_columns",
+      "template_id": "t091-uhg-033",
+      "source": "uhg:033",
+      "purpose": "five numbered evidence gates with required proof, illustrative exit and decision owner",
+      "object_ids": [
+        "12",
+        "14",
+        "20",
+        "26",
+        "27",
+        "29",
+        "30",
+        "32",
+        "33",
+        "35",
+        "36",
+        "38",
+        "40",
+        "41",
+        "44",
+        "47",
+        "49",
+        "50"
+      ],
+      "slots": [
+        "gate_1_evidence",
+        "rectangle_13",
+        "chevron_5_20",
+        "gate_2_evidence",
+        "rectangle_26",
+        "chevron_5_29",
+        "rectangle_29",
+        "gate_3_evidence",
+        "rectangle_32",
+        "chevron_5_35",
+        "rectangle_35",
+        "rectangle_37",
+        "gate_4_evidence",
+        "chevron_5_41",
+        "rectangle_43",
+        "rectangle_48",
+        "rectangle_49"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "numbereditem",
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t092-uhg-034:phase_rail",
+      "template_id": "t092-uhg-034",
+      "source": "uhg:034",
+      "purpose": "phase label, objective and three exit criteria",
+      "object_ids": [
+        "7",
+        "2",
+        "12"
+      ],
+      "slots": [
+        "phase_label",
+        "objective",
+        "phase_exit_criteria"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "phase-detail"
+    },
+    {
+      "source_id": "t092-uhg-034:workstream_matrix",
+      "template_id": "t092-uhg-034",
+      "source": "uhg:034",
+      "purpose": "four workstream rows of activities and work products",
+      "object_ids": [
+        "14"
+      ],
+      "slots": [
+        "activities_work_products_table"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "recipe",
+      "recipe": "table-matrix"
+    },
+    {
+      "source_id": "t092-uhg-034:right_support_panels",
+      "template_id": "t092-uhg-034",
+      "source": "uhg:034",
+      "purpose": "deliverables, assumptions and variable scope",
+      "object_ids": [
+        "16",
+        "18",
+        "20",
+        "32",
+        "34"
+      ],
+      "slots": [
+        "variable_scope",
+        "platform_kpi_dashboard_roadmap",
+        "training_documents_transition_runbooks",
+        "deliverables_heading",
+        "assumptions"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "mediaframe",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "phase-detail"
+    },
+    {
+      "source_id": "t093-uhg-035:enablement_narrative",
+      "template_id": "t093-uhg-035",
+      "source": "uhg:035",
+      "purpose": "headline, narrative, embedded enablement artifacts and takeaway",
+      "object_ids": [
+        "11",
+        "13",
+        "15",
+        "43"
+      ],
+      "slots": [
+        "enablement_program_and_maturity_content",
+        "adoption_takeaway",
+        "title",
+        "platform_operations_heading"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel",
+        "mediaframe"
+      ],
+      "granularity": "recipe",
+      "recipe": "evidence-narrative"
+    },
+    {
+      "source_id": "t093-uhg-035:three_step_loop",
+      "template_id": "t093-uhg-035",
+      "source": "uhg:035",
+      "purpose": "Equip, Activate, Realize Value cycle",
+      "object_ids": [
+        "20",
+        "21",
+        "22"
+      ],
+      "slots": [
+        "realize_value_step",
+        "equip_step",
+        "activate_step"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "recipe",
+      "recipe": "process-flow"
+    },
+    {
+      "source_id": "t094-uhg-036:pathway_one",
+      "template_id": "t094-uhg-036",
+      "source": "uhg:036",
+      "purpose": "request-to-provisioning five-step path",
+      "object_ids": [
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17"
+      ],
+      "slots": [
+        "pathway_1_heading",
+        "pathway_1_subheading",
+        "pathway_1_step_1",
+        "pathway_1_step_2",
+        "pathway_1_step_3",
+        "pathway_1_step_4",
+        "pathway_1_step_5"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "recipe",
+      "recipe": "process-flow"
+    },
+    {
+      "source_id": "t094-uhg-036:pathway_two",
+      "template_id": "t094-uhg-036",
+      "source": "uhg:036",
+      "purpose": "use-case optimization five-step path",
+      "object_ids": [
+        "23",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22"
+      ],
+      "slots": [
+        "pathway_2_step_1",
+        "pathway_2_step_2",
+        "pathway_2_step_3",
+        "pathway_2_step_4",
+        "pathway_2_step_5",
+        "pathway_2_heading"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "recipe",
+      "recipe": "process-flow"
+    },
+    {
+      "source_id": "t094-uhg-036:governance_callout",
+      "template_id": "t094-uhg-036",
+      "source": "uhg:036",
+      "purpose": "governance principles and outcome/operating context",
+      "object_ids": [
+        "9",
+        "24",
+        "25"
+      ],
+      "slots": [
+        "governance_principles",
+        "designed_to_align_with_uhg_s_existing",
+        "outcome"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading",
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t095-uhg-037:two_party_timeline",
+      "template_id": "t095-uhg-037",
+      "source": "uhg:037",
+      "purpose": "Phase 2/3 arrows with West Monroe and UHG contribution statements",
+      "object_ids": [
+        "15",
+        "18",
+        "21",
+        "19",
+        "39",
+        "50",
+        "51"
+      ],
+      "slots": [
+        "arrow_pentagon_14",
+        "arrow_chevron_20",
+        "wm_phase_2_contribution",
+        "wm_phase_3_contribution",
+        "uhg_phase_2_contribution",
+        "uhg_phase_3_contribution",
+        "phase_03general_availability_optimizationweeks_35"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "timeaxis",
+        "processstep",
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "timeline"
+    },
+    {
+      "source_id": "t095-uhg-037:transition_annotation",
+      "template_id": "t095-uhg-037",
+      "source": "uhg:037",
+      "purpose": "speech-bubble ownership handoff statement",
+      "object_ids": [
+        "10"
+      ],
+      "slots": [
+        "ownership_transition_callout"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel",
+        "accent"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t039-uhg-038:timeline_scale",
+      "template_id": "t039-uhg-038",
+      "source": "uhg:038",
+      "purpose": "month 1\u201312 plus beyond header",
+      "object_ids": [
+        "59"
+      ],
+      "slots": [
+        "month_scale"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "timeaxis"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t039-uhg-038:workstream_bars",
+      "template_id": "t039-uhg-038",
+      "source": "uhg:038",
+      "purpose": "three phased bars, GA onboarding and ongoing management",
+      "object_ids": [
+        "80",
+        "70",
+        "69",
+        "65",
+        "67"
+      ],
+      "slots": [
+        "onboarding_phase",
+        "ongoing_governance",
+        "phase_3",
+        "phase_2",
+        "phase_1"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "ganttlane"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t039-uhg-038:milestones",
+      "template_id": "t039-uhg-038",
+      "source": "uhg:038",
+      "purpose": "four milestone labels and markers",
+      "object_ids": [
+        "7",
+        "73",
+        "10",
+        "17"
+      ],
+      "slots": [
+        "early_release_gate",
+        "foundation_gate",
+        "launch_gate",
+        "ownership_gate"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "milestone"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t096-uhg-039:fixed_scope",
+      "template_id": "t096-uhg-039",
+      "source": "uhg:039",
+      "purpose": "one-time included platform scope list",
+      "object_ids": [
+        "9"
+      ],
+      "slots": [
+        "fixed_scope_panel"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "scope-options"
+    },
+    {
+      "source_id": "t096-uhg-039:variable_scope",
+      "template_id": "t096-uhg-039",
+      "source": "uhg:039",
+      "purpose": "scalable EA scope, workload work and specialty support",
+      "object_ids": [
+        "13"
+      ],
+      "slots": [
+        "optional_scope_panel"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "recipe",
+      "recipe": "scope-options"
+    },
+    {
+      "source_id": "t096-uhg-039:optional_service_annotation",
+      "template_id": "t096-uhg-039",
+      "source": "uhg:039",
+      "purpose": "callout and curved pointer",
+      "object_ids": [
+        "17"
+      ],
+      "slots": [
+        "optional_scope_callout"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel",
+        "accent"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t097-uhg-040:three_service_rows",
+      "template_id": "t097-uhg-040",
+      "source": "uhg:040",
+      "purpose": "service, additional scope and unlocked value across EA expansion, change management and cloud surge support",
+      "object_ids": [
+        "6"
+      ],
+      "slots": [
+        "service_scope_value_table"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t098-uhg-041:divider_panel",
+      "template_id": "t098-uhg-041",
+      "source": "uhg:041",
+      "purpose": "section number and label",
+      "object_ids": [
+        "10",
+        "15"
+      ],
+      "slots": [
+        "section_title",
+        "section_number"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "recipe",
+      "recipe": "section-divider"
+    },
+    {
+      "source_id": "t099-uhg-042:location_heading",
+      "template_id": "t099-uhg-042",
+      "source": "uhg:042",
+      "purpose": "title with highlighted global-reach phrase",
+      "object_ids": [
+        "12"
+      ],
+      "slots": [
+        "title"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t099-uhg-042:three_location_cards",
+      "template_id": "t099-uhg-042",
+      "source": "uhg:042",
+      "purpose": "Midwest presence, London/Ireland alignment and global capacity",
+      "object_ids": [
+        "13",
+        "2",
+        "5"
+      ],
+      "slots": [
+        "global_capacity_card",
+        "transatlantic_location_card",
+        "midwest_location_card"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel",
+        "mediaframe"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t099-uhg-042:summary",
+      "template_id": "t099-uhg-042",
+      "source": "uhg:042",
+      "purpose": "single-line delivery-model conclusion",
+      "object_ids": [
+        "18"
+      ],
+      "slots": [
+        "summary"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t028-uhg-043:hierarchy_chart",
+      "template_id": "t028-uhg-043",
+      "source": "uhg:043",
+      "purpose": "paired UHG/WM leadership and downstream workstream/pod hierarchy",
+      "object_ids": [
+        "54",
+        "56",
+        "57",
+        "60",
+        "61",
+        "65",
+        "66",
+        "67",
+        "8"
+      ],
+      "slots": [
+        "delivery_team_heading",
+        "partner_sponsor_role",
+        "client_sponsor_role",
+        "client_program_lead_role",
+        "delivery_lead_role",
+        "platform_architect_role",
+        "infrastructure_architect_role",
+        "program_manager_role",
+        "client_platform_owner_role"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "podcontainer",
+        "roletile"
+      ],
+      "granularity": "recipe",
+      "recipe": "organization-chart"
+    },
+    {
+      "source_id": "t028-uhg-043:leadership_responsibility_panel",
+      "template_id": "t028-uhg-043",
+      "source": "uhg:043",
+      "purpose": "UHG leadership expectations sidebar",
+      "object_ids": [
+        "40",
+        "42"
+      ],
+      "slots": [
+        "client_role_responsibilities",
+        "client_leadership_panel"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t028-uhg-043:staffing_legend",
+      "template_id": "t028-uhg-043",
+      "source": "uhg:043",
+      "purpose": "full-time/part-time ownership key",
+      "object_ids": [
+        "44",
+        "49",
+        "51",
+        "53"
+      ],
+      "slots": [
+        "legend_heading",
+        "partner_full_time_legend",
+        "partner_part_time_legend",
+        "client_part_time_legend"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "legend"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t100-uhg-044:core_roster",
+      "template_id": "t100-uhg-044",
+      "source": "uhg:044",
+      "purpose": "named core roles, matching headshots and role labels",
+      "object_ids": [
+        "15",
+        "19",
+        "22",
+        "25",
+        "33",
+        "36",
+        "50",
+        "53",
+        "58",
+        "40"
+      ],
+      "slots": [
+        "rectangle_14",
+        "rectangle_18",
+        "rectangle_21",
+        "rectangle_24",
+        "rectangle_32",
+        "rectangle_35",
+        "rectangle_49",
+        "rectangle_52",
+        "rectangle_57",
+        "rectangle_39"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "recipe",
+      "recipe": "team-roster"
+    },
+    {
+      "source_id": "t100-uhg-044:specialist_roster",
+      "template_id": "t100-uhg-044",
+      "source": "uhg:044",
+      "purpose": "subject matter specialists and corresponding names/roles",
+      "object_ids": [
+        "40",
+        "44",
+        "47",
+        "48",
+        "41",
+        "42"
+      ],
+      "slots": [
+        "text_placeholder_41",
+        "rectangle_39",
+        "rectangle_43",
+        "rectangle_47",
+        "rectangle_40",
+        "rectangle_46"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "recipe",
+      "recipe": "team-roster"
+    },
+    {
+      "source_id": "t100-uhg-044:responsibility_groups",
+      "template_id": "t100-uhg-044",
+      "source": "uhg:044",
+      "purpose": "two role-family responsibility lists",
+      "object_ids": [
+        "8",
+        "10"
+      ],
+      "slots": [
+        "core_team_responsibilities",
+        "specialist_responsibilities"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t101-uhg-045:role_by_phase_matrix",
+      "template_id": "t101-uhg-045",
+      "source": "uhg:045",
+      "purpose": "role rows crossed with phase 1/2/3 responsibility text and party accountable",
+      "object_ids": [
+        "7"
+      ],
+      "slots": [
+        "role_phase_raci_table"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "recipe",
+      "recipe": "table-matrix"
+    },
+    {
+      "source_id": "t066-ai-accelerator-002:operating_drivers",
+      "template_id": "t066-ai-accelerator-002",
+      "source": "ai-accelerator:002",
+      "purpose": "operating drivers",
+      "object_ids": [
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "slots": [
+        "drivers_heading",
+        "driver_1_number",
+        "driver_1_title",
+        "driver_1_body",
+        "driver_2_number",
+        "driver_2_title",
+        "driver_2_body",
+        "driver_3_number",
+        "driver_3_title",
+        "driver_3_body"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "numbereditem",
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t066-ai-accelerator-002:outcome_panel",
+      "template_id": "t066-ai-accelerator-002",
+      "source": "ai-accelerator:002",
+      "purpose": "outcome panel",
+      "object_ids": [
+        "16",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "slots": [
+        "outcomes_eyebrow",
+        "outcomes_heading",
+        "outcome_1_title",
+        "outcome_1_body",
+        "outcome_2_title",
+        "outcome_2_body",
+        "outcome_3_title",
+        "outcome_3_body",
+        "outcome_4_title",
+        "outcome_4_body",
+        "outcome_5_title",
+        "outcome_5_body",
+        "outcome_6_title",
+        "outcome_6_body"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "numbereditem",
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t067-ai-accelerator-003:section_panel",
+      "template_id": "t067-ai-accelerator-003",
+      "source": "ai-accelerator:003",
+      "purpose": "section panel",
+      "object_ids": [
+        "9",
+        "11",
+        "12",
+        "13",
+        "5",
+        "7"
+      ],
+      "slots": [
+        "section_label",
+        "section_number",
+        "title"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "recipe",
+      "recipe": "section-divider"
+    },
+    {
+      "source_id": "t068-ai-accelerator-004:profile_1",
+      "template_id": "t068-ai-accelerator-004",
+      "source": "ai-accelerator:004",
+      "purpose": "profile 1",
+      "object_ids": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "39"
+      ],
+      "slots": [
+        "photo_placeholder_1",
+        "person_1_name",
+        "person_1_role",
+        "person_1_biography"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t068-ai-accelerator-004:profile_2",
+      "template_id": "t068-ai-accelerator-004",
+      "source": "ai-accelerator:004",
+      "purpose": "profile 2",
+      "object_ids": [
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "38"
+      ],
+      "slots": [
+        "photo_placeholder_2",
+        "person_2_name",
+        "person_2_role",
+        "person_2_biography"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t068-ai-accelerator-004:profile_3",
+      "template_id": "t068-ai-accelerator-004",
+      "source": "ai-accelerator:004",
+      "purpose": "profile 3",
+      "object_ids": [
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "37"
+      ],
+      "slots": [
+        "photo_placeholder_3",
+        "person_3_name",
+        "person_3_role",
+        "person_3_biography"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t068-ai-accelerator-004:profile_4",
+      "template_id": "t068-ai-accelerator-004",
+      "source": "ai-accelerator:004",
+      "purpose": "profile 4",
+      "object_ids": [
+        "25",
+        "26",
+        "28",
+        "29",
+        "30",
+        "42"
+      ],
+      "slots": [
+        "person_4_name",
+        "person_4_role",
+        "person_4_biography"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t068-ai-accelerator-004:profile_5",
+      "template_id": "t068-ai-accelerator-004",
+      "source": "ai-accelerator:004",
+      "purpose": "profile 5",
+      "object_ids": [
+        "31",
+        "32",
+        "34",
+        "35",
+        "36",
+        "41"
+      ],
+      "slots": [
+        "person_5_name",
+        "person_5_role",
+        "person_5_biography"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t069-ai-accelerator-006:company_intro",
+      "template_id": "t069-ai-accelerator-006",
+      "source": "ai-accelerator:006",
+      "purpose": "company intro",
+      "object_ids": [
+        "5",
+        "9",
+        "10",
+        "22"
+      ],
+      "slots": [
+        "title",
+        "we_re_tech_forward_advisors_who_draw_on",
+        "text_placeholder_24"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t069-ai-accelerator-006:services_and_industries",
+      "template_id": "t069-ai-accelerator-006",
+      "source": "ai-accelerator:006",
+      "purpose": "services and industries",
+      "object_ids": [
+        "54",
+        "25",
+        "15",
+        "12",
+        "13",
+        "16",
+        "7",
+        "18"
+      ],
+      "slots": [
+        "where_we_do_it",
+        "what_we_do",
+        "artificial_intelligenceoperationsorganization_people",
+        "consumer_industrial_products_energy",
+        "mergers_acquisitionstech_experience",
+        "high_tech_softwareinsurancelife_sciencesprivate_equity"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t069-ai-accelerator-006:presence",
+      "template_id": "t069-ai-accelerator-006",
+      "source": "ai-accelerator:006",
+      "purpose": "presence",
+      "object_ids": [
+        "97",
+        "26",
+        "29",
+        "30"
+      ],
+      "slots": [
+        "text_placeholder_6",
+        "office_locations_chicago_hq_los_angeles",
+        "talent_hubs_denver_orange_county"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t069-ai-accelerator-006:testimonial",
+      "template_id": "t069-ai-accelerator-006",
+      "source": "ai-accelerator:006",
+      "purpose": "testimonial",
+      "object_ids": [
+        "60",
+        "61"
+      ],
+      "slots": [
+        "west_monroe_continues_to_deliver_at"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "quote"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t069-ai-accelerator-006:impact_metrics",
+      "template_id": "t069-ai-accelerator-006",
+      "source": "ai-accelerator:006",
+      "purpose": "impact metrics",
+      "object_ids": [
+        "96",
+        "55",
+        "59",
+        "62",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "70",
+        "74",
+        "77",
+        "76",
+        "78",
+        "79",
+        "80",
+        "85",
+        "86"
+      ],
+      "slots": [
+        "people_are_at_the_core_of",
+        "we_show_up_personally_and_we",
+        "text_placeholder_6_64",
+        "85",
+        "of_clients_consider_west_monroe_a",
+        "net_promoter_score_1_the_industry",
+        "99",
+        "text_placeholder_6_74",
+        "workplace_awards_in_2025",
+        "71",
+        "of_employees_say_their_work_has",
+        "35",
+        "10k_combined_hours_for_pro_bono_work_global",
+        "text_placeholder_6_86"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "metric"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t069-ai-accelerator-006:awards_and_sources",
+      "template_id": "t069-ai-accelerator-006",
+      "source": "ai-accelerator:006",
+      "purpose": "awards and sources",
+      "object_ids": [
+        "20",
+        "21",
+        "23",
+        "88"
+      ],
+      "slots": [
+        "1_2025_client_satisfaction_survey2_b2b"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t070-ai-accelerator-013:five_stage_flow",
+      "template_id": "t070-ai-accelerator-013",
+      "source": "ai-accelerator:013",
+      "purpose": "five stage flow",
+      "object_ids": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28"
+      ],
+      "slots": [
+        "01",
+        "stage_1_label",
+        "02",
+        "stage_2_label",
+        "03",
+        "stage_3_label",
+        "04",
+        "stage_4_label",
+        "05",
+        "stage_5_label"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "recipe",
+      "recipe": "process-flow"
+    },
+    {
+      "source_id": "t070-ai-accelerator-013:feedback_loop",
+      "template_id": "t070-ai-accelerator-013",
+      "source": "ai-accelerator:013",
+      "purpose": "feedback loop",
+      "object_ids": [
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34"
+      ],
+      "slots": [
+        "feedback_label"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "accent"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t070-ai-accelerator-013:feedback_explanations",
+      "template_id": "t070-ai-accelerator-013",
+      "source": "ai-accelerator:013",
+      "purpose": "feedback explanations",
+      "object_ids": [
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43"
+      ],
+      "slots": [
+        "opportunity_intake",
+        "stakeholder_feedback_shapes_what_comes_next",
+        "capability_refinement",
+        "validation_insights_sharpen_the_blueprints",
+        "operational_learning",
+        "usage_data_and_telemetry_reset_priorities"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t070-ai-accelerator-013:shared_team_band",
+      "template_id": "t070-ai-accelerator-013",
+      "source": "ai-accelerator:013",
+      "purpose": "shared team band",
+      "object_ids": [
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61"
+      ],
+      "slots": [
+        "team_heading",
+        "team_subheading",
+        "product",
+        "engineering",
+        "qa_quality",
+        "design_ux",
+        "stakeholders"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "roletile"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t071-ai-accelerator-014:stage_1",
+      "template_id": "t071-ai-accelerator-014",
+      "source": "ai-accelerator:014",
+      "purpose": "stage 1",
+      "object_ids": [
+        "20",
+        "60",
+        "61",
+        "90"
+      ],
+      "slots": [
+        "stage_1_heading",
+        "stage_1_detail"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t071-ai-accelerator-014:stage_2",
+      "template_id": "t071-ai-accelerator-014",
+      "source": "ai-accelerator:014",
+      "purpose": "stage 2",
+      "object_ids": [
+        "22",
+        "62",
+        "63",
+        "91"
+      ],
+      "slots": [
+        "stage_2_heading",
+        "stage_2_detail"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t071-ai-accelerator-014:stage_3",
+      "template_id": "t071-ai-accelerator-014",
+      "source": "ai-accelerator:014",
+      "purpose": "stage 3",
+      "object_ids": [
+        "24",
+        "64",
+        "65",
+        "92"
+      ],
+      "slots": [
+        "stage_3_heading",
+        "stage_3_detail"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t071-ai-accelerator-014:stage_4",
+      "template_id": "t071-ai-accelerator-014",
+      "source": "ai-accelerator:014",
+      "purpose": "stage 4",
+      "object_ids": [
+        "26",
+        "66",
+        "67",
+        "93"
+      ],
+      "slots": [
+        "stage_4_heading",
+        "stage_4_detail"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t071-ai-accelerator-014:stage_5",
+      "template_id": "t071-ai-accelerator-014",
+      "source": "ai-accelerator:014",
+      "purpose": "stage 5",
+      "object_ids": [
+        "28",
+        "68",
+        "69",
+        "94"
+      ],
+      "slots": [
+        "stage_5_heading",
+        "stage_5_detail"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:framework_row_1",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "framework row 1",
+      "object_ids": [
+        "203",
+        "204",
+        "205",
+        "206",
+        "207",
+        "208",
+        "209"
+      ],
+      "slots": [
+        "row_1_number",
+        "row_1_layer",
+        "row_1_examples",
+        "row_1_emphasis"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:framework_row_2",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "framework row 2",
+      "object_ids": [
+        "210",
+        "211",
+        "212",
+        "213",
+        "214",
+        "215",
+        "216"
+      ],
+      "slots": [
+        "row_2_number",
+        "row_2_layer",
+        "row_2_examples",
+        "row_2_emphasis"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:framework_row_3",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "framework row 3",
+      "object_ids": [
+        "217",
+        "218",
+        "219",
+        "220",
+        "221",
+        "222",
+        "223"
+      ],
+      "slots": [
+        "row_3_number",
+        "row_3_layer",
+        "row_3_examples",
+        "row_3_emphasis"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:framework_row_4",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "framework row 4",
+      "object_ids": [
+        "224",
+        "225",
+        "226",
+        "227",
+        "228",
+        "229",
+        "230"
+      ],
+      "slots": [
+        "row_4_number",
+        "row_4_layer",
+        "row_4_examples",
+        "row_4_emphasis"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:framework_row_5",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "framework row 5",
+      "object_ids": [
+        "231",
+        "232",
+        "233",
+        "234",
+        "235",
+        "236",
+        "237"
+      ],
+      "slots": [
+        "row_5_number",
+        "row_5_layer",
+        "row_5_examples",
+        "row_5_emphasis"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:framework_row_6",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "framework row 6",
+      "object_ids": [
+        "238",
+        "239",
+        "240",
+        "241",
+        "242",
+        "243",
+        "244"
+      ],
+      "slots": [
+        "row_6_number",
+        "row_6_layer",
+        "row_6_examples",
+        "row_6_emphasis"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:column_headers",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "column headers",
+      "object_ids": [
+        "200",
+        "201",
+        "202"
+      ],
+      "slots": [
+        "column_header_1",
+        "column_header_2",
+        "column_header_3"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:workshop_application",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "workshop application",
+      "object_ids": [
+        "245",
+        "246",
+        "247"
+      ],
+      "slots": [
+        "workshop_label",
+        "workshop_message"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t072-ai-accelerator-018:interest_metrics",
+      "template_id": "t072-ai-accelerator-018",
+      "source": "ai-accelerator:018",
+      "purpose": "interest metrics",
+      "object_ids": [
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13"
+      ],
+      "slots": [
+        "github_stars_pm_skills_marketplace",
+        "github_stars_pm_brain_as_code",
+        "github_stars_github_spec_kit",
+        "github_stars_openspec",
+        "github_stars_bmad_method",
+        "github_stars_gstack",
+        "github_stars_superpowers",
+        "github_stars_source_and_interpretation"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "metric"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t073-ai-accelerator-019:section_panel",
+      "template_id": "t073-ai-accelerator-019",
+      "source": "ai-accelerator:019",
+      "purpose": "section panel",
+      "object_ids": [
+        "10",
+        "5",
+        "6",
+        "8",
+        "9",
+        "4",
+        "7"
+      ],
+      "slots": [
+        "section_label",
+        "section_number",
+        "title"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "heading"
+      ],
+      "granularity": "recipe",
+      "recipe": "section-divider"
+    },
+    {
+      "source_id": "t073-ai-accelerator-019:facilitator_1",
+      "template_id": "t073-ai-accelerator-019",
+      "source": "ai-accelerator:019",
+      "purpose": "facilitator 1",
+      "object_ids": [
+        "11",
+        "13",
+        "14",
+        "15",
+        "16",
+        "35"
+      ],
+      "slots": [
+        "facilitator_1_label",
+        "facilitator_1_name",
+        "facilitator_1_role"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t073-ai-accelerator-019:facilitator_2",
+      "template_id": "t073-ai-accelerator-019",
+      "source": "ai-accelerator:019",
+      "purpose": "facilitator 2",
+      "object_ids": [
+        "19",
+        "21",
+        "25",
+        "27",
+        "29",
+        "31",
+        "37"
+      ],
+      "slots": [
+        "facilitator_2_label",
+        "facilitator_2_name",
+        "facilitator_2_role"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "personprofile"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t074-ai-accelerator-020:agenda_row_1",
+      "template_id": "t074-ai-accelerator-020",
+      "source": "ai-accelerator:020",
+      "purpose": "agenda row 1",
+      "object_ids": [
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "slots": [
+        "vertical_agenda_phase_1_title",
+        "vertical_agenda_phase_1_time",
+        "vertical_agenda_phase_1_contribution",
+        "vertical_agenda_phase_1_result"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t074-ai-accelerator-020:agenda_row_2",
+      "template_id": "t074-ai-accelerator-020",
+      "source": "ai-accelerator:020",
+      "purpose": "agenda row 2",
+      "object_ids": [
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64"
+      ],
+      "slots": [
+        "vertical_agenda_phase_2_title",
+        "vertical_agenda_phase_2_time",
+        "vertical_agenda_phase_2_contribution",
+        "vertical_agenda_phase_2_result"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t074-ai-accelerator-020:agenda_row_3",
+      "template_id": "t074-ai-accelerator-020",
+      "source": "ai-accelerator:020",
+      "purpose": "agenda row 3",
+      "object_ids": [
+        "65",
+        "66",
+        "67",
+        "68",
+        "69",
+        "70",
+        "71",
+        "72"
+      ],
+      "slots": [
+        "vertical_agenda_phase_3_title",
+        "vertical_agenda_phase_3_time",
+        "vertical_agenda_phase_3_contribution",
+        "vertical_agenda_phase_3_result"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t074-ai-accelerator-020:agenda_row_4",
+      "template_id": "t074-ai-accelerator-020",
+      "source": "ai-accelerator:020",
+      "purpose": "agenda row 4",
+      "object_ids": [
+        "73",
+        "74",
+        "75",
+        "76",
+        "77",
+        "78",
+        "79",
+        "80"
+      ],
+      "slots": [
+        "vertical_agenda_phase_4_title",
+        "vertical_agenda_phase_4_time",
+        "vertical_agenda_phase_4_contribution",
+        "vertical_agenda_phase_4_result"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t074-ai-accelerator-020:agenda_row_5",
+      "template_id": "t074-ai-accelerator-020",
+      "source": "ai-accelerator:020",
+      "purpose": "agenda row 5",
+      "object_ids": [
+        "81",
+        "82",
+        "83",
+        "84",
+        "85",
+        "86",
+        "87",
+        "88"
+      ],
+      "slots": [
+        "vertical_agenda_phase_5_title",
+        "vertical_agenda_phase_5_time",
+        "vertical_agenda_phase_5_contribution",
+        "vertical_agenda_phase_5_result"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t074-ai-accelerator-020:agenda_row_6",
+      "template_id": "t074-ai-accelerator-020",
+      "source": "ai-accelerator:020",
+      "purpose": "agenda row 6",
+      "object_ids": [
+        "89",
+        "90",
+        "91",
+        "92",
+        "93",
+        "94",
+        "95",
+        "96"
+      ],
+      "slots": [
+        "vertical_agenda_phase_6_title",
+        "vertical_agenda_phase_6_time",
+        "vertical_agenda_phase_6_contribution",
+        "vertical_agenda_phase_6_result"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "component_candidate",
+      "recipe": "workshop"
+    },
+    {
+      "source_id": "t074-ai-accelerator-020:column_headers",
+      "template_id": "t074-ai-accelerator-020",
+      "source": "ai-accelerator:020",
+      "purpose": "column headers",
+      "object_ids": [
+        "46",
+        "47",
+        "48"
+      ],
+      "slots": [
+        "vertical_agenda_column_header_1",
+        "vertical_agenda_column_header_2",
+        "vertical_agenda_column_header_3"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "table-row"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t075-ai-accelerator-021:step_1",
+      "template_id": "t075-ai-accelerator-021",
+      "source": "ai-accelerator:021",
+      "purpose": "step 1",
+      "object_ids": [
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "slots": [
+        "oval_7",
+        "frame_together",
+        "facilitators_set_the_objective_and_decision"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t075-ai-accelerator-021:step_2",
+      "template_id": "t075-ai-accelerator-021",
+      "source": "ai-accelerator:021",
+      "purpose": "step 2",
+      "object_ids": [
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "slots": [
+        "oval_11",
+        "work_in_role",
+        "product_and_engineering_use_approved_tools"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t075-ai-accelerator-021:step_3",
+      "template_id": "t075-ai-accelerator-021",
+      "source": "ai-accelerator:021",
+      "purpose": "step 3",
+      "object_ids": [
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "slots": [
+        "oval_15",
+        "reconnect_at_gates",
+        "teams_share_artifacts_challenge_ambiguity_make"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t075-ai-accelerator-021:step_4",
+      "template_id": "t075-ai-accelerator-021",
+      "source": "ai-accelerator:021",
+      "purpose": "step 4",
+      "object_ids": [
+        "20",
+        "21",
+        "22",
+        "23"
+      ],
+      "slots": [
+        "oval_19",
+        "iterate_and_close",
+        "the_group_reviews_evidence_addresses_feedback"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t075-ai-accelerator-021:facilitation_sidebar",
+      "template_id": "t075-ai-accelerator-021",
+      "source": "ai-accelerator:021",
+      "purpose": "facilitation sidebar",
+      "object_ids": [
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37"
+      ],
+      "slots": [
+        "sidebar_heading",
+        "sidebar_intro",
+        "brief_teaching_prompts_then_participant_work",
+        "named_checkpoints_outputs_and_timeboxes",
+        "active_coaching_challenge_and_unblocking",
+        "examples_or_fallbacks_only_when_access",
+        "human_approval_at_every_readiness_gate"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t075-ai-accelerator-021:participant_expectations",
+      "template_id": "t075-ai-accelerator-021",
+      "source": "ai-accelerator:021",
+      "purpose": "participant expectations",
+      "object_ids": [
+        "38"
+      ],
+      "slots": [
+        "participant_expectations"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "composite_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t076-ai-accelerator-023:goal_band",
+      "template_id": "t076-ai-accelerator-023",
+      "source": "ai-accelerator:023",
+      "purpose": "goal band",
+      "object_ids": [
+        "7",
+        "9",
+        "22",
+        "23"
+      ],
+      "slots": [
+        "goal_label",
+        "goal",
+        "goal_measure"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t076-ai-accelerator-023:step_1",
+      "template_id": "t076-ai-accelerator-023",
+      "source": "ai-accelerator:023",
+      "purpose": "step 1",
+      "object_ids": [
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31"
+      ],
+      "slots": [
+        "oval_26",
+        "15_min",
+        "frame_the_candidates",
+        "product_shares_1_3_candidate_opportunities_including",
+        "facilitator_clarify_the_decision_criteria_and"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t076-ai-accelerator-023:step_2",
+      "template_id": "t076-ai-accelerator-023",
+      "source": "ai-accelerator:023",
+      "purpose": "step 2",
+      "object_ids": [
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38"
+      ],
+      "slots": [
+        "oval_33",
+        "25_min",
+        "stress_test_together",
+        "engineering_tests_technical_meaning_likely_system",
+        "facilitator_compare_value_feasibility_full_stack_depth"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t076-ai-accelerator-023:step_3",
+      "template_id": "t076-ai-accelerator-023",
+      "source": "ai-accelerator:023",
+      "purpose": "step 3",
+      "object_ids": [
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "slots": [
+        "oval_40",
+        "20_min",
+        "decide_and_document",
+        "the_group_selects_one_opportunity_and",
+        "facilitator_resolve_or_assign_open_questions"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "processstep"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    },
+    {
+      "source_id": "t076-ai-accelerator-023:between_step_arrows",
+      "template_id": "t076-ai-accelerator-023",
+      "source": "ai-accelerator:023",
+      "purpose": "between step arrows",
+      "object_ids": [
+        "46",
+        "47"
+      ],
+      "slots": [],
+      "executable": false,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "accent"
+      ],
+      "granularity": "repeatable_composition",
+      "recipe": null
+    },
+    {
+      "source_id": "t076-ai-accelerator-023:outcome_strip",
+      "template_id": "t076-ai-accelerator-023",
+      "source": "ai-accelerator:023",
+      "purpose": "outcome strip",
+      "object_ids": [
+        "48"
+      ],
+      "slots": [
+        "expected_outcome"
+      ],
+      "executable": true,
+      "confidence": "inventory_semantics_proposal_not_geometry_equivalence",
+      "family_ids": [
+        "textpanel"
+      ],
+      "granularity": "component_candidate",
+      "recipe": null
+    }
+  ]
+}
