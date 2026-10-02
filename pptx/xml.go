@@ -254,7 +254,14 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 				strSlideXml += `</a:cxnLst>`
 				strSlideXml += `<a:rect l="l" t="t" r="r" b="b" />`
 				strSlideXml += `<a:pathLst>`
-				strSlideXml += `<a:path w="` + itoa(cx) + `" h="` + itoa(cy) + `">`
+				strSlideXml += `<a:path`
+				if cx > 0 {
+					strSlideXml += ` w="` + itoa(cx) + `"`
+				}
+				if cy > 0 {
+					strSlideXml += ` h="` + itoa(cy) + `"`
+				}
+				strSlideXml += `>`
 				for i := range opts.Points {
 					point := opts.Points[i]
 					if point.Curve != nil {
@@ -783,7 +790,7 @@ func slideObjectTableToXml(slideItemObj *SlideObject, slide *SlideBaseProps, int
 
 	var strXml strings.Builder
 
-	strXml.WriteString(`<p:graphicFrame><p:nvGraphicFramePr><p:cNvPr id="` + itoa(intTableNum*slide.SlideNum+1) + `" name="` + opts.ObjectName + `"/>`)
+	strXml.WriteString(`<p:graphicFrame><p:nvGraphicFramePr><p:cNvPr id="` + itoa(imageObjIdx(slide, slideItemObj)) + `" name="` + opts.ObjectName + `"/>`)
 	strXml.WriteString(`<p:cNvGraphicFramePr><a:graphicFrameLocks noGrp="1"/></p:cNvGraphicFramePr>` +
 		`  <p:nvPr><p:extLst><p:ext uri="{D42A27DB-BD31-4B8C-83A1-F6EECF244321}"><p14:modId xmlns:p14="http://schemas.microsoft.com/office/powerpoint/2010/main" val="1579011935"/></p:ext></p:extLst></p:nvPr>` +
 		`</p:nvGraphicFramePr>`)
@@ -1952,8 +1959,8 @@ func makeXmlContTypes(slides []PresSlide, slideLayouts []SlideLayout, masterSlid
 
 	strXml += `<Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/>`
 	strXml += `<Override PartName="/ppt/notesMasters/notesMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml"/>`
+	strXml += `<Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/>`
 	for idx := range slides {
-		strXml += `<Override PartName="/ppt/slideMasters/slideMaster` + itoa(idx+1) + `.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/>`
 		strXml += `<Override PartName="/ppt/slides/slide` + itoa(idx+1) + `.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>`
 		for ri := range slides[idx].RelsChart {
 			strXml += `<Override PartName="` + slides[idx].RelsChart[ri].Target + `" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>`
@@ -2374,15 +2381,18 @@ func makeXmlPresentation(pres *IPresentationProps, bc *buildContext) string {
 	// STEP 1: slide master
 	strXml += `<p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst>`
 
-	// STEP 2: slides
+	// The optional notes-master list is omitted. The sole notes master remains
+	// linked from the presentation and every notes slide. PowerPoint for Mac
+	// prompts for repair when this list precedes sldIdLst, while placing it after
+	// sldIdLst violates CT_Presentation order. Omitting the optional list keeps
+	// the schema sequence and preserves notes without that native repair.
+
+	// STEP 3: slides
 	strXml += `<p:sldIdLst>`
 	for i := range pres.Slides {
 		strXml += `<p:sldId id="` + itoa(pres.Slides[i].SlideID) + `" r:id="rId` + itoa(pres.Slides[i].RID) + `"/>`
 	}
 	strXml += `</p:sldIdLst>`
-
-	// STEP 3: notes master
-	strXml += `<p:notesMasterIdLst><p:notesMasterId r:id="rId` + itoa(len(pres.Slides)+2) + `"/></p:notesMasterIdLst>`
 
 	// STEP 4: sizes
 	strXml += `<p:sldSz cx="` + itoa(pres.PresLayout.Width) + `" cy="` + itoa(pres.PresLayout.Height) + `"/>`
@@ -2391,9 +2401,7 @@ func makeXmlPresentation(pres *IPresentationProps, bc *buildContext) string {
 	// Font embedding (net-new): embeddedFontLst immediately after notesSz, per
 	// ECMA-376 CT_Presentation sequence (sldMasterIdLst, notesMasterIdLst,
 	// handoutMasterIdLst, sldIdLst, sldSz, notesSz, smartTags, embeddedFontLst,
-	// custShowLst, ...). Everything above/below this insertion keeps its
-	// pre-existing emission order/quirks (e.g. notesMasterIdLst emitted after
-	// sldIdLst) untouched.
+	// custShowLst, ...).
 	if len(pres.EmbeddedFonts) > 0 {
 		strXml += makeEmbeddedFontLst(len(pres.Slides), pres.EmbeddedFonts)
 	}

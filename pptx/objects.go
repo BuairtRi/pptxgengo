@@ -547,12 +547,12 @@ func addChartDefinition(target *PresSlide, cc *chartCounter, chartType ChartType
 			}
 		}
 		if opts.Type == ChartTypeBar {
-			if !strInSet(opts.BarGrouping, "stacked", "percentStacked") {
+			if strInSet(opts.BarGrouping, "stacked", "percentStacked") {
 				if !strInSet(opts.DataLabelPosition, "ctr", "inBase", "inEnd") {
 					opts.DataLabelPosition = ""
 				}
 			}
-			if !strInSet(opts.BarGrouping, "clustered") {
+			if strInSet(opts.BarGrouping, "clustered") {
 				if !strInSet(opts.DataLabelPosition, "ctr", "inBase", "inEnd", "outEnd") {
 					opts.DataLabelPosition = ""
 				}
@@ -697,6 +697,7 @@ func addChartDefinition(target *PresSlide, cc *chartCounter, chartType ChartType
 	}
 	if opts.ChartArea.Border != nil {
 		opts.ChartArea.Border = &BorderProps{
+			Type:  opts.ChartArea.Border.Type,
 			Color: orStr(opts.ChartArea.Border.Color, DEF_CHART_BORDER.Color),
 			Pt:    orF(opts.ChartArea.Border.Pt, DEF_CHART_BORDER.Pt),
 		}

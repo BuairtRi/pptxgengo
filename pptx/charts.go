@@ -267,7 +267,11 @@ func makeXmlCharts(rel *SlideRelChart) string {
 
 	// OPTION: Border
 	if opts.PlotArea != nil && opts.PlotArea.Border != nil {
-		strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.PlotArea.Border.Pt)) + `" cap="flat">` + chartColorSel(opts.PlotArea.Border.Color) + `</a:ln>`)
+		if opts.PlotArea.Border.Type == "none" {
+			strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
+		} else {
+			strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.PlotArea.Border.Pt)) + `" cap="flat">` + chartColorSel(opts.PlotArea.Border.Color) + `</a:ln>`)
+		}
 	} else {
 		strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
 	}
@@ -326,7 +330,11 @@ func makeXmlCharts(rel *SlideRelChart) string {
 		strXml.WriteString(`<a:noFill/>`)
 	}
 	if opts.ChartArea != nil && opts.ChartArea.Border != nil {
-		strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.ChartArea.Border.Pt)) + `" cap="flat">` + chartColorSel(opts.ChartArea.Border.Color) + `</a:ln>`)
+		if opts.ChartArea.Border.Type == "none" {
+			strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
+		} else {
+			strXml.WriteString(`<a:ln w="` + itoa(valToPts(opts.ChartArea.Border.Pt)) + `" cap="flat">` + chartColorSel(opts.ChartArea.Border.Color) + `</a:ln>`)
+		}
 	} else {
 		strXml.WriteString(`<a:ln><a:noFill/></a:ln>`)
 	}
@@ -380,6 +388,13 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 	case ChartTypeArea, ChartTypeBar, ChartTypeBar3d, ChartTypeLine, ChartTypeRadar:
 		// 1: Start Chart
 		strXml.WriteString(`<c:` + string(chartType) + `Chart>`)
+		if chartType == ChartTypeLine {
+			grouping := opts.BarGrouping
+			if grouping != "stacked" && grouping != "percentStacked" {
+				grouping = "standard"
+			}
+			strXml.WriteString(`<c:grouping val="` + grouping + `"/>`)
+		}
 		if chartType == ChartTypeArea && opts.BarGrouping == "stacked" {
 			strXml.WriteString(`<c:grouping val="` + opts.BarGrouping + `"/>`)
 		}
@@ -442,28 +457,8 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			strXml.WriteString(createShadowElement(opts.Shadow, DEF_SHAPE_SHADOW))
 
 			strXml.WriteString(`  </c:spPr>`)
-			strXml.WriteString(`  <c:invertIfNegative val="0"/>`)
-
-			// Data Labels per series (not for RADAR)
-			if chartType != ChartTypeRadar {
-				strXml.WriteString(`<c:dLbls>`)
-				strXml.WriteString(`<c:numFmt formatCode="` + numFmtOrGeneral(opts.DataLabelFormatCode) + `" sourceLinked="0"/>`)
-				if chartBool(opts.DataLabelBkgrdColors) {
-					strXml.WriteString(`<c:spPr><a:solidFill>` + createColorElement(seriesColor, "") + `</a:solidFill></c:spPr>`)
-				}
-				strXml.WriteString(`<c:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr>`)
-				strXml.WriteString(`<a:defRPr b="` + chartB2S(opts.DataLabelFontBold) + `" i="` + chartB2S(opts.DataLabelFontItalic) + `" strike="noStrike" sz="` + itoa(int(jsRound(fontSizeOr(opts.DataLabelFontSize, DEF_FONT_SIZE)*100))) + `" u="none">`)
-				strXml.WriteString(`<a:solidFill>` + createColorElement(strOr(opts.DataLabelColor, DEF_FONT_COLOR), "") + `</a:solidFill>`)
-				strXml.WriteString(`<a:latin typeface="` + strOr(opts.DataLabelFontFace, "Arial") + `"/>`)
-				strXml.WriteString(`</a:defRPr></a:pPr></a:p></c:txPr>`)
-				if opts.DataLabelPosition != "" {
-					strXml.WriteString(`<c:dLblPos val="` + opts.DataLabelPosition + `"/>`)
-				}
-				strXml.WriteString(`<c:showLegendKey val="0"/>`)
-				strXml.WriteString(`<c:showVal val="` + chartB2S(opts.ShowValue) + `"/>`)
-				strXml.WriteString(`<c:showCatName val="0"/><c:showSerName val="` + chartB2S(opts.ShowSerName) + `"/><c:showPercent val="0"/><c:showBubbleSize val="0"/>`)
-				strXml.WriteString(`<c:showLeaderLines val="` + chartB2S(opts.ShowLeaderLines) + `"/>`)
-				strXml.WriteString(`</c:dLbls>`)
+			if chartType == ChartTypeBar || chartType == ChartTypeBar3d {
+				strXml.WriteString(`  <c:invertIfNegative val="0"/>`)
 			}
 
 			// 'c:marker' tag: lineDataSymbol
@@ -521,6 +516,28 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 					strXml.WriteString(`    </c:spPr>`)
 					strXml.WriteString(`  </c:dPt>`)
 				}
+			}
+
+			// Data Labels per series (not for RADAR)
+			if chartType != ChartTypeRadar {
+				strXml.WriteString(`<c:dLbls>`)
+				strXml.WriteString(`<c:numFmt formatCode="` + numFmtOrGeneral(opts.DataLabelFormatCode) + `" sourceLinked="0"/>`)
+				if chartBool(opts.DataLabelBkgrdColors) {
+					strXml.WriteString(`<c:spPr><a:solidFill>` + createColorElement(seriesColor, "") + `</a:solidFill></c:spPr>`)
+				}
+				strXml.WriteString(`<c:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr>`)
+				strXml.WriteString(`<a:defRPr b="` + chartB2S(opts.DataLabelFontBold) + `" i="` + chartB2S(opts.DataLabelFontItalic) + `" strike="noStrike" sz="` + itoa(int(jsRound(fontSizeOr(opts.DataLabelFontSize, DEF_FONT_SIZE)*100))) + `" u="none">`)
+				strXml.WriteString(`<a:solidFill>` + createColorElement(strOr(opts.DataLabelColor, DEF_FONT_COLOR), "") + `</a:solidFill>`)
+				strXml.WriteString(`<a:latin typeface="` + strOr(opts.DataLabelFontFace, "Arial") + `"/>`)
+				strXml.WriteString(`</a:defRPr></a:pPr></a:p></c:txPr>`)
+				if opts.DataLabelPosition != "" {
+					strXml.WriteString(`<c:dLblPos val="` + opts.DataLabelPosition + `"/>`)
+				}
+				strXml.WriteString(`<c:showLegendKey val="0"/>`)
+				strXml.WriteString(`<c:showVal val="` + chartB2S(opts.ShowValue) + `"/>`)
+				strXml.WriteString(`<c:showCatName val="0"/><c:showSerName val="` + chartB2S(opts.ShowSerName) + `"/><c:showPercent val="0"/><c:showBubbleSize val="0"/>`)
+				strXml.WriteString(`<c:showLeaderLines val="` + chartB2S(opts.ShowLeaderLines) + `"/>`)
+				strXml.WriteString(`</c:dLbls>`)
 			}
 
 			// 2: "Categories"
@@ -607,7 +624,7 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 
 		// 4: chart options (gapWidth, marker, etc.)
 		if chartType == ChartTypeBar {
-			strXml.WriteString(`  <c:gapWidth val="` + ftoa(fptrOr(opts.BarGapWidthPct, 150)) + `"/>`)
+			strXml.WriteString(`  <c:gapWidth val="` + itoa(int(jsRound(fptrOr(opts.BarGapWidthPct, 150)))) + `"/>`)
 			overlap := "0"
 			if strings.Contains(opts.BarGrouping, "tacked") {
 				overlap = "100"
@@ -616,7 +633,7 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			}
 			strXml.WriteString(`  <c:overlap val="` + overlap + `"/>`)
 		} else if chartType == ChartTypeBar3d {
-			strXml.WriteString(`  <c:gapWidth val="` + ftoa(fptrOr(opts.BarGapWidthPct, 150)) + `"/>`)
+			strXml.WriteString(`  <c:gapWidth val="` + itoa(int(jsRound(fptrOr(opts.BarGapWidthPct, 150)))) + `"/>`)
 			strXml.WriteString(`  <c:gapDepth val="` + ftoa(fptrOr(opts.BarGapDepthPct, 150)) + `"/>`)
 			strXml.WriteString(`  <c:shape val="` + opts.Bar3DShape + `"/>`)
 		} else if chartType == ChartTypeLine {
@@ -624,7 +641,10 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 		}
 
 		// 5: axisId (category first)
-		strXml.WriteString(`<c:axId val="` + catAxisID + `"/><c:axId val="` + valAxisID + `"/><c:axId val="` + AXIS_ID_SERIES_PRIMARY + `"/>`)
+		strXml.WriteString(`<c:axId val="` + catAxisID + `"/><c:axId val="` + valAxisID + `"/>`)
+		if chartType == ChartTypeBar3d {
+			strXml.WriteString(`<c:axId val="` + AXIS_ID_SERIES_PRIMARY + `"/>`)
+		}
 
 		// 6: Close Chart tag
 		strXml.WriteString(`</c:` + string(chartType) + `Chart>`)
@@ -1967,7 +1987,7 @@ func createExcelWorksheet(chartObject *SlideRelChart, bc *buildContext) ([]byte,
 			tbl.WriteString(`<tableColumn id="` + itoa(idx+1) + `" name="` + nm + itoa(idx) + `"/>`)
 		}
 	} else {
-		tbl.WriteString(`<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="1" name="Table1" displayName="Table1" ref="A1:` + getExcelColName(len(data)+len(data[0].Labels)) + itoa(len(data[0].Labels[0])+1) + `'" totalsRowShown="0">`)
+		tbl.WriteString(`<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="1" name="Table1" displayName="Table1" ref="A1:` + getExcelColName(len(data)+len(data[0].Labels)) + itoa(len(data[0].Labels[0])+1) + `" totalsRowShown="0">`)
 		tbl.WriteString(`<tableColumns count="` + itoa(len(data)+len(data[0].Labels)) + `">`)
 		for idx := range data[0].Labels {
 			tbl.WriteString(`<tableColumn id="` + itoa(idx+1) + `" name="Column` + itoa(idx+1) + `"/>`)
