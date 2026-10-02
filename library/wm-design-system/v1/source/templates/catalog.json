@@ -1,0 +1,3236 @@
+{
+  "schema": "wmds.catalog.v1",
+  "summary": "Every slide template, generated from templates/library by tools/build_catalog.py. Tier 'core' is a slide type in its simplest useful form; 'working' is a dense working slide rebuilt from a real proposal (legacy names the pptxgengo catalog reference).",
+  "families": [
+    {
+      "id": "openers",
+      "name": "Openers and structure",
+      "summary": "Covers, agendas, dividers, key messages, quotes and closings: the slides that frame a deck.",
+      "file": "templates/library/openers.json",
+      "count": 18
+    },
+    {
+      "id": "argument",
+      "name": "Argument and frameworks",
+      "summary": "Pillars, comparisons, from-to shifts, problem framing and capability frameworks that carry the storyline.",
+      "file": "templates/library/argument.json",
+      "count": 18
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence and data",
+      "summary": "Stats, charts, 2x2s, status and image-led evidence.",
+      "file": "templates/library/evidence.json",
+      "count": 10
+    },
+    {
+      "id": "solution",
+      "name": "Solution and architecture",
+      "summary": "Architecture views, process flows, workstreams and readiness criteria.",
+      "file": "templates/library/solution.json",
+      "count": 12
+    },
+    {
+      "id": "approach",
+      "name": "Approach and plan",
+      "summary": "Phases, phase detail, gates, roadmaps, work plans, cutover and method.",
+      "file": "templates/library/approach.json",
+      "count": 11
+    },
+    {
+      "id": "commercials",
+      "name": "Commercials",
+      "summary": "Pricing by option, milestone and capacity run-rate, and optional scope.",
+      "file": "templates/library/commercials.json",
+      "count": 4
+    },
+    {
+      "id": "team",
+      "name": "Team and governance",
+      "summary": "Org charts, pods, rosters, bios, roles by phase and governance.",
+      "file": "templates/library/team.json",
+      "count": 11
+    },
+    {
+      "id": "proof",
+      "name": "Proof and reference",
+      "summary": "Case studies, client proof, firm overview, history, sample deliverables and appendix references.",
+      "file": "templates/library/proof.json",
+      "count": 13
+    }
+  ],
+  "templates": [
+    {
+      "key": "cover/photo",
+      "name": "Cover · photo with contacts",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Opening slide for a proposal: logo, client, display title, preparer and two contacts on White; a photo bleeding off the right edge, framed by an L of dots.",
+      "nodes": [
+        "imageframe",
+        "logo",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "text.block",
+        "image.frame"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "preparedBy",
+        "contacts",
+        "date",
+        "photo"
+      ],
+      "budget": {
+        "words": 45,
+        "marks": 1
+      },
+      "legacy": "16:9 master cover_1–4"
+    },
+    {
+      "key": "cover/grid",
+      "name": "Cover · whiteboard grid and stat square",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Opening slide that leads with a number: whiteboard dot grid with one inverse stat square.",
+      "nodes": [
+        "logo",
+        "square",
+        "text"
+      ],
+      "uses": [
+        "header.display",
+        "grid.whiteboard",
+        "grid.squares"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "subtitle",
+        "stat",
+        "statLabel"
+      ],
+      "budget": {
+        "words": 30,
+        "marks": 1
+      },
+      "legacy": "16:9 master cover_1–4"
+    },
+    {
+      "key": "agenda/index",
+      "name": "Agenda · left panel with photo",
+      "family": "openers",
+      "tier": "core",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Section overview with page references. The title sits on the dark panel; a photo breaks out across the panel edge, over a column of dots.",
+      "nodes": [
+        "imageframe",
+        "list",
+        "text"
+      ],
+      "uses": [
+        "list.set (index rows)",
+        "image.frame"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "items",
+        "photo"
+      ],
+      "budget": {
+        "words": 40,
+        "marks": 0
+      },
+      "legacy": "agenda_1–2"
+    },
+    {
+      "key": "agenda/schedule",
+      "name": "Agenda · schedule rows",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Timed agenda for a workshop or readout: time keys on the left, one outcome on the right.",
+      "nodes": [
+        "schedule",
+        "textblock"
+      ],
+      "uses": [
+        "header.slide",
+        "list.set (schedule rows)",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "items",
+        "outcome"
+      ],
+      "budget": {
+        "words": 50,
+        "marks": 0
+      },
+      "legacy": "agenda_1–2"
+    },
+    {
+      "key": "agenda/sessions",
+      "name": "Agenda · sessions, contributions and results",
+      "family": "openers",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A working-session day as rows: the session and its time, what each side contributes, and the shared result at the end of the session.",
+      "nodes": [
+        "block",
+        "bullets",
+        "text"
+      ],
+      "uses": [
+        "table.standard",
+        "shape.block"
+      ],
+      "slots": [
+        "title",
+        "session",
+        "contribution",
+        "result",
+        "outcome line"
+      ],
+      "budget": {
+        "words": 161,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t074-ai-accelerator-020"
+    },
+    {
+      "key": "divider/panel-photo",
+      "name": "Divider · panel with breakout photo",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A Grounded panel holds the section number and title; a photo crosses the panel edge onto the dot field.",
+      "nodes": [
+        "block",
+        "square",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "header.display",
+        "grid.squares"
+      ],
+      "slots": [
+        "number",
+        "title",
+        "photo"
+      ],
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "legacy": "divider_1–6"
+    },
+    {
+      "key": "divider/panel-edge",
+      "name": "Divider · panel with Magenta edge",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Grounded panel with a Magenta edge and the section label; the photo fills the white side, over a band of dots.",
+      "nodes": [
+        "block",
+        "imageframe",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "rule",
+        "header.display",
+        "image.frame"
+      ],
+      "slots": [
+        "number",
+        "title",
+        "photo"
+      ],
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "legacy": "divider_1–6"
+    },
+    {
+      "key": "divider/full-photo",
+      "name": "Divider · full-bleed photo",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A full-bleed photo with the number and title on a Grounded block anchored bottom-left; dots run across the block's top edge.",
+      "nodes": [
+        "block",
+        "imageframe",
+        "text"
+      ],
+      "uses": [
+        "image.frame",
+        "block",
+        "header.display"
+      ],
+      "slots": [
+        "number",
+        "title",
+        "photo"
+      ],
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "legacy": "divider_1–6"
+    },
+    {
+      "key": "divider/light",
+      "name": "Divider · light with photo square",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Opens a section on White: oversized section number, display title, a photo square over the dot field.",
+      "nodes": [
+        "square",
+        "text"
+      ],
+      "uses": [
+        "header.display",
+        "grid.squares"
+      ],
+      "slots": [
+        "number",
+        "title",
+        "photo"
+      ],
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "legacy": "divider_1–6"
+    },
+    {
+      "key": "divider/inverse",
+      "name": "Divider · inverse with photo",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "inverse",
+      "density": "standard",
+      "purpose": "Opens a section on Grounded Blue: display title low-left, an abstract photo square top-right, Dark Gray dots beneath it.",
+      "nodes": [
+        "square",
+        "text"
+      ],
+      "uses": [
+        "header.display",
+        "grid.squares"
+      ],
+      "slots": [
+        "number",
+        "title",
+        "photo"
+      ],
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "legacy": "divider_1–6"
+    },
+    {
+      "key": "key-message/stat",
+      "name": "Key message · claim with one proof",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "One claim in the title; the key message at title size and its support at lead size, centered as a group in the body beside one number that proves it.",
+      "nodes": [
+        "square",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "grid.whiteboard",
+        "grid.squares",
+        "data.metric"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "body",
+        "stat",
+        "statLabel"
+      ],
+      "budget": {
+        "words": 55,
+        "marks": 1
+      },
+      "legacy": "key_message_1–3, statement_1–4"
+    },
+    {
+      "key": "key-message/statement",
+      "name": "Key message · statement",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The message is the slide: a display-size statement centered on White, with one line of support and the dot field to its right.",
+      "nodes": [
+        "text"
+      ],
+      "uses": [
+        "header.display",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "statement",
+        "support"
+      ],
+      "budget": {
+        "words": 35,
+        "marks": 1
+      },
+      "legacy": "key_message_1–3, statement_1–4"
+    },
+    {
+      "key": "narrative/lead-in",
+      "name": "Narrative · lead and three points",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A short argument in prose at reading width: one lead sentence, three lead-in points.",
+      "nodes": [
+        "bullets",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "list.set"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "lead",
+        "points",
+        "source"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "content_1col"
+    },
+    {
+      "key": "cards/3",
+      "name": "Cards · three columns",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three parallel ideas as numbered cards with a Grounded Blue band.",
+      "nodes": [
+        "cardrow"
+      ],
+      "uses": [
+        "header.slide",
+        "card row"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "cards"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Text blocks, slides 2–20"
+    },
+    {
+      "key": "cards/4",
+      "name": "Cards · four columns",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Four short parallel ideas on subtle cards with inline numbers.",
+      "nodes": [
+        "cardrow"
+      ],
+      "uses": [
+        "header.slide",
+        "card row"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "cards"
+      ],
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "legacy": "Text blocks, slides 2–20"
+    },
+    {
+      "key": "quote/light",
+      "name": "Quote · light",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A client voice in their own words at heading size, with a single quiet square.",
+      "nodes": [
+        "pullquote",
+        "square",
+        "text"
+      ],
+      "uses": [
+        "data.callout (quote)"
+      ],
+      "slots": [
+        "quote",
+        "attribution"
+      ],
+      "budget": {
+        "words": 30,
+        "marks": 0
+      },
+      "legacy": "Slides 114–118"
+    },
+    {
+      "key": "quote/inverse",
+      "name": "Quote · inverse",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "inverse",
+      "density": "standard",
+      "purpose": "The same quote on Grounded Blue for a section or deck opener.",
+      "nodes": [
+        "pullquote",
+        "square",
+        "text"
+      ],
+      "uses": [
+        "data.callout (quote)"
+      ],
+      "slots": [
+        "quote",
+        "attribution"
+      ],
+      "budget": {
+        "words": 30,
+        "marks": 0
+      },
+      "legacy": "Slides 114–118"
+    },
+    {
+      "key": "closing/tagline",
+      "name": "Closing · tagline",
+      "family": "openers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "inverse",
+      "density": "standard",
+      "purpose": "Brand sign-off on Grounded Blue with the tagline and one next step.",
+      "nodes": [
+        "art",
+        "text"
+      ],
+      "uses": [
+        "tagline art",
+        "text.block"
+      ],
+      "slots": [
+        "nextStep",
+        "contactName",
+        "contactRole",
+        "contactEmail"
+      ],
+      "budget": {
+        "words": 25,
+        "marks": 0
+      },
+      "legacy": "closing"
+    },
+    {
+      "key": "takeaway-rail/metrics-rail",
+      "name": "Argument with takeaway rail",
+      "family": "argument",
+      "tier": "core",
+      "frame": "right rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Evidence on the left and the so-what in a dark right rail.",
+      "nodes": [
+        "metric",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "data.metric",
+        "heading.statement",
+        "header.slide"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "metric value",
+        "metric label",
+        "support",
+        "rail eyebrow",
+        "rail heading",
+        "rail body",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 1
+      },
+      "legacy": "-"
+    },
+    {
+      "key": "from-to/cards",
+      "name": "From to, two cards",
+      "family": "argument",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Contrast the current state (subtle) with the target state (inverse) and one hand-drawn arrow.",
+      "nodes": [
+        "card",
+        "mark"
+      ],
+      "uses": [
+        "card.presets",
+        "mark.arrows"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "card title",
+        "bullets"
+      ],
+      "budget": {
+        "words": 60,
+        "marks": 1
+      },
+      "legacy": "Slides 12, 13, 110, 151"
+    },
+    {
+      "key": "from-to/rows",
+      "name": "From to, paired rows",
+      "family": "argument",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Row-by-row shift from today to the target state, with a metric on the target side.",
+      "nodes": [
+        "beforeafter"
+      ],
+      "uses": [
+        "diagram.beforeafter"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "column headers",
+        "row text",
+        "metric",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Slides 12, 13, 110, 151"
+    },
+    {
+      "key": "transformation/before-after",
+      "name": "Transformation · before and after",
+      "family": "argument",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Paired rows of today against the target model, with a transition arrow and a Magenta tag for each result.",
+      "nodes": [
+        "beforeafter"
+      ],
+      "uses": [
+        "diagram.beforeafter",
+        "header.slide"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "left header",
+        "right header",
+        "row",
+        "source"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Slides 12, 13, 110, 151"
+    },
+    {
+      "key": "transformation/pain-to-theme",
+      "name": "Transformation · pain points to design themes",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Pair each current pain point with the design theme that answers it, joined by an arrow, with one closing statement of how the problems were solved.",
+      "nodes": [
+        "block",
+        "text",
+        "textarrow"
+      ],
+      "uses": [
+        "shape.block",
+        "shape.arrow",
+        "heading.group"
+      ],
+      "slots": [
+        "title",
+        "pain point",
+        "theme title",
+        "theme description",
+        "statement"
+      ],
+      "budget": {
+        "words": 119,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t021-graphics-and-layouts-013"
+    },
+    {
+      "key": "method/accelerator-steps",
+      "name": "Method · what it is and seven steps",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A proprietary method on one page: a panel that says what it is, what the client gets and why it works, beside the seven steps of how it runs.",
+      "nodes": [
+        "card",
+        "table"
+      ],
+      "uses": [
+        "card.presets",
+        "table.standard",
+        "list.set"
+      ],
+      "slots": [
+        "title",
+        "panel title",
+        "step name",
+        "step text",
+        "bullet"
+      ],
+      "budget": {
+        "words": 170,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t004-enablecomp-023"
+    },
+    {
+      "key": "pillars/four-why-matters",
+      "name": "Pillars · four, each with why it matters",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Set out four principles of an approach, each with its practices and an offset Grounded panel stating why it matters to the client.",
+      "nodes": [
+        "block",
+        "card",
+        "connector",
+        "text"
+      ],
+      "uses": [
+        "card.icon",
+        "shape.block",
+        "text.block"
+      ],
+      "slots": [
+        "title",
+        "pillar title",
+        "practice",
+        "why it matters"
+      ],
+      "budget": {
+        "words": 166,
+        "marks": 1
+      },
+      "legacy": "pptxgengo t014-software-modernization-018"
+    },
+    {
+      "key": "capability-table/icon-rows",
+      "name": "Capability table · focus, AI role, human judgment",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Walk a five-step progression in one table with a tile per step, what the technology does, where human judgment stays, and a one-line takeaway.",
+      "nodes": [
+        "card",
+        "icon",
+        "table"
+      ],
+      "uses": [
+        "table.standard",
+        "shape.node",
+        "card.options"
+      ],
+      "slots": [
+        "title",
+        "focus",
+        "AI role",
+        "human judgment",
+        "takeaway"
+      ],
+      "budget": {
+        "words": 144,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t017-software-modernization-025"
+    },
+    {
+      "key": "capability-map/layered-bands",
+      "name": "Capability map · six layered bands",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Show an operating or architecture model as ruled bands, each with a label column and rows of blocks that span the width in different splits.",
+      "nodes": [
+        "card",
+        "matrix",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "heading.group",
+        "prim.line",
+        "shape.layer"
+      ],
+      "slots": [
+        "title",
+        "band label",
+        "block label",
+        "value driver",
+        "metric"
+      ],
+      "budget": {
+        "words": 141,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t020-graphics-and-layouts-062"
+    },
+    {
+      "key": "flow/challenges-to-outcomes",
+      "name": "Flow · challenges to products, use cases and outcomes",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Trace a causal chain from challenges through products and use cases to outcomes, in four framed zones joined by arrows, with a closing statement.",
+      "nodes": [
+        "block",
+        "bullets",
+        "card",
+        "connector",
+        "frame",
+        "text"
+      ],
+      "uses": [
+        "shape.frame",
+        "card.presets",
+        "shape.block",
+        "shape.connector"
+      ],
+      "slots": [
+        "title",
+        "zone label",
+        "block title",
+        "block description",
+        "challenge",
+        "closing line"
+      ],
+      "budget": {
+        "words": 112,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t036-graphics-and-layouts-019 (nested chevron approximated)"
+    },
+    {
+      "key": "problem/stat-callout",
+      "name": "Problem · two causes, one statistic and a remedy",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Frame a problem with a lead sentence, two causes in icon cards, one Grounded statistic card that carries the headline number, and a one-line remedy strip.",
+      "nodes": [
+        "card",
+        "connector",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "card.icon",
+        "card.presets",
+        "mark.inline"
+      ],
+      "slots": [
+        "title",
+        "lead",
+        "cause title",
+        "cause text",
+        "stat",
+        "stat label",
+        "remedy"
+      ],
+      "budget": {
+        "words": 121,
+        "marks": 1
+      },
+      "legacy": "pptxgengo t048-software-modernization-015"
+    },
+    {
+      "key": "decision/buy-build-economics",
+      "name": "Decision · two options and the shifting economics",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Compare two options side by side with when each fits and its trade-offs, and set the changing economics in a wider third column, ending on a decision rule.",
+      "nodes": [
+        "block",
+        "bullets",
+        "card",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "card.options",
+        "list.set",
+        "heading.group",
+        "shape.block"
+      ],
+      "slots": [
+        "title",
+        "option label",
+        "option statement",
+        "criterion",
+        "stage label",
+        "stage line",
+        "stage detail",
+        "decision rule"
+      ],
+      "budget": {
+        "words": 140,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t055-software-modernization-004"
+    },
+    {
+      "key": "objective/numbered-and-panel",
+      "name": "Objective · numbered rationale beside a Grounded outcomes panel",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "State a session or program objective with three numbered reasons on the left and a Grounded panel of six outcomes in two columns on the right.",
+      "nodes": [
+        "block",
+        "card",
+        "strongnum",
+        "text"
+      ],
+      "uses": [
+        "list.set",
+        "shape.block",
+        "card.options",
+        "heading.group"
+      ],
+      "slots": [
+        "title",
+        "reason title",
+        "reason text",
+        "panel heading",
+        "outcome title",
+        "outcome text"
+      ],
+      "budget": {
+        "words": 141,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t066-ai-accelerator-002"
+    },
+    {
+      "key": "session/stepper-and-guidance",
+      "name": "Session · step sequence with a guidance panel",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Lay out how a working session runs as a four-step vertical sequence, with a Grounded panel on facilitation and a closing ask of participants.",
+      "nodes": [
+        "block",
+        "card",
+        "text",
+        "vstepper"
+      ],
+      "uses": [
+        "seq.vstepper",
+        "card.options",
+        "shape.block",
+        "heading.group"
+      ],
+      "slots": [
+        "title",
+        "step duration",
+        "step title",
+        "step text",
+        "panel title",
+        "panel bullet",
+        "ask"
+      ],
+      "budget": {
+        "words": 145,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t071-ai-accelerator-014"
+    },
+    {
+      "key": "goal-steps/goal-band-three-steps",
+      "name": "Goal and steps · target band over three timed steps",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Open with a Grounded goal band and a target outcome, then three timed numbered steps each with a facilitator note, and a closing expected-outcome bar.",
+      "nodes": [
+        "block",
+        "cardrow",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "card.numbered",
+        "heading.group"
+      ],
+      "slots": [
+        "title",
+        "goal",
+        "target",
+        "duration",
+        "step title",
+        "step text",
+        "facilitator note",
+        "expected outcome"
+      ],
+      "budget": {
+        "words": 145,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t075-ai-accelerator-021"
+    },
+    {
+      "key": "comparison/us-versus-others",
+      "name": "Comparison · our way versus others, with six implications",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Contrast two ways of working in paired lists, then spell out six implications for the client with an icon tile each, beside a short narrative and a handover callout.",
+      "nodes": [
+        "callout",
+        "card",
+        "connector",
+        "node",
+        "text"
+      ],
+      "uses": [
+        "card.presets",
+        "shape.node",
+        "data.callout",
+        "mark.inline"
+      ],
+      "slots": [
+        "title",
+        "narrative",
+        "list item",
+        "implication",
+        "callout"
+      ],
+      "budget": {
+        "words": 144,
+        "marks": 1
+      },
+      "legacy": "pptxgengo t078-uhg-007"
+    },
+    {
+      "key": "hub-spokes/eight-spokes",
+      "name": "Hub and eight spokes",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A dark hub of benefits ringed by eight supporting capabilities, each tied to the hub with an arrow.",
+      "nodes": [
+        "card",
+        "connector"
+      ],
+      "uses": [
+        "header.slide",
+        "block",
+        "card (inverse)",
+        "connector",
+        "text"
+      ],
+      "slots": [
+        "hub title",
+        "spoke title",
+        "spoke text"
+      ],
+      "budget": {
+        "words": 169,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t010-uhg-015"
+    },
+    {
+      "key": "frameworks/layer-table",
+      "name": "Frameworks · layers, examples and emphasis",
+      "family": "argument",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Lay out a set of numbered framework layers with public examples, what each emphasizes and its maturity, closing with a call to action.",
+      "nodes": [
+        "block",
+        "chevron",
+        "grouplabel"
+      ],
+      "uses": [
+        "shape.chevron",
+        "shape.block",
+        "heading.group"
+      ],
+      "slots": [
+        "title",
+        "layer name",
+        "examples",
+        "emphasis",
+        "maturity",
+        "call to action"
+      ],
+      "budget": {
+        "words": 132,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t072-ai-accelerator-018"
+    },
+    {
+      "key": "stats/four-metrics",
+      "name": "Key stats, four metrics",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Four headline numbers that prove one claim, with a single supporting sentence.",
+      "nodes": [
+        "metric",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "data.metric",
+        "prim.line",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "metric value",
+        "metric label",
+        "support",
+        "source"
+      ],
+      "budget": {
+        "words": 55,
+        "marks": 1
+      },
+      "legacy": "Proposal 45-46"
+    },
+    {
+      "key": "stats/circled-headline",
+      "name": "Key stats, circled headline",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "One circled headline number with two supporting metric cards.",
+      "nodes": [
+        "card",
+        "metric"
+      ],
+      "uses": [
+        "data.metric",
+        "mark.inline (circle)",
+        "card.presets (metric)"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "headline value",
+        "headline label",
+        "card value",
+        "card label",
+        "source"
+      ],
+      "budget": {
+        "words": 50,
+        "marks": 1
+      },
+      "legacy": "Proposal 45-46"
+    },
+    {
+      "key": "chart/column-full",
+      "name": "Chart, full width",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "One column chart across the slide, with the takeaway in the title and the key bars highlighted.",
+      "nodes": [
+        "chart"
+      ],
+      "uses": [
+        "chart.column",
+        "header.slide"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "chart title",
+        "categories",
+        "source"
+      ],
+      "budget": {
+        "words": 50,
+        "marks": 0
+      },
+      "legacy": "Slides 30-32, 99-104"
+    },
+    {
+      "key": "chart/column-rail",
+      "name": "Chart with takeaway rail",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "right rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A clustered chart on the left and the so-what in a dark right rail.",
+      "nodes": [
+        "chart",
+        "text"
+      ],
+      "uses": [
+        "chart.column",
+        "heading.statement",
+        "header.slide"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "chart title",
+        "rail eyebrow",
+        "rail heading",
+        "rail body",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Slides 30-32, 99-104"
+    },
+    {
+      "key": "quadrant/subtle",
+      "name": "2x2 assessment, subtle",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Rank initiatives by value and effort; the aim-here quadrant is tinted, the avoid quadrant hatched.",
+      "nodes": [
+        "chart"
+      ],
+      "uses": [
+        "chart.quadrant",
+        "data.legend"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "chart title",
+        "axis titles",
+        "item labels",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Slides 105-106"
+    },
+    {
+      "key": "quadrant/strong",
+      "name": "2x2 assessment, strong",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "One filled quadrant to stay out of, with movement arrows and a short note alongside.",
+      "nodes": [
+        "chart",
+        "textblock"
+      ],
+      "uses": [
+        "chart.quadrant",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "quadrant names",
+        "item labels",
+        "note title",
+        "note body",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Slides 105-106"
+    },
+    {
+      "key": "image-text/square-left",
+      "name": "Image with text, square",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A photo square beside the point it supports and two short proof lines.",
+      "nodes": [
+        "bullets",
+        "square",
+        "text"
+      ],
+      "uses": [
+        "grid.squares",
+        "text.block",
+        "list.set"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "subhead",
+        "body",
+        "bullet lead",
+        "bullet text"
+      ],
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "legacy": "image_full_headline, statement_4"
+    },
+    {
+      "key": "image-text/frame-right",
+      "name": "Image with text, wide frame",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Text on the left with a 16:9 photo on the right and a one-line caption.",
+      "nodes": [
+        "imageframe",
+        "text"
+      ],
+      "uses": [
+        "prim.image",
+        "text.block",
+        "list.set"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "subhead",
+        "body",
+        "caption"
+      ],
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "legacy": "image_full_headline, statement_4"
+    },
+    {
+      "key": "status/four-panel",
+      "name": "Status dashboard, four panels",
+      "family": "evidence",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Four panels on one grid: two metric cards with status, a wave table and an adoption card.",
+      "nodes": [
+        "card",
+        "num",
+        "status",
+        "table"
+      ],
+      "uses": [
+        "card.presets (metric)",
+        "data.metric+ (status)",
+        "table.standard (status cells)"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "metric value",
+        "metric label",
+        "table rows",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Slides 43, 133"
+    },
+    {
+      "key": "value/capacity-conversion",
+      "name": "Value · capacity to banked savings",
+      "family": "evidence",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A stacked capacity chart that shows effort moving from manual work to priority work and savings, paired with the five governance steps that make the value count.",
+      "nodes": [
+        "chart",
+        "strongnum",
+        "textarrow"
+      ],
+      "uses": [
+        "chart.column",
+        "shape.arrow",
+        "list.set"
+      ],
+      "slots": [
+        "title",
+        "chart title",
+        "category",
+        "step title",
+        "step text",
+        "arrow text"
+      ],
+      "budget": {
+        "words": 110,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t063-enablecomp-030"
+    },
+    {
+      "key": "architecture/layers",
+      "name": "Architecture · layer stack",
+      "family": "solution",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A numbered layer stack inside one frame: the experience layer first, three rows beneath, and a cross-cutting controls column.",
+      "nodes": [
+        "card",
+        "connector",
+        "container",
+        "layerrow",
+        "textblock"
+      ],
+      "uses": [
+        "architecture map (layer stack)",
+        "header.slide"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "frame label",
+        "layers",
+        "side note",
+        "cross-cutting card",
+        "source"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Slide 62; proposal 32"
+    },
+    {
+      "key": "architecture/nested",
+      "name": "Architecture · nested view",
+      "family": "solution",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A nested deployment view: source systems outside, one cloud tenant, one finance platform boundary, and two layers inside.",
+      "nodes": [
+        "block",
+        "connector",
+        "container",
+        "cylinder"
+      ],
+      "uses": [
+        "architecture map (nested containers)",
+        "header.slide"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "container labels",
+        "blocks",
+        "external list",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Slide 62; proposal 32"
+    },
+    {
+      "key": "architecture/layer-map",
+      "name": "Architecture · legend and layer map",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A colour-keyed legend of the five architecture layers beside a dense six-group component map: users, lifecycle, platform services, governance, placement and ecosystem.",
+      "nodes": [
+        "block",
+        "container",
+        "matrix",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "text",
+        "block",
+        "container (frame)",
+        "matrix"
+      ],
+      "slots": [
+        "legend item",
+        "group label",
+        "cell"
+      ],
+      "budget": {
+        "words": 132,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t001-uhg-013"
+    },
+    {
+      "key": "architecture/product",
+      "name": "Architecture · inputs, core and integrations",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A three-zone product architecture (inputs, analysis core with a database, integrations), a dark panel of differentiators and a value strip of three headline numbers.",
+      "nodes": [
+        "block",
+        "connector",
+        "container",
+        "cylinder",
+        "node",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "container (external, region)",
+        "cylinder",
+        "node",
+        "connector (both)",
+        "text"
+      ],
+      "slots": [
+        "input",
+        "integration",
+        "differentiator",
+        "value stat"
+      ],
+      "budget": {
+        "words": 130,
+        "marks": 1
+      },
+      "legacy": "pptxgengo t002-software-modernization-044"
+    },
+    {
+      "key": "architecture/reference",
+      "name": "Reference architecture · platform map",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A narrative column (proof points and dependencies) beside a detailed platform map: a cross-cutting bar, sources, three data stores, consumption, platform services and three principles.",
+      "nodes": [
+        "block",
+        "bullets",
+        "connector",
+        "container",
+        "cylinder",
+        "grouplabel",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "container",
+        "cylinder",
+        "block",
+        "connector",
+        "bullets",
+        "stamp"
+      ],
+      "slots": [
+        "proof point",
+        "dependency note",
+        "store",
+        "service",
+        "principle"
+      ],
+      "budget": {
+        "words": 135,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t060-uhg-026"
+    },
+    {
+      "key": "process/swimlane",
+      "name": "Process · swimlane",
+      "family": "solution",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Who does what, in order: four actor lanes, one decision, two flagged pain points and a one-line key.",
+      "nodes": [
+        "swimlane"
+      ],
+      "uses": [
+        "process.swimlane",
+        "header.slide"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "lanes",
+        "steps",
+        "key line",
+        "source"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Process maps"
+    },
+    {
+      "key": "workstreams/five-with-risks",
+      "name": "Five workstreams with a risk band",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Five numbered workstream headers, activities under each, and a full-width band of five risks if the work is not done right.",
+      "nodes": [
+        "block",
+        "bullets",
+        "card",
+        "container",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "card (inline number)",
+        "container (layer)",
+        "bullets",
+        "block",
+        "text"
+      ],
+      "slots": [
+        "workstream title",
+        "activity",
+        "risk"
+      ],
+      "budget": {
+        "words": 177,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t005-uhg-012"
+    },
+    {
+      "key": "context/three-zones",
+      "name": "Context flow · carried, layered, applied",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three zones read left to right: context carried forward, a central panel with a five-step chain, and four numbered build activities, closed by a one-line shift statement.",
+      "nodes": [
+        "block",
+        "connector",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "block",
+        "text",
+        "connector"
+      ],
+      "slots": [
+        "carried item",
+        "chain step",
+        "activity",
+        "shift statement"
+      ],
+      "budget": {
+        "words": 133,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t026-uhg-030"
+    },
+    {
+      "key": "context/build-sustain",
+      "name": "Foundation with Build and Sustain panels",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A shared-foundation card beside two stacked panels, one dark and one light, each with a how-it-is-used and a value-opportunity column, closed by a dark statement bar.",
+      "nodes": [
+        "block",
+        "card",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "card (edge)",
+        "block",
+        "text"
+      ],
+      "slots": [
+        "foundation item",
+        "panel heading",
+        "how used",
+        "value",
+        "statement"
+      ],
+      "budget": {
+        "words": 130,
+        "marks": 1
+      },
+      "legacy": "pptxgengo t029-software-modernization-034"
+    },
+    {
+      "key": "patterns/three-rows",
+      "name": "Three patterns with decisions to validate",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three stacked pattern rows, each with a coloured header, a flow line and role statement, and a right column of decisions to validate.",
+      "nodes": [
+        "block",
+        "bullets",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "block",
+        "text"
+      ],
+      "slots": [
+        "pattern header",
+        "flow",
+        "role",
+        "decision"
+      ],
+      "budget": {
+        "words": 149,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t051-uhg-025"
+    },
+    {
+      "key": "readiness/six-criteria",
+      "name": "Readiness criteria · six checklists",
+      "family": "solution",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A dark statement panel overlapping the top of a light region that holds six criteria groups of three checks each.",
+      "nodes": [
+        "block",
+        "bullets",
+        "container",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "block",
+        "container (region)",
+        "text"
+      ],
+      "slots": [
+        "statement",
+        "criteria group",
+        "check"
+      ],
+      "budget": {
+        "words": 142,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t084-uhg-020"
+    },
+    {
+      "key": "pathways/two-lanes",
+      "name": "Two pathways with a left rail",
+      "family": "solution",
+      "tier": "working",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A dark left rail with the key message and four commitments beside two five-step chevron pathways and a result bar.",
+      "nodes": [
+        "block",
+        "bullets",
+        "chevron",
+        "phasehead",
+        "text"
+      ],
+      "uses": [
+        "frame (left rail)",
+        "text",
+        "chevron",
+        "block"
+      ],
+      "slots": [
+        "rail heading",
+        "rail commitment",
+        "pathway heading",
+        "step",
+        "result"
+      ],
+      "budget": {
+        "words": 119,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t094-uhg-036"
+    },
+    {
+      "key": "plan/gantt",
+      "name": "Work plan · eight weeks",
+      "family": "approach",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "appendix",
+      "purpose": "An eight-week work plan: three workstreams, phase bands, gates, workshops and soft starts, for the detailed plan a steering group signs off.",
+      "nodes": [
+        "gantt"
+      ],
+      "uses": [
+        "advanced.gantt"
+      ],
+      "slots": [
+        "title",
+        "workstream",
+        "activity",
+        "gate"
+      ],
+      "budget": {
+        "words": 120,
+        "marks": 0
+      },
+      "legacy": "Timelines, slides 68–98"
+    },
+    {
+      "key": "phases/four",
+      "name": "Phased approach · four phases",
+      "family": "approach",
+      "tier": "core",
+      "frame": "none rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The approach as four phases, each with objective, activities, deliverables and a closing gate.",
+      "nodes": [
+        "phases"
+      ],
+      "uses": [
+        "phase.columns"
+      ],
+      "slots": [
+        "title",
+        "phase name",
+        "objective",
+        "activity",
+        "deliverable",
+        "gate"
+      ],
+      "budget": {
+        "words": 95,
+        "marks": 1
+      },
+      "legacy": "Slides 44, 60, 64–66; proposal 24–27, 36"
+    },
+    {
+      "key": "phases/activities-outcomes",
+      "name": "Phases · key activities and outcome",
+      "family": "approach",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three consecutive phases as arrows sized to their weeks, each with a number, name, key activities and one outcome, so a steering group reads the whole arc at once.",
+      "nodes": [
+        "bullets",
+        "chevron",
+        "text"
+      ],
+      "uses": [
+        "shape.chevron",
+        "list.set",
+        "heading.group",
+        "shape.block",
+        "mark.highlight"
+      ],
+      "slots": [
+        "title",
+        "weeks",
+        "phase name",
+        "activity",
+        "outcome",
+        "scope note"
+      ],
+      "budget": {
+        "words": 128,
+        "marks": 1
+      },
+      "legacy": "pptxgengo t085-uhg-022"
+    },
+    {
+      "key": "phases/summary-bands",
+      "name": "Phases · summary, activities and deliverables",
+      "family": "approach",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three phase columns under arrow heads: a one-line summary band, a block of activities and a block of deliverables, aligned across phases so they compare row by row.",
+      "nodes": [
+        "block",
+        "card",
+        "chevron"
+      ],
+      "uses": [
+        "shape.chevron",
+        "shape.block",
+        "card.presets",
+        "list.set"
+      ],
+      "slots": [
+        "title",
+        "phase head",
+        "summary line",
+        "activity",
+        "deliverable"
+      ],
+      "budget": {
+        "words": 146,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t031-graphics-and-layouts-065"
+    },
+    {
+      "key": "phase-detail/rail-table",
+      "name": "Phase detail · activities and work products",
+      "family": "approach",
+      "tier": "working",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "One phase on one page: a rail with the phase name, objective and exit criteria; activities and work products by workstream; deliverable thumbnails and assumptions.",
+      "nodes": [
+        "bullets",
+        "card",
+        "chevron",
+        "table",
+        "text",
+        "thumbnail"
+      ],
+      "uses": [
+        "frame.rail-left",
+        "shape.chevron",
+        "table.standard",
+        "prim.thumbnail",
+        "card.presets"
+      ],
+      "slots": [
+        "phase name",
+        "weeks",
+        "objective",
+        "exit criterion",
+        "stream",
+        "activity",
+        "work product",
+        "deliverable caption",
+        "assumption"
+      ],
+      "budget": {
+        "words": 130,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t086-uhg-024"
+    },
+    {
+      "key": "phase-detail/rail-matrix",
+      "name": "Phase detail · repeatable process matrix",
+      "family": "approach",
+      "tier": "working",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A phase rail beside a step-by-step matrix of platform service, workload activity and evidence, with the fixed and variable scope stated underneath.",
+      "nodes": [
+        "block",
+        "chevron",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "frame.rail-left",
+        "table.standard",
+        "shape.chevron",
+        "shape.block"
+      ],
+      "slots": [
+        "phase name",
+        "weeks",
+        "objective",
+        "step",
+        "service",
+        "activity",
+        "evidence",
+        "scope line"
+      ],
+      "budget": {
+        "words": 183,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t090-uhg-032"
+    },
+    {
+      "key": "phase-detail/rail-cohort",
+      "name": "Phase detail · scorecard and cohort",
+      "family": "approach",
+      "tier": "working",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A phase rail carrying the selection scorecard, beside three illustrative workloads that each validate one pattern, with a thumbnail of the architecture each touches.",
+      "nodes": [
+        "block",
+        "card",
+        "chevron",
+        "rule",
+        "text",
+        "thumbnail"
+      ],
+      "uses": [
+        "frame.rail-left",
+        "shape.chevron",
+        "card.presets",
+        "shape.block",
+        "prim.thumbnail"
+      ],
+      "slots": [
+        "phase name",
+        "weeks",
+        "scorecard criterion",
+        "scorecard text",
+        "workload label",
+        "workload title",
+        "workload text",
+        "validation"
+      ],
+      "budget": {
+        "words": 126,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t087-uhg-027"
+    },
+    {
+      "key": "phase-detail/team-handoff",
+      "name": "Phase · team handoff over time",
+      "family": "approach",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Show how responsibility shifts between consulting and client teams across two phases, with an effort curve, a callout and a row per team.",
+      "nodes": [
+        "block",
+        "card",
+        "chart",
+        "chevron",
+        "stepper",
+        "text"
+      ],
+      "uses": [
+        "numhead",
+        "seq.stepper",
+        "chart.line",
+        "shape.chevron",
+        "shape.block",
+        "container (region)"
+      ],
+      "slots": [
+        "title",
+        "phase name",
+        "team description",
+        "callout",
+        "exit criterion"
+      ],
+      "budget": {
+        "words": 145,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t095-uhg-037"
+    },
+    {
+      "key": "phase-gate/evidence-matrix",
+      "name": "Phase gate · criteria, exit and owner",
+      "family": "approach",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The decision rule for a phase gate: five numbered criteria, the evidence each requires, an illustrative exit and one named decision owner.",
+      "nodes": [
+        "block",
+        "bullets",
+        "card",
+        "text"
+      ],
+      "uses": [
+        "card.numbered",
+        "shape.block",
+        "heading.group"
+      ],
+      "slots": [
+        "title",
+        "criterion",
+        "evidence item",
+        "exit statement",
+        "decision owner"
+      ],
+      "budget": {
+        "words": 147,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t091-uhg-033"
+    },
+    {
+      "key": "roadmap/staggered-phases",
+      "name": "Roadmap · staggered phases and milestones",
+      "family": "approach",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A months-based roadmap where each phase starts as the last one settles: staggered bars with hatched extension windows, starred milestones, and an ongoing program lane.",
+      "nodes": [
+        "gantt"
+      ],
+      "uses": [
+        "advanced.gantt",
+        "seq.timeaxis"
+      ],
+      "slots": [
+        "title",
+        "lane title",
+        "lane subtitle",
+        "bar label",
+        "milestone"
+      ],
+      "budget": {
+        "words": 107,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t039-uhg-038"
+    },
+    {
+      "key": "cutover/wave-matrix",
+      "name": "Cutover · AI support and wave matrix",
+      "family": "approach",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "How a phased cutover is run: three kinds of AI support across every wave, then a slice-by-wave matrix showing legacy, coexistence and modern state.",
+      "nodes": [
+        "grouplabel",
+        "matrix",
+        "numhead",
+        "text"
+      ],
+      "uses": [
+        "heading.group",
+        "shape.block",
+        "text.block"
+      ],
+      "slots": [
+        "title",
+        "support title",
+        "support text",
+        "slice",
+        "state",
+        "source"
+      ],
+      "budget": {
+        "words": 107,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t027-software-modernization-035"
+    },
+    {
+      "key": "pricing/options",
+      "name": "Pricing · three options",
+      "family": "commercials",
+      "tier": "core",
+      "frame": "none rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Present two to three engagement options side by side with one recommended, so the client compares scope and fee on one page.",
+      "nodes": [
+        "card"
+      ],
+      "uses": [
+        "pricing.set",
+        "card.states",
+        "card.checklist"
+      ],
+      "slots": [
+        "title",
+        "option label",
+        "option title",
+        "checklist item",
+        "duration",
+        "fee value",
+        "fee label",
+        "tag"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Slides 127–131; proposal 47–48"
+    },
+    {
+      "key": "pricing/fixed-fee",
+      "name": "Pricing · fixed fee by milestone",
+      "family": "commercials",
+      "tier": "core",
+      "frame": "none rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Show a fixed fee as payments tied to milestones, with one summary of the total and terms. Never itemize by person.",
+      "nodes": [
+        "feesummary",
+        "num",
+        "table"
+      ],
+      "uses": [
+        "pricing.set",
+        "table.standard (fees preset)",
+        "feesummary"
+      ],
+      "slots": [
+        "title",
+        "milestone",
+        "timing",
+        "fee summary line",
+        "term",
+        "source"
+      ],
+      "budget": {
+        "words": 100,
+        "marks": 0
+      },
+      "legacy": "Slides 127–131; proposal 51–53"
+    },
+    {
+      "key": "pricing/capacity",
+      "name": "Pricing · capacity run-rate",
+      "family": "commercials",
+      "tier": "core",
+      "frame": "none rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Show a capacity-based team as allocations and one monthly run-rate, never as individual rates.",
+      "nodes": [
+        "allocation",
+        "feesummary",
+        "table"
+      ],
+      "uses": [
+        "pricing.set",
+        "table.standard (capacity preset)",
+        "feesummary"
+      ],
+      "slots": [
+        "title",
+        "role",
+        "level",
+        "fee summary line",
+        "term"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Slides 127–131; proposal 47–48"
+    },
+    {
+      "key": "scope/service-value",
+      "name": "Scope · optional services, scope and value",
+      "family": "commercials",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Optional scope laid out by service: what is added, the value it unlocks and how it is priced, in one dense table a sponsor can strike items from.",
+      "nodes": [
+        "bullets",
+        "table"
+      ],
+      "uses": [
+        "table.standard",
+        "list.set"
+      ],
+      "slots": [
+        "title",
+        "service",
+        "scope bullet",
+        "value bullet",
+        "pricing basis"
+      ],
+      "budget": {
+        "words": 122,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t097-uhg-040"
+    },
+    {
+      "key": "team/org-chart",
+      "name": "Team · org chart",
+      "family": "team",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Who leads and who reports to whom across West Monroe and Northfield, with a dotted line to the controller.",
+      "nodes": [
+        "legend",
+        "orgchart"
+      ],
+      "uses": [
+        "org.chart",
+        "data.legend"
+      ],
+      "slots": [
+        "title",
+        "role title",
+        "name"
+      ],
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "legacy": "Slides 38–42; proposal 38–41"
+    },
+    {
+      "key": "team/pods",
+      "name": "Team · pods and roles",
+      "family": "team",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The team as three delivery pods plus the client roles that work beside them; simpler than a tree when reporting lines do not matter.",
+      "nodes": [
+        "grouplabel",
+        "pod",
+        "role"
+      ],
+      "uses": [
+        "pod",
+        "people.role",
+        "grouplabel"
+      ],
+      "slots": [
+        "title",
+        "pod title",
+        "role",
+        "role meta"
+      ],
+      "budget": {
+        "words": 65,
+        "marks": 0
+      },
+      "legacy": "Slides 38–42; proposal 38–41"
+    },
+    {
+      "key": "team/org-roles",
+      "name": "Team structure · org chart with roles",
+      "family": "team",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Show a joint client and consulting team as one org chart with liaisons and optional roles, paired with a table of what each role does.",
+      "nodes": [
+        "block",
+        "bullets",
+        "connector",
+        "grouplabel",
+        "legend",
+        "table"
+      ],
+      "uses": [
+        "shape.block",
+        "shape.connector",
+        "data.legend",
+        "table.standard (dense, bullets)"
+      ],
+      "slots": [
+        "title",
+        "role tile",
+        "role name",
+        "responsibility"
+      ],
+      "budget": {
+        "words": 128,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t016-graphics-and-layouts-041"
+    },
+    {
+      "key": "team/pods-pairs",
+      "name": "Team structure · pods and leadership pairs",
+      "family": "team",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Show leadership pairs across both organizations, workstream leads and delivery pods that scale by phase, with the client's role commitments beside them.",
+      "nodes": [
+        "block",
+        "connector",
+        "container",
+        "grouplabel",
+        "legend",
+        "pod"
+      ],
+      "uses": [
+        "shape.block",
+        "shape.pod",
+        "shape.connector",
+        "container (region)",
+        "data.legend"
+      ],
+      "slots": [
+        "title",
+        "role tile",
+        "pod title",
+        "leadership role"
+      ],
+      "budget": {
+        "words": 121,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t028-uhg-043"
+    },
+    {
+      "key": "team/roster",
+      "name": "Team · roster in two tiers",
+      "family": "team",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "List a named roster in two tiers, leadership and specialists, each with a short description of what the tier does.",
+      "nodes": [
+        "block",
+        "card",
+        "person"
+      ],
+      "uses": [
+        "shape.block",
+        "people.person",
+        "container (region)"
+      ],
+      "slots": [
+        "title",
+        "tier heading",
+        "name",
+        "role",
+        "tier duty"
+      ],
+      "budget": {
+        "words": 124,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t100-uhg-044"
+    },
+    {
+      "key": "governance/stack",
+      "name": "Governance · three tiers",
+      "family": "team",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "How decisions are made: three tiers with cadence, members and decision rights, and an escalation path upward.",
+      "nodes": [
+        "governance",
+        "legend"
+      ],
+      "uses": [
+        "governance.stack",
+        "data.legend"
+      ],
+      "slots": [
+        "title",
+        "tier name",
+        "member",
+        "decision"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "Slide 41; proposal 41"
+    },
+    {
+      "key": "bio-full/portrait-quote",
+      "name": "Full-page bio · portrait and quote",
+      "family": "team",
+      "tier": "core",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "One person in full: square portrait on the rail, role, background, selected experience and a client quote. A template, not a card.",
+      "nodes": [
+        "bullets",
+        "grouplabel",
+        "pullquote",
+        "square",
+        "text",
+        "textblock"
+      ],
+      "uses": [
+        "frame (left panel)",
+        "prim.square",
+        "text.block",
+        "list.bullets",
+        "data.pullquote"
+      ],
+      "slots": [
+        "title",
+        "eyebrow",
+        "name",
+        "role",
+        "tags",
+        "role text",
+        "background",
+        "experience bullet",
+        "quote",
+        "quote by"
+      ],
+      "budget": {
+        "words": 100,
+        "marks": 0
+      },
+      "legacy": "Bio layout; proposal 39–40"
+    },
+    {
+      "key": "bio-full/portrait-list",
+      "name": "Full-page bio · tall portrait, right panel",
+      "family": "team",
+      "tier": "core",
+      "frame": "right rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A quieter full-page bio without a quote: tall portrait on a right panel, role, background and a longer list of experience. Shown with the optional greyscale photo treatment.",
+      "nodes": [
+        "bullets",
+        "grouplabel",
+        "imageframe",
+        "text",
+        "textblock"
+      ],
+      "uses": [
+        "frame (right panel)",
+        "prim.imageframe",
+        "text.block",
+        "list.bullets"
+      ],
+      "slots": [
+        "title",
+        "eyebrow",
+        "name",
+        "role",
+        "role text",
+        "background",
+        "experience bullet"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Bio layout; proposal 39–40"
+    },
+    {
+      "key": "bios/three",
+      "name": "Team bios · three cards",
+      "family": "team",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Introduce three people at once with mini bio cards: photo or initials, role, credentials and two proof points.",
+      "nodes": [
+        "card"
+      ],
+      "uses": [
+        "card.bio"
+      ],
+      "slots": [
+        "title",
+        "name",
+        "title line",
+        "role",
+        "tag",
+        "point"
+      ],
+      "budget": {
+        "words": 80,
+        "marks": 0
+      },
+      "legacy": "our_team layout"
+    },
+    {
+      "key": "bios/leadership-specialists",
+      "name": "Team · leadership bios with specialist row",
+      "family": "team",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Introduce four engagement leaders as mini bios with credentials and proof points, plus a row of on-call specialists.",
+      "nodes": [
+        "card",
+        "grouplabel",
+        "person"
+      ],
+      "uses": [
+        "card.bio",
+        "people.person",
+        "heading.group"
+      ],
+      "slots": [
+        "title",
+        "name",
+        "title and role",
+        "tag",
+        "proof point",
+        "photo or initials"
+      ],
+      "budget": {
+        "words": 117,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t068-ai-accelerator-004"
+    },
+    {
+      "key": "roles/by-phase",
+      "name": "Roles · responsibilities by phase",
+      "family": "team",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "appendix",
+      "purpose": "Appendix table of roles against phases with what each role owns in each phase and who is responsible.",
+      "nodes": [
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table.standard (dense, group header, tag cells)"
+      ],
+      "slots": [
+        "title",
+        "role",
+        "phase duty",
+        "owner"
+      ],
+      "budget": {
+        "words": 175,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t101-uhg-045"
+    },
+    {
+      "key": "case-study/rail",
+      "name": "Case study · full page",
+      "family": "proof",
+      "tier": "core",
+      "frame": "right rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "One past engagement told on a full page: image, challenge, approach, and three results on a right rail. Built from an image, header, text blocks and metrics, not a card.",
+      "nodes": [
+        "imageframe",
+        "metric",
+        "text",
+        "textblock"
+      ],
+      "uses": [
+        "prim.image",
+        "header.slide",
+        "text.block",
+        "data.metric",
+        "frame (right panel)"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "image",
+        "challenge",
+        "approach",
+        "metric value",
+        "metric label",
+        "source"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Slide 158; proposal 54"
+    },
+    {
+      "key": "case-study/quote",
+      "name": "Case study · full page with quote",
+      "family": "proof",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Full-width case study: image, two text blocks, three results and a client quote. Use when a quote carries the proof.",
+      "nodes": [
+        "imageframe",
+        "metric",
+        "pullquote",
+        "textblock"
+      ],
+      "uses": [
+        "prim.image",
+        "header.slide",
+        "text.block",
+        "data.metric",
+        "data.callout (quote)"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "image",
+        "challenge",
+        "approach",
+        "metric value",
+        "metric label",
+        "quote",
+        "attribution",
+        "source"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Slide 158; proposal 54"
+    },
+    {
+      "key": "case-study/metrics-exhibits",
+      "name": "Case study · narrative, exhibits and results",
+      "family": "proof",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Anonymized case study with a situation and approach narrative, an architecture exhibit, headline results and a question-to-value mapping.",
+      "nodes": [
+        "block",
+        "card",
+        "connector",
+        "grouplabel",
+        "pyramid",
+        "text"
+      ],
+      "uses": [
+        "text.block",
+        "diagram.pyramid",
+        "card.presets (metric)",
+        "shape.block",
+        "shape.connector"
+      ],
+      "slots": [
+        "title",
+        "narrative",
+        "pyramid band",
+        "metric value",
+        "question",
+        "value",
+        "source"
+      ],
+      "budget": {
+        "words": 175,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t064-uhg-050"
+    },
+    {
+      "key": "case-studies/three",
+      "name": "Three case studies",
+      "family": "proof",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three mini case study cards with client-scale badges. The badges overhang the top-right corners inside the content margin.",
+      "nodes": [
+        "card"
+      ],
+      "uses": [
+        "header.slide",
+        "card.case"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "client",
+        "challenge",
+        "did",
+        "result",
+        "badge",
+        "source"
+      ],
+      "budget": {
+        "words": 100,
+        "marks": 0
+      },
+      "legacy": "Three case study summaries"
+    },
+    {
+      "key": "case-studies/two",
+      "name": "Two case studies",
+      "family": "proof",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Two wider case study cards with a third action line each, for a tighter story.",
+      "nodes": [
+        "card"
+      ],
+      "uses": [
+        "header.slide",
+        "card.case"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "client",
+        "challenge",
+        "did",
+        "result",
+        "badge",
+        "source"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Three case study summaries"
+    },
+    {
+      "key": "case-studies/cards-quotes",
+      "name": "Proof · result cards and client quotes",
+      "family": "proof",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Back a proposal with two anonymized result cards, two headline survey statistics and a row of client quotes.",
+      "nodes": [
+        "card",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "card.presets (metric group)",
+        "data.metric",
+        "text",
+        "rule"
+      ],
+      "slots": [
+        "title",
+        "client descriptor",
+        "result value",
+        "result label",
+        "case narrative",
+        "quote",
+        "attribution",
+        "source"
+      ],
+      "budget": {
+        "words": 145,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t079-uhg-008"
+    },
+    {
+      "key": "rfp-map/appendix",
+      "name": "RFP requirements map",
+      "family": "proof",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "appendix",
+      "purpose": "Reference table that maps each RFP requirement to how the response meets it and where. Appendix density, with a continued caption for tables that run over.",
+      "nodes": [
+        "bullets",
+        "table"
+      ],
+      "uses": [
+        "table (requirements preset)"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "continued caption",
+        "row",
+        "source"
+      ],
+      "budget": {
+        "words": 120,
+        "marks": 0
+      },
+      "legacy": "Proposal 7, 17"
+    },
+    {
+      "key": "confidential/notice",
+      "name": "Confidentiality notice",
+      "family": "proof",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A calm text slide: a lead paragraph, a rule and three short notes. The stamp carries the status.",
+      "nodes": [
+        "rule",
+        "text",
+        "textblock"
+      ],
+      "uses": [
+        "header.slide",
+        "text.block",
+        "stamp"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "stamp",
+        "lead",
+        "note"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Proposal 8"
+    },
+    {
+      "key": "history/axis",
+      "name": "Partnership history",
+      "family": "proof",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A time axis with four milestones, three short year notes beneath and one Magenta callout for where the work leads.",
+      "nodes": [
+        "callout",
+        "textblock",
+        "timeaxis"
+      ],
+      "uses": [
+        "time axis",
+        "callouts",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "periods",
+        "milestone label",
+        "year note",
+        "callout"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "Slides 87–91; proposal 42–44"
+    },
+    {
+      "key": "outcomes/three-cases",
+      "name": "Outcomes · three client programs",
+      "family": "proof",
+      "tier": "working",
+      "frame": "none rail · tall footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Prove one claim with three comparable client programs, each with its situation, two headline metrics and the business value delivered.",
+      "nodes": [
+        "block",
+        "card",
+        "text"
+      ],
+      "uses": [
+        "card.presets",
+        "data.metric",
+        "card.options"
+      ],
+      "slots": [
+        "title",
+        "client type",
+        "program title",
+        "situation",
+        "metric value",
+        "metric label",
+        "business value",
+        "source"
+      ],
+      "budget": {
+        "words": 139,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t012-software-modernization-006"
+    },
+    {
+      "key": "offerings/three-panels",
+      "name": "Offerings and capabilities · three panels",
+      "family": "proof",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A lead statement with alliance chips, a dark panel of industry offerings in three groups, and a light panel of four capability groups.",
+      "nodes": [
+        "block",
+        "bullets",
+        "grouplabel",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "text",
+        "block",
+        "grouplabel"
+      ],
+      "slots": [
+        "lead",
+        "alliance chip",
+        "offering group",
+        "offering",
+        "capability group"
+      ],
+      "budget": {
+        "words": 155,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t054-uhg-049"
+    },
+    {
+      "key": "deliverables/sample-grid",
+      "name": "Sample deliverables · four columns of exhibits",
+      "family": "proof",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Show the rigor behind each deliverable: four columns, each with a name, a one-line scope and two sample exhibits.",
+      "nodes": [
+        "colhead",
+        "text",
+        "thumbnail"
+      ],
+      "uses": [
+        "heading.column",
+        "text",
+        "screen (exhibit placeholder)"
+      ],
+      "slots": [
+        "title",
+        "deliverable name",
+        "scope",
+        "exhibit",
+        "source"
+      ],
+      "budget": {
+        "words": 114,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t061-enablecomp-029"
+    },
+    {
+      "key": "about/glance",
+      "name": "About us · firm at a glance",
+      "family": "proof",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Summarize the firm: a positioning statement, a client quote, what and where we work, and three proof statistics on a dark panel.",
+      "nodes": [
+        "block",
+        "card",
+        "metric",
+        "text"
+      ],
+      "uses": [
+        "text",
+        "card.icon (inline)",
+        "card.presets (quote, bullet, columns)",
+        "shape.block",
+        "data.metric"
+      ],
+      "slots": [
+        "title",
+        "positioning",
+        "quote",
+        "capability",
+        "statistic value",
+        "statistic label"
+      ],
+      "budget": {
+        "words": 115,
+        "marks": 1
+      },
+      "legacy": "pptxgengo t069-ai-accelerator-006"
+    }
+  ]
+}

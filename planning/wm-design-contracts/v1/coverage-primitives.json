@@ -1,0 +1,6380 @@
+{
+  "schema": "pptxgengo.wmds-template-coverage.v1",
+  "families": [
+    "openers",
+    "argument"
+  ],
+  "template_count": 36,
+  "implemented_bound_count": 3,
+  "remaining_count": 33,
+  "dependencies_catalog": {
+    "P01-frame-art-zones": "Frame source parity: inferred noHeader, custom dot fields/fades/order, overlay surfaces, absolute/bleed artwork, vertical text alignment.",
+    "P02-assets-images": "Pinned source assets: photos/square crop/focus, grayscale, body logo and tagline SVG plus fallback.",
+    "P03-text-marks-footnotes": "Go rich glyph-fragment measurement for inline/standalone drawn marks; semibold bullet leads; explicit footnote IR when activated.",
+    "P04-card-completion": "Full card anatomy: source-local padding/gaps, body titleStyle, icons, body section labels, local compact widths/heights and paragraph counts.",
+    "P05-lists-agendas": "Keyed bullets/strongnum/schedule/index, stat squares, quote and callout compounds with fixed flow capacities.",
+    "P06-shapes-connectors": "Native blocks, horizontal/vertical rules, frames/tabs, chevron/textarrow polygons and authored routed connectors.",
+    "P07-table-matrix": "Native compound tables/matrices/group headings, icon cells, dense row capacities and source-local microgeometry.",
+    "P08-argument-composites": "Beforeafter pairs, vertical stepper and hub/capability composites with stable row/step/node IDs.",
+    "P09-typed-binding-catalog": "Closed family content registries, recursive source identities, strict unions, semantic cardinality and source hash guards.",
+    "P10-source-resolutions": "Record immutable-source conflicts and explicit resolutions; no silent geometry/text corrections."
+  },
+  "source_renderer": {
+    "file": "explorations/components.src.html",
+    "sha256": "017e308d7ad107ef8faca4996f52af2496554404c76f7ab2935fdea6d8f039ca",
+    "live_source_byte_identical": true
+  },
+  "qualification_policy": "Read-only dependency/contract analysis; adapter status is not arbitrary-copy/full-source native qualification.",
+  "templates": [
+    {
+      "key": "cover/photo",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "imageframe": 1,
+        "logo": 1,
+        "text": 9
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": true,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 507,
+              "y": 36,
+              "w": 396,
+              "h": 18,
+              "fade": "right"
+            },
+            {
+              "x": 507,
+              "y": 54,
+              "w": 18,
+              "h": 396,
+              "fade": "bottom"
+            }
+          ]
+        },
+        {
+          "name": "inline_drawn_marks",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "types": [
+              "highlight"
+            ],
+            "Go_WMDS": "missing; mixed-run weights/inks do not supply marks"
+          }
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/10"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/10",
+                "reference": "photo-clinical-team",
+                "focus": "50% 40%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "authored_logo",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "footer_logo_also_present": true,
+            "intrinsic_aspect": true
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 44
+          },
+          {
+            "slot": "title",
+            "maxChars": 60
+          },
+          {
+            "slot": "preparedBy",
+            "maxChars": 90
+          },
+          {
+            "slot": "contacts",
+            "maxItems": 2
+          },
+          {
+            "slot": "date",
+            "maxChars": 20
+          },
+          {
+            "slot": "photo",
+            "kind": "image"
+          }
+        ],
+        "requirements": [
+          "Bind client eyebrow/title, preparedBy, two keyed contacts with names/roles/email, photo."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Date slot has no drawn node; explicit slot addition/omission contract needed. Photo x561+w399 intentionally bleeds to960.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "logo"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "text"
+        },
+        {
+          "path": "/body/6",
+          "type": "text"
+        },
+        {
+          "path": "/body/7",
+          "type": "text"
+        },
+        {
+          "path": "/body/8",
+          "type": "text"
+        },
+        {
+          "path": "/body/9",
+          "type": "text"
+        },
+        {
+          "path": "/body/10",
+          "type": "imageframe"
+        }
+      ]
+    },
+    {
+      "key": "cover/grid",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "logo": 1,
+        "square": 1,
+        "text": 3
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": true,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 633,
+              "y": 108,
+              "w": 270,
+              "h": 270,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "inline_drawn_marks",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "types": [
+              "underscore"
+            ],
+            "Go_WMDS": "missing; mixed-run weights/inks do not supply marks"
+          }
+        },
+        {
+          "name": "authored_logo",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "footer_logo_also_present": true,
+            "intrinsic_aspect": true
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 40
+          },
+          {
+            "slot": "title",
+            "maxChars": 48
+          },
+          {
+            "slot": "subtitle",
+            "maxChars": 90
+          },
+          {
+            "slot": "stat",
+            "maxChars": 8
+          },
+          {
+            "slot": "statLabel",
+            "maxChars": 24
+          }
+        ],
+        "requirements": [
+          "Bind eyebrow,title,subtitle,stat,statLabel."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Square stat is bottom-aligned with12pt padding, not standalone metric stack.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "logo"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "square"
+        }
+      ]
+    },
+    {
+      "key": "agenda/index",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "imageframe": 1,
+        "list": 1,
+        "text": 2
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "left",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": "inverse",
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 291,
+              "y": 18,
+              "w": 108,
+              "h": 450,
+              "fade": "bottom"
+            }
+          ]
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/0",
+            "/body/1"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/2",
+                "reference": "photo-team-meeting",
+                "focus": "50% 50%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 16
+          },
+          {
+            "slot": "title",
+            "maxChars": 32
+          },
+          {
+            "slot": "items",
+            "maxItems": 6,
+            "maxChars": 40
+          },
+          {
+            "slot": "photo",
+            "kind": "image"
+          }
+        ],
+        "requirements": [
+          "Bind keyed number/title/target-slide refs and photo."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Photo x129..345 crosses left panel boundary273; named cross-zone artwork scope needed. Index number Mono60011pt is custom typography.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "imageframe"
+        },
+        {
+          "path": "/body/3",
+          "type": "list"
+        }
+      ]
+    },
+    {
+      "key": "agenda/schedule",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "schedule": 1,
+        "textblock": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P04-card-completion",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 32
+          },
+          {
+            "slot": "title",
+            "maxChars": 48
+          },
+          {
+            "slot": "items",
+            "maxItems": 7,
+            "maxChars": 40
+          },
+          {
+            "slot": "outcome",
+            "maxChars": 80
+          }
+        ],
+        "requirements": [
+          "Bind keyed time/title schedule and outcome label/body."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Textblock has label but no title; current adapter rejects. Schedule key magenta14pt700 requires actual700 contrast exception.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "schedule"
+        },
+        {
+          "path": "/body/1",
+          "type": "textblock"
+        }
+      ]
+    },
+    {
+      "key": "agenda/sessions",
+      "family": "openers",
+      "tier": "working",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "block": 11,
+        "bullets": 5,
+        "text": 9
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P05-lists-agendas",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 52
+          },
+          {
+            "slot": "session",
+            "maxChars": 32
+          },
+          {
+            "slot": "contribution",
+            "maxChars": 56
+          },
+          {
+            "slot": "result",
+            "maxChars": 44
+          },
+          {
+            "slot": "outcome line",
+            "maxChars": 100
+          }
+        ],
+        "requirements": [
+          "Bind keyed time/session/contributions[]/result rows, column headings and outcome."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Primitive block widths108/180 are local compounds; fixed36pt results must use measured fit, not card minimum198.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "block"
+        },
+        {
+          "path": "/body/5",
+          "type": "text"
+        },
+        {
+          "path": "/body/6",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/7",
+          "type": "block"
+        },
+        {
+          "path": "/body/8",
+          "type": "block"
+        },
+        {
+          "path": "/body/9",
+          "type": "text"
+        },
+        {
+          "path": "/body/10",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/11",
+          "type": "block"
+        },
+        {
+          "path": "/body/12",
+          "type": "block"
+        },
+        {
+          "path": "/body/13",
+          "type": "text"
+        },
+        {
+          "path": "/body/14",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/15",
+          "type": "block"
+        },
+        {
+          "path": "/body/16",
+          "type": "block"
+        },
+        {
+          "path": "/body/17",
+          "type": "text"
+        },
+        {
+          "path": "/body/18",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/19",
+          "type": "block"
+        },
+        {
+          "path": "/body/20",
+          "type": "block"
+        },
+        {
+          "path": "/body/21",
+          "type": "text"
+        },
+        {
+          "path": "/body/22",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/23",
+          "type": "block"
+        },
+        {
+          "path": "/body/24",
+          "type": "block"
+        }
+      ]
+    },
+    {
+      "key": "divider/panel-photo",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "block": 1,
+        "square": 1,
+        "text": 2
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 561,
+              "y": 72,
+              "w": 342,
+              "h": 396,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/1",
+            "/body/2"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "inline_drawn_marks",
+          "paths": [
+            "/body/1"
+          ],
+          "detail": {
+            "types": [
+              "underscore"
+            ],
+            "Go_WMDS": "missing; mixed-run weights/inks do not supply marks"
+          }
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/3"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/3",
+                "reference": "photo-abstract-cubes",
+                "focus": "50% 50%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P05-lists-agendas",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "number",
+            "maxChars": 2
+          },
+          {
+            "slot": "title",
+            "maxChars": 36
+          },
+          {
+            "slot": "photo",
+            "kind": "image"
+          }
+        ],
+        "requirements": [
+          "Bind section number/title and square photo."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Panel begins x0; inverse-on text and photo overlap require explicit panel context/paint order.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "block"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "square"
+        }
+      ]
+    },
+    {
+      "key": "divider/panel-edge",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "block": 1,
+        "imageframe": 1,
+        "rule": 1,
+        "text": 3
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 579,
+              "y": 72,
+              "w": 324,
+              "h": 36,
+              "fade": "none"
+            },
+            {
+              "x": 579,
+              "y": 432,
+              "w": 324,
+              "h": 36,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/2",
+            "/body/3",
+            "/body/4"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/5"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/5",
+                "reference": "photo-clinical-leaders",
+                "focus": "50% 40%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "number",
+            "maxChars": 2
+          },
+          {
+            "slot": "title",
+            "maxChars": 36
+          },
+          {
+            "slot": "photo",
+            "kind": "image"
+          }
+        ],
+        "requirements": [
+          "Bind section label/number/title and rectangular photo."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Source rule6x396 is vertical magenta edge, not existing0.75pt line-ink horizontal rule.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "block"
+        },
+        {
+          "path": "/body/1",
+          "type": "rule"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "imageframe"
+        }
+      ]
+    },
+    {
+      "key": "divider/full-photo",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "block": 1,
+        "imageframe": 1,
+        "text": 2
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 75,
+              "y": 270,
+              "w": 414,
+              "h": 18,
+              "fade": "right",
+              "on": "inverse",
+              "above": true
+            }
+          ]
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/2",
+            "/body/3"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/0",
+                "reference": "photo-corridor",
+                "focus": "50% 45%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "number",
+            "maxChars": 2
+          },
+          {
+            "slot": "title",
+            "maxChars": 36
+          },
+          {
+            "slot": "photo",
+            "kind": "image"
+          }
+        ],
+        "requirements": [
+          "Bind full photo and section number/title."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Photo spans0..960 at y0; above=true dot field painted after body; header/body-zone restrictions need art layer exception.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "imageframe"
+        },
+        {
+          "path": "/body/1",
+          "type": "block"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "divider/light",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "square": 1,
+        "text": 3
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 579,
+              "y": 108,
+              "w": 324,
+              "h": 324,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "inline_drawn_marks",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "types": [
+              "highlight"
+            ],
+            "Go_WMDS": "missing; mixed-run weights/inks do not supply marks"
+          }
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/3"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/3",
+                "reference": "photo-abstract-grid",
+                "focus": "50% 50%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "number",
+            "maxChars": 2
+          },
+          {
+            "slot": "title",
+            "maxChars": 36
+          },
+          {
+            "slot": "photo",
+            "kind": "image"
+          }
+        ],
+        "requirements": [
+          "Bind section number/eyebrow/title and square photo."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Highlight requires measured inline fragments; plain title is a separately scoped unmarked variant.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "square"
+        }
+      ]
+    },
+    {
+      "key": "divider/inverse",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "square": 1,
+        "text": 2
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "inverse",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 633,
+              "y": 198,
+              "w": 270,
+              "h": 252,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "inline_drawn_marks",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "types": [
+              "underscore"
+            ],
+            "Go_WMDS": "missing; mixed-run weights/inks do not supply marks"
+          }
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/0",
+                "reference": "photo-abstract-led",
+                "focus": "50% 50%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "number",
+            "maxChars": 2
+          },
+          {
+            "slot": "title",
+            "maxChars": 36
+          },
+          {
+            "slot": "photo",
+            "kind": "image"
+          }
+        ],
+        "requirements": [
+          "Bind section eyebrow/title and square photo."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Photo y36 occupies header region; underscore is artwork, not native underline.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "square"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "key-message/stat",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "square": 1,
+        "text": 2
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "header_mark",
+          "paths": [
+            "/title"
+          ],
+          "detail": {
+            "emphasis": "highlight",
+            "source_phrase_markup": true
+          }
+        },
+        {
+          "name": "vertical_text_alignment",
+          "paths": [
+            "/body/0",
+            "/body/1"
+          ],
+          "detail": {
+            "alignments": [
+              "bottom",
+              "top"
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 32
+          },
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "body",
+            "maxChars": 180
+          },
+          {
+            "slot": "stat",
+            "maxChars": 8
+          },
+          {
+            "slot": "statLabel",
+            "maxChars": 30
+          }
+        ],
+        "requirements": [
+          "Bind chrome, statement, lead, stat/label."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Statement uses title32/36 in162pt bottom-aligned frame; historical declarative binding example is not executable.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "square"
+        }
+      ]
+    },
+    {
+      "key": "key-message/statement",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "text": 3
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 21,
+              "y": 18,
+              "w": 198,
+              "h": 162
+            },
+            {
+              "x": 741,
+              "y": 108,
+              "w": 162,
+              "h": 324,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "vertical_text_alignment",
+          "paths": [
+            "/body/1"
+          ],
+          "detail": {
+            "alignments": [
+              "middle"
+            ]
+          }
+        },
+        {
+          "name": "inline_drawn_marks",
+          "paths": [
+            "/body/1"
+          ],
+          "detail": {
+            "types": [
+              "underscore"
+            ],
+            "Go_WMDS": "missing; mixed-run weights/inks do not supply marks"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P03-text-marks-footnotes",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 32
+          },
+          {
+            "slot": "statement",
+            "maxChars": 80
+          },
+          {
+            "slot": "support",
+            "maxChars": 120
+          }
+        ],
+        "requirements": [
+          "Bind body eyebrow, display statement and support without global header."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Statement is middle-aligned in216pt frame; mark must follow measured baseline/phrase.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "narrative/lead-in",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "bullets": 1,
+        "text": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "source_notes",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "text": true,
+            "notes": false,
+            "browser_overflow": "nowrap ellipsis; Go must enforce measured capacity"
+          }
+        },
+        {
+          "name": "rich_bullet_leads",
+          "paths": [
+            "/body/1/items/0",
+            "/body/1/items/1",
+            "/body/1/items/2"
+          ],
+          "detail": {
+            "layout": "real600 primary lead plus normal secondary text inside square bullet"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P03-text-marks-footnotes",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 32
+          },
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "lead",
+            "maxChars": 120
+          },
+          {
+            "slot": "points",
+            "maxItems": 4,
+            "maxChars": 100
+          },
+          {
+            "slot": "source",
+            "maxChars": 80
+          }
+        ],
+        "requirements": [
+          "Bind lead, keyed semibold lead/normal bullet text and source."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Current uniform bullets cannot accept {lead,text}; browser source ellipsis is not acceptable Go overflow resolution.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "bullets"
+        }
+      ]
+    },
+    {
+      "key": "cards/3",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "cardrow": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "source_options": [
+              "card",
+              "gap",
+              "items",
+              "numbering"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P04-card-completion",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "closed typed adapter",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 32
+          },
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "cards",
+            "count": 3,
+            "titleMax": 20,
+            "bodyMax": 80
+          }
+        ],
+        "requirements": [
+          "Existing exact3 keyed cards with plain headers/title/paragraph."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Adapter covers supplied specimens; rich card bodies and arbitrary-copy qualification remain outside current contract.",
+          "state": "scoped_existing_adapter"
+        }
+      ],
+      "status": "implemented_bound",
+      "qualified_envelope": false,
+      "qualification_scope": "saved supplied-copy specimens only; plain-header variant excludes source marks",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "cardrow"
+        }
+      ]
+    },
+    {
+      "key": "cards/4",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "cardrow": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "source_options": [
+              "card",
+              "gap",
+              "items",
+              "numbering"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P04-card-completion",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "closed typed adapter",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 32
+          },
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "cards",
+            "count": 4,
+            "titleMax": 16,
+            "bodyMax": 50
+          }
+        ],
+        "requirements": [
+          "Existing exact4 keyed cards and source-order inline ordinals."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Source w198 means child width, not row width; compiler correctly expands row plus18pt gaps.",
+          "state": "scoped_existing_adapter"
+        }
+      ],
+      "status": "implemented_bound",
+      "qualified_envelope": false,
+      "qualification_scope": "saved supplied-copy specimens only; plain-header variant excludes source marks",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "cardrow"
+        }
+      ]
+    },
+    {
+      "key": "quote/light",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "pullquote": 1,
+        "square": 1,
+        "text": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 21,
+              "y": 18,
+              "w": 198,
+              "h": 162
+            },
+            {
+              "x": 741,
+              "y": 288,
+              "w": 162,
+              "h": 162,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/2",
+                "reference": "photo-working-session",
+                "focus": "50% 50%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "quote",
+            "maxChars": 100
+          },
+          {
+            "slot": "attribution",
+            "maxChars": 60
+          }
+        ],
+        "requirements": [
+          "Bind quote/by and explicit fixed/override photo policy."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Photo is drawn but metadata exposes no photo slot. Quote mark60pt/30pt lies outside pinned heading anchors.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "pullquote"
+        },
+        {
+          "path": "/body/2",
+          "type": "square"
+        }
+      ]
+    },
+    {
+      "key": "quote/inverse",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "pullquote": 1,
+        "square": 1,
+        "text": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "inverse",
+            "rail_surface": null,
+            "no_page": true,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 741,
+              "y": 126,
+              "w": 162,
+              "h": 324,
+              "fade": "none"
+            }
+          ]
+        },
+        {
+          "name": "photos_and_crop",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "fit": "cover",
+            "assets": [
+              {
+                "path": "/body/2",
+                "reference": "photo-abstract-blocks",
+                "focus": "50% 50%",
+                "grayscale": false,
+                "media": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P05-lists-agendas",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "quote",
+            "maxChars": 100
+          },
+          {
+            "slot": "attribution",
+            "maxChars": 60
+          }
+        ],
+        "requirements": [
+          "Bind quote/by and explicit photo policy; preserve noPage."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Quote mark stays white on inverse and needs60/30 custom-style allocation.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "pullquote"
+        },
+        {
+          "path": "/body/2",
+          "type": "square"
+        }
+      ]
+    },
+    {
+      "key": "closing/tagline",
+      "family": "openers",
+      "tier": "core",
+      "source_file": "templates/library/openers.json",
+      "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6",
+      "node_types": {
+        "art": 1,
+        "text": 4
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "inverse",
+            "rail_surface": null,
+            "no_page": true,
+            "title_lines": 1,
+            "no_header_inference_required": true
+          }
+        },
+        {
+          "name": "custom_whiteboard",
+          "paths": [
+            "/whiteboard"
+          ],
+          "detail": [
+            {
+              "x": 561,
+              "y": 36,
+              "w": 342,
+              "h": 126,
+              "fade": "bottom"
+            }
+          ]
+        },
+        {
+          "name": "tagline_art",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "assets": [
+              "tagline-rev"
+            ],
+            "intrinsic_aspect": true
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "nextStep",
+            "maxChars": 40
+          },
+          {
+            "slot": "contactName",
+            "maxChars": 30
+          },
+          {
+            "slot": "contactRole",
+            "maxChars": 50
+          },
+          {
+            "slot": "contactEmail",
+            "maxChars": 40
+          }
+        ],
+        "requirements": [
+          "Bind next-step and contact identity/role/email."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "contactName/contactRole metadata correspond ambiguously to one drawn line; tagline-rev is aspect-preserved artwork.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "art"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "takeaway-rail/metrics-rail",
+      "family": "argument",
+      "tier": "core",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "metric": 2,
+        "rule": 1,
+        "text": 4
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "right",
+            "footer": "tall",
+            "surface": "light",
+            "rail_surface": "inverse",
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "header_mark",
+          "paths": [
+            "/title"
+          ],
+          "detail": {
+            "emphasis": "highlight",
+            "source_phrase_markup": true
+          }
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/4",
+            "/body/5",
+            "/body/6"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "source_notes",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "text": true,
+            "notes": false,
+            "browser_overflow": "nowrap ellipsis; Go must enforce measured capacity"
+          }
+        },
+        {
+          "name": "standalone_metric",
+          "paths": [
+            "/body/0",
+            "/body/1"
+          ],
+          "detail": {
+            "current": "DataMetricSpec supports authored value or NumberFormatSpec, label, change, secondary, target, status, source; per-template compiler required"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P03-text-marks-footnotes",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "closed typed adapter",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 24
+          },
+          {
+            "slot": "title",
+            "maxChars": 48
+          },
+          {
+            "slot": "metric value",
+            "maxChars": 7
+          },
+          {
+            "slot": "metric label",
+            "maxChars": 40
+          },
+          {
+            "slot": "support",
+            "maxChars": 110
+          },
+          {
+            "slot": "rail eyebrow",
+            "maxChars": 18
+          },
+          {
+            "slot": "rail heading",
+            "maxChars": 50
+          },
+          {
+            "slot": "rail body",
+            "maxChars": 80
+          },
+          {
+            "slot": "source",
+            "maxChars": 90
+          }
+        ],
+        "requirements": [
+          "Existing metric1/2, support, rail copy, chrome/source typed bindings."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Existing plain-header binding leaves source title highlight inactive; arbitrary copy/native font identity remain unqualified.",
+          "state": "scoped_existing_adapter"
+        }
+      ],
+      "status": "implemented_bound",
+      "qualified_envelope": false,
+      "qualification_scope": "saved supplied-copy specimens only; plain-header variant excludes source marks",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "metric"
+        },
+        {
+          "path": "/body/1",
+          "type": "metric"
+        },
+        {
+          "path": "/body/2",
+          "type": "rule"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "text"
+        },
+        {
+          "path": "/body/6",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "from-to/cards",
+      "family": "argument",
+      "tier": "core",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "card": 2,
+        "mark": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "standalone_mark",
+          "paths": [
+            "/body/1"
+          ],
+          "detail": {
+            "marks": [
+              "arrow-dashed"
+            ]
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/0",
+            "/body/2"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "label",
+              "surface",
+              "title"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/0",
+            "/body/2"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P03-text-marks-footnotes",
+        "P04-card-completion",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 24
+          },
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "card title",
+            "maxChars": 34
+          },
+          {
+            "slot": "bullets",
+            "maxChars": 44
+          }
+        ],
+        "requirements": [
+          "Bind two labeled cards and keyed bullets with fixed arrow asset."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Dashed hand-drawn arrow is distinct from generic native connector variant.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "card"
+        },
+        {
+          "path": "/body/1",
+          "type": "mark"
+        },
+        {
+          "path": "/body/2",
+          "type": "card"
+        }
+      ]
+    },
+    {
+      "key": "from-to/rows",
+      "family": "argument",
+      "tier": "core",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "beforeafter": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "source_notes",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "text": true,
+            "notes": false,
+            "browser_overflow": "nowrap ellipsis; Go must enforce measured capacity"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P06-shapes-connectors",
+        "P08-argument-composites",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 24
+          },
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "column headers",
+            "maxChars": 24
+          },
+          {
+            "slot": "row text",
+            "maxChars": 40
+          },
+          {
+            "slot": "metric",
+            "maxChars": 16
+          },
+          {
+            "slot": "source",
+            "maxChars": 90
+          }
+        ],
+        "requirements": [
+          "Bind column labels, keyed before/after/metric-chip rows and source."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Positional source arrays need stable keyed typed rows; retain54pt row and9pt gap plus center arrow channel.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "beforeafter"
+        }
+      ]
+    },
+    {
+      "key": "transformation/before-after",
+      "family": "argument",
+      "tier": "core",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "beforeafter": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "source_notes",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "text": true,
+            "notes": false,
+            "browser_overflow": "nowrap ellipsis; Go must enforce measured capacity"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P06-shapes-connectors",
+        "P08-argument-composites",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "eyebrow",
+            "maxChars": 32
+          },
+          {
+            "slot": "title",
+            "maxChars": 48
+          },
+          {
+            "slot": "left header",
+            "maxChars": 20
+          },
+          {
+            "slot": "right header",
+            "maxChars": 24
+          },
+          {
+            "slot": "row",
+            "count": "3–4",
+            "note": "today 36, target 40, tag 14 chars"
+          },
+          {
+            "slot": "source",
+            "maxChars": 60
+          }
+        ],
+        "requirements": [
+          "Bind column labels, keyed transformation rows, metric chips, source."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Beforeafter includes90pt arrow width and right chips; generic card pair would omit anatomy.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "beforeafter"
+        }
+      ]
+    },
+    {
+      "key": "transformation/pain-to-theme",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 8,
+        "text": 11,
+        "textarrow": 4
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "pain point",
+            "maxChars": 80
+          },
+          {
+            "slot": "theme title",
+            "maxChars": 28
+          },
+          {
+            "slot": "theme description",
+            "maxChars": 60
+          },
+          {
+            "slot": "statement",
+            "maxChars": 80
+          }
+        ],
+        "requirements": [
+          "Bind keyed pain/title/description rows, headers, conclusion."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Inset text y147/173 uses implicit panel context and local coordinates, not recursively enforced18pt outer lattice.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "block"
+        },
+        {
+          "path": "/body/3",
+          "type": "textarrow"
+        },
+        {
+          "path": "/body/4",
+          "type": "block"
+        },
+        {
+          "path": "/body/5",
+          "type": "text"
+        },
+        {
+          "path": "/body/6",
+          "type": "text"
+        },
+        {
+          "path": "/body/7",
+          "type": "block"
+        },
+        {
+          "path": "/body/8",
+          "type": "textarrow"
+        },
+        {
+          "path": "/body/9",
+          "type": "block"
+        },
+        {
+          "path": "/body/10",
+          "type": "text"
+        },
+        {
+          "path": "/body/11",
+          "type": "text"
+        },
+        {
+          "path": "/body/12",
+          "type": "block"
+        },
+        {
+          "path": "/body/13",
+          "type": "textarrow"
+        },
+        {
+          "path": "/body/14",
+          "type": "block"
+        },
+        {
+          "path": "/body/15",
+          "type": "text"
+        },
+        {
+          "path": "/body/16",
+          "type": "text"
+        },
+        {
+          "path": "/body/17",
+          "type": "block"
+        },
+        {
+          "path": "/body/18",
+          "type": "textarrow"
+        },
+        {
+          "path": "/body/19",
+          "type": "block"
+        },
+        {
+          "path": "/body/20",
+          "type": "text"
+        },
+        {
+          "path": "/body/21",
+          "type": "text"
+        },
+        {
+          "path": "/body/22",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "method/accelerator-steps",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "card": 1,
+        "table": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "gap",
+              "label",
+              "pad",
+              "surface",
+              "title",
+              "titleStyle"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "table_cells",
+          "paths": [
+            "/body/1"
+          ],
+          "detail": {
+            "column_types": [
+              "text"
+            ],
+            "tables": [
+              {
+                "path": "/body/1",
+                "header": "dark",
+                "dense": true,
+                "row_h": 42,
+                "column_widths": [
+                  48,
+                  138,
+                  228
+                ],
+                "rows": 7
+              }
+            ]
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        },
+        {
+          "name": "body_section_labels",
+          "paths": [
+            "/body/0/body/0",
+            "/body/0/body/2",
+            "/body/0/body/4"
+          ],
+          "detail": {
+            "Go_WMDS": "missing label-only card body blocks"
+          }
+        }
+      ],
+      "dependencies": [
+        "P04-card-completion",
+        "P07-table-matrix",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 52
+          },
+          {
+            "slot": "panel title",
+            "maxChars": 40
+          },
+          {
+            "slot": "step name",
+            "maxChars": 24
+          },
+          {
+            "slot": "step text",
+            "maxChars": 48
+          },
+          {
+            "slot": "bullet",
+            "maxChars": 48
+          }
+        ],
+        "requirements": [
+          "Bind labeled card sections and keyed table number/step/description rows."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Card label-only body blocks unsupported; dense table28pt header and42pt rows must preserve independent measured capacities.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "card"
+        },
+        {
+          "path": "/body/1",
+          "type": "table"
+        }
+      ]
+    },
+    {
+      "key": "pillars/four-why-matters",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 4,
+        "card": 4,
+        "connector": 4,
+        "text": 8
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "header_mark",
+          "paths": [
+            "/title"
+          ],
+          "detail": {
+            "emphasis": "highlight",
+            "source_phrase_markup": true
+          }
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/2",
+            "/body/3",
+            "/body/6",
+            "/body/7",
+            "/body/10",
+            "/body/11",
+            "/body/14",
+            "/body/15"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "icons",
+          "paths": [
+            "/body/0",
+            "/body/4",
+            "/body/8",
+            "/body/12"
+          ],
+          "detail": {
+            "source_registry": "ICONLIB first; inline ICONS fallback",
+            "brand_inks": "navy/magenta/white",
+            "WMDS_adapter": "missing"
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/0",
+            "/body/4",
+            "/body/8",
+            "/body/12"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "icon",
+              "pad",
+              "surface",
+              "title",
+              "titleInk"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "connectors",
+          "paths": [
+            "/body/16",
+            "/body/17",
+            "/body/18",
+            "/body/19"
+          ],
+          "detail": {
+            "styles": [
+              "solid"
+            ],
+            "elbows": [
+              "none"
+            ],
+            "source_points_preserved": true
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/0",
+            "/body/4",
+            "/body/8",
+            "/body/12"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P04-card-completion",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "pillar title",
+            "maxChars": 22
+          },
+          {
+            "slot": "practice",
+            "maxChars": 56
+          },
+          {
+            "slot": "why it matters",
+            "maxChars": 100
+          }
+        ],
+        "requirements": [
+          "Bind exact4 icon/title/bullet pillars with corresponding rationale panels and connectors."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Rationale panels start342 before cards end360; intentional overlap and inverse local context must be explicit.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "card"
+        },
+        {
+          "path": "/body/1",
+          "type": "block"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "card"
+        },
+        {
+          "path": "/body/5",
+          "type": "block"
+        },
+        {
+          "path": "/body/6",
+          "type": "text"
+        },
+        {
+          "path": "/body/7",
+          "type": "text"
+        },
+        {
+          "path": "/body/8",
+          "type": "card"
+        },
+        {
+          "path": "/body/9",
+          "type": "block"
+        },
+        {
+          "path": "/body/10",
+          "type": "text"
+        },
+        {
+          "path": "/body/11",
+          "type": "text"
+        },
+        {
+          "path": "/body/12",
+          "type": "card"
+        },
+        {
+          "path": "/body/13",
+          "type": "block"
+        },
+        {
+          "path": "/body/14",
+          "type": "text"
+        },
+        {
+          "path": "/body/15",
+          "type": "text"
+        },
+        {
+          "path": "/body/16",
+          "type": "connector"
+        },
+        {
+          "path": "/body/17",
+          "type": "connector"
+        },
+        {
+          "path": "/body/18",
+          "type": "connector"
+        },
+        {
+          "path": "/body/19",
+          "type": "connector"
+        }
+      ]
+    },
+    {
+      "key": "capability-table/icon-rows",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "card": 1,
+        "table": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "icons",
+          "paths": [
+            "/body/0/rows/0/f",
+            "/body/0/rows/1/f",
+            "/body/0/rows/2/f",
+            "/body/0/rows/3/f",
+            "/body/0/rows/4/f"
+          ],
+          "detail": {
+            "source_registry": "ICONLIB first; inline ICONS fallback",
+            "brand_inks": "navy/magenta/white",
+            "WMDS_adapter": "missing"
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/1"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "edge",
+              "pad",
+              "surface"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "table_cells",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "column_types": [
+              "icon",
+              "text"
+            ],
+            "tables": [
+              {
+                "path": "/body/0",
+                "header": "dark",
+                "dense": false,
+                "row_h": 54,
+                "column_widths": [
+                  234,
+                  360,
+                  252
+                ],
+                "rows": 5
+              }
+            ]
+          }
+        },
+        {
+          "name": "existing_card_contract_conflicts",
+          "paths": [
+            "/body/1/pad"
+          ],
+          "detail": [
+            {
+              "path": "/body/1/pad",
+              "observed": 6,
+              "contract": "current12/18/24 padding"
+            }
+          ]
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/1"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P02-assets-images",
+        "P04-card-completion",
+        "P07-table-matrix",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "focus",
+            "maxChars": 26
+          },
+          {
+            "slot": "AI role",
+            "maxChars": 90
+          },
+          {
+            "slot": "human judgment",
+            "maxChars": 60
+          },
+          {
+            "slot": "takeaway",
+            "maxChars": 120
+          }
+        ],
+        "requirements": [
+          "Bind keyed icon/focus/AI-help/human-judgment rows and takeaway."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Column type icon is cell discriminator, not standalone node. Bottom card pad6/h36 outside bounded contract.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "table"
+        },
+        {
+          "path": "/body/1",
+          "type": "card"
+        }
+      ]
+    },
+    {
+      "key": "capability-map/layered-bands",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "card": 3,
+        "matrix": 5,
+        "rule": 5,
+        "text": 15
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/25",
+            "/body/26",
+            "/body/27"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "label",
+              "pad",
+              "surface"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "matrix",
+          "paths": [
+            "/body/20",
+            "/body/21",
+            "/body/22",
+            "/body/23",
+            "/body/24"
+          ],
+          "detail": {
+            "cells": "independent surfaces, equal generated widths, source microgrid fixed"
+          }
+        },
+        {
+          "name": "existing_card_contract_conflicts",
+          "paths": [
+            "/body/25/pad",
+            "/body/26/pad",
+            "/body/27/pad"
+          ],
+          "detail": [
+            {
+              "path": "/body/25/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/26/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/27/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            }
+          ]
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/25",
+            "/body/26",
+            "/body/27"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P04-card-completion",
+        "P06-shapes-connectors",
+        "P07-table-matrix",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "band label",
+            "maxChars": 24
+          },
+          {
+            "slot": "block label",
+            "maxChars": 28
+          },
+          {
+            "slot": "value driver",
+            "maxChars": 24
+          },
+          {
+            "slot": "metric",
+            "maxChars": 28
+          }
+        ],
+        "requirements": [
+          "Bind layer labels, keyed matrix rows/cells and3 value-driver cards."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Source duplicates plain value-driver labels/bullets beneath later same-copy cards; choose canonical editable content explicitly. Matrix cellH15 is shorter than source small12/18 line allocation;18pt cells have no room for wrapping. Define bounded source typography/geometry resolution, not silent shrink.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "rule"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "rule"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "rule"
+        },
+        {
+          "path": "/body/6",
+          "type": "text"
+        },
+        {
+          "path": "/body/7",
+          "type": "rule"
+        },
+        {
+          "path": "/body/8",
+          "type": "text"
+        },
+        {
+          "path": "/body/9",
+          "type": "rule"
+        },
+        {
+          "path": "/body/10",
+          "type": "text"
+        },
+        {
+          "path": "/body/11",
+          "type": "text"
+        },
+        {
+          "path": "/body/12",
+          "type": "text"
+        },
+        {
+          "path": "/body/13",
+          "type": "text"
+        },
+        {
+          "path": "/body/14",
+          "type": "text"
+        },
+        {
+          "path": "/body/15",
+          "type": "text"
+        },
+        {
+          "path": "/body/16",
+          "type": "text"
+        },
+        {
+          "path": "/body/17",
+          "type": "text"
+        },
+        {
+          "path": "/body/18",
+          "type": "text"
+        },
+        {
+          "path": "/body/19",
+          "type": "text"
+        },
+        {
+          "path": "/body/20",
+          "type": "matrix"
+        },
+        {
+          "path": "/body/21",
+          "type": "matrix"
+        },
+        {
+          "path": "/body/22",
+          "type": "matrix"
+        },
+        {
+          "path": "/body/23",
+          "type": "matrix"
+        },
+        {
+          "path": "/body/24",
+          "type": "matrix"
+        },
+        {
+          "path": "/body/25",
+          "type": "card"
+        },
+        {
+          "path": "/body/26",
+          "type": "card"
+        },
+        {
+          "path": "/body/27",
+          "type": "card"
+        }
+      ]
+    },
+    {
+      "key": "flow/challenges-to-outcomes",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 4,
+        "bullets": 1,
+        "card": 5,
+        "connector": 3,
+        "frame": 3,
+        "text": 4
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/1",
+            "/body/2",
+            "/body/3",
+            "/body/4"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/6",
+            "/body/7",
+            "/body/8",
+            "/body/10",
+            "/body/11"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "pad",
+              "surface",
+              "title",
+              "titleStyle"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "connectors",
+          "paths": [
+            "/body/16",
+            "/body/17",
+            "/body/18"
+          ],
+          "detail": {
+            "styles": [
+              "solid"
+            ],
+            "elbows": [
+              "none"
+            ],
+            "source_points_preserved": true
+          }
+        },
+        {
+          "name": "existing_card_contract_conflicts",
+          "paths": [
+            "/body/6/pad",
+            "/body/6/w",
+            "/body/6/titleStyle",
+            "/body/6/h",
+            "/body/7/pad",
+            "/body/7/w",
+            "/body/7/titleStyle",
+            "/body/7/h",
+            "/body/8/pad",
+            "/body/8/w",
+            "/body/8/titleStyle",
+            "/body/8/h",
+            "/body/10/w",
+            "/body/10/titleStyle",
+            "/body/11/w",
+            "/body/11/titleStyle"
+          ],
+          "detail": [
+            {
+              "path": "/body/6/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/6/w",
+              "observed": 180,
+              "contract": "current minimum198 width"
+            },
+            {
+              "path": "/body/6/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/6/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/7/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/7/w",
+              "observed": 180,
+              "contract": "current minimum198 width"
+            },
+            {
+              "path": "/body/7/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/7/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/8/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/8/w",
+              "observed": 180,
+              "contract": "current minimum198 width"
+            },
+            {
+              "path": "/body/8/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/8/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/10/w",
+              "observed": 180,
+              "contract": "current minimum198 width"
+            },
+            {
+              "path": "/body/10/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/11/w",
+              "observed": 180,
+              "contract": "current minimum198 width"
+            },
+            {
+              "path": "/body/11/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            }
+          ]
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/6",
+            "/body/7",
+            "/body/8",
+            "/body/10",
+            "/body/11"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P04-card-completion",
+        "P05-lists-agendas",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "zone label",
+            "maxChars": 16
+          },
+          {
+            "slot": "block title",
+            "maxChars": 28
+          },
+          {
+            "slot": "block description",
+            "maxChars": 56
+          },
+          {
+            "slot": "challenge",
+            "maxChars": 24
+          },
+          {
+            "slot": "closing line",
+            "maxChars": 110
+          }
+        ],
+        "requirements": [
+          "Bind challenges/stat, keyed products/use-cases, outcomes, group tabs, conclusion."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Cards width180/pad9/titleStyle body/h78 conflict with bounded card contract; bottom y441 requires measured footer capacity.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "block"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "frame"
+        },
+        {
+          "path": "/body/6",
+          "type": "card"
+        },
+        {
+          "path": "/body/7",
+          "type": "card"
+        },
+        {
+          "path": "/body/8",
+          "type": "card"
+        },
+        {
+          "path": "/body/9",
+          "type": "frame"
+        },
+        {
+          "path": "/body/10",
+          "type": "card"
+        },
+        {
+          "path": "/body/11",
+          "type": "card"
+        },
+        {
+          "path": "/body/12",
+          "type": "frame"
+        },
+        {
+          "path": "/body/13",
+          "type": "block"
+        },
+        {
+          "path": "/body/14",
+          "type": "block"
+        },
+        {
+          "path": "/body/15",
+          "type": "block"
+        },
+        {
+          "path": "/body/16",
+          "type": "connector"
+        },
+        {
+          "path": "/body/17",
+          "type": "connector"
+        },
+        {
+          "path": "/body/18",
+          "type": "connector"
+        },
+        {
+          "path": "/body/19",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "problem/stat-callout",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "card": 4,
+        "connector": 1,
+        "text": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 2,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "inline_drawn_marks",
+          "paths": [
+            "/body/0"
+          ],
+          "detail": {
+            "types": [
+              "underscore"
+            ],
+            "Go_WMDS": "missing; mixed-run weights/inks do not supply marks"
+          }
+        },
+        {
+          "name": "icons",
+          "paths": [
+            "/body/1",
+            "/body/2"
+          ],
+          "detail": {
+            "source_registry": "ICONLIB first; inline ICONS fallback",
+            "brand_inks": "navy/magenta/white",
+            "WMDS_adapter": "missing"
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/1",
+            "/body/2",
+            "/body/3",
+            "/body/4"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "edge",
+              "icon",
+              "label",
+              "metric",
+              "pad",
+              "surface",
+              "title",
+              "titleStyle"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "connectors",
+          "paths": [
+            "/body/5"
+          ],
+          "detail": {
+            "styles": [
+              "dashed"
+            ],
+            "elbows": [
+              "none"
+            ],
+            "source_points_preserved": true
+          }
+        },
+        {
+          "name": "existing_card_contract_conflicts",
+          "paths": [
+            "/body/1/titleStyle",
+            "/body/2/titleStyle"
+          ],
+          "detail": [
+            {
+              "path": "/body/1/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/2/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            }
+          ]
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/1",
+            "/body/2",
+            "/body/3",
+            "/body/4"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P04-card-completion",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 80
+          },
+          {
+            "slot": "lead",
+            "maxChars": 110
+          },
+          {
+            "slot": "cause title",
+            "maxChars": 40
+          },
+          {
+            "slot": "cause text",
+            "maxChars": 80
+          },
+          {
+            "slot": "stat",
+            "maxChars": 8
+          },
+          {
+            "slot": "stat label",
+            "maxChars": 100
+          },
+          {
+            "slot": "remedy",
+            "maxChars": 100
+          }
+        ],
+        "requirements": [
+          "Bind2 icon cards, risk metric/secondary, insight, lead and connector."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "TitleLines2 must drive frame; long metric label and stat terminal height need measured allocation.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "card"
+        },
+        {
+          "path": "/body/2",
+          "type": "card"
+        },
+        {
+          "path": "/body/3",
+          "type": "card"
+        },
+        {
+          "path": "/body/4",
+          "type": "card"
+        },
+        {
+          "path": "/body/5",
+          "type": "connector"
+        }
+      ]
+    },
+    {
+      "key": "decision/buy-build-economics",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 1,
+        "bullets": 4,
+        "card": 3,
+        "rule": 2,
+        "text": 13
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/0",
+            "/body/1",
+            "/body/10"
+          ],
+          "detail": {
+            "source_options": [
+              "edge",
+              "label",
+              "surface",
+              "title",
+              "titleStyle"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/0",
+            "/body/1",
+            "/body/10"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P04-card-completion",
+        "P05-lists-agendas",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "option label",
+            "maxChars": 12
+          },
+          {
+            "slot": "option statement",
+            "maxChars": 36
+          },
+          {
+            "slot": "criterion",
+            "maxChars": 30
+          },
+          {
+            "slot": "stage label",
+            "maxChars": 24
+          },
+          {
+            "slot": "stage line",
+            "maxChars": 50
+          },
+          {
+            "slot": "stage detail",
+            "maxChars": 36
+          },
+          {
+            "slot": "decision rule",
+            "maxChars": 110
+          }
+        ],
+        "requirements": [
+          "Bind3 compare cards, bullets,3 lifecycle groups, conclusion."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Local y214/237/261 coordinates and explicit small body require source-local compound layout, not automatic shrink.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "card"
+        },
+        {
+          "path": "/body/1",
+          "type": "card"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/6",
+          "type": "text"
+        },
+        {
+          "path": "/body/7",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/8",
+          "type": "text"
+        },
+        {
+          "path": "/body/9",
+          "type": "bullets"
+        },
+        {
+          "path": "/body/10",
+          "type": "card"
+        },
+        {
+          "path": "/body/11",
+          "type": "text"
+        },
+        {
+          "path": "/body/12",
+          "type": "text"
+        },
+        {
+          "path": "/body/13",
+          "type": "text"
+        },
+        {
+          "path": "/body/14",
+          "type": "rule"
+        },
+        {
+          "path": "/body/15",
+          "type": "text"
+        },
+        {
+          "path": "/body/16",
+          "type": "text"
+        },
+        {
+          "path": "/body/17",
+          "type": "text"
+        },
+        {
+          "path": "/body/18",
+          "type": "rule"
+        },
+        {
+          "path": "/body/19",
+          "type": "text"
+        },
+        {
+          "path": "/body/20",
+          "type": "text"
+        },
+        {
+          "path": "/body/21",
+          "type": "text"
+        },
+        {
+          "path": "/body/22",
+          "type": "block"
+        }
+      ]
+    },
+    {
+      "key": "objective/numbered-and-panel",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 1,
+        "card": 6,
+        "strongnum": 1,
+        "text": 3
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/3",
+            "/body/4"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/5",
+            "/body/6",
+            "/body/7",
+            "/body/8",
+            "/body/9",
+            "/body/10"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "edge",
+              "pad",
+              "surface",
+              "title",
+              "titleStyle"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "existing_card_contract_conflicts",
+          "paths": [
+            "/body/5/pad",
+            "/body/5/titleStyle",
+            "/body/5/h",
+            "/body/6/pad",
+            "/body/6/titleStyle",
+            "/body/6/h",
+            "/body/7/pad",
+            "/body/7/titleStyle",
+            "/body/7/h",
+            "/body/8/pad",
+            "/body/8/titleStyle",
+            "/body/8/h",
+            "/body/9/pad",
+            "/body/9/titleStyle",
+            "/body/9/h",
+            "/body/10/pad",
+            "/body/10/titleStyle",
+            "/body/10/h"
+          ],
+          "detail": [
+            {
+              "path": "/body/5/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/5/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/5/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/6/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/6/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/6/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/7/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/7/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/7/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/8/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/8/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/8/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/9/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/9/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/9/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            },
+            {
+              "path": "/body/10/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/10/titleStyle",
+              "observed": "body",
+              "contract": "current subhead/heading title"
+            },
+            {
+              "path": "/body/10/h",
+              "observed": 78,
+              "contract": "current18pt outer height lattice"
+            }
+          ]
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/5",
+            "/body/6",
+            "/body/7",
+            "/body/8",
+            "/body/9",
+            "/body/10"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P04-card-completion",
+        "P05-lists-agendas",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "reason title",
+            "maxChars": 36
+          },
+          {
+            "slot": "reason text",
+            "maxChars": 100
+          },
+          {
+            "slot": "panel heading",
+            "maxChars": 34
+          },
+          {
+            "slot": "outcome title",
+            "maxChars": 28
+          },
+          {
+            "slot": "outcome text",
+            "maxChars": 60
+          }
+        ],
+        "requirements": [
+          "Bind keyed reasons and exact6 outcome cards, inverse-panel heading."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "216x78 cards pad9/body-title unsupported; strongnum stat-sm uses54pt channel, unlike inline title numbering.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "strongnum"
+        },
+        {
+          "path": "/body/2",
+          "type": "block"
+        },
+        {
+          "path": "/body/3",
+          "type": "text"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "card"
+        },
+        {
+          "path": "/body/6",
+          "type": "card"
+        },
+        {
+          "path": "/body/7",
+          "type": "card"
+        },
+        {
+          "path": "/body/8",
+          "type": "card"
+        },
+        {
+          "path": "/body/9",
+          "type": "card"
+        },
+        {
+          "path": "/body/10",
+          "type": "card"
+        }
+      ]
+    },
+    {
+      "key": "session/stepper-and-guidance",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 1,
+        "card": 1,
+        "text": 1,
+        "vstepper": 1
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "edge",
+              "label",
+              "surface",
+              "title"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/2"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P04-card-completion",
+        "P06-shapes-connectors",
+        "P08-argument-composites",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "step duration",
+            "maxChars": 10
+          },
+          {
+            "slot": "step title",
+            "maxChars": 24
+          },
+          {
+            "slot": "step text",
+            "maxChars": 100
+          },
+          {
+            "slot": "panel title",
+            "maxChars": 50
+          },
+          {
+            "slot": "panel bullet",
+            "maxChars": 40
+          },
+          {
+            "slot": "ask",
+            "maxChars": 130
+          }
+        ],
+        "requirements": [
+          "Bind keyed state/duration/title/text steps, guidance bullets and ask."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Vertical stepper fixed66pt pitch and12/18pt squares need local/state policy with at most one current; small body is explicit density.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "vstepper"
+        },
+        {
+          "path": "/body/2",
+          "type": "card"
+        },
+        {
+          "path": "/body/3",
+          "type": "block"
+        }
+      ]
+    },
+    {
+      "key": "goal-steps/goal-band-three-steps",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 3,
+        "cardrow": 1,
+        "text": 3
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "local_surface_context",
+          "paths": [
+            "/body/1",
+            "/body/2"
+          ],
+          "detail": {
+            "surfaces": [
+              "inverse"
+            ],
+            "requires_actual_painted_surface": true
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/5"
+          ],
+          "detail": {
+            "source_options": [
+              "card",
+              "gap",
+              "items",
+              "numbering"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P04-card-completion",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "goal",
+            "maxChars": 150
+          },
+          {
+            "slot": "target",
+            "maxChars": 24
+          },
+          {
+            "slot": "duration",
+            "maxChars": 10
+          },
+          {
+            "slot": "step title",
+            "maxChars": 26
+          },
+          {
+            "slot": "step text",
+            "maxChars": 90
+          },
+          {
+            "slot": "facilitator note",
+            "maxChars": 90
+          },
+          {
+            "slot": "expected outcome",
+            "maxChars": 130
+          }
+        ],
+        "requirements": [
+          "Bind goal/target, exact3 duration/title/activity/output/facilitator cards, outcome."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "270pt cards contain3 paragraphs; current414pt multi-block rule rejects. Goal y135 requires local flow allocation.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "block"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "text"
+        },
+        {
+          "path": "/body/3",
+          "type": "block"
+        },
+        {
+          "path": "/body/4",
+          "type": "text"
+        },
+        {
+          "path": "/body/5",
+          "type": "cardrow"
+        },
+        {
+          "path": "/body/6",
+          "type": "block"
+        }
+      ]
+    },
+    {
+      "key": "comparison/us-versus-others",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "callout": 1,
+        "card": 2,
+        "connector": 1,
+        "node": 6,
+        "text": 9
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "header_mark",
+          "paths": [
+            "/title"
+          ],
+          "detail": {
+            "emphasis": "underscore",
+            "source_phrase_markup": true
+          }
+        },
+        {
+          "name": "vertical_text_alignment",
+          "paths": [
+            "/body/8",
+            "/body/10",
+            "/body/12",
+            "/body/14",
+            "/body/16",
+            "/body/18"
+          ],
+          "detail": {
+            "alignments": [
+              "middle"
+            ]
+          }
+        },
+        {
+          "name": "icons",
+          "paths": [
+            "/body/7",
+            "/body/9",
+            "/body/11",
+            "/body/13",
+            "/body/15",
+            "/body/17"
+          ],
+          "detail": {
+            "source_registry": "ICONLIB first; inline ICONS fallback",
+            "brand_inks": "navy/magenta/white",
+            "WMDS_adapter": "missing"
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/3",
+            "/body/4"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "label",
+              "pad",
+              "surface"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "connectors",
+          "paths": [
+            "/body/5"
+          ],
+          "detail": {
+            "styles": [
+              "solid"
+            ],
+            "elbows": [
+              "none"
+            ],
+            "source_points_preserved": true
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/3",
+            "/body/4"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P01-frame-art-zones",
+        "P02-assets-images",
+        "P03-text-marks-footnotes",
+        "P04-card-completion",
+        "P05-lists-agendas",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 56
+          },
+          {
+            "slot": "narrative",
+            "maxChars": 150
+          },
+          {
+            "slot": "list item",
+            "maxChars": 32
+          },
+          {
+            "slot": "implication",
+            "maxChars": 66
+          },
+          {
+            "slot": "callout",
+            "maxChars": 60
+          }
+        ],
+        "requirements": [
+          "Bind narrative/callout,2 comparison cards,6 icon implications, header mark."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Node icons have empty text and top layout; implication text needs middle alignment in54pt frame.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "text"
+        },
+        {
+          "path": "/body/1",
+          "type": "text"
+        },
+        {
+          "path": "/body/2",
+          "type": "callout"
+        },
+        {
+          "path": "/body/3",
+          "type": "card"
+        },
+        {
+          "path": "/body/4",
+          "type": "card"
+        },
+        {
+          "path": "/body/5",
+          "type": "connector"
+        },
+        {
+          "path": "/body/6",
+          "type": "text"
+        },
+        {
+          "path": "/body/7",
+          "type": "node"
+        },
+        {
+          "path": "/body/8",
+          "type": "text"
+        },
+        {
+          "path": "/body/9",
+          "type": "node"
+        },
+        {
+          "path": "/body/10",
+          "type": "text"
+        },
+        {
+          "path": "/body/11",
+          "type": "node"
+        },
+        {
+          "path": "/body/12",
+          "type": "text"
+        },
+        {
+          "path": "/body/13",
+          "type": "node"
+        },
+        {
+          "path": "/body/14",
+          "type": "text"
+        },
+        {
+          "path": "/body/15",
+          "type": "node"
+        },
+        {
+          "path": "/body/16",
+          "type": "text"
+        },
+        {
+          "path": "/body/17",
+          "type": "node"
+        },
+        {
+          "path": "/body/18",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "hub-spokes/eight-spokes",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "card": 9,
+        "connector": 8
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "source_notes",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "text": true,
+            "notes": false,
+            "browser_overflow": "nowrap ellipsis; Go must enforce measured capacity"
+          }
+        },
+        {
+          "name": "icons",
+          "paths": [
+            "/body/8"
+          ],
+          "detail": {
+            "source_registry": "ICONLIB first; inline ICONS fallback",
+            "brand_inks": "navy/magenta/white",
+            "WMDS_adapter": "missing"
+          }
+        },
+        {
+          "name": "card_anatomy",
+          "paths": [
+            "/body/0",
+            "/body/1",
+            "/body/2",
+            "/body/3",
+            "/body/4",
+            "/body/5",
+            "/body/6",
+            "/body/7",
+            "/body/8"
+          ],
+          "detail": {
+            "source_options": [
+              "body",
+              "bodySize",
+              "icon",
+              "label",
+              "pad",
+              "surface",
+              "title",
+              "titleStyle"
+            ],
+            "Go_current": "uniform body/metric cards, title band/edge and keyed inline/band rows; full source anatomy pending"
+          }
+        },
+        {
+          "name": "connectors",
+          "paths": [
+            "/body/9",
+            "/body/10",
+            "/body/11",
+            "/body/12",
+            "/body/13",
+            "/body/14",
+            "/body/15",
+            "/body/16"
+          ],
+          "detail": {
+            "styles": [
+              "solid"
+            ],
+            "elbows": [
+              "none",
+              "v"
+            ],
+            "source_points_preserved": true
+          }
+        },
+        {
+          "name": "existing_card_contract_conflicts",
+          "paths": [
+            "/body/0/pad",
+            "/body/1/pad",
+            "/body/2/pad",
+            "/body/3/pad",
+            "/body/4/pad",
+            "/body/5/pad",
+            "/body/6/pad",
+            "/body/7/pad"
+          ],
+          "detail": [
+            {
+              "path": "/body/0/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/1/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/2/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/3/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/4/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/5/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/6/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            },
+            {
+              "path": "/body/7/pad",
+              "observed": 9,
+              "contract": "current12/18/24 padding"
+            }
+          ]
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [
+            "/body/0",
+            "/body/1",
+            "/body/2",
+            "/body/3",
+            "/body/4",
+            "/body/5",
+            "/body/6",
+            "/body/7",
+            "/body/8"
+          ],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P02-assets-images",
+        "P04-card-completion",
+        "P06-shapes-connectors",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "hub title",
+            "maxChars": 28
+          },
+          {
+            "slot": "spoke title",
+            "count": 8,
+            "maxChars": 30
+          },
+          {
+            "slot": "spoke text",
+            "count": 8,
+            "maxChars": 85
+          }
+        ],
+        "requirements": [
+          "Bind exact8 spoke labels/body, hub icon/title/body, authored connectors, source."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Hub side icon36 needs gutter; compact pad9 spoke cards need measured height; authored elbow routes must remain stable.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "card"
+        },
+        {
+          "path": "/body/1",
+          "type": "card"
+        },
+        {
+          "path": "/body/2",
+          "type": "card"
+        },
+        {
+          "path": "/body/3",
+          "type": "card"
+        },
+        {
+          "path": "/body/4",
+          "type": "card"
+        },
+        {
+          "path": "/body/5",
+          "type": "card"
+        },
+        {
+          "path": "/body/6",
+          "type": "card"
+        },
+        {
+          "path": "/body/7",
+          "type": "card"
+        },
+        {
+          "path": "/body/8",
+          "type": "card"
+        },
+        {
+          "path": "/body/9",
+          "type": "connector"
+        },
+        {
+          "path": "/body/10",
+          "type": "connector"
+        },
+        {
+          "path": "/body/11",
+          "type": "connector"
+        },
+        {
+          "path": "/body/12",
+          "type": "connector"
+        },
+        {
+          "path": "/body/13",
+          "type": "connector"
+        },
+        {
+          "path": "/body/14",
+          "type": "connector"
+        },
+        {
+          "path": "/body/15",
+          "type": "connector"
+        },
+        {
+          "path": "/body/16",
+          "type": "connector"
+        }
+      ]
+    },
+    {
+      "key": "frameworks/layer-table",
+      "family": "argument",
+      "tier": "working",
+      "source_file": "templates/library/argument.json",
+      "source_sha256": "21b54f50ce5d8d13bda451aa94923d5e84cc9532f77ac3e13739cfcc31f5eba2",
+      "node_types": {
+        "block": 17,
+        "chevron": 5,
+        "grouplabel": 4
+      },
+      "features": [
+        {
+          "name": "frame",
+          "paths": [
+            "/"
+          ],
+          "detail": {
+            "rail": "none",
+            "footer": "compact",
+            "surface": "light",
+            "rail_surface": null,
+            "no_page": false,
+            "title_lines": 1,
+            "no_header_inference_required": false
+          }
+        },
+        {
+          "name": "footnote_scope",
+          "paths": [
+            "/source"
+          ],
+          "detail": {
+            "source_markers_present": false,
+            "source_note_array_present": false,
+            "policy": "None observed in these36 variants; enabling caller footnotes still requires explicit typed note bindings and superscript IR."
+          }
+        },
+        {
+          "name": "card_media_scope",
+          "paths": [],
+          "detail": {
+            "source_media_present": false,
+            "policy": "No card.media objects observed in these36 variants; photo/imageframe/square media are tracked separately. Card media is a shared library completion dependency owned with other families."
+          }
+        }
+      ],
+      "dependencies": [
+        "P06-shapes-connectors",
+        "P07-table-matrix",
+        "P09-typed-binding-catalog",
+        "P10-source-resolutions"
+      ],
+      "binding_work": {
+        "current": "metadata inventory only",
+        "slots": [
+          {
+            "slot": "title",
+            "maxChars": 62
+          },
+          {
+            "slot": "layer name",
+            "maxChars": 20
+          },
+          {
+            "slot": "examples",
+            "maxChars": 56
+          },
+          {
+            "slot": "emphasis",
+            "maxChars": 50
+          },
+          {
+            "slot": "maturity",
+            "maxChars": 12
+          },
+          {
+            "slot": "call to action",
+            "maxChars": 70
+          }
+        ],
+        "requirements": [
+          "Bind headers, exact5 number/title/subtitle/examples/emphasis/maturity rows and CTA."
+        ],
+        "unknown_fields": "error; no supplied geometry/style",
+        "cardinality": "semantic counts remain explicit; character guidance advisory"
+      },
+      "source_resolutions": [
+        {
+          "detail": "Chevron/block h48 at54pt pitch require local exceptions; source d=round(h/3) not generic arrow geometry.",
+          "state": "pending_explicit_contract"
+        }
+      ],
+      "status": "inventory_only",
+      "qualified_envelope": false,
+      "qualification_scope": "no new rendering/native review in this read-only analysis",
+      "render_nodes": [
+        {
+          "path": "/body/0",
+          "type": "grouplabel"
+        },
+        {
+          "path": "/body/1",
+          "type": "grouplabel"
+        },
+        {
+          "path": "/body/2",
+          "type": "grouplabel"
+        },
+        {
+          "path": "/body/3",
+          "type": "grouplabel"
+        },
+        {
+          "path": "/body/4",
+          "type": "chevron"
+        },
+        {
+          "path": "/body/5",
+          "type": "block"
+        },
+        {
+          "path": "/body/6",
+          "type": "block"
+        },
+        {
+          "path": "/body/7",
+          "type": "block"
+        },
+        {
+          "path": "/body/8",
+          "type": "chevron"
+        },
+        {
+          "path": "/body/9",
+          "type": "block"
+        },
+        {
+          "path": "/body/10",
+          "type": "block"
+        },
+        {
+          "path": "/body/11",
+          "type": "block"
+        },
+        {
+          "path": "/body/12",
+          "type": "chevron"
+        },
+        {
+          "path": "/body/13",
+          "type": "block"
+        },
+        {
+          "path": "/body/14",
+          "type": "block"
+        },
+        {
+          "path": "/body/15",
+          "type": "block"
+        },
+        {
+          "path": "/body/16",
+          "type": "chevron"
+        },
+        {
+          "path": "/body/17",
+          "type": "block"
+        },
+        {
+          "path": "/body/18",
+          "type": "block"
+        },
+        {
+          "path": "/body/19",
+          "type": "block"
+        },
+        {
+          "path": "/body/20",
+          "type": "chevron"
+        },
+        {
+          "path": "/body/21",
+          "type": "block"
+        },
+        {
+          "path": "/body/22",
+          "type": "block"
+        },
+        {
+          "path": "/body/23",
+          "type": "block"
+        },
+        {
+          "path": "/body/24",
+          "type": "block"
+        },
+        {
+          "path": "/body/25",
+          "type": "block"
+        }
+      ]
+    }
+  ],
+  "analysis_counts": {
+    "custom_whiteboard": 12,
+    "header_mark": 4,
+    "inline_drawn_marks": 7,
+    "photos_and_crop": 9,
+    "icons": 5,
+    "table_cells": 2,
+    "matrix": 1,
+    "connectors": 5,
+    "existing_card_contract_conflicts": 6,
+    "rich_bullet_leads": 1,
+    "vertical_text_alignment": 3
+  }
+}

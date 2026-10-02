@@ -1,0 +1,571 @@
+{
+  "schema": "wmds.frames.v0",
+  "units": "pt",
+  "summary": "Frames are the slide master and layouts: chrome and zones, no content. Two independent choices make a frame: rail (none, nav, left panel, right panel) and footer (compact, tall). Panel rails run full height; the footer band and rule fill only the non-rail width. Logo stays bottom-left and page number bottom-right, in the ink of the surface under them.",
+  "pptx": "Slide master holds the chrome (logo, legal line, page number placeholders). Each frame is a slide layout with named placeholder zones (header, body, rail, source).",
+  "rails": {
+    "none": {
+      "main": [
+        57,
+        903
+      ]
+    },
+    "nav": {
+      "main": [
+        57,
+        903
+      ],
+      "tabs": {
+        "x": 21,
+        "width": 18,
+        "gap": 6,
+        "widths": [
+          18,
+          24
+        ]
+      }
+    },
+    "left": {
+      "panel": [
+        0,
+        273
+      ],
+      "railContent": [
+        57,
+        255
+      ],
+      "main": [
+        345,
+        903
+      ],
+      "surfaces": [
+        "inverse",
+        "deep",
+        "subtle"
+      ]
+    },
+    "right": {
+      "panel": [
+        687,
+        960
+      ],
+      "railContent": [
+        705,
+        903
+      ],
+      "main": [
+        57,
+        615
+      ],
+      "surfaces": [
+        "inverse",
+        "deep",
+        "subtle"
+      ]
+    }
+  },
+  "footers": {
+    "compact": {
+      "rule": 477,
+      "row": [
+        486,
+        504
+      ],
+      "bodyBottom": 468
+    },
+    "tall": {
+      "band": [
+        486,
+        540
+      ],
+      "row": [
+        504,
+        522
+      ],
+      "bodyBottom": 450,
+      "surface": "subtle"
+    }
+  },
+  "zones": {
+    "header": {
+      "y": [
+        36,
+        108
+      ],
+      "twoLine": [
+        36,
+        144
+      ],
+      "note": "Body starts at 126, or 162 with a 2-line title."
+    },
+    "body": {
+      "y": [
+        126,
+        "bodyBottom"
+      ]
+    }
+  },
+  "chrome": [
+    {
+      "id": "logo",
+      "spec": "Bottom-left, 12 pt tall; positive on light, reverse on dark; in the rail when a left panel is present."
+    },
+    {
+      "id": "page",
+      "spec": "Bottom-right, Mono 7 semibold; in the rail when a right panel is present."
+    },
+    {
+      "id": "legal",
+      "spec": "Required on every slide, including covers, dividers and closing slides. {year} is the current year. Mono 7, right-aligned before the page number; may wrap to two lines next to a rail.",
+      "required": true,
+      "text": "© {year} West Monroe Partners | Reproduction and/or distribution without West Monroe Partners’ prior consent is prohibited."
+    },
+    {
+      "id": "whiteboard",
+      "required": true,
+      "spec": "Required on every slide. 3 pt dots at the 18 pt lattice. Default is the header patch: 198 × 162 from (21, 18), or from x 291 beside a left panel and x 57 beside the nav rail, fading out to the right and bottom, behind the eyebrow and title. Covers and dividers replace it with fields that frame the photo or fill the white side of the slide. Dots are Medium Gray on White and the light grays, Dark Gray on Grounded and Deep.",
+      "fields": {
+        "x": "lattice x",
+        "y": "lattice y",
+        "w": "pt",
+        "h": "pt",
+        "fade": "corner | right | left | bottom | none"
+      }
+    },
+    {
+      "id": "client-logo",
+      "spec": "Optional, after a Medium Gray hairline, no taller than the WM logo."
+    },
+    {
+      "id": "date",
+      "spec": "Optional, Mono 7."
+    },
+    {
+      "id": "section",
+      "spec": "Optional section label, Mono 7 caps."
+    }
+  ],
+  "features": [
+    {
+      "id": "title-zone",
+      "name": "Title zone",
+      "spec": "One-line title: eyebrow y 36, title y 54–90, rule y 108, body from 126. Two-line title: title y 54–126, rule y 144, body from 162. Titles never exceed two lines.",
+      "geometry": {
+        "oneLine": {
+          "rule": 108,
+          "bodyTop": 126
+        },
+        "twoLine": {
+          "rule": 144,
+          "bodyTop": 162
+        },
+        "appendix": {
+          "title": "heading",
+          "rule": 90,
+          "bodyTop": 108
+        }
+      }
+    },
+    {
+      "id": "zone.source",
+      "name": "Source zone",
+      "spec": "Directly above the footer, in the source style (Sans 9/12, secondary ink). Line 1 holds numbered notes, line 2 the source. One line: y 459–471 (compact) or 465–477 (tall), body ends at 450. Two lines: y 447–471 or 453–477, body ends at 432. More than two lines belongs in an appendix or the speaker notes.",
+      "geometry": {
+        "compact": {
+          "bottom": 471
+        },
+        "tall": {
+          "bottom": 477
+        },
+        "lineHeight": 12,
+        "bodyBottom": {
+          "1": 450,
+          "2": 432
+        },
+        "maxLines": 2
+      }
+    },
+    {
+      "id": "mark.footnote",
+      "name": "Footnote markers",
+      "spec": "Superscript numerals at 0.6 em, semibold, in emphasis ink, written [^1] in any text. Notes appear in the source zone as '¹ Note text'. Numbering restarts on every slide and follows reading order."
+    },
+    {
+      "id": "stamp",
+      "name": "Stamps",
+      "spec": "An outlined Mono label, 18 pt tall, right-aligned to the main area at the eyebrow line (y 33). Text: 'Draft for discussion', 'Confidential', 'Preliminary' or 'For internal use'. Grounded on light, White on dark. One stamp per slide.",
+      "values": [
+        "Draft for discussion",
+        "Confidential",
+        "Preliminary",
+        "For internal use"
+      ]
+    },
+    {
+      "id": "density",
+      "name": "Density modes",
+      "spec": "Standard: body 14/21, table rows 36, standard header. Appendix: body and table text 12/18, table rows 28, compact header (heading-size title, rule y 90, body from 108). Appendix is chosen explicitly for reference slides; it is never applied automatically to make content fit.",
+      "modes": {
+        "standard": {
+          "body": "body",
+          "rowH": 36,
+          "header": "standard"
+        },
+        "appendix": {
+          "body": "small",
+          "rowH": 28,
+          "header": "compact"
+        }
+      }
+    }
+  ],
+  "examples": [
+    {
+      "label": "Anatomy · stamp, footnote markers and a two-line source zone (compact footer)",
+      "h": 540,
+      "nodes": [
+        {
+          "type": "slide",
+          "rail": "none",
+          "footer": "compact",
+          "stamp": "Draft for discussion",
+          "eyebrow": "Business case",
+          "title": "The program funds itself by month 14[^1]",
+          "source": {
+            "notes": [
+              "Net of one-time implementation cost.",
+              "Run-rate after wave 2; excludes FX."
+            ],
+            "text": "West Monroe analysis of the FY26 baseline, 14 business units."
+          },
+          "body": [
+            {
+              "type": "metric",
+              "x": 57,
+              "y": 144,
+              "w": 198,
+              "value": "$4.2M",
+              "label": "run-rate savings[^2]"
+            },
+            {
+              "type": "metric",
+              "x": 345,
+              "y": 144,
+              "w": 198,
+              "value": "18%",
+              "label": "lower cost to serve"
+            },
+            {
+              "type": "metric",
+              "x": 633,
+              "y": 144,
+              "w": 198,
+              "value": "14 mo",
+              "label": "to payback"
+            },
+            {
+              "type": "text",
+              "style": "body",
+              "ink": "secondary",
+              "x": 57,
+              "y": 306,
+              "w": 558,
+              "text": "Savings come from automated reconciliations, intercompany matching and earlier review. Wave 1 covers the five entities that drive most of the delay."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Two-line title · tall footer · one-line source",
+      "h": 540,
+      "nodes": [
+        {
+          "type": "slide",
+          "rail": "none",
+          "footer": "tall",
+          "titleLines": 2,
+          "eyebrow": "Operating model",
+          "title": "Move review to the start of the cycle so the controller signs off on day five",
+          "source": {
+            "text": "Close calendar interviews with 12 controllers, Sep 2026."
+          },
+          "body": [
+            {
+              "type": "card",
+              "x": 57,
+              "y": 162,
+              "w": 414,
+              "h": 198,
+              "surface": "subtle",
+              "title": "Today",
+              "body": [
+                {
+                  "bullets": [
+                    "Entries reviewed on day 9",
+                    "Errors found late, fixed under pressure"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "card",
+              "x": 489,
+              "y": 162,
+              "w": 414,
+              "h": 198,
+              "surface": "inverse",
+              "title": "With the new model",
+              "body": [
+                {
+                  "bullets": [
+                    "Rules check entries as they post",
+                    "Exceptions routed the same day"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Standard density · table rows 36 pt, body 14 pt",
+      "h": 540,
+      "nodes": [
+        {
+          "type": "slide",
+          "rail": "none",
+          "footer": "compact",
+          "eyebrow": "Initiatives",
+          "title": "Five initiatives fund the program",
+          "source": {
+            "text": "West Monroe estimates, ±15%."
+          },
+          "body": [
+            {
+              "type": "table",
+              "x": 57,
+              "y": 144,
+              "w": 846,
+              "header": "dark",
+              "cols": [
+                {
+                  "k": "name",
+                  "label": "Initiative",
+                  "w": 342
+                },
+                {
+                  "k": "owner",
+                  "label": "Owner",
+                  "w": 198
+                },
+                {
+                  "k": "value",
+                  "label": "Run-rate",
+                  "w": 144,
+                  "type": "num"
+                },
+                {
+                  "k": "status",
+                  "label": "Status",
+                  "w": 162,
+                  "type": "status"
+                }
+              ],
+              "rows": [
+                {
+                  "name": "Automated reconciliations",
+                  "owner": "Controller",
+                  "value": "$1.2M",
+                  "status": "on"
+                },
+                {
+                  "name": "Intercompany matching",
+                  "owner": "Shared services",
+                  "value": "$0.9M",
+                  "status": "on"
+                },
+                {
+                  "name": "Rules-based journal review",
+                  "owner": "Controller",
+                  "value": "$1.4M",
+                  "status": "risk"
+                },
+                {
+                  "name": "Consolidation redesign",
+                  "owner": "FP&A",
+                  "value": "$0.7M",
+                  "status": "off"
+                },
+                {
+                  "name": "Close cockpit",
+                  "owner": "Finance IT",
+                  "value": "$0.4M",
+                  "status": "on"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Appendix density · table rows 28 pt, text 12 pt, compact header",
+      "h": 540,
+      "nodes": [
+        {
+          "type": "slide",
+          "rail": "none",
+          "footer": "compact",
+          "density": "appendix",
+          "stamp": "For internal use",
+          "eyebrow": "Appendix · initiatives",
+          "title": "Initiative detail by entity",
+          "source": {
+            "text": "West Monroe estimates, ±15%. Entity-level values rounded."
+          },
+          "body": [
+            {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "header": "dark",
+              "dense": true,
+              "cols": [
+                {
+                  "k": "name",
+                  "label": "Initiative",
+                  "w": 270
+                },
+                {
+                  "k": "ent",
+                  "label": "Entities",
+                  "w": 90,
+                  "type": "num"
+                },
+                {
+                  "k": "owner",
+                  "label": "Owner",
+                  "w": 162
+                },
+                {
+                  "k": "value",
+                  "label": "Run-rate",
+                  "w": 126,
+                  "type": "num"
+                },
+                {
+                  "k": "wave",
+                  "label": "Wave",
+                  "w": 72,
+                  "type": "tag"
+                },
+                {
+                  "k": "status",
+                  "label": "Status",
+                  "w": 126,
+                  "type": "status"
+                }
+              ],
+              "rows": [
+                {
+                  "name": "Automated reconciliations",
+                  "ent": "14",
+                  "owner": "Controller",
+                  "value": "$1.2M",
+                  "wave": "1",
+                  "status": "on"
+                },
+                {
+                  "name": "Intercompany matching",
+                  "ent": "11",
+                  "owner": "Shared services",
+                  "value": "$0.9M",
+                  "wave": "1",
+                  "status": "on"
+                },
+                {
+                  "name": "Rules-based journal review",
+                  "ent": "14",
+                  "owner": "Controller",
+                  "value": "$1.4M",
+                  "wave": "2",
+                  "status": "risk"
+                },
+                {
+                  "name": "Consolidation redesign",
+                  "ent": "6",
+                  "owner": "FP&A",
+                  "value": "$0.7M",
+                  "wave": "3",
+                  "status": "off"
+                },
+                {
+                  "name": "Close cockpit",
+                  "ent": "14",
+                  "owner": "Finance IT",
+                  "value": "$0.4M",
+                  "wave": "2",
+                  "status": "on"
+                },
+                {
+                  "name": "Account rationalization",
+                  "ent": "9",
+                  "owner": "Controller",
+                  "value": "$0.3M",
+                  "wave": "2",
+                  "status": "on"
+                },
+                {
+                  "name": "Close calendar redesign",
+                  "ent": "14",
+                  "owner": "PMO",
+                  "value": "$0.2M",
+                  "wave": "1",
+                  "status": "on"
+                },
+                {
+                  "name": "Variance commentary automation",
+                  "ent": "8",
+                  "owner": "FP&A",
+                  "value": "$0.2M",
+                  "wave": "3",
+                  "status": "risk"
+                },
+                {
+                  "name": "Fixed asset roll-forward",
+                  "ent": "5",
+                  "owner": "Controller",
+                  "value": "$0.1M",
+                  "wave": "3",
+                  "status": "on"
+                },
+                {
+                  "name": "Lease accounting controls",
+                  "ent": "4",
+                  "owner": "Controller",
+                  "value": "$0.1M",
+                  "wave": "3",
+                  "status": "off"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Stamps · four values, on light and on a dark rail",
+      "h": 126,
+      "nodes": [
+        {
+          "type": "stamps",
+          "x": 57,
+          "y": 36
+        }
+      ]
+    }
+  ]
+}

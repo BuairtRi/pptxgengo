@@ -1,0 +1,550 @@
+package wmdesign
+
+import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"sort"
+	"strconv"
+	"strings"
+)
+
+const LibraryBindingsContract = "pptxgengo.wmds-library-bindings.v1"
+
+type LibraryWhiteboard struct {
+	X     float64 `json:"x"`
+	Y     float64 `json:"y"`
+	W     float64 `json:"w"`
+	H     float64 `json:"h"`
+	Fade  string  `json:"fade,omitempty"`
+	On    string  `json:"on,omitempty"`
+	Above bool    `json:"above,omitempty"`
+}
+type LibraryChrome struct {
+	Emphasis         string              `json:"emphasis,omitempty"`
+	Stamp            string              `json:"stamp,omitempty"`
+	Whiteboard       []LibraryWhiteboard `json:"whiteboard,omitempty"`
+	CustomWhiteboard bool                `json:"custom_whiteboard,omitempty"`
+	Notes            []string            `json:"notes,omitempty"`
+}
+type librarySlide struct {
+	Type        string `json:"type"`
+	Rail        string `json:"rail"`
+	Footer      string `json:"footer"`
+	Surface     string `json:"surface,omitempty"`
+	RailSurface string `json:"railSurface,omitempty"`
+	Eyebrow     string `json:"eyebrow,omitempty"`
+	Title       string `json:"title,omitempty"`
+	TitleLines  int    `json:"titleLines,omitempty"`
+	Density     string `json:"density,omitempty"`
+	Page        string `json:"page,omitempty"`
+	NoPage      bool   `json:"noPage,omitempty"`
+	Emphasis    string `json:"emphasis,omitempty"`
+	Stamp       string `json:"stamp,omitempty"`
+	Source      *struct {
+		Text  string   `json:"text,omitempty"`
+		Notes []string `json:"notes,omitempty"`
+	} `json:"source,omitempty"`
+	Whiteboard json.RawMessage   `json:"whiteboard,omitempty"`
+	Body       []json.RawMessage `json:"body"`
+}
+type libraryEntry struct {
+	ID      string          `json:"id"`
+	Variant string          `json:"variant"`
+	Name    string          `json:"name"`
+	Tier    string          `json:"tier"`
+	Purpose string          `json:"purpose"`
+	Uses    []string        `json:"uses"`
+	Legacy  string          `json:"legacy"`
+	Budget  json.RawMessage `json:"budget"`
+	Slots   json.RawMessage `json:"slots"`
+	Slide   json.RawMessage `json:"slide"`
+}
+type LibrarySlot struct {
+	Name          string          `json:"name"`
+	SourcePointer string          `json:"source_pointer"`
+	Kind          string          `json:"kind"`
+	AllowEmpty    bool            `json:"allow_empty,omitempty"`
+	Example       json.RawMessage `json:"synthetic_source_example"`
+}
+type LibraryArray struct {
+	Name          string `json:"name"`
+	SourcePointer string `json:"source_pointer"`
+	Count         int    `json:"count"`
+}
+type LibraryValueSchema struct {
+	Kind        string            `json:"kind"`
+	GoType      string            `json:"go_type"`
+	Reference   string            `json:"reference"`
+	Fields      map[string]string `json:"fields"`
+	ExactCounts map[string]int    `json:"exact_counts,omitempty"`
+}
+
+type LibraryTemplate struct {
+	TemplateDefinition
+	Family          string              `json:"family"`
+	Tier            string              `json:"tier"`
+	Name            string              `json:"name"`
+	ContentContract string              `json:"content_contract"`
+	ValueSchema     *LibraryValueSchema `json:"value_schema,omitempty"`
+	Slots           []LibrarySlot       `json:"slots,omitempty"`
+	Arrays          []LibraryArray      `json:"arrays,omitempty"`
+	RenderStatus    string              `json:"render_status"`
+	Policy          []string            `json:"policy"`
+	RawSlide        json.RawMessage     `json:"-"`
+}
+
+func legacyTemplate(key string) bool {
+	for _, k := range executableTemplateKeys {
+		if key == k {
+			return true
+		}
+	}
+	return false
+}
+
+func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
+	paths := make([]string, 0, len(s.Templates))
+	for path := range s.Templates {
+		if strings.HasPrefix(path, "templates/library/") && !strings.HasPrefix(path[strings.LastIndex(path, "/")+1:], "_") {
+			paths = append(paths, path)
+		}
+	}
+	sort.Strings(paths)
+	var out []LibraryTemplate
+	seen := map[string]bool{}
+	for _, path := range paths {
+		raw := s.Templates[path]
+		var catalog templateSourceCatalog
+		if err := sceneDecode(raw, &catalog); err != nil {
+			return nil, err
+		}
+		if catalog.Schema != "wmds.templates.v2" {
+			return nil, fmt.Errorf("library.unsupported_schema: %s", path)
+		}
+		digest := fmt.Sprintf("%x", sha256.Sum256(raw))
+		pinned := false
+		for _, f := range s.Files {
+			if f.Path == path && f.SHA256 == digest {
+				pinned = true
+			}
+		}
+		if !pinned {
+			return nil, fmt.Errorf("library.source_hash_mismatch: %s", path)
+		}
+		for _, entryRaw := range catalog.Templates {
+			var entry libraryEntry
+			if err := sceneDecode(entryRaw, &entry); err != nil {
+				return nil, err
+			}
+			key := entry.ID + "/" + entry.Variant
+			if seen[key] {
+				return nil, fmt.Errorf("library.duplicate_template: %s", key)
+			}
+			seen[key] = true
+			var slide librarySlide
+			if err := sceneDecode(entry.Slide, &slide); err != nil {
+				return nil, fmt.Errorf("%s: %w", key, err)
+			}
+			if slide.Type != "slide" || len(slide.Body) == 0 {
+				return nil, fmt.Errorf("library.invalid_source_slide: %s", key)
+			}
+			def := LibraryTemplate{TemplateDefinition: TemplateDefinition{Key: key, SourceFile: path, SourceSHA256: digest}, Family: catalog.Family, Tier: entry.Tier, Name: entry.Name, ContentContract: LibraryBindingsContract, RawSlide: entry.Slide, RenderStatus: "binding_defined_render_review_pending", Policy: []string{"Named content slots and exact-count key overlays; geometry/base styles remain frozen.", "Source slot metadata is advisory; this definition explicitly names the drawn content fields.", "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.", "Binding availability does not establish successful rendering, native review or a qualified envelope."}}
+			obj, err := libraryObject(entry.Slide)
+			if err != nil {
+				return nil, err
+			}
+			for _, field := range []string{"eyebrow", "title"} {
+				if v, ok := obj[field]; ok {
+					libraryContentWalk(&def, v, "/"+field, field, field, libraryProjectionContext{})
+				}
+			}
+			if v, ok := obj["stamp"]; ok {
+				libraryContentWalk(&def, v, "/stamp", "stamp", "stamp", libraryProjectionContext{})
+			}
+			if v, ok := obj["source"]; ok {
+				libraryContentWalk(&def, v, "/source", "source", "source", libraryProjectionContext{})
+			}
+			body, ok := obj["body"].([]any)
+			if !ok {
+				return nil, fmt.Errorf("library.invalid_body: %s", key)
+			}
+			for i, n := range body {
+				name := fmt.Sprintf("node%02d", i+1)
+				pointer := "/body/" + strconv.Itoa(i)
+				libraryContentWalk(&def, n, pointer, name, "", libraryProjectionContext{})
+				var tag struct {
+					Type string `json:"type"`
+				}
+				json.Unmarshal(slide.Body[i], &tag)
+				def.Identities = append(def.Identities, TemplateIdentity{ID: name, SourcePointer: pointer, ExpectedType: tag.Type})
+			}
+			if legacyTemplate(key) {
+				def.ContentContract = TemplateBindingsContract
+				def.ValueSchema = libraryLegacyValueSchema(key)
+				def.Slots, def.Arrays = nil, nil
+				def.Policy = []string{"This template retains its typed v2 values API; the library slots/keys projection is not accepted.", "All declared typed content is required; geometry/base styles remain frozen.", "Binding availability does not establish successful rendering, native review or a qualified envelope."}
+			}
+			out = append(out, def)
+		}
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Key < out[j].Key })
+	if len(out) != 97 {
+		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
+	}
+	return out, nil
+}
+
+func LibraryCatalog(bundle, override string) ([]LibraryTemplate, error) {
+	s, err := Load(bundle, override)
+	if err != nil {
+		return nil, err
+	}
+	return libraryCatalog(s)
+}
+
+func libraryObject(raw []byte) (map[string]any, error) {
+	var obj map[string]any
+	d := json.NewDecoder(bytes.NewReader(raw))
+	d.UseNumber()
+	if err := d.Decode(&obj); err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+// The content projection is closed by a source-pinned definition. A token,
+// geometry or structural discriminator never becomes an editable content slot.
+var libraryFixedString = map[string]bool{"type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "corner": true, "event": true}
+var libraryNumbers = map[string]bool{"values": true, "value": true, "alloc": true, "from": true, "to": true, "at": true, "softStart": true, "softEnd": true}
+
+type libraryProjectionContext struct {
+	NodeType string
+	Parent   string
+}
+
+func libraryLegacyValueSchema(key string) *LibraryValueSchema {
+	fields := map[string]string{"eyebrow": "string", "title": "string"}
+	schema := &LibraryValueSchema{Kind: "typed_values", Reference: "planning/wm-design-contracts/v1/template-execution.md", Fields: fields}
+	switch key {
+	case "cards/3", "cards/4":
+		schema.GoType = "BoundCardRowsContent"
+		fields["cards"] = "array of {key:string,title:string,body:string}; unique authored keys; array order controls card order"
+		count := 3
+		if key == "cards/4" {
+			count = 4
+		}
+		schema.ExactCounts = map[string]int{"cards": count}
+	case "stats/four-metrics":
+		schema.GoType = "BoundStatsContent"
+		for _, f := range []string{"metric1", "metric2", "metric3", "metric4"} {
+			fields[f] = "BoundMetric: {value:string XOR format:NumberFormatSpec,label:string}"
+		}
+		fields["support"] = "string OR RichTextSpec"
+		fields["source"] = "string"
+	case "takeaway-rail/metrics-rail":
+		schema.GoType = "BoundRailContent"
+		for _, f := range []string{"metric1", "metric2"} {
+			fields[f] = "BoundMetric: {value:string XOR format:NumberFormatSpec,label:string}"
+		}
+		for _, f := range []string{"support", "railHeading", "railBody"} {
+			fields[f] = "string OR RichTextSpec"
+		}
+		fields["source"] = "string"
+		fields["railEyebrow"] = "string"
+	}
+	return schema
+}
+
+func libraryPointerChild(pointer, field string) string {
+	return pointer + "/" + strings.ReplaceAll(strings.ReplaceAll(field, "~", "~0"), "/", "~1")
+}
+
+func libraryScalarSlot(def *LibraryTemplate, v any, pointer, name, kind string) bool {
+	switch kind {
+	case "string":
+		if _, ok := v.(string); !ok {
+			return false
+		}
+	case "number":
+		if _, ok := v.(json.Number); !ok {
+			return false
+		}
+	case "boolean":
+		if _, ok := v.(bool); !ok {
+			return false
+		}
+	default:
+		return false
+	}
+	raw, _ := json.Marshal(v)
+	allowEmpty := false
+	if text, ok := v.(string); ok {
+		allowEmpty = text == ""
+	}
+	def.Slots = append(def.Slots, LibrarySlot{Name: name, SourcePointer: pointer, Kind: kind, AllowEmpty: allowEmpty, Example: raw})
+	return true
+}
+
+// A table cell's schema, not the spelling of its column key, decides content.
+// Nested numeric-format/icon objects cannot expose styles, geometry or arbitrary
+// fields through the previous recursive row exemption.
+func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind string) bool {
+	if v == nil {
+		return false
+	}
+	switch kind {
+	case "", "status", "tag", "raci":
+		return libraryScalarSlot(def, v, pointer, name, "string")
+	case "delta", "rating", "allocation", "harvey", "gauge":
+		return libraryScalarSlot(def, v, pointer, name, "number")
+	case "check":
+		return libraryScalarSlot(def, v, pointer, name, "boolean")
+	case "icon":
+		if _, ok := v.(string); ok {
+			return libraryScalarSlot(def, v, pointer, name, "string")
+		}
+		if obj, ok := v.(map[string]any); ok {
+			found := false
+			for _, k := range []string{"icon", "text"} {
+				if val, ok := obj[k]; ok {
+					found = libraryScalarSlot(def, val, libraryPointerChild(pointer, k), name+"."+k, "string") || found
+				}
+			}
+			return found
+		}
+	case "num":
+		if _, ok := v.(string); ok {
+			return libraryScalarSlot(def, v, pointer, name, "string")
+		}
+		if obj, ok := v.(map[string]any); ok {
+			value, ok := obj["value"]
+			if !ok {
+				return false
+			}
+			if _, ok := value.(json.Number); ok {
+				return libraryScalarSlot(def, value, pointer+"/value", name+".value", "number")
+			}
+			if endpoints, ok := value.([]any); ok {
+				found := false
+				for i, value := range endpoints {
+					found = libraryScalarSlot(def, value, pointer+"/value/"+strconv.Itoa(i), name+".value"+fmt.Sprintf(".item%02d", i+1), "number") || found
+				}
+				return found
+			}
+		}
+	case "bullets", "maturity":
+		if values, ok := v.([]any); ok {
+			scalar := "string"
+			if kind == "maturity" {
+				scalar = "number"
+			}
+			found := false
+			for i, value := range values {
+				found = libraryScalarSlot(def, value, pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1), scalar) || found
+			}
+			if found {
+				def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(values)})
+			}
+			return found
+		}
+	}
+	return false
+}
+
+func libraryTableRowsWalk(def *LibraryTemplate, obj map[string]any, pointer, name string) bool {
+	columns := map[string]string{}
+	if cols, ok := obj["cols"].([]any); ok {
+		for _, raw := range cols {
+			if col, ok := raw.(map[string]any); ok {
+				if key, ok := col["k"].(string); ok {
+					kind, _ := col["type"].(string)
+					columns[key] = kind
+				}
+			}
+		}
+	}
+	rows, ok := obj["rows"].([]any)
+	if !ok {
+		return false
+	}
+	found := false
+	for i, raw := range rows {
+		row, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		rowPointer := pointer + "/" + strconv.Itoa(i)
+		rowName := name + fmt.Sprintf(".item%02d", i+1)
+		keys := make([]string, 0, len(row))
+		for k := range row {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			if kind, ok := columns[key]; ok {
+				found = libraryTableCellWalk(def, row[key], libraryPointerChild(rowPointer, key), rowName+"."+key, kind) || found
+			} else if key == "group" && len(row) == 1 {
+				found = libraryScalarSlot(def, row[key], rowPointer+"/group", rowName+".group", "string") || found
+			}
+		}
+	}
+	if found {
+		def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(rows)})
+	}
+	return found
+}
+
+func librarySwimlaneLinksWalk(def *LibraryTemplate, v any, pointer, name string) bool {
+	links, ok := v.([]any)
+	if !ok {
+		return false
+	}
+	found := false
+	for i, raw := range links {
+		link, ok := raw.([]any)
+		if !ok || len(link) < 3 {
+			continue
+		}
+		found = libraryScalarSlot(def, link[2], pointer+"/"+strconv.Itoa(i)+"/2", name+fmt.Sprintf(".item%02d.item03", i+1), "string") || found
+	}
+	// Link identity is the frozen endpoint pair; labels do not create key arrays.
+	return found
+}
+
+func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string, ctx libraryProjectionContext) bool {
+	switch x := v.(type) {
+	case map[string]any:
+		if typ, ok := x["type"].(string); ok {
+			ctx.NodeType = typ
+		}
+		keys := make([]string, 0, len(x))
+		for k := range x {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		found := false
+		for _, k := range keys {
+			childPointer := libraryPointerChild(pointer, k)
+			childName := name + "." + k
+			if ctx.NodeType == "table" && k == "rows" {
+				found = libraryTableRowsWalk(def, x, childPointer, childName) || found
+				continue
+			}
+			if ctx.NodeType == "swimlane" && k == "links" {
+				found = librarySwimlaneLinksWalk(def, x[k], childPointer, childName) || found
+				continue
+			}
+			if x["type"] == "connector" && (k == "from" || k == "to" || k == "points") {
+				continue
+			}
+			if k == "text" && x["fill"] != nil && strings.HasPrefix(fmt.Sprint(x[k]), "#") {
+				continue
+			}
+			childCtx := libraryProjectionContext{NodeType: ctx.NodeType, Parent: k}
+			if k == "metric" {
+				childCtx.NodeType = "metric"
+			}
+			projectedField := k
+			if k == "icon" {
+				if _, ok := x[k].(string); ok {
+					projectedField = "registry_asset_content"
+				}
+			}
+			if k == "k" && ctx.NodeType == "schedule" && ctx.Parent == "items" {
+				projectedField = "schedule_time_content"
+			}
+			if k == "status" && ctx.NodeType == "metric" {
+				projectedField = "metric_status_content"
+			}
+			if k == "state" && (ctx.NodeType == "stepper" || ctx.NodeType == "vstepper") && ctx.Parent == "steps" {
+				projectedField = "step_state_content"
+			}
+			if k == "on" && ctx.Parent == "checklist" {
+				found = libraryScalarSlot(def, x[k], childPointer, childName, "boolean") || found
+				continue
+			}
+			found = libraryContentWalk(def, x[k], childPointer, childName, projectedField, childCtx) || found
+		}
+		return found
+	case []any:
+		start := len(def.Slots)
+		arrayField := field
+		if field == "labels" || field == "bands" || field == "points" {
+			arrayField = "array_content"
+		}
+		for i, item := range x {
+			libraryContentWalk(def, item, pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1), arrayField, ctx)
+		}
+		if len(def.Slots) > start && len(x) > 0 {
+			def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(x)})
+			return true
+		}
+	case string:
+		if libraryFixedString[field] || field == "h" || field == "w" || field == "points" || field == "links" || field == "page" && pointer == "/page" {
+			return false
+		}
+		return libraryScalarSlot(def, x, pointer, name, "string")
+	case json.Number:
+		if libraryNumbers[field] {
+			return libraryScalarSlot(def, x, pointer, name, "number")
+		}
+	}
+	return false
+}
+
+func compileLibrarySlide(raw json.RawMessage, keys map[string][]string) (SlideSpec, error) {
+	var src librarySlide
+	if err := sceneDecode(raw, &src); err != nil {
+		return SlideSpec{}, err
+	}
+	q := FrameRequest{Rail: src.Rail, Footer: src.Footer, Surface: src.Surface, RailSurface: src.RailSurface, TitleLines: src.TitleLines, Density: src.Density, NoHeader: src.Title == "" && src.Eyebrow == "", NoPage: src.NoPage}
+	if q.TitleLines == 0 {
+		q.TitleLines = 1
+	}
+	chrome := &LibraryChrome{Emphasis: src.Emphasis, Stamp: src.Stamp}
+	doc := SlideSpec{Frame: q, Eyebrow: src.Eyebrow, Title: src.Title, LibraryChrome: chrome}
+	if src.Source != nil {
+		chrome.Notes = src.Source.Notes
+		doc.Source = ""
+		for i, note := range src.Source.Notes {
+			if doc.Source != "" {
+				doc.Source += "\n"
+			}
+			doc.Source += strconv.Itoa(i+1) + " " + note
+		}
+		if src.Source.Text != "" {
+			if doc.Source != "" {
+				doc.Source += "\n"
+			}
+			doc.Source += "Source: " + src.Source.Text
+		}
+		if doc.Source != "" {
+			doc.Frame.SourceLines = 1
+			if len(src.Source.Notes) > 1 || (len(src.Source.Notes) > 0 && src.Source.Text != "") {
+				doc.Frame.SourceLines = 2
+			}
+		}
+	}
+	if len(src.Whiteboard) > 0 && !bytes.Equal(bytes.TrimSpace(src.Whiteboard), []byte(`"header"`)) {
+		chrome.CustomWhiteboard = true
+		if err := sceneDecode(src.Whiteboard, &chrome.Whiteboard); err != nil {
+			return SlideSpec{}, err
+		}
+	}
+	for i, node := range src.Body {
+		path := "/body/" + strconv.Itoa(i)
+		doc.Nodes = append(doc.Nodes, Node{ID: fmt.Sprintf("node%02d", i+1), Kind: "scene", Scene: &SceneSpec{Node: node, Path: path, Keys: keys, Notes: chrome.Notes}})
+	}
+	return doc, nil
+}
+
+func libraryTemplate(catalog []LibraryTemplate, key string) (LibraryTemplate, error) {
+	for _, t := range catalog {
+		if t.Key == key {
+			return t, nil
+		}
+	}
+	return LibraryTemplate{}, fmt.Errorf("library.unknown_template: %s", key)
+}

@@ -3,6 +3,15 @@
 The current implementation sequence is in [IMPLEMENTATION_PLAN.md](../IMPLEMENTATION_PLAN.md).
 Inventory describes what exists; visual approval and reusable contracts are separate work.
 
+The [modern WM design-system integration plan](WM_DESIGN_SYSTEM_INTEGRATION.md)
+maps the sibling design repository's grid, primitives, components, composites,
+frames and 97 slide templates to the Go implementation. Its
+[source inventory](wm-design-system-inventory-2026-10-01.json) records the reviewed
+definitions and hashes; it is source inspection, not implementation qualification.
+The [v1 execution contracts](wm-design-contracts/v1/README.md) resolve typography,
+source precedence, template bindings, native editability and acceptance, with
+machine-readable policies and a concrete content-binding example.
+
 | Source | Slides | Native layout parts | Masters | Availability |
 | --- | ---: | ---: | ---: | --- |
 | Graphics and Layouts | 166 | 33 | 1 | Local source, ignored |

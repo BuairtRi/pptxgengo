@@ -1,0 +1,30 @@
+{
+  "audit": "notes-master-native-compatibility",
+  "read_only": true,
+  "schema_source": "https://github.com/dotnet/Open-XML-SDK/blob/main/data/schemas/schemas_openxmlformats_org_presentationml_2006_main.json",
+  "notes_master_list_occurrence": {
+    "min": 0,
+    "max": 1
+  },
+  "comparison": {
+    "original": "review03/library-reference.pptx",
+    "diagnostic": "isolate-full-no-notes-list/reference.pptx",
+    "changed_parts": [
+      "ppt/presentation.xml"
+    ],
+    "notes_count": 97,
+    "notes_parts_unchanged": true
+  },
+  "relationships": {
+    "notes_master": "ppt/notesMasters/notesMaster1.xml",
+    "notes_slide_relationship_count": 97,
+    "missing_targets": [],
+    "presentation_notes_master_relationship_retained": true
+  },
+  "native_evidence": "Parent agent reports diagnostic opens without repair, 97 thumbnails and Has Notes; observer audit does not claim independent UI operation.",
+  "boundaries": [
+    "Underlying PowerPoint implementation cause unproven",
+    "Notes-page print/layout fidelity not inspected",
+    "Source and bound fixture evidence does not qualify arbitrary content or all Office versions"
+  ]
+}

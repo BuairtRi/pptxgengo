@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pptxgengo:wmds-template-binding:v1",
+  "title": "WMDS template binding sidecar v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "profile", "template", "identities", "content_schema", "bindings", "fixed_copy", "guidance", "layout"],
+  "properties": {
+    "schema": {"const": "pptxgengo.wmds-template-binding.v1"},
+    "profile": {"const": "wmds-native.v1"},
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "source_file", "source_sha256"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"},
+        "source_file": {"type": "string", "pattern": "^templates/library/[a-z0-9-]+\\.json$"},
+        "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "identities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "source_pointer", "expected_type"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "source_pointer": {"$ref": "#/$defs/pointer"},
+          "expected_type": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "content_schema": {"type": "object"},
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "slot", "input_pointer", "targets", "transform"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "slot": {"type": "string", "minLength": 1},
+          "input_pointer": {"$ref": "#/$defs/pointer"},
+          "targets": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/target"}},
+          "transform": {"enum": ["identity", "format_number", "asset", "keyed_array"]},
+          "array_projection": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["key_pointer", "value_pointer"],
+            "properties": {
+              "key_pointer": {"$ref": "#/$defs/pointer"},
+              "value_pointer": {"$ref": "#/$defs/pointer"}
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"transform": {"const": "keyed_array"}}},
+            "then": {"required": ["array_projection"]},
+            "else": {"not": {"required": ["array_projection"]}}
+          }
+        ]
+      }
+    },
+    "fixed_copy": {"type": "array", "items": {"$ref": "#/$defs/target"}},
+    "guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["word_budget", "slot_character_budgets"],
+      "properties": {
+        "word_budget": {"type": "integer", "minimum": 0},
+        "slot_character_budgets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["slot", "bindings", "max_chars"],
+            "properties": {
+              "slot": {"type": "string", "minLength": 1},
+              "bindings": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/id"}},
+              "max_chars": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "overflow", "header_allocation", "max_marks"],
+      "properties": {
+        "mode": {"enum": ["fixed", "component_flow", "zone_relative"]},
+        "overflow": {"enum": ["error", "continue"]},
+        "header_allocation": {"enum": ["authored", "adaptive_one_or_two"]},
+        "max_marks": {"type": "integer", "minimum": 0, "maximum": 1},
+        "continuation_template": {"type": "string", "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"},
+        "split_binding": {"$ref": "#/$defs/id"},
+        "continuation_binding_contract": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"overflow": {"const": "continue"}}},
+          "then": {"required": ["continuation_template", "split_binding", "continuation_binding_contract"]},
+          "else": {
+            "not": {
+              "anyOf": [
+                {"required": ["continuation_template"]},
+                {"required": ["split_binding"]},
+                {"required": ["continuation_binding_contract"]}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9._-]*$"},
+    "pointer": {"type": "string", "pattern": "^(?:/(?:[^~/]|~[01])*)*$"},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node", "property"],
+      "properties": {
+        "node": {"type": "string", "pattern": "^(?:\\$slide|[a-z][a-z0-9._-]*)$"},
+        "property": {"type": "string", "pattern": "^/(?:[^~/]|~[01])+(?:/(?:[^~/]|~[01])*)*$"}
+      }
+    }
+  }
+}

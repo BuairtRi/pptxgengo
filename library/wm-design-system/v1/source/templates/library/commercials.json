@@ -1,0 +1,587 @@
+{
+  "schema": "wmds.templates.v2",
+  "family": "commercials",
+  "name": "Commercials",
+  "summary": "Pricing by option, milestone and capacity run-rate, and optional scope.",
+  "templates": [
+    {
+      "id": "pricing",
+      "variant": "options",
+      "name": "Pricing · three options",
+      "tier": "core",
+      "purpose": "Present two to three engagement options side by side with one recommended, so the client compares scope and fee on one page.",
+      "uses": [
+        "pricing.set",
+        "card.states",
+        "card.checklist"
+      ],
+      "legacy": "Slides 127–131; proposal 47–48",
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "option label",
+          "maxChars": 24
+        },
+        {
+          "slot": "option title",
+          "maxChars": 24
+        },
+        {
+          "slot": "checklist item",
+          "maxChars": 30
+        },
+        {
+          "slot": "duration",
+          "maxChars": 32
+        },
+        {
+          "slot": "fee value",
+          "maxChars": 20
+        },
+        {
+          "slot": "fee label",
+          "maxChars": 24
+        },
+        {
+          "slot": "tag",
+          "maxChars": 16
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Commercials",
+        "title": "Three ways to engage, one we recommend",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "h": 288,
+            "surface": "outline",
+            "label": "Option A · fixed fee",
+            "title": "Diagnose only",
+            "body": [
+              {
+                "checklist": [
+                  {
+                    "text": "Close diagnostic",
+                    "on": true
+                  },
+                  {
+                    "text": "Target design and roadmap",
+                    "on": false
+                  },
+                  {
+                    "text": "Wave 1 build",
+                    "on": false
+                  }
+                ]
+              },
+              {
+                "label": "Duration"
+              },
+              {
+                "p": "4 weeks"
+              }
+            ],
+            "fee": {
+              "value": "$288K",
+              "label": "fixed fee"
+            }
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "h": 288,
+            "surface": "subtle",
+            "label": "Option B · hybrid",
+            "title": "Diagnose and build",
+            "body": [
+              {
+                "checklist": [
+                  {
+                    "text": "Close diagnostic",
+                    "on": true
+                  },
+                  {
+                    "text": "Target design and roadmap",
+                    "on": true
+                  },
+                  {
+                    "text": "Wave 1 build",
+                    "on": true
+                  }
+                ]
+              },
+              {
+                "label": "Duration"
+              },
+              {
+                "p": "8 weeks fixed, then 16 weeks capacity"
+              }
+            ],
+            "fee": {
+              "value": "$720K + $210K/mo",
+              "label": "fixed, then run-rate"
+            },
+            "state": "featured",
+            "tag": "Recommended"
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "h": 288,
+            "surface": "outline",
+            "label": "Option C · capacity",
+            "title": "Embedded pod",
+            "body": [
+              {
+                "checklist": [
+                  {
+                    "text": "Close diagnostic",
+                    "on": true
+                  },
+                  {
+                    "text": "Target design and roadmap",
+                    "on": true
+                  },
+                  {
+                    "text": "Wave 1 build",
+                    "on": true
+                  }
+                ]
+              },
+              {
+                "label": "Duration"
+              },
+              {
+                "p": "Rolling, 3-month minimum"
+              }
+            ],
+            "fee": {
+              "value": "$240K/mo",
+              "label": "pod run-rate"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pricing",
+      "variant": "fixed-fee",
+      "name": "Pricing · fixed fee by milestone",
+      "tier": "core",
+      "purpose": "Show a fixed fee as payments tied to milestones, with one summary of the total and terms. Never itemize by person.",
+      "uses": [
+        "pricing.set",
+        "table.standard (fees preset)",
+        "feesummary"
+      ],
+      "legacy": "Slides 127–131; proposal 51–53",
+      "budget": {
+        "words": 100,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "milestone",
+          "maxChars": 30
+        },
+        {
+          "slot": "timing",
+          "maxChars": 12
+        },
+        {
+          "slot": "fee summary line",
+          "maxChars": 30
+        },
+        {
+          "slot": "term",
+          "maxChars": 44
+        },
+        {
+          "slot": "source",
+          "maxChars": 80
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Commercials",
+        "title": "A fixed fee of $720K, paid as milestones are accepted",
+        "source": {
+          "text": "West Monroe estimate. Fees exclude expenses."
+        },
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "preset": "fees",
+            "cols": [
+              {
+                "k": "m",
+                "label": "Milestone",
+                "w": 198
+              },
+              {
+                "k": "t",
+                "label": "Timing",
+                "w": 90
+              },
+              {
+                "k": "p",
+                "label": "% of fee",
+                "w": 90,
+                "type": "num"
+              },
+              {
+                "k": "a",
+                "label": "Amount",
+                "w": 90,
+                "type": "num"
+              },
+              {
+                "k": "c",
+                "label": "Cumulative",
+                "w": 90,
+                "type": "num"
+              }
+            ],
+            "rows": [
+              {
+                "m": "Mobilization complete",
+                "t": "Week 1",
+                "p": "10%",
+                "a": "$72K",
+                "c": "$72K"
+              },
+              {
+                "m": "Diagnostic readout",
+                "t": "Week 4",
+                "p": "30%",
+                "a": "$216K",
+                "c": "$288K"
+              },
+              {
+                "m": "Design sign-off",
+                "t": "Week 7",
+                "p": "40%",
+                "a": "$288K",
+                "c": "$576K"
+              },
+              {
+                "m": "Final readout accepted",
+                "t": "Week 8",
+                "p": "20%",
+                "a": "$144K",
+                "c": "$720K"
+              },
+              {
+                "m": "Total fixed fee",
+                "p": "100%",
+                "a": "$720K",
+                "total": true
+              }
+            ]
+          },
+          {
+            "type": "feesummary",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "model": "Fixed fee",
+            "total": "$720K",
+            "totalLabel": "total fixed fee",
+            "lines": [
+              [
+                "Diagnose · weeks 1–4",
+                "$288K"
+              ],
+              [
+                "Design and roadmap · weeks 5–8",
+                "$432K"
+              ]
+            ],
+            "terms": [
+              "Invoiced on milestone acceptance",
+              "Expenses capped at 8% of fees"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "pricing",
+      "variant": "capacity",
+      "name": "Pricing · capacity run-rate",
+      "tier": "core",
+      "purpose": "Show a capacity-based team as allocations and one monthly run-rate, never as individual rates.",
+      "uses": [
+        "pricing.set",
+        "table.standard (capacity preset)",
+        "feesummary"
+      ],
+      "legacy": "Slides 127–131; proposal 47–48",
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "role",
+          "maxChars": 24
+        },
+        {
+          "slot": "level",
+          "maxChars": 28
+        },
+        {
+          "slot": "fee summary line",
+          "maxChars": 30
+        },
+        {
+          "slot": "term",
+          "maxChars": 44
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Commercials",
+        "title": "One team, one monthly run-rate of $210K",
+        "body": [
+          {
+            "type": "feesummary",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "model": "Capacity",
+            "total": "$840K",
+            "totalLabel": "estimated, four months",
+            "lines": [
+              [
+                "Team run-rate",
+                "$210K / mo"
+              ],
+              [
+                "Duration",
+                "4 months"
+              ]
+            ],
+            "terms": [
+              "Invoiced monthly in arrears",
+              "30 days' notice to change the team",
+              "Expenses capped at 8% of fees"
+            ]
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "rowHeader": true,
+            "preset": "capacity",
+            "cols": [
+              {
+                "k": "role",
+                "label": "Role",
+                "w": 198
+              },
+              {
+                "k": "lvl",
+                "label": "Level",
+                "w": 180
+              },
+              {
+                "k": "alloc",
+                "label": "Allocation",
+                "w": 180,
+                "type": "allocation"
+              }
+            ],
+            "rows": [
+              {
+                "role": "Engagement lead",
+                "lvl": "Managing Director",
+                "alloc": 0.25
+              },
+              {
+                "role": "Process lead",
+                "lvl": "Senior Manager",
+                "alloc": 1
+              },
+              {
+                "role": "Data architect",
+                "lvl": "Manager",
+                "alloc": 1
+              },
+              {
+                "role": "Accountants",
+                "lvl": "Consultant × 2",
+                "alloc": 1
+              }
+            ],
+            "runRate": {
+              "label": "Team monthly run-rate",
+              "value": "$210K"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "scope",
+      "variant": "service-value",
+      "name": "Scope · optional services, scope and value",
+      "tier": "working",
+      "purpose": "Optional scope laid out by service: what is added, the value it unlocks and how it is priced, in one dense table a sponsor can strike items from.",
+      "uses": [
+        "table.standard",
+        "list.set"
+      ],
+      "legacy": "pptxgengo t097-uhg-040",
+      "budget": {
+        "words": 122,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "service",
+          "maxChars": 30
+        },
+        {
+          "slot": "scope bullet",
+          "maxChars": 50
+        },
+        {
+          "slot": "value bullet",
+          "maxChars": 34
+        },
+        {
+          "slot": "pricing basis",
+          "maxChars": 28
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "title": "Optional scope can be added as demand grows",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 102,
+            "rowHeader": true,
+            "cols": [
+              {
+                "k": "s",
+                "label": "Service",
+                "w": 126
+              },
+              {
+                "k": "a",
+                "label": "Additional scope",
+                "w": 342,
+                "type": "bullets"
+              },
+              {
+                "k": "v",
+                "label": "Unlocked value",
+                "w": 234,
+                "type": "bullets"
+              },
+              {
+                "k": "p",
+                "label": "Pricing basis",
+                "w": 144
+              }
+            ],
+            "rows": [
+              {
+                "s": "Early-adopter expansion",
+                "a": [
+                  "Assess and select three more adopter teams",
+                  "Workload-specific design and implementation",
+                  "Provisioning and operational validation",
+                  "Workload hypercare and enhancements"
+                ],
+                "v": [
+                  "Twice the workloads onboarded",
+                  "Higher value per workload",
+                  "Faster user adoption"
+                ],
+                "p": "Fixed fee per added team"
+              },
+              {
+                "s": "Change management ownership",
+                "a": [
+                  "Lead end-to-end change for platform rollout",
+                  "Readiness assessment and champion program",
+                  "Reusable onboarding and adoption playbook",
+                  "Program communications and socialization"
+                ],
+                "v": [
+                  "Stickier adoption",
+                  "Less ongoing user support",
+                  "Faster onboarding of future teams"
+                ],
+                "p": "Fixed fee by phase"
+              },
+              {
+                "s": "Cloud engineering surge",
+                "a": [
+                  "Continued cloud architecture and engineering",
+                  "Post-deployment environment optimization",
+                  "Ad hoc performance and scaling troubleshooting"
+                ],
+                "v": [
+                  "More capacity for workload growth",
+                  "Faster cost optimization after launch"
+                ],
+                "p": "Team run-rate, monthly"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "schema": "pptxgengo.wmds-template-binding.v1",
+  "profile": "wmds-native.v1",
+  "template": {
+    "key": "key-message/stat",
+    "source_file": "templates/library/openers.json",
+    "source_sha256": "54c11bef39b933ead57bf994d1c2da4c06c453d6a9e43761b253557d639ef4b6"
+  },
+  "identities": [
+    {
+      "id": "claim",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "support",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "proof",
+      "source_pointer": "/body/2",
+      "expected_type": "square"
+    }
+  ],
+  "content_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eyebrow",
+      "title",
+      "body",
+      "stat",
+      "statLabel"
+    ],
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "body": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim",
+          "support"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "support": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "stat": {
+        "type": "string",
+        "minLength": 1
+      },
+      "statLabel": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "bindings": [
+    {
+      "id": "eyebrow",
+      "slot": "eyebrow",
+      "input_pointer": "/eyebrow",
+      "targets": [
+        {
+          "node": "$slide",
+          "property": "/eyebrow"
+        }
+      ],
+      "transform": "identity"
+    },
+    {
+      "id": "title",
+      "slot": "title",
+      "input_pointer": "/title",
+      "targets": [
+        {
+          "node": "$slide",
+          "property": "/title"
+        }
+      ],
+      "transform": "identity"
+    },
+    {
+      "id": "body.claim",
+      "slot": "body",
+      "input_pointer": "/body/claim",
+      "targets": [
+        {
+          "node": "claim",
+          "property": "/text"
+        }
+      ],
+      "transform": "identity"
+    },
+    {
+      "id": "body.support",
+      "slot": "body",
+      "input_pointer": "/body/support",
+      "targets": [
+        {
+          "node": "support",
+          "property": "/text"
+        }
+      ],
+      "transform": "identity"
+    },
+    {
+      "id": "stat",
+      "slot": "stat",
+      "input_pointer": "/stat",
+      "targets": [
+        {
+          "node": "proof",
+          "property": "/stat"
+        }
+      ],
+      "transform": "identity"
+    },
+    {
+      "id": "stat-label",
+      "slot": "statLabel",
+      "input_pointer": "/statLabel",
+      "targets": [
+        {
+          "node": "proof",
+          "property": "/label"
+        }
+      ],
+      "transform": "identity"
+    }
+  ],
+  "fixed_copy": [],
+  "guidance": {
+    "word_budget": 55,
+    "slot_character_budgets": [
+      {
+        "slot": "eyebrow",
+        "bindings": [
+          "eyebrow"
+        ],
+        "max_chars": 32
+      },
+      {
+        "slot": "title",
+        "bindings": [
+          "title"
+        ],
+        "max_chars": 56
+      },
+      {
+        "slot": "body",
+        "bindings": [
+          "body.claim",
+          "body.support"
+        ],
+        "max_chars": 180
+      },
+      {
+        "slot": "stat",
+        "bindings": [
+          "stat"
+        ],
+        "max_chars": 8
+      },
+      {
+        "slot": "statLabel",
+        "bindings": [
+          "stat-label"
+        ],
+        "max_chars": 30
+      }
+    ]
+  },
+  "layout": {
+    "mode": "fixed",
+    "overflow": "error",
+    "header_allocation": "authored",
+    "max_marks": 1
+  }
+}
