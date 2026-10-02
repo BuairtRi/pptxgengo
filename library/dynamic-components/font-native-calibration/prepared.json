@@ -1,0 +1,79 @@
+{
+  "schema": "pptxgengo.font-height-capture-preparation.v1",
+  "date": "2026-10-01",
+  "status": "corrected_packet_prepared_pending_normal_terminal_capture",
+  "native_capture_completed": false,
+  "previous_capture_sha256": "5da5fe9064bcfbb42586364a40d21776a07442c73c2b6a3ef1ef1e61f25b8bcb",
+  "previous_capture_count": 276,
+  "previous_capture_audit_pass_count": 273,
+  "previous_capture_audit_failures": [
+    {
+      "reason": "native text mismatch 1:probe-0055",
+      "request_id": "measure:WyJwbGV4LXNhbnMtaGFyZC1icmVhay0xIiwiY2FudmFzIiwic2FtcGxlIl0",
+      "slide_index": 55
+    },
+    {
+      "reason": "native text mismatch 1:probe-0122",
+      "request_id": "measure:WyJwbGV4LW1vbm8taGFyZC1icmVhay0xIiwiY2FudmFzIiwic2FtcGxlIl0",
+      "slide_index": 122
+    },
+    {
+      "reason": "native text mismatch 1:probe-0189",
+      "request_id": "measure:WyJhcmlhbC1oYXJkLWJyZWFrLTEiLCJjYW52YXMiLCJzYW1wbGUiXQ",
+      "slide_index": 189
+    }
+  ],
+  "correction": "Composer emits explicit paragraphs for plain-text hard breaks, including trailing empty paragraph; native failures now retain capture provenance.",
+  "source_sha256": {
+    "cmd/pptxcompose/render.go": "42e225a0a8530efa4288d58eff6fd41f76863d068535c7518d9be847833cc6b6",
+    "cmd/pptxcompose/main.go": "1ead303ef09aeef8820d066e3ef79e65be9d189b756410fde2a4fa8c3e626028"
+  },
+  "changed_reference_text_bodies": [
+    55,
+    122,
+    189
+  ],
+  "go_predictions_unchanged": true,
+  "sets": [
+    {
+      "name": "trailing-break",
+      "request_count": 3,
+      "probe_file": "height-trailing-break-native-probes-fixed/height-trailing-break-native-probes-fixed.pptx",
+      "spec_sha256": "88c73d05b873822365057d54b1445eaf3ac2e02f186803bff538d93d325292da",
+      "deck_sha256": "77ccfb7dba018f61c64bcbb8296fbdc6040a4bb24c7fb5499ffd6ee3a01062ed"
+    },
+    {
+      "name": "reference",
+      "request_count": 276,
+      "probe_file": "height-reference-native-probes-fixed/height-reference-native-probes-fixed.pptx",
+      "spec_sha256": "a4d8387d0bf10359e6ab73429f5f2f64be07cfc84f838be26e96de58f45a45e6",
+      "deck_sha256": "fe9cf27255f07600b74f6e6a1d40953a2d1af27bf960eff803f6f352f306ba97"
+    },
+    {
+      "name": "additional",
+      "request_count": 117,
+      "probe_file": "height-additional-native-probes-fixed/height-additional-native-probes-fixed.pptx",
+      "spec_sha256": "9dcf7d261eece7648c0e2ae91029ae7746c57acc751ee62debcc9cbaaa65730e",
+      "deck_sha256": "66bd480fc80a68520b04a0333ed733b04f3dfe7465ca86b47649ab16f107a8ed"
+    }
+  ],
+  "artifacts": {
+    "README.md": "7fbb01497297f911ecc3aae65a0fd598c178ead7aa7b49471cfe361b7c1b52c1",
+    "additional-go.json": "486fa3a02c695e7c9e35b27bfa49e0038343f35cc7d8061a618feb0fdb5d2f99",
+    "bin/pptxcompose": "2fe3aa0e9a52dfded8f3339276a3675de80916186dfaed06f7d88d705b603cb8",
+    "capture.sh": "c7baa3068e93b7ff588ff79cc039125e197b47888d8d292b5f8712bb6860ff63",
+    "height-additional-native-probes-fixed/height-additional-native-probes-fixed.pptx": "66bd480fc80a68520b04a0333ed733b04f3dfe7465ca86b47649ab16f107a8ed",
+    "height-additional-native-probes-fixed/manifest.json": "548f73a96ff65cc193682c9adeddfb06b2ac6dcba7c6217d93f529d0c00c1855",
+    "height-reference-native-probes-fixed/height-reference-native-probes-fixed.pptx": "fe9cf27255f07600b74f6e6a1d40953a2d1af27bf960eff803f6f352f306ba97",
+    "height-reference-native-probes-fixed/manifest.json": "6e83a917001e3135e774656bdbd94d1150ee9a847de4ad227ad8cbaf8b825545",
+    "height-trailing-break-native-probes-fixed/height-trailing-break-native-probes-fixed.pptx": "77ccfb7dba018f61c64bcbb8296fbdc6040a4bb24c7fb5499ffd6ee3a01062ed",
+    "height-trailing-break-native-probes-fixed/manifest.json": "8d5b783702d366f077b365dbcbc6be106e0d779d66c7941511e7fccd867d2d29",
+    "reference-audit.json": "77bed4ed026297063fe29999efa8b69734ff603db4a127bd7637fe42b1bab0c9",
+    "reference-go.json": "60c77fbc93c7f4a111ed85ff55ef2a0c5944b157163c5af2da9ba73e11f39634",
+    "scripts/compose-environment.swift": "ce334676b60694117cde13c1f4ed2d4397797abf591290ae2fe8fe3a2173e5d1",
+    "scripts/measure-compose-text.applescript": "ec139fe46d24a7ff1cc93d4aa019847d3a45547b7af93d583834e7df8fba3029",
+    "specs/additional.json": "9dcf7d261eece7648c0e2ae91029ae7746c57acc751ee62debcc9cbaaa65730e",
+    "specs/reference.json": "a4d8387d0bf10359e6ab73429f5f2f64be07cfc84f838be26e96de58f45a45e6",
+    "specs/trailing-break.json": "88c73d05b873822365057d54b1445eaf3ac2e02f186803bff538d93d325292da"
+  }
+}

@@ -33,7 +33,7 @@ func expandProcessPaths(spec Spec) (Spec, []LayoutZoneFit) {
 		s.Layouts = append([]ContainerSpec(nil), s.Layouts...)
 		s.Connections = append([]ConnectionSpec(nil), s.Connections...)
 		for _, path := range s.Paths {
-			if !validID(path.ID) || !validRect(path.Bounds) || len(path.Labels) < 2 || !positive(path.GapPt) || !validInsets(path.NodePadding) || path.FontFace != "Arial" || !positive(path.FontSizePt) || !nonnegative(path.ArrowHeightPt) || !nonnegative(path.ArrowMarginPt) {
+			if !validID(path.ID) || !validRect(path.Bounds) || len(path.Labels) < 2 || !positive(path.GapPt) || !validInsets(path.NodePadding) || !ValidFontFace(path.FontFace) || !positive(path.FontSizePt) || !nonnegative(path.ArrowHeightPt) || !nonnegative(path.ArrowMarginPt) {
 				failures = append(failures, fail(s.ID, path.ID, "", "", "invalid process path geometry, node count, or typography"))
 				continue
 			}

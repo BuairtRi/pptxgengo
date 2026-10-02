@@ -76,8 +76,8 @@ func validateCanvas(s SlideSpec, ids map[string]bool) error {
 		switch c.Kind {
 		case "text":
 			rich := len(c.Paragraphs) > 0
-			if (!rich && (!validID(c.Text) || c.FontFace != "Arial" || !positive(c.FontSizePt))) || (rich && (c.Text != "" || c.FontFace != "" || c.FontSizePt != 0 || c.Bold || c.Foreground != "")) || !nonnegative(c.InsetX) || !nonnegative(c.InsetY) || c.Bounds.Width <= 2*c.InsetX || c.Bounds.Height <= 2*c.InsetY {
-				return fmt.Errorf("canvas text %s requires explicit Arial typography, content and usable frame", c.ID)
+			if (!rich && (!validID(c.Text) || !ValidFontFace(c.FontFace) || !positive(c.FontSizePt))) || (rich && (c.Text != "" || c.FontFace != "" || c.FontSizePt != 0 || c.Bold || c.Foreground != "")) || !nonnegative(c.InsetX) || !nonnegative(c.InsetY) || c.Bounds.Width <= 2*c.InsetX || c.Bounds.Height <= 2*c.InsetY {
+				return fmt.Errorf("canvas text %s requires explicit font family typography, content and usable frame", c.ID)
 			}
 			if c.Align != "left" && c.Align != "center" && c.Align != "right" {
 				return fmt.Errorf("canvas text %s requires explicit left/center/right alignment", c.ID)

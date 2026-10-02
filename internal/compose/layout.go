@@ -128,7 +128,7 @@ func ExpandLayoutsForProbes(spec Spec) (Spec, error) {
 }
 
 // ExpandLayouts lowers declarative panels into the existing CanvasSpec model
-// using native text measurements for row and block heights.
+// using text measurements for row and block heights.
 func ExpandLayouts(spec Spec, measured Measurements) (Spec, error) {
 	return expandLayouts(spec, measured, layoutFinal)
 }
@@ -560,7 +560,7 @@ func lowerSlideLayouts(s SlideSpec, measured Measurements, mode layoutMode, port
 func blockHeight(slide string, c ContainerSpec, cell CellSpec, b BlockSpec, width float64, m Measurements, mode layoutMode) (float64, []LayoutZoneFit) {
 	var fs []LayoutZoneFit
 	rich := len(b.Paragraphs) > 0
-	if !validLayer(b.Layer) || !validID(b.ID) || (!rich && (!validID(b.Text) || b.FontFace != "Arial" || !positive(b.FontSizePt))) || (rich && (b.Text != "" || b.FontFace != "" || b.FontSizePt != 0 || b.Bold || b.Foreground != "")) || !nonnegative(b.GapBeforePt) || !nonnegative(b.MinHeightPt) || !nonnegative(b.MaxHeightPt) || !nonnegative(b.LeftInsetPt) || !nonnegative(b.RightInsetPt) || !nonnegative(b.MarkerWidthPt) || (b.Marker != "" && (!positive(b.MarkerWidthPt) || rich)) || (b.MaxHeightPt > 0 && b.MaxHeightPt < b.MinHeightPt) {
+	if !validLayer(b.Layer) || !validID(b.ID) || (!rich && (!validID(b.Text) || !ValidFontFace(b.FontFace) || !positive(b.FontSizePt))) || (rich && (b.Text != "" || b.FontFace != "" || b.FontSizePt != 0 || b.Bold || b.Foreground != "")) || !nonnegative(b.GapBeforePt) || !nonnegative(b.MinHeightPt) || !nonnegative(b.MaxHeightPt) || !nonnegative(b.LeftInsetPt) || !nonnegative(b.RightInsetPt) || !nonnegative(b.MarkerWidthPt) || (b.Marker != "" && (!positive(b.MarkerWidthPt) || rich)) || (b.MaxHeightPt > 0 && b.MaxHeightPt < b.MinHeightPt) {
 		return 0, []LayoutZoneFit{fail(slide, c.ID, cell.ID, b.ID, "invalid block content, typography, inset, gap, or height bounds")}
 	}
 	if rich {
@@ -607,16 +607,16 @@ func blockHeight(slide string, c ContainerSpec, cell CellSpec, b BlockSpec, widt
 	for i, id := range ids {
 		z, ok := m.ByRequestID[id]
 		if !ok || !positive(z.RenderedWidthPt) || !positive(z.RenderedHeightPt) {
-			fs = append(fs, LayoutZoneFit{SlideID: slide, ContainerID: c.ID, CellID: cell.ID, BlockID: b.ID, RequestID: id, Fits: false, Reason: "missing or invalid native measurement"})
+			fs = append(fs, LayoutZoneFit{SlideID: slide, ContainerID: c.ID, CellID: cell.ID, BlockID: b.ID, RequestID: id, Fits: false, Reason: "missing or invalid text measurement"})
 			continue
 		}
-		const nativeTolerance = .15
+		const measurementTolerance = .15
 		requiredWidth := z.RenderedWidthPt + math.Max(0, z.OffsetXPt)
 		requiredHeight := z.RenderedHeightPt + math.Max(0, z.OffsetYPt)
-		if z.OffsetXPt < -nativeTolerance || z.OffsetYPt < -nativeTolerance {
-			fs = append(fs, LayoutZoneFit{SlideID: slide, ContainerID: c.ID, CellID: cell.ID, BlockID: b.ID, RequestID: id, RequiredWidthPt: requiredWidth, RequiredHeightPt: requiredHeight, Fits: false, Reason: "native text ink begins outside its zero-inset frame"})
+		if z.OffsetXPt < -measurementTolerance || z.OffsetYPt < -measurementTolerance {
+			fs = append(fs, LayoutZoneFit{SlideID: slide, ContainerID: c.ID, CellID: cell.ID, BlockID: b.ID, RequestID: id, RequiredWidthPt: requiredWidth, RequiredHeightPt: requiredHeight, Fits: false, Reason: "measured text begins outside its zero-inset frame"})
 		}
-		if requiredWidth > widths[i]+nativeTolerance {
+		if requiredWidth > widths[i]+measurementTolerance {
 			fs = append(fs, LayoutZoneFit{SlideID: slide, ContainerID: c.ID, CellID: cell.ID, BlockID: b.ID, RequestID: id, AvailableWidthPt: widths[i], RequiredWidthPt: requiredWidth, Fits: false, Reason: "measured text exceeds available width"})
 		}
 		h = math.Max(h, requiredHeight)

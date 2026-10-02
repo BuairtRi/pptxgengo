@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/buairtri/pptxgengo/internal/compose"
 	"github.com/buairtri/pptxgengo/pptx"
+	"strings"
 )
 
 type frame struct {
@@ -83,7 +84,22 @@ func render(slides []renderSlide) ([]byte, error) {
 	p.Company = "West Monroe"
 	p.Title = "Editable PowerPoint compositions"
 	p.Subject = "Illustrative proposal and component examples"
-	p.Theme = pptx.ThemeProps{HeadFontFace: "Arial", BodyFontFace: "Arial"}
+	// Text runs always carry explicit fonts. Use the first text family for the
+	// theme as well so newly inserted text follows the deck's typography.
+	face := "Arial"
+findFont:
+	for _, slide := range slides {
+		for _, e := range slide.Elements {
+			if e.Kind == "text" {
+				face = e.FontFace
+				if len(e.Paragraphs) > 0 {
+					face = e.Paragraphs[0].Runs[0].FontFace
+				}
+				break findFont
+			}
+		}
+	}
+	p.Theme = pptx.ThemeProps{HeadFontFace: face, BodyFontFace: face}
 	for _, rs := range slides {
 		if rs.Width != slides[0].Width || rs.Height != slides[0].Height {
 			return nil, fmt.Errorf("mixed slide sizes unsupported")
@@ -150,7 +166,15 @@ func render(slides []renderSlide) ([]byte, error) {
 			}
 			var textRuns []pptx.TextProps
 			if len(e.Paragraphs) == 0 {
-				textRuns = []pptx.TextProps{{Text: e.Text}}
+				// Emit hard breaks as explicit paragraphs, including a final
+				// empty paragraph. The upstream writer leaves a newline-terminated
+				// string inside <a:t>; PowerPoint renders it but omits those breaks
+				// from its native text content, breaking the measurement contract.
+				plain := strings.ReplaceAll(strings.ReplaceAll(e.Text, "\r\n", "\n"), "\r", "\n")
+				lines := strings.Split(plain, "\n")
+				for i, line := range lines {
+					textRuns = append(textRuns, pptx.TextProps{Text: line, Options: &pptx.TextPropsOptions{TextBaseProps: pptx.TextBaseProps{BreakLine: pointer(i < len(lines)-1)}}})
+				}
 			} else {
 				for pi, paragraph := range e.Paragraphs {
 					for ri, run := range paragraph.Runs {

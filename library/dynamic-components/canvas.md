@@ -8,7 +8,7 @@ JSON; the Go CLI authors every slide.
 
 ## Elements and overlap
 
-Every item has a stable `id`, `kind`, and `bounds`. Text requires explicit Arial
+Every item has a stable `id`, `kind`, and `bounds`. Text requires an explicit `font_face` family and
 font size/weight, `foreground`, `align` (`left`, `center`, `right`) and `valign`
 (`top`, `middle`). Optional `inset_x`/`inset_y` reserve internal space. Native
 probe width exactly matches the final inner width. No character-count estimate,
@@ -96,7 +96,7 @@ PPTX is untouched. Recovered content needs new probes, a new build and final nat
 verification. For decks without a known original spec, extract their raw native
 scenes; do not infer a semantic composition or YAML contract from visual similarity.
 
-The current v5 adapter reads native character/font property snapshots in batches
+The current v8 adapter reads native character/font property snapshots in batches
 and excludes spaces/tabs from visible bounds. Whitespace formatting is still
 checked. This avoids end-of-line space advances extending past a wrapped text
 frame. Bounds remain character advances rather than a raster-ink measurement.

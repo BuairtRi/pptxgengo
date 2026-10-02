@@ -19,9 +19,11 @@ import (
 	"time"
 
 	"github.com/buairtri/pptxgengo/internal/compose"
+	"github.com/buairtri/pptxgengo/internal/textlayout"
 )
 
 type manifest struct {
+	GoLayout          *textlayout.Report      `json:"go_layout,omitempty"`
 	Environment       *measurementEnvironment `json:"environment,omitempty"`
 	CacheUses         []cacheUse              `json:"cache_uses,omitempty"`
 	DeckFile          string                  `json:"deck_file"`
@@ -178,6 +180,11 @@ func bundle(dir string, m manifest) (err error) {
 	}
 	if e = writeNew(filepath.Join(tmp, "manifest.json"), jsonBytes(m)); e != nil {
 		return e
+	}
+	if m.GoLayout != nil {
+		if e = writeNew(filepath.Join(tmp, "go-layout.json"), jsonBytes(m.GoLayout)); e != nil {
+			return e
+		}
 	}
 	return os.Rename(tmp, dir)
 }
@@ -379,6 +386,9 @@ func checkNative(m manifest, n nativeResult, fit bool) (compose.Measurements, er
 			} else {
 				if r.Font.Name == nil || *r.Font.Name != e.FontFace || r.Font.Size == nil || !near(*r.Font.Size, e.FontSize) || r.Font.Bold == nil || *r.Font.Bold != e.Bold {
 					return result, fmt.Errorf("native font mismatch %s: %+v", k, r.Font)
+				}
+				if err := checkNativePlainFonts(e, r, n.Schema == "pptxgengo.compose-text-measurement.v8"); err != nil {
+					return result, fmt.Errorf("native font mismatch %s: %w", k, err)
 				}
 				if rgbHex(r.TextColor) != e.Foreground {
 					return result, fmt.Errorf("native text color mismatch %s: %v expected %s", k, r.TextColor, e.Foreground)
@@ -586,6 +596,9 @@ func run(args []string) error {
 		return fmt.Errorf("usage: pptxcompose probe|measure|fit-report|build|verify|recover-text|cache-import [flags]")
 	}
 	fs := flag.NewFlagSet(args[0], flag.ContinueOnError)
+	engine := fs.String("engine", "native", "measurement engine: native (PowerPoint) or go (prototype; measure/build/fit-report)")
+	var fontDirs fontDirectories
+	fs.Var(&fontDirs, "font-dir", "Go engine font directory; repeatable; replaces system font discovery")
 	cacheDir := fs.String("cache", "", "native measurement cache directory; missing or stale contracts are never guessed")
 	returned := fs.String("returned", "", "colleague-edited generated PPTX for recover-text")
 	textOnly := fs.Bool("text-only", false, "recover text while restoring original spec styling; geometry changes require scene extraction")
@@ -605,12 +618,40 @@ func run(args []string) error {
 	if fs.NArg() != 0 || *out == "" {
 		return fmt.Errorf("--out is required; positional arguments unsupported")
 	}
+	if *engine != "native" && *engine != "go" {
+		return fmt.Errorf("--engine must be native or go")
+	}
+	if *engine == "go" {
+		if args[0] != "measure" && args[0] != "build" && args[0] != "fit-report" {
+			return fmt.Errorf("--engine go supports measure, build and fit-report only")
+		}
+		if *cacheDir != "" || *dir != "" || *evPath != "" || *reuse || *nativeWorkspace != "" || *returned != "" || *textOnly {
+			return fmt.Errorf("--engine go measures --spec directly; native evidence, cache, bundle and recovery flags are not supported")
+		}
+		adapterSet := false
+		fs.Visit(func(f *flag.Flag) {
+			if f.Name == "adapter" {
+				adapterSet = true
+			}
+		})
+		if adapterSet {
+			return fmt.Errorf("--adapter is not used with --engine go")
+		}
+		return runGoLayout(args[0], *specPath, *out, fontDirs)
+	}
+	if len(fontDirs) > 0 {
+		return fmt.Errorf("--font-dir requires --engine go")
+	}
 	switch args[0] {
 	case "cache-import":
 		if *cacheDir == "" {
 			return fmt.Errorf("--cache required")
 		}
-		env, e := currentEnvironment(*script)
+		source, e := validateProbeSource(*dir, *evPath)
+		if e != nil {
+			return e
+		}
+		env, e := currentEnvironment(*script, manifestFonts(source.manifest))
 		if e != nil {
 			return e
 		}
@@ -645,7 +686,7 @@ func run(args []string) error {
 			if *dir != "" || *evPath != "" || *reuse {
 				return fmt.Errorf("--cache is exclusive with --bundle, --evidence and --reuse-measurements for probe/build/fit-report")
 			}
-			env, err := currentEnvironment(*script)
+			env, err := currentEnvironment(*script, requestFonts(requests))
 			if err != nil {
 				return err
 			}
@@ -725,6 +766,7 @@ func run(args []string) error {
 				if ev.SpecSHA != hash(raw) {
 					m.ReusedFromSpecSHA = ev.SpecSHA
 				}
+				m.Environment = ev.Environment
 			}
 			// Reconstruct dimensions from raw native evidence instead of trusting an editable summary.
 			plan, e := compose.Plan(spec, measured)
@@ -799,7 +841,8 @@ func run(args []string) error {
 		if e != nil {
 			return e
 		}
-		env, e := currentEnvironment(*script)
+		fonts := manifestFonts(m)
+		env, e := currentEnvironment(*script, fonts)
 		if e != nil {
 			return e
 		}
@@ -822,7 +865,7 @@ func run(args []string) error {
 		if measureErr != nil {
 			return measureErr
 		}
-		afterEnv, e := currentEnvironment(*script)
+		afterEnv, e := currentEnvironment(*script, fonts)
 		if e != nil {
 			return e
 		}
@@ -842,7 +885,10 @@ func run(args []string) error {
 		}
 		measured, e := checkNative(m, nr, isFinal)
 		if e != nil {
-			failure := map[string]any{"status": "failed", "reason": e.Error(), "native": json.RawMessage(b), "deck_sha256": m.DeckSHA}
+			// Retain capture provenance even if strict content/style validation
+			// fails. The raw observations remain failed evidence, but subsequent
+			// diagnosis can identify the exact spec, scripts, fonts and binary.
+			failure := map[string]any{"status": "failed", "reason": e.Error(), "native": json.RawMessage(b), "deck_sha256": m.DeckSHA, "manifest_sha256": hash(mb), "spec_sha256": m.SpecSHA, "environment": env, "adapter_sha256": hash(adapterBytes), "measured_at": time.Now().UTC().Format(time.RFC3339)}
 			if we := writeNew(*out+".failed.json", jsonBytes(failure)); we != nil {
 				return fmt.Errorf("%w; failed to retain native evidence: %v", e, we)
 			}

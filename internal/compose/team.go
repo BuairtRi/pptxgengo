@@ -165,7 +165,7 @@ func validateTeam(s SlideSpec, ids map[string]bool) error {
 		}
 		ids[r.ID] = true
 		rootIDs[r.ID] = true
-		if !validID(r.Label) || !validRect(r.Bounds) || !inside(r.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) || r.FontFace != "Arial" || !positive(r.FontSizePt) || !nonnegative(r.HorizontalInsetPt) || !nonnegative(r.VerticalInsetPt) || r.Bounds.Width <= 2*r.HorizontalInsetPt || r.Bounds.Height <= 2*r.VerticalInsetPt {
+		if !validID(r.Label) || !validRect(r.Bounds) || !inside(r.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) || !ValidFontFace(r.FontFace) || !positive(r.FontSizePt) || !nonnegative(r.HorizontalInsetPt) || !nonnegative(r.VerticalInsetPt) || r.Bounds.Width <= 2*r.HorizontalInsetPt || r.Bounds.Height <= 2*r.VerticalInsetPt {
 			return fmt.Errorf("slide %s standalone role %s has invalid label, bounds, font or insets", s.ID, r.ID)
 		}
 		if teamMode && !isStaffingToken(r.Background) {
@@ -194,7 +194,7 @@ func validateTeam(s SlideSpec, ids map[string]bool) error {
 		}
 		ids[p.ID] = true
 		phaseIDs[p.ID] = true
-		if !validID(p.Title) || !validRect(p.Bounds) || !inside(p.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) || p.FontFace != "Arial" || !positive(p.FontSizePt) || !nonnegative(p.PaddingPt) || !positive(p.LabelHeightPt) || p.Bounds.Width <= 2*p.PaddingPt || p.Bounds.Height <= 2*p.PaddingPt+p.LabelHeightPt {
+		if !validID(p.Title) || !validRect(p.Bounds) || !inside(p.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) || !ValidFontFace(p.FontFace) || !positive(p.FontSizePt) || !nonnegative(p.PaddingPt) || !positive(p.LabelHeightPt) || p.Bounds.Width <= 2*p.PaddingPt || p.Bounds.Height <= 2*p.PaddingPt+p.LabelHeightPt {
 			return fmt.Errorf("slide %s phase %s has invalid title, bounds, font or footer geometry", s.ID, p.ID)
 		}
 		if _, e := resolveColor(p.Surface); e != nil {
@@ -216,7 +216,7 @@ func validateTeam(s SlideSpec, ids map[string]bool) error {
 	}
 	if s.Legend != nil {
 		l := s.Legend
-		if !validRect(l.Bounds) || !inside(l.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) || l.FontFace != "Arial" || !positive(l.FontSizePt) || !positive(l.SwatchSizePt) || !nonnegative(l.GapPt) || !nonnegative(l.ItemGapPt) || l.SwatchSizePt > l.Bounds.Height {
+		if !validRect(l.Bounds) || !inside(l.Bounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) || !ValidFontFace(l.FontFace) || !positive(l.FontSizePt) || !positive(l.SwatchSizePt) || !nonnegative(l.GapPt) || !nonnegative(l.ItemGapPt) || l.SwatchSizePt > l.Bounds.Height {
 			return fmt.Errorf("slide %s legend has invalid bounds, font, or item geometry", s.ID)
 		}
 		if _, e := foreground(l.Foreground, white); e != nil {

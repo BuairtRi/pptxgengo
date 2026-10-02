@@ -12,11 +12,12 @@ import (
 )
 
 type environmentFont struct {
-	Family         string `json:"family"`
-	PostscriptName string `json:"postscript_name"`
-	Style          string `json:"style"`
-	Path           string `json:"path"`
-	SHA            string `json:"sha256"`
+	Family         string             `json:"family"`
+	PostscriptName string             `json:"postscript_name"`
+	Style          string             `json:"style"`
+	Path           string             `json:"path"`
+	SHA            string             `json:"sha256"`
+	Variations     map[string]float64 `json:"variations,omitempty"`
 }
 type measurementEnvironment struct {
 	Schema            string            `json:"schema"`
@@ -29,24 +30,33 @@ type measurementEnvironment struct {
 	InspectorSHA      string            `json:"inspector_sha256"`
 }
 
-func currentEnvironment(adapter string) (*measurementEnvironment, error) {
+func currentEnvironment(adapter string, fonts []fontRequirement) (*measurementEnvironment, error) {
 	inspector := releaseScript("compose-environment.swift")
 	source, e := os.ReadFile(inspector)
 	if e != nil {
 		return nil, e
 	}
-	b, e := exec.Command("swift", inspector).Output()
+	fonts = canonicalFonts(fonts)
+	command := exec.Command("swift", inspector)
+	command.Stdin = bytes.NewReader(jsonBytes(fonts))
+	var diagnostics bytes.Buffer
+	command.Stderr = &diagnostics
+	b, e := command.Output()
 	if e != nil {
-		return nil, fmt.Errorf("inspect native measurement environment: %w", e)
+		return nil, fmt.Errorf("inspect native measurement environment: %w: %s", e, diagnostics.String())
 	}
 	var env measurementEnvironment
 	if e = json.Unmarshal(b, &env); e != nil {
 		return nil, e
 	}
-	if env.OS == "" || env.PowerPointVersion == "" || env.PowerPointBuild == "" || len(env.Fonts) != 4 {
+	if env.OS == "" || env.PowerPointVersion == "" || env.PowerPointBuild == "" || len(env.Fonts) != len(fonts) {
 		return nil, fmt.Errorf("incomplete native environment")
 	}
 	for i := range env.Fonts {
+		font := env.Fonts[i]
+		if font.Family != fonts[i].Family || font.Style != fonts[i].Style || font.PostscriptName == "" || font.Path == "" {
+			return nil, fmt.Errorf("native font resolution mismatch for %s (%s)", fonts[i].Family, fonts[i].Style)
+		}
 		data, e := os.ReadFile(env.Fonts[i].Path)
 		if e != nil {
 			return nil, e
@@ -74,7 +84,7 @@ func currentEnvironment(adapter string) (*measurementEnvironment, error) {
 func environmentKey(env *measurementEnvironment) string { return hash(jsonBytes(env)) }
 
 // Every value that can affect the probe rendering belongs here. IDs locate
-// observations but do not alter glyph geometry. This version supports Arial only.
+// observations but do not alter glyph geometry.
 type textContract struct {
 	PhraseRequests []compose.PhraseRequest `json:"phrase_requests,omitempty"`
 	Text           string                  `json:"text"`

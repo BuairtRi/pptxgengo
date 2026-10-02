@@ -10,6 +10,18 @@ described as completed.
 
 ## Current slice — detailed proposal composition
 
+### Go text layout prototype — 2026-09-30
+
+An opt-in pure Go measurement path now supports compose `measure`, `fit-report`
+and `build` via `--engine go`. It resolves explicit font families/styles, handles
+variable weight instances, shapes and wraps horizontal Latin text, and supplies
+the existing planner with dimensions. It records font hashes and line metrics;
+results remain separate from native evidence/cache. The two-slide font fixture
+builds with 14 passing text zones. The ten-request native control comparison
+matches line breaks, with width differences below 1 pt and height differences
+up to 4.84 pt. PowerPoint parity and phrase-bound support remain future work.
+See [implementation, scope and usage](library/dynamic-components/go-layout.md).
+
 The first mechanics showcase was insufficiently complex in user review. The
 immediate acceptance gate is now the five-page dense proposal benchmark:
 EnableComp 3/4 and UHG 28/38/43 patterns with substantial text, aligned evidence
@@ -84,8 +96,8 @@ Implemented in this slice: `pptxcompose probe|measure|build|verify`, native
 measurement evidence tied to exact input hashes, variable-role pods, deterministic
 column selection, semantic colors, contrast checks, and connector anchor geometry.
 See [workflow and limits](library/dynamic-components/README.md) and the
-[native proof report](library/dynamic-components/proof-report.json). This first
-implementation uses explicit Arial styles; arbitrary source-theme inheritance is
+[native proof report](library/dynamic-components/proof-report.json). Measured composition now supports explicit installed font families,
+including IBM Plex Sans; arbitrary source-theme inheritance is
 still pending.
 
 The enclosing [team composition](library/dynamic-components/team.md) now adds

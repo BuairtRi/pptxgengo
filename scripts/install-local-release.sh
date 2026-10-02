@@ -183,6 +183,18 @@ for path, expected_hash in sorted(evidence_paths.items()):
             raise ValueError(f'adaptive evidence hash mismatch: {path}')
     copy(path)
 
+# Retain the bounded font example's measurements and rendered review alongside
+# the authoring fixture. Its evidence is separate from older template proofs.
+font_proof_path = src / 'library/dynamic-components/fonts-proof.json'
+if font_proof_path.is_file():
+    font_proof = json.loads(font_proof_path.read_text())
+    for artifact in font_proof['artifacts']:
+        path = artifact['path']
+        actual_hash = hashlib.sha256((src / path).read_bytes()).hexdigest()
+        if actual_hash != artifact['sha256']:
+            raise ValueError(f'font evidence hash mismatch: {path}')
+        copy(path)
+
 # The capability records link to these exact implementation schema sources.
 capabilities = json.loads((src / 'library/adaptive/capabilities.json').read_text())
 for family in capabilities['family_builders'].values():

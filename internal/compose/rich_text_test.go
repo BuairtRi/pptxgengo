@@ -35,9 +35,9 @@ func TestRichTextRejectsLegacyMixAndBadRun(t *testing.T) {
 		t.Fatal("legacy/rich mixture accepted")
 	}
 	s.Slides[0].Canvas[0].Text = ""
-	s.Slides[0].Canvas[0].Paragraphs[0].Runs[0].FontFace = "Helvetica"
+	s.Slides[0].Canvas[0].Paragraphs[0].Runs[0].FontFace = "+mn-lt"
 	if _, err := ProbeRequests(s); err == nil {
-		t.Fatal("unsupported rich font accepted")
+		t.Fatal("inherited rich font accepted")
 	}
 	s.Slides[0].Canvas[0].Paragraphs = richParagraphFixture()
 	s.Slides[0].Canvas[0].Paragraphs[0].Runs[0].Text = "embedded\nparagraph"

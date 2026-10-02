@@ -70,7 +70,7 @@ func arrowPhraseRequests(s SlideSpec, target string) []PhraseRequest {
 	return out
 }
 func arrowNoteProbe(s SlideSpec, a ArtworkArrowSpec) ProbeRequest {
-	return ProbeRequest{ID: requestID(s.ID, "arrow-note", a.ID), SlideID: s.ID, Kind: "arrow_note", Text: "MANUAL PLACEMENT: " + a.Staging.Note, TextWidthPt: a.Staging.NoteBounds.Width, FontFace: "Arial", FontSizePt: 11, Foreground: "#070154", Background: white, Align: "left"}
+	return ProbeRequest{ID: requestID(s.ID, "arrow-note", a.ID), SlideID: s.ID, Kind: "arrow_note", Text: "MANUAL PLACEMENT: " + a.Staging.Note, TextWidthPt: a.Staging.NoteBounds.Width, FontFace: s.TitleFontFace, FontSizePt: 11, Foreground: "#070154", Background: white, Align: "left"}
 }
 func validateArtworkArrows(s SlideSpec, ids map[string]bool) error {
 	for _, a := range s.ArtworkArrows {
@@ -291,7 +291,7 @@ func planArtworkArrows(s SlideSpec, p *PlannedSlide, m Measurements) error {
 			}
 			out = PlannedArtworkArrow{ArtworkArrowSpec: a, Bounds: a.Staging.AssetBounds, VisibleBounds: a.Staging.AssetBounds, Status: "manual_required", Reason: err.Error()}
 			p.ManualRequired = append(p.ManualRequired, a.Staging.Note+" ("+err.Error()+")")
-			p.Canvas = append(p.Canvas, PlannedCanvas{CanvasSpec: CanvasSpec{ID: a.ID + "/manual-note", Kind: "text", Bounds: a.Staging.NoteBounds, Text: q.Text, FontFace: "Arial", FontSizePt: 11, Foreground: "#070154", Align: "left", Valign: "top", Layer: 100}, MeasurementID: q.ID})
+			p.Canvas = append(p.Canvas, PlannedCanvas{CanvasSpec: CanvasSpec{ID: a.ID + "/manual-note", Kind: "text", Bounds: a.Staging.NoteBounds, Text: q.Text, FontFace: s.TitleFontFace, FontSizePt: 11, Foreground: "#070154", Align: "left", Valign: "top", Layer: 100}, MeasurementID: q.ID})
 		}
 		p.ArtworkArrows = append(p.ArtworkArrows, out)
 	}

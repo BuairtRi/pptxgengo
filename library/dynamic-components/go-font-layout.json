@@ -1,0 +1,315 @@
+{
+  "schema": "pptxgengo.compose-spec.v1",
+  "slides": [
+    {
+      "id": "font-families",
+      "title": "Go font layout: IBM Plex Sans and Arial",
+      "width_pt": 960,
+      "height_pt": 540,
+      "title_bounds": {
+        "x": 40,
+        "y": 35,
+        "width": 880,
+        "height": 55
+      },
+      "title_font_face": "IBM Plex Sans",
+      "title_font_size_pt": 26,
+      "title_bold": true,
+      "title_foreground": "#070154",
+      "pods": [],
+      "canvas": [
+        {
+          "id": "styles",
+          "kind": "text",
+          "bounds": {
+            "x": 40,
+            "y": 105,
+            "width": 880,
+            "height": 35
+          },
+          "paragraphs": [
+            {
+              "id": "styles",
+              "align": "left",
+              "runs": [
+                {
+                  "id": "regular",
+                  "text": "Regular. ",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "foreground": "#070154"
+                },
+                {
+                  "id": "bold",
+                  "text": "Bold. ",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "bold": true,
+                  "foreground": "#070154"
+                },
+                {
+                  "id": "italic",
+                  "text": "Italic. ",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "italic": true,
+                  "foreground": "#070154"
+                },
+                {
+                  "id": "bold-italic",
+                  "text": "Bold italic.",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "bold": true,
+                  "italic": true,
+                  "foreground": "#070154"
+                }
+              ]
+            }
+          ],
+          "align": "left",
+          "valign": "top"
+        },
+        {
+          "id": "plex-label",
+          "kind": "text",
+          "bounds": {
+            "x": 40,
+            "y": 160,
+            "width": 400,
+            "height": 25
+          },
+          "text": "IBM Plex Sans / 16 pt",
+          "font_face": "IBM Plex Sans",
+          "font_size_pt": 16,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top"
+        },
+        {
+          "id": "arial-label",
+          "kind": "text",
+          "bounds": {
+            "x": 510,
+            "y": 160,
+            "width": 400,
+            "height": 25
+          },
+          "text": "Arial / 16 pt",
+          "font_face": "Arial",
+          "font_size_pt": 16,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top"
+        },
+        {
+          "id": "plex-wrap",
+          "kind": "text",
+          "bounds": {
+            "x": 40,
+            "y": 195,
+            "width": 400,
+            "height": 100
+          },
+          "text": "The same words, point size and box width are measured independently for each font. Go computes the line breaks from the selected font.",
+          "font_face": "IBM Plex Sans",
+          "font_size_pt": 16,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top"
+        },
+        {
+          "id": "arial-wrap",
+          "kind": "text",
+          "bounds": {
+            "x": 510,
+            "y": 195,
+            "width": 400,
+            "height": 100
+          },
+          "text": "The same words, point size and box width are measured independently for each font. Go computes the line breaks from the selected font.",
+          "font_face": "Arial",
+          "font_size_pt": 16,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top"
+        }
+      ],
+      "cards": [
+        {
+          "id": "plex-card",
+          "kind": "metric",
+          "bounds": {
+            "x": 40,
+            "y": 330,
+            "width": 400,
+            "height": 155
+          },
+          "font_face": "IBM Plex Sans",
+          "value": "IBM Plex Sans",
+          "label": "Card value in bold; label in regular",
+          "surface": "surface.light"
+        },
+        {
+          "id": "arial-card",
+          "kind": "metric",
+          "bounds": {
+            "x": 510,
+            "y": 330,
+            "width": 400,
+            "height": 155
+          },
+          "font_face": "Arial",
+          "value": "Arial",
+          "label": "Card value in bold; label in regular",
+          "surface": "surface.light"
+        }
+      ],
+      "notes": "Generated using the pure Go layout prototype. Editable text. Font metrics and line breaks are predictions; this deck has not been verified in PowerPoint."
+    },
+    {
+      "id": "go-layout-controls",
+      "title": "Mixed fonts, paragraph spacing and bullets",
+      "title_font_face": "IBM Plex Sans",
+      "title_font_size_pt": 26,
+      "title_bold": true,
+      "title_foreground": "#070154",
+      "title_bounds": {
+        "x": 40,
+        "y": 35,
+        "width": 880,
+        "height": 55
+      },
+      "width_pt": 960,
+      "height_pt": 540,
+      "pods": [],
+      "notes": "Prototype scope: horizontal Latin text, exact font family and real styles. Measurement and generation run without PowerPoint. Native final verification remains optional.",
+      "canvas": [
+        {
+          "id": "mixed",
+          "kind": "text",
+          "bounds": {
+            "x": 40,
+            "y": 110,
+            "width": 880,
+            "height": 105
+          },
+          "align": "left",
+          "valign": "top",
+          "paragraphs": [
+            {
+              "id": "mixed-run",
+              "align": "left",
+              "space_after_pt": 8,
+              "runs": [
+                {
+                  "id": "intro",
+                  "text": "Mixed runs: ",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "foreground": "#070154"
+                },
+                {
+                  "id": "mono",
+                  "text": "IBM Plex Mono",
+                  "font_face": "IBM Plex Mono",
+                  "font_size_pt": 18,
+                  "bold": true,
+                  "foreground": "#0047FF"
+                },
+                {
+                  "id": "closing",
+                  "text": " beside italic sans text.",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "italic": true,
+                  "foreground": "#070154"
+                }
+              ]
+            },
+            {
+              "id": "fractional",
+              "align": "left",
+              "runs": [
+                {
+                  "id": "fractional",
+                  "text": "Fractional size: 16.5 pt. Paragraph boundaries and font metrics are explicit.",
+                  "font_face": "Arial",
+                  "font_size_pt": 16.5,
+                  "foreground": "#070154"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bullets",
+          "kind": "text",
+          "bounds": {
+            "x": 40,
+            "y": 240,
+            "width": 405,
+            "height": 210
+          },
+          "align": "left",
+          "valign": "top",
+          "paragraphs": [
+            {
+              "id": "bullet-one",
+              "align": "left",
+              "space_after_pt": 10,
+              "bullet": {
+                "character": "\u2022",
+                "margin_left_pt": 24,
+                "hanging_pt": 16
+              },
+              "runs": [
+                {
+                  "id": "copy",
+                  "text": "A wrapped bullet uses the available width after the left indent and keeps the continuation aligned.",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "foreground": "#070154"
+                }
+              ]
+            },
+            {
+              "id": "bullet-two",
+              "align": "left",
+              "bullet": {
+                "character": "\u2022",
+                "margin_left_pt": 24,
+                "hanging_pt": 16
+              },
+              "runs": [
+                {
+                  "id": "copy",
+                  "text": "Font files, selected styles and variable axes are recorded in the report.",
+                  "font_face": "IBM Plex Sans",
+                  "font_size_pt": 18,
+                  "foreground": "#070154"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hard-breaks",
+          "kind": "text",
+          "bounds": {
+            "x": 510,
+            "y": 240,
+            "width": 400,
+            "height": 210
+          },
+          "text": "An explicit hard break follows.\n\nThis paragraph follows a blank line.\nThe original text remains editable.",
+          "font_face": "IBM Plex Mono",
+          "font_size_pt": 16,
+          "foreground": "#070154",
+          "align": "left",
+          "valign": "top"
+        }
+      ]
+    }
+  ]
+}

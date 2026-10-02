@@ -1,6 +1,6 @@
 # Local West Monroe presentation release
 
-Version: **0.1.0-local.4**. This is a frozen local authoring release, not a published package.
+Version: **0.1.0-local.5**. This is a frozen local authoring release, not a published package.
 
 ## Start
 
@@ -36,7 +36,23 @@ copy after reviewing the generated slides. The installed release contains its
 own library, source scene projects, selected original source PPTX files,
 reviewed previews, exact gauge evidence, scripts and skill references.
 
-## Changes from local.3
+## Changes from local.4
+
+- Measured composition accepts explicit installed font families, including IBM
+  Plex Sans, with regular/bold/italic style resolution and variable font instance
+  fingerprints. Missing fonts/styles fail before native measurement.
+- All five adaptive builders apply the chosen `font_face` throughout their text,
+  including footers, page numbers, pods, matrices and comparison labels.
+- Cards expose optional `font_face`; existing cards default to Arial.
+- The packaged `library/dynamic-components/fonts.json` example covers IBM Plex
+  Sans styles and wrapping alongside Arial. See `fonts.md` for the workflow.
+
+The Go test suite passes for this change.
+`library/dynamic-components/fonts-proof.json` records the new bounded native
+font example and its packaged evidence. Historical template and adaptive
+example evidence retains its original environment and qualification scope.
+
+## Changes from local.3 to local.4
 
 - Separate searchable template and component galleries, with previews, controls,
   source identity and per-item limitations.
@@ -60,7 +76,7 @@ To create a reviewable package without changing global links:
 
 ```sh
 python3 scripts/build-release-catalog.py
-scripts/install-local-release.sh --stage-only /absolute/path/new-local-4-stage
+scripts/install-local-release.sh --stage-only /absolute/path/new-local-5-stage
 ```
 
 The stage command checks all 101 template records, the 124 component contracts,
@@ -68,7 +84,7 @@ local gallery assets and skill references, then writes a SHA-256
 `release-manifest.json`. Running `scripts/install-local-release.sh` without
 arguments installs this version and switches the global command and skill
 symlinks. The installer refuses to overwrite an existing version directory;
-`0.1.0-local.3` remains available for rollback.
+`0.1.0-local.4` remains available for rollback.
 
 Required: Go 1.27.1 and Python 3. Native PowerPoint measurement additionally
 requires macOS, PowerPoint and the fonts used by the source decks.

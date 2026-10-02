@@ -1,0 +1,21 @@
+# Font layout reference set
+
+276 cases. PowerPoint PDF references captured for all three families.
+
+Go engine: `go-text-prototype.v3`. Font provenance matches the dataset's baseline: True.
+
+The PDF selections measure exported glyph geometry. Their height differs in meaning from PowerPoint TextRange bounds and Go line boxes.
+
+| Family | Cases | Matching line breaks | Font warnings | Largest width delta | Largest PDF height delta |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| IBM Plex Sans | 92 | 91 | 0 | 35.780 pt | 21.260 pt |
+| IBM Plex Mono | 92 | 92 | 0 | 1.593 pt | 4.000 pt |
+| Arial | 92 | 92 | 0 | 1.419 pt | 3.320 pt |
+
+## Cases needing calibration
+
+- `plex-sans-boundary-16.5-regular-plus-0`: Go 1 visible lines, PowerPoint 2. Font warnings: none.
+
+Width differences include cases with different wrapping; they are not single-line advance errors. Blank lines are excluded from the visible-line comparison, but remain in the corpus and geometry. Bullet markers are excluded from line text comparisons. Font names come from PDF BaseFont resources; PDFKit selection font attributes can report fallback names in this process.
+
+Full measurements and line text are in `reference-wrap-comparison.json`. Exact source contracts are in the dataset's `corpus.json` and `cases.json`. The comparator does not modify measurements or calibrate the engine.

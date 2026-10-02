@@ -50,7 +50,8 @@ of inventing controls.
 
 ## Style and composition
 
-Shared styles support `neutral`, `subtle`, and `inverse` profiles; Arial; explicit
+Shared styles support `neutral`, `subtle`, and `inverse` profiles; explicit installed font families via `font_face` (Arial by default,
+for example IBM Plex Sans); explicit
 title/body/label point sizes; and named color roles. Consult the current catalog
 for accepted role names and ranges. Foreground colors may resolve to contrasting
 brand ink on individual surfaces. The shared style check compares `text.primary`

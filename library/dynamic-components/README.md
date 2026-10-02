@@ -8,6 +8,17 @@ reconstruction of UHG43.
 
 ## Workflow
 
+For generation without PowerPoint, see the opt-in
+[pure Go font layout prototype](go-layout.md) and its
+[font layout example](go-font-layout.json). Go measurement results are
+predictions; native final verification remains a separate command.
+The [font layout reference set](font-layout-reference.md) supplies the frozen
+IBM Plex Sans, Arial and IBM Plex Mono corpus and PowerPoint PDF comparison.
+The [v2 wrapping calibration](font-wrap-calibration.md) records the shared
+advance rule, additional comparisons and boundary warnings.
+The [v3 height calibration](font-height-calibration.md) records native character
+height controls, PDF baseline spacing comparisons and height review warnings.
+
 Run from the repository root on macOS with Microsoft PowerPoint installed:
 
 ```sh
@@ -60,10 +71,11 @@ files. A custom adapter is a trusted local integration.
 - `foreground: auto` chooses the higher-contrast navy or white. Explicit colors
   are checked too. A 4.5:1 minimum is an engineering policy for this component,
   using the [W3C relative-luminance formula](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
-- This first API requires explicit Arial font sizes/weights and zero
-  `paragraph_gap_pt` (paragraph spacing is fixed at zero). General inheritance
-  resolution from arbitrary source masters, mixed-format labels, rotation, rich
-  text and other fonts remain unsupported. Negative geometry, duplicate IDs,
+- Typography requires explicit font families, point sizes and weights, and zero
+  pod `paragraph_gap_pt`. Installed families such as IBM Plex Sans are supported;
+  see [font selection and measurement](fonts.md). Rich canvas/layout paragraphs
+  have explicit per-run fonts. General inheritance from arbitrary source
+  masters, mixed-format pod labels and text rotation remain unsupported. Negative geometry, duplicate IDs,
   pod collisions and text that cannot fit are errors.
 - The provided 12pt role and 14pt pod-title styles are proposed fixture dimensions.
   Original UHG43 uses smaller 9pt roles; these examples are not source-sized clones.
@@ -91,3 +103,9 @@ profiles. [Canvas elements and accents](canvas.md) support varied new layouts,
 pinned PNG/JPEG assets, measured whole-text emphasis, and bounded recovery of
 colleague text edits. The [showcase](../showcase/README.md) combines these paths
 into a proposal-style review deck.
+
+- [Fresh native font calibration](font-native-calibration.md): 393 validated
+  PowerPoint probes, v4 line allocation corrections, and the focused follow-up.
+
+- [Focused font results](font-native-focused-results.md): 45 additional controls
+  and successful native verification of the two-slide Go example.

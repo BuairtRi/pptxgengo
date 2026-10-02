@@ -45,6 +45,7 @@ side rule. A parent composition owns shared bands, separators, and dividers.
 
 These are measured layout primitives, not source-object transplant contracts.
 They support a single number/title/body row or value/label pair per card and use
-fixed Arial styles. No alternative typography, rich text, bullets, or per-field
-style tuning is exposed. Source-fitting and final native visual review remain
+`font_face` to select an installed family (Arial by default), with fixed
+point sizes/weights. Rich text, bullets, and per-field style tuning are not
+exposed. See [font support](fonts.md). Source-fitting and final native visual review remain
 necessary for production copy.

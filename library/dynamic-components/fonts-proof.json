@@ -1,0 +1,206 @@
+{
+  "schema": "pptxgengo.font-support-proof.v1",
+  "date": "2026-09-30",
+  "release_version": "0.1.0-local.5",
+  "scope": "Bounded font selection and measurement example; no general layout or font capacity claim.",
+  "supported_font_policy": "Explicit installed font families and requested regular/bold/italic styles; font names are not an allowlist.",
+  "native_example": {
+    "status": "verified",
+    "slides": 1,
+    "text_frames": 10,
+    "shapes": 12,
+    "font_instances": [
+      {
+        "family": "Arial",
+        "postscript_name": "Arial-BoldMT",
+        "style": "bold",
+        "path": "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+        "sha256": "d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0"
+      },
+      {
+        "family": "Arial",
+        "postscript_name": "ArialMT",
+        "style": "regular",
+        "path": "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "sha256": "525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9"
+      },
+      {
+        "family": "IBM Plex Sans",
+        "postscript_name": "IBMPlexSans-Bold",
+        "style": "bold",
+        "path": "/Users/rscott/Library/Fonts/IBMPlexSans-VariableFont_wdth,wght.ttf",
+        "sha256": "6e8034d686da3e4631e0f367303b40e2e0608d6aafd39fb3c6c58aa7ddf5d40a",
+        "variations": {
+          "2003265652": 700
+        }
+      },
+      {
+        "family": "IBM Plex Sans",
+        "postscript_name": "IBMPlexSans-BoldItalic",
+        "style": "bold_italic",
+        "path": "/Users/rscott/Library/Fonts/IBMPlexSans-Italic-VariableFont_wdth,wght.ttf",
+        "sha256": "591d5f618cc90cc4a88c5bfee754a7116903d5ea6aa73afcd1897fee8fb718fe",
+        "variations": {
+          "2003265652": 700
+        }
+      },
+      {
+        "family": "IBM Plex Sans",
+        "postscript_name": "IBMPlexSans-Italic",
+        "style": "italic",
+        "path": "/Users/rscott/Library/Fonts/IBMPlexSans-Italic-VariableFont_wdth,wght.ttf",
+        "sha256": "591d5f618cc90cc4a88c5bfee754a7116903d5ea6aa73afcd1897fee8fb718fe"
+      },
+      {
+        "family": "IBM Plex Sans",
+        "postscript_name": "IBMPlexSans-Regular",
+        "style": "regular",
+        "path": "/Users/rscott/Library/Fonts/IBMPlexSans-VariableFont_wdth,wght.ttf",
+        "sha256": "6e8034d686da3e4631e0f367303b40e2e0608d6aafd39fb3c6c58aa7ddf5d40a"
+      }
+    ],
+    "powerpoint_version": "16.113.3",
+    "powerpoint_build": "16.113.26092714",
+    "executable_sha256": "2efb260500fb0ad3842ce460c31f3f52b3b61583a4b1ee44271207f8d529ac99",
+    "adapter_sha256": "ec139fe46d24a7ff1cc93d4aa019847d3a45547b7af93d583834e7df8fba3029",
+    "inspector_sha256": "ce334676b60694117cde13c1f4ed2d4397797abf591290ae2fe8fe3a2173e5d1",
+    "styles": [
+      "regular",
+      "bold",
+      "italic",
+      "bold_italic"
+    ],
+    "mixed_families": [
+      "Arial",
+      "IBM Plex Sans"
+    ]
+  },
+  "checks": {
+    "go_test_all": "passed",
+    "all_five_adaptive_families_font_propagation": "passed",
+    "other_family_compilation": "IBM Plex Mono propagated to all adaptive text styles",
+    "other_family_resolution": [
+      "IBM Plex Mono regular/bold",
+      "Helvetica Neue regular"
+    ],
+    "missing_family_rejected": true,
+    "missing_style_rejected": "Arial Black italic",
+    "full_cache_reuse": {
+      "requests": 10,
+      "misses": 0
+    },
+    "partial_cache_reuse": {
+      "hits": 9,
+      "misses": 1,
+      "font_instances_retained": 6,
+      "remeasurement_and_build": "passed"
+    },
+    "staged_release_validation": {
+      "templates": 101,
+      "component_occurrences": 132,
+      "files": 4725
+    }
+  },
+  "visual_review": {
+    "status": "reviewed",
+    "method": "PowerPoint editor screenshot and exported PDF rendered at 1920x1080",
+    "findings": "Regular, bold, italic and bold italic are visually distinct; headings, wrapping and both cards are legible and fit without clipping."
+  },
+  "artifacts": [
+    {
+      "path": "library/dynamic-components/fonts.json",
+      "sha256": "f2a335a6467f4a1b3da347bb27c702dfbcf6a70b9e2eb59a6df2c77f50695691"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/release-probe/manifest.json",
+      "sha256": "fedbef14d8005bbcadf2003f4ad2d1a6f38d271780b54b8c74365a2114f3a260",
+      "original_capture_path": "samples/font-support-20260930/release-probe/manifest.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/release-probe/release-probe.pptx",
+      "sha256": "f484e9d65124083ab0316bbae5b2e8d1e67ab253165940b03b5ac9fc77c454f9",
+      "original_capture_path": "samples/font-support-20260930/release-probe/release-probe.pptx"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/release-evidence.json",
+      "sha256": "31c30f9ffd663ed20902f91bdc0ef480d144b687c25daf718d5ef79f1c704448",
+      "original_capture_path": "samples/font-support-20260930/release-evidence.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/release-output/manifest.json",
+      "sha256": "f291dbb51b30ac15495e7910458e6b95d2cda2e52be95c80b884c3993dc3a8d5",
+      "original_capture_path": "samples/font-support-20260930/release-output/manifest.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/release-output/release-output.pptx",
+      "sha256": "f98149afacc56d8617a32b51585101d10f552fa0bf2fa2df6b72518ae601f31b",
+      "original_capture_path": "samples/font-support-20260930/release-output/release-output.pptx"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/release-verification.json",
+      "sha256": "1d3d979e7afee43d61da3a3431e105e4c2dcdb3b985a2b0d36649fff1a8b4888",
+      "original_capture_path": "samples/font-support-20260930/release-verification.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/release-reuse/cache-report.json",
+      "sha256": "ca8945f14dbd6a268a8c089b8a1d3295022c007276bdc865b4371988145c23dc",
+      "original_capture_path": "samples/font-support-20260930/release-reuse/cache-report.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/probe/manifest.json",
+      "sha256": "caa9e2f14c5c8498759782c632c974641ca304c7e3dde864ba1e67099f693bc7",
+      "original_capture_path": "samples/font-support-20260930/probe/manifest.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/probe/probe.pptx",
+      "sha256": "c731182b3a645805ab73370ce7fea844d365e98cd226842266a241270ad3d67a",
+      "original_capture_path": "samples/font-support-20260930/probe/probe.pptx"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/evidence.json",
+      "sha256": "9158206dc187a25330697ab4e54efc558a4832da36a59a8770aa2c563d67cbbc",
+      "original_capture_path": "samples/font-support-20260930/evidence.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/partial-spec.json",
+      "sha256": "508b09f02c31df0494a3ce907db8b81d478de21286e9c4f08921731b9763387a",
+      "original_capture_path": "samples/font-support-20260930/partial-spec.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/partial-probe/manifest.json",
+      "sha256": "2ac14e81a8c0835aba3ada1d2b82221291460d0ffadd377f108a6f9458e47467",
+      "original_capture_path": "samples/font-support-20260930/partial-probe/manifest.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/partial-probe/partial-probe.pptx",
+      "sha256": "d343451b9bfdc8430fd8da4ad86730dd1be185ef94ba3a4a67fde17a52b521eb",
+      "original_capture_path": "samples/font-support-20260930/partial-probe/partial-probe.pptx"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/partial-evidence.json",
+      "sha256": "af8fc9390f7b8bfaf7cd1aadc4e54dd1f71130c5fc364e8b9c77700b37cdf0f9",
+      "original_capture_path": "samples/font-support-20260930/partial-evidence.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/partial-output/manifest.json",
+      "sha256": "9e3009f45b0c9e9a9d7a4d0c59dc02efceb4a644dbe484f81044092ef1e91eff",
+      "original_capture_path": "samples/font-support-20260930/partial-output/manifest.json"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/partial-output/partial-output.pptx",
+      "sha256": "27ae742407263b80a6ddc0fd4d5bc3569f02281c34020c7d52f9350297df6596",
+      "original_capture_path": "samples/font-support-20260930/partial-output/partial-output.pptx"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/font-example.pdf",
+      "sha256": "9db9af26f78691a49f0bfd64bbc83600c96dd9fec6e0aa3609feaede0740fcfd",
+      "original_capture_path": "samples/font-support-20260930/font-example.pdf"
+    },
+    {
+      "path": "library/dynamic-components/font-support-evidence/render/slide-001.png",
+      "sha256": "81ba978139bb294eb3c5ad2cbd2b83a7efcc00b71372e02a9c832cfebca47c4d",
+      "original_capture_path": "samples/font-support-20260930/render/slide-001.png"
+    }
+  ],
+  "evidence_storage": "Canonical evidence copied byte-for-byte to the versioned library; original capture paths are provenance only."
+}

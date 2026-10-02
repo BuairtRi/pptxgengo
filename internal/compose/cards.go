@@ -21,6 +21,7 @@ type CardSpec struct {
 	Label      string `json:"label,omitempty"`
 	Surface    string `json:"surface"`
 	Accent     string `json:"accent,omitempty"`
+	FontFace   string `json:"font_face,omitempty"`  // defaults to Arial
 	Foreground string `json:"foreground,omitempty"` // auto or explicit #RRGGBB
 }
 
@@ -85,6 +86,12 @@ func cardFields(c CardSpec) []struct{ role, text string } {
 }
 
 func effectiveCard(c CardSpec) (CardSpec, error) {
+	if c.FontFace == "" {
+		c.FontFace = "Arial"
+	}
+	if !ValidFontFace(c.FontFace) {
+		return c, fmt.Errorf("font_face requires an explicit font family")
+	}
 	if c.Profile == "" {
 		c.Profile = "light"
 	}
@@ -229,7 +236,7 @@ func cardProbes(s SlideSpec) ([]ProbeRequest, error) {
 			if err != nil {
 				return nil, fmt.Errorf("slide %s card %s foreground: %w", s.ID, c.ID, err)
 			}
-			out = append(out, ProbeRequest{ID: requestID(s.ID, "card", c.ID, f.role), SlideID: s.ID, RoleID: c.ID + ":" + f.role, Kind: "card_" + f.role, Text: f.text, TextWidthPt: r.Width - 2*ix, HorizontalInsetPt: ix, VerticalInsetPt: iy, FontFace: "Arial", FontSizePt: size, Bold: bold, Foreground: resolved, Background: bg, Align: align})
+			out = append(out, ProbeRequest{ID: requestID(s.ID, "card", c.ID, f.role), SlideID: s.ID, RoleID: c.ID + ":" + f.role, Kind: "card_" + f.role, Text: f.text, TextWidthPt: r.Width - 2*ix, HorizontalInsetPt: ix, VerticalInsetPt: iy, FontFace: c.FontFace, FontSizePt: size, Bold: bold, Foreground: resolved, Background: bg, Align: align})
 		}
 	}
 	return out, nil
@@ -268,7 +275,7 @@ func planCards(s SlideSpec, out *PlannedSlide, m Measurements) error {
 			if q.RenderedWidthPt > r.Width-2*ix+1e-6 || q.RenderedHeightPt > r.Height-2*iy+1e-6 {
 				return fmt.Errorf("slide %s card %s %s exceeds its fixed measured text area; enlarge the card or shorten copy", s.ID, c.ID, f.role)
 			}
-			p.Blocks = append(p.Blocks, PlannedCardBlock{Role: f.role, Text: f.text, Bounds: r, FontFace: "Arial", FontSizePt: size, Bold: bold, Foreground: fg, Align: align, HorizontalInsetPt: ix, VerticalInsetPt: iy, MeasurementID: id})
+			p.Blocks = append(p.Blocks, PlannedCardBlock{Role: f.role, Text: f.text, Bounds: r, FontFace: c.FontFace, FontSizePt: size, Bold: bold, Foreground: fg, Align: align, HorizontalInsetPt: ix, VerticalInsetPt: iy, MeasurementID: id})
 		}
 		out.Cards = append(out.Cards, p)
 	}

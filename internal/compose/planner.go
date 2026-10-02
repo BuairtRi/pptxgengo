@@ -451,8 +451,8 @@ func validateSpec(spec Spec) error {
 		if !positive(s.WidthPt) || !positive(s.HeightPt) {
 			return fmt.Errorf("slide %s dimensions must be positive finite points", s.ID)
 		}
-		if s.TitleFontFace != "Arial" || !positive(s.TitleFontSizePt) {
-			return fmt.Errorf("slide %s requires explicit Arial title font and positive point size", s.ID)
+		if !ValidFontFace(s.TitleFontFace) || !positive(s.TitleFontSizePt) {
+			return fmt.Errorf("slide %s requires an explicit title font family and positive point size", s.ID)
 		}
 		if strings.TrimSpace(s.Title) != "" {
 			if !validRect(s.TitleBounds) || !inside(s.TitleBounds, Rect{Width: s.WidthPt, Height: s.HeightPt}) {
@@ -493,8 +493,8 @@ func validateSpec(spec Spec) error {
 				return fmt.Errorf("slide %s pod %s has no usable title/content width after padding", s.ID, p.ID)
 			}
 			st := p.Style
-			if st.FontFace != "Arial" || st.TitleFontFace != "Arial" || !positive(st.FontSizePt) || !positive(st.TitleFontSizePt) || !positive(st.TileMinHeightPt) || !nonnegative(st.HorizontalInsetPt) || !nonnegative(st.VerticalInsetPt) || st.ParagraphGapPt != 0 {
-				return fmt.Errorf("slide %s pod %s requires explicit Arial styles, zero paragraph_gap_pt and valid tile dimensions", s.ID, p.ID)
+			if !ValidFontFace(st.FontFace) || !ValidFontFace(st.TitleFontFace) || !positive(st.FontSizePt) || !positive(st.TitleFontSizePt) || !positive(st.TileMinHeightPt) || !nonnegative(st.HorizontalInsetPt) || !nonnegative(st.VerticalInsetPt) || st.ParagraphGapPt != 0 {
+				return fmt.Errorf("slide %s pod %s requires explicit font families, zero paragraph_gap_pt and valid tile dimensions", s.ID, p.ID)
 			}
 			if tileWidth(p, 1)-2*st.HorizontalInsetPt <= 0 {
 				return fmt.Errorf("slide %s pod %s has no usable role text width", s.ID, p.ID)

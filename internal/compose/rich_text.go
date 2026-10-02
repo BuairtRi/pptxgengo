@@ -6,7 +6,7 @@ import (
 )
 
 // ParagraphSpec is one native PowerPoint paragraph. Rich paragraphs are
-// intentionally bounded to explicit Arial runs and point paragraph spacing.
+// intentionally bounded to explicit font families in runs and point paragraph spacing.
 type ParagraphSpec struct {
 	ID                  string      `json:"id"`
 	Align               string      `json:"align"` // left, center, right
@@ -101,8 +101,8 @@ func validateRichTextStructure(paragraphs []ParagraphSpec) error {
 				return fmt.Errorf("paragraph %s run IDs and text must be nonempty; IDs must be unique: %q", p.ID, r.ID)
 			}
 			runIDs[r.ID] = true
-			if r.FontFace != "Arial" || !positive(r.FontSizePt) {
-				return fmt.Errorf("paragraph %s run %s requires Arial and a positive font size", p.ID, r.ID)
+			if !ValidFontFace(r.FontFace) || !positive(r.FontSizePt) {
+				return fmt.Errorf("paragraph %s run %s requires an explicit font family and a positive font size", p.ID, r.ID)
 			}
 			for _, ch := range r.Text {
 				if ch == '\r' || ch == '\n' {

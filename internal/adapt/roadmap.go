@@ -70,8 +70,8 @@ func roadmapIntervalFill(style Style, intervals []roadmapInterval, index map[str
 	return "", false
 }
 
-func roadmapText(id, text string, r compose.Rect, fontSize float64, bold bool, fg, bg string) compose.CanvasSpec {
-	return compose.CanvasSpec{ID: id, Kind: "text", Bounds: r, Text: text, FontFace: "Arial", FontSizePt: fontSize, Bold: bold, Foreground: fg, Background: bg, InsetX: 3, InsetY: 2, Align: "left", Valign: "middle"}
+func roadmapText(fontFace, id, text string, r compose.Rect, fontSize float64, bold bool, fg, bg string) compose.CanvasSpec {
+	return compose.CanvasSpec{ID: id, Kind: "text", Bounds: r, Text: text, FontFace: fontFace, FontSizePt: fontSize, Bold: bold, Foreground: fg, Background: bg, InsetX: 3, InsetY: 2, Align: "left", Valign: "middle"}
 }
 
 func buildRoadmap(c Context, raw json.RawMessage) (Content, error) {
@@ -168,20 +168,20 @@ func buildRoadmap(c Context, raw json.RawMessage) (Content, error) {
 	}
 	content := Content{Controls: map[string]any{"period_count": len(in.Periods), "workstream_count": len(in.Workstreams), "group_count": groups, "source_vocabulary": []string{"T015 period grid and phase bands", "T039 swimlane milestones"}}, Limitations: []string{"Time labels and workstream copy require native text measurement and visual review.", "Milestone positions are tied to period IDs; this adapter does not infer dates or dependencies."}}
 	add := func(v compose.CanvasSpec) { content.Canvas = append(content.Canvas, v) }
-	add(roadmapText("roadmap-header-label", "WORKSTREAM / PHASE", compose.Rect{X: b.X, Y: b.Y, Width: labelW, Height: headerH}, c.Style.LabelFontPt, true, c.Style.Ink(c.Style.Navy), c.Style.Navy))
+	add(roadmapText(c.Style.FontFace, "roadmap-header-label", "WORKSTREAM / PHASE", compose.Rect{X: b.X, Y: b.Y, Width: labelW, Height: headerH}, c.Style.LabelFontPt, true, c.Style.Ink(c.Style.Navy), c.Style.Navy))
 	for i, p := range in.Periods {
 		x := b.X + labelW + float64(i)*periodW
 		bg := c.Style.Navy
 		if i%2 == 1 {
 			bg = c.Style.Active
 		}
-		add(roadmapText(fmt.Sprintf("roadmap-period-%02d", i), p.Label, compose.Rect{X: x, Y: b.Y, Width: periodW, Height: headerH}, c.Style.LabelFontPt, true, c.Style.Ink(bg), bg))
+		add(roadmapText(c.Style.FontFace, fmt.Sprintf("roadmap-period-%02d", i), p.Label, compose.Rect{X: x, Y: b.Y, Width: periodW, Height: headerH}, c.Style.LabelFontPt, true, c.Style.Ink(bg), bg))
 	}
 	y := b.Y + headerH
 	previousGroup = ""
 	for i, w := range in.Workstreams {
 		if w.Group != "" && w.Group != previousGroup {
-			add(roadmapText(fmt.Sprintf("roadmap-group-%02d", i), w.Group, compose.Rect{X: b.X, Y: y, Width: b.Width, Height: groupH}, c.Style.LabelFontPt, true, c.Style.Ink(c.Style.Secondary), c.Style.Secondary))
+			add(roadmapText(c.Style.FontFace, fmt.Sprintf("roadmap-group-%02d", i), w.Group, compose.Rect{X: b.X, Y: y, Width: b.Width, Height: groupH}, c.Style.LabelFontPt, true, c.Style.Ink(c.Style.Secondary), c.Style.Secondary))
 			y += groupH
 		}
 		previousGroup = w.Group
@@ -199,7 +199,7 @@ func buildRoadmap(c Context, raw json.RawMessage) (Content, error) {
 		labelBaseID := fmt.Sprintf("roadmap-row-%02d-base", i)
 		add(compose.CanvasSpec{ID: labelBaseID, Kind: "surface", Bounds: compose.Rect{X: b.X, Y: y, Width: labelW, Height: rowH}, Background: rowBG})
 		label := w.Label + "  ·  " + strings.ReplaceAll(w.Status, "_", " ")
-		labelSpec := roadmapText(fmt.Sprintf("roadmap-row-%02d-label", i), label, compose.Rect{X: b.X, Y: y, Width: labelW, Height: activityH}, c.Style.BodyFontPt, true, roadmapInk(c.Style, rowBG), rowBG)
+		labelSpec := roadmapText(c.Style.FontFace, fmt.Sprintf("roadmap-row-%02d-label", i), label, compose.Rect{X: b.X, Y: y, Width: labelW, Height: activityH}, c.Style.BodyFontPt, true, roadmapInk(c.Style, rowBG), rowBG)
 		labelSpec.AllowOverlap = []string{labelBaseID}
 		add(labelSpec)
 		barIDs := make(map[int]string, len(in.Periods))
@@ -286,7 +286,7 @@ func buildRoadmap(c Context, raw json.RawMessage) (Content, error) {
 			}
 			labelH := math.Min(42, rowH-activityH-1)
 			labelID := fmt.Sprintf("roadmap-milestone-label-%02d-%02d", i, j)
-			caption := roadmapText(labelID, m.Label, compose.Rect{X: captionX, Y: y + rowH - labelH - 1, Width: captionW, Height: labelH}, math.Min(c.Style.LabelFontPt, 10), false, roadmapInk(c.Style, rowBG), rowBG)
+			caption := roadmapText(c.Style.FontFace, labelID, m.Label, compose.Rect{X: captionX, Y: y + rowH - labelH - 1, Width: captionW, Height: labelH}, math.Min(c.Style.LabelFontPt, 10), false, roadmapInk(c.Style, rowBG), rowBG)
 			caption.Align = captionAlign
 			for period := range in.Periods {
 				cellX := b.X + labelW + float64(period)*periodW

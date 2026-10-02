@@ -55,7 +55,9 @@ roles and numeric values are synthetic capability examples.
 
 Style profiles are `neutral`, `subtle`, `inverse`. Explicit point sizes are
 `title_font_pt` (18–36), `body_font_pt` (9–18), `label_font_pt` (9–18). These are
-input ranges, not capacity guarantees. Current native text support is Arial.
+input ranges, not capacity guarantees. Use `font_face` for any installed explicit family, for example `IBM Plex Sans`.
+Arial remains the default. Native measurement checks family/style availability
+and fingerprints the selected font files; see [font support](../../library/dynamic-components/fonts.md).
 The compiler never reduces a font size automatically to hide overflow.
 
 `style.colors` accepts semantic roles: `text.primary`, `text.secondary`,

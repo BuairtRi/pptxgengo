@@ -152,7 +152,7 @@ func buildTeam(c Context, raw json.RawMessage) (Content, error) {
 			}
 			rolesOut[j] = compose.RoleSpec{ID: r.ID, Label: r.Label, Background: bg, Foreground: "auto"}
 		}
-		out.Pods = append(out.Pods, compose.PodSpec{ID: p.ID, Title: p.Title, Bounds: compose.PodBounds{X: x, Y: y, Width: podW, MaxHeightPt: podH}, Layout: compose.LayoutSpec{Columns: 1, GapPt: 4, PaddingPt: 7, TitleGapPt: 5, MinTileWidthPt: podW - 16}, Style: compose.PodStyle{FontFace: "Arial", FontSizePt: fs, Bold: false, TitleFontFace: "Arial", TitleFontSizePt: podTitleFS, TitleBold: true, TileMinHeightPt: 22, HorizontalInsetPt: 5, VerticalInsetPt: 3, ParagraphGapPt: 0, Surface: surface, Foreground: st.Ink(surface), TitleForeground: st.Ink(surface)}, Roles: rolesOut})
+		out.Pods = append(out.Pods, compose.PodSpec{ID: p.ID, Title: p.Title, Bounds: compose.PodBounds{X: x, Y: y, Width: podW, MaxHeightPt: podH}, Layout: compose.LayoutSpec{Columns: 1, GapPt: 4, PaddingPt: 7, TitleGapPt: 5, MinTileWidthPt: podW - 16}, Style: compose.PodStyle{FontFace: st.FontFace, FontSizePt: fs, Bold: false, TitleFontFace: st.FontFace, TitleFontSizePt: podTitleFS, TitleBold: true, TileMinHeightPt: 22, HorizontalInsetPt: 5, VerticalInsetPt: 3, ParagraphGapPt: 0, Surface: surface, Foreground: st.Ink(surface), TitleForeground: st.Ink(surface)}, Roles: rolesOut})
 	}
 	for i, r := range in.ReportingLines {
 		from, to := positions[r.From], positions[r.To]
@@ -178,7 +178,7 @@ func buildTeam(c Context, raw json.RawMessage) (Content, error) {
 		}
 		cells := make([]compose.CellSpec, 0, nrow*ncol)
 		for col, label := range append([]string{"RESPONSIBILITY"}, m.Columns...) {
-			cells = append(cells, compose.CellSpec{ID: fmt.Sprintf("head-%d", col), Row: 0, Column: col, Padding: compose.Insets{Top: 2, Bottom: 2, Left: 4, Right: 4}, Background: titleColor, Valign: "middle", Blocks: []compose.BlockSpec{{ID: "label", Text: label, FontFace: "Arial", FontSizePt: styleSize(st.LabelFontPt, 9), Bold: true, Foreground: "#FFFFFF", Align: "left", Valign: "middle"}}})
+			cells = append(cells, compose.CellSpec{ID: fmt.Sprintf("head-%d", col), Row: 0, Column: col, Padding: compose.Insets{Top: 2, Bottom: 2, Left: 4, Right: 4}, Background: titleColor, Valign: "middle", Blocks: []compose.BlockSpec{{ID: "label", Text: label, FontFace: st.FontFace, FontSizePt: styleSize(st.LabelFontPt, 9), Bold: true, Foreground: "#FFFFFF", Align: "left", Valign: "middle"}}})
 		}
 		for ri, r := range m.Rows {
 			vals := append([]string{r.Label}, r.Values...)
@@ -187,7 +187,7 @@ func buildTeam(c Context, raw json.RawMessage) (Content, error) {
 				if (ri+ci)%2 == 1 {
 					bg = muted
 				}
-				cells = append(cells, compose.CellSpec{ID: fmt.Sprintf("row-%d-col-%d", ri, ci), Row: ri + 1, Column: ci, Padding: compose.Insets{Top: 2, Bottom: 2, Left: 4, Right: 4}, Background: bg, Valign: "middle", Blocks: []compose.BlockSpec{{ID: "value", Text: v, FontFace: "Arial", FontSizePt: styleSize(st.LabelFontPt, 9), Bold: ci == 0, Foreground: st.Ink(bg), Align: "left", Valign: "middle"}}})
+				cells = append(cells, compose.CellSpec{ID: fmt.Sprintf("row-%d-col-%d", ri, ci), Row: ri + 1, Column: ci, Padding: compose.Insets{Top: 2, Bottom: 2, Left: 4, Right: 4}, Background: bg, Valign: "middle", Blocks: []compose.BlockSpec{{ID: "value", Text: v, FontFace: st.FontFace, FontSizePt: styleSize(st.LabelFontPt, 9), Bold: ci == 0, Foreground: st.Ink(bg), Align: "left", Valign: "middle"}}})
 			}
 		}
 		matrixY := b.Y + podsH + 8
@@ -197,7 +197,7 @@ func buildTeam(c Context, raw json.RawMessage) (Content, error) {
 		out.Layouts = append(out.Layouts, compose.ContainerSpec{ID: "responsibility-matrix", Bounds: compose.Rect{X: matrixX, Y: matrixY, Width: matrixW, Height: matrixH}, Padding: compose.Insets{Top: 1, Bottom: 1, Left: 1, Right: 1}, Columns: cols, Rows: rs, ColumnGapPt: 1, RowGapPt: 1, Layer: 0, Cells: cells})
 	}
 	if staffUsed {
-		out.Legend = &compose.LegendSpec{Bounds: compose.Rect{X: b.X, Y: b.Y + b.Height - 19, Width: b.Width, Height: 17}, FontFace: "Arial", FontSizePt: 8.5, Bold: true, Foreground: st.Ink(st.White), SwatchSizePt: 8, GapPt: 4, ItemGapPt: 14}
+		out.Legend = &compose.LegendSpec{Bounds: compose.Rect{X: b.X, Y: b.Y + b.Height - 19, Width: b.Width, Height: 17}, FontFace: st.FontFace, FontSizePt: 8.5, Bold: true, Foreground: st.Ink(st.White), SwatchSizePt: 8, GapPt: 4, ItemGapPt: 14}
 	}
 	return out, nil
 }

@@ -1,0 +1,190 @@
+{
+  "schema": "pptxgengo.font-wrap-calibration.v1",
+  "date": "2026-09-30",
+  "engine": "go-text-prototype.v2",
+  "status": "shared_advance_calibration_implemented_with_two_recorded_boundary_differences",
+  "sets": [
+    {
+      "name": "frozen",
+      "case_count": 276,
+      "before_matches": 252,
+      "after_matches": 275,
+      "regression_count": 0,
+      "font_provenance_matches": true,
+      "groups": [
+        {
+          "family": "IBM Plex Sans",
+          "case_count": 92,
+          "line_break_match_count": 91,
+          "unexpected_font_cases": 0,
+          "max_absolute_width_delta_pt": 35.78000652800006,
+          "max_absolute_pdf_height_delta_pt": 25.797502080000015,
+          "go_height_underprediction_count": 7
+        },
+        {
+          "family": "IBM Plex Mono",
+          "case_count": 92,
+          "line_break_match_count": 92,
+          "unexpected_font_cases": 0,
+          "max_absolute_width_delta_pt": 1.593235542239995,
+          "max_absolute_pdf_height_delta_pt": 31.504989999999907,
+          "go_height_underprediction_count": 8
+        },
+        {
+          "family": "Arial",
+          "case_count": 92,
+          "line_break_match_count": 92,
+          "unexpected_font_cases": 0,
+          "max_absolute_width_delta_pt": 1.4193599703999666,
+          "max_absolute_pdf_height_delta_pt": 21.506751787200017,
+          "go_height_underprediction_count": 20
+        }
+      ],
+      "remaining_differences": [
+        {
+          "case_id": "plex-sans-boundary-16.5-regular-plus-0",
+          "go_lines": [
+            "A clear typography plan"
+          ],
+          "native_lines": [
+            "A clear typography",
+            "plan"
+          ],
+          "boundary_warnings": [
+            {
+              "line_index": 0,
+              "clearance_pt": 0.078125,
+              "review_band_pt": 1.4375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "heldout",
+      "case_count": 117,
+      "before_matches": 89,
+      "after_matches": 116,
+      "regression_count": 0,
+      "font_provenance_matches": true,
+      "groups": [
+        {
+          "family": "IBM Plex Sans",
+          "case_count": 39,
+          "line_break_match_count": 39,
+          "unexpected_font_cases": 0,
+          "max_absolute_width_delta_pt": 0.8387610207998932,
+          "max_absolute_pdf_height_delta_pt": 11.182500400000038,
+          "go_height_underprediction_count": 0
+        },
+        {
+          "family": "IBM Plex Mono",
+          "case_count": 39,
+          "line_break_match_count": 39,
+          "unexpected_font_cases": 0,
+          "max_absolute_width_delta_pt": 0.9718605760001537,
+          "max_absolute_pdf_height_delta_pt": 11.182500400000038,
+          "go_height_underprediction_count": 0
+        },
+        {
+          "family": "Arial",
+          "case_count": 39,
+          "line_break_match_count": 38,
+          "unexpected_font_cases": 0,
+          "max_absolute_width_delta_pt": 65.12686784560003,
+          "max_absolute_pdf_height_delta_pt": 30.11136606399998,
+          "go_height_underprediction_count": 17
+        }
+      ],
+      "remaining_differences": [
+        {
+          "case_id": "arial-heldout-26-regular-boundary-0.2",
+          "go_lines": [
+            "Roadmap AV office 2027"
+          ],
+          "native_lines": [
+            "Roadmap AV office",
+            "2027"
+          ],
+          "boundary_warnings": [
+            {
+              "line_index": 0,
+              "clearance_pt": 0.19999999999998863,
+              "review_band_pt": 1.375
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "combined_before": 341,
+  "combined_after": 391,
+  "combined_case_count": 393,
+  "advance_policy": "Shape at 64x scale; round each glyph advance to nearest 1/8 pt before wrapping; font line metrics are unchanged.",
+  "boundary_warning_policy": "Flag clearance no greater than glyph count times 1/16 pt. This is a review heuristic and does not qualify native fit or change line breaks.",
+  "native_capture": {
+    "application": "Microsoft PowerPoint",
+    "version": "16.113.3",
+    "method": "UI local PDF export, Best for printing",
+    "heldout_pages": 117,
+    "probe_unchanged_after_capture": true,
+    "textrange_measurements": false
+  },
+  "no_family_specific_rules": true,
+  "baseline_hashes_unchanged": true,
+  "unit_tests_run": false,
+  "checks": "Source binary compiled; both corpora measured and compared; source, PDF, fonts and probe hashes checked; all case text preserved; remaining differences have boundary warnings; fit-report warning counts checked.",
+  "original_binary_sha256": "3b833a8ae97e7be171c0315643a6f5490c8f54255ee3a02b418a474740bf2251",
+  "candidate_binary_sha256": "bd65ebde47433d696c6ab424794c10e3a3fa13d509d0051caa9bfd4ac3dd9cd2",
+  "source_sha256": {
+    "internal/textlayout/layout.go": "3d96e67a708b962bac4e4048b3eb00febd134a1a205adaf8f30699a25ee796f1",
+    "cmd/pptxcompose/go_layout.go": "2f75fee84232c0a1eccd474e70bc37515d24d5f13424a89a031bb580e5c7d50c",
+    "scripts/font-layout-reference.py": "dcc6c94b4fb8640e46588b6875c7b585da75121b089a21cf637bc20edc8ecfa4"
+  },
+  "artifacts": {
+    "calibrated-fit.json": "0ac94870f333a6891111601bf3a142f1b9f84aa6225b33b5d121fcff8c2679b1",
+    "comparison-calibrated.json": "10a44f880493bec8768745a708f1626e56749bcc48a1f97a74a3a596b18a3d31",
+    "comparison-calibrated.md": "6c27a07fc1bb28e3a8aff41001e052a316767b8690678527cd61fcd165aeea06",
+    "calibrated-go.json": "18a5c6e782ad82ada461782f596398ddc8b31232d01daa9883c48ede5cf6cc75",
+    "comparison-final.json": "10a44f880493bec8768745a708f1626e56749bcc48a1f97a74a3a596b18a3d31",
+    "comparison-final.md": "6e970d5ba60e762651f25b852e9c149bd0ba6e600883786e70464cc4a2c54115",
+    "heldout/heldout-native.pdf": "7e9ae5e869e364c65d586850c2d7ad51550c75d9146c50d83d60862522c80ec9",
+    "heldout/corpus.json": "9dcf7d261eece7648c0e2ae91029ae7746c57acc751ee62debcc9cbaaa65730e",
+    "heldout/reference-set.json": "1be4afc33689205bad3bba850b5029337f15e25c5301283f876f99924c30cae0",
+    "heldout/comparison-calibrated.json": "caa7ee12e6c1a85ca899c84ad5693ffca9f16ab2e5326acd58ea864aa0de4d49",
+    "heldout/font-reference-probes.pptx": "e4aa56d3a953f7317369dc5271fa18b4cc9beda13730705c0a1c2073feebbe1d",
+    "heldout/cases.json": "94eadd8982c5c0c321895ba4f053508c0f3fed7adb29e04074653aca91f06235",
+    "heldout/native-measurements.json": "1ac15c30773109a012a210ba23c2384661667d26b45820a98c76f266285f58ab",
+    "heldout/manifest.json": "59f13b46fd3a1cfe6adfeaa08bc32d8216e657dda16596f77fcac5be9ed5734d",
+    "heldout/calibrated-go.json": "09fb724715baf382334e08a1c2d66a0000dde269754f4c0af9e8e3b737b50abc",
+    "heldout/original-go.json": "d5ea9532b2c06602c0e1cc070f06012eca77dd13f504932ecf5e376fd3a0014c",
+    "heldout/comparison-original.json": "d5ec8abadd3edd60bfc02868d364b32ce3d6136f864e71a1b97069bbb10832f7",
+    "heldout/go-measurements.json": "dc40ccdbcb2228faf24f41e23e73f3f0288df879245208bbe4ea046f534ac33c",
+    "heldout/comparison-final.json": "caa7ee12e6c1a85ca899c84ad5693ffca9f16ab2e5326acd58ea864aa0de4d49",
+    "heldout/comparison-final.md": "b865f76045606eb0adec6efcd8561b85c0b64010a31081c9c0b57d54d4777a45"
+  },
+  "limitations": [
+    "Evidence covers this PowerPoint version and three Latin font families, rather than arbitrary-font native parity.",
+    "Two narrow-boundary cases remain; both predict one line where PowerPoint renders two.",
+    "PDF geometry remains distinct from native TextRange geometry; height calibration remains pending.",
+    "Glyph boundary warnings are a triage heuristic, rather than a universal PowerPoint error bound.",
+    "The Go engine remains opt-in and reports powerpoint_verified=false."
+  ],
+  "final_comparisons": [
+    "comparison-final.json",
+    "heldout/comparison-final.json"
+  ],
+  "supersedes": [
+    "comparison-calibrated.json",
+    "comparison-calibrated.md",
+    "heldout/comparison-calibrated.json"
+  ],
+  "superseded_reason": "Final reports add the archived dataset replay and corrected candidate report wording; measurements and line-match counts are unchanged.",
+  "prototype_build": {
+    "bundle": "samples/font-wrap-calibration-20260930/prototype-build",
+    "pptx_sha256": "8feb68261378614b7659e57588a4452271489b5487ba3e1480dbfe5831a67200",
+    "manifest_sha256": "2742195206c1c33d681c97e4acfff7e8d249b35aab422623c842ecadb82c36db",
+    "engine": "go-text-prototype.v2",
+    "powerpoint_verified": false
+  }
+}

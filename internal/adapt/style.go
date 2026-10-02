@@ -5,6 +5,8 @@ import (
 	"math"
 	"strconv"
 	"strings"
+
+	"github.com/buairtri/pptxgengo/internal/compose"
 )
 
 func ResolveStyle(o StyleOptions) (Style, error) {
@@ -24,8 +26,11 @@ func ResolveStyle(o StyleOptions) (Style, error) {
 	default:
 		return s, fmt.Errorf("unknown style profile %q", s.Profile)
 	}
-	if o.FontFace != "" && o.FontFace != "Arial" {
-		return s, fmt.Errorf("font_face %q unsupported: native measurement currently supports Arial", o.FontFace)
+	if o.FontFace != "" {
+		if !compose.ValidFontFace(o.FontFace) {
+			return s, fmt.Errorf("font_face %q requires an explicit font family", o.FontFace)
+		}
+		s.FontFace = o.FontFace
 	}
 	for _, x := range []struct {
 		v        float64

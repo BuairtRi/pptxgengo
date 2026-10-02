@@ -1,0 +1,1787 @@
+{
+  "schema": "pptxgengo.go-layout.v1",
+  "engine": "go-text-prototype.v4",
+  "library": "github.com/go-text/typesetting@v0.3.5",
+  "spec_sha256": "ba7216b7b55f8ad631f45e8a0619fe1cb8ce61292189d26704e3304394b87422",
+  "powerpoint_verified": false,
+  "height_policy": "1.2 em line allocation scaled by line-spacing multiple; character boxes include paragraph spacing before/after between paragraphs; expanded terminal allocation is a conservative estimate requiring native review; baseline retains 75% extra leading above; nonblank box union excludes trailing blanks and final paragraph spacing; ink bounds are diagnostic",
+  "advance_policy": "shaped glyph advances rounded to nearest 1/8 pt before wrapping",
+  "fonts": [
+    {
+      "family": "Arial",
+      "style": "bold",
+      "file": "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+      "face_index": 0,
+      "sha256": "d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0",
+      "weight": 700,
+      "subfamily": "Bold"
+    },
+    {
+      "family": "Arial",
+      "style": "italic",
+      "file": "/System/Library/Fonts/Supplemental/Arial Italic.ttf",
+      "face_index": 0,
+      "sha256": "ce1d2f1ab89db45f9796100eee960f5702a40e84c225c2b48c3ec3e81d153f98",
+      "weight": 400,
+      "subfamily": "Italic"
+    },
+    {
+      "family": "Arial",
+      "style": "regular",
+      "file": "/System/Library/Fonts/Supplemental/Arial.ttf",
+      "face_index": 0,
+      "sha256": "525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9",
+      "weight": 400,
+      "subfamily": "Regular"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "style": "bold",
+      "file": "/Users/rscott/Library/Fonts/IBMPlexMono-Bold.ttf",
+      "face_index": 0,
+      "sha256": "dbd2a2fb024579438d6400a84e57579bfd2dbe67c306c8fd9fde92a61e4f2eea",
+      "weight": 700,
+      "subfamily": "Bold"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "style": "italic",
+      "file": "/Users/rscott/Library/Fonts/IBMPlexMono-Italic.ttf",
+      "face_index": 0,
+      "sha256": "359ada4ec72185c9dde7841675a585e9fe6dcb272be526c11ff370aee4198fb8",
+      "weight": 400,
+      "subfamily": "Italic"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "style": "regular",
+      "file": "/Users/rscott/Library/Fonts/IBMPlexMono-Regular.ttf",
+      "face_index": 0,
+      "sha256": "ab08018ccd276b79fb2c636bb95b9c543598f9d50505fe92506fcb4dae7810cd",
+      "weight": 400,
+      "subfamily": "Regular"
+    },
+    {
+      "family": "IBM Plex Sans",
+      "style": "bold",
+      "file": "/Users/rscott/Library/Fonts/IBMPlexSans-VariableFont_wdth,wght.ttf",
+      "face_index": 0,
+      "sha256": "6e8034d686da3e4631e0f367303b40e2e0608d6aafd39fb3c6c58aa7ddf5d40a",
+      "axes": {
+        "wdth": 100,
+        "wght": 700
+      },
+      "weight": 700,
+      "subfamily": "Regular"
+    },
+    {
+      "family": "IBM Plex Sans",
+      "style": "italic",
+      "file": "/Users/rscott/Library/Fonts/IBMPlexSans-Italic-VariableFont_wdth,wght.ttf",
+      "face_index": 0,
+      "sha256": "591d5f618cc90cc4a88c5bfee754a7116903d5ea6aa73afcd1897fee8fb718fe",
+      "axes": {
+        "wdth": 100,
+        "wght": 400
+      },
+      "weight": 400,
+      "subfamily": "Italic"
+    },
+    {
+      "family": "IBM Plex Sans",
+      "style": "regular",
+      "file": "/Users/rscott/Library/Fonts/IBMPlexSans-VariableFont_wdth,wght.ttf",
+      "face_index": 0,
+      "sha256": "6e8034d686da3e4631e0f367303b40e2e0608d6aafd39fb3c6c58aa7ddf5d40a",
+      "axes": {
+        "wdth": 100,
+        "wght": 400
+      },
+      "weight": 400,
+      "subfamily": "Regular"
+    }
+  ],
+  "warnings": [
+    "request measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xLjE1IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC13cmFwcGVkLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC13cmFwcGVkLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC1zaW5nbGUtMjQtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC1ib2xkLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC1pdGFsaWMtMTYtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC10ZXJtaW5hbC1hZnRlci02IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC1wYXJhZ3JhcGgtYWZ0ZXItb25seSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJhcmlhbC1wYXJhZ3JhcGgtYmVmb3JlLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtd3JhcHBlZC0xNi1zcGFjaW5nLTEuMTUiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtd3JhcHBlZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtc2luZ2xlLTI0LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtYm9sZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtaXRhbGljLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtdGVybWluYWwtYWZ0ZXItNiIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtcGFyYWdyYXBoLWFmdGVyLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtcGFyYWdyYXBoLWJlZm9yZS1vbmx5IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8td3JhcHBlZC0xNi1zcGFjaW5nLTEuMTUiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8td3JhcHBlZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8tc2luZ2xlLTI0LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8tYm9sZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8taXRhbGljLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8tdGVybWluYWwtYWZ0ZXItNiIsImNhbnZhcyIsInNhbXBsZSJd: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8tcGFyYWdyYXBoLWFmdGVyLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LW1vbm8tcGFyYWdyYXBoLWJlZm9yZS1vbmx5IiwiY2FudmFzIiwic2FtcGxlIl0: nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review",
+    "request measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjU1IiwiY2FudmFzIiwic2FtcGxlIl0 line 1 is near a wrap boundary (0.0500 pt clearance, 1.4375 pt review band); native wrapping may differ",
+    "request measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjYiLCJjYW52YXMiLCJzYW1wbGUiXQ line 1 is near a wrap boundary (0.1000 pt clearance, 1.4375 pt review band); native wrapping may differ",
+    "request measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjYyNSIsImNhbnZhcyIsInNhbXBsZSJd line 1 is near a wrap boundary (0.1250 pt clearance, 1.4375 pt review band); native wrapping may differ",
+    "request measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjY1IiwiY2FudmFzIiwic2FtcGxlIl0 line 1 is near a wrap boundary (0.1500 pt clearance, 1.4375 pt review band); native wrapping may differ",
+    "request measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjciLCJjYW52YXMiLCJzYW1wbGUiXQ line 1 is near a wrap boundary (0.2000 pt clearance, 1.4375 pt review band); native wrapping may differ",
+    "request measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuNzUiLCJjYW52YXMiLCJzYW1wbGUiXQ line 1 is near a wrap boundary (0.1250 pt clearance, 1.3750 pt review band); native wrapping may differ",
+    "request measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuOCIsImNhbnZhcyIsInNhbXBsZSJd line 1 is near a wrap boundary (0.1750 pt clearance, 1.3750 pt review band); native wrapping may differ",
+    "request measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuODI1IiwiY2FudmFzIiwic2FtcGxlIl0 line 1 is near a wrap boundary (0.2000 pt clearance, 1.3750 pt review band); native wrapping may differ",
+    "request measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuODUiLCJjYW52YXMiLCJzYW1wbGUiXQ line 1 is near a wrap boundary (0.2250 pt clearance, 1.3750 pt review band); native wrapping may differ",
+    "request measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuOSIsImNhbnZhcyIsInNhbXBsZSJd line 1 is near a wrap boundary (0.2750 pt clearance, 1.3750 pt review band); native wrapping may differ"
+  ],
+  "measurements": {
+    "by_request_id": {
+      "measure:WyJhcmlhbC10ZXJtaW5hbC1hZnRlci02IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "offset_x_pt": -0.03125,
+        "rendered_width_pt": 148.65625,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJhcmlhbC13cmFwcGVkLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 152.875,
+        "rendered_height_pt": 57.599999999999994
+      },
+      "measure:WyJhcmlhbC13cmFwcGVkLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 152.875,
+        "rendered_height_pt": 44.16
+      },
+      "measure:WyJhcmlhbC1ib2xkLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 161.125,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuNzUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 285.625,
+        "rendered_height_pt": 31.2
+      },
+      "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuOCIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 285.625,
+        "rendered_height_pt": 31.2
+      },
+      "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuODI1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 285.625,
+        "rendered_height_pt": 31.2
+      },
+      "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuODUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 285.625,
+        "rendered_height_pt": 31.2
+      },
+      "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuOSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 285.625,
+        "rendered_height_pt": 31.2
+      },
+      "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0zMzAiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 285.625,
+        "rendered_height_pt": 31.2
+      },
+      "measure:WyJhcmlhbC1pdGFsaWMtMTYtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "offset_x_pt": -0.328125,
+        "rendered_width_pt": 149.875,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJhcmlhbC1wYXJhZ3JhcGgtYWZ0ZXItb25seSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 136,
+        "rendered_height_pt": 65.6
+      },
+      "measure:WyJhcmlhbC1wYXJhZ3JhcGgtYmVmb3JlLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 136,
+        "rendered_height_pt": 61.599999999999994
+      },
+      "measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xIiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "offset_x_pt": -0.03125,
+        "rendered_width_pt": 148.65625,
+        "rendered_height_pt": 19.2
+      },
+      "measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xLjE1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "offset_x_pt": -0.03125,
+        "rendered_width_pt": 148.65625,
+        "rendered_height_pt": 22.08
+      },
+      "measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "offset_x_pt": -0.03125,
+        "rendered_width_pt": 148.65625,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJhcmlhbC1zaW5nbGUtMjQtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "offset_x_pt": -0.03125,
+        "rendered_width_pt": 223.53125,
+        "rendered_height_pt": 43.199999999999996
+      },
+      "measure:WyJwbGV4LW1vbm8tYm9sZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 211.75,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJwbGV4LW1vbm8taXRhbGljLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "offset_x_pt": -0.140625,
+        "rendered_width_pt": 211.890625,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 211.75,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 211.75,
+        "rendered_height_pt": 22.08
+      },
+      "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 211.75,
+        "rendered_height_pt": 19.2
+      },
+      "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTI0LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 316.25,
+        "rendered_height_pt": 43.199999999999996
+      },
+      "measure:WyJwbGV4LW1vbm8tcGFyYWdyYXBoLWFmdGVyLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 163.625,
+        "rendered_height_pt": 65.6
+      },
+      "measure:WyJwbGV4LW1vbm8tcGFyYWdyYXBoLWJlZm9yZS1vbmx5IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 163.625,
+        "rendered_height_pt": 61.599999999999994
+      },
+      "measure:WyJwbGV4LW1vbm8td3JhcHBlZC0xNi1zcGFjaW5nLTEuMTUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 154,
+        "rendered_height_pt": 66.24
+      },
+      "measure:WyJwbGV4LW1vbm8td3JhcHBlZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 154,
+        "rendered_height_pt": 86.39999999999999
+      },
+      "measure:WyJwbGV4LW1vbm8tdGVybWluYWwtYWZ0ZXItNiIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 211.75,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjU1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 174.5,
+        "rendered_height_pt": 19.8
+      },
+      "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjY1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 174.5,
+        "rendered_height_pt": 19.8
+      },
+      "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjYiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 174.5,
+        "rendered_height_pt": 19.8
+      },
+      "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjYyNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 174.5,
+        "rendered_height_pt": 19.8
+      },
+      "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjciLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 174.5,
+        "rendered_height_pt": 19.8
+      },
+      "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMjIwIiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 174.5,
+        "rendered_height_pt": 19.8
+      },
+      "measure:WyJwbGV4LXNhbnMtYm9sZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 161.25,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJwbGV4LXNhbnMtaXRhbGljLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "offset_x_pt": -0.4375,
+        "rendered_width_pt": 150.8125,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 153.75,
+        "rendered_height_pt": 28.799999999999997
+      },
+      "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 153.75,
+        "rendered_height_pt": 22.08
+      },
+      "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 153.75,
+        "rendered_height_pt": 19.2
+      },
+      "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTI0LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 229.875,
+        "rendered_height_pt": 43.199999999999996
+      },
+      "measure:WyJwbGV4LXNhbnMtcGFyYWdyYXBoLWFmdGVyLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 134.625,
+        "rendered_height_pt": 65.6
+      },
+      "measure:WyJwbGV4LXNhbnMtcGFyYWdyYXBoLWJlZm9yZS1vbmx5IiwiY2FudmFzIiwic2FtcGxlIl0": {
+        "rendered_width_pt": 134.625,
+        "rendered_height_pt": 61.599999999999994
+      },
+      "measure:WyJwbGV4LXNhbnMtd3JhcHBlZC0xNi1zcGFjaW5nLTEuMTUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+        "rendered_width_pt": 155.375,
+        "rendered_height_pt": 44.16
+      },
+      "measure:WyJwbGV4LXNhbnMtd3JhcHBlZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 155.375,
+        "rendered_height_pt": 57.599999999999994
+      },
+      "measure:WyJwbGV4LXNhbnMtdGVybWluYWwtYWZ0ZXItNiIsImNhbnZhcyIsInNhbXBsZSJd": {
+        "rendered_width_pt": 153.75,
+        "rendered_height_pt": 28.799999999999997
+      }
+    }
+  },
+  "requests": {
+    "measure:WyJhcmlhbC10ZXJtaW5hbC1hZnRlci02IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 148.625,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": -0.03125,
+            "y": 9.943749999999998,
+            "width": 147.953125,
+            "height": 15.03125
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC13cmFwcGVkLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Clear type makes ",
+          "start_rune": 0,
+          "end_rune": 17,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 124.5,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.796875,
+            "y": 9.943749999999998,
+            "width": 123.09375,
+            "height": 15.03125
+          }
+        },
+        {
+          "text": "ideas easier to follow.",
+          "start_rune": 17,
+          "end_rune": 40,
+          "x_pt": 0,
+          "y_pt": 28.799999999999997,
+          "advance_pt": 152.875,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 50.39999999999999,
+          "ink_bounds": {
+            "x": 1.0625,
+            "y": 38.74374999999999,
+            "width": 150.375,
+            "height": 11.84375
+          }
+        }
+      ],
+      "glyph_count": 40,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC13cmFwcGVkLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Clear type makes ",
+          "start_rune": 0,
+          "end_rune": 17,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 124.5,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 16.56,
+          "ink_bounds": {
+            "x": 0.796875,
+            "y": 4.903749999999999,
+            "width": 123.09375,
+            "height": 15.03125
+          }
+        },
+        {
+          "text": "ideas easier to follow.",
+          "start_rune": 17,
+          "end_rune": 40,
+          "x_pt": 0,
+          "y_pt": 22.08,
+          "advance_pt": 152.875,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 38.64,
+          "ink_bounds": {
+            "x": 1.0625,
+            "y": 26.98375,
+            "width": 150.375,
+            "height": 11.84375
+          }
+        }
+      ],
+      "glyph_count": 40,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC1ib2xkLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 161.125,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0,
+            "y": 9.943749999999998,
+            "width": 160.46875,
+            "height": 15.03125
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuNzUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Roadmap AV office 2027",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 285.625,
+          "height_pt": 31.2,
+          "layout_advance_pt": 31.2,
+          "max_font_size_pt": 26,
+          "baseline_pt": 23.400000000000002,
+          "ink_bounds": {
+            "x": 2.046875,
+            "y": 4.478125000000002,
+            "width": 282.359375,
+            "height": 24.09375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.125,
+          "review_band_pt": 1.375
+        }
+      ]
+    },
+    "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuOCIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Roadmap AV office 2027",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 285.625,
+          "height_pt": 31.2,
+          "layout_advance_pt": 31.2,
+          "max_font_size_pt": 26,
+          "baseline_pt": 23.400000000000002,
+          "ink_bounds": {
+            "x": 2.046875,
+            "y": 4.478125000000002,
+            "width": 282.359375,
+            "height": 24.09375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.17500000000001137,
+          "review_band_pt": 1.375
+        }
+      ]
+    },
+    "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuODI1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Roadmap AV office 2027",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 285.625,
+          "height_pt": 31.2,
+          "layout_advance_pt": 31.2,
+          "max_font_size_pt": 26,
+          "baseline_pt": 23.400000000000002,
+          "ink_bounds": {
+            "x": 2.046875,
+            "y": 4.478125000000002,
+            "width": 282.359375,
+            "height": 24.09375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.19999999999998863,
+          "review_band_pt": 1.375
+        }
+      ]
+    },
+    "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuODUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Roadmap AV office 2027",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 285.625,
+          "height_pt": 31.2,
+          "layout_advance_pt": 31.2,
+          "max_font_size_pt": 26,
+          "baseline_pt": 23.400000000000002,
+          "ink_bounds": {
+            "x": 2.046875,
+            "y": 4.478125000000002,
+            "width": 282.359375,
+            "height": 24.09375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.22500000000002274,
+          "review_band_pt": 1.375
+        }
+      ]
+    },
+    "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0yODUuOSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Roadmap AV office 2027",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 285.625,
+          "height_pt": 31.2,
+          "layout_advance_pt": 31.2,
+          "max_font_size_pt": 26,
+          "baseline_pt": 23.400000000000002,
+          "ink_bounds": {
+            "x": 2.046875,
+            "y": 4.478125000000002,
+            "width": 282.359375,
+            "height": 24.09375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.27499999999997726,
+          "review_band_pt": 1.375
+        }
+      ]
+    },
+    "measure:WyJhcmlhbC1ib3VuZGFyeS13aWR0aC0zMzAiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Roadmap AV office 2027",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 285.625,
+          "height_pt": 31.2,
+          "layout_advance_pt": 31.2,
+          "max_font_size_pt": 26,
+          "baseline_pt": 23.400000000000002,
+          "ink_bounds": {
+            "x": 2.046875,
+            "y": 4.478125000000002,
+            "width": 282.359375,
+            "height": 24.09375
+          }
+        }
+      ],
+      "glyph_count": 22
+    },
+    "measure:WyJhcmlhbC1pdGFsaWMtMTYtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 149.5,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": -0.328125,
+            "y": 9.943749999999998,
+            "width": 149.875,
+            "height": 15.03125
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC1wYXJhZ3JhcGgtYWZ0ZXItb25seSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "First paragraph.",
+          "start_rune": 0,
+          "end_rune": 16,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 113,
+          "height_pt": 36.8,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 1.3125,
+            "y": 10.146874999999998,
+            "width": 110.25,
+            "height": 14.828125
+          }
+        },
+        {
+          "text": "Second paragraph.",
+          "start_rune": 17,
+          "end_rune": 34,
+          "x_pt": 0,
+          "y_pt": 36.8,
+          "advance_pt": 136,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 58.39999999999999,
+          "ink_bounds": {
+            "x": 0.71875,
+            "y": 46.74374999999999,
+            "width": 133.84375,
+            "height": 15.03125
+          }
+        }
+      ],
+      "glyph_count": 33,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC1wYXJhZ3JhcGgtYmVmb3JlLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "First paragraph.",
+          "start_rune": 0,
+          "end_rune": 16,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 113,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 1.3125,
+            "y": 10.146874999999998,
+            "width": 110.25,
+            "height": 14.828125
+          }
+        },
+        {
+          "text": "Second paragraph.",
+          "start_rune": 17,
+          "end_rune": 34,
+          "x_pt": 0,
+          "y_pt": 28.799999999999997,
+          "advance_pt": 136,
+          "height_pt": 32.8,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 54.39999999999999,
+          "ink_bounds": {
+            "x": 0.71875,
+            "y": 42.74374999999999,
+            "width": 133.84375,
+            "height": 15.03125
+          }
+        }
+      ],
+      "glyph_count": 33,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xIiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 148.625,
+          "height_pt": 19.2,
+          "layout_advance_pt": 19.2,
+          "max_font_size_pt": 16,
+          "baseline_pt": 14.4,
+          "ink_bounds": {
+            "x": -0.03125,
+            "y": 2.7437500000000004,
+            "width": 147.953125,
+            "height": 15.031249999999998
+          }
+        }
+      ],
+      "glyph_count": 22
+    },
+    "measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xLjE1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 148.625,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 16.56,
+          "ink_bounds": {
+            "x": -0.03125,
+            "y": 4.903749999999999,
+            "width": 147.953125,
+            "height": 15.03125
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC1zaW5nbGUtMTYtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 148.625,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": -0.03125,
+            "y": 9.943749999999998,
+            "width": 147.953125,
+            "height": 15.03125
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJhcmlhbC1zaW5nbGUtMjQtc3BhY2luZy0xLjUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 223.5,
+          "height_pt": 43.199999999999996,
+          "layout_advance_pt": 43.199999999999996,
+          "max_font_size_pt": 24,
+          "baseline_pt": 32.4,
+          "ink_bounds": {
+            "x": -0.03125,
+            "y": 14.931249999999999,
+            "width": 222.421875,
+            "height": 22.515625
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8tYm9sZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 211.75,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.078125,
+            "y": 9.584374999999998,
+            "width": 210.9375,
+            "height": 15.40625
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8taXRhbGljLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 211.75,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": -0.140625,
+            "y": 9.631249999999998,
+            "width": 211.078125,
+            "height": 15.359375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 211.75,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.5,
+            "y": 9.631249999999998,
+            "width": 209.90625,
+            "height": 15.359375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 211.75,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 16.56,
+          "ink_bounds": {
+            "x": 0.5,
+            "y": 4.591249999999999,
+            "width": 209.90625,
+            "height": 15.359375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTE2LXNwYWNpbmctMSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 211.75,
+          "height_pt": 19.2,
+          "layout_advance_pt": 19.2,
+          "max_font_size_pt": 16,
+          "baseline_pt": 14.4,
+          "ink_bounds": {
+            "x": 0.5,
+            "y": 2.4312500000000004,
+            "width": 209.90625,
+            "height": 15.359374999999998
+          }
+        }
+      ],
+      "glyph_count": 22
+    },
+    "measure:WyJwbGV4LW1vbm8tc2luZ2xlLTI0LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 316.25,
+          "height_pt": 43.199999999999996,
+          "layout_advance_pt": 43.199999999999996,
+          "max_font_size_pt": 24,
+          "baseline_pt": 32.4,
+          "ink_bounds": {
+            "x": 0.75,
+            "y": 14.446874999999999,
+            "width": 313.5625,
+            "height": 23.046875
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8tcGFyYWdyYXBoLWFmdGVyLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "First paragraph.",
+          "start_rune": 0,
+          "end_rune": 16,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 154,
+          "height_pt": 36.8,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 1.4375,
+            "y": 9.631249999999998,
+            "width": 148.921875,
+            "height": 15.359375
+          }
+        },
+        {
+          "text": "Second paragraph.",
+          "start_rune": 17,
+          "end_rune": 34,
+          "x_pt": 0,
+          "y_pt": 36.8,
+          "advance_pt": 163.625,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 58.39999999999999,
+          "ink_bounds": {
+            "x": 0.71875,
+            "y": 46.55624999999999,
+            "width": 159.265625,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 33,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8tcGFyYWdyYXBoLWJlZm9yZS1vbmx5IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "First paragraph.",
+          "start_rune": 0,
+          "end_rune": 16,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 154,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 1.4375,
+            "y": 9.631249999999998,
+            "width": 148.921875,
+            "height": 15.359375
+          }
+        },
+        {
+          "text": "Second paragraph.",
+          "start_rune": 17,
+          "end_rune": 34,
+          "x_pt": 0,
+          "y_pt": 28.799999999999997,
+          "advance_pt": 163.625,
+          "height_pt": 32.8,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 54.39999999999999,
+          "ink_bounds": {
+            "x": 0.71875,
+            "y": 42.55624999999999,
+            "width": 159.265625,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 33,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8td3JhcHBlZC0xNi1zcGFjaW5nLTEuMTUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Clear type makes ",
+          "start_rune": 0,
+          "end_rune": 17,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 154,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 16.56,
+          "ink_bounds": {
+            "x": 1.125,
+            "y": 4.716249999999999,
+            "width": 151.640625,
+            "height": 15.046875
+          }
+        },
+        {
+          "text": "ideas easier to ",
+          "start_rune": 17,
+          "end_rune": 33,
+          "x_pt": 0,
+          "y_pt": 22.08,
+          "advance_pt": 144.375,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 38.64,
+          "ink_bounds": {
+            "x": 1.703125,
+            "y": 26.67125,
+            "width": 141.59375,
+            "height": 12.15625
+          }
+        },
+        {
+          "text": "follow.",
+          "start_rune": 33,
+          "end_rune": 40,
+          "x_pt": 0,
+          "y_pt": 44.16,
+          "advance_pt": 67.375,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 60.71999999999999,
+          "ink_bounds": {
+            "x": 1.171875,
+            "y": 48.87624999999999,
+            "width": 62.5625,
+            "height": 12.03125
+          }
+        }
+      ],
+      "glyph_count": 40,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8td3JhcHBlZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Clear type makes ",
+          "start_rune": 0,
+          "end_rune": 17,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 154,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 1.125,
+            "y": 9.756249999999998,
+            "width": 151.640625,
+            "height": 15.046875
+          }
+        },
+        {
+          "text": "ideas easier to ",
+          "start_rune": 17,
+          "end_rune": 33,
+          "x_pt": 0,
+          "y_pt": 28.799999999999997,
+          "advance_pt": 144.375,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 50.39999999999999,
+          "ink_bounds": {
+            "x": 1.703125,
+            "y": 38.43124999999999,
+            "width": 141.59375,
+            "height": 12.15625
+          }
+        },
+        {
+          "text": "follow.",
+          "start_rune": 33,
+          "end_rune": 40,
+          "x_pt": 0,
+          "y_pt": 57.599999999999994,
+          "advance_pt": 67.375,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 79.2,
+          "ink_bounds": {
+            "x": 1.171875,
+            "y": 67.35625,
+            "width": 62.5625,
+            "height": 12.03125
+          }
+        }
+      ],
+      "glyph_count": 40,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LW1vbm8tdGVybWluYWwtYWZ0ZXItNiIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 211.75,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.5,
+            "y": 9.631249999999998,
+            "width": 209.90625,
+            "height": 15.359375
+          }
+        }
+      ],
+      "glyph_count": 22,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjU1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "A clear typography plan",
+          "start_rune": 0,
+          "end_rune": 23,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 174.5,
+          "height_pt": 19.8,
+          "layout_advance_pt": 19.8,
+          "max_font_size_pt": 16.5,
+          "baseline_pt": 14.850000000000001,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 2.6468750000000014,
+            "width": 172.8125,
+            "height": 15.703125
+          }
+        }
+      ],
+      "glyph_count": 23,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.05000000000001137,
+          "review_band_pt": 1.4375
+        }
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjY1IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "A clear typography plan",
+          "start_rune": 0,
+          "end_rune": 23,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 174.5,
+          "height_pt": 19.8,
+          "layout_advance_pt": 19.8,
+          "max_font_size_pt": 16.5,
+          "baseline_pt": 14.850000000000001,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 2.6468750000000014,
+            "width": 172.8125,
+            "height": 15.703125
+          }
+        }
+      ],
+      "glyph_count": 23,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.15000000000000568,
+          "review_band_pt": 1.4375
+        }
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjYiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "A clear typography plan",
+          "start_rune": 0,
+          "end_rune": 23,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 174.5,
+          "height_pt": 19.8,
+          "layout_advance_pt": 19.8,
+          "max_font_size_pt": 16.5,
+          "baseline_pt": 14.850000000000001,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 2.6468750000000014,
+            "width": 172.8125,
+            "height": 15.703125
+          }
+        }
+      ],
+      "glyph_count": 23,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.09999999999999432,
+          "review_band_pt": 1.4375
+        }
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjYyNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "A clear typography plan",
+          "start_rune": 0,
+          "end_rune": 23,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 174.5,
+          "height_pt": 19.8,
+          "layout_advance_pt": 19.8,
+          "max_font_size_pt": 16.5,
+          "baseline_pt": 14.850000000000001,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 2.6468750000000014,
+            "width": 172.8125,
+            "height": 15.703125
+          }
+        }
+      ],
+      "glyph_count": 23,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.125,
+          "review_band_pt": 1.4375
+        }
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMTc0LjciLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "A clear typography plan",
+          "start_rune": 0,
+          "end_rune": 23,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 174.5,
+          "height_pt": 19.8,
+          "layout_advance_pt": 19.8,
+          "max_font_size_pt": 16.5,
+          "baseline_pt": 14.850000000000001,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 2.6468750000000014,
+            "width": 172.8125,
+            "height": 15.703125
+          }
+        }
+      ],
+      "glyph_count": 23,
+      "boundary_warnings": [
+        {
+          "line_index": 0,
+          "clearance_pt": 0.19999999999998863,
+          "review_band_pt": 1.4375
+        }
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtYm91bmRhcnktd2lkdGgtMjIwIiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "A clear typography plan",
+          "start_rune": 0,
+          "end_rune": 23,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 174.5,
+          "height_pt": 19.8,
+          "layout_advance_pt": 19.8,
+          "max_font_size_pt": 16.5,
+          "baseline_pt": 14.850000000000001,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 2.6468750000000014,
+            "width": 172.8125,
+            "height": 15.703125
+          }
+        }
+      ],
+      "glyph_count": 23
+    },
+    "measure:WyJwbGV4LXNhbnMtYm9sZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 161.25,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.3125,
+            "y": 9.615624999999998,
+            "width": 159.9375,
+            "height": 15.375
+          }
+        }
+      ],
+      "glyph_count": 21,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtaXRhbGljLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 150.375,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": -0.4375,
+            "y": 9.756249999999998,
+            "width": 149.796875,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 21,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 153.75,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 9.756249999999998,
+            "width": 151.828125,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 21,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMS4xNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 153.75,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 16.56,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 4.716249999999999,
+            "width": 151.828125,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 21,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTE2LXNwYWNpbmctMSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 153.75,
+          "height_pt": 19.2,
+          "layout_advance_pt": 19.2,
+          "max_font_size_pt": 16,
+          "baseline_pt": 14.4,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 2.5562500000000004,
+            "width": 151.828125,
+            "height": 15.234374999999998
+          }
+        }
+      ],
+      "glyph_count": 21
+    },
+    "measure:WyJwbGV4LXNhbnMtc2luZ2xlLTI0LXNwYWNpbmctMS41IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 229.875,
+          "height_pt": 43.199999999999996,
+          "layout_advance_pt": 43.199999999999996,
+          "max_font_size_pt": 24,
+          "baseline_pt": 32.4,
+          "ink_bounds": {
+            "x": 0.546875,
+            "y": 14.634374999999999,
+            "width": 227.078125,
+            "height": 22.859375
+          }
+        }
+      ],
+      "glyph_count": 21,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtcGFyYWdyYXBoLWFmdGVyLW9ubHkiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "First paragraph.",
+          "start_rune": 0,
+          "end_rune": 16,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 113.375,
+          "height_pt": 36.8,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 1.484375,
+            "y": 9.756249999999998,
+            "width": 110.671875,
+            "height": 15.234375
+          }
+        },
+        {
+          "text": "Second paragraph.",
+          "start_rune": 17,
+          "end_rune": 34,
+          "x_pt": 0,
+          "y_pt": 36.8,
+          "advance_pt": 134.625,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 58.39999999999999,
+          "ink_bounds": {
+            "x": 0.671875,
+            "y": 46.55624999999999,
+            "width": 132.734375,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 33,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtcGFyYWdyYXBoLWJlZm9yZS1vbmx5IiwiY2FudmFzIiwic2FtcGxlIl0": {
+      "lines": [
+        {
+          "text": "First paragraph.",
+          "start_rune": 0,
+          "end_rune": 16,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 113.375,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 1.484375,
+            "y": 9.756249999999998,
+            "width": 110.671875,
+            "height": 15.234375
+          }
+        },
+        {
+          "text": "Second paragraph.",
+          "start_rune": 17,
+          "end_rune": 34,
+          "x_pt": 0,
+          "y_pt": 28.799999999999997,
+          "advance_pt": 134.625,
+          "height_pt": 32.8,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 54.39999999999999,
+          "ink_bounds": {
+            "x": 0.671875,
+            "y": 42.55624999999999,
+            "width": 132.734375,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 33,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtd3JhcHBlZC0xNi1zcGFjaW5nLTEuMTUiLCJjYW52YXMiLCJzYW1wbGUiXQ": {
+      "lines": [
+        {
+          "text": "Clear type makes ",
+          "start_rune": 0,
+          "end_rune": 17,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 123.625,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 16.56,
+          "ink_bounds": {
+            "x": 0.921875,
+            "y": 4.716249999999999,
+            "width": 121.84375,
+            "height": 15.046875
+          }
+        },
+        {
+          "text": "ideas easier to follow.",
+          "start_rune": 17,
+          "end_rune": 40,
+          "x_pt": 0,
+          "y_pt": 22.08,
+          "advance_pt": 155.375,
+          "height_pt": 22.08,
+          "layout_advance_pt": 22.08,
+          "max_font_size_pt": 16,
+          "baseline_pt": 38.64,
+          "ink_bounds": {
+            "x": 1.21875,
+            "y": 26.79625,
+            "width": 152.9375,
+            "height": 12.03125
+          }
+        }
+      ],
+      "glyph_count": 40,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtd3JhcHBlZC0xNi1zcGFjaW5nLTEuNSIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Clear type makes ",
+          "start_rune": 0,
+          "end_rune": 17,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 123.625,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.921875,
+            "y": 9.756249999999998,
+            "width": 121.84375,
+            "height": 15.046875
+          }
+        },
+        {
+          "text": "ideas easier to follow.",
+          "start_rune": 17,
+          "end_rune": 40,
+          "x_pt": 0,
+          "y_pt": 28.799999999999997,
+          "advance_pt": 155.375,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 50.39999999999999,
+          "ink_bounds": {
+            "x": 1.21875,
+            "y": 38.55624999999999,
+            "width": 152.9375,
+            "height": 12.03125
+          }
+        }
+      ],
+      "glyph_count": 40,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    },
+    "measure:WyJwbGV4LXNhbnMtdGVybWluYWwtYWZ0ZXItNiIsImNhbnZhcyIsInNhbXBsZSJd": {
+      "lines": [
+        {
+          "text": "Agility AV office 0123",
+          "start_rune": 0,
+          "end_rune": 22,
+          "x_pt": 0,
+          "y_pt": 0,
+          "advance_pt": 153.75,
+          "height_pt": 28.799999999999997,
+          "layout_advance_pt": 28.799999999999997,
+          "max_font_size_pt": 16,
+          "baseline_pt": 21.599999999999998,
+          "ink_bounds": {
+            "x": 0.375,
+            "y": 9.756249999999998,
+            "width": 151.828125,
+            "height": 15.234375
+          }
+        }
+      ],
+      "glyph_count": 21,
+      "height_warnings": [
+        "nondefault line spacing uses a full terminal line allocation; captured expanded-spacing heights are conservatively overestimated, and other sizes/styles/multiples need native review"
+      ]
+    }
+  }
+}

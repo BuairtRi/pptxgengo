@@ -98,7 +98,7 @@ func validatePhraseAccent(a AccentSpec, t CanvasSpec, s SlideSpec) error {
 }
 
 func accentNoteProbe(s SlideSpec, a AccentSpec) ProbeRequest {
-	return ProbeRequest{ID: requestID(s.ID, "accent-note", a.ID), SlideID: s.ID, Kind: "accent_note", Text: "MANUAL PLACEMENT: " + a.Staging.Note, TextWidthPt: a.Staging.NoteBounds.Width, FontFace: "Arial", FontSizePt: 11, Foreground: "#070154", Background: white, Align: "left"}
+	return ProbeRequest{ID: requestID(s.ID, "accent-note", a.ID), SlideID: s.ID, Kind: "accent_note", Text: "MANUAL PLACEMENT: " + a.Staging.Note, TextWidthPt: a.Staging.NoteBounds.Width, FontFace: s.TitleFontFace, FontSizePt: 11, Foreground: "#070154", Background: white, Align: "left"}
 }
 
 func planAccents(s SlideSpec, p *PlannedSlide, m Measurements) error {
@@ -156,7 +156,7 @@ func planAccents(s SlideSpec, p *PlannedSlide, m Measurements) error {
 			if err := checkAccentCollisions(AccentSpec{ID: a.ID}, a.Staging.NoteBounds, p); err != nil {
 				return err
 			}
-			p.Canvas = append(p.Canvas, PlannedCanvas{CanvasSpec: CanvasSpec{ID: a.ID + "/manual-note", Kind: "text", Bounds: a.Staging.NoteBounds, Text: q.Text, FontFace: "Arial", FontSizePt: 11, Foreground: "#070154", Align: "left", Valign: "top", Layer: 100}, MeasurementID: q.ID})
+			p.Canvas = append(p.Canvas, PlannedCanvas{CanvasSpec: CanvasSpec{ID: a.ID + "/manual-note", Kind: "text", Bounds: a.Staging.NoteBounds, Text: q.Text, FontFace: s.TitleFontFace, FontSizePt: 11, Foreground: "#070154", Align: "left", Valign: "top", Layer: 100}, MeasurementID: q.ID})
 			p.Accents = append(p.Accents, PlannedAccent{AccentSpec: a, Bounds: a.Staging.AssetBounds, VisibleBounds: a.Staging.AssetBounds, Status: "manual_required", Reason: reason})
 			p.ManualRequired = append(p.ManualRequired, "Manual accent placement: "+a.Staging.Note+" ("+reason+")")
 			continue
