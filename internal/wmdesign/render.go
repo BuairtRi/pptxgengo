@@ -80,6 +80,8 @@ type Report struct {
 	Schema             string            `json:"schema"`
 	Profile            string            `json:"profile"`
 	Engine             string            `json:"engine"`
+	SourceRevision     string            `json:"source_revision"`
+	SourceCommit       string            `json:"source_commit,omitempty"`
 	PowerPointVerified bool              `json:"powerpoint_verified"`
 	VisuallyReviewed   bool              `json:"visually_reviewed"`
 	Qualification      string            `json:"qualification"`
@@ -102,6 +104,7 @@ type renderer struct {
 	err           error
 	libraryChrome *LibraryChrome
 	sceneContext  SceneContext
+	sceneTargets  map[string]annotationTarget
 }
 
 func pos(r Rect) pptx.PositionProps {
@@ -256,7 +259,7 @@ func (r *renderer) chrome(f ResolvedFrame, year int) {
 		}
 	}
 	if f.TitleRule > 0 {
-		r.shape("wm.header.rule", Rect{f.Body.X, f.TitleRule, f.Body.W, .75}, r.ink(q.Surface, "line"), 0)
+		r.shape("wm.header.rule", Rect{f.Header.X, f.TitleRule, f.Header.W, .75}, r.ink(q.Surface, "line"), 0)
 	}
 	fs := q.Surface
 	if q.Footer == "tall" {
@@ -290,7 +293,7 @@ func (r *renderer) nav(f ResolvedFrame) {
 	if q.Rail != "nav" {
 		return
 	}
-	h := (f.Body.Y + f.Body.H - 36 - float64(len(q.Nav)-1)*6) / float64(len(q.Nav))
+	h := (f.NavBottom - 36 - float64(len(q.Nav)-1)*6) / float64(len(q.Nav))
 	for i, tab := range q.Nav {
 		surf := "subtle"
 		if tab.ID == q.Active {
@@ -299,21 +302,33 @@ func (r *renderer) nav(f ResolvedFrame) {
 		b := Rect{21, 36 + float64(i)*(h+6), 18, h}
 		r.shape("nav."+tab.ID, b, r.ink(surf, "bg"), 0)
 		st, _ := r.source.Style("label")
+		labelWidth := h - 12
+		if r.source.Revision == LibraryRevisionV2 {
+			// Source .gtab span is a distinct 8pt/600 Mono style with 0.1em
+			// tracking, rather than the generic 9pt label token. It has no
+			// CSS padding; reserve 2pt at each native end for terminal spacing.
+			st.Size, st.Weight, st.Tracking, st.TrackingPt = 8, 600, "0.1em", .8
+			labelWidth = h - 4
+		}
 		id, e := r.typeEngine.Resolve(st)
 		if e != nil {
 			r.err = e
 			return
 		}
 		text := strings.ToUpper(tab.Label)
-		l, e := r.typeEngine.Measure(text, st, h-12)
+		l, e := r.typeEngine.Measure(text, st, labelWidth)
 		if e != nil || len(l.Lines) != 1 {
 			r.err = fmt.Errorf("frame.nav_label_does_not_fit: %s", tab.Label)
 			return
 		}
-		p := &pptx.TextPropsOptions{PositionProps: pos(Rect{b.X, b.Y, 18, h}), ObjectNameProps: pptx.ObjectNameProps{ObjectName: "nav.label." + tab.ID}, TextBaseProps: pptx.TextBaseProps{FontFace: id.Typeface, FontSize: st.Size, Bold: &id.Bold, Italic: &id.NativeItalic, Color: r.ink(surf, "primary"), Align: pptx.HAlign("center")}, CharSpacing: st.TrackingPt, LineSpacing: st.Leading, Margin: pptx.Margin{0}, Valign: pptx.VAlign("mid"), Vert: "vert270", Fit: "none", ParaSpaceBefore: zero(), ParaSpaceAfter: zero()}
+		color := r.ink(surf, "primary")
+		if r.source.Revision == LibraryRevisionV2 && tab.ID != q.Active {
+			color = r.ink(surf, "secondary")
+		}
+		p := &pptx.TextPropsOptions{PositionProps: pos(Rect{b.X, b.Y, 18, h}), ObjectNameProps: pptx.ObjectNameProps{ObjectName: "nav.label." + tab.ID}, TextBaseProps: pptx.TextBaseProps{FontFace: id.Typeface, FontSize: st.Size, Bold: &id.Bold, Italic: &id.NativeItalic, Color: color, Align: pptx.HAlign("center")}, CharSpacing: st.TrackingPt, LineSpacing: st.Leading, Margin: pptx.Margin{0}, Valign: pptx.VAlign("mid"), Vert: "vert270", Fit: "none", ParaSpaceBefore: zero(), ParaSpaceAfter: zero()}
 		r.err = r.slide.AddText([]pptx.TextProps{{Text: text}}, p)
 		if r.typeEngine.engine == CandidateEngine {
-			*r.records = append(*r.records, TextRecord{ID: "nav.label." + tab.ID, Rect: Rect{b.X, b.Y, 18, h}, Color: r.ink(surf, "primary"), Align: "center", Layout: l})
+			*r.records = append(*r.records, TextRecord{ID: "nav.label." + tab.ID, Rect: Rect{b.X, b.Y, 18, h}, Color: color, Align: "center", Layout: l})
 		}
 		if r.err != nil {
 			return
@@ -355,6 +370,7 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 	p.Author = "West Monroe"
 	p.Theme = pptx.ThemeProps{HeadFontFace: "IBM Plex Sans SemiBold", BodyFontFace: "IBM Plex Sans"}
 	report = Report{Schema: "pptxgengo.wmds-layout.v1", Profile: ProfileForEngine(engine), Engine: engine, Qualification: "implemented_unqualified", SourceFiles: s.Files, Fonts: t.Fonts(), Warnings: []string{"Go first-baseline/occupied-height predictions require native calibration for the new exact-leading profile.", "Native font identity, wrapping, visual quality and overflow remain unqualified until PowerPoint capture/review.", "Whiteboard variant: editable dots with center-sampled radial opacity; no browser pixel identity claim.", "Source scene components and closed template content bindings require v2. Catalog availability does not establish successful source rendering or native visual qualification."}}
+	report.SourceRevision, report.SourceCommit = s.Revision, s.Commit
 	report.MeasurementPolicy = map[string]string{"leading": "exact authored points between predicted baselines", "first_baseline": "provisional 0.9 em; native calibration pending", "occupied_height": "provisional 1.2 em plus leading between lines; native calibration pending", "advance": "Harfbuzz shaped at 64x then quantized to 1/64 pt; no legacy 1/8 pt correction", "tracking": "serialized 0.01 pt then applied per cluster; terminal cluster tracking excluded from line width", "ligatures": "liga/clig enabled at zero tracking, disabled at nonzero tracking; native feature parity pending", "paragraphs": "CRLF/CR normalized to LF; hard breaks and empty paragraphs preserved"}
 	if engine == CandidateEngine {
 		report.Warnings[0] = "v2 passes the 139 declared native controls; arbitrary content and exact native font file identity remain unqualified."
@@ -402,6 +418,9 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 		}
 		sr := SlideReport{ID: slide.ID, Page: i + 1, Frame: f, TemplateBinding: slide.TemplateBinding}
 		r.libraryChrome = slide.LibraryChrome
+		if err := r.registerSceneTargets(slide, f); err != nil {
+			return nil, report, err
+		}
 		r.records = &sr.Texts
 		masterName := "wmds." + slide.ID
 		r.master = &pptx.SlideMasterProps{Title: masterName, Background: &pptx.BackgroundProps{ShapeFillProps: pptx.ShapeFillProps{Color: r.ink(f.Request.Surface, "bg")}}, Margin: pptx.Margin{0}}
@@ -435,14 +454,14 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 		}
 		if !f.Request.NoHeader {
 			st, _ := s.Style("eyebrow")
-			eyebrowWidth := f.Body.W
+			eyebrowWidth := f.Header.W
 			if slide.LibraryChrome != nil && slide.LibraryChrome.Stamp != "" {
 				eyebrowWidth -= 180
 			}
-			r.text("eyebrow", slide.Eyebrow, st, Rect{f.Body.X, 36, eyebrowWidth, 12}, r.ink(f.Request.Surface, "emphasis"), "left", 1)
+			r.text("eyebrow", slide.Eyebrow, st, Rect{f.Header.X, 36, eyebrowWidth, 12}, r.ink(f.Request.Surface, "emphasis"), "left", 1)
 			st, _ = s.Style(f.TitleStyle)
 			if slide.LibraryChrome != nil && (strings.Contains(slide.Title, "[[") || strings.Contains(slide.Title, "[^")) {
-				plan := &scenePlan{ID: "library-header", Bounds: Rect{f.Body.X, 54, f.Body.W, f.TitleRule - 54}}
+				plan := &scenePlan{ID: "library-header", Bounds: Rect{f.Header.X, 54, f.Header.W, f.TitleRule - 54}}
 				ctx := SceneContext{Surface: f.Request.Surface, Zone: f.Header, Path: "/title", Notes: slide.LibraryChrome.Notes}
 				if err := r.primitiveRichText(plan, "title", slide.Title, st, plan.Bounds, f.Request.Surface, "display", "left", slide.LibraryChrome.Emphasis, "", ctx); err != nil {
 					return nil, report, err
@@ -451,7 +470,7 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 					return nil, report, err
 				}
 			} else {
-				r.text("title", slide.Title, st, Rect{f.Body.X, 54, f.Body.W, f.TitleRule - 54}, r.ink(f.Request.Surface, "display"), "left", f.Request.TitleLines)
+				r.text("title", slide.Title, st, Rect{f.Header.X, 54, f.Header.W, f.TitleRule - 54}, r.ink(f.Request.Surface, "display"), "left", f.Request.TitleLines)
 			}
 		}
 		if slide.Source != "" {
@@ -487,6 +506,10 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 			if n.Scope == "rail" {
 				zone = f.Rail
 				surf = f.Request.RailSurface
+			} else if n.Scope == "short" && f.Request.Split != "" {
+				zone = f.ShortBody
+			} else if n.Scope == "tall" && f.Request.Split != "" {
+				zone = f.TallBody
 			} else if n.Scope != "" && n.Scope != "body" {
 				return nil, report, fmt.Errorf("node.unsupported_scope")
 			}
@@ -515,6 +538,13 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 			} else if n.Start != 0 || n.Span != 0 {
 				return nil, report, fmt.Errorf("grid.span_without_grid: %s", n.ID)
 			}
+			if f.Request.Split != "" && n.Kind != "scene" && (n.Scope == "" || n.Scope == "body") {
+				if b.X >= f.TallBody.X-.01 && b.X+b.W <= f.TallBody.X+f.TallBody.W+.01 {
+					zone = f.TallBody
+				} else {
+					zone = f.ShortBody
+				}
+			}
 			if n.Surface != "" {
 				if (n.Kind == "text" || n.Kind == "textblock" || n.Kind == "metric" || n.Kind == "richtext" || n.Kind == "rule") && n.Surface != surf {
 					return nil, report, fmt.Errorf("text.surface_context_requires_matching_zone: %s", n.ID)
@@ -536,7 +566,9 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 				sceneZone := Rect{f.Body.X, 0, f.Body.W, f.Body.Y + f.Body.H}
 				var sourceTag struct {
 					Type string  `json:"type"`
+					Kind string  `json:"kind"`
 					X    float64 `json:"x"`
+					Y    float64 `json:"y"`
 					W    float64 `json:"w"`
 				}
 				if err := json.Unmarshal(n.Scene.Node, &sourceTag); err != nil {
@@ -546,6 +578,22 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 					sceneZone = Rect{f.Rail.X, 0, f.Rail.W, f.Rail.Y + f.Rail.H}
 					surf = f.Request.RailSurface
 				}
+				if f.Request.Split != "" {
+					if sourceTag.Type == "connector" {
+						sceneZone = f.Body
+					} else if sourceTag.X >= f.TallBody.X-.02 && sourceTag.X+sourceTag.W <= f.TallBody.X+f.TallBody.W+.02 {
+						sceneZone = f.TallBody
+					} else {
+						sceneZone = f.ShortBody
+					}
+					// The refreshed quadrant allocates its tall plot at y27; its
+					// outer border deliberately bleeds 9pt above the ordinary zone.
+					// Measured text still obeys the ordinary footer reservation.
+					if s.Revision == LibraryRevisionV2 && sourceTag.Type == "chart" && sourceTag.Kind == "quadrant" && sourceTag.Y == 27 && sceneZone == f.TallBody {
+						sceneZone.Y -= 9
+						sceneZone.H += 9
+					}
+				}
 				switch sourceTag.Type {
 				case "imageframe", "square", "logo", "art", "mark", "thumbnail":
 					sceneZone = Rect{0, 0, 960, 540}
@@ -554,6 +602,13 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 				plan, err := r.planSceneNode(n.ID, n.Scene.Node, ctx)
 				if err != nil {
 					return nil, report, fmt.Errorf("slide %s/%s: %w", slide.ID, n.ID, err)
+				}
+				splitBoundsOK := inside(plan.Bounds, f.ShortBody) || inside(plan.Bounds, f.TallBody)
+				if s.Revision == LibraryRevisionV2 && sourceTag.Type == "chart" && sourceTag.Kind == "quadrant" && sourceTag.Y == 27 && sceneZone.Y == 27 {
+					splitBoundsOK = inside(plan.Bounds, sceneZone)
+				}
+				if f.Request.Split != "" && sceneZone.W != 960 && !splitBoundsOK {
+					return nil, report, fmt.Errorf("scene.outside_split_zone: %s/%s: %+v", slide.ID, n.ID, plan.Bounds)
 				}
 				plan.Warnings = append(plan.Warnings, n.Scene.Resolutions...)
 				if err = r.drawScene(plan, &sr, n.Scene.Path); err != nil {

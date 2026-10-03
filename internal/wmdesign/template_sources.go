@@ -19,15 +19,20 @@ type templateSourceCatalog struct {
 	Templates []json.RawMessage `json:"templates"`
 }
 type templateSourceEntry struct {
-	ID      string          `json:"id"`
-	Variant string          `json:"variant"`
-	Name    string          `json:"name"`
-	Tier    string          `json:"tier"`
-	Purpose string          `json:"purpose"`
-	Uses    []string        `json:"uses"`
-	Legacy  string          `json:"legacy"`
-	Budget  json.RawMessage `json:"budget"`
-	Slots   []struct {
+	ID         string          `json:"id"`
+	Variant    string          `json:"variant"`
+	Name       string          `json:"name"`
+	Tier       string          `json:"tier"`
+	Purpose    string          `json:"purpose"`
+	Uses       []string        `json:"uses"`
+	Legacy     string          `json:"legacy"`
+	Budget     json.RawMessage `json:"budget"`
+	Revision   int             `json:"rev,omitempty"`
+	Added      string          `json:"added,omitempty"`
+	Revised    string          `json:"revised,omitempty"`
+	Status     string          `json:"status,omitempty"`
+	ReplacedBy string          `json:"replacedBy,omitempty"`
+	Slots      []struct {
 		Slot     string `json:"slot"`
 		MaxChars int    `json:"maxChars"`
 		Count    int    `json:"count"`
@@ -113,7 +118,10 @@ func decodeTemplateSource(raw []byte, v any) error {
 // copy. Binding supplies all presentation content; geometry stays source bound.
 func compileTemplateSource(s *Source, key string) (SlideSpec, TemplateDefinition, error) {
 	var slide SlideSpec
-	def := TemplateDefinition{Key: key}
+	def := TemplateDefinition{Key: key, SourceRevision: s.Revision}
+	if s.Revision == LibraryRevisionV2 && !usesLegacyTemplate(s.Revision, key) {
+		return slide, def, fmt.Errorf("template.requires_library_content_contract: %s; inspect library-catalog for the v2 contract or select the v1 bundle for the previous API", key)
+	}
 	var family, id, variant string
 	var names, expected []string
 	switch key {

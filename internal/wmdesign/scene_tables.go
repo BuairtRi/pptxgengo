@@ -96,7 +96,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	colW := make([]float64, len(n.Columns))
 	acc := n.X
 	hi := -1
-	supported := map[string]bool{"": true, "num": true, "delta": true, "status": true, "rating": true, "allocation": true, "harvey": true, "maturity": true, "gauge": true, "tag": true, "raci": true, "bullets": true, "icon": true, "check": true}
+	supported := map[string]bool{"": true, "num": true, "delta": true, "status": true, "rating": true, "allocation": true, "harvey": true, "maturity": true, "gauge": true, "tag": true, "raci": true, "bullets": true, "icon": true, "check": true, "checkbox": true}
 	for i, c := range n.Columns {
 		if !validPartKey(c.Key) || c.Width <= 24 || cols[c.Key] != 0 || !supported[c.Type] {
 			return nil, fmt.Errorf("scene.table_invalid_column: %s", c.Key)
@@ -331,7 +331,7 @@ func sceneTableAlign(kind string) string {
 	switch kind {
 	case "num", "delta":
 		return "right"
-	case "check", "harvey", "raci", "gauge":
+	case "check", "checkbox", "harvey", "raci", "gauge":
 		return "center"
 	}
 	return "left"
@@ -382,7 +382,7 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 	left, right := 12., 12.
 	align := sceneTableAlign(c.Type)
 	blank := len(raw) == 0 || string(raw) == "null" || string(raw) == `""`
-	if blank {
+	if blank && c.Type != "checkbox" {
 		return r.sceneNativeCell(id, "", st, b, surface, "primary", align, left, right, ctx)
 	}
 	str := func() error { return json.Unmarshal(raw, &text) }
@@ -551,6 +551,24 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 			return pptx.TableCell{}, TextRecord{}, err
 		}
 		left += size + 9
+	case "checkbox":
+		var checked bool
+		if !blank {
+			if err := json.Unmarshal(raw, &checked); err != nil {
+				return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_checkbox_requires_boolean: %s", id)
+			}
+		}
+		color, err := r.sceneColor(surface, "strong")
+		if err != nil {
+			return pptx.TableCell{}, TextRecord{}, err
+		}
+		box := Rect{b.X + (b.W-12)/2, b.Y + (b.H-12)/2, 12, 12}
+		r.sceneDataShape(p, id+".checkbox", Rect{box.X + .5, box.Y + .5, 11, 11}, pptx.ShapeTypeRect, color, &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: color}, Width: 1})
+		p.Items[len(p.Items)-1].Shape.Props.Fill = &pptx.ShapeFillProps{Type: "none"}
+		if checked {
+			r.sceneDataCheck(p, id+".tick", box, color)
+		}
+		text = ""
 	case "check":
 		var on bool
 		if err := json.Unmarshal(raw, &on); err != nil {
@@ -667,7 +685,16 @@ func (r *renderer) sceneRACISquare(p *scenePlan, id, role string, b Rect) error 
 		r.sceneDataShape(p, id+".outline", b, pptx.ShapeTypeRect, bg, &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: strong}, Width: .75})
 	}
 	st, _ := r.sceneDataToken("label", 600)
-	_, err := r.sceneDataText(p, id+".text", role, st, Rect{b.X + 1, b.Y + 3, b.W - 2, 12}, surface, ink, "center")
+	// The calibrated label allocation exceeds its 12pt CSS leading. Center
+	// the measured native allocation inside the existing 18pt role square.
+	need, _, err := r.sequenceNeed(role, st, b.W-2)
+	if err != nil {
+		return err
+	}
+	if need > b.H {
+		return fmt.Errorf("scene.table_raci_badge_height: %.3f > %.3f", need, b.H)
+	}
+	_, err = r.sceneDataText(p, id+".text", role, st, Rect{b.X + 1, b.Y + (b.H-need)/2, b.W - 2, need}, surface, ink, "center")
 	return err
 }
 func (r *renderer) sceneRACILegend(p *scenePlan, id string, b Rect, surface string) error {

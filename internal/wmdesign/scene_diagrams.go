@@ -217,6 +217,7 @@ func (r *renderer) diagramChild(p *scenePlan, id string, node any, ctx SceneCont
 type diagramSpec struct {
 	Highlight string            `json:"highlight"`
 	Type      string            `json:"type"`
+	SourceID  string            `json:"id,omitempty"`
 	X         float64           `json:"x"`
 	Y         float64           `json:"y"`
 	W         float64           `json:"w"`
@@ -259,7 +260,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 	if e := json.Unmarshal(raw, &tag); e != nil {
 		return nil, false, e
 	}
-	fields := map[string]string{"block": "x y w h surface text style align", "frame": "x y w h style label", "chevron": "x y w h first surface text style number sub", "textarrow": "x y w h dir surface text style", "connector": "points label labelPos style head elbow ink startDot dashed", "container": "x y w h style label labelPos bullets", "cylinder": "x y w h surface text sub", "node": "x y w h surface icon text sub layout", "layerrow": "x y w h surface n label text highlight", "matrix": "x y w labels labelW cols cellH gap rowGap style rows", "beforeafter": "x y w left right rows"}
+	fields := map[string]string{"block": "x y w h surface text style align", "frame": "id x y w h style label", "chevron": "x y w h first surface text style number sub", "textarrow": "x y w h dir surface text style", "connector": "points label labelPos style head elbow ink startDot dashed", "container": "id x y w h style label labelPos bullets", "cylinder": "x y w h surface text sub", "node": "x y w h surface icon text sub layout", "layerrow": "x y w h surface n label text highlight", "matrix": "x y w labels labelW cols cellH gap rowGap style rows", "beforeafter": "x y w left right rows"}
 	allowed, ok := fields[tag.Type]
 	if !ok {
 		return nil, false, nil

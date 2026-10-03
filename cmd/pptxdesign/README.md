@@ -427,3 +427,48 @@ pages were reviewed individually. Pair comparisons retain fixed source geometry
 and styles; both right-rail perimeters are opaque navy. Binding provenance stays
 unqualified for arbitrary content and exact native font-file selection. Generation
 is Go-only; no per-deck character capture is required. No tests were added or run.
+
+## Refreshed library: split frames and caller navigation
+
+Select round-4 source explicitly with `--bundle library/wm-design-system/v2`.
+The original v1 bundle remains the default. Source revision and typography engine
+are separate; both revisions use the existing candidate Go font engine for scenes.
+
+```sh
+pptxdesign library-catalog --bundle library/wm-design-system/v2 \
+  --engine wmds-go-foundation.v2
+pptxdesign frame-reference --bundle library/wm-design-system/v2 \
+  --engine wmds-go-foundation.v2 --out /tmp/wmds-frame-reference
+pptxdesign library-reference --bundle library/wm-design-system/v2 \
+  --engine wmds-go-foundation.v2 \
+  --template-keys agenda/schedule-split,key-message/stat-split,team/roster-split,case-study/exhibit-split,bio-full/portrait-nav \
+  --out /tmp/wmds-split-templates
+```
+
+The catalog reports 166 active definitions; `--include-deprecated` also includes
+`from-to/rows`. Metadata records source revision, template revision, lifecycle,
+replacement and pending capabilities. Definitions are not evidence that all 167
+fixtures render or that new content fits. The focused `--template-keys` option is
+also supported by source references and sweeps; it is exclusive with `--family`.
+
+Nav templates require `values.nav` with 2–6 `{key,label}` items and an `active` key.
+Callers choose labels, ordering, tab count and active selection. Keys remain stable
+native identities; active selection must name an item. Geometry/style changes are
+not content slots. See [the frame/navigation contract](../../planning/wm-design-contracts/v2/frames-and-navigation.md).
+
+The v2 first two slices implement split/nav infrastructure, the new component
+semantics and revised bindings. The two old typed card-row APIs remain valid
+in v2; the four historical typed APIs remain available through the v1 bundle.
+
+Slice 2 implements checkbox cells, square quadrant/numbered marker modes and
+named-target annotations. Revised stats and rail templates require the v2 library
+slots/keys contract; the earlier typed APIs remain on the v1 bundle.
+See [component contracts and native review](../../planning/wm-design-contracts/v2/components-and-revised-bindings.md).
+
+Slice 3 covers all 70 added designs with source/meaningful-content pairs in a
+140-slide native reference. Family reproduction scripts and the integration
+command are in [the completion note](../../planning/wm-design-contracts/v2/slice3-completion.md).
+V2 navigation uses the dedicated 8pt semibold source style; table group boundaries
+remain structural, and outline surfaces retain their inset border. Native review
+of these pairs does not qualify arbitrary input or replace the full-catalog
+regression review and release packaging planned for slice 4.

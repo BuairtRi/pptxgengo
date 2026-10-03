@@ -1,0 +1,902 @@
+{
+  "schema": "wmds.template-changes.v1",
+  "base": "pptxgengo-wmds-v1",
+  "baseCommit": "d8f45d4",
+  "framesChanged": [
+    "splits"
+  ],
+  "frameNotes": {
+    "splits": {
+      "summary": "New split-frame family: the title zone covers a short column only and a tall column runs from y 36 to the body bottom. Four variants: tall-right, tall-left (tall two-thirds, 558 wide) and tall-right-narrow, tall-left-narrow (tall one-third, 270 wide); standard 18 pt gutter (narrowed from a one-column gutter on owner review).",
+      "pptx": "Add four slide layouts (or a split option on the existing no-rail and nav layouts): header placeholders sized to the short column; a 270-wide short column sets the title at heading size (24/30) with up to three lines (rule at 108/126/162), a 558-wide one keeps title size (rule 108/144/180). The header dot patch starts 36 pt left of the short column (not left of x 57 on nav). Stamp and source line follow the short column."
+    },
+    "nav": {
+      "summary": "Nav-rail tabs are now slots: slide.nav = {items: [2-6 section names], active: index}. Previously the labels were hard-coded (Identify, Define, Build, Optimize) with the second always active. Split frames now combine with the nav rail.",
+      "pptx": "Read tab labels and the active tab from slide.nav; tab height = (body bottom - 36 - 6*(n-1)) / n; active tab Grounded with White text, others Light Gray with Dark Gray text. No template used the nav rail before, so this only affects new templates."
+    },
+    "quadrant-markers": {
+      "summary": "Quadrant chart gains key: \"markers\": numbered filled circles on the points without the built-in key, for templates with their own legend column.",
+      "pptx": "Support key \"markers\" on the quadrant chart: draw numbered circles at each point and omit the side key."
+    },
+    "table-checkbox": {
+      "summary": "Table cell type checkbox: an empty outlined box for walk-through checklists (true draws a tick). Distinct from check, which reports status (filled tick or dash).",
+      "pptx": "Support cell type checkbox: 12 pt square, 1 pt Grounded outline, no fill; a tick when true. Used by runbook/step-detail-data and runbook/step-detail-gate."
+    }
+  },
+  "summary": {
+    "added": 70,
+    "revised": 15,
+    "deprecated": 1,
+    "removed": 0
+  },
+  "templates": [
+    {
+      "key": "phase-detail/team-handoff",
+      "family": "approach",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body nodes changed: 12, 13"
+      ],
+      "summary": "Northfield team row text changed from emphasis (blue) to primary ink; rev 2.",
+      "pptx": "Render the two Northfield team paragraphs in primary body ink, matching the West Monroe row."
+    },
+    {
+      "key": "roadmap/staggered-phases-nav",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Staggered roadmap with the nav rail, compact footer.",
+      "pptx": "Same as roadmap/staggered-phases plus four rotated tab labels at x 21-39."
+    },
+    {
+      "key": "runbook/cutover-timeline",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "T-minus axis with four go/no-go milestones, window cards and a gate-owner strip.",
+      "pptx": "Axis lines and diamonds as shapes; four cards and four dark blocks."
+    },
+    {
+      "key": "runbook/escalation",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New escalation table: level, trigger, time threshold, contact or owner, what the level decides, plus a rule block.",
+      "pptx": "Add table template, columns 180/216/108/162/180, rowH 54, subtle rule block at y 396."
+    },
+    {
+      "key": "runbook/escalation-flow",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New escalation path as a flow: Trigger (inverse block) to L1-L4 blocks joined by connectors labelled Alert, 15 min, 30 min, 60 min; the L3-L4 connector is two-way; dashed vertical exits 'Resolved' to 'Closed at Ln' under L1-L3 and 'Decision' to 'Plan reset' under L4; one-line decision text per column; rule block.",
+      "pptx": "Add a slide template built from 5 blocks (126x54 at x 57/237/417/597/777, y 144), arrow connectors with mono labels (head 'both' for L3-L4), dashed vertical connectors with labels to outline blocks at y 252, small text at y 324 and a subtle rule block at y 414."
+    },
+    {
+      "key": "runbook/escalation-split",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Split variant (tall-right, titleLines 3): four stacked level cards in the tall column; short column carries a note and rule block. Round 4: Reordered as a ladder: L4 at the top, L1 at the bottom, cards 72 high with 36 gaps. Three hand-drawn arrow-right-angle marks (w 36, rotate -90, x 369, y 105/213/321) point up the ladder between levels. Budget marks 3, title emphasis removed.",
+      "pptx": "Implement tall-right split with four cards h 90 at pitch 108 starting y 36. Round 4: Reverse card order (L4 top to L1 bottom, y 36/144/252/360, h 72), add three rotated (-90deg) right-angle hand-drawn arrows in the gaps, make the title plain (no highlight)."
+    },
+    {
+      "key": "runbook/go-no-go",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Go/no-go checklist with owner, evidence, RAG status and go tick, plus decision rule.",
+      "pptx": "Native table with status squares and check glyphs; one tinted block."
+    },
+    {
+      "key": "runbook/overview",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Runbook front sheet: purpose, scope, role table, entry and exit criteria, timed escalation stepper. Round 3: Escalation path stepper replaced by four full-width chevrons (x 57/273/489/705, y 396, h 54, subtle, subtle, strong, inverse) with the time threshold as the chevron number and the role as its text. The line now spans the width and ends in a deliberate final step.",
+      "pptx": "Native table, two cards, stepper of squares and text boxes. Round 3: Replace the stepper with four chevrons across the content width; threshold label plus role name inside each, last chevron inverse."
+    },
+    {
+      "key": "runbook/roles",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New role list table: role, held by, accountable for, decisions and authority, backup; six rows at 48 pt.",
+      "pptx": "Add table template, five columns 144/144/198/216/144, dense, rowH 48."
+    },
+    {
+      "key": "runbook/roles-raci",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New RACI version of the runbook roles: six cutover steps by six roles, preset raci with raci cells, legend, and an authority note block. Emphasis highlight on 'accountable'.",
+      "pptx": "Add a slide template: dark-header raci table (270 step column + six 96-wide role columns, 36pt rows), R/A/C/I tag cells incl. 'A/R', the four-item RACI legend under the table, and a subtle note block at y 414."
+    },
+    {
+      "key": "runbook/step-detail",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "One step on a whole slide (Freeze legacy postings): number, name, description, owners, window, sub-steps, rules, gate clearance card.",
+      "pptx": "Add three-column step layout with a full-width gate clearance card at y 324."
+    },
+    {
+      "key": "runbook/step-detail-data",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Data migration step: reconciliation table with legacy, new ledger, tolerance and status result; sub-steps and acceptance cards. Round 4: Reads as a checklist to execute: the status Result column is replaced by an empty tick-box Done column (outlined 18pt squares placed over the table, since a false check cell renders as a dash), legacy figure and tolerance kept, and a blank 'New ledger' column to fill in. Title now 'Tick every reconciliation before step 4 loads balances'.",
+      "pptx": "Add table (status column type) with two cards below at y 324. Round 4: Table columns: Done (54, empty outlined 18pt box per row), check, legacy, tolerance, blank new-ledger. Remove the On track / At risk status cells and the pre-filled new-ledger values. New title. The Done/Go column uses the new checkbox cell type (empty outlined boxes); no overlaid shapes."
+    },
+    {
+      "key": "runbook/step-detail-gate",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Decision gate step: go criteria with evidence, approver and go tick; if-go and if-no-go cards. Round 4: The Go column no longer has pre-filled ticks: it is now the first column with an empty box per criterion. Title now 'Tick every criterion before step 7 opens the ledger'.",
+      "pptx": "Add table (check column type) with two outcome cards below at y 324. Round 4: Move the Go column first (54 wide), draw an empty outlined 18pt box in each row instead of ticks/dashes; update the title. The Done/Go column uses the new checkbox cell type (empty outlined boxes); no overlaid shapes."
+    },
+    {
+      "key": "runbook/step-list",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Four steps, each with 2-3 bullets, owner and window; optional continuation indicator block (slot) at y 432.",
+      "pptx": "Add numhead rows (pitch 72) with bullets and owner/window columns; the continuation block is an optional slot, omit when empty."
+    },
+    {
+      "key": "runbook/step-list-split",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Split variant (tall-right, titleLines 3): four step rows down the tall column at pitch 108; continuation indicator block in the short column.",
+      "pptx": "Implement tall-right split with step rows in x 345-903; continuation block at short column y 414."
+    },
+    {
+      "key": "runbook/step-table",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Step-by-step cutover table: step, action, owner, window, verification check, rollback.",
+      "pptx": "Native 6-column table, 12pt cells, 36pt rows."
+    },
+    {
+      "key": "runbook/step-table-nav",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Step table with the nav rail (Prepare, Cutover, Hypercare, Handover), tall footer.",
+      "pptx": "Same as runbook/step-table plus rotated tabs; tall footer band."
+    },
+    {
+      "key": "comparison/us-versus-others",
+      "family": "argument",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body nodes changed: 2",
+        "slots",
+        "budget",
+        "purpose",
+        "uses"
+      ],
+      "summary": "Replaced the Magenta 'Owned' callout with a calm light-surface card that has an explicit purpose: a labelled handover metric (label 'Handover target', value 'Day 90', one line of context). The slot entries now state what each part is for.",
+      "pptx": "Delete the callout node (57,324,w198). Add a card (57,324,270 x 144, surface subtle, pad 18, label, metric {value, label}). Slots 'callout' replaced by handover label, value and context."
+    },
+    {
+      "key": "comparison/us-versus-others-four",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New variant of us-versus-others with four implications in a 2 x 2 (row pitch 90, 14pt text) and the same calm handover metric card.",
+      "pptx": "Same as us-versus-others but the implication grid has four icon nodes (54 x 54, subtle) at (345,306), (633,306), (345,396), (633,396), each with 14pt text beside it (w204, h54, vertically centred). Same handover card at (57,324)."
+    },
+    {
+      "key": "from-to/rows",
+      "family": "argument",
+      "change": "deprecated",
+      "date": "2026-10-02",
+      "replacedBy": "transformation/before-after",
+      "summary": "Marked deprecated because it is hard to tell apart from transformation/before-after; kept in the file, content unchanged.",
+      "pptx": "No layout change. Use transformation/before-after instead; stop offering from-to/rows for new slides."
+    },
+    {
+      "key": "goal-steps/goal-band-three-steps",
+      "family": "argument",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body: 7 → 6 nodes",
+        "slots",
+        "budget",
+        "purpose"
+      ],
+      "summary": "Removed the bottom gray 'Expected outcome' bar; the three step cards now run to the body bottom (h 252) and set their text at 14pt instead of 12pt.",
+      "pptx": "Delete the 846 x 36 strong block at y 432 and the 'expected outcome' slot. Cardrow h 198 to 252 (y 216 to 468); remove bodySize 'small' so card body is 14/21."
+    },
+    {
+      "key": "objective/numbered-and-guidance",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New: the numbered three-reason rationale (from numbered-and-panel) widened to 558 beside the skinnier 270 guidance panel (from stepper-and-guidance), now full body height.",
+      "pptx": "Label text (57,126,w558) and strongnum (57,162,w558, numStyle stat-sm) on the left; inverse card (633,126,270 x 306, top edge 6 callout, label, title, six bullets, bodySize small) on the right. No bottom bar."
+    },
+    {
+      "key": "objective/numbered-and-guidance-split",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "tall-right-narrow split: title (2 lines) and three numbered reasons in the wide column, guidance panel rising through the header band at x 633 y 36.",
+      "pptx": "Add tall-right-narrow, titleLines 2. Label y 162, strongnum y 198 (w 558); guidance card x 633 y 36 w 270 h 270."
+    },
+    {
+      "key": "pillars/four-why-matters",
+      "family": "argument",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "slide.emphasis",
+        "slide.title",
+        "body nodes changed: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11…",
+        "budget",
+        "purpose"
+      ],
+      "summary": "Each pillar title now sits to the right of its icon on one row (wraps if needed), giving the light-blue body more room, and each light-blue box is joined to its dark-blue box by a hand-drawn right-angle arrow pointing down instead of a plain L connector. Round 3: Arrows now drop out of the light card, turn and point right at the dark card (arrow-right-angle, no flip or rotation). Dark cards are narrower (126 wide) and shifted right 72pt from the card edge, 18pt below it, 144 tall; arrow tip leaves about 19pt of margin to the dark card.",
+      "pptx": "Cards: icon.layout 'stack' to 'inline', h 234 to 180. Dark boxes moved to y 360, h 126 to 108 (x unchanged at card x + 18, w 180); their label and text moved to y 372 and y 390. The 4 connector nodes are removed and 4 mark nodes added (arrow-right-angle, rotate 90, w 54, at card x + 12, y 302). budget.marks is 4 (one repeated motif). The title's highlight emphasis is removed (title now plain text, [[ ]] dropped) so the slide keeps a single mark motif. Round 3: Draw the arrow-right-angle mark unrotated at x = card x, y = card bottom + 2, w 54. Dark block at x = card x + 72, y = card bottom + 18, w 126, h 144; its label and text at x + 12, w 102 (label y + 12, text y + 30)."
+    },
+    {
+      "key": "pillars/four-why-matters-nav",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of four pillars with why-it-matters panels (tall footer); cards 162 high with two bullets each, panels end at y 450. Round 3: Same arrow and narrower, shifted dark-card fix as the standard variant, on the nav frame (card bottom 288).",
+      "pptx": "Draw 5 vertical section tabs at x 21-39; cards h162, panels y342 h108, arrows y284. Round 3: Same geometry as pillars/four-why-matters, relative to the card bottom at 288: mark y 290, dark block y 306, h 144."
+    },
+    {
+      "key": "session/stepper-and-guidance",
+      "family": "argument",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body nodes changed: 3",
+        "purpose"
+      ],
+      "summary": "Removed the gray box at the bottom; the ask of participants is now plain call-out text under a hairline rule. Round 3: Removed the horizontal rule above the participants line; text kept. Purpose text updated.",
+      "pptx": "Delete the 846 x 36 'strong' block at y 432. Add a rule (57,432,w846) and a 14pt primary text (57,444,w846) with the same sentence. Round 3: Drop the rule at y 432; keep the ask text at y 444."
+    },
+    {
+      "key": "session/stepper-and-guidance-split",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "tall-right-narrow split: title (2 lines) and step sequence in the wide column, tall Grounded guidance panel from y 36 beside it, participants ask under the panel.",
+      "pptx": "Add tall-right-narrow, titleLines 2. Label y 162 and vstepper y 186 (w 558); guidance card x 633 y 36 w 270 h 270; ask text x 633 y 324 w 270."
+    },
+    {
+      "key": "session/stepper-and-outcomes",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New: the four-step vertical sequence (from stepper-and-guidance, narrowed to 342) beside the Grounded two-column outcomes panel (from numbered-and-panel), with the ask as plain text under a rule. Round 3: Removed the horizontal rule above the ask line; text kept.",
+      "pptx": "Label text, vstepper (57,150,w342, step text trimmed to one or two 12pt lines), rule (57,420,w342) and 14pt text (57,432,w342) on the left. Right: inverse block (417,126,486 x 342), label, heading and six deep outcome cards (216 x 78, left callout edge) exactly as in objective/numbered-and-panel. Round 3: Drop the rule at y 414; keep the ask text at y 426."
+    },
+    {
+      "key": "takeaway-rail/metrics-rail",
+      "family": "argument",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body: 7 → 8 nodes",
+        "slots",
+        "budget"
+      ],
+      "summary": "The one-line sentence under the metrics is now a labelled 3-sentence explanatory paragraph on how automated matching and earlier review produce the savings.",
+      "pptx": "Replace the single text at (57,324,w414) with a label text (57,324,w558) and a 14pt body paragraph (57,342,w558, about 55 words). Two new slots: explanation label and explanation paragraph."
+    },
+    {
+      "key": "transformation/pain-to-themes",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New one-to-many variant: two pain points, each fanned out by elbow connectors to three design themes (six total). pain-to-theme is unchanged.",
+      "pptx": "Two inverse blocks (57,144 and 57,306; 270 x 144) with pain text; six subtle 486 x 36 theme blocks at x 417 with a subhead title (x 429) and 12pt description (x 627). Six elbow connectors (elbow 'h', startDot) from each pain block right-middle (327, gy+72) to each theme left-middle (417, ty+18). No arrow nodes, no closing statement."
+    },
+    {
+      "key": "transformation/pain-to-themes-nav",
+      "family": "argument",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of pain points fanning out to design themes (compact footer); rail marks Approach.",
+      "pptx": "Draw 5 vertical section tabs at x 21-39; content unchanged."
+    },
+    {
+      "key": "pricing/capacity-split",
+      "family": "commercials",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Capacity run-rate with the fee summary in the short left column and a full-height allocation table (7 roles, rowH 46, team run-rate footer) in a wide tall-right column. Still only team monthly run-rate, no individual pricing.",
+      "pptx": "New layout: split tall-right, titleLines 2; feesummary x57 y144 w270; table x345 y36 w558 rowH 46 with runRate row; tall footer."
+    },
+    {
+      "key": "pricing/options-nav",
+      "family": "commercials",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of pricing/options with tall footer; section tabs at the left edge.",
+      "pptx": "Same body as the original; add the nav rail tabs at x 21-39 with the active section highlighted."
+    },
+    {
+      "key": "scope/service-value-nav",
+      "family": "commercials",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of scope/service-value with compact footer; section tabs at the left edge.",
+      "pptx": "Same body as the original; add the nav rail tabs at x 21-39 with the active section highlighted."
+    },
+    {
+      "key": "chart/column-full-split",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Tall column chart (558x432) in tall-right; short column holds a two-line title, a subhead and two proof bullets.",
+      "pptx": "Chart x 345 y 36 w 558 h 432; subhead at y 162 and bullets at y 216 in x 57-327."
+    },
+    {
+      "key": "image-text/frame-right-split",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Portrait photo 270x432 in the narrow left column (tall-left-narrow); title, subhead, paragraph, two proof lines and caption fill the 558-wide short column.",
+      "pptx": "Image frame x 57 y 36 w 270 h 432 (cropped portrait); text column x 345-903."
+    },
+    {
+      "key": "quadrant/numbered-legend",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 2,
+      "summary": "2x2 with numbered points (1-6) and a numbered legend in the short column (strongnum, small: number, title, short line). tall-right split. Points are numbered via item labels because the renderer's key:true draws its own legend inside the chart. Round 4: Same recentring: x 411, w 441 (key markers).",
+      "pptx": "Build the quadrant with numbered points (plain numerals beside the dot; filled numbered circles would be better) and a 6-item numbered list (01-06, bold title, one line) in the short column. A renderer option for numbered points without the inline key would improve this. Points are filled numbered circles (chart key: \"markers\": 16 pt Grounded circles with White Mono 9 numerals), matching the legend numbers in the short column. Round 4: Update chart node to x 411, w 441."
+    },
+    {
+      "key": "quadrant/strong",
+      "family": "evidence",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 3,
+      "fields": [
+        "slide.source",
+        "slide.split",
+        "slide.title",
+        "slide.titleLines",
+        "body: 2 → 4 nodes",
+        "slots"
+      ],
+      "summary": "Rebuilt on split frame tall-right with the 2x2 (about 396 square) in the tall column; the single note is replaced by three stacked kicker/title/body blocks (Labs, Hospitals, target). Arrow targets changed so the two movement arrows no longer cross. Round 3: Same refit as subtle: chart x 381, w 522. Round 4: Same recentring: x 411, w 441.",
+      "pptx": "Set frame to split tall-right. Chart moves from x 57-615 to x 447-903, y 27-468 (plot x 471-867, y 36-432), chart title removed. Replace the single textblock with three textblocks at x 57, w 270, y 144/252/360. Title 'Out of the red zone by wave 3' on 2 lines at heading size. Item positions and arrow targets updated (Labs to .4/.28, Hospitals to .18/.36). Source shortened. Round 3: Quadrant chart box x 381, w 522. Round 4: Update chart node to x 411, w 441."
+    },
+    {
+      "key": "quadrant/subtle",
+      "family": "evidence",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 3,
+      "fields": [
+        "slide.source",
+        "slide.split",
+        "slide.title",
+        "slide.titleLines",
+        "body: 1 → 4 nodes",
+        "slots",
+        "budget",
+        "uses"
+      ],
+      "summary": "Rebuilt on split frame tall-right. 2x2 now fills the tall column (plot about 396 square, y 36-432) with direct item labels; no chart title or numbered key. Three stacked kicker/title/body blocks (aim here, plan carefully, avoid) fill the short left column. Title shortened to 2 lines. Round 3: Refit to the 558-wide tall-right column: chart node x 381, w 522 (square about 405 centred in the column, room for right-hand point labels). Round 4: Right-side quadrant chart centred horizontally in the tall column (345-903): node x 381->411, w 522->441. Plot square 405 at x 435-840 with y-label at about 418; margins 73/72.",
+      "pptx": "Set frame to split tall-right (no rail). Title zone now 270 wide at heading size, titleLines 2 (rule at 126). Resize and move the 2x2 chart to x 447-903, y 27-468 (plot x 471-867, y 36-432); drop the chart title and the numbered key (key:false, labels beside points). Shorten item labels to 22 chars or fewer and keep them inside their quadrant. Add three textblock nodes at x 57, w 270, y 144/252/360. Source text shortened to fit 270 wide. Slots: added block label/title/body, title maxChars 42. Round 3: Quadrant chart box x 381, w 522; text blocks unchanged. Round 4: Update chart node to x 411, w 441 (y 27, h 441 unchanged); plot square x 435-840."
+    },
+    {
+      "key": "quadrant/subtle-left",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Mirror of quadrant/subtle: split tall-left, 2x2 in the tall left column, header and three stacked text blocks in the short right column. Round 3: Refit to the 558-wide tall-left column (x 57-615): chart x 75, w 522.",
+      "pptx": "New template. Frame split tall-left (tall x 57-543, short x 633-903). Chart at x 87, y 27, w 456, h 441 (plot x 111-507, y 36-432), no title, no key. Three textblocks at x 633, w 270, y 144/252/360. Header zone sits over the short right column (whiteboard patch follows it). Same node types as quadrant/subtle. Round 3: Quadrant chart box x 75, w 522."
+    },
+    {
+      "key": "stats/circled-headline",
+      "family": "evidence",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body: 3 → 4 nodes",
+        "slots",
+        "budget",
+        "purpose",
+        "uses"
+      ],
+      "summary": "Metric cards shrunk to 198x162 (stat-sm values) in the right column; circled headline centred left; added a 'What it means' narrative card (label plus a two-line paragraph) across the bottom. Budget 70 words.",
+      "pptx": "Reposition circle metric (x 165, y 180), two cards (x 489 and 705, y 144, 198x162), and a subtle card x 57 y 324 w 846 h 90 with label and one paragraph."
+    },
+    {
+      "key": "stats/four-metrics",
+      "family": "evidence",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body: 6 → 8 nodes",
+        "budget"
+      ],
+      "summary": "The one-line savings note under the four metrics is now a labelled two-column explanation of where the savings come from.",
+      "pptx": "Replace the single body text box at y 342 with a label at (57,288) and two 414-wide body text boxes at (57,306) and (489,306)."
+    },
+    {
+      "key": "status/classic",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Classic project status dashboard (working tier, 12pt dense): overall status table in the header band, status by area (Scope, Schedule, Budget, Risks) with one-line notes, completed and planned activities, a three-row risk register and four decisions needed.",
+      "pptx": "New template, rail none, compact footer, one-line title. Uses dense tables (rowH 28, 12pt) with status cells (green/yellow/red square plus label) and spanning group headers; a one-cell status table at x 705, y 36; grouplabel plus small bullets for activities and decisions (bullets with bold lead and secondary text). Table row heights are 28 so band 1 ends at y 290 and band 2 starts at y 306."
+    },
+    {
+      "key": "status/milestones-workstreams",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Workstream status by month (five workstreams, Jul to Oct) with a milestone vertical stepper beside it and next steps below.",
+      "pptx": "New template, rail none, compact footer. Dense status table with group header over month columns, vstepper (done/current/next states) at x 633, w 270, grouplabel + 14pt bullets for next steps, source line."
+    },
+    {
+      "key": "status/raid-log",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Dense RAID log (risks, assumptions, issues, dependencies) as one full-width table with type tag, item, owner, due, next action and status; nav rail with compact footer.",
+      "pptx": "New template. rail nav (items [Update, Plan, RAID, Asks], active 2), footer compact, source line. One dark-header dense table, rowH 30, nine rows, tag and status cell types."
+    },
+    {
+      "key": "status/steering-update",
+      "family": "evidence",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Executive one-pager on the nav rail with tall footer: overall status card, key messages, an inverse decisions-requested card, top three risks table and next milestones.",
+      "pptx": "New template. rail nav with nav items [Update, Plan, Risks, Asks] active 0, footer tall (body bottom 450, no source line). Nodes: metric card with status, grouplabel + bullets, inverse card with bullets body, dense status table with group header, grouplabel + schedule list."
+    },
+    {
+      "key": "agenda/schedule",
+      "family": "openers",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 3,
+      "fields": [
+        "body: 2 → 4 nodes",
+        "slots",
+        "budget",
+        "purpose",
+        "uses"
+      ],
+      "summary": "Added a working-session photo under the Outcome block and pulled the right column left (x 507) so the photo and outcome sit closer to the schedule, which narrows to 414 wide. Round 4: Photo now layered over an offset Grounded (inverse) block. Photo is 378x252 at (525,198); block is 378x252 at (507,216), so it shows 18pt left and below the photo. Block left edge aligns with the Outcome text (x 507), photo right edge with the margin (903), block bottom with the body bottom (468). Rev 3.",
+      "pptx": "Schedule width 558 to 414. Outcome textblock moved x 705 to 507 and widened 198 to 396. New imageframe x 507, y 252, 396 x 216, photo-working-session. New 'photo' image slot. Round 4: Add a Grounded rectangle at x507 y216 w378 h252 behind the photo; resize and move the photo to x525 y198 w378 h252 (crop to fit)."
+    },
+    {
+      "key": "agenda/schedule-nav",
+      "family": "openers",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 2,
+      "summary": "Nav-rail variant of the schedule agenda (compact footer); rail marks Context. Round 4: Same layered photo and Grounded block as agenda/schedule. Rev 2.",
+      "pptx": "Draw 5 vertical section tabs at x 21-39; content unchanged. Round 4: Same as agenda/schedule: Grounded rectangle x507 y216 w378 h252 behind photo x525 y198 w378 h252."
+    },
+    {
+      "key": "agenda/schedule-split",
+      "family": "openers",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Schedule agenda with a full-height photo in a narrow left column (tall-left-narrow); title, 45pt schedule rows and outcome in the wide right column.",
+      "pptx": "New layout: split tall-left-narrow; photo imageframe at x57 y36 270x432; title zone x345-903; schedule x345 y126 w558 keyW144 rowHeight45; outcome textblock x345 y378 w558."
+    },
+    {
+      "key": "divider/inverse",
+      "family": "openers",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "slide.whiteboard",
+        "body nodes changed: 0",
+        "budget",
+        "purpose"
+      ],
+      "summary": "The photo square is now 270 and sits at x 399, y 126, closer to the title, and overlaps the dot field deliberately: the dots run behind its right half and extend above, below and to the right of it.",
+      "pptx": "Square moved (633,36,216) to (399,126,270). Whiteboard dot field moved/resized (633,198,270x252) to (543,54,360x396), drawn behind the photo so the photo covers the field's left portion. Title and eyebrow unchanged."
+    },
+    {
+      "key": "key-message/stat",
+      "family": "openers",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body: 3 → 4 nodes",
+        "slots",
+        "budget",
+        "purpose",
+        "uses"
+      ],
+      "summary": "Plain stat square replaced by a two-tone stat block: the Grounded square ($4.2M, run-rate savings) moves up to y162, and a Subtle block 198x72 at y360 beneath it carries '12 → 5 days' in heading style. No new hand-drawn mark (the title already uses the highlight). Budget words +3, new 'comparison' slot. Rev 2.",
+      "pptx": "Move the Grounded stat square to y162 (size 198). Add a Subtle (#E8EEF8) rectangle x705 y360 w198 h72 with centered heading-style text '12 → 5 days'. Add the comparison slot."
+    },
+    {
+      "key": "key-message/stat-nav",
+      "family": "openers",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 2,
+      "summary": "Nav-rail variant of the claim-with-proof key message (tall footer); rail marks Approach. Round 4: Same two-tone stat block as key-message/stat. Rev 2.",
+      "pptx": "Draw 5 vertical section tabs at x 21-39; content already fits above y 450. Round 4: Same as key-message/stat."
+    },
+    {
+      "key": "key-message/stat-split",
+      "family": "openers",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Key message and one proof stat in the short left column (tall-right-narrow) beside a full-height photo.",
+      "pptx": "New layout: split tall-right-narrow; photo imageframe x633 y36 270x432; title zone x57-615, 1 line; message title text x57 y126 w342 h162 bottom; lead x57 y306 w342; stat square x417 y270 198."
+    },
+    {
+      "key": "case-studies/matrix",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Engagement index: past work against Close, Data and ERP capabilities with a one-line result.",
+      "pptx": "Native table with check cells."
+    },
+    {
+      "key": "case-study/exhibit",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Case study built around a graphic: a 414x324 clustered before/after column chart (days to close by entity) on the left; challenge, what we did (three bullets) and results (two metrics) on the right.",
+      "pptx": "Add the template with a native clustered column chart (series Before deemph.3, After series.1) and the right-hand text stack."
+    },
+    {
+      "key": "case-study/exhibit-split",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Split variant (tall-left) of exhibit: a 558x414 full-height chart, with a two-line title, challenge, three actions and one headline result in the 270 column. The source line is shortened ('replace before use') to fit 270 wide.",
+      "pptx": "Split frame tall-left; chart at x 57 y 36 w 558 h 414; text stack at x 633; shortened source text."
+    },
+    {
+      "key": "case-study/quote-nav",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Case study quote slide on the nav rail with compact footer; Proof active.",
+      "pptx": "As case-study/quote plus vertical nav tabs."
+    },
+    {
+      "key": "case-study/quote-outcome",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Client quote beside three outcome metrics and the deliverable thumbnail. Round 3: Reduced the quote's dominance: the inverse quote card dropped from 270x324 to 270x126 with a shorter quote, and the freed space carries a 'What we did' column (three actions). Title now names the work. Metrics and deliverable unchanged.",
+      "pptx": "Quote card, three metrics, thumbnail placeholder or image. Round 3: Resize the quote card to 270x126 at y 324, shorten the quote, add the colhead and three-item bullets at x 345 y 126/180, and update the title."
+    },
+    {
+      "key": "case-study/timeline",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Case study as a challenge, approach and results timeline with before and after metric cards. Round 3: Approach column widened to 396 and now lists four concrete actions (bold lead plus text). Challenge narrowed to 198 with a 198x144 imageframe (photo-clinical-leaders) beneath. Two thumbnails (close map diagram, reconciliation rules table) sit under the approach. Results are three stacked metrics. Renamed 'challenge, approach and results with photo'.",
+      "pptx": "Three colhead columns plus three metric cards; plain text and rectangles. Round 3: New column geometry (x 57/273/687, w 198/396/216); add the imageframe, the bullets list with bold leads, two thumbnails with captions and three metrics; drop the three before/after cards and grouplabel."
+    },
+    {
+      "key": "case-study/what-we-did",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Core 'what we did' slide: a 198x216 photo beside three workstream rows (title, one-line description, and the result it drove, set off by hairline rules), then a Results label and a compact strip of three stat-sm metrics.",
+      "pptx": "Add the template: imageframe (photo-working-session), 3 rows of textblock title+body (x 273, w 324) and textblock label+body (x 615, w 288) at 72 pitch with rules between, grouplabel at y 360, three stat-sm values with small labels at y 378."
+    },
+    {
+      "key": "case-study/what-we-did-split",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Split variant (tall-right-narrow) of what-we-did: full-height 270x414 photo on the right (photo-clinical-team), workstream rows and a three-metric results strip in the 558 short column.",
+      "pptx": "Split frame tall-right-narrow; imageframe at x 633 y 36 w 270 h 414; rows at x 57 (w 270) and x 345 (w 270); strip columns at 174 wide."
+    },
+    {
+      "key": "deliverables/annotated",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "One large deliverable page with dashed zones and hand-drawn double arrows to three call-outs (budget.marks 3).",
+      "pptx": "Thumbnail, dashed frames and arrow art; call-outs are subtle-fill text boxes."
+    },
+    {
+      "key": "deliverables/index",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Deliverable index table (phase, format, audience) with a sample thumbnail beside each row.",
+      "pptx": "Native table with thumbnails placed over the Sample column."
+    },
+    {
+      "key": "deliverables/sample-grid-nav",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Sample deliverables grid on the nav rail with tall footer; Deliverables active.",
+      "pptx": "As deliverables/sample-grid plus vertical nav tabs and tall footer band."
+    },
+    {
+      "key": "deliverables/walkthrough",
+      "family": "proof",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Strip of four deliverable thumbnails, each numbered with a one-line explanation.",
+      "pptx": "Four thumbnails, numbered headings and a banner block."
+    },
+    {
+      "key": "architecture/layers",
+      "family": "solution",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body nodes changed: 1, 2, 3, 4, 5, 6, 7",
+        "slots",
+        "budget",
+        "purpose"
+      ],
+      "summary": "Rebuilt the layer stack: the experience card is now a layerrow so all four layers share x 273, w 450 and flush edges; tones step inverse, strong, subtle, outline; the connector line is gone; layer 4 is numbered; the shared-controls card spans layers 1-4 (label, 4 bullets); a deep Foundation layerrow spans the stack and controls column at y 396.",
+      "pptx": "Replace the stacked card plus connector with four flush 54 pt rows at x 273 w 450 (y 162, 216, 270, 324) filled Navy, Strong, Subtle, White with a 1 pt outline. Remove the connector. Add a 144 x 216 Subtle controls card at x 741 y 162 with a 3 pt left edge, a label, a subhead title and 4 bullets. Add a Deep foundation row at x 273 y 396 w 612 h 36. Narrow the left text block to w 180."
+    },
+    {
+      "key": "architecture/layers-nav",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of architecture/layers with the compact footer; sections Context, Solution, Approach, Team, Commercials, Solution active.",
+      "pptx": "Same as architecture/layers with rail nav, 5 tabs at x 21-39, tab 2 active; content stays in x 57-903; the header dot patch starts at x 57."
+    },
+    {
+      "key": "architecture/layers-split",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "tall-right split of the layer stack: title, Build once note and Shared controls card in the short column; the frame runs y36-450 with four 72pt layer rows and a foundation row.",
+      "pptx": "New split template (tall-right, titleLines 3). Short column: build-once textblock y180, shared controls card y270 h180 (small body). Tall column: frame x345 y36 w558 h414, layer rows x363 w522 h72 from y72, foundation y378 h54."
+    },
+    {
+      "key": "process/current-future",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Current versus future state on one page: five current-state chevrons with two pain-point steps in Magenta and a note under each, a future-state row of four Navy chevrons (one spanning two columns) with improvement notes, and a Navy result strip.",
+      "pptx": "Row labels at x 57 w 126. Chevrons at x 201, 345, 489, 633, 777 (w 138, last 126; future step 2 w 282), h 54, current y 126 and future y 270. Pain steps filled Magenta. 12 pt notes at y 198 and y 342. Navy strip y 414 h 36."
+    },
+    {
+      "key": "process/hierarchy",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 2,
+      "summary": "L1 to L2 process hierarchy: five 5-up chevrons (in-scope ones Navy, others Strong) with 7-item level-two lists in cards beneath and a scope strip. Round 3: Chevrons now interlock: each point nests into the next notch, bounding boxes abut (172.8 wide on the 5-up pitch, first chevron first:true, last 154.8). Each column card is split into label sub-sections: Process elements (4 bullets), Owner and Systems (short lines). Scope note is now a plain text line instead of a block; cards grew to 216 high.",
+      "pptx": "5-up grid (starts 57, 229.8, 402.6, 575.4, 748.2; w 154.8). Chevrons y 126 h 54; cards y 198 h 198 (Strong under in-scope, Subtle otherwise) with 12 pt bullets; full-width Subtle strip y 414 h 36. Round 3: Draw chevrons with notch/point interlock at x = column start, w 172.8 (last 154.8). Replace the single bullet list per card with three labeled sections: Process elements (4 bullets), Owner (one line), Systems (one line). Scope note becomes a text line at y 426, no panel."
+    },
+    {
+      "key": "process/metrics",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "End-to-end process with step metrics: five chevrons over a four-row metric grid (cycle time, handoffs, volume, rework), bottleneck step Navy with a Subtle column tint and Blue first value, and a Navy takeaway strip.",
+      "pptx": "Chevrons x 183, 327, 471, 615, 759 (w 138, last 144), y 126 h 36. Rules at y 180, 234, 288, 342; row labels at x 57; values in Heading style at column x + 6. Subtle block x 471 y 180 w 138 h 216 behind the bottleneck column. Navy strip y 414 h 36."
+    },
+    {
+      "key": "process/metrics-nav",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of process/metrics with the tall footer; sections Context, Solution, Approach, Team, Context active.",
+      "pptx": "Same as process/metrics with rail nav (4 tabs, tab 1 active) and the tall footer; the source line stays above the footer band."
+    },
+    {
+      "key": "process/sipoc",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "SIPOC: five 5-up columns (Suppliers, Inputs, Process, Outputs, Customers) with the Process column in Navy, plus three outline cards for start, end and out of scope.",
+      "pptx": "5-up header blocks y 126 h 36 (Process Navy, others Strong); cards y 180 h 162 with 12 pt bullets (Process card Strong); three 270 x 90 outline cards at x 57, 345, 633, y 360 with a mono label and a 14 pt line."
+    },
+    {
+      "key": "readiness/six-criteria-split",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "tall-right split of the readiness criteria: dark statement panel under a 3-line heading-size title (shortened to 'GA means Northfield runs it as one owned service'), six criteria groups in a 2x3 grid in the tall region.",
+      "pptx": "New split template (tall-right, titleLines 3). Statement block x57 y180 w270 h270; region x345 y36 w558 h414 with 2 columns (x363, x633) and rows at y54, 180, 306."
+    },
+    {
+      "key": "workstreams/five-narrative",
+      "family": "solution",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "New 5-up workstream slide: short narrative paragraph on top of each column, a rule, then a Key risks label with two bullets at the foot. The risk band is folded into the columns (columns run to y 468).",
+      "pptx": "New template: five 154.8 columns, header card y126 h72, tall layer container y198 h270, narrative text at y210, rule y342, Key risks label y354, 2 bullets y372."
+    },
+    {
+      "key": "workstreams/five-with-risks",
+      "family": "solution",
+      "change": "revised",
+      "date": "2026-10-02",
+      "rev": 2,
+      "fields": [
+        "body: 22 → 37 nodes",
+        "slots",
+        "budget",
+        "purpose",
+        "uses"
+      ],
+      "summary": "Each workstream column now has two labeled sub-sections: Activities (2 bullets) and Output (one short line), replacing the four-bullet list. Risk band unchanged.",
+      "pptx": "In each of the five columns, replace the 4-bullet list with an Activities label + 2 bullets and an Output label + one line of text."
+    },
+    {
+      "key": "bio-full/portrait-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Full-page bio on the nav rail with no panel; split tall-left-narrow: portrait imageframe (photo-headshot, focus 50% 22%) in the 270 x 432 tall column, bio content in the 558 short column.",
+      "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Split tall-left-narrow: portrait x57 y36 w270 h432 (to body bottom 468); short column x345-903, title at title size, name heading y126, Role textblock y180, Background y252 (w270) beside Selected experience y252/bullets y276 (x633), pullquote y372."
+    },
+    {
+      "key": "bios/leadership-specialists-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav variant of leadership-specialists, compact footer.",
+      "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Compact footer."
+    },
+    {
+      "key": "bios/three-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav variant of bios/three, tall footer. Refit: cards 234 tall with a third proof point each, plus a one-line closing statement at y 378.",
+      "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Tall footer; add third bullet to each bio card, card h 234, add lead-style closing line."
+    },
+    {
+      "key": "roles/by-phase-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav variant of roles/by-phase, tall footer. Refit: table row height 42 to 40 so the table ends at 440.",
+      "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Tall footer; table rowH 40."
+    },
+    {
+      "key": "team/org-chart-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of team/org-chart with compact footer; section tabs at the left edge.",
+      "pptx": "Same body as the original; add the nav rail tabs at x 21-39 with the active section highlighted."
+    },
+    {
+      "key": "team/org-roles-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav variant of org-roles, tall footer (body bottom 450; content already ends at 450).",
+      "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Tall footer."
+    },
+    {
+      "key": "team/pods-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav-rail variant of team/pods with tall footer; section tabs at the left edge.",
+      "pptx": "Same body as the original; add the nav rail tabs at x 21-39 with the active section highlighted."
+    },
+    {
+      "key": "team/pods-pairs-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav variant of pods-pairs, compact footer.",
+      "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Compact footer."
+    },
+    {
+      "key": "team/roster-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Nav variant of roster, compact footer.",
+      "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Compact footer."
+    },
+    {
+      "key": "team/roster-split",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Split variant of roster, tall-right-narrow: leadership tier in a 2x3 grid in the 558 short column with the core-team card; the six specialists stack in the 270 tall column.",
+      "pptx": "Split tall-right-narrow; title 'Core team, matched specialists'; short column x57-615 with header block, 2 columns of persons (w270) at y180/234/288 and card y360 h108; tall column x633-903 with Specialists header y36, six persons at y90..360 (pitch 54), small closing text y432."
+    }
+  ]
+}

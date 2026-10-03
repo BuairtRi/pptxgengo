@@ -115,10 +115,14 @@ func (r *renderer) drawLibraryStamp(chrome *LibraryChrome, f ResolvedFrame, sr *
 	// line. Reserve 2pt beyond the measured glyph advance so the final letter
 	// stays inside the stamp; the wrapper retains its source right edge.
 	width += 2
-	if width+12 > f.Body.W+.02 {
-		return fmt.Errorf("library.stamp_width: requires %.3fpt capacity %.3fpt", width+12, f.Body.W)
+	header := f.Header
+	if header.W == 0 {
+		header = f.Body
 	}
-	box := Rect{f.Body.X + f.Body.W - width - 12, 33, width + 12, 18}
+	if width+12 > header.W+.02 {
+		return fmt.Errorf("library.stamp_width: requires %.3fpt capacity %.3fpt", width+12, header.W)
+	}
+	box := Rect{header.X + header.W - width - 12, 33, width + 12, 18}
 	p := &scenePlan{ID: "wm.library-stamp", Bounds: box}
 	outline, err := r.sceneColor(f.Request.Surface, "strong")
 	if err != nil {

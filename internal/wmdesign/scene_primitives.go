@@ -50,7 +50,7 @@ type primitiveSource struct {
 }
 
 var primitiveFields = map[string]string{
-	"text": "style ink on text align valign emphasis markInk variant h", "textblock": "label title body", "bullets": "items size on k label", "ol": "items size on", "list": "items variant rowHeight", "schedule": "items keyInk keyW rowHeight", "grouplabel": "text", "numhead": "n text numInk ink", "colhead": "rule weight label title", "strongnum": "items numInk numStyle size", "pullquote": "text by markInk",
+	"text": "style ink on text align valign emphasis markInk variant h weight", "textblock": "label title body h", "bullets": "items size on k label", "ol": "items size on", "list": "items variant rowHeight", "schedule": "items keyInk keyW rowHeight", "grouplabel": "text", "numhead": "n text numInk ink", "colhead": "rule weight label title", "strongnum": "items numInk numStyle size", "pullquote": "text by markInk",
 }
 
 func primitiveDecode(raw json.RawMessage, target any, allowed string) error {
@@ -193,6 +193,18 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 			err = e
 			break
 		}
+		if n.Weight != 0 {
+			switch n.Weight {
+			case 400, 500, 600, 700:
+				st.Weight = int(n.Weight)
+			default:
+				err = fmt.Errorf("scene.unsupported_text_weight: %s", id)
+				break
+			}
+			if err != nil {
+				break
+			}
+		}
 		if n.VAlign != "" && n.VAlign != "top" && n.VAlign != "middle" && n.VAlign != "bottom" {
 			err = fmt.Errorf("scene.unsupported_valign: %s", n.VAlign)
 			break
@@ -249,6 +261,14 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 		}
 		if len(p.Items) == 0 {
 			err = fmt.Errorf("scene.empty_textblock: %s", id)
+		}
+		if err == nil && n.H > 0 {
+			for _, item := range p.Items {
+				if item.Text != nil && item.Text.Rect.Y+item.Text.Rect.H > n.Y+n.H+.02 {
+					err = fmt.Errorf("scene.textblock_overflow: %s bottom %.3fpt, capacity %.3fpt", item.Text.ID, item.Text.Rect.Y+item.Text.Rect.H, n.Y+n.H)
+					break
+				}
+			}
 		}
 	case "colhead":
 		weight := n.Weight

@@ -13,6 +13,15 @@ import (
 type LibraryValues struct {
 	Slots map[string]json.RawMessage `json:"slots"`
 	Keys  map[string][]string        `json:"keys"`
+	Nav   *LibraryNavContent         `json:"nav,omitempty"`
+}
+type LibraryNavItem struct {
+	Key   string `json:"key"`
+	Label string `json:"label"`
+}
+type LibraryNavContent struct {
+	Items  []LibraryNavItem `json:"items"`
+	Active string           `json:"active"`
 }
 
 func setLibraryContent(root any, pointer string, value any) error {
@@ -50,6 +59,9 @@ func setLibraryContent(root any, pointer string, value any) error {
 }
 
 func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, TemplateSlideRecord, error) {
+	if len(def.PendingCapabilities) > 0 {
+		return SlideSpec{}, TemplateSlideRecord{}, fmt.Errorf("library.capability_pending: %s: %s", def.Key, strings.Join(def.PendingCapabilities, ", "))
+	}
 	var values LibraryValues
 	if err := bindingStrictDecode(bound.Values, &values); err != nil {
 		return SlideSpec{}, TemplateSlideRecord{}, err
@@ -61,7 +73,7 @@ func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, Temp
 	if err != nil {
 		return SlideSpec{}, TemplateSlideRecord{}, err
 	}
-	record := TemplateSlideRecord{SlideID: bound.ID, Template: def.Key, Contract: LibraryBindingsContract, SourceFile: def.SourceFile, SourceSHA256: def.SourceSHA256, ContentKind: bound.ContentKind, Identities: def.Identities}
+	record := TemplateSlideRecord{SlideID: bound.ID, Template: def.Key, Contract: LibraryBindingsContract, SourceFile: def.SourceFile, SourceSHA256: def.SourceSHA256, SourceRevision: def.SourceRevision, ContentKind: bound.ContentKind, Identities: def.Identities}
 	for _, slot := range def.Slots {
 		raw, ok := values.Slots[slot.Name]
 		if !ok {
@@ -102,6 +114,37 @@ func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, Temp
 		record.Assignments = append(record.Assignments, TemplateSlotAssignment{Slot: slot.Name, TargetID: strings.Split(slot.Name, ".")[0], Property: slot.Name, ValueKind: slot.Kind, SourcePointer: slot.SourcePointer, Value: raw})
 	}
 	keyOverlay := map[string][]string{}
+	if def.Nav == nil && values.Nav != nil {
+		return SlideSpec{}, record, fmt.Errorf("library.nav_without_nav_template")
+	}
+	if def.Nav != nil {
+		if values.Nav == nil || len(values.Nav.Items) < def.Nav.MinItems || len(values.Nav.Items) > def.Nav.MaxItems {
+			return SlideSpec{}, record, fmt.Errorf("library.nav_requires_2_to_6_items")
+		}
+		seen := map[string]bool{}
+		labels := []string{}
+		active := -1
+		for i, item := range values.Nav.Items {
+			if !validPartKey(item.Key) || seen[item.Key] || strings.TrimSpace(item.Label) == "" || strings.ContainsAny(item.Label, "\r\n") {
+				return SlideSpec{}, record, fmt.Errorf("library.invalid_nav_item: %s", item.Key)
+			}
+			seen[item.Key] = true
+			if item.Key == values.Nav.Active {
+				active = i
+			}
+			labels = append(labels, item.Label)
+			keyOverlay["/nav/items"] = append(keyOverlay["/nav/items"], item.Key)
+			raw, _ := json.Marshal(item.Label)
+			record.Assignments = append(record.Assignments, TemplateSlotAssignment{Slot: "nav." + item.Key + ".label", TargetID: "nav." + item.Key, Property: "label", ValueKind: "string", SourcePointer: fmt.Sprintf("/nav/items/%d", i), Value: raw})
+			record.CardKeys = append(record.CardKeys, TemplateCardKey{Key: item.Key, Ordinal: i + 1, TargetID: "nav." + item.Key, SourcePointer: "/nav/items"})
+		}
+		if active < 0 {
+			return SlideSpec{}, record, fmt.Errorf("library.nav_active_key_missing")
+		}
+		obj["nav"] = map[string]any{"items": labels, "active": active}
+		raw, _ := json.Marshal(values.Nav.Active)
+		record.Assignments = append(record.Assignments, TemplateSlotAssignment{Slot: "nav.active", TargetID: "$slide", Property: "nav.active", ValueKind: "string", SourcePointer: "/nav/active", Value: raw})
+	}
 	for _, array := range def.Arrays {
 		keys, ok := values.Keys[array.Name]
 		if !ok || len(keys) != array.Count {
@@ -126,7 +169,7 @@ func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, Temp
 		return SlideSpec{}, record, err
 	}
 	slide.ID, slide.ContentKind, slide.TemplateBinding = bound.ID, bound.ContentKind, &record
-	if err := applyLibraryRefinements(def.Key, &slide); err != nil {
+	if err := applyLibraryRefinements(def.Key, def.SourceRevision, &slide); err != nil {
 		return SlideSpec{}, record, err
 	}
 	return slide, record, nil
@@ -134,6 +177,10 @@ func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, Temp
 
 func libraryExampleValues(def LibraryTemplate) LibraryValues {
 	values := LibraryValues{Slots: map[string]json.RawMessage{}, Keys: map[string][]string{}}
+	if def.Nav != nil {
+		example := def.Nav.Example
+		values.Nav = &example
+	}
 	for _, slot := range def.Slots {
 		values.Slots[slot.Name] = slot.Example
 	}
@@ -160,7 +207,10 @@ func LibraryReference(bundle, override, family string, year int) (BoundDocument,
 		if family != "" && def.Family != family {
 			continue
 		}
-		if legacyTemplate(def.Key) {
+		if def.Status == "deprecated" {
+			continue
+		}
+		if def.ContentContract == TemplateBindingsContract {
 			for _, slide := range legacy.Slides {
 				if slide.Template == def.Key {
 					slide.ID = fmt.Sprintf("library-%03d", len(doc.Slides)+1)
@@ -198,8 +248,8 @@ func LibrarySourceReference(bundle, override, family string, year int) (Document
 		}
 		slide.ID = fmt.Sprintf("source-%03d", len(doc.Slides)+1)
 		slide.ContentKind = "synthetic_example"
-		slide.TemplateBinding = &TemplateSlideRecord{SlideID: slide.ID, Template: def.Key, Contract: LibraryBindingsContract, SourceFile: def.SourceFile, SourceSHA256: def.SourceSHA256, ContentKind: "synthetic_example", Identities: def.Identities}
-		if e := applyLibraryRefinements(def.Key, &slide); e != nil {
+		slide.TemplateBinding = &TemplateSlideRecord{SlideID: slide.ID, Template: def.Key, Contract: LibraryBindingsContract, SourceFile: def.SourceFile, SourceSHA256: def.SourceSHA256, SourceRevision: def.SourceRevision, ContentKind: "synthetic_example", Identities: def.Identities}
+		if e := applyLibraryRefinements(def.Key, def.SourceRevision, &slide); e != nil {
 			return Document{}, e
 		}
 		doc.Slides = append(doc.Slides, slide)

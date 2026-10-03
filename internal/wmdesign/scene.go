@@ -256,6 +256,15 @@ func (r *renderer) sceneRect(p *scenePlan, id string, box Rect, surface string) 
 		return fmt.Errorf("scene.invalid_shape_geometry: %s", id)
 	}
 	props := pptx.ShapeProps{PositionProps: pos(box), ObjectNameProps: pptx.ObjectNameProps{ObjectName: id}, Fill: &pptx.ShapeFillProps{Color: color}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}}
+	if r.source.Revision == LibraryRevisionV2 && surface == "outline" {
+		// The source surface uses an inset 1pt border. Keep its outer bounds
+		// fixed while centering the native stroke half a point inside them.
+		if box.W <= 1 || box.H <= 1 {
+			return fmt.Errorf("scene.invalid_outline_geometry: %s", id)
+		}
+		props.PositionProps = pos(Rect{box.X + .5, box.Y + .5, box.W - 1, box.H - 1})
+		props.Line = &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: "CED7E6"}, Width: 1}
+	}
 	p.Items = append(p.Items, sceneItem{Shape: &sceneShape{Type: pptx.ShapeTypeRect, Props: props, Record: ShapeRecord{ID: id, Rect: box, Color: color}}})
 	return nil
 }
@@ -267,7 +276,7 @@ func (r *renderer) planSceneNode(id string, raw json.RawMessage, ctx SceneContex
 	if r.typeEngine.engine != CandidateEngine {
 		return nil, fmt.Errorf("scene.requires_v2")
 	}
-	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
+	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
 		plan, handled, err := handler(id, raw, ctx)
 		if handled || err != nil {
 			if err == nil {

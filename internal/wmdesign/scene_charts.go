@@ -28,6 +28,27 @@ type sceneQuadrantItem struct {
 	Label string    `json:"label"`
 	To    []float64 `json:"to,omitempty"`
 }
+
+// Quadrant keys are a closed false/true/"markers" union.
+type sceneQuadrantKey string
+
+func (k *sceneQuadrantKey) UnmarshalJSON(raw []byte) error {
+	switch string(raw) {
+	case "false":
+		*k = ""
+	case "true":
+		*k = "legend"
+	case `"markers"`:
+		*k = "markers"
+	default:
+		return fmt.Errorf("scene.quadrant_key_requires_boolean_or_markers")
+	}
+	return nil
+}
+func (k sceneQuadrantKey) numbered() bool    { return k != "" }
+func (k sceneQuadrantKey) ownLegend() bool   { return k == "legend" }
+func (k sceneQuadrantKey) markersOnly() bool { return k == "markers" }
+
 type sceneChartSource struct {
 	Type        string             `json:"type"`
 	Kind        string             `json:"kind"`
@@ -59,7 +80,7 @@ type sceneChartSource struct {
 	Trend        bool                     `json:"trend,omitempty"`
 	Quadrants    map[string]sceneQuadrant `json:"quadrants,omitempty"`
 	Items        []sceneQuadrantItem      `json:"items,omitempty"`
-	Key          bool                     `json:"key,omitempty"`
+	Key          sceneQuadrantKey         `json:"key,omitempty"`
 	Style        string                   `json:"style,omitempty"`
 	Fill         string                   `json:"fill,omitempty"`
 	StrongState  string                   `json:"strongState,omitempty"`
@@ -231,7 +252,9 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 		}
 		bottom -= 18
 	}
-	top += 9
+	if n.Kind != "quadrant" || r.source.Revision != LibraryRevisionV2 {
+		top += 9
+	}
 	plot := Rect{b.X, top, b.W, bottom - top}
 	if plot.H <= 36 {
 		return nil, fmt.Errorf("scene.chart_no_plot_capacity")
@@ -239,6 +262,20 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 	if n.Kind == "quadrant" {
 		if err := r.sceneQuadrantChart(p, id, n, plot, surface, ctx); err != nil {
 			return nil, err
+		}
+		if r.source.Revision == LibraryRevisionV2 {
+			p.Bounds = Rect{}
+			for _, item := range p.Items {
+				if item.Shape != nil {
+					p.Bounds = diagramUnion(p.Bounds, item.Shape.Record.Rect)
+				}
+				if item.Text != nil {
+					p.Bounds = diagramUnion(p.Bounds, diagramRotatedRect(item.Text.Rect, item.Text.Rotation))
+				}
+				if item.Chart != nil {
+					p.Bounds = diagramUnion(p.Bounds, item.Chart.Rect)
+				}
+			}
 		}
 		sceneDataGroup(p, id, "chart.quadrant.source", 0, p.Bounds)
 		return p, nil
@@ -744,15 +781,25 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 		return fmt.Errorf("scene.quadrant_content_union")
 	}
 	plotW, plotH := b.W-36, b.H-24
-	if n.Key {
+	if n.Key.ownLegend() {
 		plotW = b.W - 330
+	}
+	if r.source.Revision == LibraryRevisionV2 {
+		availableW := b.W - 36
+		if n.Key.ownLegend() {
+			availableW = b.W - 300
+		}
+		plotW = math.Min(b.H-36, availableW)
+		plotH = plotW
 	}
 	if plotW < 72 || plotH < 72 {
 		return fmt.Errorf("scene.quadrant_minimum_plot")
 	}
 	x, y := b.X+24, b.Y
 	midX, midY := plotW/2, plotH/2
-	p.Warnings = append(p.Warnings, "user-review.v1/quadrant-rectangular-plot: "+id+" uses allocated rectangular plot,24pt axis reserve and fixed306pt key reserve when enabled.")
+	if r.source.Revision == LibraryRevisionV1 {
+		p.Warnings = append(p.Warnings, "user-review.v1/quadrant-rectangular-plot: "+id+" uses allocated rectangular plot,24pt axis reserve and fixed306pt key reserve when enabled.")
+	}
 	fill := n.Fill
 	if fill == "" {
 		fill = "inverse"
@@ -892,7 +939,7 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 		if err != nil {
 			return err
 		}
-		if it.X < 0 || it.X > 1 || it.Y < 0 || it.Y > 1 || it.Label == "" || math.IsNaN(it.X+it.Y) {
+		if it.X < 0 || it.X > 1 || it.Y < 0 || it.Y > 1 || !n.Key.markersOnly() && it.Label == "" || math.IsNaN(it.X+it.Y) || math.IsInf(it.X+it.Y, 0) {
 			return fmt.Errorf("scene.quadrant_item_domain")
 		}
 		iid := id + ".item." + key
@@ -935,16 +982,23 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 			markSurface = "light"
 		}
 		radius := 5.
-		if n.Key {
+		if n.Key.numbered() {
 			radius = 8
 		}
 		r.sceneDataShape(p, iid+".point", Rect{px - radius, py - radius, 2 * radius, 2 * radius}, pptx.ShapeTypeEllipse, fg, nil)
-		if n.Key {
+		if n.Key.numbered() {
 			st, _ := r.sceneDataToken("label", 600)
 			if _, err := r.sceneDataText(p, iid+".number", strconv.Itoa(i+1), st, Rect{px - 7, py - 7, 14, 14}, markSurface, "primary", "center"); err != nil {
 				return err
 			}
-			kx, ky := x+plotW+24, y+6+float64(i)*24
+			if n.Key.markersOnly() {
+				continue
+			}
+			keyGap := 24.
+			if r.source.Revision == LibraryRevisionV2 {
+				keyGap = 36
+			}
+			kx, ky := x+plotW+keyGap, y+6+float64(i)*24
 			r.sceneDataShape(p, iid+".key-point", Rect{kx, ky, 16, 16}, pptx.ShapeTypeEllipse, navy, nil)
 			if _, err := r.sceneDataText(p, iid+".key-number", strconv.Itoa(i+1), st, Rect{kx + 1, ky + 1, 14, 14}, "inverse", "primary", "center"); err != nil {
 				return err
@@ -964,7 +1018,7 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 		}
 	}
 	if n.PositionMode == "data" {
-		if n.Key {
+		if n.Key.numbered() {
 			return fmt.Errorf("scene.quadrant_native_data_key_not_supported")
 		}
 		o, err := r.sceneChartOptions(surface)

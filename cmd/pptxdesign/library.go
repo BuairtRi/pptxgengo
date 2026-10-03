@@ -6,15 +6,44 @@ import (
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
-func runLibrary(command, bundle, source, engine, out, family string, year int) error {
+func runLibrary(command, bundle, source, engine, out, family, templateKeys string, includeDeprecated bool, year int) error {
 	if engine != wmdesign.CandidateEngine {
 		return fmt.Errorf("%s requires --engine %s", command, wmdesign.CandidateEngine)
 	}
 	catalog, err := wmdesign.LibraryCatalog(bundle, source)
 	if err != nil {
 		return err
+	}
+	if includeDeprecated && command != "library-catalog" {
+		return fmt.Errorf("--include-deprecated is supported only by library-catalog")
+	}
+	var selected []string
+	seen := map[string]bool{}
+	if templateKeys != "" {
+		if family != "" {
+			return fmt.Errorf("choose --family or --template-keys")
+		}
+		for _, key := range strings.Split(templateKeys, ",") {
+			key = strings.TrimSpace(key)
+			if key == "" || seen[key] {
+				return fmt.Errorf("invalid or duplicate template key: %s", key)
+			}
+			found := false
+			for _, t := range catalog {
+				if t.Key == key {
+					found = true
+					break
+				}
+			}
+			if !found {
+				return fmt.Errorf("unknown template key: %s", key)
+			}
+			seen[key] = true
+			selected = append(selected, key)
+		}
 	}
 	if command == "library-catalog" {
 		if family != "" {
@@ -23,7 +52,13 @@ func runLibrary(command, bundle, source, engine, out, family string, year int) e
 		if out != "" {
 			return fmt.Errorf("library-catalog does not accept --out")
 		}
-		return json.NewEncoder(os.Stdout).Encode(catalog)
+		visible := []wmdesign.LibraryTemplate{}
+		for _, t := range catalog {
+			if (includeDeprecated || t.Status != "deprecated") && (len(selected) == 0 || seen[t.Key]) {
+				visible = append(visible, t)
+			}
+		}
+		return json.NewEncoder(os.Stdout).Encode(visible)
 	}
 	if out == "" {
 		return fmt.Errorf("--out NEW-DIR required")
@@ -39,6 +74,23 @@ func runLibrary(command, bundle, source, engine, out, family string, year int) e
 		if e != nil {
 			return e
 		}
+		if len(selected) > 0 {
+			all := input.Slides
+			input.Slides = nil
+			for _, key := range selected {
+				found := false
+				for _, slide := range all {
+					if slide.Template == key {
+						input.Slides = append(input.Slides, slide)
+						found = true
+						break
+					}
+				}
+				if !found {
+					return fmt.Errorf("template unavailable for reference: %s", key)
+				}
+			}
+		}
 		compiled, report, e := wmdesign.BindTemplates(bundle, source, input)
 		if e != nil {
 			return e
@@ -50,6 +102,18 @@ func runLibrary(command, bundle, source, engine, out, family string, year int) e
 		doc, err = wmdesign.LibrarySourceReference(bundle, source, family, year)
 		if err != nil {
 			return err
+		}
+		if len(selected) > 0 {
+			all := doc.Slides
+			doc.Slides = nil
+			for _, key := range selected {
+				for _, slide := range all {
+					if slide.TemplateBinding.Template == key {
+						doc.Slides = append(doc.Slides, slide)
+						break
+					}
+				}
+			}
 		}
 	}
 	if command == "library-sweep" || command == "library-bound-sweep" {

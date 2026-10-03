@@ -1,0 +1,6260 @@
+{
+  "schema": "wmds.templates.v2",
+  "family": "approach",
+  "name": "Approach and plan",
+  "summary": "Phases, phase detail, gates, roadmaps, work plans, cutover and method.",
+  "templates": [
+    {
+      "id": "plan",
+      "variant": "gantt",
+      "name": "Work plan · eight weeks",
+      "tier": "core",
+      "purpose": "An eight-week work plan: three workstreams, phase bands, gates, workshops and soft starts, for the detailed plan a steering group signs off.",
+      "uses": [
+        "advanced.gantt"
+      ],
+      "legacy": "Timelines, slides 68–98",
+      "budget": {
+        "words": 120,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 64
+        },
+        {
+          "slot": "workstream",
+          "maxChars": 28
+        },
+        {
+          "slot": "activity",
+          "maxChars": 32
+        },
+        {
+          "slot": "gate",
+          "maxChars": 28
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "density": "appendix",
+        "eyebrow": "Work plan",
+        "title": "Eight weeks from kickoff to a signed-off roadmap",
+        "body": [
+          {
+            "type": "gantt",
+            "x": 57,
+            "y": 108,
+            "w": 846,
+            "cols": {
+              "group": 24,
+              "lane": 210
+            },
+            "periods": {
+              "labels": [
+                "W1",
+                "W2",
+                "W3",
+                "W4",
+                "W5",
+                "W6",
+                "W7",
+                "W8"
+              ],
+              "sublabels": [
+                "Oct 5",
+                "Oct 12",
+                "Oct 19",
+                "Oct 26",
+                "Nov 2",
+                "Nov 9",
+                "Nov 16",
+                "Nov 23"
+              ]
+            },
+            "phases": [
+              {
+                "label": "Mobilize",
+                "from": 0,
+                "to": 1,
+                "rule": "line"
+              },
+              {
+                "label": "Diagnose",
+                "from": 1,
+                "to": 4,
+                "rule": "strong"
+              },
+              {
+                "label": "Design",
+                "from": 4,
+                "to": 7,
+                "rule": "emphasis"
+              },
+              {
+                "label": "Roadmap",
+                "from": 7,
+                "to": 8,
+                "rule": "callout"
+              }
+            ],
+            "gates": [
+              {
+                "at": 1,
+                "label": "G1 · Mobilized"
+              },
+              {
+                "at": 4,
+                "label": "G2 · Readout",
+                "key": true
+              },
+              {
+                "at": 8,
+                "label": "G3 · Final"
+              }
+            ],
+            "kinds": {
+              "core": {
+                "fill": "#070154",
+                "text": "#FFFFFF",
+                "label": "Core activity"
+              },
+              "support": {
+                "fill": "#CED7E6",
+                "text": "#070154",
+                "label": "Supporting activity"
+              }
+            },
+            "events": {
+              "star": {
+                "fill": "#F900D3",
+                "label": "Workshop"
+              },
+              "triangle": {
+                "fill": "#0047FF",
+                "label": "Review"
+              }
+            },
+            "groups": [
+              {
+                "label": "Finance",
+                "fill": "#070154",
+                "lanes": [
+                  {
+                    "title": "Current-state diagnostic",
+                    "sub": "Interviews, close calendar",
+                    "icon": "people",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 1,
+                        "to": 4,
+                        "label": "Interviews and close mapping",
+                        "softEnd": 0.5
+                      },
+                      {
+                        "event": "star",
+                        "at": 4.3,
+                        "label": "Controller workshop"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Future-state design",
+                    "sub": "Operating model",
+                    "icon": "layers",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 4,
+                        "to": 6,
+                        "label": "Design sprints"
+                      },
+                      {
+                        "event": "triangle",
+                        "at": 6.3,
+                        "label": "Design review"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Roadmap and business case",
+                    "sub": "Waves, value, cost",
+                    "icon": "chart",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 6,
+                        "to": 8,
+                        "label": "Roadmap",
+                        "softStart": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Data",
+                "fill": "#05013F",
+                "lanes": [
+                  {
+                    "title": "Systems and architecture",
+                    "sub": "14 business units",
+                    "icon": "database",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 1,
+                        "to": 3,
+                        "label": "Systems inventory"
+                      },
+                      {
+                        "kind": "support",
+                        "from": 3,
+                        "to": 4,
+                        "label": "Quality scan"
+                      },
+                      {
+                        "kind": "core",
+                        "from": 4,
+                        "to": 7,
+                        "label": "Target architecture",
+                        "softStart": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Change",
+                "fill": "#50658E",
+                "lanes": [
+                  {
+                    "title": "Stakeholder engagement",
+                    "sub": "Steering, working sessions",
+                    "icon": "people",
+                    "items": [
+                      {
+                        "event": "star",
+                        "at": 0.3,
+                        "label": "Kickoff"
+                      },
+                      {
+                        "kind": "support",
+                        "from": 1,
+                        "to": 8,
+                        "label": "Weekly working sessions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "phases",
+      "variant": "four",
+      "name": "Phased approach · four phases",
+      "tier": "core",
+      "purpose": "The approach as four phases, each with objective, activities, deliverables and a closing gate.",
+      "uses": [
+        "phase.columns"
+      ],
+      "legacy": "Slides 44, 60, 64–66; proposal 24–27, 36",
+      "budget": {
+        "words": 95,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "phase name",
+          "maxChars": 14
+        },
+        {
+          "slot": "objective",
+          "maxChars": 44
+        },
+        {
+          "slot": "activity",
+          "maxChars": 30
+        },
+        {
+          "slot": "deliverable",
+          "maxChars": 30
+        },
+        {
+          "slot": "gate",
+          "maxChars": 24
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Approach",
+        "title": "Four phases take the close from [[12 days to 5]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "phases",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "phases": [
+              {
+                "n": "Phase 1",
+                "name": "Mobilize",
+                "duration": "1 wk",
+                "rule": "strong",
+                "objective": "Team, data access and plan in place.",
+                "activities": [
+                  "Kickoff and interviews",
+                  "Data access"
+                ],
+                "deliverables": [
+                  "Project plan"
+                ],
+                "gate": "G1 · Mobilized"
+              },
+              {
+                "n": "Phase 2",
+                "name": "Diagnose",
+                "duration": "3 wks",
+                "rule": "strong",
+                "objective": "Know where the 12 days go.",
+                "activities": [
+                  "Close calendar mapping",
+                  "Delay ranking"
+                ],
+                "deliverables": [
+                  "Diagnostic readout"
+                ],
+                "gate": "G2 · Readout"
+              },
+              {
+                "n": "Phase 3",
+                "name": "Design",
+                "duration": "3 wks",
+                "rule": "strong",
+                "objective": "A five-day close, designed.",
+                "activities": [
+                  "Rules and routing",
+                  "Operating model"
+                ],
+                "deliverables": [
+                  "Target design"
+                ],
+                "gate": "G3 · Sign-off"
+              },
+              {
+                "n": "Phase 4",
+                "name": "Roadmap",
+                "duration": "1 wk",
+                "rule": "emphasis",
+                "objective": "Waves 1–3 planned and funded.",
+                "activities": [
+                  "Wave sequencing",
+                  "Business case"
+                ],
+                "deliverables": [
+                  "$4.2M business case"
+                ],
+                "gate": "G4 · Final"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "phases",
+      "variant": "activities-outcomes",
+      "name": "Phases · key activities and outcome",
+      "tier": "working",
+      "purpose": "Three consecutive phases as arrows sized to their weeks, each with a number, name, key activities and one outcome, so a steering group reads the whole arc at once.",
+      "uses": [
+        "shape.chevron",
+        "list.set",
+        "heading.group",
+        "shape.block",
+        "mark.highlight"
+      ],
+      "legacy": "pptxgengo t085-uhg-022",
+      "budget": {
+        "words": 128,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 100
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "phase name",
+          "maxChars": 38
+        },
+        {
+          "slot": "activity",
+          "maxChars": 32
+        },
+        {
+          "slot": "outcome",
+          "maxChars": 32
+        },
+        {
+          "slot": "scope note",
+          "maxChars": 96
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "titleLines": 2,
+        "emphasis": "highlight",
+        "title": "Our [[three-phase]] approach turns a defined architecture into a Northfield-owned enterprise service",
+        "body": [
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 162,
+            "w": 300,
+            "h": 36,
+            "first": true,
+            "surface": "inverse",
+            "text": "Weeks 0–16",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 204,
+            "w": 252,
+            "text": "01"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 228,
+            "w": 252,
+            "text": "Data platform foundation"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 264,
+            "w": 252,
+            "text": "Key activities"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 282,
+            "w": 252,
+            "items": [
+              "Define target architecture",
+              "Set enterprise guardrails",
+              "Establish ingestion patterns",
+              "Validate patterns via pilots",
+              "Choose early-adopter workloads"
+            ],
+            "size": "small"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 408,
+            "w": 252,
+            "text": "Outcome"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 426,
+            "w": 252,
+            "items": [
+              "Approved platform foundation"
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 162,
+            "w": 300,
+            "h": 36,
+            "first": false,
+            "surface": "strong",
+            "text": "Weeks 17–34",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 204,
+            "w": 252,
+            "text": "02"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 345,
+            "y": 228,
+            "w": 252,
+            "text": "Scale and early adoption"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 264,
+            "w": 252,
+            "text": "Key activities"
+          },
+          {
+            "type": "bullets",
+            "x": 345,
+            "y": 282,
+            "w": 252,
+            "items": [
+              "Automate provisioning",
+              "Operationalize governance",
+              "Stand up support and cost controls",
+              "Onboard early adopters",
+              "Refine standards from pilots"
+            ],
+            "size": "small"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 408,
+            "w": 252,
+            "text": "Outcome"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 426,
+            "w": 252,
+            "items": [
+              "Repeatable platform services"
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 633,
+            "y": 162,
+            "w": 270,
+            "h": 36,
+            "first": false,
+            "surface": "callout",
+            "text": "Weeks 30–42",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 204,
+            "w": 252,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 228,
+            "w": 252,
+            "text": "General availability"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 264,
+            "w": 252,
+            "text": "Key activities"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 282,
+            "w": 252,
+            "items": [
+              "Launch as a supported service",
+              "Hand ownership to Northfield",
+              "Transition operations and support",
+              "Optimize cost and adoption",
+              "Plan the next wave of teams"
+            ],
+            "size": "small"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 408,
+            "w": 252,
+            "text": "Outcome"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 426,
+            "w": 252,
+            "items": [
+              "Platform ready to scale"
+            ]
+          }
+        ],
+        "source": {
+          "text": "Fixed platform scope is priced once; workload scope scales with the number of early adopters."
+        }
+      }
+    },
+    {
+      "id": "phases",
+      "variant": "summary-bands",
+      "name": "Phases · summary, activities and deliverables",
+      "tier": "working",
+      "purpose": "Three phase columns under arrow heads: a one-line summary band, a block of activities and a block of deliverables, aligned across phases so they compare row by row.",
+      "uses": [
+        "shape.chevron",
+        "shape.block",
+        "card.presets",
+        "list.set"
+      ],
+      "legacy": "pptxgengo t031-graphics-and-layouts-065",
+      "budget": {
+        "words": 146,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "phase head",
+          "maxChars": 24
+        },
+        {
+          "slot": "summary line",
+          "maxChars": 40
+        },
+        {
+          "slot": "activity",
+          "maxChars": 40
+        },
+        {
+          "slot": "deliverable",
+          "maxChars": 32
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Approach",
+        "title": "Three phases from baseline to a funded roadmap",
+        "body": [
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 126,
+            "w": 300,
+            "h": 54,
+            "first": true,
+            "surface": "inverse",
+            "text": "Phase 1 · Baseline",
+            "style": "subhead"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "h": 36,
+            "surface": "strong",
+            "text": "6–8 weeks · establish the fact base",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 216,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "label": "Activities",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Gather data and benchmarks",
+                  "Interview finance leaders",
+                  "Size the opportunity by function",
+                  "Map workflows and handoffs",
+                  "Test findings with sponsors"
+                ]
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "h": 108,
+            "surface": "outline",
+            "pad": 12,
+            "label": "Deliverables",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Baseline and benchmark report",
+                  "Opportunity sizing model",
+                  "Fact-base readout"
+                ]
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 126,
+            "w": 300,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Phase 2 · Design",
+            "style": "subhead"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 180,
+            "w": 270,
+            "h": 36,
+            "surface": "strong",
+            "text": "2–3 weeks · shape the options",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 216,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "label": "Activities",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Develop recommendations per area",
+                  "Set savings and value targets",
+                  "Define the target mix of roles",
+                  "Rank options by impact and effort",
+                  "Align leaders on the options"
+                ]
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 360,
+            "w": 270,
+            "h": 108,
+            "surface": "outline",
+            "pad": 12,
+            "label": "Deliverables",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Prioritized value opportunities",
+                  "Target role-mix view",
+                  "Value-target summary"
+                ]
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Phase 3 · Roadmap",
+            "style": "subhead"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 180,
+            "w": 270,
+            "h": 36,
+            "surface": "strong",
+            "text": "1–2 weeks · agree the plan",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 216,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "label": "Activities",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Facilitate a trade-off workshop",
+                  "Build the integrated roadmap",
+                  "Sequence initiatives by value",
+                  "Name owners and dependencies",
+                  "Read out the priorities"
+                ]
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 360,
+            "w": 270,
+            "h": 108,
+            "surface": "outline",
+            "pad": 12,
+            "label": "Deliverables",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Value-creation roadmap",
+                  "Initiative owner register",
+                  "Executive readout deck"
+                ]
+              }
+            ],
+            "bodySize": "small"
+          }
+        ]
+      }
+    },
+    {
+      "id": "phase-detail",
+      "variant": "rail-table",
+      "name": "Phase detail · activities and work products",
+      "tier": "working",
+      "purpose": "One phase on one page: a rail with the phase name, objective and exit criteria; activities and work products by workstream; deliverable thumbnails and assumptions.",
+      "uses": [
+        "frame.rail-left",
+        "shape.chevron",
+        "table.standard",
+        "prim.thumbnail",
+        "card.presets"
+      ],
+      "legacy": "pptxgengo t086-uhg-024",
+      "budget": {
+        "words": 130,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "phase name",
+          "maxChars": 28
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "objective",
+          "maxChars": 170
+        },
+        {
+          "slot": "exit criterion",
+          "maxChars": 32
+        },
+        {
+          "slot": "stream",
+          "maxChars": 10
+        },
+        {
+          "slot": "activity",
+          "maxChars": 52
+        },
+        {
+          "slot": "work product",
+          "maxChars": 28
+        },
+        {
+          "slot": "deliverable caption",
+          "maxChars": 22
+        },
+        {
+          "slot": "assumption",
+          "maxChars": 48
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "inverse",
+        "page": "24",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 36,
+            "w": 198,
+            "text": "Our approach",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "callout",
+            "x": 57,
+            "y": 60,
+            "w": 198,
+            "text": "Phase 01",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 57,
+            "y": 84,
+            "w": 198,
+            "text": "Data Platform Foundation",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 150,
+            "w": 198,
+            "text": "Weeks 0–16",
+            "on": "inverse"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": true,
+            "surface": "callout",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 129,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 180,
+            "w": 54,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "text": "Objective",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 243,
+            "w": 198,
+            "text": "Stand up and validate the enterprise data platform: target architecture, security, governance and onboarding patterns for the first finance workloads.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 360,
+            "w": 198,
+            "text": "Phase 01 exit",
+            "on": "inverse"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 387,
+            "w": 198,
+            "on": "inverse",
+            "items": [
+              "Architecture patterns approved",
+              "Foundation environments live",
+              "Integrations demonstrated",
+              "Three pilot workloads chosen"
+            ]
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 54,
+            "w": 378,
+            "header": "light",
+            "dense": true,
+            "rowH": 96,
+            "rowHeader": true,
+            "cols": [
+              {
+                "k": "w",
+                "label": "Stream",
+                "w": 78
+              },
+              {
+                "k": "a",
+                "label": "Activities",
+                "w": 174,
+                "type": "bullets"
+              },
+              {
+                "k": "p",
+                "label": "Work products",
+                "w": 126,
+                "type": "bullets"
+              }
+            ],
+            "rows": [
+              {
+                "w": "Design",
+                "a": [
+                  "Define target architecture and capacity",
+                  "Create the placement framework"
+                ],
+                "p": [
+                  "Reference architecture",
+                  "Placement framework"
+                ]
+              },
+              {
+                "w": "Build",
+                "a": [
+                  "Configure environments and pipelines",
+                  "Set up health and cost telemetry"
+                ],
+                "p": [
+                  "Configured environments",
+                  "Telemetry baseline"
+                ]
+              },
+              {
+                "w": "Govern",
+                "a": [
+                  "Define security and catalog patterns",
+                  "Set lineage and classification rules"
+                ],
+                "p": [
+                  "Access control framework",
+                  "Lineage standards"
+                ]
+              },
+              {
+                "w": "Launch",
+                "a": [
+                  "Define the service catalog and onboarding",
+                  "Set adopter criteria; plan Phase 02"
+                ],
+                "p": [
+                  "Service catalog and kit",
+                  "Early-adopter cohort"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "emphasis",
+            "x": 741,
+            "y": 54,
+            "w": 162,
+            "text": "Deliverables"
+          },
+          {
+            "type": "thumbnail",
+            "x": 741,
+            "y": 108,
+            "w": 126,
+            "h": 72,
+            "kind": "diagram",
+            "stack": true,
+            "caption": "Onboarding framework"
+          },
+          {
+            "type": "thumbnail",
+            "x": 741,
+            "y": 234,
+            "w": 126,
+            "h": 72,
+            "kind": "text",
+            "stack": true,
+            "caption": "Reference design"
+          },
+          {
+            "type": "card",
+            "x": 741,
+            "y": 342,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "title": "Assumptions",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "bullets": [
+                  "Access is provided",
+                  "Pilots test patterns only"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "phase-detail",
+      "variant": "rail-matrix",
+      "name": "Phase detail · repeatable process matrix",
+      "tier": "working",
+      "purpose": "A phase rail beside a step-by-step matrix of platform service, workload activity and evidence, with the fixed and variable scope stated underneath.",
+      "uses": [
+        "frame.rail-left",
+        "table.standard",
+        "shape.chevron",
+        "shape.block"
+      ],
+      "legacy": "pptxgengo t090-uhg-032",
+      "budget": {
+        "words": 183,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "phase name",
+          "maxChars": 28
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "objective",
+          "maxChars": 150
+        },
+        {
+          "slot": "step",
+          "maxChars": 10
+        },
+        {
+          "slot": "service",
+          "maxChars": 56
+        },
+        {
+          "slot": "activity",
+          "maxChars": 62
+        },
+        {
+          "slot": "evidence",
+          "maxChars": 46
+        },
+        {
+          "slot": "scope line",
+          "maxChars": 96
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "subtle",
+        "page": "32",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 36,
+            "w": 198,
+            "text": "Our approach",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 60,
+            "w": 198,
+            "text": "Phase 02",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 57,
+            "y": 84,
+            "w": 198,
+            "text": "Scale and Early Adoption",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 150,
+            "w": 198,
+            "text": "Weeks 17–34",
+            "on": "subtle"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": true,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 129,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": false,
+            "surface": "inverse",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 180,
+            "w": 54,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "text": "Objective",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 243,
+            "w": 198,
+            "text": "Prove that Northfield can assess, onboard, enable, govern and support a workload through one repeatable enterprise process.",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 342,
+            "w": 198,
+            "text": "Fixed or variable",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 369,
+            "w": 198,
+            "text": "Shared services are fixed and priced once.",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 414,
+            "w": 198,
+            "text": "Workload delivery varies with the number of early adopters.",
+            "on": "subtle"
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 54,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 60,
+            "rowHeader": true,
+            "cols": [
+              {
+                "k": "s",
+                "label": "Step",
+                "w": 90
+              },
+              {
+                "k": "p",
+                "label": "Platform service",
+                "w": 156
+              },
+              {
+                "k": "w",
+                "label": "Workload activity",
+                "w": 156
+              },
+              {
+                "k": "e",
+                "label": "Evidence",
+                "w": 156
+              }
+            ],
+            "rows": [
+              {
+                "s": "Assess",
+                "p": "Intake, workload placement and readiness assessment",
+                "w": "Confirm outcomes, data and team readiness; list dependencies",
+                "e": "Approved placement decision and scope"
+              },
+              {
+                "s": "Design",
+                "p": "Approved patterns, security model and governance",
+                "w": "Complete solution design and confirm component ownership",
+                "e": "Signed design, exceptions and delivery backlog"
+              },
+              {
+                "s": "Provision",
+                "p": "Workspace automation, access and policy assignment",
+                "w": "Confirm users, roles, connections and monitoring needs",
+                "e": "Compliant environment with controls active"
+              },
+              {
+                "s": "Validate",
+                "p": "Production-readiness criteria and governance checks",
+                "w": "Test the workload, resolve defects, secure acceptance",
+                "e": "Readiness decision and acceptance record"
+              },
+              {
+                "s": "Operate",
+                "p": "Monitoring, support, escalation and service management",
+                "w": "Assume ownership; respond to issues; track value and usage",
+                "e": "Support model validated; lessons defined"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 396,
+            "w": 558,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Fixed shared services: intake · placement · provisioning · governance · monitoring · support",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 432,
+            "w": 558,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Variable delivery: solution design · build · data integration · testing · launch · hypercare",
+            "style": "small",
+            "align": "left"
+          }
+        ]
+      }
+    },
+    {
+      "id": "phase-detail",
+      "variant": "rail-cohort",
+      "name": "Phase detail · scorecard and cohort",
+      "tier": "working",
+      "purpose": "A phase rail carrying the selection scorecard, beside three illustrative workloads that each validate one pattern, with a thumbnail of the architecture each touches.",
+      "uses": [
+        "frame.rail-left",
+        "shape.chevron",
+        "card.presets",
+        "shape.block",
+        "prim.thumbnail"
+      ],
+      "legacy": "pptxgengo t087-uhg-027",
+      "budget": {
+        "words": 126,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "phase name",
+          "maxChars": 28
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "scorecard criterion",
+          "maxChars": 22
+        },
+        {
+          "slot": "scorecard text",
+          "maxChars": 32
+        },
+        {
+          "slot": "workload label",
+          "maxChars": 26
+        },
+        {
+          "slot": "workload title",
+          "maxChars": 20
+        },
+        {
+          "slot": "workload text",
+          "maxChars": 52
+        },
+        {
+          "slot": "validation",
+          "maxChars": 56
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "inverse",
+        "page": "27",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 36,
+            "w": 198,
+            "text": "Our approach",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "callout",
+            "x": 57,
+            "y": 60,
+            "w": 198,
+            "text": "Phase 01",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 57,
+            "y": 84,
+            "w": 198,
+            "text": "Data Platform Foundation",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 150,
+            "w": 198,
+            "text": "Weeks 0–16",
+            "on": "inverse"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": true,
+            "surface": "callout",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 129,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 180,
+            "w": 54,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "text": "Early-adopter scorecard",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 252,
+            "w": 198,
+            "text": "Strategic value",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 265,
+            "w": 198,
+            "text": "Outcomes and sponsorship",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 287,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 294,
+            "w": 198,
+            "text": "Pattern coverage",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 307,
+            "w": 198,
+            "text": "Warehouse, lakehouse or both",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 329,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 336,
+            "w": 198,
+            "text": "Technical readiness",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 349,
+            "w": 198,
+            "text": "Data, security, dependencies",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 371,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 378,
+            "w": 198,
+            "text": "Team readiness",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 391,
+            "w": 198,
+            "text": "Owner, engineers, timeline",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 413,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 420,
+            "w": 198,
+            "text": "Learning value",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 433,
+            "w": 198,
+            "text": "Reusable patterns and controls",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 455,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 345,
+            "y": 54,
+            "w": 558,
+            "text": "Three workloads prove the platform patterns"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 90,
+            "w": 558,
+            "text": "Selected to maximize enterprise learning and to test each architecture pattern once."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 126,
+            "w": 162,
+            "text": "Warehouse A to platform"
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 144,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Analytics",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "p": "Build analytics models on curated warehouse data."
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 270,
+            "w": 162,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Validates data movement and lineage.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "thumbnail",
+            "x": 345,
+            "y": 342,
+            "w": 162,
+            "h": 90,
+            "kind": "diagram",
+            "stack": false,
+            "caption": "Warehouse A architecture"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 543,
+            "y": 126,
+            "w": 162,
+            "text": "Lakehouse B to platform"
+          },
+          {
+            "type": "card",
+            "x": 543,
+            "y": 144,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Reporting",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "p": "Rebuild reports and dashboards on curated data."
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "block",
+            "x": 543,
+            "y": 270,
+            "w": 162,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Validates ownership of curated layers.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "thumbnail",
+            "x": 543,
+            "y": 342,
+            "w": 162,
+            "h": 90,
+            "kind": "diagram",
+            "stack": false,
+            "caption": "Lakehouse B architecture"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 741,
+            "y": 126,
+            "w": 162,
+            "text": "End to end on platform"
+          },
+          {
+            "type": "card",
+            "x": 741,
+            "y": 144,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Engineering",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "p": "Net-new ingestion, curation and BI for one use case."
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "block",
+            "x": 741,
+            "y": 270,
+            "w": 162,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Validates engineering standards.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "thumbnail",
+            "x": 741,
+            "y": 342,
+            "w": 162,
+            "h": 90,
+            "kind": "diagram",
+            "stack": false,
+            "caption": "End-to-end architecture"
+          }
+        ]
+      }
+    },
+    {
+      "id": "phase-detail",
+      "variant": "team-handoff",
+      "name": "Phase · team handoff over time",
+      "tier": "working",
+      "purpose": "Show how responsibility shifts between consulting and client teams across two phases, with an effort curve, a callout and a row per team.",
+      "uses": [
+        "numhead",
+        "seq.stepper",
+        "chart.line",
+        "shape.chevron",
+        "shape.block",
+        "container (region)"
+      ],
+      "legacy": "pptxgengo t095-uhg-037",
+      "budget": {
+        "words": 145,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "phase name",
+          "maxChars": 40
+        },
+        {
+          "slot": "team description",
+          "maxChars": 90
+        },
+        {
+          "slot": "callout",
+          "maxChars": 90
+        },
+        {
+          "slot": "exit criterion",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Approach",
+        "title": "Phase 3 hands platform ownership to the Northfield team",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "Phase 03 · Weeks 35–42"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 198,
+            "text": "General availability and optimization"
+          },
+          {
+            "type": "stepper",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "steps": [
+              {
+                "label": "1–14",
+                "title": "Build",
+                "state": "done"
+              },
+              {
+                "label": "15–34",
+                "title": "Scale",
+                "state": "done"
+              },
+              {
+                "label": "35–42",
+                "title": "Run",
+                "state": "current"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 324,
+            "w": 198,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "body": [
+              {
+                "bullets": [
+                  "Runbooks accepted",
+                  "Northfield on call",
+                  "Benefits tracked",
+                  "Risks transferred"
+                ]
+              }
+            ],
+            "label": "Exit criteria"
+          },
+          {
+            "type": "chart",
+            "kind": "line",
+            "x": 273,
+            "y": 126,
+            "w": 414,
+            "h": 126,
+            "categories": [
+              "Wk 1",
+              "Wk 14",
+              "Wk 28",
+              "Wk 35",
+              "Wk 42"
+            ],
+            "series": [
+              {
+                "name": "West Monroe effort",
+                "values": [
+                  2,
+                  6,
+                  7,
+                  4,
+                  2
+                ],
+                "color": "series.1"
+              },
+              {
+                "name": "Northfield effort",
+                "values": [
+                  1,
+                  3,
+                  5,
+                  6,
+                  7
+                ],
+                "dashed": true,
+                "color": "deemph.3"
+              }
+            ],
+            "yMin": 0
+          },
+          {
+            "type": "block",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "h": 126,
+            "surface": "subtle",
+            "text": "West Monroe tapers its driving role so the Northfield core team owns execution. Effort crosses at about week 30, when Northfield staff lead more work than West Monroe.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "chevron",
+            "x": 273,
+            "y": 270,
+            "w": 300,
+            "h": 36,
+            "first": true,
+            "surface": "strong",
+            "text": "Phase 2 · Scalability and early adoption",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 579,
+            "y": 270,
+            "w": 324,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Phase 3 · General availability",
+            "style": "small"
+          },
+          {
+            "type": "block",
+            "x": 273,
+            "y": 324,
+            "w": 630,
+            "h": 18,
+            "surface": "subtle",
+            "text": "West Monroe team",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 348,
+            "w": 294,
+            "text": "Deploying provisioning and monitoring, and onboarding the first business units."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 348,
+            "w": 306,
+            "text": "Optimizing performance, cost and adoption while transferring ownership and operations."
+          },
+          {
+            "type": "block",
+            "x": 273,
+            "y": 396,
+            "w": 630,
+            "h": 18,
+            "surface": "subtle",
+            "text": "Northfield team",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 420,
+            "w": 294,
+            "text": "Refining standards and overseeing the early adopter program."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 420,
+            "w": 306,
+            "text": "Dedicated staff are learning to support the platform and beginning to lead."
+          }
+        ]
+      },
+      "rev": 2,
+      "revised": "2026-10-02"
+    },
+    {
+      "id": "phase-gate",
+      "variant": "evidence-matrix",
+      "name": "Phase gate · criteria, exit and owner",
+      "tier": "working",
+      "purpose": "The decision rule for a phase gate: five numbered criteria, the evidence each requires, an illustrative exit and one named decision owner.",
+      "uses": [
+        "card.numbered",
+        "shape.block",
+        "heading.group"
+      ],
+      "legacy": "pptxgengo t091-uhg-033",
+      "budget": {
+        "words": 147,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 100
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 14
+        },
+        {
+          "slot": "evidence item",
+          "maxChars": 23
+        },
+        {
+          "slot": "exit statement",
+          "maxChars": 36
+        },
+        {
+          "slot": "decision owner",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Phase 02 · Weeks 17–34",
+        "titleLines": 2,
+        "title": "Evidence from three early adopters decides whether the platform is ready for general availability",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "01",
+            "title": "Platform",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Patterns validated",
+              "Integrations reliable",
+              "Exceptions understood",
+              "Standards adopted"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Priority patterns approved for GA",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 57,
+            "y": 444,
+            "w": 154.8,
+            "text": "Chief architect"
+          },
+          {
+            "type": "card",
+            "x": 229.8,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "02",
+            "title": "Operations",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 229.8,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 229.8,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Provisioning automated",
+              "Telemetry active",
+              "Runbooks exercised",
+              "Alerts routed"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 229.8,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 229.8,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Core services supportable",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 229.8,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 229.8,
+            "y": 444,
+            "w": 154.8,
+            "text": "Platform owner"
+          },
+          {
+            "type": "card",
+            "x": 402.6,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "03",
+            "title": "Governance",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 402.6,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 402.6,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Controls applied",
+              "Lineage and evidence",
+              "Access reviews done",
+              "Gaps closed"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 402.6,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 402.6,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "No unresolved critical gaps",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 402.6,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 402.6,
+            "y": 444,
+            "w": 154.8,
+            "text": "Governance lead"
+          },
+          {
+            "type": "card",
+            "x": 575.4,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "04",
+            "title": "Service",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 575.4,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 575.4,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Ownership clear",
+              "Support tiers tested",
+              "Onboarding working",
+              "Handover agreed"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 575.4,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 575.4,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Support accepted by Northfield",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 575.4,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 575.4,
+            "y": 444,
+            "w": 154.8,
+            "text": "Service owner"
+          },
+          {
+            "type": "card",
+            "x": 748.2,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "05",
+            "title": "Financial",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 748.2,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 748.2,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Cost visible",
+              "Demand forecastable",
+              "Value demonstrated",
+              "Savings tracked"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 748.2,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 748.2,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Sustainable operating basis",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 748.2,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 748.2,
+            "y": 444,
+            "w": 154.8,
+            "text": "Finance sponsor"
+          }
+        ]
+      }
+    },
+    {
+      "id": "roadmap",
+      "variant": "staggered-phases",
+      "name": "Roadmap · staggered phases and milestones",
+      "tier": "working",
+      "purpose": "A months-based roadmap where each phase starts as the last one settles: staggered bars with hatched extension windows, starred milestones, and an ongoing program lane.",
+      "uses": [
+        "advanced.gantt",
+        "seq.timeaxis"
+      ],
+      "legacy": "pptxgengo t039-uhg-038",
+      "budget": {
+        "words": 107,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "lane title",
+          "maxChars": 28
+        },
+        {
+          "slot": "lane subtitle",
+          "maxChars": 30
+        },
+        {
+          "slot": "bar label",
+          "maxChars": 40
+        },
+        {
+          "slot": "milestone",
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "title": "Nine months from build to Northfield ownership",
+        "body": [
+          {
+            "type": "gantt",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "cols": {
+              "group": 0,
+              "lane": 192
+            },
+            "sidebarLabel": "Phase · scope",
+            "periods": {
+              "labels": [
+                "M1",
+                "M2",
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7",
+                "M8",
+                "M9",
+                "M10",
+                "M11",
+                "M12",
+                "Later"
+              ]
+            },
+            "phases": [
+              {
+                "label": "Build the platform",
+                "from": 0,
+                "to": 4,
+                "rule": "strong"
+              },
+              {
+                "label": "Prove and scale",
+                "from": 4,
+                "to": 9,
+                "rule": "emphasis"
+              },
+              {
+                "label": "Hand over",
+                "from": 9,
+                "to": 13,
+                "rule": "callout"
+              }
+            ],
+            "kinds": {
+              "p1": {
+                "fill": "#CED7E6",
+                "text": "#070154",
+                "label": "Phase 01"
+              },
+              "p2": {
+                "fill": "#50658E",
+                "text": "#FFFFFF",
+                "label": "Phase 02"
+              },
+              "p3": {
+                "fill": "#070154",
+                "text": "#FFFFFF",
+                "label": "Phase 03"
+              },
+              "ga": {
+                "fill": "#0047FF",
+                "text": "#FFFFFF",
+                "label": "Onboarding"
+              },
+              "pm": {
+                "fill": "#E8EEF8",
+                "text": "#070154",
+                "label": "Ongoing"
+              }
+            },
+            "events": {
+              "star": {
+                "fill": "#F900D3",
+                "label": "Milestone"
+              }
+            },
+            "groups": [
+              {
+                "label": "Delivery",
+                "fill": "#070154",
+                "lanes": [
+                  {
+                    "title": "Phase 01 · Foundation",
+                    "sub": "Architecture and guardrails",
+                    "icon": "connected-cube",
+                    "items": [
+                      {
+                        "kind": "p1",
+                        "from": 0,
+                        "to": 3.5,
+                        "label": "Foundation",
+                        "softEnd": 0.5
+                      },
+                      {
+                        "event": "star",
+                        "at": 4,
+                        "label": "Architecture approved"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Phase 02 · Scale",
+                    "sub": "Three early adopters",
+                    "icon": "people-network",
+                    "items": [
+                      {
+                        "kind": "p2",
+                        "from": 3.5,
+                        "to": 8,
+                        "label": "Scale and early adoption",
+                        "softEnd": 1
+                      },
+                      {
+                        "event": "star",
+                        "at": 9,
+                        "label": "Targeted release"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Phase 03 · Availability",
+                    "sub": "General availability",
+                    "icon": "rocket",
+                    "items": [
+                      {
+                        "kind": "p3",
+                        "from": 7,
+                        "to": 9.5,
+                        "label": "Availability",
+                        "softEnd": 0.5
+                      },
+                      {
+                        "event": "star",
+                        "at": 10,
+                        "label": "Launch"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Onboarding",
+                    "sub": "Northfield ownership",
+                    "icon": "handshake",
+                    "items": [
+                      {
+                        "kind": "ga",
+                        "from": 9.5,
+                        "to": 13,
+                        "label": "Onboarding and handover"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Program",
+                "fill": "#50658E",
+                "lanes": [
+                  {
+                    "title": "Program management",
+                    "sub": "Project and product",
+                    "icon": "task-list-cycle",
+                    "items": [
+                      {
+                        "kind": "pm",
+                        "from": 0,
+                        "to": 9.5,
+                        "label": "Ongoing project and product management"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cutover",
+      "variant": "wave-matrix",
+      "name": "Cutover · AI support and wave matrix",
+      "tier": "working",
+      "purpose": "How a phased cutover is run: three kinds of AI support across every wave, then a slice-by-wave matrix showing legacy, coexistence and modern state.",
+      "uses": [
+        "heading.group",
+        "shape.block",
+        "text.block"
+      ],
+      "legacy": "pptxgengo t027-software-modernization-035",
+      "budget": {
+        "words": 107,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 100
+        },
+        {
+          "slot": "support title",
+          "maxChars": 14
+        },
+        {
+          "slot": "support text",
+          "maxChars": 90
+        },
+        {
+          "slot": "slice",
+          "maxChars": 28
+        },
+        {
+          "slot": "state",
+          "maxChars": 14
+        },
+        {
+          "slot": "source",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Phase 03 approach",
+        "titleLines": 2,
+        "title": "AI sequences each cutover wave and watches coexistence; people hold every go or no-go decision",
+        "source": {
+          "text": "Illustrative. The migration unit is a business-viable capability slice, not a single technical component."
+        },
+        "body": [
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 162,
+            "w": 252,
+            "n": "1",
+            "text": "Sequence",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 198,
+            "w": 252,
+            "text": "Find viable capability slices, expose hidden dependencies and simulate fallback paths."
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 162,
+            "w": 252,
+            "n": "2",
+            "text": "Prepare",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 198,
+            "w": 252,
+            "text": "Profile and map data; draft test scenarios, runbooks, communications and support."
+          },
+          {
+            "type": "numhead",
+            "x": 633,
+            "y": 162,
+            "w": 252,
+            "n": "3",
+            "text": "Monitor",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 633,
+            "y": 198,
+            "w": 252,
+            "text": "Compare transactions and outcomes, flag exceptions and trace anomalies to dependencies."
+          },
+          {
+            "type": "grouplabel",
+            "x": 57,
+            "y": 264,
+            "w": 846,
+            "text": "Illustrative phased cutover"
+          },
+          {
+            "type": "matrix",
+            "x": 57,
+            "y": 288,
+            "w": 846,
+            "labels": "left",
+            "labelW": 216,
+            "cols": [
+              "Current state",
+              "Wave 1",
+              "Wave 2",
+              "Wave 3"
+            ],
+            "cellH": 36,
+            "gap": 18,
+            "rowGap": 18,
+            "rows": [
+              {
+                "label": "Close and consolidation",
+                "cells": [
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Coexistence",
+                    "surface": "callout"
+                  },
+                  {
+                    "text": "Modern",
+                    "surface": "inverse"
+                  },
+                  {
+                    "text": "Modern",
+                    "surface": "inverse"
+                  }
+                ]
+              },
+              {
+                "label": "Intercompany and payables",
+                "cells": [
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Coexistence",
+                    "surface": "callout"
+                  },
+                  {
+                    "text": "Modern",
+                    "surface": "inverse"
+                  }
+                ]
+              },
+              {
+                "label": "Planning and reporting",
+                "cells": [
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Coexistence",
+                    "surface": "callout"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "runbook",
+      "variant": "overview",
+      "name": "Runbook · overview, roles and escalation",
+      "tier": "working",
+      "purpose": "One-page runbook front sheet: purpose, scope, role owners, entry and exit criteria and a timed escalation path.",
+      "uses": [
+        "text.label",
+        "composite.table",
+        "card",
+        "seq.stepper"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 128,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "purpose",
+          "maxChars": 110
+        },
+        {
+          "slot": "scope item",
+          "maxChars": 34
+        },
+        {
+          "slot": "role",
+          "maxChars": 16
+        },
+        {
+          "slot": "accountability",
+          "maxChars": 38
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 30
+        },
+        {
+          "slot": "escalation tier",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "One runbook governs every [[wave 1]] cutover decision",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Purpose"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Move close and consolidation to the new ledger over one weekend, with a tested way back at every step."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 216,
+            "w": 270,
+            "text": "Scope"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "items": [
+              "General ledger and subledgers",
+              "Bank and intercompany interfaces",
+              "Excludes planning and reporting"
+            ]
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "cols": [
+              {
+                "k": "r",
+                "label": "Role",
+                "w": 144
+              },
+              {
+                "k": "h",
+                "label": "Held by",
+                "w": 126
+              },
+              {
+                "k": "a",
+                "label": "Accountable for",
+                "w": 288
+              }
+            ],
+            "rows": [
+              {
+                "r": "Cutover lead",
+                "h": "Program director",
+                "a": "Runs the bridge; calls go or no-go"
+              },
+              {
+                "r": "Ledger owner",
+                "h": "Controller",
+                "a": "Signs balances; opens the ledger"
+              },
+              {
+                "r": "Technical lead",
+                "h": "Finance IT",
+                "a": "Runs loads and interface switch"
+              },
+              {
+                "r": "Support lead",
+                "h": "Shared services",
+                "a": "User comms and hypercare"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 288,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "Entry criteria",
+            "body": [
+              {
+                "bullets": [
+                  "Dress rehearsal signed off",
+                  "Rollback plan approved"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 288,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "Exit criteria",
+            "body": [
+              {
+                "bullets": [
+                  "Day 1 postings reconciled",
+                  "Hypercare handover accepted"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 378,
+            "w": 846,
+            "text": "Escalation path"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "subtle",
+            "number": "0–15 min",
+            "text": "Workstream lead",
+            "first": true
+          },
+          {
+            "type": "chevron",
+            "x": 273,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "subtle",
+            "number": "15–30 min",
+            "text": "Cutover lead"
+          },
+          {
+            "type": "chevron",
+            "x": 489,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "strong",
+            "number": "30–60 min",
+            "text": "Controller and CIO"
+          },
+          {
+            "type": "chevron",
+            "x": 705,
+            "y": 396,
+            "w": 198,
+            "h": 54,
+            "surface": "inverse",
+            "number": "60+ min",
+            "text": "Steering committee"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-table",
+      "name": "Runbook · step-by-step table",
+      "tier": "working",
+      "purpose": "The working runbook: numbered steps with owner, time window, verification check and rollback action for each.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 182,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "action",
+          "maxChars": 36
+        },
+        {
+          "slot": "owner",
+          "maxChars": 16
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "verification",
+          "maxChars": 42
+        },
+        {
+          "slot": "rollback",
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Eight steps take the ledger from freeze to [[go-live]]",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "n",
+                "label": "Step",
+                "w": 54
+              },
+              {
+                "k": "a",
+                "label": "Action",
+                "w": 192
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 132
+              },
+              {
+                "k": "w",
+                "label": "Window",
+                "w": 126
+              },
+              {
+                "k": "v",
+                "label": "Verification check",
+                "w": 198
+              },
+              {
+                "k": "b",
+                "label": "Rollback",
+                "w": 144
+              }
+            ],
+            "rows": [
+              {
+                "n": "1",
+                "a": "Freeze legacy postings",
+                "o": "Controller",
+                "w": "Fri 18:00 · 30m",
+                "v": "Subledger lock report shows no open batches",
+                "b": "Lift the freeze flag"
+              },
+              {
+                "n": "2",
+                "a": "Take the final legacy backup",
+                "o": "Finance IT",
+                "w": "Fri 18:30 · 1h",
+                "v": "Checksums match the source",
+                "b": "Restore the snapshot"
+              },
+              {
+                "n": "3",
+                "a": "Extract open balances",
+                "o": "Data lead",
+                "w": "Fri 19:30 · 3h",
+                "v": "Trial balance ties to the legacy ledger",
+                "b": "Re-extract the data"
+              },
+              {
+                "n": "4",
+                "a": "Load balances to new ledger",
+                "o": "Finance IT",
+                "w": "Fri 22:30 · 2h",
+                "v": "Row counts and totals reconcile",
+                "b": "Purge target; reopen legacy"
+              },
+              {
+                "n": "5",
+                "a": "Run the reconciliation rules",
+                "o": "Shared services",
+                "w": "Sat 00:30 · 2h",
+                "v": "Auto-match rate above 90%",
+                "b": "Hold; rerun prior rules"
+              },
+              {
+                "n": "6",
+                "a": "Switch the interfaces",
+                "o": "Integration lead",
+                "w": "Sat 02:30 · 1h",
+                "v": "Test postings flow end to end",
+                "b": "Repoint to legacy endpoints"
+              },
+              {
+                "n": "7",
+                "a": "Hold the go or no-go decision",
+                "o": "Cutover lead",
+                "w": "Sat 03:30 · 30m",
+                "v": "Every check is signed on the log",
+                "b": "Invoke the full rollback"
+              },
+              {
+                "n": "8",
+                "a": "Open the ledger to users",
+                "o": "Controller",
+                "w": "Sat 06:00 · 1h",
+                "v": "First live posting is accepted",
+                "b": "Close the ledger; notify users"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "cutover-timeline",
+      "name": "Runbook · T-minus cutover timeline",
+      "tier": "working",
+      "purpose": "A T-minus axis with go/no-go gates marked as milestones and one card per window listing the work and the gate owner.",
+      "uses": [
+        "seq.timeaxis",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 132,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "period",
+          "maxChars": 8
+        },
+        {
+          "slot": "gate",
+          "maxChars": 24
+        },
+        {
+          "slot": "window",
+          "maxChars": 16
+        },
+        {
+          "slot": "window title",
+          "maxChars": 22
+        },
+        {
+          "slot": "action",
+          "maxChars": 34
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Four go/no-go gates pace the [[weekend]] cutover",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "timeaxis",
+            "x": 57,
+            "y": 162,
+            "w": 846,
+            "periods": [
+              "T-12h",
+              "T-6h",
+              "T-0",
+              "T+6h",
+              "T+12h",
+              "T+18h",
+              "T+24h",
+              "T+36h"
+            ],
+            "milestones": [
+              {
+                "at": 0.125,
+                "label": "G1 · Ready to freeze"
+              },
+              {
+                "at": 0.4,
+                "label": "G2 · Data tied out"
+              },
+              {
+                "at": 0.58,
+                "label": "G3 · Open ledger"
+              },
+              {
+                "at": 0.9,
+                "label": "G4 · Exit to hypercare"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T-12h to T-0",
+            "title": "Prepare",
+            "body": [
+              {
+                "bullets": [
+                  "Sign the rollback plan",
+                  "Open the support bridge"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G1 · Cutover lead confirms rollback and bridge ready"
+          },
+          {
+            "type": "card",
+            "x": 273,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T-0 to T+6h",
+            "title": "Freeze and migrate",
+            "body": [
+              {
+                "bullets": [
+                  "Lock legacy; take backup",
+                  "Extract, load and reconcile"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 273,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G2 · Controller confirms balances tie to legacy"
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T+6h to T+12h",
+            "title": "Validate and open",
+            "body": [
+              {
+                "bullets": [
+                  "Switch interfaces; test posting",
+                  "Leads sign off balances"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 489,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G3 · Controller opens the ledger to users"
+          },
+          {
+            "type": "card",
+            "x": 705,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T+12h to T+36h",
+            "title": "Stabilize",
+            "body": [
+              {
+                "bullets": [
+                  "Watch posting and match rates",
+                  "Triage defects every 2 hours"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 705,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G4 · Support lead accepts the exit to hypercare"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "go-no-go",
+      "name": "Runbook · go/no-go checklist",
+      "tier": "working",
+      "purpose": "Criteria with owner, evidence, RAG status and a go tick, closed by the decision rule the cutover lead applies.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 120,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 46
+        },
+        {
+          "slot": "owner",
+          "maxChars": 18
+        },
+        {
+          "slot": "evidence",
+          "maxChars": 30
+        },
+        {
+          "slot": "decision rule",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Wave 1 goes live only when every criterion is [[green]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "c",
+                "label": "Go/no-go criterion",
+                "w": 318
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 132
+              },
+              {
+                "k": "e",
+                "label": "Evidence",
+                "w": 204
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 120,
+                "type": "status"
+              },
+              {
+                "k": "g",
+                "label": "Go",
+                "w": 72,
+                "type": "check"
+              }
+            ],
+            "rows": [
+              {
+                "c": "Dress rehearsal passed with no open defects",
+                "o": "Test lead",
+                "e": "Rehearsal log, run 3",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Balances tie to the legacy trial balance",
+                "o": "Controller",
+                "e": "Reconciliation report",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Interfaces tested end to end",
+                "o": "Integration lead",
+                "e": "Interface test pack",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Rollback rehearsed within the window",
+                "o": "Technical lead",
+                "e": "Timed rollback record",
+                "s": "risk",
+                "g": false
+              },
+              {
+                "c": "Users trained and access confirmed",
+                "o": "Support lead",
+                "e": "Training roster, 94%",
+                "s": "risk",
+                "g": false
+              },
+              {
+                "c": "Support bridge staffed for 36 hours",
+                "o": "Support lead",
+                "e": "Rota signed by leads",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Audit sign-off on migration controls",
+                "o": "Internal audit",
+                "e": "Control walkthrough memo",
+                "s": "off",
+                "g": false
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 432,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Decision rule: any red criterion is a no-go; an amber criterion needs a written mitigation from the Cutover lead."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "roadmap",
+      "variant": "staggered-phases-nav",
+      "name": "Roadmap · staggered phases with nav rail",
+      "tier": "working",
+      "purpose": "The staggered roadmap in a long deck: section tabs down the left edge show where the roadmap sits (compact footer).",
+      "uses": [
+        "advanced.gantt",
+        "seq.timeaxis"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 111,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "lane title",
+          "maxChars": 28
+        },
+        {
+          "slot": "lane subtitle",
+          "maxChars": 30
+        },
+        {
+          "slot": "bar label",
+          "maxChars": 40
+        },
+        {
+          "slot": "milestone",
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "title": "Nine months from build to Northfield ownership",
+        "body": [
+          {
+            "type": "gantt",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "cols": {
+              "group": 0,
+              "lane": 192
+            },
+            "sidebarLabel": "Phase · scope",
+            "periods": {
+              "labels": [
+                "M1",
+                "M2",
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7",
+                "M8",
+                "M9",
+                "M10",
+                "M11",
+                "M12",
+                "Later"
+              ]
+            },
+            "phases": [
+              {
+                "label": "Build the platform",
+                "from": 0,
+                "to": 4,
+                "rule": "strong"
+              },
+              {
+                "label": "Prove and scale",
+                "from": 4,
+                "to": 9,
+                "rule": "emphasis"
+              },
+              {
+                "label": "Hand over",
+                "from": 9,
+                "to": 13,
+                "rule": "callout"
+              }
+            ],
+            "kinds": {
+              "p1": {
+                "fill": "#CED7E6",
+                "text": "#070154",
+                "label": "Phase 01"
+              },
+              "p2": {
+                "fill": "#50658E",
+                "text": "#FFFFFF",
+                "label": "Phase 02"
+              },
+              "p3": {
+                "fill": "#070154",
+                "text": "#FFFFFF",
+                "label": "Phase 03"
+              },
+              "ga": {
+                "fill": "#0047FF",
+                "text": "#FFFFFF",
+                "label": "Onboarding"
+              },
+              "pm": {
+                "fill": "#E8EEF8",
+                "text": "#070154",
+                "label": "Ongoing"
+              }
+            },
+            "events": {
+              "star": {
+                "fill": "#F900D3",
+                "label": "Milestone"
+              }
+            },
+            "groups": [
+              {
+                "label": "Delivery",
+                "fill": "#070154",
+                "lanes": [
+                  {
+                    "title": "Phase 01 · Foundation",
+                    "sub": "Architecture and guardrails",
+                    "icon": "connected-cube",
+                    "items": [
+                      {
+                        "kind": "p1",
+                        "from": 0,
+                        "to": 3.5,
+                        "label": "Foundation",
+                        "softEnd": 0.5
+                      },
+                      {
+                        "event": "star",
+                        "at": 4,
+                        "label": "Architecture approved"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Phase 02 · Scale",
+                    "sub": "Three early adopters",
+                    "icon": "people-network",
+                    "items": [
+                      {
+                        "kind": "p2",
+                        "from": 3.5,
+                        "to": 8,
+                        "label": "Scale and early adoption",
+                        "softEnd": 1
+                      },
+                      {
+                        "event": "star",
+                        "at": 9,
+                        "label": "Targeted release"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Phase 03 · Availability",
+                    "sub": "General availability",
+                    "icon": "rocket",
+                    "items": [
+                      {
+                        "kind": "p3",
+                        "from": 7,
+                        "to": 9.5,
+                        "label": "Availability",
+                        "softEnd": 0.5
+                      },
+                      {
+                        "event": "star",
+                        "at": 10,
+                        "label": "Launch"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Onboarding",
+                    "sub": "Northfield ownership",
+                    "icon": "handshake",
+                    "items": [
+                      {
+                        "kind": "ga",
+                        "from": 9.5,
+                        "to": 13,
+                        "label": "Onboarding and handover"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Program",
+                "fill": "#50658E",
+                "lanes": [
+                  {
+                    "title": "Program management",
+                    "sub": "Project and product",
+                    "icon": "task-list-cycle",
+                    "items": [
+                      {
+                        "kind": "pm",
+                        "from": 0,
+                        "to": 9.5,
+                        "label": "Ongoing project and product management"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "nav": {
+          "items": [
+            "Context",
+            "Approach",
+            "Commercials",
+            "Team"
+          ],
+          "active": 1
+        }
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-table-nav",
+      "name": "Runbook · step table with nav rail",
+      "tier": "working",
+      "purpose": "The step-by-step runbook table in a long runbook pack: section tabs down the left edge (tall footer).",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 186,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "action",
+          "maxChars": 36
+        },
+        {
+          "slot": "owner",
+          "maxChars": 16
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "verification",
+          "maxChars": 42
+        },
+        {
+          "slot": "rollback",
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "tall",
+        "eyebrow": "Cutover runbook",
+        "title": "Eight steps take the ledger from freeze to [[go-live]]",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "n",
+                "label": "Step",
+                "w": 54
+              },
+              {
+                "k": "a",
+                "label": "Action",
+                "w": 192
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 132
+              },
+              {
+                "k": "w",
+                "label": "Window",
+                "w": 126
+              },
+              {
+                "k": "v",
+                "label": "Verification check",
+                "w": 198
+              },
+              {
+                "k": "b",
+                "label": "Rollback",
+                "w": 144
+              }
+            ],
+            "rows": [
+              {
+                "n": "1",
+                "a": "Freeze legacy postings",
+                "o": "Controller",
+                "w": "Fri 18:00 · 30m",
+                "v": "Subledger lock report shows no open batches",
+                "b": "Lift the freeze flag"
+              },
+              {
+                "n": "2",
+                "a": "Take the final legacy backup",
+                "o": "Finance IT",
+                "w": "Fri 18:30 · 1h",
+                "v": "Checksums match the source",
+                "b": "Restore the snapshot"
+              },
+              {
+                "n": "3",
+                "a": "Extract open balances",
+                "o": "Data lead",
+                "w": "Fri 19:30 · 3h",
+                "v": "Trial balance ties to the legacy ledger",
+                "b": "Re-extract the data"
+              },
+              {
+                "n": "4",
+                "a": "Load balances to new ledger",
+                "o": "Finance IT",
+                "w": "Fri 22:30 · 2h",
+                "v": "Row counts and totals reconcile",
+                "b": "Purge target; reopen legacy"
+              },
+              {
+                "n": "5",
+                "a": "Run the reconciliation rules",
+                "o": "Shared services",
+                "w": "Sat 00:30 · 2h",
+                "v": "Auto-match rate above 90%",
+                "b": "Hold; rerun prior rules"
+              },
+              {
+                "n": "6",
+                "a": "Switch the interfaces",
+                "o": "Integration lead",
+                "w": "Sat 02:30 · 1h",
+                "v": "Test postings flow end to end",
+                "b": "Repoint to legacy endpoints"
+              },
+              {
+                "n": "7",
+                "a": "Hold the go or no-go decision",
+                "o": "Cutover lead",
+                "w": "Sat 03:30 · 30m",
+                "v": "Every check is signed on the log",
+                "b": "Invoke the full rollback"
+              },
+              {
+                "n": "8",
+                "a": "Open the ledger to users",
+                "o": "Controller",
+                "w": "Sat 06:00 · 1h",
+                "v": "First live posting is accepted",
+                "b": "Close the ledger; notify users"
+              }
+            ]
+          }
+        ],
+        "nav": {
+          "items": [
+            "Prepare",
+            "Cutover",
+            "Hypercare",
+            "Handover"
+          ],
+          "active": 1
+        }
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "roles",
+      "name": "Runbook · roles and authority",
+      "tier": "working",
+      "purpose": "A dedicated role list for the cutover: who holds each role, what they are accountable for, the decisions they may take alone and who covers them.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 114,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "role",
+          "maxChars": 18
+        },
+        {
+          "slot": "held by",
+          "maxChars": 24
+        },
+        {
+          "slot": "accountable for",
+          "maxChars": 34
+        },
+        {
+          "slot": "decisions and authority",
+          "maxChars": 38
+        },
+        {
+          "slot": "backup",
+          "maxChars": 26
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Six roles hold every [[cutover]] decision, each with a backup",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 48,
+            "cols": [
+              {
+                "k": "r",
+                "label": "Role",
+                "w": 144
+              },
+              {
+                "k": "h",
+                "label": "Held by",
+                "w": 144
+              },
+              {
+                "k": "a",
+                "label": "Accountable for",
+                "w": 198
+              },
+              {
+                "k": "d",
+                "label": "Decisions and authority",
+                "w": 216
+              },
+              {
+                "k": "b",
+                "label": "Backup",
+                "w": 144
+              }
+            ],
+            "rows": [
+              {
+                "r": "Cutover lead",
+                "h": "Program director",
+                "a": "The runbook and the bridge",
+                "d": "Calls go or no-go; invokes rollback",
+                "b": "Deputy program director"
+              },
+              {
+                "r": "Ledger owner",
+                "h": "Controller",
+                "a": "Balances and ledger opening",
+                "d": "Signs balances; opens the ledger",
+                "b": "Assistant controller"
+              },
+              {
+                "r": "Technical lead",
+                "h": "Finance IT",
+                "a": "Loads, jobs and environments",
+                "d": "Pauses a load; restores a snapshot",
+                "b": "Platform engineer"
+              },
+              {
+                "r": "Integration lead",
+                "h": "Enterprise architecture",
+                "a": "Interface switch and testing",
+                "d": "Repoints interfaces to legacy",
+                "b": "Integration engineer"
+              },
+              {
+                "r": "Data lead",
+                "h": "Data engineering",
+                "a": "Extracts and reconciliation",
+                "d": "Stops a load on a variance",
+                "b": "Senior data analyst"
+              },
+              {
+                "r": "Support lead",
+                "h": "Shared services",
+                "a": "User comms and hypercare",
+                "d": "Sends notices; triages defects",
+                "b": "Service desk manager"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "roles-raci",
+      "name": "Runbook · roles as a RACI",
+      "tier": "working",
+      "purpose": "A RACI version of the cutover roles: runbook steps down the side, the six roles across the top and R, A, C or I in each cell, with a note on who can sign a step off.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 111,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "cutover step",
+          "maxChars": 36
+        },
+        {
+          "slot": "role",
+          "maxChars": 18
+        },
+        {
+          "slot": "R, A, C or I",
+          "maxChars": 3
+        },
+        {
+          "slot": "authority note",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Every cutover step has exactly one [[accountable]] role",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "rowHeader": true,
+            "preset": "raci",
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "act",
+                "label": "Cutover step",
+                "w": 270
+              },
+              {
+                "k": "c",
+                "label": "Cutover lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "l",
+                "label": "Ledger owner",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "t",
+                "label": "Technical lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "i",
+                "label": "Integration lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "d",
+                "label": "Data lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "s",
+                "label": "Support lead",
+                "w": 96,
+                "type": "raci"
+              }
+            ],
+            "rows": [
+              {
+                "act": "Freeze legacy postings",
+                "c": "A",
+                "l": "C",
+                "t": "R",
+                "i": "I",
+                "d": "I",
+                "s": "I"
+              },
+              {
+                "act": "Extract and reconcile balances",
+                "c": "I",
+                "l": "A",
+                "t": "C",
+                "i": "I",
+                "d": "R",
+                "s": "I"
+              },
+              {
+                "act": "Load balances to the new ledger",
+                "c": "I",
+                "l": "A",
+                "t": "R",
+                "i": "I",
+                "d": "C",
+                "s": "I"
+              },
+              {
+                "act": "Switch interfaces to the new ledger",
+                "c": "I",
+                "l": "I",
+                "t": "C",
+                "i": "A/R",
+                "d": "C",
+                "s": "I"
+              },
+              {
+                "act": "Hold the go or no-go decision",
+                "c": "A/R",
+                "l": "C",
+                "t": "C",
+                "i": "C",
+                "d": "C",
+                "s": "I"
+              },
+              {
+                "act": "Notify users and open hypercare",
+                "c": "A",
+                "l": "I",
+                "t": "I",
+                "i": "I",
+                "d": "I",
+                "s": "R"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Authority: only the accountable role signs a step off. The cutover lead's go or no-go call overrides any other sign-off."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "escalation",
+      "name": "Runbook · escalation path",
+      "tier": "working",
+      "purpose": "A dedicated escalation path: each level with its trigger, time threshold, contact and the decisions it owns.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 149,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level",
+          "maxChars": 26
+        },
+        {
+          "slot": "trigger",
+          "maxChars": 42
+        },
+        {
+          "slot": "time threshold",
+          "maxChars": 14
+        },
+        {
+          "slot": "contact or owner",
+          "maxChars": 34
+        },
+        {
+          "slot": "decision",
+          "maxChars": 36
+        },
+        {
+          "slot": "escalation rule",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Four levels put every [[issue]] in front of a decision-maker",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 54,
+            "cols": [
+              {
+                "k": "l",
+                "label": "Level",
+                "w": 180
+              },
+              {
+                "k": "t",
+                "label": "Trigger",
+                "w": 216
+              },
+              {
+                "k": "m",
+                "label": "Time threshold",
+                "w": 108
+              },
+              {
+                "k": "o",
+                "label": "Contact or owner",
+                "w": 162
+              },
+              {
+                "k": "d",
+                "label": "What this level decides",
+                "w": 180
+              }
+            ],
+            "rows": [
+              {
+                "l": "L1 · Workstream lead",
+                "t": "A step runs late or a check fails",
+                "m": "0–15 min",
+                "o": "Workstream lead · bridge line",
+                "d": "Retry the step or apply its rollback"
+              },
+              {
+                "l": "L2 · Cutover lead",
+                "t": "L1 cannot clear it, or the window slips",
+                "m": "15–30 min",
+                "o": "Program director · ext. 4410",
+                "d": "Re-sequence steps; extend a window"
+              },
+              {
+                "l": "L3 · Controller and CIO",
+                "t": "Balances do not tie, or a gate is at risk",
+                "m": "30–60 min",
+                "o": "Controller and CIO · ext. 4420",
+                "d": "Go or no-go; invoke full rollback"
+              },
+              {
+                "l": "L4 · Steering committee",
+                "t": "Rollback invoked or go-live date at risk",
+                "m": "60+ min",
+                "o": "Executive sponsor · ext. 4430",
+                "d": "Reset the date; approve a new plan"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Rule: the clock runs from the first alert. If a level has not acknowledged within its threshold, page the next level."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "escalation-flow",
+      "name": "Runbook · escalation path as a flow",
+      "tier": "working",
+      "purpose": "The escalation path drawn as a flow: a trigger, four levels joined by connectors that carry the time thresholds, and a resolved exit under each level.",
+      "uses": [
+        "shape.block",
+        "shape.connector",
+        "text"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 110,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level and owner",
+          "maxChars": 26
+        },
+        {
+          "slot": "time threshold",
+          "maxChars": 8
+        },
+        {
+          "slot": "exit label",
+          "maxChars": 16
+        },
+        {
+          "slot": "decision at the level",
+          "maxChars": 40
+        },
+        {
+          "slot": "escalation rule",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Each missed threshold moves an [[issue]] up one level",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "style": "small",
+            "text": "Trigger"
+          },
+          {
+            "type": "block",
+            "x": 237,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L1 · Workstream lead"
+          },
+          {
+            "type": "block",
+            "x": 417,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L2 · Cutover lead"
+          },
+          {
+            "type": "block",
+            "x": 597,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L3 · Controller and CIO"
+          },
+          {
+            "type": "block",
+            "x": 777,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L4 · Steering committee"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                183,
+                171
+              ],
+              [
+                237,
+                171
+              ]
+            ],
+            "label": "Alert",
+            "labelPos": "above"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                363,
+                171
+              ],
+              [
+                417,
+                171
+              ]
+            ],
+            "label": "15 min",
+            "labelPos": "above"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                543,
+                171
+              ],
+              [
+                597,
+                171
+              ]
+            ],
+            "label": "30 min",
+            "labelPos": "above"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                723,
+                171
+              ],
+              [
+                777,
+                171
+              ]
+            ],
+            "label": "60 min",
+            "labelPos": "above",
+            "head": "both"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                300,
+                198
+              ],
+              [
+                300,
+                252
+              ]
+            ],
+            "label": "Resolved",
+            "style": "dashed"
+          },
+          {
+            "type": "block",
+            "x": 237,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Closed at L1"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                480,
+                198
+              ],
+              [
+                480,
+                252
+              ]
+            ],
+            "label": "Resolved",
+            "style": "dashed"
+          },
+          {
+            "type": "block",
+            "x": 417,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Closed at L2"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                660,
+                198
+              ],
+              [
+                660,
+                252
+              ]
+            ],
+            "label": "Resolved",
+            "style": "dashed"
+          },
+          {
+            "type": "block",
+            "x": 597,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Closed at L3"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                840,
+                198
+              ],
+              [
+                840,
+                252
+              ]
+            ],
+            "style": "dashed",
+            "label": "Decision"
+          },
+          {
+            "type": "block",
+            "x": 777,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Plan reset"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 324,
+            "w": 126,
+            "text": "The first alert on the bridge line starts the clock."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 237,
+            "y": 324,
+            "w": 126,
+            "text": "Retry the step or apply its rollback."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 417,
+            "y": 324,
+            "w": 126,
+            "text": "Re-sequence steps or extend a window."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 324,
+            "w": 126,
+            "text": "Go or no-go; invoke full rollback."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 777,
+            "y": 324,
+            "w": 126,
+            "text": "Reset the date and approve a new plan."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Rule: if a level has not acknowledged within its threshold, page the next level. Steering hears the outcome of every rollback."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-list",
+      "name": "Runbook · step list with continuation",
+      "tier": "working",
+      "purpose": "Four or five runbook steps, each with two or three actions, an owner and a window, and an optional continuation indicator for steps that run to a second page.",
+      "uses": [
+        "numhead",
+        "list.bullets",
+        "text",
+        "rule"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 116,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step title",
+          "maxChars": 24
+        },
+        {
+          "slot": "action",
+          "maxChars": 30
+        },
+        {
+          "slot": "owner",
+          "maxChars": 24
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "continuation indicator (optional)",
+          "maxChars": 48
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Steps 1 to 4 lock the legacy ledger and [[move]] its balances",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 135,
+            "w": 270,
+            "n": "1",
+            "text": "Freeze legacy postings",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 132,
+            "w": 342,
+            "items": [
+              "Close open batches",
+              "Lock subledgers",
+              "Publish the freeze notice"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 135,
+            "w": 198,
+            "text": "Owner: Controller"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 153,
+            "w": 198,
+            "text": "Fri 18:00 · 30m"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 198,
+            "w": 846
+          },
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 207,
+            "w": 270,
+            "n": "2",
+            "text": "Take the final backup",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 204,
+            "w": 342,
+            "items": [
+              "Snapshot the legacy ledger",
+              "Verify checksums"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 207,
+            "w": 198,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 225,
+            "w": 198,
+            "text": "Fri 18:30 · 1h"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 270,
+            "w": 846
+          },
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 279,
+            "w": 270,
+            "n": "3",
+            "text": "Extract open balances",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 276,
+            "w": 342,
+            "items": [
+              "Run the extract jobs",
+              "Tie to the trial balance",
+              "Log variances"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 279,
+            "w": 198,
+            "text": "Owner: Data lead"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 297,
+            "w": 198,
+            "text": "Fri 19:30 · 3h"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 342,
+            "w": 846
+          },
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 351,
+            "w": 270,
+            "n": "4",
+            "text": "Load the new ledger",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 348,
+            "w": 342,
+            "items": [
+              "Load by entity",
+              "Check counts and totals",
+              "Park rejected rows"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 351,
+            "w": 198,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 369,
+            "w": 198,
+            "text": "Fri 22:30 · 2h"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 432,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Step 4 · page 1 of 2 · Continued on next page"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-detail",
+      "name": "Runbook · single step in detail",
+      "tier": "working",
+      "purpose": "One runbook step on a whole slide: name and description, owners and window, sub-steps, rules and the criteria that clear the gate to the next step.",
+      "uses": [
+        "text",
+        "list.ol",
+        "list.bullets",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 126,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step name",
+          "maxChars": 28
+        },
+        {
+          "slot": "description",
+          "maxChars": 100
+        },
+        {
+          "slot": "owner",
+          "maxChars": 32
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "sub-step",
+          "maxChars": 36
+        },
+        {
+          "slot": "rule",
+          "maxChars": 36
+        },
+        {
+          "slot": "gate criterion",
+          "maxChars": 44
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Step 1 freezes every [[legacy posting]] before any data moves",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Step 1"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Freeze legacy postings"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 186,
+            "w": 270,
+            "text": "Stop every posting to the legacy ledger so the extract is one stable cut of the books."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 270,
+            "w": 270,
+            "text": "Owners"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 288,
+            "w": 270,
+            "items": [
+              "Controller · accountable",
+              "Finance IT · executes",
+              "Internal audit · observes"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "text": "Window"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "text": "Fri 18:00 · 30 min"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "text": "Sub-steps"
+          },
+          {
+            "type": "ol",
+            "size": "small",
+            "x": 345,
+            "y": 144,
+            "w": 270,
+            "items": [
+              "Announce the freeze on the bridge",
+              "Close and post open batches",
+              "Lock subledgers and the calendar",
+              "Run the subledger lock report",
+              "Publish the freeze notice"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "Rules"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 144,
+            "w": 270,
+            "items": [
+              "No manual journals after freeze",
+              "Exceptions need the Cutover lead",
+              "Late items are queued, not posted",
+              "Record the freeze time on the log"
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 324,
+            "w": 558,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "Gate clearance",
+            "body": [
+              {
+                "bullets": [
+                  "Lock report shows no open batches",
+                  "Controller confirms the freeze on the log",
+                  "Cutover lead releases step 2"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-detail-data",
+      "name": "Runbook · data migration step in detail",
+      "tier": "working",
+      "purpose": "A data migration step as a checklist to execute: owners and window, reconciliation checks with legacy figures and tolerances, an empty tick box and a blank for the new-ledger figure per check, sub-steps and acceptance criteria.",
+      "uses": [
+        "text",
+        "composite.table",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 114,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step name",
+          "maxChars": 28
+        },
+        {
+          "slot": "description",
+          "maxChars": 100
+        },
+        {
+          "slot": "owner",
+          "maxChars": 32
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "check",
+          "maxChars": 28
+        },
+        {
+          "slot": "value",
+          "maxChars": 10
+        },
+        {
+          "slot": "tolerance",
+          "maxChars": 10
+        },
+        {
+          "slot": "sub-step",
+          "maxChars": 32
+        },
+        {
+          "slot": "acceptance criterion",
+          "maxChars": 36
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Tick every [[reconciliation]] before step 4 loads balances",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Step 4"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Load balances to the new ledger"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 186,
+            "w": 270,
+            "text": "Load the extracted open balances by entity and prove they match the legacy books."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 270,
+            "w": 270,
+            "text": "Owners"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 288,
+            "w": 270,
+            "items": [
+              "Finance IT · executes",
+              "Data lead · reconciles",
+              "Controller · accountable"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "text": "Window"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "text": "Fri 22:30 · 2 h"
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "d",
+                "label": "Done",
+                "w": 54,
+                "type": "checkbox"
+              },
+              {
+                "k": "c",
+                "label": "Reconciliation check",
+                "w": 174
+              },
+              {
+                "k": "l",
+                "label": "Legacy",
+                "w": 90
+              },
+              {
+                "k": "t",
+                "label": "Tolerance",
+                "w": 84
+              },
+              {
+                "k": "n",
+                "label": "New ledger",
+                "w": 156
+              }
+            ],
+            "rows": [
+              {
+                "d": false,
+                "c": "Row count by entity",
+                "l": "412,806",
+                "t": "Zero",
+                "n": ""
+              },
+              {
+                "d": false,
+                "c": "Debit and credit totals",
+                "l": "$1.284bn",
+                "t": "$0",
+                "n": ""
+              },
+              {
+                "d": false,
+                "c": "Open items by entity",
+                "l": "9,418",
+                "t": "±0.1%",
+                "n": ""
+              },
+              {
+                "d": false,
+                "c": "Intercompany balances",
+                "l": "$38.2m",
+                "t": "±0.5%",
+                "n": ""
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "Sub-steps",
+            "body": [
+              {
+                "bullets": [
+                  "Load by entity, parents last",
+                  "Run the count and total checks",
+                  "Park rejected rows",
+                  "Log each variance"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "Acceptance",
+            "body": [
+              {
+                "bullets": [
+                  "Every check inside tolerance",
+                  "Variances explained and signed",
+                  "Data lead releases step 5"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-detail-gate",
+      "name": "Runbook · decision gate step in detail",
+      "tier": "working",
+      "purpose": "A decision or gate step as a checklist to execute: go criteria with evidence and approver and an empty tick box per criterion, the owners and window, and what happens on a go or a no-go.",
+      "uses": [
+        "text",
+        "composite.table",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 123,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step name",
+          "maxChars": 28
+        },
+        {
+          "slot": "description",
+          "maxChars": 100
+        },
+        {
+          "slot": "owner",
+          "maxChars": 32
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 28
+        },
+        {
+          "slot": "evidence",
+          "maxChars": 26
+        },
+        {
+          "slot": "approver",
+          "maxChars": 18
+        },
+        {
+          "slot": "outcome action",
+          "maxChars": 32
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Tick every criterion before step 7 opens the [[ledger]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Step 7"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Hold the go or no-go decision"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 186,
+            "w": 270,
+            "text": "Review the evidence for every criterion and decide whether the ledger opens to users."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 270,
+            "w": 270,
+            "text": "Owners"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 288,
+            "w": 270,
+            "items": [
+              "Cutover lead · decides",
+              "Controller · signs balances",
+              "CIO · endorses"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "text": "Window"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "text": "Sat 03:30 · 30 min"
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "g",
+                "label": "Go",
+                "w": 54,
+                "type": "checkbox"
+              },
+              {
+                "k": "c",
+                "label": "Go criterion",
+                "w": 186
+              },
+              {
+                "k": "e",
+                "label": "Evidence",
+                "w": 168
+              },
+              {
+                "k": "a",
+                "label": "Approver",
+                "w": 150
+              }
+            ],
+            "rows": [
+              {
+                "c": "Balances tie to legacy",
+                "e": "Reconciliation report",
+                "a": "Controller",
+                "g": false
+              },
+              {
+                "c": "Interfaces pass end to end",
+                "e": "Interface test pack",
+                "a": "Integration lead",
+                "g": false
+              },
+              {
+                "c": "Rollback fits the window",
+                "e": "Timed rollback record",
+                "a": "Technical lead",
+                "g": false
+              },
+              {
+                "c": "Support bridge staffed",
+                "e": "Signed rota",
+                "a": "Support lead",
+                "g": false
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "If go",
+            "body": [
+              {
+                "bullets": [
+                  "Controller opens the ledger",
+                  "Support lead sends the notice",
+                  "Log the decision and time"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "If no-go",
+            "body": [
+              {
+                "bullets": [
+                  "Cutover lead invokes rollback",
+                  "Escalate to level 3",
+                  "Reset the date at steering"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "escalation-split",
+      "name": "Runbook · escalation path, tall ladder",
+      "tier": "working",
+      "purpose": "Split-frame escalation path: four stacked level cards in the tall column, each with its time threshold, trigger and the decision it owns.",
+      "uses": [
+        "card",
+        "text",
+        "shape.block"
+      ],
+      "legacy": "split variant of runbook/escalation",
+      "budget": {
+        "words": 144,
+        "marks": 3
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "short-column note",
+          "maxChars": 110
+        },
+        {
+          "slot": "level",
+          "maxChars": 4
+        },
+        {
+          "slot": "time threshold",
+          "maxChars": 14
+        },
+        {
+          "slot": "level owner",
+          "maxChars": 24
+        },
+        {
+          "slot": "trigger",
+          "maxChars": 42
+        },
+        {
+          "slot": "decision",
+          "maxChars": 36
+        },
+        {
+          "slot": "escalation rule",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Four levels put every issue in front of a decision-maker",
+        "body": [
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Each level owns one class of decision. If a level has not acknowledged within its threshold, page the next level."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "The clock runs from the first alert, not from the escalation."
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L4 · Steering committee · 60+ min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: rollback invoked or go-live date at risk",
+                  "Decides: reset the date; approve a new plan"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 144,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L3 · Controller and CIO · 30–60 min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: balances do not tie, or a gate is at risk",
+                  "Decides: go or no-go; invoke full rollback"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 252,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L2 · Cutover lead · 15–30 min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: L1 cannot clear it, or the window slips",
+                  "Decides: re-sequence steps; extend a window"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 360,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L1 · Workstream lead · 0–15 min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: a step runs late or a check fails",
+                  "Decides: retry the step or apply its rollback"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "mark",
+            "mark": "arrow-right-angle",
+            "x": 369,
+            "y": 105,
+            "w": 36,
+            "rotate": -90
+          },
+          {
+            "type": "mark",
+            "mark": "arrow-right-angle",
+            "x": 369,
+            "y": 213,
+            "w": 36,
+            "rotate": -90
+          },
+          {
+            "type": "mark",
+            "mark": "arrow-right-angle",
+            "x": 369,
+            "y": 321,
+            "w": 36,
+            "rotate": -90
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 3
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-list-split",
+      "name": "Runbook · step list, tall column",
+      "tier": "working",
+      "purpose": "Split-frame step list: four steps down the tall column, each with actions, owner and window, and an optional continuation indicator in the short column.",
+      "uses": [
+        "numhead",
+        "list.bullets",
+        "text",
+        "shape.block"
+      ],
+      "legacy": "split variant of runbook/step-list",
+      "budget": {
+        "words": 138,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "short-column note",
+          "maxChars": 110
+        },
+        {
+          "slot": "step title",
+          "maxChars": 24
+        },
+        {
+          "slot": "action",
+          "maxChars": 30
+        },
+        {
+          "slot": "owner",
+          "maxChars": 24
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "continuation indicator (optional)",
+          "maxChars": 48
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Steps 1 to 4 lock the legacy ledger and [[move]] its balances",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Each step has an owner and a window. Work to the actions in order and log each one as it completes."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Step 4 · page 1 of 2 · Continued on next page"
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 45,
+            "w": 270,
+            "n": "1",
+            "text": "Freeze legacy postings",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 81,
+            "w": 270,
+            "text": "Owner: Controller"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 99,
+            "w": 270,
+            "text": "Fri 18:00 · 30m"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 42,
+            "w": 270,
+            "items": [
+              "Close open batches",
+              "Lock subledgers",
+              "Publish the freeze notice"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 144,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 153,
+            "w": 270,
+            "n": "2",
+            "text": "Take the final backup",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 189,
+            "w": 270,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 207,
+            "w": 270,
+            "text": "Fri 18:30 · 1h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 150,
+            "w": 270,
+            "items": [
+              "Snapshot the legacy ledger",
+              "Verify checksums"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 252,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 261,
+            "w": 270,
+            "n": "3",
+            "text": "Extract open balances",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 297,
+            "w": 270,
+            "text": "Owner: Data lead"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 315,
+            "w": 270,
+            "text": "Fri 19:30 · 3h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 258,
+            "w": 270,
+            "items": [
+              "Run the extract jobs",
+              "Tie to the trial balance",
+              "Log variances"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 360,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 369,
+            "w": 270,
+            "n": "4",
+            "text": "Load the new ledger",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 405,
+            "w": 270,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 423,
+            "w": 270,
+            "text": "Fri 22:30 · 2h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 366,
+            "w": 270,
+            "items": [
+              "Load by entity",
+              "Check counts and totals",
+              "Park rejected rows"
+            ]
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 3
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    }
+  ]
+}

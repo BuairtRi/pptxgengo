@@ -26,11 +26,12 @@ type TemplateGuidance struct {
 	Advisory      bool   `json:"advisory"`
 }
 type TemplateDefinition struct {
-	Key          string             `json:"key"`
-	SourceFile   string             `json:"source_file"`
-	SourceSHA256 string             `json:"source_sha256"`
-	Identities   []TemplateIdentity `json:"identities"`
-	Guidance     []TemplateGuidance `json:"guidance,omitempty"`
+	Key            string             `json:"key"`
+	SourceFile     string             `json:"source_file"`
+	SourceSHA256   string             `json:"source_sha256"`
+	SourceRevision string             `json:"source_revision,omitempty"`
+	Identities     []TemplateIdentity `json:"identities"`
+	Guidance       []TemplateGuidance `json:"guidance,omitempty"`
 }
 type BoundDocument struct {
 	Schema string       `json:"schema"`
@@ -179,6 +180,7 @@ type TemplateSlideRecord struct {
 	Contract        string                   `json:"contract"`
 	SourceFile      string                   `json:"source_file"`
 	SourceSHA256    string                   `json:"source_sha256"`
+	SourceRevision  string                   `json:"source_revision,omitempty"`
 	ContentKind     string                   `json:"content_kind"`
 	Identities      []TemplateIdentity       `json:"identities"`
 	Assignments     []TemplateSlotAssignment `json:"assignments"`
@@ -467,6 +469,9 @@ func TemplateCatalog(bundle, sourceOverride string) ([]TemplateDefinition, error
 	}
 	var catalog []TemplateDefinition
 	for _, key := range executableTemplateKeys {
+		if !usesLegacyTemplate(s.Revision, key) {
+			continue
+		}
 		_, definition, err := compileTemplateSource(s, key)
 		if err != nil {
 			return nil, err
@@ -497,7 +502,7 @@ func BindTemplates(bundle, sourceOverride string, input BoundDocument) (Document
 	}}
 	var library []LibraryTemplate
 	for _, bound := range input.Slides {
-		if !legacyTemplate(bound.Template) {
+		if !usesLegacyTemplate(s.Revision, bound.Template) {
 			if library == nil {
 				library, err = libraryCatalog(s)
 				if err != nil {
@@ -521,7 +526,7 @@ func BindTemplates(bundle, sourceOverride string, input BoundDocument) (Document
 			return Document{}, BindingReport{}, err
 		}
 		slide.ID, slide.ContentKind = bound.ID, bound.ContentKind
-		record := TemplateSlideRecord{SlideID: bound.ID, Template: bound.Template, Contract: TemplateBindingsContract, SourceFile: def.SourceFile, SourceSHA256: def.SourceSHA256, ContentKind: bound.ContentKind, Identities: def.Identities, Guidance: def.Guidance}
+		record := TemplateSlideRecord{SlideID: bound.ID, Template: bound.Template, Contract: TemplateBindingsContract, SourceFile: def.SourceFile, SourceSHA256: def.SourceSHA256, SourceRevision: s.Revision, ContentKind: bound.ContentKind, Identities: def.Identities, Guidance: def.Guidance}
 		if err := assignBoundTemplate(&slide, def, bound.Values, &record); err != nil {
 			return Document{}, BindingReport{}, fmt.Errorf("binding.slide %s: %w", bound.ID, err)
 		}

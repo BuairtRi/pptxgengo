@@ -7,7 +7,21 @@ import (
 
 // These named composition amendments preserve the pinned source and caller copy.
 // They are not content-driven shrinking or geometry supplied by a binding.
-func applyLibraryRefinements(key string, doc *SlideSpec) error {
+func applyLibraryRefinements(key, revision string, doc *SlideSpec) error {
+	for _, refine := range []func(string, string, *SlideSpec) error{
+		applyApproachCommercialLibraryRefinements,
+		applyProofEvidenceLibraryRefinements,
+		applyTeamSolutionLibraryRefinements,
+	} {
+		if err := refine(key, revision, doc); err != nil {
+			return err
+		}
+	}
+	// The refreshed designs author these elements directly; v1 amendments must
+	// not append a duplicate photo or overwrite the new hand-drawn arrows.
+	if revision == LibraryRevisionV2 && (key == "agenda/schedule" || key == "pillars/four-why-matters") {
+		return nil
+	}
 	if err := applyPrimitiveLibraryRefinement(key, doc); err != nil {
 		return err
 	}
@@ -44,6 +58,28 @@ func applyLibraryRefinements(key string, doc *SlideSpec) error {
 		return fmt.Errorf("library.refinement_target_missing: %s", id)
 	}
 	switch key {
+	case "divider/inverse":
+		if revision == LibraryRevisionV2 {
+			const resolution = "wmds.inverse-divider-separated-columns.v2"
+			if err := change(1, "square", resolution, map[string]any{"x": 507, "y": 126, "size": 270}); err != nil {
+				return err
+			}
+			// Retain the photo-over-whiteboard layering with three 18pt grid
+			// steps. The left column reserves an 18pt gap before the photo.
+			doc.LibraryChrome.Whiteboard = []LibraryWhiteboard{{X: 561, Y: 54, W: 342, H: 396, Fade: "none"}}
+			for _, item := range []struct {
+				ordinal int
+				y       float64
+			}{{2, 216}, {3, 234}} {
+				if err := change(item.ordinal, "text", resolution, map[string]any{"w": 432, "y": item.y}); err != nil {
+					return err
+				}
+			}
+		}
+	case "stats/circled-headline":
+		if revision == LibraryRevisionV2 {
+			return change(4, "card", "wmds.circled-headline-explanation-capacity.v2", map[string]any{"h": 108})
+		}
 	case "architecture/layer-map":
 		if err := change(16, "container", "wmds.architecture-layer-padding.v1", map[string]any{"h": 294}); err != nil {
 			return err

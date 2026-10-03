@@ -16,7 +16,7 @@ import (
 
 func run() error {
 	if len(os.Args) < 2 {
-		return fmt.Errorf("usage: pptxdesign <inspect|templates|template|template-reference|library-catalog|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
+		return fmt.Errorf("usage: pptxdesign <inspect|templates|template|template-reference|library-catalog|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
 	}
 	command := os.Args[1]
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
@@ -26,6 +26,8 @@ func run() error {
 	out := f.String("out", "", "new output directory")
 	spec := f.String("spec", "", "foundation document JSON")
 	family := f.String("family", "", "source library family for library references")
+	templateKeys := f.String("template-keys", "", "comma-separated library keys for a focused reference")
+	includeDeprecated := f.Bool("include-deprecated", false, "include deprecated entries in library-catalog")
 	year := f.Int("year", time.Now().Year(), "explicit legal year for reference generation")
 	if e := f.Parse(os.Args[2:]); e != nil {
 		return e
@@ -37,7 +39,10 @@ func run() error {
 		if *spec != "" {
 			return fmt.Errorf("%s does not accept --spec", command)
 		}
-		return runLibrary(command, *bundle, *source, *engine, *out, *family, *year)
+		return runLibrary(command, *bundle, *source, *engine, *out, *family, *templateKeys, *includeDeprecated, *year)
+	}
+	if *templateKeys != "" || *includeDeprecated {
+		return fmt.Errorf("--template-keys/--include-deprecated require a library command")
 	}
 	if *family != "" {
 		return fmt.Errorf("--family is supported only by library reference and sweep commands")
@@ -59,9 +64,9 @@ func run() error {
 				return e
 			}
 		}
-		return json.NewEncoder(os.Stdout).Encode(map[string]any{"profile": wmdesign.ProfileForEngine(*engine), "engine": *engine, "status": "implemented_unqualified", "styles": s.Tokens.Type, "grid": s.Tokens.Grid, "frames": s.Frames, "sources": s.Files, "fonts": t.Fonts(), "executable_node_kinds": []string{"text", "box", "textblock (v2)", "card (v2)", "cardrow (v2)", "metric (v2)", "richtext (v2)", "rule (v2)", "scene (v2): primitives, media, cards, tables, charts, diagrams, sequences, people"}, "components_and_templates": "97 source-pinned closed library bindings in candidate v2; use library-catalog for content contracts. Native review and reusable content qualification are separate from implementation."})
+		return json.NewEncoder(os.Stdout).Encode(map[string]any{"profile": wmdesign.ProfileForEngine(*engine), "engine": *engine, "status": "implemented_unqualified", "styles": s.Tokens.Type, "grid": s.Tokens.Grid, "frames": s.Frames, "sources": s.Files, "source_revision": s.Revision, "source_commit": s.Commit, "fonts": t.Fonts(), "executable_node_kinds": []string{"text", "box", "textblock (v2)", "card (v2)", "cardrow (v2)", "metric (v2)", "richtext (v2)", "rule (v2)", "scene (v2): primitives, media, cards, tables, charts, diagrams, sequences, people"}, "components_and_templates": "Source-pinned closed library bindings in candidate v2; library-catalog reports revision and pending capabilities. Native review and reusable content qualification are separate from implementation."})
 	}
-	if command != "reference" && command != "component-reference" && command != "metric-reference" && command != "card-row-reference" && command != "data-metric-reference" && command != "rich-reference" && command != "parallel-reference" && command != "build" && command != "typography-probes" {
+	if command != "reference" && command != "frame-reference" && command != "component-reference" && command != "metric-reference" && command != "card-row-reference" && command != "data-metric-reference" && command != "rich-reference" && command != "parallel-reference" && command != "build" && command != "typography-probes" {
 		return fmt.Errorf("unknown command %q", command)
 	}
 	if *out == "" {
@@ -93,6 +98,17 @@ func run() error {
 	doc := wmdesign.Reference(*year)
 	specName := "foundation.json"
 	name := "reference.pptx"
+	if command == "frame-reference" {
+		if *spec != "" || *engine != wmdesign.CandidateEngine {
+			return fmt.Errorf("frame-reference requires candidate v2 and does not accept --spec")
+		}
+		var err error
+		doc, err = wmdesign.SplitFrameReference(*bundle, *source, *year)
+		if err != nil {
+			return err
+		}
+		name, specName = "frame-reference.pptx", "frames.json"
+	}
 	if command == "component-reference" {
 		if *engine != wmdesign.CandidateEngine {
 			return fmt.Errorf("component-reference requires --engine %s", wmdesign.CandidateEngine)

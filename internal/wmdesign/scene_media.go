@@ -535,72 +535,76 @@ func (r *renderer) primitiveThumbnail(p *scenePlan, n mediaSource, ctx SceneCont
 		if e := page(p.ID+".page", b); e != nil {
 			return e
 		}
-		pad, gap := math.Max(6, b.W*.07), math.Max(3, b.H*.05)
-		x, y, w := b.X+pad, b.Y+pad, b.W-2*pad
-		head := math.Max(3, b.H*.07)
-		if e := r.primitiveShape(p, p.ID+".head", Rect{X: x, Y: y, W: w * .55, H: head}, "light", "display", false); e != nil {
-			return e
-		}
-		y += head + gap
-		h := b.Y + b.H - pad - y
-		if h <= 0 {
-			return fmt.Errorf("scene.thumbnail_placeholder_overflow: %s", p.ID)
-		}
-		shape := func(part string, box Rect, ink string) error {
-			return r.primitiveShape(p, p.ID+"."+part, box, "light", ink, false)
-		}
-		kind := n.Kind
-		if kind == "" {
-			kind = "text"
-		}
-		switch kind {
-		case "text":
-			for i, v := range []float64{.9, .75, .85, .6} {
-				if e := shape(fmt.Sprintf("line-%d", i+1), Rect{X: x, Y: y + float64(i)*(math.Max(2, b.H*.04)+gap), W: w * v, H: math.Max(2, b.H*.04)}, "line"); e != nil {
-					return e
-				}
+		// A blank page is a composition surface for native preview content.
+		// Other kinds retain the source's intentionally schematic placeholders.
+		if n.Kind != "blank" {
+			pad, gap := math.Max(6, b.W*.07), math.Max(3, b.H*.05)
+			x, y, w := b.X+pad, b.Y+pad, b.W-2*pad
+			head := math.Max(3, b.H*.07)
+			if e := r.primitiveShape(p, p.ID+".head", Rect{X: x, Y: y, W: w * .55, H: head}, "light", "display", false); e != nil {
+				return e
 			}
-		case "chart":
-			cw := (w - 12) / 5
-			for i, v := range []float64{.4, .65, .5, .85, .7} {
-				ink := "line"
-				if i == 3 {
-					ink = "emphasis"
-				}
-				if e := shape(fmt.Sprintf("bar-%d", i+1), Rect{X: x + float64(i)*(cw+3), Y: y + h*(1-v), W: cw, H: h * v}, ink); e != nil {
-					return e
-				}
+			y += head + gap
+			h := b.Y + b.H - pad - y
+			if h <= 0 {
+				return fmt.Errorf("scene.thumbnail_placeholder_overflow: %s", p.ID)
 			}
-		case "table":
-			rh := (h - 8) / 5
-			for i := 0; i < 5; i++ {
-				ink := "bg"
-				surf := "subtle"
-				if i == 0 {
-					surf = "light"
-					ink = "secondary"
-				}
-				if e := r.primitiveShape(p, fmt.Sprintf("%s.row-%d", p.ID, i+1), Rect{X: x, Y: y + float64(i)*(rh+2), W: w, H: rh}, surf, ink, false); e != nil {
-					return e
-				}
+			shape := func(part string, box Rect, ink string) error {
+				return r.primitiveShape(p, p.ID+"."+part, box, "light", ink, false)
 			}
-		case "diagram":
-			cw := (w - 8) / 3
-			bh := math.Max(4, b.H*.12)
-			for i, count := range []int{2, 3, 2} {
-				ink := "line"
-				if i == 1 {
-					ink = "display"
-				}
-				top := y + (h-float64(count)*bh-float64(count-1)*3)/2
-				for j := 0; j < count; j++ {
-					if e := shape(fmt.Sprintf("box-%d-%d", i+1, j+1), Rect{X: x + float64(i)*(cw+4), Y: top + float64(j)*(bh+3), W: cw, H: bh}, ink); e != nil {
+			kind := n.Kind
+			if kind == "" {
+				kind = "text"
+			}
+			switch kind {
+			case "text":
+				for i, v := range []float64{.9, .75, .85, .6} {
+					if e := shape(fmt.Sprintf("line-%d", i+1), Rect{X: x, Y: y + float64(i)*(math.Max(2, b.H*.04)+gap), W: w * v, H: math.Max(2, b.H*.04)}, "line"); e != nil {
 						return e
 					}
 				}
+			case "chart":
+				cw := (w - 12) / 5
+				for i, v := range []float64{.4, .65, .5, .85, .7} {
+					ink := "line"
+					if i == 3 {
+						ink = "emphasis"
+					}
+					if e := shape(fmt.Sprintf("bar-%d", i+1), Rect{X: x + float64(i)*(cw+3), Y: y + h*(1-v), W: cw, H: h * v}, ink); e != nil {
+						return e
+					}
+				}
+			case "table":
+				rh := (h - 8) / 5
+				for i := 0; i < 5; i++ {
+					ink := "bg"
+					surf := "subtle"
+					if i == 0 {
+						surf = "light"
+						ink = "secondary"
+					}
+					if e := r.primitiveShape(p, fmt.Sprintf("%s.row-%d", p.ID, i+1), Rect{X: x, Y: y + float64(i)*(rh+2), W: w, H: rh}, surf, ink, false); e != nil {
+						return e
+					}
+				}
+			case "diagram":
+				cw := (w - 8) / 3
+				bh := math.Max(4, b.H*.12)
+				for i, count := range []int{2, 3, 2} {
+					ink := "line"
+					if i == 1 {
+						ink = "display"
+					}
+					top := y + (h-float64(count)*bh-float64(count-1)*3)/2
+					for j := 0; j < count; j++ {
+						if e := shape(fmt.Sprintf("box-%d-%d", i+1, j+1), Rect{X: x + float64(i)*(cw+4), Y: top + float64(j)*(bh+3), W: cw, H: bh}, ink); e != nil {
+							return e
+						}
+					}
+				}
+			default:
+				return fmt.Errorf("scene.unsupported_thumbnail_kind: %s", kind)
 			}
-		default:
-			return fmt.Errorf("scene.unsupported_thumbnail_kind: %s", kind)
 		}
 	}
 	if n.Caption != "" {

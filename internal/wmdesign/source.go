@@ -18,12 +18,24 @@ const Engine = "wmds-go-foundation.v1"
 const inventorySHA256 = "efe3801e16c282d1ea1fcffefc7f360a6a0afea924b0f9fe45798ccf92d8a012"
 const bundleSHA256 = "02a975693995f9aca88602cd64e159e054da5a9771d8e3205d3beffd3d3ee45e"
 
+const LibraryRevisionV1 = "wmds-library.v1"
+const LibraryRevisionV2 = "wmds-library.v2"
+
+type sourcePin struct {
+	Inventory, Revision string
+}
+
+var sourcePins = map[string]sourcePin{
+	bundleSHA256: {inventorySHA256, LibraryRevisionV1},
+	"c0926ec4e65d36b3a9fd53e74ae0a3204d03acd5d0ba9fe4919849700c8f3690": {"8e70c96c07b5346906c983f0893e686cd433fd73fae4c31642a71984f395dce3", LibraryRevisionV2},
+}
+
 func checkBundle(root string) error {
 	data, err := os.ReadFile(filepath.Join(root, "bundle.json"))
 	if err != nil {
 		return err
 	}
-	if fmt.Sprintf("%x", sha256.Sum256(data)) != bundleSHA256 {
+	if _, ok := sourcePins[fmt.Sprintf("%x", sha256.Sum256(data))]; !ok {
 		return fmt.Errorf("source.bundle_drift: adapter migration required")
 	}
 	var manifest struct {
@@ -52,7 +64,9 @@ type SourceFile struct {
 	SHA256 string `json:"sha256"`
 }
 type Inventory struct {
-	Sources []SourceFile `json:"sources"`
+	Sources  []SourceFile `json:"sources"`
+	Revision string       `json:"source_revision,omitempty"`
+	Commit   string       `json:"source_commit,omitempty"`
 }
 type Style struct {
 	ID         string  `json:"id"`
@@ -109,10 +123,11 @@ type Footer struct {
 	Surface string     `json:"surface"`
 }
 type Frames struct {
-	Schema  string            `json:"schema"`
-	Units   string            `json:"units"`
-	Rails   map[string]Rail   `json:"rails"`
-	Footers map[string]Footer `json:"footers"`
+	Schema  string                     `json:"schema"`
+	Units   string                     `json:"units"`
+	Rails   map[string]Rail            `json:"rails"`
+	Footers map[string]Footer          `json:"footers"`
+	Splits  map[string]json.RawMessage `json:"splits,omitempty"`
 	Chrome  []struct {
 		ID   string `json:"id"`
 		Text string `json:"text"`
@@ -123,10 +138,12 @@ type Frames struct {
 	} `json:"features"`
 }
 type Source struct {
-	Root   string       `json:"root"`
-	Files  []SourceFile `json:"files"`
-	Tokens Tokens       `json:"tokens"`
-	Frames Frames       `json:"frames"`
+	Root     string       `json:"root"`
+	Revision string       `json:"source_revision"`
+	Commit   string       `json:"source_commit,omitempty"`
+	Files    []SourceFile `json:"files"`
+	Tokens   Tokens       `json:"tokens"`
+	Frames   Frames       `json:"frames"`
 	// Frozen definitions retain full metadata. Only explicitly contracted text, card,
 	// card-row and standalone-metric subsets have executable v2 adapter semantics.
 	Components json.RawMessage            `json:"components"`
@@ -134,7 +151,7 @@ type Source struct {
 	styles     map[string]Style
 }
 
-// Load accepts only the frozen, reviewed snapshot. Hash mismatches are source
+// Load accepts only explicitly pinned source revisions. Hash mismatches are source
 // drift errors: unknown fields cannot silently acquire rendering semantics.
 // A source override must match this inventory until a new adapter is qualified.
 func Load(bundle, override string) (*Source, error) {
@@ -145,12 +162,20 @@ func Load(bundle, override string) (*Source, error) {
 	if err != nil {
 		return nil, err
 	}
-	if fmt.Sprintf("%x", sha256.Sum256(raw)) != inventorySHA256 {
+	bundleData, err := os.ReadFile(filepath.Join(bundle, "bundle.json"))
+	if err != nil {
+		return nil, err
+	}
+	pin := sourcePins[fmt.Sprintf("%x", sha256.Sum256(bundleData))]
+	if fmt.Sprintf("%x", sha256.Sum256(raw)) != pin.Inventory {
 		return nil, fmt.Errorf("source.inventory_drift: adapter migration required")
 	}
 	var inv Inventory
 	if err = json.Unmarshal(raw, &inv); err != nil {
 		return nil, err
+	}
+	if inv.Revision != "" && inv.Revision != pin.Revision {
+		return nil, fmt.Errorf("source.revision_mismatch")
 	}
 	root := override
 	if root == "" {
@@ -160,7 +185,7 @@ func Load(bundle, override string) (*Source, error) {
 	if err != nil {
 		return nil, err
 	}
-	s := &Source{Root: root, Files: inv.Sources, Templates: map[string]json.RawMessage{}, styles: map[string]Style{}}
+	s := &Source{Root: root, Revision: pin.Revision, Commit: inv.Commit, Files: inv.Sources, Templates: map[string]json.RawMessage{}, styles: map[string]Style{}}
 	if len(inv.Sources) == 0 {
 		return nil, fmt.Errorf("source.invalid_inventory: empty snapshot")
 	}

@@ -29,19 +29,21 @@ type LibraryChrome struct {
 	Notes            []string            `json:"notes,omitempty"`
 }
 type librarySlide struct {
-	Type        string `json:"type"`
-	Rail        string `json:"rail"`
-	Footer      string `json:"footer"`
-	Surface     string `json:"surface,omitempty"`
-	RailSurface string `json:"railSurface,omitempty"`
-	Eyebrow     string `json:"eyebrow,omitempty"`
-	Title       string `json:"title,omitempty"`
-	TitleLines  int    `json:"titleLines,omitempty"`
-	Density     string `json:"density,omitempty"`
-	Page        string `json:"page,omitempty"`
-	NoPage      bool   `json:"noPage,omitempty"`
-	Emphasis    string `json:"emphasis,omitempty"`
-	Stamp       string `json:"stamp,omitempty"`
+	Type        string      `json:"type"`
+	Rail        string      `json:"rail"`
+	Footer      string      `json:"footer"`
+	Surface     string      `json:"surface,omitempty"`
+	RailSurface string      `json:"railSurface,omitempty"`
+	Eyebrow     string      `json:"eyebrow,omitempty"`
+	Title       string      `json:"title,omitempty"`
+	TitleLines  int         `json:"titleLines,omitempty"`
+	Density     string      `json:"density,omitempty"`
+	Page        string      `json:"page,omitempty"`
+	NoPage      bool        `json:"noPage,omitempty"`
+	Emphasis    string      `json:"emphasis,omitempty"`
+	Stamp       string      `json:"stamp,omitempty"`
+	Split       string      `json:"split,omitempty"`
+	Nav         *libraryNav `json:"nav,omitempty"`
 	Source      *struct {
 		Text  string   `json:"text,omitempty"`
 		Notes []string `json:"notes,omitempty"`
@@ -49,17 +51,26 @@ type librarySlide struct {
 	Whiteboard json.RawMessage   `json:"whiteboard,omitempty"`
 	Body       []json.RawMessage `json:"body"`
 }
+type libraryNav struct {
+	Items  []string `json:"items"`
+	Active *int     `json:"active"`
+}
 type libraryEntry struct {
-	ID      string          `json:"id"`
-	Variant string          `json:"variant"`
-	Name    string          `json:"name"`
-	Tier    string          `json:"tier"`
-	Purpose string          `json:"purpose"`
-	Uses    []string        `json:"uses"`
-	Legacy  string          `json:"legacy"`
-	Budget  json.RawMessage `json:"budget"`
-	Slots   json.RawMessage `json:"slots"`
-	Slide   json.RawMessage `json:"slide"`
+	ID         string          `json:"id"`
+	Variant    string          `json:"variant"`
+	Name       string          `json:"name"`
+	Tier       string          `json:"tier"`
+	Purpose    string          `json:"purpose"`
+	Uses       []string        `json:"uses"`
+	Legacy     string          `json:"legacy"`
+	Budget     json.RawMessage `json:"budget"`
+	Slots      json.RawMessage `json:"slots"`
+	Slide      json.RawMessage `json:"slide"`
+	Revision   int             `json:"rev,omitempty"`
+	Added      string          `json:"added,omitempty"`
+	Revised    string          `json:"revised,omitempty"`
+	Status     string          `json:"status,omitempty"`
+	ReplacedBy string          `json:"replacedBy,omitempty"`
 }
 type LibrarySlot struct {
 	Name          string          `json:"name"`
@@ -83,16 +94,28 @@ type LibraryValueSchema struct {
 
 type LibraryTemplate struct {
 	TemplateDefinition
-	Family          string              `json:"family"`
-	Tier            string              `json:"tier"`
-	Name            string              `json:"name"`
-	ContentContract string              `json:"content_contract"`
-	ValueSchema     *LibraryValueSchema `json:"value_schema,omitempty"`
-	Slots           []LibrarySlot       `json:"slots,omitempty"`
-	Arrays          []LibraryArray      `json:"arrays,omitempty"`
-	RenderStatus    string              `json:"render_status"`
-	Policy          []string            `json:"policy"`
-	RawSlide        json.RawMessage     `json:"-"`
+	Family              string              `json:"family"`
+	Tier                string              `json:"tier"`
+	Name                string              `json:"name"`
+	ContentContract     string              `json:"content_contract"`
+	ValueSchema         *LibraryValueSchema `json:"value_schema,omitempty"`
+	Slots               []LibrarySlot       `json:"slots,omitempty"`
+	Arrays              []LibraryArray      `json:"arrays,omitempty"`
+	RenderStatus        string              `json:"render_status"`
+	Policy              []string            `json:"policy"`
+	RawSlide            json.RawMessage     `json:"-"`
+	Revision            int                 `json:"revision"`
+	Added               string              `json:"added,omitempty"`
+	Revised             string              `json:"revised,omitempty"`
+	Status              string              `json:"status"`
+	ReplacedBy          string              `json:"replaced_by,omitempty"`
+	Nav                 *LibraryNavContract `json:"nav,omitempty"`
+	PendingCapabilities []string            `json:"pending_capabilities,omitempty"`
+}
+type LibraryNavContract struct {
+	MinItems int               `json:"min_items"`
+	MaxItems int               `json:"max_items"`
+	Example  LibraryNavContent `json:"synthetic_source_example"`
 }
 
 func legacyTemplate(key string) bool {
@@ -151,6 +174,36 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 				return nil, fmt.Errorf("library.invalid_source_slide: %s", key)
 			}
 			def := LibraryTemplate{TemplateDefinition: TemplateDefinition{Key: key, SourceFile: path, SourceSHA256: digest}, Family: catalog.Family, Tier: entry.Tier, Name: entry.Name, ContentContract: LibraryBindingsContract, RawSlide: entry.Slide, RenderStatus: "binding_defined_render_review_pending", Policy: []string{"Named content slots and exact-count key overlays; geometry/base styles remain frozen.", "Source slot metadata is advisory; this definition explicitly names the drawn content fields.", "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.", "Binding availability does not establish successful rendering, native review or a qualified envelope."}}
+			def.SourceRevision = s.Revision
+			def.Revision, def.Added, def.Revised, def.Status, def.ReplacedBy = entry.Revision, entry.Added, entry.Revised, entry.Status, entry.ReplacedBy
+			if def.Revision == 0 {
+				def.Revision = 1
+			}
+			if def.Status == "" {
+				def.Status = "active"
+			}
+			if def.Status != "active" && def.Status != "deprecated" {
+				return nil, fmt.Errorf("library.unknown_lifecycle_status: %s", key)
+			}
+			if def.Status == "deprecated" && def.ReplacedBy == "" {
+				return nil, fmt.Errorf("library.deprecated_requires_replacement: %s", key)
+			}
+			if slide.Nav != nil {
+				if slide.Rail != "nav" {
+					return nil, fmt.Errorf("library.nav_without_nav_rail: %s", key)
+				}
+				if len(slide.Nav.Items) < 2 || len(slide.Nav.Items) > 6 || slide.Nav.Active == nil || *slide.Nav.Active < 0 || *slide.Nav.Active >= len(slide.Nav.Items) {
+					return nil, fmt.Errorf("library.invalid_nav: %s", key)
+				}
+				nav := LibraryNavContent{}
+				for i, label := range slide.Nav.Items {
+					nav.Items = append(nav.Items, LibraryNavItem{Key: fmt.Sprintf("section-%02d", i+1), Label: label})
+				}
+				nav.Active = nav.Items[*slide.Nav.Active].Key
+				def.Nav = &LibraryNavContract{MinItems: 2, MaxItems: 6, Example: nav}
+			} else if slide.Rail == "nav" {
+				return nil, fmt.Errorf("library.nav_content_required: %s", key)
+			}
 			obj, err := libraryObject(entry.Slide)
 			if err != nil {
 				return nil, err
@@ -172,6 +225,11 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 			}
 			for i, n := range body {
 				name := fmt.Sprintf("node%02d", i+1)
+				if node, ok := n.(map[string]any); ok {
+					if id, ok := node["id"].(string); ok {
+						name = id
+					}
+				}
 				pointer := "/body/" + strconv.Itoa(i)
 				libraryContentWalk(&def, n, pointer, name, "", libraryProjectionContext{})
 				var tag struct {
@@ -180,7 +238,7 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 				json.Unmarshal(slide.Body[i], &tag)
 				def.Identities = append(def.Identities, TemplateIdentity{ID: name, SourcePointer: pointer, ExpectedType: tag.Type})
 			}
-			if legacyTemplate(key) {
+			if usesLegacyTemplate(s.Revision, key) {
 				def.ContentContract = TemplateBindingsContract
 				def.ValueSchema = libraryLegacyValueSchema(key)
 				def.Slots, def.Arrays = nil, nil
@@ -190,10 +248,19 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 		}
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Key < out[j].Key })
-	if len(out) != 97 {
+	expected := 97
+	if s.Revision == LibraryRevisionV2 {
+		expected = 167
+	}
+	if len(out) != expected {
 		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
 	}
 	return out, nil
+}
+
+// Only the unchanged card APIs carry forward into the refreshed source revision.
+func usesLegacyTemplate(revision, key string) bool {
+	return legacyTemplate(key) && (revision != LibraryRevisionV2 || key == "cards/3" || key == "cards/4")
 }
 
 func LibraryCatalog(bundle, override string) ([]LibraryTemplate, error) {
@@ -216,7 +283,7 @@ func libraryObject(raw []byte) (map[string]any, error) {
 
 // The content projection is closed by a source-pinned definition. A token,
 // geometry or structural discriminator never becomes an editable content slot.
-var libraryFixedString = map[string]bool{"type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "corner": true, "event": true}
+var libraryFixedString = map[string]bool{"target": true, "placement": true, "arrow": true, "type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "corner": true, "event": true}
 var libraryNumbers = map[string]bool{"values": true, "value": true, "alloc": true, "from": true, "to": true, "at": true, "softStart": true, "softEnd": true}
 
 type libraryProjectionContext struct {
@@ -299,7 +366,7 @@ func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind strin
 		return libraryScalarSlot(def, v, pointer, name, "string")
 	case "delta", "rating", "allocation", "harvey", "gauge":
 		return libraryScalarSlot(def, v, pointer, name, "number")
-	case "check":
+	case "check", "checkbox":
 		return libraryScalarSlot(def, v, pointer, name, "boolean")
 	case "icon":
 		if _, ok := v.(string); ok {
@@ -439,6 +506,11 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 			if x["type"] == "connector" && (k == "from" || k == "to" || k == "points") {
 				continue
 			}
+			if def.SourceRevision == LibraryRevisionV2 && ctx.NodeType == "table" && ctx.Parent == "groups" && (k == "from" || k == "to") {
+				// Group row boundaries are topology, not numeric table data.
+				// The visible group label remains a required content slot.
+				continue
+			}
 			if k == "text" && x["fill"] != nil && strings.HasPrefix(fmt.Sprint(x[k]), "#") {
 				continue
 			}
@@ -447,6 +519,9 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 				childCtx.NodeType = "metric"
 			}
 			projectedField := k
+			if def.SourceRevision == LibraryRevisionV2 && ctx.NodeType == "chart" && ctx.Parent == "items" && (k == "x" || k == "y") {
+				projectedField = "quadrant_coordinate_content"
+			}
 			if k == "icon" {
 				if _, ok := x[k].(string); ok {
 					projectedField = "registry_asset_content"
@@ -477,7 +552,7 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 		for i, item := range x {
 			libraryContentWalk(def, item, pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1), arrayField, ctx)
 		}
-		if len(def.Slots) > start && len(x) > 0 {
+		if (len(def.Slots) > start || field == "items" && ctx.NodeType == "chart") && len(x) > 0 {
 			def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(x)})
 			return true
 		}
@@ -487,7 +562,7 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 		}
 		return libraryScalarSlot(def, x, pointer, name, "string")
 	case json.Number:
-		if libraryNumbers[field] {
+		if libraryNumbers[field] || field == "quadrant_coordinate_content" {
 			return libraryScalarSlot(def, x, pointer, name, "number")
 		}
 	}
@@ -499,7 +574,24 @@ func compileLibrarySlide(raw json.RawMessage, keys map[string][]string) (SlideSp
 	if err := sceneDecode(raw, &src); err != nil {
 		return SlideSpec{}, err
 	}
-	q := FrameRequest{Rail: src.Rail, Footer: src.Footer, Surface: src.Surface, RailSurface: src.RailSurface, TitleLines: src.TitleLines, Density: src.Density, NoHeader: src.Title == "" && src.Eyebrow == "", NoPage: src.NoPage}
+	q := FrameRequest{Rail: src.Rail, Footer: src.Footer, Surface: src.Surface, RailSurface: src.RailSurface, TitleLines: src.TitleLines, Density: src.Density, NoHeader: src.Title == "" && src.Eyebrow == "", NoPage: src.NoPage, Split: src.Split}
+	if src.Nav != nil {
+		if src.Rail != "nav" || src.Nav.Active == nil || len(src.Nav.Items) < 2 || len(src.Nav.Items) > 6 || *src.Nav.Active < 0 || *src.Nav.Active >= len(src.Nav.Items) {
+			return SlideSpec{}, fmt.Errorf("library.invalid_nav")
+		}
+		navKeys := keys["/nav/items"]
+		if len(navKeys) > 0 && len(navKeys) != len(src.Nav.Items) {
+			return SlideSpec{}, fmt.Errorf("library.nav_key_count")
+		}
+		for i, label := range src.Nav.Items {
+			key := fmt.Sprintf("section-%02d", i+1)
+			if len(navKeys) > 0 {
+				key = navKeys[i]
+			}
+			q.Nav = append(q.Nav, NavTab{ID: key, Label: label})
+		}
+		q.Active = q.Nav[*src.Nav.Active].ID
+	}
 	if q.TitleLines == 0 {
 		q.TitleLines = 1
 	}
@@ -533,9 +625,22 @@ func compileLibrarySlide(raw json.RawMessage, keys map[string][]string) (SlideSp
 			return SlideSpec{}, err
 		}
 	}
+	seenIDs := map[string]bool{}
 	for i, node := range src.Body {
 		path := "/body/" + strconv.Itoa(i)
-		doc.Nodes = append(doc.Nodes, Node{ID: fmt.Sprintf("node%02d", i+1), Kind: "scene", Scene: &SceneSpec{Node: node, Path: path, Keys: keys, Notes: chrome.Notes}})
+		id := fmt.Sprintf("node%02d", i+1)
+		var tag struct{ ID string }
+		if err := json.Unmarshal(node, &tag); err != nil {
+			return SlideSpec{}, err
+		}
+		if tag.ID != "" {
+			id = tag.ID
+		}
+		if !validPartKey(id) || seenIDs[id] {
+			return SlideSpec{}, fmt.Errorf("library.invalid_or_duplicate_node_id: %s", id)
+		}
+		seenIDs[id] = true
+		doc.Nodes = append(doc.Nodes, Node{ID: id, Kind: "scene", Scene: &SceneSpec{Node: node, Path: path, Keys: keys, Notes: chrome.Notes}})
 	}
 	return doc, nil
 }

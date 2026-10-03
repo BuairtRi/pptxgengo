@@ -55,11 +55,14 @@ type FrameRequest struct {
 	NoPage      bool     `json:"no_page"`
 	Nav         []NavTab `json:"nav,omitempty"`
 	Active      string   `json:"active,omitempty"`
+	Split       string   `json:"split,omitempty"`
 }
 type ResolvedFrame struct {
 	Request    FrameRequest `json:"request"`
 	Header     Rect         `json:"header"`
 	Body       Rect         `json:"body"`
+	ShortBody  Rect         `json:"short_body,omitempty"`
+	TallBody   Rect         `json:"tall_body,omitempty"`
 	Rail       Rect         `json:"rail"`
 	Panel      Rect         `json:"panel"`
 	Source     Rect         `json:"source"`
@@ -69,6 +72,7 @@ type ResolvedFrame struct {
 	TitleRule  float64      `json:"title_rule_pt"`
 	FooterRule float64      `json:"footer_rule_pt"`
 	TitleStyle string       `json:"title_style"`
+	NavBottom  float64      `json:"nav_bottom_pt,omitempty"`
 }
 
 func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
@@ -101,7 +105,43 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 	if !ok {
 		return ResolvedFrame{}, fmt.Errorf("frame.unknown_footer: %s", q.Footer)
 	}
-	if q.TitleLines < 1 || q.TitleLines > 2 || q.SourceLines < 0 || q.SourceLines > 2 {
+	maxLines := 2
+	var split struct{ Short, Tall [2]float64 }
+	var splitTitle struct {
+		Narrow, Wide struct {
+			Style string
+			Rule  map[string]float64
+		}
+		TallTop float64
+	}
+	if q.Split != "" {
+		if q.Rail != "none" && q.Rail != "nav" {
+			return ResolvedFrame{}, fmt.Errorf("frame.split_requires_no_panel_rail")
+		}
+		if q.Density != "standard" || q.NoHeader {
+			return ResolvedFrame{}, fmt.Errorf("frame.split_requires_standard_header")
+		}
+		switch q.Split {
+		case "tall-right", "tall-left", "tall-right-narrow", "tall-left-narrow":
+		default:
+			return ResolvedFrame{}, fmt.Errorf("frame.unknown_split: %s", q.Split)
+		}
+		raw, exists := s.Frames.Splits[q.Split]
+		if !exists {
+			return ResolvedFrame{}, fmt.Errorf("frame.split_not_in_source_revision: %s", q.Split)
+		}
+		if err := json.Unmarshal(raw, &split); err != nil {
+			return ResolvedFrame{}, err
+		}
+		if err := json.Unmarshal(s.Frames.Splits["titleZone"], &splitTitle); err != nil {
+			return ResolvedFrame{}, err
+		}
+		if err := json.Unmarshal(s.Frames.Splits["tallTop"], &splitTitle.TallTop); err != nil {
+			return ResolvedFrame{}, err
+		}
+		maxLines = 3
+	}
+	if q.TitleLines < 1 || q.TitleLines > maxLines || q.SourceLines < 0 || q.SourceLines > 2 {
 		return ResolvedFrame{}, fmt.Errorf("frame.invalid_line_allocation")
 	}
 	if q.Density != "standard" && q.Density != "appendix" {
@@ -120,10 +160,14 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 		}
 	}
 	if q.Rail == "nav" {
+		if s.Revision == LibraryRevisionV2 && (len(q.Nav) < 2 || len(q.Nav) > 6) {
+			return ResolvedFrame{}, fmt.Errorf("frame.nav_requires_2_to_6_tabs")
+		}
 		seen := map[string]bool{}
 		active := false
 		for _, tab := range q.Nav {
-			if tab.ID == "" || tab.Label == "" || seen[tab.ID] {
+			invalidID := tab.ID == "" || s.Revision == LibraryRevisionV2 && !validPartKey(tab.ID)
+			if invalidID || tab.Label == "" || seen[tab.ID] {
 				return ResolvedFrame{}, fmt.Errorf("frame.invalid_nav")
 			}
 			seen[tab.ID] = true
@@ -167,6 +211,19 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 	if q.Density == "appendix" {
 		top, rule, style = title.Appendix.BodyTop, title.Appendix.Rule, title.Appendix.Title
 	}
+	headerX, headerW := r.Main[0], r.Main[1]-r.Main[0]
+	if q.Split != "" {
+		headerX, headerW = split.Short[0], split.Short[1]-split.Short[0]
+		z := splitTitle.Wide
+		if headerW <= 270 {
+			z = splitTitle.Narrow
+		}
+		rule, style = z.Rule[fmt.Sprint(q.TitleLines)], z.Style
+		if rule <= 54 || style == "" || splitTitle.TallTop != 36 || split.Tall[1] <= split.Tall[0] {
+			return ResolvedFrame{}, fmt.Errorf("frame.invalid_split_source_geometry")
+		}
+		top = rule + 18
+	}
 	if q.NoHeader {
 		top = s.Tokens.Grid.MarginY
 		rule = 0
@@ -175,7 +232,16 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 	if q.SourceLines > 0 {
 		bottom = source.BodyBottom[fmt.Sprint(q.SourceLines)]
 	}
-	f := ResolvedFrame{Request: q, Header: Rect{r.Main[0], 36, r.Main[1] - r.Main[0], rule - 36}, Body: Rect{r.Main[0], top, r.Main[1] - r.Main[0], bottom - top}, TitleRule: rule, TitleStyle: style, FooterRule: foot.Rule}
+	f := ResolvedFrame{Request: q, Header: Rect{headerX, 36, headerW, rule - 36}, Body: Rect{r.Main[0], top, r.Main[1] - r.Main[0], bottom - top}, TitleRule: rule, TitleStyle: style, FooterRule: foot.Rule, NavBottom: bottom}
+	if s.Revision == LibraryRevisionV2 {
+		f.NavBottom = foot.Bottom
+	}
+	if q.Split != "" {
+		f.ShortBody = Rect{headerX, top, headerW, bottom - top}
+		f.TallBody = Rect{split.Tall[0], splitTitle.TallTop, split.Tall[1] - split.Tall[0], bottom - splitTitle.TallTop}
+		// Body is the enclosing content region; split placement uses the two explicit zones.
+		f.Body.Y, f.Body.H = splitTitle.TallTop, bottom-splitTitle.TallTop
+	}
 	if q.NoHeader {
 		f.Header = Rect{}
 	}
@@ -198,7 +264,7 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 			b = source.Tall.Bottom
 		}
 		h := float64(q.SourceLines) * source.LineHeight
-		f.Source = Rect{r.Main[0], b - h, r.Main[1] - r.Main[0], h}
+		f.Source = Rect{headerX, b - h, headerW, h}
 	}
 	wx := 21.0
 	if q.Rail == "left" {
@@ -207,8 +273,14 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 	if q.Rail == "nav" {
 		wx = 57
 	}
+	if q.Split != "" {
+		wx = math.Max(3, headerX-36)
+		if q.Rail == "nav" {
+			wx = math.Max(57, wx)
+		}
+	}
 	f.Whiteboard = Rect{wx, 18, 201, 165}
-	if f.Body.H <= 0 {
+	if f.Body.H <= 0 || q.Split != "" && (f.ShortBody.H <= 0 || f.TallBody.H <= 0) {
 		return ResolvedFrame{}, fmt.Errorf("frame.empty_body")
 	}
 	return f, nil
