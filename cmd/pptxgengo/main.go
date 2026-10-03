@@ -15,12 +15,12 @@ var version = "dev"
 var tools = map[string]string{
 	"template": "pptxtemplate", "compose": "pptxcompose", "scene": "pptxscene",
 	"component": "pptxcomponent", "lib": "pptxlib", "anchor": "pptxanchor",
-	"diff": "pptxdiff", "adapt": "pptxadapt",
+	"diff": "pptxdiff", "adapt": "pptxadapt", "design": "pptxdesign",
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: pptxgengo <template|compose|scene|component|lib|anchor|diff|adapt> <command> [flags]")
-	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--components] [--print|--open]")
+	fmt.Fprintln(os.Stderr, "usage: pptxgengo <template|compose|scene|component|lib|anchor|diff|adapt|design> <command> [flags]")
+	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--components|--design-system] [--print|--open]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
 }
@@ -38,8 +38,12 @@ func releaseRoot() (string, error) {
 }
 
 func hasRoot(args []string) bool {
+	return hasFlag(args, "--root")
+}
+
+func hasFlag(args []string, flag string) bool {
 	for _, arg := range args {
-		if arg == "--root" || strings.HasPrefix(arg, "--root=") {
+		if arg == flag || strings.HasPrefix(arg, flag+"=") {
 			return true
 		}
 	}
@@ -71,15 +75,17 @@ func run() error {
 		seenAction := false
 		for _, arg := range os.Args[2:] {
 			switch arg {
-			case "--templates", "--components":
+			case "--templates", "--components", "--design-system":
 				if seenPage {
 					return fmt.Errorf("choose one catalog gallery")
 				}
 				seenPage = true
 				if arg == "--templates" {
 					page = "templates.html"
-				} else {
+				} else if arg == "--components" {
 					page = "components.html"
+				} else {
+					page = "design-system.html"
 				}
 			case "--open", "--print":
 				if seenAction {
@@ -88,7 +94,7 @@ func run() error {
 				seenAction = true
 				open = arg == "--open"
 			default:
-				return fmt.Errorf("usage: pptxgengo catalog [--templates|--components] [--print|--open]")
+				return fmt.Errorf("usage: pptxgengo catalog [--templates|--components|--design-system] [--print|--open]")
 			}
 		}
 		path := filepath.Join(root, "catalog", page)
@@ -107,13 +113,15 @@ func run() error {
 			return fmt.Errorf("usage: pptxgengo paths")
 		}
 		paths := map[string]string{
-			"root":               root,
-			"library":            filepath.Join(root, "library"),
-			"scripts":            filepath.Join(root, "scripts"),
-			"catalog":            filepath.Join(root, "catalog", "index.html"),
-			"catalog_templates":  filepath.Join(root, "catalog", "templates.html"),
-			"catalog_components": filepath.Join(root, "catalog", "components.html"),
-			"skill":              filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
+			"root":                  root,
+			"library":               filepath.Join(root, "library"),
+			"scripts":               filepath.Join(root, "scripts"),
+			"catalog":               filepath.Join(root, "catalog", "index.html"),
+			"catalog_templates":     filepath.Join(root, "catalog", "templates.html"),
+			"catalog_components":    filepath.Join(root, "catalog", "components.html"),
+			"catalog_design_system": filepath.Join(root, "catalog", "design-system.html"),
+			"design_system_v2":      filepath.Join(root, "library", "wm-design-system", "v2"),
+			"skill":                 filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
 		}
 		return json.NewEncoder(os.Stdout).Encode(paths)
 	}
@@ -132,6 +140,14 @@ func run() error {
 	}
 	path := filepath.Join(root, "bin", tool)
 	args := append([]string{}, os.Args[2:]...)
+	if tool == "pptxdesign" && len(args) > 0 {
+		if !hasFlag(args, "--bundle") {
+			args = append(args, "--bundle", filepath.Join(root, "library", "wm-design-system", "v2"))
+		}
+		if !hasFlag(args, "--engine") {
+			args = append(args, "--engine", "wmds-go-foundation.v2")
+		}
+	}
 	if (tool == "pptxtemplate" || tool == "pptxlib" || tool == "pptxadapt") && !hasRoot(args) && len(args) > 0 && !(tool == "pptxtemplate" && (args[0] == "apply-accent" || args[0] == "apply-gauge")) {
 		args = append(args, "--root", root)
 	}

@@ -20,7 +20,7 @@ state the supported controls and distinguish source editing from new composition
 - [Local CLI release and Codex installation](release/README.md)
 - [West Monroe authoring skill with progressive references](skills/west-monroe-presentations/SKILL.md)
 - [Current capabilities and verified baseline](CAPABILITIES.md)
-- [WMDS foundation prototype: typography, grids, frames and editable reference deck](cmd/pptxdesign/README.md)
+- [WMDS Go authoring: typography, grids, components and 167 slide designs](cmd/pptxdesign/README.md)
 - [Product architecture, experiments, and implementation sequence](PRODUCT_PLAN.md)
 - [Current remaining-work plan and library inventory/curation sequence](IMPLEMENTATION_PLAN.md)
 - [SQLite catalog, narrative model, composition, and design passes](DESIGN_WORKFLOW.md)

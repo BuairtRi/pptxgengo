@@ -1042,6 +1042,22 @@ type PrimitiveAssetReference struct {
 	Crop   [4]int `json:"crop,omitempty"`
 }
 
+// PrimitiveAssetCatalog lists every pinned registry dependency for portable
+// packaging. It reports source bytes, not transformed preview images.
+func PrimitiveAssetCatalog() []PrimitiveAssetReference {
+	keys := make([]string, 0, len(primitiveAssetRegistry))
+	for key := range primitiveAssetRegistry {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	refs := make([]PrimitiveAssetReference, 0, len(keys))
+	for _, key := range keys {
+		a := primitiveAssetRegistry[key]
+		refs = append(refs, PrimitiveAssetReference{Key: key, Path: a.Path, SHA256: a.SHA256, Crop: a.Crop})
+	}
+	return refs
+}
+
 // UsedPrimitiveAssets reads canonical provenance from generated picture XML.
 // An overridden human alt description may omit the registry key; in that case
 // all keys for that exact pinned hash are returned. Packaging should deduplicate

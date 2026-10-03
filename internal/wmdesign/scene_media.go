@@ -67,6 +67,9 @@ func primitiveAssetBytes(key string) ([]byte, primitiveAsset, error) {
 		return nil, a, fmt.Errorf("scene.unregistered_asset: %s", key)
 	}
 	root := os.Getenv("WMDS_BRANDING_ROOT")
+	if root == "" && os.Getenv("PPTXGENGO_RELEASE_ROOT") != "" {
+		root = filepath.Join(os.Getenv("PPTXGENGO_RELEASE_ROOT"), "branding")
+	}
 	if root == "" {
 		home, e := os.UserHomeDir()
 		if e != nil {

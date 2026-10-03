@@ -1,6 +1,37 @@
 # Local West Monroe presentation release
 
-Version: **0.1.0-local.5**. This is a frozen local authoring release, not a published package.
+Version: **0.1.0-local.6**. This is a frozen local authoring release, not a published package.
+
+## Changes from local.5 to local.6
+
+The modern WMDS grid library is available through `pptxgengo design`, with 167
+registered designs (166 active and one retained deprecated compatibility layout).
+The separate `catalog --design-system` gallery shows native source/alternate
+specimens, caller fields and editable composition examples. This route uses the
+packaged v2 source and candidate Go typography engine by default. Source revision
+and typography engine remain independently selectable; the standalone developer
+`pptxdesign` default remains v1.
+
+```sh
+pptxgengo catalog --design-system --open
+pptxgengo design library-catalog
+pptxgengo design library-catalog --include-deprecated
+pptxgengo design template --spec CONTENT.json --out NEW_DIRECTORY
+pptxgengo design build --spec COMPOSITION.json --out NEW_DIRECTORY
+pptxgengo design library-source-reference --bundle v1 --out OLD_REFERENCE
+```
+
+Generation uses Go font layout and packaged, hash-pinned artwork. No PowerPoint
+capture or separate AppleScript runs during this route. Native review applies to
+the recorded source/alternate specimens; arbitrary new copy still needs fit and
+visual review. Original IBM Plex font names are retained. Exact native selection
+among competing installed font files remains separately qualified.
+
+The staged package includes its own fonts, calibration, frozen source, complete
+artwork registry, content/composition examples, gallery and review receipts. See
+`verification-wmds-v2.json` for this release's bounded evidence; the historical
+`verification.json` remains evidence for its original version. No tests were
+added or run in this WMDS refresh.
 
 ## Start
 
@@ -14,8 +45,8 @@ pptxgengo template list
 pptxgengo template components --id t068-ai-accelerator-004
 ```
 
-The landing page points to two galleries: **101 supported source templates** and
-**132 source component occurrences**. The component gallery identifies 124
+The landing page points to the **166 active modern WMDS designs**,
+**101 legacy source templates** and **132 source component occurrences**. The component gallery identifies 124
 executable text/style subcontracts and eight visual-only groups. Use the
 `west-monroe-presentations` Codex skill to choose a source layout or supported
 composition route for a new deck.
@@ -36,7 +67,7 @@ copy after reviewing the generated slides. The installed release contains its
 own library, source scene projects, selected original source PPTX files,
 reviewed previews, exact gauge evidence, scripts and skill references.
 
-## Changes from local.4
+## Changes from local.4 to local.5
 
 - Measured composition accepts explicit installed font families, including IBM
   Plex Sans, with regular/bold/italic style resolution and variable font instance
@@ -68,7 +99,7 @@ example evidence retains its original environment and qualification scope.
 ## Paths and reproducibility
 
 `pptxgengo paths` prints the installed release root and the library, scripts,
-skill, landing page, template gallery and component gallery paths. The command
+skill, landing page and all three gallery paths. The command
 launcher resolves these paths from its own frozen release directory, so later
 repository edits do not affect this version.
 
@@ -76,7 +107,7 @@ To create a reviewable package without changing global links:
 
 ```sh
 python3 scripts/build-release-catalog.py
-scripts/install-local-release.sh --stage-only /absolute/path/new-local-5-stage
+scripts/install-local-release.sh --stage-only /absolute/path/new-local-6-stage
 ```
 
 The stage command checks all 101 template records, the 124 component contracts,
@@ -88,3 +119,10 @@ symlinks. The installer refuses to overwrite an existing version directory;
 
 Required: Go 1.27.1 and Python 3. Native PowerPoint measurement additionally
 requires macOS, PowerPoint and the fonts used by the source decks.
+
+If earlier accepted sample decks have been removed by cleanup, explicitly set
+`PPTXGENGO_PRIOR_RELEASE_ROOT` to a frozen installed release when staging. Only
+missing legacy evidence is recovered, each file is checked against that release's
+manifest and the original proof hashes, and `packaging-inputs.json` records it.
+No decks are restored into the working samples folder. This is a package assembly
+input; normal authoring uses the new package alone.

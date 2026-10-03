@@ -40,7 +40,7 @@ from pathlib import Path
 import sys
 catalog, readme = map(Path, sys.argv[1:3])
 version = sys.argv[3]
-pages = [catalog / name for name in ('index.html', 'templates.html', 'components.html')]
+pages = [catalog / name for name in ('index.html', 'templates.html', 'components.html', 'design-system.html')]
 if any(not p.is_file() for p in [catalog / 'index.json', *pages]):
     raise SystemExit('catalog landing, both galleries, and index.json are required')
 if json.loads((catalog / 'index.json').read_text()).get('version') != version or any(version not in p.read_text() for p in pages) or version not in readme.read_text():
@@ -56,7 +56,7 @@ trap 'rm -rf "$stage"' EXIT
 mkdir -p "$stage/bin"
 
 cd "$repo_root"
-for tool in pptxgengo pptxtemplate pptxcompose pptxscene pptxcomponent pptxlib pptxanchor pptxdiff pptxadapt; do
+for tool in pptxgengo pptxtemplate pptxcompose pptxscene pptxcomponent pptxlib pptxanchor pptxdiff pptxadapt pptxdesign; do
   echo "building $tool" >&2
   if [[ "$tool" == pptxgengo ]]; then
     go build -trimpath -ldflags "-s -w -X main.version=$version" -o "$stage/bin/$tool" "./cmd/$tool"
@@ -68,20 +68,44 @@ done
 python3 - "$repo_root" "$stage" "$version" <<'PY'
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 
 src, dst = map(Path, sys.argv[1:3])
 version = sys.argv[3]
+prior_root = os.environ.get('PPTXGENGO_PRIOR_RELEASE_ROOT')
+prior = Path(prior_root).resolve() if prior_root else None
+prior_manifest = json.loads((prior / 'release-manifest.json').read_text()) if prior else None
+recovered_inputs = {}
+
+def resolve_input(path):
+    path = Path(path)
+    if path.is_absolute() or '..' in path.parts:
+        raise ValueError(f'nonlocal release input: {path}')
+    source = src / path
+    if source.is_file():
+        return source
+    # Cleanup may remove old generated decks while an installed frozen release
+    # still owns their accepted bytes. Recovery is explicit and hash-verified.
+    if prior:
+        candidate = prior / path
+        expected = prior_manifest.get('files_sha256', {}).get(str(path))
+        if candidate.is_file() and expected:
+            actual = hashlib.sha256(candidate.read_bytes()).hexdigest()
+            if actual != expected:
+                raise ValueError(f'prior release input hash mismatch: {path}')
+            recovered_inputs[str(path)] = {'prior_release': prior_manifest['version'], 'sha256': actual}
+            return candidate
+    raise FileNotFoundError(source)
 
 def copy(path):
     path = Path(path)
     if path.is_absolute() or '..' in path.parts:
         raise ValueError(f'nonlocal release input: {path}')
-    source, target = src / path, dst / path
-    if not source.is_file():
-        raise FileNotFoundError(source)
+    source, target = resolve_input(path), dst / path
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, target)
 
@@ -91,9 +115,40 @@ shutil.copytree(src / 'skills/west-monroe-presentations', dst / 'skills/west-mon
 shutil.copytree(src / 'planning/release-0.1', dst / 'planning/release-0.1')
 shutil.copytree(src / 'planning/adaptive', dst / 'planning/adaptive')
 shutil.copytree(src / 'planning/requested-templates', dst / 'planning/requested-templates')
-for release_doc in ('release/README.md', 'release/cleanup.json', 'release/verification.json'):
+shutil.copytree(src / 'planning/wm-design-contracts', dst / 'planning/wm-design-contracts')
+for release_doc in ('release/README.md', 'release/cleanup.json', 'release/verification.json', 'release/verification-wmds-v2.json'):
     if (src / release_doc).is_file():
         copy(release_doc)
+
+# The modern Go renderer uses registered, hash-pinned artwork. Package the whole
+# registry so caller-selected photos/icons/marks work without a home-directory
+# branding tree. Payloads are deduplicated by relative path, never by guesswork.
+assets = json.loads(subprocess.run(
+    [str(dst / 'bin/pptxdesign'), 'asset-catalog'],
+    check=True, capture_output=True, text=True).stdout)
+branding_root = Path(os.environ.get('WMDS_BRANDING_ROOT') or Path.home() / 'Documents/branding')
+seen_assets = {}
+for asset in assets:
+    rel = Path(asset['path'])
+    if rel.is_absolute() or str(rel) != asset['path']:
+        raise ValueError(f"nonlocal WMDS asset: {asset['path']}")
+    # One pinned profile image historically sits beside the branding tree.
+    # Preserve registry-relative addressing, bounded by the release directory.
+    target = (dst / 'branding' / rel).resolve()
+    if not target.is_relative_to(dst.resolve()):
+        raise ValueError(f"WMDS asset escapes the release: {asset['path']}")
+    expected = asset['sha256']
+    if rel in seen_assets:
+        if seen_assets[rel] != expected:
+            raise ValueError(f'conflicting WMDS asset hash: {rel}')
+        continue
+    payload = branding_root / rel
+    if hashlib.sha256(payload.read_bytes()).hexdigest() != expected:
+        raise ValueError(f'WMDS asset hash mismatch: {rel}')
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(payload, target)
+    seen_assets[rel] = expected
+(dst / 'branding/registry.json').write_text(json.dumps(assets, indent=2) + '\n')
 
 assignments = json.loads((src / 'library/templates/rollout/assignments.json').read_text())['entries']
 for project in sorted({row['source_project'] for row in assignments}):
@@ -107,13 +162,13 @@ for row in assignments:
 request = json.loads((src / 'planning/requested-templates/request.json').read_text())
 for source in request['sources']:
     path = source['path']
-    if hashlib.sha256((src / path).read_bytes()).hexdigest() != source['sha256']:
+    if hashlib.sha256(resolve_input(path).read_bytes()).hexdigest() != source['sha256']:
         raise ValueError(f'requested source hash mismatch: {path}')
     copy(path)
 gauge_review = json.loads((src / 'planning/requested-templates/gauge-review.json').read_text())
 for artifact in gauge_review['artifacts']:
     path = artifact['path']
-    if hashlib.sha256((src / path).read_bytes()).hexdigest() != artifact['sha256']:
+    if hashlib.sha256(resolve_input(path).read_bytes()).hexdigest() != artifact['sha256']:
         raise ValueError(f'gauge evidence hash mismatch: {path}')
     copy(path)
 
@@ -178,7 +233,7 @@ for group in example_groups:
 
 for path, expected_hash in sorted(evidence_paths.items()):
     if expected_hash:
-        actual_hash = hashlib.sha256((src / path).read_bytes()).hexdigest()
+        actual_hash = hashlib.sha256(resolve_input(path).read_bytes()).hexdigest()
         if actual_hash != expected_hash:
             raise ValueError(f'adaptive evidence hash mismatch: {path}')
     copy(path)
@@ -190,7 +245,7 @@ if font_proof_path.is_file():
     font_proof = json.loads(font_proof_path.read_text())
     for artifact in font_proof['artifacts']:
         path = artifact['path']
-        actual_hash = hashlib.sha256((src / path).read_bytes()).hexdigest()
+        actual_hash = hashlib.sha256(resolve_input(path).read_bytes()).hexdigest()
         if actual_hash != artifact['sha256']:
             raise ValueError(f'font evidence hash mismatch: {path}')
         copy(path)
@@ -220,9 +275,12 @@ for path in [
     'scripts/build-release-catalog.py',
     'scripts/build-requested-template-gallery.py',
     'scripts/import-requested-templates.py',
+    'scripts/build-wmds-release-gallery.py',
+    'scripts/render-contact-sheet.swift',
 ]:
     copy(path)
 (dst / 'VERSION').write_text(version + '\n')
+(dst / 'packaging-inputs.json').write_text(json.dumps({'recovered_legacy_evidence': recovered_inputs}, indent=2) + '\n')
 PY
 
 "$stage/bin/pptxlib" index --root "$stage" --out "$stage/library/catalog-library.sqlite" >/dev/null
@@ -279,11 +337,24 @@ class LocalLinks(HTMLParser):
             if not target.is_relative_to(catalog.resolve()) or not target.is_file():
                 raise SystemExit(f'broken catalog local asset: {self.page.name}: {value}')
 
-for name in ('index.html', 'templates.html', 'components.html'):
+for name in ('index.html', 'templates.html', 'components.html', 'design-system.html'):
     page = catalog / name
     if not page.is_file():
         raise SystemExit(f'missing gallery page {name}')
     LocalLinks(page).feed(page.read_text())
+
+design_index = json.loads((catalog / 'design-system/index.json').read_text())
+design_rows = design_index['designs']
+if len(design_rows) != 167 or sum(row['status'] != 'deprecated' for row in design_rows) != 166:
+    raise SystemExit('WMDS gallery must include 167 designs, 166 active')
+if any(row['native_review'] != 'accepted_paired_specimens' for row in design_rows):
+    raise SystemExit('WMDS release requires accepted paired native review')
+if index.get('design_system', {}).get('entries') != 167:
+    raise SystemExit('WMDS landing index is missing the separate 167-design catalog')
+result = subprocess.run([str(root / 'bin/pptxgengo'), 'design', 'library-catalog', '--include-deprecated'],
+                        cwd='/tmp', capture_output=True, text=True, check=True)
+if len(json.loads(result.stdout)) != 167:
+    raise SystemExit('packaged WMDS catalog is incomplete outside the repository')
 def catalog_assets(value):
     if isinstance(value, dict):
         for child in value.values():
@@ -291,10 +362,10 @@ def catalog_assets(value):
     elif isinstance(value, list):
         for child in value:
             yield from catalog_assets(child)
-    elif isinstance(value, str) and value.startswith(('templates/', 'components/', 'assets/', 'compose/', 'recipes/')):
+    elif isinstance(value, str) and value.startswith(('templates/', 'components/', 'assets/', 'compose/', 'recipes/', 'design-system/')):
         yield value
 
-for value in catalog_assets(index):
+for value in list(catalog_assets(index)) + list(catalog_assets(design_index)):
     path = value.split('?', 1)[0].split('#', 1)[0]
     if not (catalog / path).is_file():
         raise SystemExit(f'broken catalog index asset: {path}')
@@ -302,7 +373,7 @@ for value in catalog_assets(index):
 skill = root / 'skills/west-monroe-presentations'
 if not (skill / 'SKILL.md').is_file():
     raise SystemExit('missing packaged skill')
-for name in ('template-authoring.md', 'component-customization.md', 'compose-authoring.md'):
+for name in ('template-authoring.md', 'component-customization.md', 'compose-authoring.md', 'design-system-authoring.md'):
     if not (skill / 'references' / name).is_file():
         raise SystemExit(f'missing skill reference {name}')
 for doc in skill.rglob('*.md'):

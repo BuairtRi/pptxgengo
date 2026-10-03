@@ -37,30 +37,31 @@ type sceneMetricSource struct {
 	On        string            `json:"on,omitempty"`
 }
 type sceneCardSource struct {
-	SourceID     string            `json:"id,omitempty"`
-	Type         string            `json:"type"`
-	X            float64           `json:"x"`
-	Y            float64           `json:"y"`
-	W            float64           `json:"w"`
-	H            float64           `json:"h"`
-	Surface      string            `json:"surface,omitempty"`
-	Pad          float64           `json:"pad"`
-	PadTop       float64           `json:"padTop"`
-	PadRight     float64           `json:"padRight"`
-	Gap          float64           `json:"gap"`
-	Label        string            `json:"label,omitempty"`
-	Title        string            `json:"title,omitempty"`
-	TitleStyle   string            `json:"titleStyle,omitempty"`
-	TitleInk     string            `json:"titleInk,omitempty"`
-	Number       string            `json:"number,omitempty"`
-	InlineNumber string            `json:"inlineNumber,omitempty"`
-	BandNumber   string            `json:"bandNumber,omitempty"`
-	CornerNumber string            `json:"cornerNumber,omitempty"`
-	NumInk       string            `json:"numInk,omitempty"`
-	Body         []json.RawMessage `json:"body,omitempty"`
-	BodySize     string            `json:"bodySize,omitempty"`
-	Band         *CardBand         `json:"band,omitempty"`
-	Edge         *struct {
+	SourceID      string            `json:"id,omitempty"`
+	Type          string            `json:"type"`
+	X             float64           `json:"x"`
+	Y             float64           `json:"y"`
+	W             float64           `json:"w"`
+	H             float64           `json:"h"`
+	Surface       string            `json:"surface,omitempty"`
+	Pad           float64           `json:"pad"`
+	PadTop        float64           `json:"padTop"`
+	PadRight      float64           `json:"padRight"`
+	ContentBottom float64           `json:"contentBottom,omitempty"`
+	Gap           float64           `json:"gap"`
+	Label         string            `json:"label,omitempty"`
+	Title         string            `json:"title,omitempty"`
+	TitleStyle    string            `json:"titleStyle,omitempty"`
+	TitleInk      string            `json:"titleInk,omitempty"`
+	Number        string            `json:"number,omitempty"`
+	InlineNumber  string            `json:"inlineNumber,omitempty"`
+	BandNumber    string            `json:"bandNumber,omitempty"`
+	CornerNumber  string            `json:"cornerNumber,omitempty"`
+	NumInk        string            `json:"numInk,omitempty"`
+	Body          []json.RawMessage `json:"body,omitempty"`
+	BodySize      string            `json:"bodySize,omitempty"`
+	Band          *CardBand         `json:"band,omitempty"`
+	Edge          *struct {
 		Side   string  `json:"side"`
 		Weight float64 `json:"weight"`
 		Ink    string  `json:"ink"`
@@ -783,6 +784,14 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 		if e := r.sceneDataInkShape(p, id+".edge", eb, surface, ed.Ink); e != nil {
 			return nil, e
 		}
+	}
+	// A composed card may contain an independently positioned footer. Reserve
+	// its space explicitly while preserving the outer card surface and bounds.
+	if n.ContentBottom != 0 {
+		if n.ContentBottom <= b.Y+pt || n.ContentBottom > b.Y+b.H-pb {
+			return nil, fmt.Errorf("scene.invalid_card_content_bottom: %s", id)
+		}
+		pb = b.Y + b.H - n.ContentBottom
 	}
 	y := b.Y
 	x, w := b.X+pl, b.W-pl-pr

@@ -16,7 +16,7 @@ import (
 
 func run() error {
 	if len(os.Args) < 2 {
-		return fmt.Errorf("usage: pptxdesign <inspect|templates|template|template-reference|library-catalog|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
+		return fmt.Errorf("usage: pptxdesign <inspect|asset-catalog|templates|template|template-reference|library-catalog|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
 	}
 	command := os.Args[1]
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
@@ -34,6 +34,16 @@ func run() error {
 	}
 	if f.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
+	}
+	if *bundle == "v1" || *bundle == "v2" {
+		root := os.Getenv("PPTXGENGO_RELEASE_ROOT")
+		*bundle = filepath.Join(root, "library", "wm-design-system", *bundle)
+	}
+	if command == "asset-catalog" {
+		if *out != "" || *spec != "" || *family != "" || *source != "" || *templateKeys != "" || *includeDeprecated {
+			return fmt.Errorf("asset-catalog does not accept output, content or source filters")
+		}
+		return json.NewEncoder(os.Stdout).Encode(wmdesign.PrimitiveAssetCatalog())
 	}
 	if command == "library-catalog" || command == "library-reference" || command == "library-source-reference" || command == "library-sweep" || command == "library-bound-sweep" {
 		if *spec != "" {

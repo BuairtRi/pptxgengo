@@ -28,7 +28,7 @@ func applyProofEvidenceLibraryRefinements(key, revision string, doc *SlideSpec) 
 				return fmt.Errorf("library.refinement_type_mismatch: %s", id)
 			}
 			for field, value := range values {
-				if _, ok := raw[field]; !ok && !(kind == "textblock" && field == "h") {
+				if _, ok := raw[field]; !ok && !((kind == "textblock" || kind == "text") && field == "h") && !(kind == "card" && field == "contentBottom") {
 					return fmt.Errorf("library.refinement_field_missing: %s/%s", id, field)
 				}
 				raw[field] = value
@@ -43,6 +43,25 @@ func applyProofEvidenceLibraryRefinements(key, revision string, doc *SlideSpec) 
 		return fmt.Errorf("library.refinement_target_missing: %s", id)
 	}
 	switch key {
+	case "transformation/pain-to-theme":
+		for _, ordinal := range []int{6, 11, 16, 21} {
+			if err := change(fmt.Sprintf("node%02d", ordinal), "text", "wmds.pain-to-theme-fixed-text-capacity.v2", map[string]any{"h": 24}); err != nil {
+				return err
+			}
+		}
+		for _, ordinal := range []int{7, 12, 17, 22} {
+			if err := change(fmt.Sprintf("node%02d", ordinal), "text", "wmds.pain-to-theme-fixed-text-capacity.v2", map[string]any{"h": 18}); err != nil {
+				return err
+			}
+		}
+	case "case-studies/cards-quotes":
+		// Platform captions begin at324pt inside the two234pt cards. Their
+		// separately positioned text requires9pt clearance from flowing content.
+		for _, id := range []string{"node01", "node02"} {
+			if err := change(id, "card", "wmds.cards-quotes-platform-clearance.v2", map[string]any{"contentBottom": 315}); err != nil {
+				return err
+			}
+		}
 	case "case-study/what-we-did", "case-study/what-we-did-split":
 		// Fixed row allocations reserve9pt before separators and the Results
 		// label. The renderer rejects caller copy exceeding these capacities.

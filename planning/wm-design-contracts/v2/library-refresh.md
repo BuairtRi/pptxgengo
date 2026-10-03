@@ -177,6 +177,13 @@ execution choice, not a requirement to start agents during this inspection.
 
 ### Slice 4 — integrated native review and packaging
 
+Completed 2026-10-02. All 167 designs have accepted source/meaningful-alternate
+pairs in the 334-slide native packet, including unchanged regression specimens
+and the deprecated compatibility entry. The final library has 167 source slides.
+The local.6 release adds a separate gallery and portable `pptxgengo design` route.
+See [completion](slice4-completion.md) and [native receipt](reference-review/slice4.json).
+This is bounded specimen acceptance, not arbitrary-content qualification.
+
 Generate the 167-design fixture catalog and meaningful bound-content examples.
 Inspect all updated/additional layouts in native PowerPoint, including images,
 marks, table headers, source lines and dense wrapping. Recheck unchanged designs

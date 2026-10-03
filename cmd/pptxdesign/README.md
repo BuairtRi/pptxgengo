@@ -470,5 +470,18 @@ Slice 3 covers all 70 added designs with source/meaningful-content pairs in a
 command are in [the completion note](../../planning/wm-design-contracts/v2/slice3-completion.md).
 V2 navigation uses the dedicated 8pt semibold source style; table group boundaries
 remain structural, and outline surfaces retain their inset border. Native review
-of these pairs does not qualify arbitrary input or replace the full-catalog
-regression review and release packaging planned for slice 4.
+of these pairs does not qualify arbitrary input.
+
+Slice 4 completes full-catalog regression review: all 167 designs have accepted
+source/meaningful-alternate specimens (334 slides). The final library deck has
+one source example per design. See [integrated completion](../../planning/wm-design-contracts/v2/slice4-completion.md)
+for the native receipts, named content-capacity amendments and portable packaging.
+
+The local.6 package exposes `pptxgengo design`, defaulting to bundled v2 source
+and the candidate Go engine, and `pptxgengo catalog --design-system`. The gallery
+provides native previews and editable one-slide values/foundation documents.
+Original font names remain intact. Normal builds use packaged font/artwork bytes
+in Go; PowerPoint capture is calibration/review evidence, not a build dependency.
+Standalone `pptxdesign` keeps its earlier defaults. `--bundle v1` / `--bundle v2`
+aliases resolve relative to the installed release (or repository working directory
+for standalone use). `asset-catalog` lists the complete hash-pinned artwork registry.
