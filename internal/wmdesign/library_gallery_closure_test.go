@@ -33,7 +33,13 @@ func TestFrozenGalleryNativePreviewClosure(t *testing.T) {
 		t.Fatalf("incomplete frozen gallery: %d/%d", index.Entries, len(index.Designs))
 	}
 	for _, design := range index.Designs {
-		for _, relative := range []string{design.Preview, design.Contract, design.Foundation, design.Values} {
+		dependencies := []string{design.Preview, design.Contract, design.Foundation}
+		// Deprecated specimens can omit a source-values link. Every declared
+		// link must resolve; inventing a link would misstate that contract.
+		if design.Values != "" {
+			dependencies = append(dependencies, design.Values)
+		}
+		for _, relative := range dependencies {
 			if relative == "" || !filepath.IsLocal(relative) {
 				t.Fatalf("invalid gallery dependency for %s: %q", design.Template, relative)
 			}

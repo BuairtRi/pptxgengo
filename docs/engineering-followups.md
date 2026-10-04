@@ -51,12 +51,13 @@ Consolidated qualification on macOS arm64 with Go 1.27.1:
 | Check | Result |
 | --- | --- |
 | `go build ./...` | Pass |
-| `make test`, empty branding root | Pass, 24.50–28.76 seconds wall time; latest run includes final CLI parsing and fixture-isolation regressions |
+| `make test`, empty branding root | Pass, latest clean-checkout run 23.96 seconds; includes final CLI parsing, fixture isolation and all 587 frozen-preview dependencies |
 | `make test-integration INTEGRATION_TEST_TIMEOUT=3m` | Pass, 30.06 seconds; final rerun 46.81 seconds while the exhaustive race suite ran concurrently; includes full catalog and final relocated projects |
 | Cache race regressions | Pass, 53.20 seconds; includes concurrent callers, clone isolation, eviction, source/font/calibration drift and source override |
 | `make test-race`, empty branding root | Pass, 77.84 seconds wall time; all four focused developer checks |
 | Full race lane, final 5-minute per-package ceiling | Incomplete: design-library package timed out at 301.78 seconds in `TestV5DeltaSourceQualification`; no reported data race. All other packages passed, including project 174.02 seconds. Remains out-of-band. |
 | CI YAML syntax / installer shell syntax | Pass; remote CI execution and action-specific lint not run |
+| Packaging closure / private-task dialog monitor, focused race | Pass; native 1.31 seconds, gallery 2.39 seconds |
 
 An earlier three-minute full-race attempt timed out in the design-library package
 while rebuilding SQLite fixtures; the project package passed in 155.63 seconds.
@@ -90,6 +91,22 @@ hash-pinned files are now tracked, with a full 587-specimen closure regression.
 Native command monitoring is also restricted to absolute private task scripts;
 inline doctor AppleScript no longer writes `dialog.swift` into the caller's
 working directory. The stray diagnostic file was removed.
+
+## Installed CLI
+
+Global **0.1.0-local.13** is installed at
+`~/.local/share/pptxgengo/releases/0.1.0-local.13`, through
+`~/.local/bin/pptxgengo`. Binaries were built from clean committed runtime code
+`92d2d66661ce4913fd8a89f0ad575616ee5362d1`, with `vcs.modified=false`.
+The subsequent correction permits the deprecated specimen's absent optional
+source-values link in the new closure test; it changes no CLI runtime code.
+
+The installer validates 587 source specimens, 1,760 linked artifacts and 3,864
+package files. Outside-repository checks pass init/build, audience content review,
+new software-photo search, section-aware add with `--as` / `--check-fit`, split
+source and retained-file re-add, and malformed render-flag diagnostics. The real doctor
+still reports dispatch failure and unknown permission, and creates no stray
+working-directory script. The existing presentation-skill link is preserved.
 
 An isolated checkout keeps unrelated in-progress skill and DentalXChange edits
 out of the engineering qualification. Those working-tree changes are preserved.
