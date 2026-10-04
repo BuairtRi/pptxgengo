@@ -11,7 +11,11 @@ func SplitFrameReference(bundle, override string, year int) (Document, error) {
 	if err != nil {
 		return Document{}, err
 	}
-	if s.Revision != LibraryRevisionV2 {
+	return splitFrameReference(s, year)
+}
+
+func splitFrameReference(s *Source, year int) (Document, error) {
+	if !isModernLibrary(s.Revision) {
 		return Document{}, fmt.Errorf("frame.reference_requires_library_v2")
 	}
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: year}
@@ -74,6 +78,30 @@ func SplitFrameReference(bundle, override string, year int) (Document, error) {
 		}
 		q.Active = q.Nav[n-1].ID
 		if err := add(q, fmt.Sprintf("%d navigation tabs", n)); err != nil {
+			return Document{}, err
+		}
+	}
+	if _, updated := s.Frames.Footers["slim"]; updated {
+		for _, rail := range []string{"none", "left", "right", "nav"} {
+			for sourceLines := 0; sourceLines <= 2; sourceLines++ {
+				q := FrameRequest{Rail: rail, Footer: "slim", TitleLines: 4, SourceLines: sourceLines}
+				if rail == "nav" {
+					q.Nav = []NavTab{{ID: "context", Label: "Context"}, {ID: "decision", Label: "Decision"}}
+					q.Active = "decision"
+				}
+				if err := add(q, "Four authored lines\nkeep the headline\nabove the body\nwith a slim footer"); err != nil {
+					return Document{}, err
+				}
+			}
+		}
+		for _, split := range splits {
+			q := FrameRequest{Split: split, Rail: "none", Footer: "slim", TitleLines: 4, SourceLines: 1}
+			if err := add(q, "A split frame\ncan preserve\nfour authored\ntitle lines"); err != nil {
+				return Document{}, err
+			}
+		}
+		// Full-width three-line allocation is new alongside the fourth line.
+		if err := add(FrameRequest{Rail: "none", Footer: "compact", TitleLines: 3}, "Three title lines\nnow have an explicit\nheader allocation"); err != nil {
 			return Document{}, err
 		}
 	}

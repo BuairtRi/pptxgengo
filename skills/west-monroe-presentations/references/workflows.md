@@ -1,6 +1,18 @@
-# Workflow routes and current boundaries
+# Workflow routes and boundaries
 
 Use the `pptxgengo` dispatcher shipped with the skill/package. Syntax is versioned; inspect `pptxgengo --help`, the selected route's help, and the current catalog before relying on a flag or assuming a resource path. `pptxgengo catalog --templates` and `--components` print the corresponding gallery path; add `--open` to display that gallery. `pptxgengo paths` returns JSON with the absolute installed `root`, `library`, `scripts`, catalog landing/templates/components pages, and `skill` locations. Do not hardcode the frozen release directory into task artifacts. The individual route binaries are implementation details, not required global commands.
+
+## Choose a route
+
+| Route | Use it when | Reference |
+| --- | --- | --- |
+| `design` (project) | Building a source-managed deck from `deck.yaml`: the default for new decks | [Project and resumption](project-and-resume.md), [source format](source-format.md), [template selection](template-selection.md) |
+| `design template` / `design build` | Filling one modern WM design-system slide or keeping one illustrated composition editable | [Design-system authoring](design-system-authoring.md) |
+| `template` | A legacy source slide's fixed layout already fits the story | [Fixed-source template authoring](template-authoring.md) |
+| `template` / `component` with palette, gauge or accent changes | Recoloring declared roles, setting gauges, placing accents | [Component customization](component-customization.md) |
+| `adapt` | Roadmaps, architecture, processes, teams or comparisons whose geometry should follow the content | [Adaptive families](adaptive-authoring.md) |
+| `compose` | A new page assembled from bounded native components | [New slide composition](compose-authoring.md) |
+| `scene`, `lib`, `anchor`, `diff` | Source-preserving edits, library contracts, accent placement, pixel comparison | This page, below |
 
 ## Template review (`template`)
 

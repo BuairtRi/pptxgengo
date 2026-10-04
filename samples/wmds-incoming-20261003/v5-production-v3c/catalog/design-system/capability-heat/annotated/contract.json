@@ -1,0 +1,604 @@
+{
+  "key": "capability-heat/annotated",
+  "source_file": "templates/library/heatmaps.json",
+  "source_sha256": "f5d51a0c9c9ad109e5e719da24a06344f7d95be171a4bd52cf7606bce207d9ba",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "legend"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "mark"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "mark"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "card"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "bullets"
+    }
+  ],
+  "family": "heatmaps",
+  "tier": "core",
+  "name": "Capability gap heat map, annotated",
+  "purpose": "A gap heat map with a hand-drawn underscore on the worst row and a straight arrow to a callout card.",
+  "uses": [
+    "table.standard (heat cells)",
+    "mark.underscore",
+    "mark.arrow-straight",
+    "card.callout"
+  ],
+  "source_advisory_budget": {
+    "words": 92,
+    "marks": 2
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "heat values",
+      "maxChars": 3
+    },
+    {
+      "slot": "legend labels",
+      "maxChars": 14
+    },
+    {
+      "slot": "source",
+      "maxChars": 90
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "heatmap",
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "cards",
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "card",
+      "legend",
+      "mark",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "legend",
+        "role": "content",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/5/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 450,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "legend",
+        "role": "content",
+        "source_bounds": {
+          "w": 450,
+          "x": 57,
+          "y": 432
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "mark",
+        "role": "content",
+        "source_bounds": {
+          "w": 126,
+          "x": 63,
+          "y": 332
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "mark",
+        "role": "content",
+        "source_bounds": {
+          "w": 96,
+          "x": 519,
+          "y": 312
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 162,
+          "w": 270,
+          "x": 633,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Capability gaps"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "One row carries the largest gap to target"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield Health System assessment, Sep 2026."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Capability"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Main"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Lakeside"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Ridgeview"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Harbor"
+    },
+    {
+      "name": "node01.rows.item01.c0",
+      "source_pointer": "/body/0/rows/0/c0",
+      "kind": "string",
+      "synthetic_source_example": "Patient access"
+    },
+    {
+      "name": "node01.rows.item01.c1",
+      "source_pointer": "/body/0/rows/0/c1",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item01.c2",
+      "source_pointer": "/body/0/rows/0/c2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item01.c3",
+      "source_pointer": "/body/0/rows/0/c3",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item01.c4",
+      "source_pointer": "/body/0/rows/0/c4",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item02.c0",
+      "source_pointer": "/body/0/rows/1/c0",
+      "kind": "string",
+      "synthetic_source_example": "Scheduling"
+    },
+    {
+      "name": "node01.rows.item02.c1",
+      "source_pointer": "/body/0/rows/1/c1",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item02.c2",
+      "source_pointer": "/body/0/rows/1/c2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item02.c3",
+      "source_pointer": "/body/0/rows/1/c3",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item02.c4",
+      "source_pointer": "/body/0/rows/1/c4",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item03.c0",
+      "source_pointer": "/body/0/rows/2/c0",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle"
+    },
+    {
+      "name": "node01.rows.item03.c1",
+      "source_pointer": "/body/0/rows/2/c1",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item03.c2",
+      "source_pointer": "/body/0/rows/2/c2",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item03.c3",
+      "source_pointer": "/body/0/rows/2/c3",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item03.c4",
+      "source_pointer": "/body/0/rows/2/c4",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item04.c0",
+      "source_pointer": "/body/0/rows/3/c0",
+      "kind": "string",
+      "synthetic_source_example": "Documentation"
+    },
+    {
+      "name": "node01.rows.item04.c1",
+      "source_pointer": "/body/0/rows/3/c1",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item04.c2",
+      "source_pointer": "/body/0/rows/3/c2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item04.c3",
+      "source_pointer": "/body/0/rows/3/c3",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item04.c4",
+      "source_pointer": "/body/0/rows/3/c4",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.c0",
+      "source_pointer": "/body/0/rows/4/c0",
+      "kind": "string",
+      "synthetic_source_example": "Care coordination"
+    },
+    {
+      "name": "node01.rows.item05.c1",
+      "source_pointer": "/body/0/rows/4/c1",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.c2",
+      "source_pointer": "/body/0/rows/4/c2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.c3",
+      "source_pointer": "/body/0/rows/4/c3",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item05.c4",
+      "source_pointer": "/body/0/rows/4/c4",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node01.rows.item06.c0",
+      "source_pointer": "/body/0/rows/5/c0",
+      "kind": "string",
+      "synthetic_source_example": "Supply chain"
+    },
+    {
+      "name": "node01.rows.item06.c1",
+      "source_pointer": "/body/0/rows/5/c1",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item06.c2",
+      "source_pointer": "/body/0/rows/5/c2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item06.c3",
+      "source_pointer": "/body/0/rows/5/c3",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item06.c4",
+      "source_pointer": "/body/0/rows/5/c4",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item07.c0",
+      "source_pointer": "/body/0/rows/6/c0",
+      "kind": "string",
+      "synthetic_source_example": "Data and analytics"
+    },
+    {
+      "name": "node01.rows.item07.c1",
+      "source_pointer": "/body/0/rows/6/c1",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item07.c2",
+      "source_pointer": "/body/0/rows/6/c2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item07.c3",
+      "source_pointer": "/body/0/rows/6/c3",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item07.c4",
+      "source_pointer": "/body/0/rows/6/c4",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node02.items.item01.heat",
+      "source_pointer": "/body/1/items/0/heat",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "No gap"
+    },
+    {
+      "name": "node02.items.item02.heat",
+      "source_pointer": "/body/1/items/1/heat",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Small"
+    },
+    {
+      "name": "node02.items.item03.heat",
+      "source_pointer": "/body/1/items/2/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Moderate"
+    },
+    {
+      "name": "node02.items.item04.heat",
+      "source_pointer": "/body/1/items/3/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node02.items.item04.text",
+      "source_pointer": "/body/1/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Large"
+    },
+    {
+      "name": "node02.items.item05.heat",
+      "source_pointer": "/body/1/items/4/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node02.items.item05.text",
+      "source_pointer": "/body/1/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Critical"
+    },
+    {
+      "name": "node05.body.item01.p",
+      "source_pointer": "/body/4/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Referral status lives in faxes and phone notes, so no one sees a patient's whole path."
+    },
+    {
+      "name": "node05.label",
+      "source_pointer": "/body/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Biggest gap"
+    },
+    {
+      "name": "node05.title",
+      "source_pointer": "/body/4/title",
+      "kind": "string",
+      "synthetic_source_example": "Care coordination at Harbor"
+    },
+    {
+      "name": "node06.items.item01",
+      "source_pointer": "/body/5/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Nine other cells sit in the large band, all at Ridgeview or Harbor."
+    },
+    {
+      "name": "node06.items.item02",
+      "source_pointer": "/body/5/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Main campus has no gap above moderate."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 5
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 7
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 5
+    },
+    {
+      "name": "node05.body",
+      "source_pointer": "/body/4/body",
+      "count": 1
+    },
+    {
+      "name": "node06.items",
+      "source_pointer": "/body/5/items",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

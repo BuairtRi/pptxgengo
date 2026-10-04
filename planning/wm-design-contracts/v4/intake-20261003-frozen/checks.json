@@ -1,0 +1,68 @@
+{
+  "schema": "pptxgengo.intake-checks.v1",
+  "normal": {
+    "packages": [
+      "internal/wmdesign",
+      "internal/deckproject",
+      "cmd/pptxdesign",
+      "cmd/pptxgengo"
+    ],
+    "status": "passed",
+    "seconds": [
+      6.337,
+      5.981,
+      1.048
+    ],
+    "cmd_pptxgengo": "no test files"
+  },
+  "race": {
+    "packages": [
+      "internal/wmdesign",
+      "internal/deckproject",
+      "cmd/pptxdesign"
+    ],
+    "status": "passed",
+    "seconds": [
+      74.464,
+      47.209,
+      4.265
+    ]
+  },
+  "final_gauge_linejoin_race": {
+    "command": "go test -race ./pptx ./internal/wmdesign -run 'TestShape(LineJoin|EmptyLineJoin)|TestIntakeGauge' -count=1",
+    "status": "passed",
+    "seconds": [
+      1.388,
+      2.317
+    ],
+    "gauge_tests": 6
+  },
+  "node_diagnostic": {
+    "command": "go test ./internal/wmdesign -run ^TestIntakeManualNodeSmoke$ -count=1 -v",
+    "status": "diagnostic completed; failures recorded, not blanket qualification",
+    "seconds": 9.252,
+    "nodes": 6307,
+    "node_failures": 63,
+    "unsupported_types": 0
+  },
+  "v3_rebuild": {
+    "command": "pptxdesign library-source-reference --bundle library/wm-design-system/v3 --out temporary --year 2026 --engine wmds-go-foundation.v2",
+    "status": "passed",
+    "slides": 248
+  },
+  "source_hash_verification": {
+    "files": 35,
+    "status": "passed"
+  },
+  "upstream_freeze_recheck": {
+    "head": "8f9f16ab8a7e2a6fff45a97627308668f4a12753",
+    "git_status": "clean"
+  },
+  "diff_check": "passed",
+  "limits": [
+    "Native PowerPoint visual review pending",
+    "Full repository suite not claimed green; pre-existing broad pptx failures remain",
+    "495 compiled slides plus 27 rejected definitions in incoming diagnostic",
+    "Unreleased; no installed bundle migration"
+  ]
+}

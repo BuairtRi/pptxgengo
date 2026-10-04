@@ -1,0 +1,186 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-443",
+      "frame": {
+        "rail": "nav",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false,
+        "nav": [
+          {
+            "id": "section-01",
+            "label": "Prepare"
+          },
+          {
+            "id": "section-02",
+            "label": "Cutover"
+          },
+          {
+            "id": "section-03",
+            "label": "Rollback"
+          },
+          {
+            "id": "section-04",
+            "label": "Hypercare"
+          }
+        ],
+        "active": "section-03"
+      },
+      "eyebrow": "Cutover runbook",
+      "title": "Eight steps return the ledger to legacy in [[three hours]]",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "header": "dark",
+              "dense": true,
+              "rowH": 36,
+              "cols": [
+                {
+                  "k": "n",
+                  "label": "Step",
+                  "w": 54
+                },
+                {
+                  "k": "a",
+                  "label": "Rollback action",
+                  "w": 252
+                },
+                {
+                  "k": "o",
+                  "label": "Owner",
+                  "w": 120
+                },
+                {
+                  "k": "t",
+                  "label": "Budget",
+                  "w": 84
+                },
+                {
+                  "k": "v",
+                  "label": "Verification check",
+                  "w": 228
+                },
+                {
+                  "k": "d",
+                  "label": "Done",
+                  "w": 108,
+                  "type": "checkbox"
+                }
+              ],
+              "rows": [
+                {
+                  "n": "1",
+                  "a": "Call the rollback on the bridge",
+                  "o": "Cutover lead",
+                  "t": "5 min",
+                  "v": "Call logged with time and reason",
+                  "d": true
+                },
+                {
+                  "n": "2",
+                  "a": "Stop postings in the new ledger",
+                  "o": "Controller",
+                  "t": "10 min",
+                  "v": "Subledger lock report is clean",
+                  "d": true
+                },
+                {
+                  "n": "3",
+                  "a": "Disable the new interfaces",
+                  "o": "Integration lead",
+                  "t": "15 min",
+                  "v": "Queues show zero in flight",
+                  "d": false
+                },
+                {
+                  "n": "4",
+                  "a": "Repoint feeds to the legacy endpoints",
+                  "o": "Integration lead",
+                  "t": "20 min",
+                  "v": "Test postings reach legacy",
+                  "d": false
+                },
+                {
+                  "n": "5",
+                  "a": "Restore the legacy snapshot",
+                  "o": "Finance IT",
+                  "t": "60 min",
+                  "v": "Checksums match the backup",
+                  "d": false
+                },
+                {
+                  "n": "6",
+                  "a": "Tie legacy to the pre-cutover trial balance",
+                  "o": "Data lead",
+                  "t": "45 min",
+                  "v": "Zero variance by entity",
+                  "d": false
+                },
+                {
+                  "n": "7",
+                  "a": "Reopen the legacy ledger to users",
+                  "o": "Controller",
+                  "t": "15 min",
+                  "v": "First posting accepted",
+                  "d": false
+                },
+                {
+                  "n": "8",
+                  "a": "Notify users and Steering",
+                  "o": "Comms lead",
+                  "t": "10 min",
+                  "v": "Notice sent and acknowledged",
+                  "d": false
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-443",
+        "template": "runbook/rollback-steps-nav",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/runbooks.json",
+        "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+        "source_revision": "wmds-library.v5",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {
+        "emphasis": "underscore"
+      }
+    }
+  ]
+}

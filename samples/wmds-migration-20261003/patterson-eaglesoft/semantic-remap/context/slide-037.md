@@ -1,0 +1,1 @@
+Keep hidden; preserve40source connectors, four environments, all key features, VAX/SOX and imported platform facts without reconciling to current Eaglesoft target. Overlay and underlyingcopy both retained.

@@ -1,0 +1,425 @@
+{
+  "key": "runbook/cutover-comms-checkpoints",
+  "source_file": "templates/library/runbooks.json",
+  "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "block"
+    }
+  ],
+  "family": "runbooks",
+  "tier": "working",
+  "name": "Runbook · cutover communications checkpoints",
+  "purpose": "Six communications checkpoints on the cutover timeline with the audience, message, sender and a sent box; a pointer to the change comms plan.",
+  "uses": [
+    "composite.table",
+    "shape.block"
+  ],
+  "source_advisory_budget": {
+    "words": 103,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "when",
+      "maxChars": 10
+    },
+    {
+      "slot": "audience",
+      "maxChars": 24
+    },
+    {
+      "slot": "message",
+      "maxChars": 40
+    },
+    {
+      "slot": "sender",
+      "maxChars": 16
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 846,
+          "x": 57,
+          "y": 432
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Cutover runbook"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Six checkpoints keep users and leaders [[informed]]"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Check"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "When"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Audience"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Message"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Sender"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Sent"
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "All finance users"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node01.rows.item01.i",
+      "source_pointer": "/body/0/rows/0/i",
+      "kind": "string",
+      "synthetic_source_example": "C1"
+    },
+    {
+      "name": "node01.rows.item01.m",
+      "source_pointer": "/body/0/rows/0/m",
+      "kind": "string",
+      "synthetic_source_example": "Freeze starts at 18:00"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item01.w",
+      "source_pointer": "/body/0/rows/0/w",
+      "kind": "string",
+      "synthetic_source_example": "Fri 16:00"
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "Finance and IT leads"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node01.rows.item02.i",
+      "source_pointer": "/body/0/rows/1/i",
+      "kind": "string",
+      "synthetic_source_example": "C2"
+    },
+    {
+      "name": "node01.rows.item02.m",
+      "source_pointer": "/body/0/rows/1/m",
+      "kind": "string",
+      "synthetic_source_example": "Freeze confirmed; cutover begins"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "Cutover lead"
+    },
+    {
+      "name": "node01.rows.item02.w",
+      "source_pointer": "/body/0/rows/1/w",
+      "kind": "string",
+      "synthetic_source_example": "Fri 18:00"
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "Steering committee"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item03.i",
+      "source_pointer": "/body/0/rows/2/i",
+      "kind": "string",
+      "synthetic_source_example": "C3"
+    },
+    {
+      "name": "node01.rows.item03.m",
+      "source_pointer": "/body/0/rows/2/m",
+      "kind": "string",
+      "synthetic_source_example": "Midpoint status and any risks"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "Exec sponsor"
+    },
+    {
+      "name": "node01.rows.item03.w",
+      "source_pointer": "/body/0/rows/2/w",
+      "kind": "string",
+      "synthetic_source_example": "Sat 00:00"
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "Steering committee"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item04.i",
+      "source_pointer": "/body/0/rows/3/i",
+      "kind": "string",
+      "synthetic_source_example": "C4"
+    },
+    {
+      "name": "node01.rows.item04.m",
+      "source_pointer": "/body/0/rows/3/m",
+      "kind": "string",
+      "synthetic_source_example": "Go or no-go decision"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "Cutover lead"
+    },
+    {
+      "name": "node01.rows.item04.w",
+      "source_pointer": "/body/0/rows/3/w",
+      "kind": "string",
+      "synthetic_source_example": "Sat 03:30"
+    },
+    {
+      "name": "node01.rows.item05.a",
+      "source_pointer": "/body/0/rows/4/a",
+      "kind": "string",
+      "synthetic_source_example": "All finance users"
+    },
+    {
+      "name": "node01.rows.item05.d",
+      "source_pointer": "/body/0/rows/4/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item05.i",
+      "source_pointer": "/body/0/rows/4/i",
+      "kind": "string",
+      "synthetic_source_example": "C5"
+    },
+    {
+      "name": "node01.rows.item05.m",
+      "source_pointer": "/body/0/rows/4/m",
+      "kind": "string",
+      "synthetic_source_example": "New ledger is open; where to get help"
+    },
+    {
+      "name": "node01.rows.item05.s",
+      "source_pointer": "/body/0/rows/4/s",
+      "kind": "string",
+      "synthetic_source_example": "Comms lead"
+    },
+    {
+      "name": "node01.rows.item05.w",
+      "source_pointer": "/body/0/rows/4/w",
+      "kind": "string",
+      "synthetic_source_example": "Sat 06:00"
+    },
+    {
+      "name": "node01.rows.item06.a",
+      "source_pointer": "/body/0/rows/5/a",
+      "kind": "string",
+      "synthetic_source_example": "Business leaders"
+    },
+    {
+      "name": "node01.rows.item06.d",
+      "source_pointer": "/body/0/rows/5/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item06.i",
+      "source_pointer": "/body/0/rows/5/i",
+      "kind": "string",
+      "synthetic_source_example": "C6"
+    },
+    {
+      "name": "node01.rows.item06.m",
+      "source_pointer": "/body/0/rows/5/m",
+      "kind": "string",
+      "synthetic_source_example": "End-of-day status and next steps"
+    },
+    {
+      "name": "node01.rows.item06.s",
+      "source_pointer": "/body/0/rows/5/s",
+      "kind": "string",
+      "synthetic_source_example": "Exec sponsor"
+    },
+    {
+      "name": "node01.rows.item06.w",
+      "source_pointer": "/body/0/rows/5/w",
+      "kind": "string",
+      "synthetic_source_example": "Sat 18:00"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "The full message plan, templates and approvals sit in the change communications plan."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 6
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 6
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

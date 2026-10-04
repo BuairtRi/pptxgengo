@@ -1,0 +1,52 @@
+{
+  "schema": "pptxgengo.wmds-v5-generic-native-independent-review.v1",
+  "scope": "Read-only review of six root-owned native files; independent regression tests only.",
+  "files": {
+    "internal/wmdesign/scene_native_word_fit.go": "775faa62e7b6d549adb4ae0f339c786cf7695e743302522267ba332d561fda5b",
+    "internal/wmdesign/scene_native_word_fit_test.go": "1a6cee52d517f929fee1a0a90644c028274c50f88961a8b60db9cb77efb07e64",
+    "internal/wmdesign/scene_tables.go": "5cd212f67ba300cb44daa8481d691261f313d281f2b8543bb6a2e179ef82a4b9",
+    "internal/wmdesign/scene_diagrams.go": "9bbc34bccf2d43c9d86ec06554f44ec1c0a44944221e4ca7ee02718e214381f0",
+    "internal/wmdesign/scene_people.go": "a084e228eaf5c0af0bc62f1b94f8c4562a12a5df958fafacebd06447b24c4277",
+    "internal/wmdesign/scene_charts.go": "4be2a6cc6918de6f3e1cf8eb2e3d8778d9c013b250adf210b933c16e79c828f8",
+    "internal/wmdesign/scene_native_word_fit_review_test.go": "3e6955e2b949852f534e330a0db58739065332891089fe27ecee3f28245a57d7"
+  },
+  "findings_closed": [
+    {
+      "finding": "holeSize validation was below quadrant early return, allowing doughnut-only data silently in earlier revisions.",
+      "fix_owner": "root",
+      "resolution": "Guard moved before the quadrant branch; regression rejects v3/v4/v5 quadrant holeSize."
+    },
+    {
+      "finding": "Default horizontal legend reserve increased packing footprint; proposed gap compensation used sequenceInlineWidth(0), which returns zero.",
+      "fix_owner": "root",
+      "resolution": "v5 default horizontal swatch gap subtracts sequenceInlineWidth(1)-1; tests require correct gap and identical source packing footprint. Explicit-size and historical policies retained."
+    }
+  ],
+  "regression_checks": [
+    "Word-inset exact threshold/no-op branches and unchanged source style",
+    "Overflow still rejected when no bounded inset can fit",
+    "Historical and explicit-size legend policies unchanged",
+    "Horizontal legend copy/font preserved, rectangles separated and bounded",
+    "Default horizontal legend reserve does not increase source packing footprint",
+    "v3/v4 native chart format unchanged; observations/series copy unchanged in v5",
+    "Quoted units, conditional and delta format syntax preserved; decimal helper idempotent",
+    "Quadrant header and point geometry, copy and fonts preserved; old badge policy unchanged",
+    "Doughnut-only holeSize cannot pass quadrant early return"
+  ],
+  "normal_checks_seconds": 0.615,
+  "race_checks_seconds": 4.156,
+  "logs": {
+    "native-independent-review-checks": {
+      "path": "planning/wm-design-contracts/v5/intake-20261003-587-frozen/repair-wave/native-independent-review-checks.log",
+      "sha256": "6d5b105a56c575271b335069f7a67a742bee9ddeabe0c99b7b6ecc7b45532f2d",
+      "result": "ok  \tgithub.com/buairtri/pptxgengo/internal/wmdesign\t0.615s"
+    },
+    "native-independent-review-race-checks": {
+      "path": "planning/wm-design-contracts/v5/intake-20261003-587-frozen/repair-wave/native-independent-review-race-checks.log",
+      "sha256": "9d3ca8811f8f9a3ad16c7c2906c66251729d44ac7eed911293b5aed6c8e39d32",
+      "result": "ok  \tgithub.com/buairtri/pptxgengo/internal/wmdesign\t4.156s"
+    }
+  },
+  "production_edits_by_reviewer": false,
+  "native_review": "Root owns regenerated v3 native gallery review; these tests do not certify native glyph or chart data-label appearance."
+}

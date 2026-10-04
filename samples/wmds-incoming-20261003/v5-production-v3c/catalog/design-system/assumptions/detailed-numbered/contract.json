@@ -1,0 +1,444 @@
+{
+  "key": "assumptions/detailed-numbered",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "table"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "table"
+    }
+  ],
+  "family": "commercials",
+  "tier": "working",
+  "name": "Assumptions · detailed, two columns numbered",
+  "purpose": "Ten numbered assumptions in two columns, each with a one-line clarification, so the contract can cite them by number.",
+  "uses": [
+    "table.standard"
+  ],
+  "source_advisory_budget": {
+    "words": 169,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "column label",
+      "maxChars": 36
+    },
+    {
+      "slot": "assumption",
+      "maxChars": 60
+    },
+    {
+      "slot": "clarification",
+      "maxChars": 44
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/1/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/3/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/3/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 414,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 414,
+          "x": 57,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 414,
+          "x": 489,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 414,
+          "x": 489,
+          "y": 150
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Commercials"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Ten numbered assumptions we will hold each other to"
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Delivery and governance"
+    },
+    {
+      "name": "node02.cols.item01.label",
+      "source_pointer": "/body/1/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "No."
+    },
+    {
+      "name": "node02.cols.item02.label",
+      "source_pointer": "/body/1/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Assumption"
+    },
+    {
+      "name": "node02.rows.item01.a.text",
+      "source_pointer": "/body/1/rows/0/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Client provides a named lead for each of the 14 business units"
+    },
+    {
+      "name": "node02.rows.item01.a.sub",
+      "source_pointer": "/body/1/rows/0/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Leads attend the weekly working session"
+    },
+    {
+      "name": "node02.rows.item01.n",
+      "source_pointer": "/body/1/rows/0/n",
+      "kind": "string",
+      "synthetic_source_example": "1"
+    },
+    {
+      "name": "node02.rows.item02.a.text",
+      "source_pointer": "/body/1/rows/1/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Decisions are made within five business days"
+    },
+    {
+      "name": "node02.rows.item02.a.sub",
+      "source_pointer": "/body/1/rows/1/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Longer waits move dates day for day"
+    },
+    {
+      "name": "node02.rows.item02.n",
+      "source_pointer": "/body/1/rows/1/n",
+      "kind": "string",
+      "synthetic_source_example": "2"
+    },
+    {
+      "name": "node02.rows.item03.a.text",
+      "source_pointer": "/body/1/rows/2/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Read access to the ERP and close calendars in week 1"
+    },
+    {
+      "name": "node02.rows.item03.a.sub",
+      "source_pointer": "/body/1/rows/2/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Production data is read only"
+    },
+    {
+      "name": "node02.rows.item03.n",
+      "source_pointer": "/body/1/rows/2/n",
+      "kind": "string",
+      "synthetic_source_example": "3"
+    },
+    {
+      "name": "node02.rows.item04.a.text",
+      "source_pointer": "/body/1/rows/3/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Close data for the last 24 months is complete"
+    },
+    {
+      "name": "node02.rows.item04.a.sub",
+      "source_pointer": "/body/1/rows/3/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Gaps are logged and carried forward"
+    },
+    {
+      "name": "node02.rows.item04.n",
+      "source_pointer": "/body/1/rows/3/n",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node02.rows.item05.a.text",
+      "source_pointer": "/body/1/rows/4/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Steering committee meets every two weeks"
+    },
+    {
+      "name": "node02.rows.item05.a.sub",
+      "source_pointer": "/body/1/rows/4/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Quorum is the CFO plus two leads"
+    },
+    {
+      "name": "node02.rows.item05.n",
+      "source_pointer": "/body/1/rows/4/n",
+      "kind": "string",
+      "synthetic_source_example": "5"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Data, environment and commercial"
+    },
+    {
+      "name": "node04.cols.item01.label",
+      "source_pointer": "/body/3/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "No."
+    },
+    {
+      "name": "node04.cols.item02.label",
+      "source_pointer": "/body/3/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Assumption"
+    },
+    {
+      "name": "node04.rows.item01.a.text",
+      "source_pointer": "/body/3/rows/0/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Cutover window agreed by week 12"
+    },
+    {
+      "name": "node04.rows.item01.a.sub",
+      "source_pointer": "/body/3/rows/0/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "No month-end inside the window"
+    },
+    {
+      "name": "node04.rows.item01.n",
+      "source_pointer": "/body/3/rows/0/n",
+      "kind": "string",
+      "synthetic_source_example": "6"
+    },
+    {
+      "name": "node04.rows.item02.a.text",
+      "source_pointer": "/body/3/rows/1/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Existing interfaces stay unchanged during the program"
+    },
+    {
+      "name": "node04.rows.item02.a.sub",
+      "source_pointer": "/body/3/rows/1/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "New interfaces are in scope"
+    },
+    {
+      "name": "node04.rows.item02.n",
+      "source_pointer": "/body/3/rows/1/n",
+      "kind": "string",
+      "synthetic_source_example": "7"
+    },
+    {
+      "name": "node04.rows.item03.a.text",
+      "source_pointer": "/body/3/rows/2/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Fees are fixed for the phases shown"
+    },
+    {
+      "name": "node04.rows.item03.a.sub",
+      "source_pointer": "/body/3/rows/2/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Build is billed on the team run-rate"
+    },
+    {
+      "name": "node04.rows.item03.n",
+      "source_pointer": "/body/3/rows/2/n",
+      "kind": "string",
+      "synthetic_source_example": "8"
+    },
+    {
+      "name": "node04.rows.item04.a.text",
+      "source_pointer": "/body/3/rows/3/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Expenses are billed at cost, capped at 8% of fees"
+    },
+    {
+      "name": "node04.rows.item04.a.sub",
+      "source_pointer": "/body/3/rows/3/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Travel is pre-approved"
+    },
+    {
+      "name": "node04.rows.item04.n",
+      "source_pointer": "/body/3/rows/3/n",
+      "kind": "string",
+      "synthetic_source_example": "9"
+    },
+    {
+      "name": "node04.rows.item05.a.text",
+      "source_pointer": "/body/3/rows/4/a/text",
+      "kind": "string",
+      "synthetic_source_example": "Changes follow the agreed change control"
+    },
+    {
+      "name": "node04.rows.item05.a.sub",
+      "source_pointer": "/body/3/rows/4/a/sub",
+      "kind": "string",
+      "synthetic_source_example": "Requests are sized within three days"
+    },
+    {
+      "name": "node04.rows.item05.n",
+      "source_pointer": "/body/3/rows/4/n",
+      "kind": "string",
+      "synthetic_source_example": "10"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node02.cols",
+      "source_pointer": "/body/1/cols",
+      "count": 2
+    },
+    {
+      "name": "node02.rows",
+      "source_pointer": "/body/1/rows",
+      "count": 5
+    },
+    {
+      "name": "node04.cols",
+      "source_pointer": "/body/3/cols",
+      "count": 2
+    },
+    {
+      "name": "node04.rows",
+      "source_pointer": "/body/3/rows",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -1,0 +1,1232 @@
+{
+  "key": "capacity-heat/team-weeks",
+  "source_file": "templates/library/heatmaps.json",
+  "source_sha256": "f5d51a0c9c9ad109e5e719da24a06344f7d95be171a4bd52cf7606bce207d9ba",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "legend"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    }
+  ],
+  "family": "heatmaps",
+  "tier": "core",
+  "name": "Capacity heat map, roles by week",
+  "purpose": "Roles by week shaded by load against capacity, with a callout strip for the over-allocated weeks.",
+  "uses": [
+    "table.standard (heat cells)",
+    "card.callout",
+    "data.legend (heat)"
+  ],
+  "source_advisory_budget": {
+    "words": 155,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "heat values",
+      "maxChars": 3
+    },
+    {
+      "slot": "legend labels",
+      "maxChars": 14
+    },
+    {
+      "slot": "source",
+      "maxChars": 90
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "heatmap",
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "cards",
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "card",
+      "legend",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 11,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "legend",
+        "role": "content",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "legend",
+        "role": "content",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 354
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 72,
+          "w": 846,
+          "x": 57,
+          "y": 378
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Resourcing"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 4 to 7 overload two roles"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield program resource plan, Sep 2026."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Role"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "W1"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "W2"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "W3"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "W4"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "W5"
+    },
+    {
+      "name": "node01.cols.item07.label",
+      "source_pointer": "/body/0/cols/6/label",
+      "kind": "string",
+      "synthetic_source_example": "W6"
+    },
+    {
+      "name": "node01.cols.item08.label",
+      "source_pointer": "/body/0/cols/7/label",
+      "kind": "string",
+      "synthetic_source_example": "W7"
+    },
+    {
+      "name": "node01.cols.item09.label",
+      "source_pointer": "/body/0/cols/8/label",
+      "kind": "string",
+      "synthetic_source_example": "W8"
+    },
+    {
+      "name": "node01.cols.item10.label",
+      "source_pointer": "/body/0/cols/9/label",
+      "kind": "string",
+      "synthetic_source_example": "W9"
+    },
+    {
+      "name": "node01.cols.item11.label",
+      "source_pointer": "/body/0/cols/10/label",
+      "kind": "string",
+      "synthetic_source_example": "W10"
+    },
+    {
+      "name": "node01.rows.item01.c0",
+      "source_pointer": "/body/0/rows/0/c0",
+      "kind": "string",
+      "synthetic_source_example": "Program manager"
+    },
+    {
+      "name": "node01.rows.item01.c1.value",
+      "source_pointer": "/body/0/rows/0/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item01.c1.text",
+      "source_pointer": "/body/0/rows/0/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item01.c10.value",
+      "source_pointer": "/body/0/rows/0/c10/value",
+      "kind": "number",
+      "synthetic_source_example": 50
+    },
+    {
+      "name": "node01.rows.item01.c10.text",
+      "source_pointer": "/body/0/rows/0/c10/text",
+      "kind": "string",
+      "synthetic_source_example": "50%"
+    },
+    {
+      "name": "node01.rows.item01.c2.value",
+      "source_pointer": "/body/0/rows/0/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item01.c2.text",
+      "source_pointer": "/body/0/rows/0/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item01.c3.value",
+      "source_pointer": "/body/0/rows/0/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item01.c3.text",
+      "source_pointer": "/body/0/rows/0/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item01.c4.value",
+      "source_pointer": "/body/0/rows/0/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 70
+    },
+    {
+      "name": "node01.rows.item01.c4.text",
+      "source_pointer": "/body/0/rows/0/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item01.c5.value",
+      "source_pointer": "/body/0/rows/0/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 70
+    },
+    {
+      "name": "node01.rows.item01.c5.text",
+      "source_pointer": "/body/0/rows/0/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item01.c6.value",
+      "source_pointer": "/body/0/rows/0/c6/value",
+      "kind": "number",
+      "synthetic_source_example": 70
+    },
+    {
+      "name": "node01.rows.item01.c6.text",
+      "source_pointer": "/body/0/rows/0/c6/text",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item01.c7.value",
+      "source_pointer": "/body/0/rows/0/c7/value",
+      "kind": "number",
+      "synthetic_source_example": 70
+    },
+    {
+      "name": "node01.rows.item01.c7.text",
+      "source_pointer": "/body/0/rows/0/c7/text",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item01.c8.value",
+      "source_pointer": "/body/0/rows/0/c8/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item01.c8.text",
+      "source_pointer": "/body/0/rows/0/c8/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item01.c9.value",
+      "source_pointer": "/body/0/rows/0/c9/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item01.c9.text",
+      "source_pointer": "/body/0/rows/0/c9/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item02.c0",
+      "source_pointer": "/body/0/rows/1/c0",
+      "kind": "string",
+      "synthetic_source_example": "Integration architect"
+    },
+    {
+      "name": "node01.rows.item02.c1.value",
+      "source_pointer": "/body/0/rows/1/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 70
+    },
+    {
+      "name": "node01.rows.item02.c1.text",
+      "source_pointer": "/body/0/rows/1/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item02.c10.value",
+      "source_pointer": "/body/0/rows/1/c10/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item02.c10.text",
+      "source_pointer": "/body/0/rows/1/c10/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item02.c2.value",
+      "source_pointer": "/body/0/rows/1/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 90
+    },
+    {
+      "name": "node01.rows.item02.c2.text",
+      "source_pointer": "/body/0/rows/1/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "90%"
+    },
+    {
+      "name": "node01.rows.item02.c3.value",
+      "source_pointer": "/body/0/rows/1/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item02.c3.text",
+      "source_pointer": "/body/0/rows/1/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item02.c4.value",
+      "source_pointer": "/body/0/rows/1/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 120
+    },
+    {
+      "name": "node01.rows.item02.c4.text",
+      "source_pointer": "/body/0/rows/1/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "120%"
+    },
+    {
+      "name": "node01.rows.item02.c5.value",
+      "source_pointer": "/body/0/rows/1/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 130
+    },
+    {
+      "name": "node01.rows.item02.c5.text",
+      "source_pointer": "/body/0/rows/1/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "130%"
+    },
+    {
+      "name": "node01.rows.item02.c6.value",
+      "source_pointer": "/body/0/rows/1/c6/value",
+      "kind": "number",
+      "synthetic_source_example": 130
+    },
+    {
+      "name": "node01.rows.item02.c6.text",
+      "source_pointer": "/body/0/rows/1/c6/text",
+      "kind": "string",
+      "synthetic_source_example": "130%"
+    },
+    {
+      "name": "node01.rows.item02.c7.value",
+      "source_pointer": "/body/0/rows/1/c7/value",
+      "kind": "number",
+      "synthetic_source_example": 120
+    },
+    {
+      "name": "node01.rows.item02.c7.text",
+      "source_pointer": "/body/0/rows/1/c7/text",
+      "kind": "string",
+      "synthetic_source_example": "120%"
+    },
+    {
+      "name": "node01.rows.item02.c8.value",
+      "source_pointer": "/body/0/rows/1/c8/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item02.c8.text",
+      "source_pointer": "/body/0/rows/1/c8/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item02.c9.value",
+      "source_pointer": "/body/0/rows/1/c9/value",
+      "kind": "number",
+      "synthetic_source_example": 80
+    },
+    {
+      "name": "node01.rows.item02.c9.text",
+      "source_pointer": "/body/0/rows/1/c9/text",
+      "kind": "string",
+      "synthetic_source_example": "80%"
+    },
+    {
+      "name": "node01.rows.item03.c0",
+      "source_pointer": "/body/0/rows/2/c0",
+      "kind": "string",
+      "synthetic_source_example": "Data engineer"
+    },
+    {
+      "name": "node01.rows.item03.c1.value",
+      "source_pointer": "/body/0/rows/2/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 40
+    },
+    {
+      "name": "node01.rows.item03.c1.text",
+      "source_pointer": "/body/0/rows/2/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "40%"
+    },
+    {
+      "name": "node01.rows.item03.c10.value",
+      "source_pointer": "/body/0/rows/2/c10/value",
+      "kind": "number",
+      "synthetic_source_example": 40
+    },
+    {
+      "name": "node01.rows.item03.c10.text",
+      "source_pointer": "/body/0/rows/2/c10/text",
+      "kind": "string",
+      "synthetic_source_example": "40%"
+    },
+    {
+      "name": "node01.rows.item03.c2.value",
+      "source_pointer": "/body/0/rows/2/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item03.c2.text",
+      "source_pointer": "/body/0/rows/2/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item03.c3.value",
+      "source_pointer": "/body/0/rows/2/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 80
+    },
+    {
+      "name": "node01.rows.item03.c3.text",
+      "source_pointer": "/body/0/rows/2/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "80%"
+    },
+    {
+      "name": "node01.rows.item03.c4.value",
+      "source_pointer": "/body/0/rows/2/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item03.c4.text",
+      "source_pointer": "/body/0/rows/2/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item03.c5.value",
+      "source_pointer": "/body/0/rows/2/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 110
+    },
+    {
+      "name": "node01.rows.item03.c5.text",
+      "source_pointer": "/body/0/rows/2/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "110%"
+    },
+    {
+      "name": "node01.rows.item03.c6.value",
+      "source_pointer": "/body/0/rows/2/c6/value",
+      "kind": "number",
+      "synthetic_source_example": 120
+    },
+    {
+      "name": "node01.rows.item03.c6.text",
+      "source_pointer": "/body/0/rows/2/c6/text",
+      "kind": "string",
+      "synthetic_source_example": "120%"
+    },
+    {
+      "name": "node01.rows.item03.c7.value",
+      "source_pointer": "/body/0/rows/2/c7/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item03.c7.text",
+      "source_pointer": "/body/0/rows/2/c7/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item03.c8.value",
+      "source_pointer": "/body/0/rows/2/c8/value",
+      "kind": "number",
+      "synthetic_source_example": 80
+    },
+    {
+      "name": "node01.rows.item03.c8.text",
+      "source_pointer": "/body/0/rows/2/c8/text",
+      "kind": "string",
+      "synthetic_source_example": "80%"
+    },
+    {
+      "name": "node01.rows.item03.c9.value",
+      "source_pointer": "/body/0/rows/2/c9/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item03.c9.text",
+      "source_pointer": "/body/0/rows/2/c9/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item04.c0",
+      "source_pointer": "/body/0/rows/3/c0",
+      "kind": "string",
+      "synthetic_source_example": "Clinical SME"
+    },
+    {
+      "name": "node01.rows.item04.c1.value",
+      "source_pointer": "/body/0/rows/3/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 20
+    },
+    {
+      "name": "node01.rows.item04.c1.text",
+      "source_pointer": "/body/0/rows/3/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "20%"
+    },
+    {
+      "name": "node01.rows.item04.c10.value",
+      "source_pointer": "/body/0/rows/3/c10/value",
+      "kind": "number",
+      "synthetic_source_example": 40
+    },
+    {
+      "name": "node01.rows.item04.c10.text",
+      "source_pointer": "/body/0/rows/3/c10/text",
+      "kind": "string",
+      "synthetic_source_example": "40%"
+    },
+    {
+      "name": "node01.rows.item04.c2.value",
+      "source_pointer": "/body/0/rows/3/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 30
+    },
+    {
+      "name": "node01.rows.item04.c2.text",
+      "source_pointer": "/body/0/rows/3/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "30%"
+    },
+    {
+      "name": "node01.rows.item04.c3.value",
+      "source_pointer": "/body/0/rows/3/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 50
+    },
+    {
+      "name": "node01.rows.item04.c3.text",
+      "source_pointer": "/body/0/rows/3/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "50%"
+    },
+    {
+      "name": "node01.rows.item04.c4.value",
+      "source_pointer": "/body/0/rows/3/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item04.c4.text",
+      "source_pointer": "/body/0/rows/3/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item04.c5.value",
+      "source_pointer": "/body/0/rows/3/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item04.c5.text",
+      "source_pointer": "/body/0/rows/3/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item04.c6.value",
+      "source_pointer": "/body/0/rows/3/c6/value",
+      "kind": "number",
+      "synthetic_source_example": 80
+    },
+    {
+      "name": "node01.rows.item04.c6.text",
+      "source_pointer": "/body/0/rows/3/c6/text",
+      "kind": "string",
+      "synthetic_source_example": "80%"
+    },
+    {
+      "name": "node01.rows.item04.c7.value",
+      "source_pointer": "/body/0/rows/3/c7/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item04.c7.text",
+      "source_pointer": "/body/0/rows/3/c7/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item04.c8.value",
+      "source_pointer": "/body/0/rows/3/c8/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item04.c8.text",
+      "source_pointer": "/body/0/rows/3/c8/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item04.c9.value",
+      "source_pointer": "/body/0/rows/3/c9/value",
+      "kind": "number",
+      "synthetic_source_example": 70
+    },
+    {
+      "name": "node01.rows.item04.c9.text",
+      "source_pointer": "/body/0/rows/3/c9/text",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item05.c0",
+      "source_pointer": "/body/0/rows/4/c0",
+      "kind": "string",
+      "synthetic_source_example": "Test lead"
+    },
+    {
+      "name": "node01.rows.item05.c1.value",
+      "source_pointer": "/body/0/rows/4/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item05.c1.text",
+      "source_pointer": "/body/0/rows/4/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "-"
+    },
+    {
+      "name": "node01.rows.item05.c10.value",
+      "source_pointer": "/body/0/rows/4/c10/value",
+      "kind": "number",
+      "synthetic_source_example": 80
+    },
+    {
+      "name": "node01.rows.item05.c10.text",
+      "source_pointer": "/body/0/rows/4/c10/text",
+      "kind": "string",
+      "synthetic_source_example": "80%"
+    },
+    {
+      "name": "node01.rows.item05.c2.value",
+      "source_pointer": "/body/0/rows/4/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item05.c2.text",
+      "source_pointer": "/body/0/rows/4/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "-"
+    },
+    {
+      "name": "node01.rows.item05.c3.value",
+      "source_pointer": "/body/0/rows/4/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 20
+    },
+    {
+      "name": "node01.rows.item05.c3.text",
+      "source_pointer": "/body/0/rows/4/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "20%"
+    },
+    {
+      "name": "node01.rows.item05.c4.value",
+      "source_pointer": "/body/0/rows/4/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 40
+    },
+    {
+      "name": "node01.rows.item05.c4.text",
+      "source_pointer": "/body/0/rows/4/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "40%"
+    },
+    {
+      "name": "node01.rows.item05.c5.value",
+      "source_pointer": "/body/0/rows/4/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 80
+    },
+    {
+      "name": "node01.rows.item05.c5.text",
+      "source_pointer": "/body/0/rows/4/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "80%"
+    },
+    {
+      "name": "node01.rows.item05.c6.value",
+      "source_pointer": "/body/0/rows/4/c6/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item05.c6.text",
+      "source_pointer": "/body/0/rows/4/c6/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item05.c7.value",
+      "source_pointer": "/body/0/rows/4/c7/value",
+      "kind": "number",
+      "synthetic_source_example": 110
+    },
+    {
+      "name": "node01.rows.item05.c7.text",
+      "source_pointer": "/body/0/rows/4/c7/text",
+      "kind": "string",
+      "synthetic_source_example": "110%"
+    },
+    {
+      "name": "node01.rows.item05.c8.value",
+      "source_pointer": "/body/0/rows/4/c8/value",
+      "kind": "number",
+      "synthetic_source_example": 110
+    },
+    {
+      "name": "node01.rows.item05.c8.text",
+      "source_pointer": "/body/0/rows/4/c8/text",
+      "kind": "string",
+      "synthetic_source_example": "110%"
+    },
+    {
+      "name": "node01.rows.item05.c9.value",
+      "source_pointer": "/body/0/rows/4/c9/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item05.c9.text",
+      "source_pointer": "/body/0/rows/4/c9/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item06.c0",
+      "source_pointer": "/body/0/rows/5/c0",
+      "kind": "string",
+      "synthetic_source_example": "Change lead"
+    },
+    {
+      "name": "node01.rows.item06.c1.value",
+      "source_pointer": "/body/0/rows/5/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 20
+    },
+    {
+      "name": "node01.rows.item06.c1.text",
+      "source_pointer": "/body/0/rows/5/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "20%"
+    },
+    {
+      "name": "node01.rows.item06.c10.value",
+      "source_pointer": "/body/0/rows/5/c10/value",
+      "kind": "number",
+      "synthetic_source_example": 90
+    },
+    {
+      "name": "node01.rows.item06.c10.text",
+      "source_pointer": "/body/0/rows/5/c10/text",
+      "kind": "string",
+      "synthetic_source_example": "90%"
+    },
+    {
+      "name": "node01.rows.item06.c2.value",
+      "source_pointer": "/body/0/rows/5/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 30
+    },
+    {
+      "name": "node01.rows.item06.c2.text",
+      "source_pointer": "/body/0/rows/5/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "30%"
+    },
+    {
+      "name": "node01.rows.item06.c3.value",
+      "source_pointer": "/body/0/rows/5/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 40
+    },
+    {
+      "name": "node01.rows.item06.c3.text",
+      "source_pointer": "/body/0/rows/5/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "40%"
+    },
+    {
+      "name": "node01.rows.item06.c4.value",
+      "source_pointer": "/body/0/rows/5/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item06.c4.text",
+      "source_pointer": "/body/0/rows/5/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item06.c5.value",
+      "source_pointer": "/body/0/rows/5/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item06.c5.text",
+      "source_pointer": "/body/0/rows/5/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item06.c6.value",
+      "source_pointer": "/body/0/rows/5/c6/value",
+      "kind": "number",
+      "synthetic_source_example": 70
+    },
+    {
+      "name": "node01.rows.item06.c6.text",
+      "source_pointer": "/body/0/rows/5/c6/text",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item06.c7.value",
+      "source_pointer": "/body/0/rows/5/c7/value",
+      "kind": "number",
+      "synthetic_source_example": 90
+    },
+    {
+      "name": "node01.rows.item06.c7.text",
+      "source_pointer": "/body/0/rows/5/c7/text",
+      "kind": "string",
+      "synthetic_source_example": "90%"
+    },
+    {
+      "name": "node01.rows.item06.c8.value",
+      "source_pointer": "/body/0/rows/5/c8/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item06.c8.text",
+      "source_pointer": "/body/0/rows/5/c8/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item06.c9.value",
+      "source_pointer": "/body/0/rows/5/c9/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item06.c9.text",
+      "source_pointer": "/body/0/rows/5/c9/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item07.c0",
+      "source_pointer": "/body/0/rows/6/c0",
+      "kind": "string",
+      "synthetic_source_example": "Training developer"
+    },
+    {
+      "name": "node01.rows.item07.c1.value",
+      "source_pointer": "/body/0/rows/6/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item07.c1.text",
+      "source_pointer": "/body/0/rows/6/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "-"
+    },
+    {
+      "name": "node01.rows.item07.c10.value",
+      "source_pointer": "/body/0/rows/6/c10/value",
+      "kind": "number",
+      "synthetic_source_example": 60
+    },
+    {
+      "name": "node01.rows.item07.c10.text",
+      "source_pointer": "/body/0/rows/6/c10/text",
+      "kind": "string",
+      "synthetic_source_example": "60%"
+    },
+    {
+      "name": "node01.rows.item07.c2.value",
+      "source_pointer": "/body/0/rows/6/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item07.c2.text",
+      "source_pointer": "/body/0/rows/6/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "-"
+    },
+    {
+      "name": "node01.rows.item07.c3.value",
+      "source_pointer": "/body/0/rows/6/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item07.c3.text",
+      "source_pointer": "/body/0/rows/6/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "-"
+    },
+    {
+      "name": "node01.rows.item07.c4.value",
+      "source_pointer": "/body/0/rows/6/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 20
+    },
+    {
+      "name": "node01.rows.item07.c4.text",
+      "source_pointer": "/body/0/rows/6/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "20%"
+    },
+    {
+      "name": "node01.rows.item07.c5.value",
+      "source_pointer": "/body/0/rows/6/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 50
+    },
+    {
+      "name": "node01.rows.item07.c5.text",
+      "source_pointer": "/body/0/rows/6/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "50%"
+    },
+    {
+      "name": "node01.rows.item07.c6.value",
+      "source_pointer": "/body/0/rows/6/c6/value",
+      "kind": "number",
+      "synthetic_source_example": 80
+    },
+    {
+      "name": "node01.rows.item07.c6.text",
+      "source_pointer": "/body/0/rows/6/c6/text",
+      "kind": "string",
+      "synthetic_source_example": "80%"
+    },
+    {
+      "name": "node01.rows.item07.c7.value",
+      "source_pointer": "/body/0/rows/6/c7/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item07.c7.text",
+      "source_pointer": "/body/0/rows/6/c7/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item07.c8.value",
+      "source_pointer": "/body/0/rows/6/c8/value",
+      "kind": "number",
+      "synthetic_source_example": 110
+    },
+    {
+      "name": "node01.rows.item07.c8.text",
+      "source_pointer": "/body/0/rows/6/c8/text",
+      "kind": "string",
+      "synthetic_source_example": "110%"
+    },
+    {
+      "name": "node01.rows.item07.c9.value",
+      "source_pointer": "/body/0/rows/6/c9/value",
+      "kind": "number",
+      "synthetic_source_example": 100
+    },
+    {
+      "name": "node01.rows.item07.c9.text",
+      "source_pointer": "/body/0/rows/6/c9/text",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node02.items.item01.heat",
+      "source_pointer": "/body/1/items/0/heat",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Under 15%"
+    },
+    {
+      "name": "node02.items.item02.heat",
+      "source_pointer": "/body/1/items/1/heat",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "15–44%"
+    },
+    {
+      "name": "node02.items.item03.heat",
+      "source_pointer": "/body/1/items/2/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "45–74%"
+    },
+    {
+      "name": "node02.items.item04.heat",
+      "source_pointer": "/body/1/items/3/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node02.items.item04.text",
+      "source_pointer": "/body/1/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "75–104%"
+    },
+    {
+      "name": "node02.items.item05.heat",
+      "source_pointer": "/body/1/items/4/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node02.items.item05.text",
+      "source_pointer": "/body/1/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "105% or more"
+    },
+    {
+      "name": "node03.body.item01.p",
+      "source_pointer": "/body/2/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "The integration architect runs over 100% from week 4 to week 7, and the data engineer joins in weeks 5 and 6."
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Over-allocation"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 11
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 7
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 5
+    },
+    {
+      "name": "node03.body",
+      "source_pointer": "/body/2/body",
+      "count": 1
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

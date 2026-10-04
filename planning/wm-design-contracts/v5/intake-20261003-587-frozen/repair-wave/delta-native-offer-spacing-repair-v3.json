@@ -1,0 +1,73 @@
+{
+  "schema": "pptxgengo.wmds-v5-native-offer-spacing-repair.v1",
+  "source_revision": "wmds-library.v5",
+  "scope": "Exact three new 587 intake template keys only; atomic/idempotent guarded amendments.",
+  "production_code": "internal/wmdesign/library_refinements_v5_intake.go",
+  "production_code_sha256": "471f77170543f399fd402270a444c54421af4cf82450f2add7607a1a227012bb",
+  "new_test": "internal/wmdesign/library_refinements_v5_native_spacing_test.go",
+  "new_test_sha256": "1a2a6bf193f6101fc5d3e8dbdf0392b4636b65ea1399c62b5ee1829a740a4d1e",
+  "repairs": [
+    {
+      "page": 306,
+      "template": "offers-gantt/six-week-split",
+      "finding": "Rules at345 crossed bullet rows ending348.",
+      "repair": "Retain authored rules354, labels360, bullets378 and use supported slim footer; lower bullets end438 within450 body.",
+      "resolution": "wmds.v5.six-week-source-rule-clearance-slim-footer",
+      "reviewed_png": "samples/wmds-incoming-20261003/v5-production-v2/source/native-pages/slide-306.png",
+      "reviewed_png_sha256": "574e9b3c37426e8f91b94941d3c2f4be47bd18a5f32e5aa1c52019d3d21c7d0f"
+    },
+    {
+      "page": 311,
+      "template": "offers-onepager/panel-right",
+      "finding": "Rule327 crossed the value paragraph ending336.",
+      "repair": "Retain authored rules345/417 and text357/375/426 with supported slim footer; last text ends462 within468 body.",
+      "resolution": "wmds.v5.offers-panel-source-section-spacing-slim-footer",
+      "reviewed_png": "samples/wmds-incoming-20261003/v5-production-v2/source/native-pages/slide-311.png",
+      "reviewed_png_sha256": "4327860daa9b82a370f3c685b38e3dd46d6314fb97d500fb082f35d372e2ec35"
+    },
+    {
+      "page": 313,
+      "template": "offers-sku/catalog-split",
+      "finding": "Compressed section label342 crossed preceding bullet ending348; caption396 crossed lower bullet ending399.",
+      "repair": "Retain table row63 and source label354, bullets372, caption414 with supported slim footer; caption ends450 and table442 within450 body.",
+      "resolution": "wmds.v5.offer-catalog-source-section-clearance-slim-footer",
+      "reviewed_png": "samples/wmds-incoming-20261003/v5-production-v2/source/native-pages/slide-313.png",
+      "reviewed_png_sha256": "d0503190b7bf531e4312fb331b3773c61bcf70cf986ceea6b23bc0b50d46cfab"
+    }
+  ],
+  "preserved": [
+    "All source visible copy",
+    "All chart/table observations",
+    "All pinned source font/style tokens",
+    "Source section allocations restored",
+    "Branded footer retained with supported slim variant"
+  ],
+  "primitive_checks": [
+    "Rules versus all horizontally overlapping text primitives require at least 3pt separation",
+    "Catalog adjacent text stacks require at least 3pt separation",
+    "All 68 delta real production source builds",
+    "All 68 atomicity/idempotency/copy/data/style checks"
+  ],
+  "checks": {
+    "native-spacing-final-checks": {
+      "path": "planning/wm-design-contracts/v5/intake-20261003-587-frozen/repair-wave/delta-native-spacing-final-checks.log",
+      "sha256": "fe06fcc2451ea3e4360aadc76f628a38e11e13c37b40b6a00556357cc91d6744",
+      "result": "ok  \tgithub.com/buairtri/pptxgengo/internal/wmdesign\t3.472s"
+    },
+    "native-spacing-race-checks": {
+      "path": "planning/wm-design-contracts/v5/intake-20261003-587-frozen/repair-wave/delta-native-spacing-race-checks.log",
+      "sha256": "2f9158f18b6f59bced6fa2b27be35062b43bce6d9921b466665ab7665634f613",
+      "result": "ok  \tgithub.com/buairtri/pptxgengo/internal/wmdesign\t43.939s"
+    }
+  },
+  "native_v3_review": "Pending root regenerated native gallery; these successful code checks do not certify the new native render.",
+  "process_metrics_adjudication": {
+    "pages": [
+      372,
+      373
+    ],
+    "source": "Both contain the same nonempty inverse takeaway; compiled text and XML match.",
+    "root_native_review": "Root independently reviewed both v2 PNGs and confirmed complete centered white text in both navy bars; earlier blank-bar finding was false.",
+    "repair": "None"
+  }
+}

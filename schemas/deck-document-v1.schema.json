@@ -1,0 +1,969 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pptxgengo:schema:deck-document:v1",
+  "title": "Authoritative deck document v1",
+  "$comment": "Wave 2 runtime accepts strict YAML in this document shape. Runtime rejects unimplemented placement zones/schema vocabulary and validates pinned source scene fields during build. Native rendering and arbitrary content fit remain separate qualification.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "title",
+    "year",
+    "toolchain",
+    "slides"
+  ],
+  "properties": {
+    "schema": {
+      "const": "pptxgengo.deck-document.v1"
+    },
+    "id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 2000,
+      "maximum": 9999
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lockfile"
+      ],
+      "properties": {
+        "lockfile": {
+          "$ref": "#/$defs/relativePath"
+        }
+      }
+    },
+    "media_optimization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deduplicate",
+        "resize_jpeg",
+        "compression",
+        "pixels_per_inch",
+        "jpeg_quality",
+        "min_savings_percent"
+      ],
+      "properties": {
+        "deduplicate": {
+          "type": "boolean"
+        },
+        "resize_jpeg": {
+          "type": "boolean"
+        },
+        "compression": {
+          "type": "boolean"
+        },
+        "pixels_per_inch": {
+          "type": "integer",
+          "minimum": 72,
+          "maximum": 1200
+        },
+        "jpeg_quality": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "min_savings_percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 99
+        }
+      },
+      "$comment": "Maps directly to pptx.MediaOptimizationOptions. All fields are explicit when overridden; otherwise the adapter uses DeliveryMediaOptions and records the resolved policy."
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "audience": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "outline": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sources": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "claims": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "decisions": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "state": {
+          "$ref": "#/$defs/relativePath"
+        }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/asset"
+      }
+    },
+    "local_templates": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/localTemplate"
+      }
+    },
+    "slides": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/slide"
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/section"
+      }
+    }
+  },
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "maxLength": 120
+    },
+    "definitionId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*://).+$",
+      "$comment": "Filesystem containment and symlink escape checks are mandatory in the runtime in addition to this lexical restriction."
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "id"
+      ],
+      "properties": {
+        "scope": {
+          "enum": [
+            "shared",
+            "local"
+          ]
+        },
+        "id": {
+          "$ref": "#/$defs/definitionId"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "local"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/stableId"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sharedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "id"
+      ],
+      "properties": {
+        "scope": {
+          "const": "shared"
+        },
+        "id": {
+          "$ref": "#/$defs/definitionId"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding"
+      ],
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/stableId"
+        }
+      },
+      "$comment": "Names a declared zone. No string interpolation, source-pointer mutation or expression evaluation."
+    },
+    "textValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/binding"
+        }
+      ]
+    },
+    "jsonValue": {
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      ]
+    },
+    "asset": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "registry_id"
+          ],
+          "properties": {
+            "registry_id": {
+              "$ref": "#/$defs/definitionId"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "$ref": "#/$defs/relativePath"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "description": {
+              "type": "string"
+            },
+            "derived_from": {
+              "$ref": "#/$defs/stableId"
+            },
+            "derivation_receipt": {
+              "$ref": "#/$defs/relativePath"
+            }
+          },
+          "dependentRequired": {
+            "derived_from": [
+              "derivation_receipt"
+            ],
+            "derivation_receipt": [
+              "derived_from"
+            ]
+          }
+        }
+      ]
+    },
+    "slide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "content_kind",
+        "template",
+        "values"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "content_kind": {
+          "enum": [
+            "supplied_content",
+            "synthetic_example"
+          ]
+        },
+        "template": {
+          "$ref": "#/$defs/reference"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        "brief": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1048576
+        }
+      },
+      "$comment": "Values must satisfy the resolved template content schema. Required slots never default to illustrative source copy. Slide IDs must be unique across this deck."
+    },
+    "zone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "required",
+        "schema"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "schema": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "capacity_note": {
+          "type": "string"
+        }
+      },
+      "$comment": "Schema is a JSON Schema 2020-12 object in the compiler's explicitly supported subset. Meta-schema validation, unsupported keyword rejection and bindable-type validation are required separately. Capacity notes are advisory, not measured fit guarantees."
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "parent",
+        "definition_sha256"
+      ],
+      "properties": {
+        "operation": {
+          "enum": [
+            "detach",
+            "fork"
+          ]
+        },
+        "parent": {
+          "$ref": "#/$defs/reference"
+        },
+        "definition_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "definition_snapshot": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "source_file": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "source_file_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "dependentRequired": {
+        "source_file": [
+          "source_file_sha256"
+        ],
+        "source_file_sha256": [
+          "source_file"
+        ]
+      }
+    },
+    "localTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "frame",
+        "grid",
+        "zones",
+        "nodes"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "frame": {
+          "$ref": "#/$defs/sharedReference"
+        },
+        "grid": {
+          "$ref": "#/$defs/sharedReference"
+        },
+        "zones": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/stableId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/zone"
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "frame_options": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rail": {
+              "enum": [
+                "none",
+                "left",
+                "right",
+                "nav"
+              ]
+            },
+            "footer": {
+              "enum": [
+                "compact",
+                "tall",
+                "slim"
+              ]
+            },
+            "surface": {
+              "type": "string"
+            },
+            "rail_surface": {
+              "type": "string"
+            },
+            "title_lines": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "density": {
+              "type": "string"
+            },
+            "source_lines": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "no_header": {
+              "type": "boolean"
+            },
+            "no_page": {
+              "type": "boolean"
+            },
+            "active": {
+              "type": "string"
+            },
+            "split": {
+              "enum": [
+                "tall-right",
+                "tall-left",
+                "tall-right-narrow",
+                "tall-left-narrow"
+              ]
+            },
+            "nav": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "label"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/stableId"
+                  },
+                  "label": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "$comment": "Validated by the pinned frame resolver. Rail/footer must match the referenced frame; nav and split compose through its options."
+        },
+        "frame_chrome": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "emphasis": {
+              "type": "string"
+            },
+            "custom_whiteboard": {
+              "type": "boolean"
+            },
+            "whiteboard": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "x",
+                  "y",
+                  "w",
+                  "h"
+                ],
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "w": {
+                    "type": "number"
+                  },
+                  "h": {
+                    "type": "number"
+                  },
+                  "fade": {
+                    "enum": [
+                      "corner",
+                      "right",
+                      "left",
+                      "bottom",
+                      "none"
+                    ]
+                  },
+                  "on": {
+                    "type": "string"
+                  },
+                  "above": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "$comment": "Pinned source chrome geometry. Editable source notes/stamp detachment is not supported; source-scene body and frame/nav copy remain bound to values."
+        }
+      }
+    },
+    "placement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "zone"
+      ],
+      "properties": {
+        "zone": {
+          "enum": [
+            "body",
+            "rail",
+            "panel",
+            "short_body",
+            "tall_body",
+            "whiteboard",
+            "source"
+          ]
+        },
+        "rect": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x_pt",
+            "y_pt",
+            "width_pt",
+            "height_pt"
+          ],
+          "properties": {
+            "x_pt": {
+              "type": "number"
+            },
+            "y_pt": {
+              "type": "number"
+            },
+            "width_pt": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height_pt": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        "span": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "start",
+            "count",
+            "y_pt",
+            "height_pt"
+          ],
+          "properties": {
+            "start": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "y_pt": {
+              "type": "number"
+            },
+            "height_pt": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "rect"
+          ],
+          "not": {
+            "required": [
+              "span"
+            ]
+          }
+        },
+        {
+          "required": [
+            "span"
+          ],
+          "not": {
+            "required": [
+              "rect"
+            ]
+          }
+        }
+      ]
+    },
+    "node": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/textNode"
+        },
+        {
+          "$ref": "#/$defs/boxNode"
+        },
+        {
+          "$ref": "#/$defs/imageNode"
+        },
+        {
+          "$ref": "#/$defs/ruleNode"
+        },
+        {
+          "$ref": "#/$defs/groupNode"
+        },
+        {
+          "$ref": "#/$defs/definitionNode"
+        }
+      ]
+    },
+    "textNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "placement",
+        "style",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "const": "text"
+        },
+        "placement": {
+          "$ref": "#/$defs/placement"
+        },
+        "style": {
+          "$ref": "#/$defs/definitionId"
+        },
+        "ink": {
+          "$ref": "#/$defs/definitionId"
+        },
+        "align": {
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "text": {
+          "$ref": "#/$defs/textValue"
+        }
+      }
+    },
+    "boxNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "placement",
+        "surface"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "const": "box"
+        },
+        "placement": {
+          "$ref": "#/$defs/placement"
+        },
+        "surface": {
+          "$ref": "#/$defs/definitionId"
+        },
+        "border": {
+          "$ref": "#/$defs/definitionId"
+        }
+      }
+    },
+    "imageNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "placement",
+        "asset",
+        "fit"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "const": "image"
+        },
+        "placement": {
+          "$ref": "#/$defs/placement"
+        },
+        "asset": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/stableId"
+            },
+            {
+              "$ref": "#/$defs/binding"
+            }
+          ]
+        },
+        "fit": {
+          "enum": [
+            "contain",
+            "cover"
+          ]
+        },
+        "rotation_deg": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        }
+      }
+    },
+    "ruleNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "placement",
+        "ink",
+        "weight_pt"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "const": "rule"
+        },
+        "placement": {
+          "$ref": "#/$defs/placement"
+        },
+        "ink": {
+          "$ref": "#/$defs/definitionId"
+        },
+        "weight_pt": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "groupNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "nodes"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "const": "group"
+        },
+        "nodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      }
+    },
+    "definitionNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "placement",
+        "definition",
+        "arguments"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "enum": [
+            "component",
+            "composite"
+          ]
+        },
+        "placement": {
+          "$ref": "#/$defs/placement"
+        },
+        "definition": {
+          "$ref": "#/$defs/sharedReference"
+        },
+        "arguments": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        "keys": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/stableId"
+            },
+            "uniqueItems": true
+          },
+          "$comment": "Stable array item keys for generic source components/composites; compiler validates required source arrays."
+        }
+      },
+      "$comment": "Argument schemas are definition-specific and strict. Every field and nested binding must be checked against that pinned schema; this envelope grants no freeform renderer arguments."
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "before_slide_id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "before_slide_id": {
+          "$ref": "#/$defs/stableId"
+        }
+      }
+    }
+  }
+}

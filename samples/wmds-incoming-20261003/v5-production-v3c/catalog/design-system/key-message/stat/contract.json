@@ -1,0 +1,241 @@
+{
+  "key": "key-message/stat",
+  "source_file": "templates/library/core.json",
+  "source_sha256": "3a3bccfcb82d3a9984779f06ea35937deb3cfa68871b54bfc1f62f59737acf69",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "square"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "node"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "card"
+    }
+  ],
+  "family": "core",
+  "tier": "core",
+  "name": "Key message · claim with one proof",
+  "purpose": "One claim in the title; the key message at title size and its support at lead size, centered as a group in the body beside a two-tone stat block: the number on Grounded, the before and after beneath it with an icon, and a 36 pt icon inset in the stat square's upper-right corner so the block reads as designed, not empty.",
+  "uses": [
+    "header.slide",
+    "grid.whiteboard",
+    "grid.squares",
+    "data.metric",
+    "shape.node",
+    "icon"
+  ],
+  "source_advisory_budget": {
+    "words": 51,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "body",
+      "maxChars": 180
+    },
+    {
+      "slot": "stat",
+      "maxChars": 8
+    },
+    {
+      "slot": "statLabel",
+      "maxChars": 30
+    },
+    {
+      "slot": "comparison",
+      "maxChars": 14
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "icon",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [],
+    "visual_forms": [
+      "cards",
+      "diagram",
+      "icon",
+      "text"
+    ],
+    "component_types": [
+      "card",
+      "node",
+      "square",
+      "text"
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "h": 162,
+          "w": 576,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "h": 144,
+          "w": 576,
+          "x": 57,
+          "y": 306
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "square",
+        "role": "content",
+        "source_bounds": {
+          "x": 705,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "node",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 72,
+          "w": 198,
+          "x": 705,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 54,
+          "w": 54,
+          "x": 831,
+          "y": 180
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Finance transformation"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Close the books in [[5 days]] instead of 12"
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "We standardize reconciliations, automate intercompany matching and move review earlier."
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "The controller signs off on day five, and the team stops finding problems on day nine."
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "run-rate savings"
+    },
+    {
+      "name": "node03.stat",
+      "source_pointer": "/body/2/stat",
+      "kind": "string",
+      "synthetic_source_example": "$4.2M"
+    },
+    {
+      "name": "node04.icon",
+      "source_pointer": "/body/3/icon",
+      "kind": "string",
+      "synthetic_source_example": "clock"
+    },
+    {
+      "name": "node04.sub",
+      "source_pointer": "/body/3/sub",
+      "kind": "string",
+      "synthetic_source_example": "Close, before and after"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "12 → 5 days"
+    },
+    {
+      "name": "node05.icon.name",
+      "source_pointer": "/body/4/icon/name",
+      "kind": "string",
+      "synthetic_source_example": "financial-growth-chart"
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 3,
+  "revised": "2026-10-03",
+  "status": "active"
+}

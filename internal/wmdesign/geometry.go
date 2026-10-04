@@ -105,7 +105,16 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 	if !ok {
 		return ResolvedFrame{}, fmt.Errorf("frame.unknown_footer: %s", q.Footer)
 	}
+	// The updated renderer extends titles alongside its explicitly declared slim
+	// footer. Frozen source bundles without that declaration retain prior limits.
+	_, extendedTitles := s.Frames.Footers["slim"]
+	if q.Footer == "slim" && (!frameFinite(foot.Rule, foot.Row[0], foot.Row[1], foot.Bottom) || foot.Bottom <= 0 || foot.Bottom >= foot.Rule || foot.Rule >= foot.Row[0] || foot.Row[1] <= foot.Row[0] || foot.Row[1] > 540 || foot.Band != [2]float64{}) {
+		return ResolvedFrame{}, fmt.Errorf("frame.invalid_slim_source_geometry")
+	}
 	maxLines := 2
+	if extendedTitles {
+		maxLines = 4
+	}
 	var split struct{ Short, Tall [2]float64 }
 	var splitTitle struct {
 		Narrow, Wide struct {
@@ -139,7 +148,9 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 		if err := json.Unmarshal(s.Frames.Splits["tallTop"], &splitTitle.TallTop); err != nil {
 			return ResolvedFrame{}, err
 		}
-		maxLines = 3
+		if !extendedTitles {
+			maxLines = 3
+		}
 	}
 	if q.TitleLines < 1 || q.TitleLines > maxLines || q.SourceLines < 0 || q.SourceLines > 2 {
 		return ResolvedFrame{}, fmt.Errorf("frame.invalid_line_allocation")
@@ -160,13 +171,13 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 		}
 	}
 	if q.Rail == "nav" {
-		if s.Revision == LibraryRevisionV2 && (len(q.Nav) < 2 || len(q.Nav) > 6) {
+		if isModernLibrary(s.Revision) && (len(q.Nav) < 2 || len(q.Nav) > 6) {
 			return ResolvedFrame{}, fmt.Errorf("frame.nav_requires_2_to_6_tabs")
 		}
 		seen := map[string]bool{}
 		active := false
 		for _, tab := range q.Nav {
-			invalidID := tab.ID == "" || s.Revision == LibraryRevisionV2 && !validPartKey(tab.ID)
+			invalidID := tab.ID == "" || isModernLibrary(s.Revision) && !validPartKey(tab.ID)
 			if invalidID || tab.Label == "" || seen[tab.ID] {
 				return ResolvedFrame{}, fmt.Errorf("frame.invalid_nav")
 			}
@@ -188,9 +199,9 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 		} `json:"appendix"`
 	}
 	var source struct {
-		Compact, Tall struct{ Bottom float64 }
-		LineHeight    float64
-		BodyBottom    map[string]float64
+		Compact, Tall, Slim struct{ Bottom float64 }
+		LineHeight          float64
+		BodyBottom          map[string]float64
 	}
 	for _, f := range s.Frames.Features {
 		switch f.ID {
@@ -208,6 +219,12 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 	if q.TitleLines == 2 {
 		top, rule = title.Two.BodyTop, title.Two.Rule
 	}
+	if extendedTitles && q.TitleLines >= 3 {
+		// Authoritative renderer fallbacks; older frames JSON has only one/two
+		// explicit entries even in the current source publication.
+		rule = 108 + float64(q.TitleLines-1)*36
+		top = rule + 18
+	}
 	if q.Density == "appendix" {
 		top, rule, style = title.Appendix.BodyTop, title.Appendix.Rule, title.Appendix.Title
 	}
@@ -219,6 +236,12 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 			z = splitTitle.Narrow
 		}
 		rule, style = z.Rule[fmt.Sprint(q.TitleLines)], z.Style
+		if extendedTitles && q.TitleLines == 4 && rule == 0 {
+			rule = 216
+			if headerW <= 270 {
+				rule = 198
+			}
+		}
 		if rule <= 54 || style == "" || splitTitle.TallTop != 36 || split.Tall[1] <= split.Tall[0] {
 			return ResolvedFrame{}, fmt.Errorf("frame.invalid_split_source_geometry")
 		}
@@ -231,9 +254,12 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 	bottom := foot.Bottom
 	if q.SourceLines > 0 {
 		bottom = source.BodyBottom[fmt.Sprint(q.SourceLines)]
+		if q.Footer == "slim" {
+			bottom += 18
+		}
 	}
 	f := ResolvedFrame{Request: q, Header: Rect{headerX, 36, headerW, rule - 36}, Body: Rect{r.Main[0], top, r.Main[1] - r.Main[0], bottom - top}, TitleRule: rule, TitleStyle: style, FooterRule: foot.Rule, NavBottom: bottom}
-	if s.Revision == LibraryRevisionV2 {
+	if isModernLibrary(s.Revision) {
 		f.NavBottom = foot.Bottom
 	}
 	if q.Split != "" {
@@ -263,6 +289,12 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 		if q.Footer == "tall" {
 			b = source.Tall.Bottom
 		}
+		if q.Footer == "slim" {
+			b = source.Slim.Bottom
+			if !frameFinite(b, source.LineHeight, bottom) || b <= 0 || b >= foot.Rule || source.LineHeight <= 0 || bottom >= b-float64(q.SourceLines)*source.LineHeight || bottom <= top {
+				return ResolvedFrame{}, fmt.Errorf("frame.invalid_slim_source_zone")
+			}
+		}
 		h := float64(q.SourceLines) * source.LineHeight
 		f.Source = Rect{headerX, b - h, headerW, h}
 	}
@@ -284,4 +316,13 @@ func (s *Source) ResolveFrame(q FrameRequest) (ResolvedFrame, error) {
 		return ResolvedFrame{}, fmt.Errorf("frame.empty_body")
 	}
 	return f, nil
+}
+
+func frameFinite(values ...float64) bool {
+	for _, v := range values {
+		if math.IsNaN(v) || math.IsInf(v, 0) {
+			return false
+		}
+	}
+	return true
 }

@@ -1,0 +1,363 @@
+{
+  "key": "bio-full/portrait-nav",
+  "source_file": "templates/library/team.json",
+  "source_sha256": "a138b809a4d3e069e84c9252179b8f633751a48609c34d9ac82492ac219bc8ae",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "imageframe"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "textblock"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "textblock"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "grouplabel"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "pullquote"
+    }
+  ],
+  "family": "team",
+  "tier": "core",
+  "name": "Full-page bio · portrait and quote · nav rail",
+  "purpose": "One person in full on the nav rail, with no panel: a tall portrait column beside role, background, selected experience and a client quote.",
+  "uses": [
+    "media.imageframe",
+    "text.textblock",
+    "list.bullets",
+    "data.pullquote"
+  ],
+  "source_advisory_budget": {
+    "words": 73,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 40
+    },
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "portrait",
+      "kind": "image"
+    },
+    {
+      "slot": "name and role",
+      "maxChars": 40
+    },
+    {
+      "slot": "role text",
+      "maxChars": 150
+    },
+    {
+      "slot": "background",
+      "maxChars": 120
+    },
+    {
+      "slot": "experience bullet",
+      "maxChars": 36
+    },
+    {
+      "slot": "quote",
+      "maxChars": 56
+    },
+    {
+      "slot": "quote by",
+      "maxChars": 40
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "image",
+      "key-message",
+      "navigation",
+      "point",
+      "quotation"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "image",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "grouplabel",
+      "imageframe",
+      "pullquote",
+      "text",
+      "textblock"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "textblock",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/5/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "imageframe",
+        "role": "image",
+        "source_bounds": {
+          "h": 432,
+          "w": 270,
+          "x": 57,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "textblock",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "textblock",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "grouplabel",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 276
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "pullquote",
+        "role": "quotation",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 372
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "split": "tall-left-narrow",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Engagement lead"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Jordan Ellis leads the engagement"
+    },
+    {
+      "name": "node01.photo",
+      "source_pointer": "/body/0/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-headshot"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Jordan Ellis · Managing Director"
+    },
+    {
+      "name": "node03.body",
+      "source_pointer": "/body/2/body",
+      "kind": "string",
+      "synthetic_source_example": "Jordan sets direction, chairs the steering committee and is accountable for the five-day close."
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Role"
+    },
+    {
+      "name": "node04.body",
+      "source_pointer": "/body/3/body",
+      "kind": "string",
+      "synthetic_source_example": "Thirty years in health-system finance, most of them spent redesigning the close."
+    },
+    {
+      "name": "node04.label",
+      "source_pointer": "/body/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Background"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Selected experience"
+    },
+    {
+      "name": "node06.items.item01",
+      "source_pointer": "/body/5/items/0",
+      "kind": "string",
+      "synthetic_source_example": "30+ close transformations"
+    },
+    {
+      "name": "node06.items.item02",
+      "source_pointer": "/body/5/items/1",
+      "kind": "string",
+      "synthetic_source_example": "14-entity finance redesign"
+    },
+    {
+      "name": "node06.items.item03",
+      "source_pointer": "/body/5/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Former health-system CFO"
+    },
+    {
+      "name": "node07.by",
+      "source_pointer": "/body/6/by",
+      "kind": "string",
+      "synthetic_source_example": "VP Finance · Regional health partner"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Our close became a calendar, not a fire drill."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node06.items",
+      "source_pointer": "/body/5/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Context"
+        },
+        {
+          "key": "section-02",
+          "label": "Approach"
+        },
+        {
+          "key": "section-03",
+          "label": "Team"
+        },
+        {
+          "key": "section-04",
+          "label": "Commercials"
+        },
+        {
+          "key": "section-05",
+          "label": "Next steps"
+        }
+      ],
+      "active": "section-03"
+    }
+  }
+}

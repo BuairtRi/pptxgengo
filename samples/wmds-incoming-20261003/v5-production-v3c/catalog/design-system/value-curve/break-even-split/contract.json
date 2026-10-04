@@ -1,0 +1,910 @@
+{
+  "key": "value-curve/break-even-split",
+  "source_file": "templates/library/value.json",
+  "source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "chart"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "connector"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "text"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "text"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "text"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "text"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "text"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "text"
+    },
+    {
+      "id": "node16",
+      "source_pointer": "/body/15",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node17",
+      "source_pointer": "/body/16",
+      "expected_type": "text"
+    },
+    {
+      "id": "node18",
+      "source_pointer": "/body/17",
+      "expected_type": "text"
+    }
+  ],
+  "family": "value",
+  "tier": "core",
+  "name": "Value curve · cumulative cost and value · split",
+  "purpose": "A tall cumulative cost and value curve with the break-even point annotated, and the reading and headline numbers in the short column.",
+  "uses": [
+    "split.tall-left",
+    "chart.line",
+    "connector (start dot)",
+    "metric",
+    "bullets"
+  ],
+  "source_advisory_budget": {
+    "words": 86,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 40
+    },
+    {
+      "slot": "chart title",
+      "maxChars": 40
+    },
+    {
+      "slot": "annotation",
+      "maxChars": 36
+    },
+    {
+      "slot": "bullet",
+      "maxChars": 44
+    },
+    {
+      "slot": "metric value",
+      "maxChars": 8
+    },
+    {
+      "slot": "metric label",
+      "maxChars": 24
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "numeric-data",
+      "point"
+    ],
+    "structures": [
+      "network",
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "chart",
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "chart",
+      "connector",
+      "rule",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/5/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "chart",
+        "role": "numeric-data",
+        "source_bounds": {
+          "h": 414,
+          "w": 558,
+          "x": 57,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "connector",
+        "role": "content"
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 200,
+          "x": 305.5,
+          "y": 78
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 200,
+          "x": 305.5,
+          "y": 96
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 168
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 282
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 144,
+          "x": 633,
+          "y": 291
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 777,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 144,
+          "x": 633,
+          "y": 333
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 777,
+          "y": 330
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 366
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 144,
+          "x": 633,
+          "y": 375
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 777,
+          "y": 372
+        }
+      },
+      {
+        "source_pointer": "/body/15",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 408
+        }
+      },
+      {
+        "source_pointer": "/body/16",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 144,
+          "x": 633,
+          "y": 417
+        }
+      },
+      {
+        "source_pointer": "/body/17",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 777,
+          "y": 414
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-left",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Investment and value"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Value overtakes cost in month 31"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.categories.item01",
+      "source_pointer": "/body/0/categories/0",
+      "kind": "string",
+      "synthetic_source_example": "Y1"
+    },
+    {
+      "name": "node01.categories.item02",
+      "source_pointer": "/body/0/categories/1",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item03",
+      "source_pointer": "/body/0/categories/2",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item04",
+      "source_pointer": "/body/0/categories/3",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item05",
+      "source_pointer": "/body/0/categories/4",
+      "kind": "string",
+      "synthetic_source_example": "Y2"
+    },
+    {
+      "name": "node01.categories.item06",
+      "source_pointer": "/body/0/categories/5",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item07",
+      "source_pointer": "/body/0/categories/6",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item08",
+      "source_pointer": "/body/0/categories/7",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item09",
+      "source_pointer": "/body/0/categories/8",
+      "kind": "string",
+      "synthetic_source_example": "Y3"
+    },
+    {
+      "name": "node01.categories.item10",
+      "source_pointer": "/body/0/categories/9",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item11",
+      "source_pointer": "/body/0/categories/10",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item12",
+      "source_pointer": "/body/0/categories/11",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item13",
+      "source_pointer": "/body/0/categories/12",
+      "kind": "string",
+      "synthetic_source_example": "Y4"
+    },
+    {
+      "name": "node01.categories.item14",
+      "source_pointer": "/body/0/categories/13",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item15",
+      "source_pointer": "/body/0/categories/14",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item16",
+      "source_pointer": "/body/0/categories/15",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item17",
+      "source_pointer": "/body/0/categories/16",
+      "kind": "string",
+      "synthetic_source_example": "Y5"
+    },
+    {
+      "name": "node01.categories.item18",
+      "source_pointer": "/body/0/categories/17",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item19",
+      "source_pointer": "/body/0/categories/18",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.categories.item20",
+      "source_pointer": "/body/0/categories/19",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.series.item01.name",
+      "source_pointer": "/body/0/series/0/name",
+      "kind": "string",
+      "synthetic_source_example": "Cost"
+    },
+    {
+      "name": "node01.series.item01.values.item01",
+      "source_pointer": "/body/0/series/0/values/0",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.6
+    },
+    {
+      "name": "node01.series.item01.values.item02",
+      "source_pointer": "/body/0/series/0/values/1",
+      "kind": "nullable_number",
+      "synthetic_source_example": 1.2
+    },
+    {
+      "name": "node01.series.item01.values.item03",
+      "source_pointer": "/body/0/series/0/values/2",
+      "kind": "nullable_number",
+      "synthetic_source_example": 1.8
+    },
+    {
+      "name": "node01.series.item01.values.item04",
+      "source_pointer": "/body/0/series/0/values/3",
+      "kind": "nullable_number",
+      "synthetic_source_example": 2.4
+    },
+    {
+      "name": "node01.series.item01.values.item05",
+      "source_pointer": "/body/0/series/0/values/4",
+      "kind": "nullable_number",
+      "synthetic_source_example": 2.73
+    },
+    {
+      "name": "node01.series.item01.values.item06",
+      "source_pointer": "/body/0/series/0/values/5",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.05
+    },
+    {
+      "name": "node01.series.item01.values.item07",
+      "source_pointer": "/body/0/series/0/values/6",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.38
+    },
+    {
+      "name": "node01.series.item01.values.item08",
+      "source_pointer": "/body/0/series/0/values/7",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.7
+    },
+    {
+      "name": "node01.series.item01.values.item09",
+      "source_pointer": "/body/0/series/0/values/8",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.83
+    },
+    {
+      "name": "node01.series.item01.values.item10",
+      "source_pointer": "/body/0/series/0/values/9",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.95
+    },
+    {
+      "name": "node01.series.item01.values.item11",
+      "source_pointer": "/body/0/series/0/values/10",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.08
+    },
+    {
+      "name": "node01.series.item01.values.item12",
+      "source_pointer": "/body/0/series/0/values/11",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item13",
+      "source_pointer": "/body/0/series/0/values/12",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item14",
+      "source_pointer": "/body/0/series/0/values/13",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item15",
+      "source_pointer": "/body/0/series/0/values/14",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item16",
+      "source_pointer": "/body/0/series/0/values/15",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item17",
+      "source_pointer": "/body/0/series/0/values/16",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item18",
+      "source_pointer": "/body/0/series/0/values/17",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item19",
+      "source_pointer": "/body/0/series/0/values/18",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item01.values.item20",
+      "source_pointer": "/body/0/series/0/values/19",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.2
+    },
+    {
+      "name": "node01.series.item02.name",
+      "source_pointer": "/body/0/series/1/name",
+      "kind": "string",
+      "synthetic_source_example": "Value"
+    },
+    {
+      "name": "node01.series.item02.values.item01",
+      "source_pointer": "/body/0/series/1/values/0",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.0
+    },
+    {
+      "name": "node01.series.item02.values.item02",
+      "source_pointer": "/body/0/series/1/values/1",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.series.item02.values.item03",
+      "source_pointer": "/body/0/series/1/values/2",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.3
+    },
+    {
+      "name": "node01.series.item02.values.item04",
+      "source_pointer": "/body/0/series/1/values/3",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.6
+    },
+    {
+      "name": "node01.series.item02.values.item05",
+      "source_pointer": "/body/0/series/1/values/4",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.9
+    },
+    {
+      "name": "node01.series.item02.values.item06",
+      "source_pointer": "/body/0/series/1/values/5",
+      "kind": "nullable_number",
+      "synthetic_source_example": 1.3
+    },
+    {
+      "name": "node01.series.item02.values.item07",
+      "source_pointer": "/body/0/series/1/values/6",
+      "kind": "nullable_number",
+      "synthetic_source_example": 1.8
+    },
+    {
+      "name": "node01.series.item02.values.item08",
+      "source_pointer": "/body/0/series/1/values/7",
+      "kind": "nullable_number",
+      "synthetic_source_example": 2.4
+    },
+    {
+      "name": "node01.series.item02.values.item09",
+      "source_pointer": "/body/0/series/1/values/8",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.05
+    },
+    {
+      "name": "node01.series.item02.values.item10",
+      "source_pointer": "/body/0/series/1/values/9",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.7
+    },
+    {
+      "name": "node01.series.item02.values.item11",
+      "source_pointer": "/body/0/series/1/values/10",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.35
+    },
+    {
+      "name": "node01.series.item02.values.item12",
+      "source_pointer": "/body/0/series/1/values/11",
+      "kind": "nullable_number",
+      "synthetic_source_example": 5.0
+    },
+    {
+      "name": "node01.series.item02.values.item13",
+      "source_pointer": "/body/0/series/1/values/12",
+      "kind": "nullable_number",
+      "synthetic_source_example": 5.65
+    },
+    {
+      "name": "node01.series.item02.values.item14",
+      "source_pointer": "/body/0/series/1/values/13",
+      "kind": "nullable_number",
+      "synthetic_source_example": 6.3
+    },
+    {
+      "name": "node01.series.item02.values.item15",
+      "source_pointer": "/body/0/series/1/values/14",
+      "kind": "nullable_number",
+      "synthetic_source_example": 6.95
+    },
+    {
+      "name": "node01.series.item02.values.item16",
+      "source_pointer": "/body/0/series/1/values/15",
+      "kind": "nullable_number",
+      "synthetic_source_example": 7.6
+    },
+    {
+      "name": "node01.series.item02.values.item17",
+      "source_pointer": "/body/0/series/1/values/16",
+      "kind": "nullable_number",
+      "synthetic_source_example": 8.25
+    },
+    {
+      "name": "node01.series.item02.values.item18",
+      "source_pointer": "/body/0/series/1/values/17",
+      "kind": "nullable_number",
+      "synthetic_source_example": 8.9
+    },
+    {
+      "name": "node01.series.item02.values.item19",
+      "source_pointer": "/body/0/series/1/values/18",
+      "kind": "nullable_number",
+      "synthetic_source_example": 9.55
+    },
+    {
+      "name": "node01.series.item02.values.item20",
+      "source_pointer": "/body/0/series/1/values/19",
+      "kind": "nullable_number",
+      "synthetic_source_example": 10.2
+    },
+    {
+      "name": "node01.title",
+      "source_pointer": "/body/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Cumulative cost and value"
+    },
+    {
+      "name": "node01.units",
+      "source_pointer": "/body/0/units",
+      "kind": "string",
+      "synthetic_source_example": "$M, by quarter, five years"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Break-even in month 31"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Value reaches $4.0M"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Reading the curves"
+    },
+    {
+      "name": "node06.items.item01",
+      "source_pointer": "/body/5/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Spend peaks in year one at $0.6M a quarter"
+    },
+    {
+      "name": "node06.items.item02",
+      "source_pointer": "/body/5/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Value ramps from $0.6M to $2.6M a year"
+    },
+    {
+      "name": "node06.items.item03",
+      "source_pointer": "/body/5/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Spend stops after year three"
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "Total cost"
+    },
+    {
+      "name": "node09.text",
+      "source_pointer": "/body/8/text",
+      "kind": "string",
+      "synthetic_source_example": "$4.2M"
+    },
+    {
+      "name": "node11.text",
+      "source_pointer": "/body/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Five-year value"
+    },
+    {
+      "name": "node12.text",
+      "source_pointer": "/body/11/text",
+      "kind": "string",
+      "synthetic_source_example": "$10.2M"
+    },
+    {
+      "name": "node14.text",
+      "source_pointer": "/body/13/text",
+      "kind": "string",
+      "synthetic_source_example": "Net value"
+    },
+    {
+      "name": "node15.text",
+      "source_pointer": "/body/14/text",
+      "kind": "string",
+      "synthetic_source_example": "$6.0M"
+    },
+    {
+      "name": "node17.text",
+      "source_pointer": "/body/16/text",
+      "kind": "string",
+      "synthetic_source_example": "Payback"
+    },
+    {
+      "name": "node18.text",
+      "source_pointer": "/body/17/text",
+      "kind": "string",
+      "synthetic_source_example": "month 31"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.categories",
+      "source_pointer": "/body/0/categories",
+      "count": 20
+    },
+    {
+      "name": "node01.series.item01.values",
+      "source_pointer": "/body/0/series/0/values",
+      "count": 20
+    },
+    {
+      "name": "node01.series.item02.values",
+      "source_pointer": "/body/0/series/1/values",
+      "count": 20
+    },
+    {
+      "name": "node01.series",
+      "source_pointer": "/body/0/series",
+      "count": 2
+    },
+    {
+      "name": "node06.items",
+      "source_pointer": "/body/5/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -119,7 +119,7 @@ func decodeTemplateSource(raw []byte, v any) error {
 func compileTemplateSource(s *Source, key string) (SlideSpec, TemplateDefinition, error) {
 	var slide SlideSpec
 	def := TemplateDefinition{Key: key, SourceRevision: s.Revision}
-	if s.Revision == LibraryRevisionV2 && !usesLegacyTemplate(s.Revision, key) {
+	if isModernLibrary(s.Revision) && !usesLegacyTemplate(s.Revision, key) {
 		return slide, def, fmt.Errorf("template.requires_library_content_contract: %s; inspect library-catalog for the v2 contract or select the v1 bundle for the previous API", key)
 	}
 	var family, id, variant string
@@ -138,6 +138,9 @@ func compileTemplateSource(s *Source, key string) (SlideSpec, TemplateDefinition
 		expected = []string{"metric", "metric", "rule", "text", "text", "text", "text"}
 	default:
 		return slide, def, fmt.Errorf("template.unsupported_key: %s", key)
+	}
+	if (s.Revision == LibraryRevisionV3 || isExpandedLibrary(s.Revision)) && family == "openers" {
+		family = "core"
 	}
 	def.SourceFile = "templates/library/" + family + ".json"
 	raw, ok := s.Templates[def.SourceFile]

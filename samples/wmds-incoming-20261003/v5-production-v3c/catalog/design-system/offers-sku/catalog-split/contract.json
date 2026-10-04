@@ -1,0 +1,663 @@
+{
+  "key": "offers-sku/catalog-split",
+  "source_file": "templates/library/offers.json",
+  "source_sha256": "b21d3126f6dce1e8db9d15c23f922c7a4a0f634428eed59e54a7519bca3e26ac",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "text"
+    }
+  ],
+  "family": "offers",
+  "tier": "core",
+  "name": "Packaged offer menu · six-offer catalog",
+  "purpose": "A tall catalog table of six offers with what we do in three steps and the fixed fee and duration; the narrow column explains the menu, what every offer includes, how offers chain and the shared assumptions.",
+  "uses": [
+    "table.dense (bullets)",
+    "text",
+    "bullets",
+    "split.tall-left"
+  ],
+  "source_advisory_budget": {
+    "words": 208,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 48
+    },
+    {
+      "slot": "menu narrative",
+      "maxChars": 170
+    },
+    {
+      "slot": "offer outcome",
+      "maxChars": 40
+    },
+    {
+      "slot": "step (x3)",
+      "maxChars": 34
+    },
+    {
+      "slot": "fee",
+      "maxChars": 8
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "supporting",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/4/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/6/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 354
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 372
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 414
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-left",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Offerings"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Six packaged offers, one fixed fee each"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Offer"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "How we do it"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Fixed fee"
+    },
+    {
+      "name": "node01.rows.item01.f.text",
+      "source_pointer": "/body/0/rows/0/f/text",
+      "kind": "string",
+      "synthetic_source_example": "$65K"
+    },
+    {
+      "name": "node01.rows.item01.f.sub",
+      "source_pointer": "/body/0/rows/0/f/sub",
+      "kind": "string",
+      "synthetic_source_example": "3 weeks"
+    },
+    {
+      "name": "node01.rows.item01.h.item01",
+      "source_pointer": "/body/0/rows/0/h/0",
+      "kind": "string",
+      "synthetic_source_example": "Interview 8 leaders"
+    },
+    {
+      "name": "node01.rows.item01.h.item02",
+      "source_pointer": "/body/0/rows/0/h/1",
+      "kind": "string",
+      "synthetic_source_example": "Scan data, risk, talent"
+    },
+    {
+      "name": "node01.rows.item01.h.item03",
+      "source_pointer": "/body/0/rows/0/h/2",
+      "kind": "string",
+      "synthetic_source_example": "Rank top five use cases"
+    },
+    {
+      "name": "node01.rows.item01.s.text",
+      "source_pointer": "/body/0/rows/0/s/text",
+      "kind": "string",
+      "synthetic_source_example": "AI readiness scan"
+    },
+    {
+      "name": "node01.rows.item01.s.sub",
+      "source_pointer": "/body/0/rows/0/s/sub",
+      "kind": "string",
+      "synthetic_source_example": "Strategy"
+    },
+    {
+      "name": "node01.rows.item02.f.text",
+      "source_pointer": "/body/0/rows/1/f/text",
+      "kind": "string",
+      "synthetic_source_example": "$185K"
+    },
+    {
+      "name": "node01.rows.item02.f.sub",
+      "source_pointer": "/body/0/rows/1/f/sub",
+      "kind": "string",
+      "synthetic_source_example": "8 weeks"
+    },
+    {
+      "name": "node01.rows.item02.h.item01",
+      "source_pointer": "/body/0/rows/1/h/0",
+      "kind": "string",
+      "synthetic_source_example": "Score five domains vs. peers"
+    },
+    {
+      "name": "node01.rows.item02.h.item02",
+      "source_pointer": "/body/0/rows/1/h/1",
+      "kind": "string",
+      "synthetic_source_example": "Rank 30 use cases"
+    },
+    {
+      "name": "node01.rows.item02.h.item03",
+      "source_pointer": "/body/0/rows/1/h/2",
+      "kind": "string",
+      "synthetic_source_example": "Governance and 90-day plan"
+    },
+    {
+      "name": "node01.rows.item02.s.text",
+      "source_pointer": "/body/0/rows/1/s/text",
+      "kind": "string",
+      "synthetic_source_example": "AI readiness assessment"
+    },
+    {
+      "name": "node01.rows.item02.s.sub",
+      "source_pointer": "/body/0/rows/1/s/sub",
+      "kind": "string",
+      "synthetic_source_example": "Strategy"
+    },
+    {
+      "name": "node01.rows.item03.f.text",
+      "source_pointer": "/body/0/rows/2/f/text",
+      "kind": "string",
+      "synthetic_source_example": "$145K"
+    },
+    {
+      "name": "node01.rows.item03.f.sub",
+      "source_pointer": "/body/0/rows/2/f/sub",
+      "kind": "string",
+      "synthetic_source_example": "6 weeks"
+    },
+    {
+      "name": "node01.rows.item03.h.item01",
+      "source_pointer": "/body/0/rows/2/h/0",
+      "kind": "string",
+      "synthetic_source_example": "Baseline 24 months of claims"
+    },
+    {
+      "name": "node01.rows.item03.h.item02",
+      "source_pointer": "/body/0/rows/2/h/1",
+      "kind": "string",
+      "synthetic_source_example": "Root-cause denials and A/R"
+    },
+    {
+      "name": "node01.rows.item03.h.item03",
+      "source_pointer": "/body/0/rows/2/h/2",
+      "kind": "string",
+      "synthetic_source_example": "Size fixes; 90-day plan"
+    },
+    {
+      "name": "node01.rows.item03.s.text",
+      "source_pointer": "/body/0/rows/2/s/text",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle diagnostic"
+    },
+    {
+      "name": "node01.rows.item03.s.sub",
+      "source_pointer": "/body/0/rows/2/s/sub",
+      "kind": "string",
+      "synthetic_source_example": "Finance"
+    },
+    {
+      "name": "node01.rows.item04.f.text",
+      "source_pointer": "/body/0/rows/3/f/text",
+      "kind": "string",
+      "synthetic_source_example": "$240K"
+    },
+    {
+      "name": "node01.rows.item04.f.sub",
+      "source_pointer": "/body/0/rows/3/f/sub",
+      "kind": "string",
+      "synthetic_source_example": "10 weeks"
+    },
+    {
+      "name": "node01.rows.item04.h.item01",
+      "source_pointer": "/body/0/rows/3/h/0",
+      "kind": "string",
+      "synthetic_source_example": "Frame sources and standards"
+    },
+    {
+      "name": "node01.rows.item04.h.item02",
+      "source_pointer": "/body/0/rows/3/h/1",
+      "kind": "string",
+      "synthetic_source_example": "Build core model, six sources"
+    },
+    {
+      "name": "node01.rows.item04.h.item03",
+      "source_pointer": "/body/0/rows/3/h/2",
+      "kind": "string",
+      "synthetic_source_example": "Prove with two live reports"
+    },
+    {
+      "name": "node01.rows.item04.s.text",
+      "source_pointer": "/body/0/rows/3/s/text",
+      "kind": "string",
+      "synthetic_source_example": "Data platform jumpstart"
+    },
+    {
+      "name": "node01.rows.item04.s.sub",
+      "source_pointer": "/body/0/rows/3/s/sub",
+      "kind": "string",
+      "synthetic_source_example": "Data"
+    },
+    {
+      "name": "node01.rows.item05.f.text",
+      "source_pointer": "/body/0/rows/4/f/text",
+      "kind": "string",
+      "synthetic_source_example": "$210K"
+    },
+    {
+      "name": "node01.rows.item05.f.sub",
+      "source_pointer": "/body/0/rows/4/f/sub",
+      "kind": "string",
+      "synthetic_source_example": "8 weeks"
+    },
+    {
+      "name": "node01.rows.item05.h.item01",
+      "source_pointer": "/body/0/rows/4/h/0",
+      "kind": "string",
+      "synthetic_source_example": "Design zone and guardrails"
+    },
+    {
+      "name": "node01.rows.item05.h.item02",
+      "source_pointer": "/body/0/rows/4/h/1",
+      "kind": "string",
+      "synthetic_source_example": "Build and test pipelines"
+    },
+    {
+      "name": "node01.rows.item05.h.item03",
+      "source_pointer": "/body/0/rows/4/h/2",
+      "kind": "string",
+      "synthetic_source_example": "Train and hand over"
+    },
+    {
+      "name": "node01.rows.item05.s.text",
+      "source_pointer": "/body/0/rows/4/s/text",
+      "kind": "string",
+      "synthetic_source_example": "Cloud landing zone sprint"
+    },
+    {
+      "name": "node01.rows.item05.s.sub",
+      "source_pointer": "/body/0/rows/4/s/sub",
+      "kind": "string",
+      "synthetic_source_example": "Cloud"
+    },
+    {
+      "name": "node01.rows.item06.f.text",
+      "source_pointer": "/body/0/rows/5/f/text",
+      "kind": "string",
+      "synthetic_source_example": "$75K"
+    },
+    {
+      "name": "node01.rows.item06.f.sub",
+      "source_pointer": "/body/0/rows/5/f/sub",
+      "kind": "string",
+      "synthetic_source_example": "4 weeks"
+    },
+    {
+      "name": "node01.rows.item06.h.item01",
+      "source_pointer": "/body/0/rows/5/h/0",
+      "kind": "string",
+      "synthetic_source_example": "Pull billing and usage data"
+    },
+    {
+      "name": "node01.rows.item06.h.item02",
+      "source_pointer": "/body/0/rows/5/h/1",
+      "kind": "string",
+      "synthetic_source_example": "Map spend to owners"
+    },
+    {
+      "name": "node01.rows.item06.h.item03",
+      "source_pointer": "/body/0/rows/5/h/2",
+      "kind": "string",
+      "synthetic_source_example": "Rank savings by effort"
+    },
+    {
+      "name": "node01.rows.item06.s.text",
+      "source_pointer": "/body/0/rows/5/s/text",
+      "kind": "string",
+      "synthetic_source_example": "Cloud cost review"
+    },
+    {
+      "name": "node01.rows.item06.s.sub",
+      "source_pointer": "/body/0/rows/5/s/sub",
+      "kind": "string",
+      "synthetic_source_example": "Cloud"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "What we will do"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Pick a package, not a proposal. Each offer is a fixed fee for a fixed time, with named deliverables."
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Every offer includes"
+    },
+    {
+      "name": "node05.items.item01",
+      "source_pointer": "/body/4/items/0",
+      "kind": "string",
+      "synthetic_source_example": "A named lead and team"
+    },
+    {
+      "name": "node05.items.item02",
+      "source_pointer": "/body/4/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Weekly sponsor check-in"
+    },
+    {
+      "name": "node05.items.item03",
+      "source_pointer": "/body/4/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Readout and handover pack"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "How offers chain"
+    },
+    {
+      "name": "node07.items.item01",
+      "source_pointer": "/body/6/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Scan, then assessment, then pilot"
+    },
+    {
+      "name": "node07.items.item02",
+      "source_pointer": "/body/6/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Diagnostic, then jumpstart"
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "Assumes data access in week 1. Fees exclude expenses."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item01.h",
+      "source_pointer": "/body/0/rows/0/h",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item02.h",
+      "source_pointer": "/body/0/rows/1/h",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item03.h",
+      "source_pointer": "/body/0/rows/2/h",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item04.h",
+      "source_pointer": "/body/0/rows/3/h",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item05.h",
+      "source_pointer": "/body/0/rows/4/h",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item06.h",
+      "source_pointer": "/body/0/rows/5/h",
+      "count": 3
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 6
+    },
+    {
+      "name": "node05.items",
+      "source_pointer": "/body/4/items",
+      "count": 3
+    },
+    {
+      "name": "node07.items",
+      "source_pointer": "/body/6/items",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

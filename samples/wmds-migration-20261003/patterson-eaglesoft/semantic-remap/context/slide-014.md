@@ -1,0 +1,1 @@
+Keep source Intellio marks, ten icon/image occurrences, two bidirectional relationships, storage/tool names, and less-than12-month/10+/up-to80% caveats. Reference alternative has clearer platform inventory but weaker accelerator narrative.

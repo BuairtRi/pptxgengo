@@ -1,0 +1,442 @@
+{
+  "key": "interviews-planned/table-nav",
+  "source_file": "templates/library/interviews.json",
+  "source_sha256": "d62be1c2fe3d0015929413af45741fbee87918ac22969ebf48e893743dbf5d42",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "interviews",
+  "tier": "working",
+  "name": "Planned interviews · wave table with nav rail",
+  "purpose": "Planned interviews grouped by wave with group header rows, target date, purpose and scheduling status, inside the nav rail.",
+  "uses": [
+    "rail.nav",
+    "table (group rows, {text, sub}, status)"
+  ],
+  "source_advisory_budget": {
+    "words": 150,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "group row",
+      "maxChars": 40
+    },
+    {
+      "slot": "purpose",
+      "maxChars": 50
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "navigation",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 10,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Stakeholder interviews"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 is booked; waves 2 and 3 are not yet scheduled"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample names for layout only; replace with engagement stakeholders before use."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Stakeholder"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Department"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Target"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Purpose"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Scheduling"
+    },
+    {
+      "name": "node01.cols.item05.labels.notstarted",
+      "source_pointer": "/body/0/cols/4/labels/notstarted",
+      "kind": "string",
+      "synthetic_source_example": "Not scheduled"
+    },
+    {
+      "name": "node01.cols.item05.labels.progress",
+      "source_pointer": "/body/0/cols/4/labels/progress",
+      "kind": "string",
+      "synthetic_source_example": "Scheduled"
+    },
+    {
+      "name": "node01.rows.item01.group",
+      "source_pointer": "/body/0/rows/0/group",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 · Executives · by Oct 16"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "Clinical ops"
+    },
+    {
+      "name": "node01.rows.item02.dt",
+      "source_pointer": "/body/0/rows/1/dt",
+      "kind": "string",
+      "synthetic_source_example": "Oct 7"
+    },
+    {
+      "name": "node01.rows.item02.p",
+      "source_pointer": "/body/0/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Chief Nursing Officer"
+    },
+    {
+      "name": "node01.rows.item02.pu",
+      "source_pointer": "/body/0/rows/1/pu",
+      "kind": "string",
+      "synthetic_source_example": "Clinical priorities and nurse time lost to rework"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "progress"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "Operations"
+    },
+    {
+      "name": "node01.rows.item03.dt",
+      "source_pointer": "/body/0/rows/2/dt",
+      "kind": "string",
+      "synthetic_source_example": "Oct 8"
+    },
+    {
+      "name": "node01.rows.item03.p",
+      "source_pointer": "/body/0/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "Chief Operating Officer"
+    },
+    {
+      "name": "node01.rows.item03.pu",
+      "source_pointer": "/body/0/rows/2/pu",
+      "kind": "string",
+      "synthetic_source_example": "Operating model and decision rights"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "progress"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "IT"
+    },
+    {
+      "name": "node01.rows.item04.dt",
+      "source_pointer": "/body/0/rows/3/dt",
+      "kind": "string",
+      "synthetic_source_example": "Oct 13"
+    },
+    {
+      "name": "node01.rows.item04.p",
+      "source_pointer": "/body/0/rows/3/p",
+      "kind": "string",
+      "synthetic_source_example": "Chief Digital Officer"
+    },
+    {
+      "name": "node01.rows.item04.pu",
+      "source_pointer": "/body/0/rows/3/pu",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap fit and platform timelines"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "notstarted"
+    },
+    {
+      "name": "node01.rows.item05.group",
+      "source_pointer": "/body/0/rows/4/group",
+      "kind": "string",
+      "synthetic_source_example": "Wave 2 · Operational leaders · by Oct 23"
+    },
+    {
+      "name": "node01.rows.item06.d",
+      "source_pointer": "/body/0/rows/5/d",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle"
+    },
+    {
+      "name": "node01.rows.item06.dt",
+      "source_pointer": "/body/0/rows/5/dt",
+      "kind": "string",
+      "synthetic_source_example": "Oct 20"
+    },
+    {
+      "name": "node01.rows.item06.p",
+      "source_pointer": "/body/0/rows/5/p",
+      "kind": "string",
+      "synthetic_source_example": "Director, Billing"
+    },
+    {
+      "name": "node01.rows.item06.pu",
+      "source_pointer": "/body/0/rows/5/pu",
+      "kind": "string",
+      "synthetic_source_example": "Statement and collections process"
+    },
+    {
+      "name": "node01.rows.item06.s",
+      "source_pointer": "/body/0/rows/5/s",
+      "kind": "string",
+      "synthetic_source_example": "notstarted"
+    },
+    {
+      "name": "node01.rows.item07.d",
+      "source_pointer": "/body/0/rows/6/d",
+      "kind": "string",
+      "synthetic_source_example": "Compliance"
+    },
+    {
+      "name": "node01.rows.item07.dt",
+      "source_pointer": "/body/0/rows/6/dt",
+      "kind": "string",
+      "synthetic_source_example": "Oct 21"
+    },
+    {
+      "name": "node01.rows.item07.p",
+      "source_pointer": "/body/0/rows/6/p",
+      "kind": "string",
+      "synthetic_source_example": "Manager, Credentialing"
+    },
+    {
+      "name": "node01.rows.item07.pu",
+      "source_pointer": "/body/0/rows/6/pu",
+      "kind": "string",
+      "synthetic_source_example": "Payer enrollment delays"
+    },
+    {
+      "name": "node01.rows.item07.s",
+      "source_pointer": "/body/0/rows/6/s",
+      "kind": "string",
+      "synthetic_source_example": "notstarted"
+    },
+    {
+      "name": "node01.rows.item08.group",
+      "source_pointer": "/body/0/rows/7/group",
+      "kind": "string",
+      "synthetic_source_example": "Wave 3 · Front-line and SMEs · by Oct 30"
+    },
+    {
+      "name": "node01.rows.item09.d",
+      "source_pointer": "/body/0/rows/8/d",
+      "kind": "string",
+      "synthetic_source_example": "Patient access"
+    },
+    {
+      "name": "node01.rows.item09.dt",
+      "source_pointer": "/body/0/rows/8/dt",
+      "kind": "string",
+      "synthetic_source_example": "Oct 24"
+    },
+    {
+      "name": "node01.rows.item09.p",
+      "source_pointer": "/body/0/rows/8/p",
+      "kind": "string",
+      "synthetic_source_example": "Registration leads (3)"
+    },
+    {
+      "name": "node01.rows.item09.pu",
+      "source_pointer": "/body/0/rows/8/pu",
+      "kind": "string",
+      "synthetic_source_example": "Workflow walk at the front desk"
+    },
+    {
+      "name": "node01.rows.item09.s",
+      "source_pointer": "/body/0/rows/8/s",
+      "kind": "string",
+      "synthetic_source_example": "notstarted"
+    },
+    {
+      "name": "node01.rows.item10.d",
+      "source_pointer": "/body/0/rows/9/d",
+      "kind": "string",
+      "synthetic_source_example": "HIM"
+    },
+    {
+      "name": "node01.rows.item10.dt",
+      "source_pointer": "/body/0/rows/9/dt",
+      "kind": "string",
+      "synthetic_source_example": "Oct 27"
+    },
+    {
+      "name": "node01.rows.item10.p",
+      "source_pointer": "/body/0/rows/9/p",
+      "kind": "string",
+      "synthetic_source_example": "Coding specialists (4)"
+    },
+    {
+      "name": "node01.rows.item10.pu",
+      "source_pointer": "/body/0/rows/9/pu",
+      "kind": "string",
+      "synthetic_source_example": "Query volume and documentation gaps"
+    },
+    {
+      "name": "node01.rows.item10.s",
+      "source_pointer": "/body/0/rows/9/s",
+      "kind": "string",
+      "synthetic_source_example": "notstarted"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 5
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 10
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Readout"
+        },
+        {
+          "key": "section-02",
+          "label": "Coverage"
+        },
+        {
+          "key": "section-03",
+          "label": "Access"
+        },
+        {
+          "key": "section-04",
+          "label": "Requests"
+        }
+      ],
+      "active": "section-01"
+    }
+  }
+}

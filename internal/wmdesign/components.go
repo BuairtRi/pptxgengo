@@ -79,11 +79,11 @@ type componentPlan struct {
 }
 
 func validPartKey(k string) bool {
-	if k == "" {
+	if k == "" || k == "." || k == ".." {
 		return false
 	}
 	for _, c := range k {
-		if !(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '-' || c == '_') {
+		if !(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '-' || c == '_' || c == '.') {
 			return false
 		}
 	}

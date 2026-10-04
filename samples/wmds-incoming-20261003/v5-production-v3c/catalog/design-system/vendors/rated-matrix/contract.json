@@ -1,0 +1,486 @@
+{
+  "key": "vendors/rated-matrix",
+  "source_file": "templates/library/argument.json",
+  "source_sha256": "a6cbe304790ef6def6566f82233f5cdc59cdd8fbfbdff6d4bf70fc19083df196",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "block"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "block"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "table"
+    }
+  ],
+  "family": "argument",
+  "tier": "core",
+  "name": "Vendor comparison · rated matrix with a recommended column",
+  "purpose": "Rate three vendors against the client needs with dot scores and a subtitle under each need, and set a logo and tag on the recommended column.",
+  "uses": [
+    "composite.table",
+    "shape.logoslot",
+    "shape.block"
+  ],
+  "source_advisory_budget": {
+    "words": 78,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "need",
+      "maxChars": 32
+    },
+    {
+      "slot": "vendor name",
+      "maxChars": 12
+    },
+    {
+      "slot": "tag",
+      "maxChars": 14,
+      "note": "Marks the recommended or \"our\" option."
+    },
+    {
+      "slot": "rows",
+      "note": "4-6 needs; 3 vendor columns (4 at 144 wide). Dots 0-4, or swap the cells to harvey."
+    },
+    {
+      "slot": "need subtitle",
+      "maxChars": 40
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "image",
+      "key-message",
+      "point",
+      "relationship",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "diagram",
+      "image",
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "logoslot",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "logoslot",
+        "role": "image",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/6/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/6/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 330,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "block",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 18,
+          "w": 198,
+          "x": 507,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 36,
+          "w": 198,
+          "x": 507,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 162,
+          "x": 327,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 162,
+          "x": 525,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 162,
+          "x": 723,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 180
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Vendor options"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Vendor B is the strongest fit for [[Northfield]]"
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "●○○○ Limited  ●●○○ Partial  ●●●○ Strong  ●●●● Leading"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Recommended"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node04.name",
+      "source_pointer": "/body/3/name",
+      "kind": "string",
+      "synthetic_source_example": "Vendor A logo"
+    },
+    {
+      "name": "node05.name",
+      "source_pointer": "/body/4/name",
+      "kind": "string",
+      "synthetic_source_example": "Vendor B logo"
+    },
+    {
+      "name": "node06.name",
+      "source_pointer": "/body/5/name",
+      "kind": "string",
+      "synthetic_source_example": "Vendor C logo"
+    },
+    {
+      "name": "node07.cols.item01.label",
+      "source_pointer": "/body/6/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Northfield need"
+    },
+    {
+      "name": "node07.cols.item02.label",
+      "source_pointer": "/body/6/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Vendor A"
+    },
+    {
+      "name": "node07.cols.item03.label",
+      "source_pointer": "/body/6/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Vendor B"
+    },
+    {
+      "name": "node07.cols.item04.label",
+      "source_pointer": "/body/6/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Vendor C"
+    },
+    {
+      "name": "node07.highlight",
+      "source_pointer": "/body/6/highlight",
+      "kind": "string",
+      "synthetic_source_example": "b"
+    },
+    {
+      "name": "node07.rows.item01.a",
+      "source_pointer": "/body/6/rows/0/a",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node07.rows.item01.b.value",
+      "source_pointer": "/body/6/rows/0/b/value",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node07.rows.item01.c",
+      "source_pointer": "/body/6/rows/0/c",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node07.rows.item01.need.text",
+      "source_pointer": "/body/6/rows/0/need/text",
+      "kind": "string",
+      "synthetic_source_example": "Core workflow coverage"
+    },
+    {
+      "name": "node07.rows.item01.need.sub",
+      "source_pointer": "/body/6/rows/0/need/sub",
+      "kind": "string",
+      "synthetic_source_example": "Intake, scheduling and referrals"
+    },
+    {
+      "name": "node07.rows.item02.a",
+      "source_pointer": "/body/6/rows/1/a",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node07.rows.item02.b.value",
+      "source_pointer": "/body/6/rows/1/b/value",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node07.rows.item02.c",
+      "source_pointer": "/body/6/rows/1/c",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node07.rows.item02.need.text",
+      "source_pointer": "/body/6/rows/1/need/text",
+      "kind": "string",
+      "synthetic_source_example": "Integration with ERP and data"
+    },
+    {
+      "name": "node07.rows.item02.need.sub",
+      "source_pointer": "/body/6/rows/1/need/sub",
+      "kind": "string",
+      "synthetic_source_example": "Finance, supply and data feeds"
+    },
+    {
+      "name": "node07.rows.item03.a",
+      "source_pointer": "/body/6/rows/2/a",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node07.rows.item03.b.value",
+      "source_pointer": "/body/6/rows/2/b/value",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node07.rows.item03.c",
+      "source_pointer": "/body/6/rows/2/c",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node07.rows.item03.need.text",
+      "source_pointer": "/body/6/rows/2/need/text",
+      "kind": "string",
+      "synthetic_source_example": "Security and compliance"
+    },
+    {
+      "name": "node07.rows.item03.need.sub",
+      "source_pointer": "/body/6/rows/2/need/sub",
+      "kind": "string",
+      "synthetic_source_example": "Access control, audit and privacy"
+    },
+    {
+      "name": "node07.rows.item04.a",
+      "source_pointer": "/body/6/rows/3/a",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node07.rows.item04.b.value",
+      "source_pointer": "/body/6/rows/3/b/value",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node07.rows.item04.c",
+      "source_pointer": "/body/6/rows/3/c",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node07.rows.item04.need.text",
+      "source_pointer": "/body/6/rows/3/need/text",
+      "kind": "string",
+      "synthetic_source_example": "Admin and configuration effort"
+    },
+    {
+      "name": "node07.rows.item04.need.sub",
+      "source_pointer": "/body/6/rows/3/need/sub",
+      "kind": "string",
+      "synthetic_source_example": "Setup, tuning and ongoing upkeep"
+    },
+    {
+      "name": "node07.rows.item05.a",
+      "source_pointer": "/body/6/rows/4/a",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node07.rows.item05.b.value",
+      "source_pointer": "/body/6/rows/4/b/value",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node07.rows.item05.c",
+      "source_pointer": "/body/6/rows/4/c",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node07.rows.item05.need.text",
+      "source_pointer": "/body/6/rows/4/need/text",
+      "kind": "string",
+      "synthetic_source_example": "Delivery partner ecosystem"
+    },
+    {
+      "name": "node07.rows.item05.need.sub",
+      "source_pointer": "/body/6/rows/4/need/sub",
+      "kind": "string",
+      "synthetic_source_example": "Implementers, skills and capacity"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node07.cols",
+      "source_pointer": "/body/6/cols",
+      "count": 4
+    },
+    {
+      "name": "node07.rows",
+      "source_pointer": "/body/6/rows",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 2,
+  "added": "2026-10-03",
+  "revised": "2026-10-03",
+  "status": "active"
+}

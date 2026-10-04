@@ -16,11 +16,20 @@ import (
 
 func run() error {
 	if len(os.Args) < 2 {
-		return fmt.Errorf("usage: pptxdesign <inspect|asset-catalog|templates|template|template-reference|library-catalog|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
+		return fmt.Errorf("usage: pptxdesign <inspect|asset-catalog|templates|template|template-reference|library-catalog|library-search|library-index|library-find|library-inspect|library-preview|library-fit|project|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
 	}
 	command := os.Args[1]
+	if command == "project" {
+		return runProject(os.Args[2:])
+	}
+	if command == "library-index" || command == "library-find" || command == "library-inspect" || command == "library-preview" || command == "library-fit" {
+		return runLibraryIndex(command, os.Args[2:])
+	}
+	if command == "library-search" {
+		return runLibrarySearch(os.Args[2:])
+	}
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "library/wm-design-system/v1", "pinned foundation bundle")
+	bundle := f.String("bundle", "library/wm-design-system/v1", "pinned foundation bundle path or v1/v2/v3/v4/v5")
 	engine := f.String("engine", wmdesign.Engine, "typography engine: wmds-go-foundation.v1 or wmds-go-foundation.v2 (candidate)")
 	source := f.String("source", "", "optional WMDS source override; must match pinned snapshot")
 	out := f.String("out", "", "new output directory")
@@ -35,7 +44,7 @@ func run() error {
 	if f.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
 	}
-	if *bundle == "v1" || *bundle == "v2" {
+	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
 		root := os.Getenv("PPTXGENGO_RELEASE_ROOT")
 		*bundle = filepath.Join(root, "library", "wm-design-system", *bundle)
 	}

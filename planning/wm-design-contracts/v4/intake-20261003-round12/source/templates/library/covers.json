@@ -1,0 +1,4130 @@
+{
+  "schema": "wmds.templates.v2",
+  "family": "covers",
+  "name": "Covers and section dividers",
+  "summary": "Covers, agendas, section dividers and closings: the slides that open and structure a deck.",
+  "templates": [
+    {
+      "id": "cover",
+      "variant": "photo",
+      "name": "Cover · photo with contacts",
+      "tier": "core",
+      "purpose": "Opening slide for a proposal: logo, client, display title, preparer and two contacts on White; a photo bleeding off the right edge, framed by an L of dots.",
+      "uses": [
+        "logo",
+        "header.display",
+        "text.block",
+        "image.frame"
+      ],
+      "legacy": "16:9 master cover_1–4",
+      "budget": {
+        "words": 45,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 44
+        },
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "preparedBy",
+          "maxChars": 90
+        },
+        {
+          "slot": "contacts",
+          "maxItems": 2
+        },
+        {
+          "slot": "date",
+          "maxChars": 20
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "noPage": true,
+        "whiteboard": [
+          {
+            "x": 507,
+            "y": 36,
+            "w": 396,
+            "h": 18,
+            "fade": "right"
+          },
+          {
+            "x": 507,
+            "y": 54,
+            "w": 18,
+            "h": 396,
+            "fade": "bottom"
+          }
+        ],
+        "body": [
+          {
+            "type": "logo",
+            "x": 57,
+            "y": 54,
+            "w": 126,
+            "variant": "pos"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 180,
+            "w": 414,
+            "text": "Proposal for Northfield Health System"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 198,
+            "w": 432,
+            "text": "Close the books in [[five days]]",
+            "emphasis": "highlight"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 342,
+            "w": 198,
+            "text": "Prepared by"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 360,
+            "w": 414,
+            "text": "West Monroe · Finance Transformation"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 396,
+            "w": 198,
+            "text": "Proposal contacts"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 414,
+            "w": 198,
+            "text": "Dana Whitfield · Partner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 414,
+            "w": 198,
+            "text": "Marcus Lee · Director"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 432,
+            "w": 198,
+            "text": "dwhitfield@westmonroe.com"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 273,
+            "y": 432,
+            "w": 198,
+            "text": "mlee@westmonroe.com"
+          },
+          {
+            "type": "imageframe",
+            "x": 561,
+            "y": 72,
+            "w": 399,
+            "h": 396,
+            "photo": "photo-clinical-team",
+            "focus": "50% 40%"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cover",
+      "variant": "grid",
+      "name": "Cover · whiteboard grid and stat square",
+      "tier": "core",
+      "purpose": "Opening slide that leads with a number: whiteboard dot grid with one inverse stat square.",
+      "uses": [
+        "header.display",
+        "grid.whiteboard",
+        "grid.squares"
+      ],
+      "legacy": "16:9 master cover_1–4",
+      "budget": {
+        "words": 30,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 40
+        },
+        {
+          "slot": "title",
+          "maxChars": 48
+        },
+        {
+          "slot": "subtitle",
+          "maxChars": 90
+        },
+        {
+          "slot": "stat",
+          "maxChars": 8
+        },
+        {
+          "slot": "statLabel",
+          "maxChars": 24
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "noPage": true,
+        "body": [
+          {
+            "type": "logo",
+            "x": 57,
+            "y": 54,
+            "w": 126,
+            "variant": "pos"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 162,
+            "w": 558,
+            "text": "Proposal · Northfield Health System"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 180,
+            "w": 540,
+            "text": "A five-day close that [[pays]] for itself",
+            "emphasis": "underscore"
+          },
+          {
+            "type": "text",
+            "style": "lead",
+            "ink": "secondary",
+            "x": 57,
+            "y": 342,
+            "w": 414,
+            "text": "Record-to-report redesign for 14 business units"
+          },
+          {
+            "type": "square",
+            "x": 705,
+            "y": 180,
+            "size": 198,
+            "surface": "inverse",
+            "stat": "12 → 5",
+            "label": "days to close"
+          }
+        ],
+        "whiteboard": [
+          {
+            "x": 633,
+            "y": 108,
+            "w": 270,
+            "h": 270,
+            "fade": "none"
+          }
+        ]
+      }
+    },
+    {
+      "id": "agenda",
+      "variant": "index",
+      "name": "Agenda · left panel with photo",
+      "tier": "core",
+      "purpose": "Section overview with page references. The title sits on the dark panel; a photo breaks out across the panel edge, over a column of dots.",
+      "uses": [
+        "list.set (index rows)",
+        "image.frame"
+      ],
+      "legacy": "agenda_1–2",
+      "budget": {
+        "words": 40,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 16
+        },
+        {
+          "slot": "title",
+          "maxChars": 32
+        },
+        {
+          "slot": "items",
+          "maxItems": 6,
+          "maxChars": 40
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "inverse",
+        "page": "2",
+        "whiteboard": [
+          {
+            "x": 291,
+            "y": 18,
+            "w": 108,
+            "h": 450,
+            "fade": "bottom"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 36,
+            "w": 198,
+            "text": "Agenda",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "title",
+            "ink": "display",
+            "x": 57,
+            "y": 54,
+            "w": 198,
+            "text": "What we will cover today",
+            "on": "inverse"
+          },
+          {
+            "type": "imageframe",
+            "x": 129,
+            "y": 288,
+            "w": 216,
+            "h": 162,
+            "photo": "photo-team-meeting",
+            "focus": "50% 50%"
+          },
+          {
+            "type": "list",
+            "variant": "index",
+            "x": 417,
+            "y": 54,
+            "w": 486,
+            "rowHeight": 72,
+            "items": [
+              {
+                "n": "01",
+                "title": "Where the close loses time",
+                "page": "3"
+              },
+              {
+                "n": "02",
+                "title": "Target operating model",
+                "page": "7"
+              },
+              {
+                "n": "03",
+                "title": "Phased roadmap",
+                "page": "12"
+              },
+              {
+                "n": "04",
+                "title": "Business case",
+                "page": "18"
+              },
+              {
+                "n": "05",
+                "title": "Team and next steps",
+                "page": "22"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "agenda",
+      "variant": "schedule",
+      "name": "Agenda · schedule rows",
+      "tier": "core",
+      "purpose": "Timed agenda for a workshop or readout: time keys on the left, one outcome on the right, and a photo beneath it, layered over an offset Grounded block, that sits close to the schedule.",
+      "uses": [
+        "header.slide",
+        "list.set (schedule rows)",
+        "text.block",
+        "media.imageframe",
+        "shape.block"
+      ],
+      "legacy": "agenda_1–2",
+      "budget": {
+        "words": 43,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 48
+        },
+        {
+          "slot": "items",
+          "maxItems": 7,
+          "maxChars": 40
+        },
+        {
+          "slot": "outcome",
+          "maxChars": 80
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Workshop · Northfield Health System",
+        "title": "Close redesign working session",
+        "page": "2",
+        "body": [
+          {
+            "type": "schedule",
+            "x": 57,
+            "y": 144,
+            "w": 414,
+            "keyW": 144,
+            "rowHeight": 36,
+            "keyInk": "callout",
+            "items": [
+              {
+                "k": "9:00–9:30",
+                "t": "Welcome and goals"
+              },
+              {
+                "k": "9:30–10:30",
+                "t": "Where the close loses time"
+              },
+              {
+                "k": "10:30–11:30",
+                "t": "Target operating model"
+              },
+              {
+                "k": "11:30–12:15",
+                "t": "Wave plan and owners"
+              },
+              {
+                "k": "12:15–1:00",
+                "t": "Decisions and next steps"
+              }
+            ]
+          },
+          {
+            "type": "textblock",
+            "x": 507,
+            "y": 144,
+            "w": 396,
+            "label": "Outcome",
+            "body": "One agreed wave 1 scope and a named owner for each entity."
+          },
+          {
+            "type": "block",
+            "x": 507,
+            "y": 216,
+            "w": 378,
+            "h": 252,
+            "surface": "inverse",
+            "text": "",
+            "style": "body"
+          },
+          {
+            "type": "imageframe",
+            "x": 525,
+            "y": 198,
+            "w": 378,
+            "h": 252,
+            "photo": "photo-working-session",
+            "focus": "50% 40%"
+          }
+        ]
+      },
+      "rev": 3,
+      "revised": "2026-10-02"
+    },
+    {
+      "id": "agenda",
+      "variant": "schedule-right",
+      "name": "Agenda · schedule rows · right panel",
+      "tier": "core",
+      "purpose": "Timed agenda with the session outcome on a dark right panel: time keys and sessions in the main column, the outcome and a supporting photo on the panel.",
+      "uses": [
+        "header.slide",
+        "list.set (schedule rows)",
+        "text.block",
+        "media.imageframe",
+        "shape.block"
+      ],
+      "legacy": "right panel variant of agenda/schedule",
+      "budget": {
+        "words": 46,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 48
+        },
+        {
+          "slot": "items",
+          "maxItems": 7,
+          "maxChars": 40
+        },
+        {
+          "slot": "outcome",
+          "maxChars": 80
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "footer": "compact",
+        "eyebrow": "Workshop · Northfield Health System",
+        "title": "Close redesign working session",
+        "page": "2",
+        "body": [
+          {
+            "type": "schedule",
+            "x": 57,
+            "y": 144,
+            "w": 558,
+            "keyW": 144,
+            "rowHeight": 54,
+            "keyInk": "callout",
+            "items": [
+              {
+                "k": "9:00–9:30",
+                "t": "Welcome and goals"
+              },
+              {
+                "k": "9:30–10:30",
+                "t": "Where the close loses time"
+              },
+              {
+                "k": "10:30–11:30",
+                "t": "Target operating model"
+              },
+              {
+                "k": "11:30–12:15",
+                "t": "Wave plan and owners"
+              },
+              {
+                "k": "12:15–1:00",
+                "t": "Decisions and next steps"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Outcome",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 705,
+            "y": 144,
+            "w": 198,
+            "text": "One agreed wave 1 scope and a named owner for each entity.",
+            "on": "inverse"
+          },
+          {
+            "type": "imageframe",
+            "x": 705,
+            "y": 306,
+            "w": 198,
+            "h": 162,
+            "photo": "photo-working-session",
+            "focus": "50% 40%"
+          }
+        ],
+        "railSurface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "agenda",
+      "variant": "schedule-tall",
+      "name": "Agenda · schedule rows · tall footer",
+      "tier": "core",
+      "purpose": "Timed agenda with a tall footer for a note or sponsor line: the same schedule, outcome and layered photo, ending the body at 450.",
+      "uses": [
+        "header.slide",
+        "list.set (schedule rows)",
+        "text.block",
+        "media.imageframe",
+        "shape.block"
+      ],
+      "legacy": "tall footer variant of agenda/schedule",
+      "budget": {
+        "words": 46,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 48
+        },
+        {
+          "slot": "items",
+          "maxItems": 7,
+          "maxChars": 40
+        },
+        {
+          "slot": "outcome",
+          "maxChars": 80
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Workshop · Northfield Health System",
+        "title": "Close redesign working session",
+        "page": "2",
+        "body": [
+          {
+            "type": "schedule",
+            "x": 57,
+            "y": 144,
+            "w": 414,
+            "keyW": 144,
+            "rowHeight": 36,
+            "keyInk": "callout",
+            "items": [
+              {
+                "k": "9:00–9:30",
+                "t": "Welcome and goals"
+              },
+              {
+                "k": "9:30–10:30",
+                "t": "Where the close loses time"
+              },
+              {
+                "k": "10:30–11:30",
+                "t": "Target operating model"
+              },
+              {
+                "k": "11:30–12:15",
+                "t": "Wave plan and owners"
+              },
+              {
+                "k": "12:15–1:00",
+                "t": "Decisions and next steps"
+              }
+            ]
+          },
+          {
+            "type": "textblock",
+            "x": 507,
+            "y": 144,
+            "w": 396,
+            "label": "Outcome",
+            "body": "One agreed wave 1 scope and a named owner for each entity."
+          },
+          {
+            "type": "block",
+            "x": 507,
+            "y": 216,
+            "w": 378,
+            "h": 234,
+            "surface": "inverse",
+            "text": "",
+            "style": "body"
+          },
+          {
+            "type": "imageframe",
+            "x": 525,
+            "y": 198,
+            "w": 378,
+            "h": 234,
+            "photo": "photo-working-session",
+            "focus": "50% 40%"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "agenda",
+      "variant": "schedule-nav",
+      "name": "Agenda · schedule rows · nav rail",
+      "tier": "core",
+      "purpose": "Timed agenda for a workshop or readout: time keys on the left, one outcome on the right, and a photo beneath it, layered over an offset Grounded block, that sits close to the schedule.",
+      "uses": [
+        "header.slide",
+        "list.set (schedule rows)",
+        "text.block",
+        "media.imageframe",
+        "shape.block"
+      ],
+      "legacy": "nav variant of agenda/schedule",
+      "budget": {
+        "words": 49,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 48
+        },
+        {
+          "slot": "items",
+          "maxItems": 7,
+          "maxChars": 40
+        },
+        {
+          "slot": "outcome",
+          "maxChars": 80
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "compact",
+        "eyebrow": "Workshop · Northfield Health System",
+        "title": "Close redesign working session",
+        "page": "2",
+        "body": [
+          {
+            "type": "schedule",
+            "x": 57,
+            "y": 144,
+            "w": 414,
+            "keyW": 144,
+            "rowHeight": 36,
+            "keyInk": "callout",
+            "items": [
+              {
+                "k": "9:00–9:30",
+                "t": "Welcome and goals"
+              },
+              {
+                "k": "9:30–10:30",
+                "t": "Where the close loses time"
+              },
+              {
+                "k": "10:30–11:30",
+                "t": "Target operating model"
+              },
+              {
+                "k": "11:30–12:15",
+                "t": "Wave plan and owners"
+              },
+              {
+                "k": "12:15–1:00",
+                "t": "Decisions and next steps"
+              }
+            ]
+          },
+          {
+            "type": "textblock",
+            "x": 507,
+            "y": 144,
+            "w": 396,
+            "label": "Outcome",
+            "body": "One agreed wave 1 scope and a named owner for each entity."
+          },
+          {
+            "type": "block",
+            "x": 507,
+            "y": 216,
+            "w": 378,
+            "h": 252,
+            "surface": "inverse",
+            "text": "",
+            "style": "body"
+          },
+          {
+            "type": "imageframe",
+            "x": 525,
+            "y": 198,
+            "w": 378,
+            "h": 252,
+            "photo": "photo-working-session",
+            "focus": "50% 40%"
+          }
+        ],
+        "nav": {
+          "items": [
+            "Context",
+            "Approach",
+            "Team",
+            "Commercials",
+            "Next steps"
+          ],
+          "active": 0
+        }
+      },
+      "rev": 2,
+      "added": "2026-10-02",
+      "revised": "2026-10-02"
+    },
+    {
+      "id": "agenda",
+      "variant": "schedule-split",
+      "name": "Agenda · schedule rows · tall photo left",
+      "tier": "core",
+      "purpose": "Timed agenda with a full-height photo in a narrow left column; title, schedule and outcome share the wide right column.",
+      "uses": [
+        "header.slide",
+        "list.set (schedule rows)",
+        "text.block",
+        "media.imageframe"
+      ],
+      "legacy": "split variant of agenda/schedule",
+      "budget": {
+        "words": 44,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 48
+        },
+        {
+          "slot": "items",
+          "maxItems": 7,
+          "maxChars": 40
+        },
+        {
+          "slot": "outcome",
+          "maxChars": 80
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Workshop · Northfield Health System",
+        "title": "Close redesign working session",
+        "page": "2",
+        "body": [
+          {
+            "type": "imageframe",
+            "x": 57,
+            "y": 36,
+            "w": 270,
+            "h": 432,
+            "photo": "photo-working-session",
+            "focus": "50% 40%"
+          },
+          {
+            "type": "schedule",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "keyW": 144,
+            "rowHeight": 45,
+            "keyInk": "callout",
+            "items": [
+              {
+                "k": "9:00–9:30",
+                "t": "Welcome and goals"
+              },
+              {
+                "k": "9:30–10:30",
+                "t": "Where the close loses time"
+              },
+              {
+                "k": "10:30–11:30",
+                "t": "Target operating model"
+              },
+              {
+                "k": "11:30–12:15",
+                "t": "Wave plan and owners"
+              },
+              {
+                "k": "12:15–1:00",
+                "t": "Decisions and next steps"
+              }
+            ]
+          },
+          {
+            "type": "textblock",
+            "x": 345,
+            "y": 378,
+            "w": 558,
+            "label": "Outcome",
+            "body": "One agreed wave 1 scope and a named owner for each entity."
+          }
+        ],
+        "split": "tall-left-narrow"
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "agenda",
+      "variant": "sessions",
+      "name": "Agenda · sessions, contributions and results",
+      "tier": "working",
+      "purpose": "A working-session day as rows: the session and its time, what each side contributes, and the shared result at the end of the session.",
+      "uses": [
+        "table.standard",
+        "shape.block"
+      ],
+      "legacy": "pptxgengo t074-ai-accelerator-020",
+      "budget": {
+        "words": 161,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "session",
+          "maxChars": 32
+        },
+        {
+          "slot": "contribution",
+          "maxChars": 56
+        },
+        {
+          "slot": "result",
+          "maxChars": 44
+        },
+        {
+          "slot": "outcome line",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Working session · Northfield Health System",
+        "title": "Agenda for the design-sprint day",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 108,
+            "text": "Time"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 183,
+            "y": 126,
+            "w": 162,
+            "text": "Session"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 363,
+            "y": 126,
+            "w": 342,
+            "text": "Finance and data contribution"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 723,
+            "y": 126,
+            "w": 180,
+            "text": "Shared result"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 144,
+            "w": 108,
+            "h": 36,
+            "surface": "inverse",
+            "text": "8:30–9:30",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 183,
+            "y": 144,
+            "w": 162,
+            "text": "1. Joint framing"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 144,
+            "w": 342,
+            "items": [
+              "Finance: bring close calendar and pain points",
+              "Data: test feasibility and source availability"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 723,
+            "y": 144,
+            "w": 180,
+            "h": 36,
+            "surface": "subtle",
+            "text": "One scoped opportunity with a visible path",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 198,
+            "w": 108,
+            "h": 36,
+            "surface": "inverse",
+            "text": "9:35–11:30",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 183,
+            "y": 198,
+            "w": 162,
+            "text": "2. Parallel definition"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 198,
+            "w": 342,
+            "items": [
+              "Finance: define rules, controls, acceptance",
+              "Data: profile sources and prove the data flow"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 723,
+            "y": 198,
+            "w": 180,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Agreed rules and a working data sample",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 252,
+            "w": 108,
+            "h": 36,
+            "surface": "inverse",
+            "text": "12:15–1:00",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 183,
+            "y": 252,
+            "w": 162,
+            "text": "3. Handoff"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 252,
+            "w": 342,
+            "items": [
+              "Finance: explain intent and open questions",
+              "Data: challenge ambiguity; propose a slice"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 723,
+            "y": 252,
+            "w": 180,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Agreed interface, scope and demo slice",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 306,
+            "w": 108,
+            "h": 36,
+            "surface": "inverse",
+            "text": "1:00–3:15",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 183,
+            "y": 306,
+            "w": 162,
+            "text": "4. Build and review"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 306,
+            "w": 342,
+            "items": [
+              "Finance: review each increment against rules",
+              "Data: convert feedback into bounded changes"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 723,
+            "y": 306,
+            "w": 180,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Traceable feedback and acceptance evidence",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 360,
+            "w": 108,
+            "h": 36,
+            "surface": "inverse",
+            "text": "3:15–4:30",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 183,
+            "y": 360,
+            "w": 162,
+            "text": "5. Scale-up"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 360,
+            "w": 342,
+            "items": [
+              "Finance: name operating-model implications",
+              "Data: name platform and ownership implications"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 723,
+            "y": 360,
+            "w": 180,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Next actions and a reusable learning record",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Outcome of the day: one agreed wave 1 scope, a tested data slice and a named owner for each decision.",
+            "style": "small",
+            "align": "left"
+          }
+        ]
+      }
+    },
+    {
+      "id": "divider",
+      "variant": "panel-photo",
+      "name": "Divider · panel with breakout photo",
+      "tier": "core",
+      "purpose": "A Grounded panel holds the section number and title; a photo crosses the panel edge onto the dot field.",
+      "uses": [
+        "block",
+        "header.display",
+        "grid.squares"
+      ],
+      "legacy": "divider_1–6",
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "10",
+        "whiteboard": [
+          {
+            "x": 561,
+            "y": 72,
+            "w": 342,
+            "h": 396,
+            "fade": "none"
+          }
+        ],
+        "body": [
+          {
+            "type": "block",
+            "x": 0,
+            "y": 72,
+            "w": 543,
+            "h": 396,
+            "surface": "inverse",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "[[02]]",
+            "emphasis": "underscore",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "title",
+            "ink": "display",
+            "x": 57,
+            "y": 342,
+            "w": 414,
+            "text": "Our perspective",
+            "on": "inverse"
+          },
+          {
+            "type": "square",
+            "x": 489,
+            "y": 162,
+            "size": 234,
+            "photo": "photo-abstract-cubes"
+          }
+        ]
+      }
+    },
+    {
+      "id": "divider",
+      "variant": "panel-edge",
+      "name": "Divider · panel with Magenta edge",
+      "tier": "core",
+      "purpose": "Grounded panel with a Magenta edge and the section label; the photo fills the white side, over a band of dots.",
+      "uses": [
+        "block",
+        "rule",
+        "header.display",
+        "image.frame"
+      ],
+      "legacy": "divider_1–6",
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "3",
+        "whiteboard": [
+          {
+            "x": 579,
+            "y": 72,
+            "w": 324,
+            "h": 36,
+            "fade": "none"
+          },
+          {
+            "x": 579,
+            "y": 432,
+            "w": 324,
+            "h": 36,
+            "fade": "none"
+          }
+        ],
+        "body": [
+          {
+            "type": "block",
+            "x": 0,
+            "y": 72,
+            "w": 561,
+            "h": 396,
+            "surface": "inverse",
+            "text": ""
+          },
+          {
+            "type": "rule",
+            "x": 555,
+            "y": 72,
+            "w": 6,
+            "weight": 396,
+            "ink": "callout"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "callout",
+            "x": 57,
+            "y": 108,
+            "w": 414,
+            "text": "Section",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "01",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "title",
+            "ink": "display",
+            "x": 57,
+            "y": 342,
+            "w": 468,
+            "text": "Introductions and objectives",
+            "on": "inverse"
+          },
+          {
+            "type": "imageframe",
+            "x": 579,
+            "y": 126,
+            "w": 324,
+            "h": 288,
+            "photo": "photo-clinical-leaders",
+            "focus": "50% 40%"
+          }
+        ]
+      }
+    },
+    {
+      "id": "divider",
+      "variant": "full-photo",
+      "name": "Divider · full-bleed photo",
+      "tier": "core",
+      "purpose": "A full-bleed photo with the number and title on a Grounded block anchored bottom-left; dots run across the block's top edge.",
+      "uses": [
+        "image.frame",
+        "block",
+        "header.display"
+      ],
+      "legacy": "divider_1–6",
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "16",
+        "whiteboard": [
+          {
+            "x": 75,
+            "y": 270,
+            "w": 414,
+            "h": 18,
+            "fade": "right",
+            "on": "inverse",
+            "above": true
+          }
+        ],
+        "body": [
+          {
+            "type": "imageframe",
+            "x": 0,
+            "y": 0,
+            "w": 960,
+            "h": 468,
+            "photo": "photo-corridor",
+            "focus": "50% 45%"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 252,
+            "w": 450,
+            "h": 216,
+            "surface": "inverse",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "display",
+            "x": 75,
+            "y": 306,
+            "w": 198,
+            "text": "03",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "title",
+            "ink": "display",
+            "x": 75,
+            "y": 378,
+            "w": 414,
+            "text": "How we get there",
+            "on": "inverse"
+          }
+        ]
+      }
+    },
+    {
+      "id": "divider",
+      "variant": "light",
+      "name": "Divider · light with photo square",
+      "tier": "core",
+      "purpose": "Opens a section on White: oversized section number, display title, a photo square over the dot field.",
+      "uses": [
+        "header.display",
+        "grid.squares"
+      ],
+      "legacy": "divider_1–6",
+      "budget": {
+        "words": 14,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "21",
+        "whiteboard": [
+          {
+            "x": 579,
+            "y": 108,
+            "w": 324,
+            "h": 324,
+            "fade": "none"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 162,
+            "w": 198,
+            "text": "04"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 252,
+            "w": 486,
+            "text": "Business case"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 270,
+            "w": 486,
+            "text": "What it is [[worth]]",
+            "emphasis": "highlight"
+          },
+          {
+            "type": "square",
+            "x": 633,
+            "y": 162,
+            "size": 216,
+            "photo": "photo-abstract-grid"
+          }
+        ]
+      }
+    },
+    {
+      "id": "divider",
+      "variant": "inverse-square",
+      "name": "Divider · inverse with photo square",
+      "tier": "core",
+      "purpose": "Opens a section on Grounded Blue like the light divider: oversized section number, display title, a photo square over the dot field.",
+      "uses": [
+        "header.display",
+        "grid.squares"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 12,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "27",
+        "whiteboard": [
+          {
+            "x": 579,
+            "y": 108,
+            "w": 324,
+            "h": 324,
+            "fade": "none",
+            "on": "inverse"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 162,
+            "w": 198,
+            "text": "04",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 252,
+            "w": 486,
+            "text": "Section 04 · Business case",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 270,
+            "w": 486,
+            "text": "What it is [[worth]]",
+            "emphasis": "underscore",
+            "on": "inverse"
+          },
+          {
+            "type": "square",
+            "x": 633,
+            "y": 162,
+            "size": 216,
+            "photo": "photo-abstract-grid"
+          }
+        ],
+        "surface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "inverse",
+      "name": "Divider · inverse with photo",
+      "tier": "core",
+      "purpose": "Opens a section on Grounded Blue: display title low-left, an abstract photo square set close to the title and overlapping a Dark Gray dot field that extends above, below and to the right of it.",
+      "uses": [
+        "header.display",
+        "grid.squares"
+      ],
+      "legacy": "divider_1–6",
+      "budget": {
+        "words": 11,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "surface": "inverse",
+        "page": "26",
+        "whiteboard": [
+          {
+            "x": 543,
+            "y": 54,
+            "w": 360,
+            "h": 396,
+            "fade": "none"
+          }
+        ],
+        "body": [
+          {
+            "type": "square",
+            "x": 399,
+            "y": 126,
+            "size": 270,
+            "photo": "photo-abstract-led"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 252,
+            "w": 486,
+            "text": "Section 05 · Team"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 270,
+            "w": 486,
+            "text": "Who you will [[work with]]",
+            "emphasis": "underscore"
+          }
+        ]
+      },
+      "rev": 2,
+      "revised": "2026-10-02"
+    },
+    {
+      "id": "guide",
+      "variant": "deck-overview",
+      "name": "Guide · deck overview",
+      "tier": "core",
+      "purpose": "The internal guide at the front of a pick deck: the narrative, the sections like an agenda, how to use the deck and an internal-use note. A stamp marks it as not for clients.",
+      "uses": [
+        "header.slide",
+        "stamp",
+        "list.ol",
+        "block"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck mapping",
+      "budget": {
+        "words": 143,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 20
+        },
+        {
+          "slot": "title",
+          "maxChars": 32
+        },
+        {
+          "slot": "stamp",
+          "values": [
+            "For internal use",
+            "Internal only"
+          ]
+        },
+        {
+          "slot": "narrative",
+          "maxWords": 45
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "fields": [
+            "number",
+            "name",
+            "scope"
+          ],
+          "maxChars": 36
+        },
+        {
+          "slot": "steps",
+          "minItems": 3,
+          "maxItems": 4,
+          "maxChars": 44
+        },
+        {
+          "slot": "note",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "1",
+        "eyebrow": "Deck guide",
+        "title": "How to use this deck",
+        "stamp": "For internal use",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Narrative"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 150,
+            "w": 270,
+            "text": "This deck is a library, not a story told start to finish. Each section answers one buyer question for Northfield Health System, from why change now to what happens next. Pull only the slides that fit the buyer and the moment."
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "text": "How it is organized"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 150,
+            "w": 30,
+            "text": "01"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 150,
+            "w": 234,
+            "text": "Context"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 171,
+            "w": 234,
+            "text": "Why the buyer acts now"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 202,
+            "w": 30,
+            "text": "02"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 202,
+            "w": 234,
+            "text": "Economics"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 223,
+            "w": 234,
+            "text": "What modernization costs and returns"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 254,
+            "w": 30,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 254,
+            "w": 234,
+            "text": "Approach"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 275,
+            "w": 234,
+            "text": "How the work gets delivered"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 306,
+            "w": 30,
+            "text": "04"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 306,
+            "w": 234,
+            "text": "Proof"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 327,
+            "w": 234,
+            "text": "Results from comparable programs"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 358,
+            "w": 30,
+            "text": "05"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 358,
+            "w": 234,
+            "text": "Next steps"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 379,
+            "w": 234,
+            "text": "Decisions and first steps"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "How to use it"
+          },
+          {
+            "type": "ol",
+            "x": 633,
+            "y": 150,
+            "w": 270,
+            "items": [
+              "Start with the buyer and the reason to act.",
+              "Pick the sections that match the conversation.",
+              "Choose depth: one slide, or the full set.",
+              "Close with proof and one clear next step."
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Internal use only: remove this guide and every section guide before sharing the deck externally.",
+            "style": "label",
+            "align": "left"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "guide",
+      "variant": "deck-overview-inverse",
+      "name": "Guide · deck overview, inverse",
+      "tier": "core",
+      "purpose": "The deck overview on Grounded Blue: narrative, section list, usage steps and an internal-use note.",
+      "uses": [
+        "header.slide",
+        "stamp",
+        "list.ol",
+        "block"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck mapping",
+      "budget": {
+        "words": 143,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 20
+        },
+        {
+          "slot": "title",
+          "maxChars": 32
+        },
+        {
+          "slot": "stamp",
+          "values": [
+            "For internal use",
+            "Internal only"
+          ]
+        },
+        {
+          "slot": "narrative",
+          "maxWords": 45
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "fields": [
+            "number",
+            "name",
+            "scope"
+          ],
+          "maxChars": 36
+        },
+        {
+          "slot": "steps",
+          "minItems": 3,
+          "maxItems": 4,
+          "maxChars": 44
+        },
+        {
+          "slot": "note",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "1",
+        "eyebrow": "Deck guide",
+        "title": "How to use this deck",
+        "stamp": "For internal use",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Narrative",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 150,
+            "w": 270,
+            "text": "This deck is a library, not a story told start to finish. Each section answers one buyer question for Northfield Health System, from why change now to what happens next. Pull only the slides that fit the buyer and the moment.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "text": "How it is organized",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 150,
+            "w": 30,
+            "text": "01",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 150,
+            "w": 234,
+            "text": "Context",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 171,
+            "w": 234,
+            "text": "Why the buyer acts now",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 202,
+            "w": 30,
+            "text": "02",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 202,
+            "w": 234,
+            "text": "Economics",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 223,
+            "w": 234,
+            "text": "What modernization costs and returns",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 254,
+            "w": 30,
+            "text": "03",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 254,
+            "w": 234,
+            "text": "Approach",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 275,
+            "w": 234,
+            "text": "How the work gets delivered",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 306,
+            "w": 30,
+            "text": "04",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 306,
+            "w": 234,
+            "text": "Proof",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 327,
+            "w": 234,
+            "text": "Results from comparable programs",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "callout",
+            "x": 345,
+            "y": 358,
+            "w": 30,
+            "text": "05",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 381,
+            "y": 358,
+            "w": 234,
+            "text": "Next steps",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 381,
+            "y": 379,
+            "w": 234,
+            "text": "Decisions and first steps",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "How to use it",
+            "on": "inverse"
+          },
+          {
+            "type": "ol",
+            "x": 633,
+            "y": 150,
+            "w": 270,
+            "items": [
+              "Start with the buyer and the reason to act.",
+              "Pick the sections that match the conversation.",
+              "Choose depth: one slide, or the full set.",
+              "Close with proof and one clear next step."
+            ],
+            "on": "inverse"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "light",
+            "text": "Internal use only: remove this guide and every section guide before sharing the deck externally.",
+            "style": "label",
+            "align": "left"
+          }
+        ],
+        "surface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "guide",
+      "variant": "section-overview",
+      "name": "Guide · section overview",
+      "tier": "core",
+      "purpose": "The internal overview for one section of a pick deck: a compact how-to-use-the-deck band, then an index of the section's slides with what each covers and when to use it. Not for clients.",
+      "uses": [
+        "header.slide",
+        "stamp",
+        "table",
+        "block"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 170,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 44
+        },
+        {
+          "slot": "stamp",
+          "values": [
+            "For internal use",
+            "Internal only"
+          ]
+        },
+        {
+          "slot": "deck_steps",
+          "minItems": 3,
+          "maxItems": 4,
+          "maxChars": 44
+        },
+        {
+          "slot": "index",
+          "minItems": 5,
+          "maxItems": 7,
+          "fields": [
+            "slide",
+            "title",
+            "covers",
+            "when"
+          ],
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "30",
+        "eyebrow": "Section overview · 03",
+        "title": "Approach: how to use this section",
+        "stamp": "For internal use",
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "h": 72,
+            "surface": "subtle",
+            "text": "",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 69,
+            "y": 138,
+            "w": 174,
+            "text": "How to use this deck"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 138,
+            "w": 300,
+            "text": "1  Start with the buyer and the reason to act."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 162,
+            "w": 300,
+            "text": "2  Pick the sections that match the talk."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 138,
+            "w": 294,
+            "text": "3  Choose depth: one slide or the full set."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 162,
+            "w": 294,
+            "text": "4  Close with proof and one next step."
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 216,
+            "w": 414,
+            "text": "How to use this section"
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 234,
+            "w": 846,
+            "header": "light",
+            "cols": [
+              {
+                "k": "n",
+                "label": "Slide",
+                "w": 54
+              },
+              {
+                "k": "slide",
+                "label": "Title",
+                "w": 198
+              },
+              {
+                "k": "what",
+                "label": "What it covers",
+                "w": 378
+              },
+              {
+                "k": "when",
+                "label": "When to use",
+                "w": 216
+              }
+            ],
+            "rows": [
+              {
+                "n": "31",
+                "slide": "Approach at a glance",
+                "what": "Four subphases take approved outcomes to a live capability",
+                "when": "Opening any delivery conversation"
+              },
+              {
+                "n": "32",
+                "slide": "Subphase detail",
+                "what": "Activities, outputs and owners for each subphase",
+                "when": "Buyer asks for specifics"
+              },
+              {
+                "n": "33",
+                "slide": "Working model",
+                "what": "What each Northfield team does, week by week",
+                "when": "Resourcing and capacity questions"
+              },
+              {
+                "n": "34",
+                "slide": "Phased cutover",
+                "what": "Entities move in controlled waves, not one event",
+                "when": "Risk-averse operations leaders"
+              },
+              {
+                "n": "35",
+                "slide": "Decision gates",
+                "what": "Where leaders sign off before work moves on",
+                "when": "Steering committee review"
+              },
+              {
+                "n": "36",
+                "slide": "Delivery risks",
+                "what": "Top risks and how we contain each one",
+                "when": "Late-stage diligence"
+              },
+              {
+                "n": "37",
+                "slide": "Governance cadence",
+                "what": "Who meets, how often and what they decide",
+                "when": "Sponsor wants oversight detail"
+              }
+            ],
+            "dense": true,
+            "rowH": 28
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-light",
+      "name": "Divider · progress strip, light",
+      "tier": "core",
+      "purpose": "Opens a section on White with the number and title, and a strip of every section pill along the bottom with the current one filled Grounded.",
+      "uses": [
+        "header.display",
+        "block",
+        "grid.squares"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck mapping",
+      "budget": {
+        "words": 20,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names; shown as pills"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 597,
+            "y": 72,
+            "w": 306,
+            "h": 288,
+            "fade": "none"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 108,
+            "w": 198,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 486,
+            "text": "Section 03 of 05"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 486,
+            "text": "Our [[approach]]",
+            "emphasis": "highlight"
+          },
+          {
+            "type": "block",
+            "x": 57.0,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "01  Context",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 229.8,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "02  Economics",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 402.6,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "inverse",
+            "text": "03  Approach",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 575.4,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "04  Proof",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 748.2,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "05  Next steps",
+            "style": "label"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-inverse",
+      "name": "Divider · progress strip, inverse",
+      "tier": "core",
+      "purpose": "Opens a section on Grounded Blue; the section pills run along the bottom with the current one filled White.",
+      "uses": [
+        "header.display",
+        "block"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck mapping",
+      "budget": {
+        "words": 20,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names; shown as pills"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 597,
+            "y": 72,
+            "w": 306,
+            "h": 288,
+            "fade": "none",
+            "on": "inverse"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 108,
+            "w": 198,
+            "text": "03",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 198,
+            "w": 486,
+            "text": "Section 03 of 05",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 486,
+            "text": "Our [[approach]]",
+            "emphasis": "underscore",
+            "on": "inverse"
+          },
+          {
+            "type": "block",
+            "x": 57.0,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "deep",
+            "text": "01  Context",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 229.8,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "deep",
+            "text": "02  Economics",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 402.6,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "light",
+            "text": "03  Approach",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 575.4,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "deep",
+            "text": "04  Proof",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 748.2,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "deep",
+            "text": "05  Next steps",
+            "style": "label"
+          }
+        ],
+        "surface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-photo",
+      "name": "Divider · progress strip with photo",
+      "tier": "core",
+      "purpose": "A photo half beside the section number and title, with the section pills along the bottom and the current one filled.",
+      "uses": [
+        "image.frame",
+        "header.display",
+        "block"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck mapping",
+      "budget": {
+        "words": 20,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names; shown as pills"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        },
+        {
+          "slot": "photo",
+          "kind": "image"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 21,
+            "y": 36,
+            "w": 270,
+            "h": 54,
+            "fade": "right"
+          }
+        ],
+        "body": [
+          {
+            "type": "imageframe",
+            "x": 489,
+            "y": 0,
+            "w": 471,
+            "h": 378,
+            "photo": "photo-working-session",
+            "focus": "50% 40%"
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 108,
+            "w": 198,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 396,
+            "text": "Section 03 of 05"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 396,
+            "text": "Our [[approach]]",
+            "emphasis": "highlight"
+          },
+          {
+            "type": "block",
+            "x": 57.0,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "01  Context",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 229.8,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "02  Economics",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 402.6,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "inverse",
+            "text": "03  Approach",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 575.4,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "04  Proof",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 748.2,
+            "y": 414,
+            "w": 154.8,
+            "h": 36,
+            "surface": "outline",
+            "text": "05  Next steps",
+            "style": "label"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-list",
+      "name": "Divider · progress list",
+      "tier": "core",
+      "purpose": "A large section number and title beside the full list of sections, the current one highlighted on a Grounded bar.",
+      "uses": [
+        "header.display",
+        "block",
+        "rule"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck mapping",
+      "budget": {
+        "words": 20,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names; shown as pills"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 21,
+            "y": 324,
+            "w": 396,
+            "h": 108,
+            "fade": "right"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 108,
+            "w": 198,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 396,
+            "text": "Section 03 of 05"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 396,
+            "text": "Our [[approach]]",
+            "emphasis": "underscore"
+          },
+          {
+            "type": "rule",
+            "x": 489,
+            "y": 108,
+            "w": 414
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "secondary",
+            "x": 507,
+            "y": 123,
+            "w": 36,
+            "text": "01"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 555,
+            "y": 123,
+            "w": 330,
+            "text": "Context"
+          },
+          {
+            "type": "rule",
+            "x": 489,
+            "y": 162,
+            "w": 414
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "secondary",
+            "x": 507,
+            "y": 177,
+            "w": 36,
+            "text": "02"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 555,
+            "y": 177,
+            "w": 330,
+            "text": "Economics"
+          },
+          {
+            "type": "block",
+            "x": 489,
+            "y": 216,
+            "w": 414,
+            "h": 54,
+            "surface": "inverse",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "display",
+            "x": 507,
+            "y": 231,
+            "w": 36,
+            "text": "03",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 555,
+            "y": 231,
+            "w": 330,
+            "text": "Approach",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 489,
+            "y": 270,
+            "w": 414
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "secondary",
+            "x": 507,
+            "y": 285,
+            "w": 36,
+            "text": "04"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 555,
+            "y": 285,
+            "w": 330,
+            "text": "Proof"
+          },
+          {
+            "type": "rule",
+            "x": 489,
+            "y": 324,
+            "w": 414
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "secondary",
+            "x": 507,
+            "y": 339,
+            "w": 36,
+            "text": "05"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 555,
+            "y": 339,
+            "w": 330,
+            "text": "Next steps"
+          },
+          {
+            "type": "rule",
+            "x": 489,
+            "y": 378,
+            "w": 414
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-top",
+      "name": "Divider · progress line on top",
+      "tier": "core",
+      "purpose": "Opens a section on White with the number and title, under a thin text-only progress line along the top: the current section in Grounded, the rest muted.",
+      "uses": [
+        "header.display",
+        "text",
+        "rule"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 20,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 597,
+            "y": 216,
+            "w": 306,
+            "h": 216,
+            "fade": "none"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 36,
+            "w": 154.8,
+            "text": "01 Context"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 229.8,
+            "y": 36,
+            "w": 154.8,
+            "text": "02 Economics"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "display",
+            "x": 402.6,
+            "y": 36,
+            "w": 154.8,
+            "text": "03 Approach"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 575.4,
+            "y": 36,
+            "w": 154.8,
+            "text": "04 Proof"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 748.2,
+            "y": 36,
+            "w": 154.8,
+            "text": "05 Next steps"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 63,
+            "w": 846
+          },
+          {
+            "type": "rule",
+            "x": 402.6,
+            "y": 62,
+            "w": 36,
+            "weight": 3,
+            "ink": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 180,
+            "w": 198,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 270,
+            "w": 486,
+            "text": "Section 03 of 05"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 288,
+            "w": 486,
+            "text": "Our [[approach]]",
+            "emphasis": "highlight"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-underline",
+      "name": "Divider · progress underline, inverse",
+      "tier": "core",
+      "purpose": "Opens a section on Grounded Blue with section names as plain labels along the bottom; only a short accent rule under the current one marks progress.",
+      "uses": [
+        "header.display",
+        "text",
+        "rule"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 20,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 597,
+            "y": 72,
+            "w": 306,
+            "h": 288,
+            "fade": "none",
+            "on": "inverse"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 108,
+            "w": 198,
+            "text": "03",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 486,
+            "text": "Section 03 of 05",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 486,
+            "text": "Our [[approach]]",
+            "on": "inverse",
+            "emphasis": "underscore"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 414,
+            "w": 154.8,
+            "text": "01 Context",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 229.8,
+            "y": 414,
+            "w": 154.8,
+            "text": "02 Economics",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "display",
+            "x": 402.6,
+            "y": 414,
+            "w": 154.8,
+            "text": "03 Approach",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 575.4,
+            "y": 414,
+            "w": 154.8,
+            "text": "04 Proof",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 748.2,
+            "y": 414,
+            "w": 154.8,
+            "text": "05 Next steps",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 402.6,
+            "y": 441,
+            "w": 36,
+            "weight": 3,
+            "ink": "callout"
+          }
+        ],
+        "surface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-dots",
+      "name": "Divider · progress ticks",
+      "tier": "core",
+      "purpose": "Opens a section on White with the number and title, and a row of numbered ticks beneath: the current one drawn heavy and named, the others a quiet number on a hairline.",
+      "uses": [
+        "header.display",
+        "text",
+        "rule"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 15,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 597,
+            "y": 72,
+            "w": 306,
+            "h": 216,
+            "fade": "none"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 108,
+            "w": 198,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 486,
+            "text": "Section 03 of 05"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 486,
+            "text": "Our [[approach]]",
+            "emphasis": "underscore"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 360,
+            "w": 154.8,
+            "text": "01"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 384,
+            "w": 136.8,
+            "weight": 1.5,
+            "ink": "line"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 229.8,
+            "y": 360,
+            "w": 154.8,
+            "text": "02"
+          },
+          {
+            "type": "rule",
+            "x": 229.8,
+            "y": 384,
+            "w": 136.8,
+            "weight": 1.5,
+            "ink": "line"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "display",
+            "x": 402.6,
+            "y": 360,
+            "w": 154.8,
+            "text": "03 Approach"
+          },
+          {
+            "type": "rule",
+            "x": 402.6,
+            "y": 384,
+            "w": 136.8,
+            "weight": 4.5,
+            "ink": "display"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 575.4,
+            "y": 360,
+            "w": 154.8,
+            "text": "04"
+          },
+          {
+            "type": "rule",
+            "x": 575.4,
+            "y": 384,
+            "w": 136.8,
+            "weight": 1.5,
+            "ink": "line"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 748.2,
+            "y": 360,
+            "w": 154.8,
+            "text": "05"
+          },
+          {
+            "type": "rule",
+            "x": 748.2,
+            "y": 384,
+            "w": 136.8,
+            "weight": 1.5,
+            "ink": "line"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "divider",
+      "variant": "progress-rail",
+      "name": "Divider · progress rail, inverse",
+      "tier": "core",
+      "purpose": "Opens a section on Grounded Blue with the number and title as the hero and a slim vertical progress list on the right edge: a thin rule with labels, the current one bright and marked.",
+      "uses": [
+        "header.display",
+        "text",
+        "connector"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 20,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "number",
+          "maxChars": 2
+        },
+        {
+          "slot": "title",
+          "maxChars": 36
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "28",
+        "whiteboard": [
+          {
+            "x": 21,
+            "y": 324,
+            "w": 396,
+            "h": 108,
+            "fade": "right",
+            "on": "inverse"
+          }
+        ],
+        "body": [
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 108,
+            "w": 198,
+            "text": "03",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 438,
+            "text": "Section 03 of 05",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "display",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 438,
+            "text": "Our [[approach]]",
+            "on": "inverse",
+            "emphasis": "underscore"
+          },
+          {
+            "type": "block",
+            "x": 759,
+            "y": 126,
+            "w": 1.5,
+            "h": 180,
+            "surface": "subtle",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 777,
+            "y": 135,
+            "w": 126,
+            "text": "01 Context",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 777,
+            "y": 171,
+            "w": 126,
+            "text": "02 Economics",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "display",
+            "x": 777,
+            "y": 207,
+            "w": 126,
+            "text": "03 Approach",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 777,
+            "y": 243,
+            "w": 126,
+            "text": "04 Proof",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 777,
+            "y": 279,
+            "w": 126,
+            "text": "05 Next steps",
+            "on": "inverse"
+          },
+          {
+            "type": "block",
+            "x": 759,
+            "y": 198,
+            "w": 3,
+            "h": 36,
+            "surface": "light",
+            "text": ""
+          }
+        ],
+        "surface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "guide",
+      "variant": "section-guide",
+      "name": "Guide · section opener",
+      "tier": "core",
+      "purpose": "The internal opener a pick deck repeats per section: a short narrative of the section, then an index with one row per slide (number, title, the point it makes, when to use it) and a subtle section-progress line. Not for clients.",
+      "uses": [
+        "header.slide",
+        "stamp",
+        "table",
+        "text"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck mapping",
+      "budget": {
+        "words": 167,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 44
+        },
+        {
+          "slot": "stamp",
+          "values": [
+            "For internal use"
+          ]
+        },
+        {
+          "slot": "narrative",
+          "maxWords": 40
+        },
+        {
+          "slot": "index",
+          "minItems": 6,
+          "maxItems": 8,
+          "fields": [
+            "slide",
+            "title",
+            "point",
+            "when"
+          ],
+          "maxChars": 60
+        },
+        {
+          "slot": "sections",
+          "minItems": 3,
+          "maxItems": 5,
+          "maxChars": 14,
+          "note": "short section names; shown as a muted text line"
+        },
+        {
+          "slot": "active",
+          "kind": "index",
+          "note": "zero-based index of the current section"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "page": "30",
+        "eyebrow": "Section guide · 03",
+        "title": "Approach: how the work gets delivered",
+        "stamp": "For internal use",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "text": "Narrative of this section"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 144,
+            "w": 846,
+            "text": "Approved outcomes become working capability in four subphases. Design fixes the target, build and validation prove it with Northfield teams, and cutover moves entities in controlled waves behind leader sign-off."
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 198,
+            "w": 846,
+            "header": "light",
+            "cols": [
+              {
+                "k": "n",
+                "label": "Slide",
+                "w": 54
+              },
+              {
+                "k": "slide",
+                "label": "Title",
+                "w": 198
+              },
+              {
+                "k": "what",
+                "label": "What it covers",
+                "w": 378
+              },
+              {
+                "k": "when",
+                "label": "When to use",
+                "w": 216
+              }
+            ],
+            "rows": [
+              {
+                "n": "31",
+                "slide": "Approach at a glance",
+                "what": "Four subphases take approved outcomes to a live capability",
+                "when": "Opening any delivery talk"
+              },
+              {
+                "n": "32",
+                "slide": "Subphase detail",
+                "what": "Activities, outputs and owners for each subphase",
+                "when": "Buyer asks for specifics"
+              },
+              {
+                "n": "33",
+                "slide": "Working model",
+                "what": "What each Northfield team does, week by week",
+                "when": "Resourcing questions"
+              },
+              {
+                "n": "34",
+                "slide": "Phased cutover",
+                "what": "Entities move in controlled waves, not one event",
+                "when": "Risk-averse operations leaders"
+              },
+              {
+                "n": "35",
+                "slide": "Decision gates",
+                "what": "Where leaders sign off before work moves on",
+                "when": "Steering committee review"
+              },
+              {
+                "n": "36",
+                "slide": "Delivery risks",
+                "what": "Top risks and how we contain each one",
+                "when": "Late-stage diligence"
+              },
+              {
+                "n": "37",
+                "slide": "Governance cadence",
+                "what": "Who meets, how often and what they decide",
+                "when": "Sponsor wants oversight"
+              }
+            ],
+            "dense": true,
+            "rowH": 28
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 441,
+            "w": 154.8,
+            "text": "01  Context"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 229.8,
+            "y": 441,
+            "w": 154.8,
+            "text": "02  Economics"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 402.6,
+            "y": 441,
+            "w": 154.8,
+            "text": "03  Approach"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 575.4,
+            "y": 441,
+            "w": 154.8,
+            "text": "04  Proof"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 748.2,
+            "y": 441,
+            "w": 154.8,
+            "text": "05  Next steps"
+          },
+          {
+            "type": "rule",
+            "x": 402.6,
+            "y": 462,
+            "w": 36,
+            "weight": 3,
+            "ink": "emphasis"
+          }
+        ]
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-03"
+    },
+    {
+      "id": "closing",
+      "variant": "tagline",
+      "name": "Closing · tagline",
+      "tier": "core",
+      "purpose": "Brand sign-off on Grounded Blue with the tagline and one next step.",
+      "uses": [
+        "tagline art",
+        "text.block"
+      ],
+      "legacy": "closing",
+      "budget": {
+        "words": 25,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "nextStep",
+          "maxChars": 40
+        },
+        {
+          "slot": "contactName",
+          "maxChars": 30
+        },
+        {
+          "slot": "contactRole",
+          "maxChars": 50
+        },
+        {
+          "slot": "contactEmail",
+          "maxChars": 40
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "surface": "inverse",
+        "noPage": true,
+        "body": [
+          {
+            "type": "art",
+            "src": "tagline-rev",
+            "x": 57,
+            "y": 180,
+            "w": 342,
+            "alt": "Clear Action. Lasting Impact."
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 561,
+            "y": 198,
+            "w": 342,
+            "text": "Next step"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 561,
+            "y": 216,
+            "w": 342,
+            "text": "Kick off wave 1 in January"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 561,
+            "y": 270,
+            "w": 342,
+            "text": "Engagement lead · Finance Transformation"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 561,
+            "y": 288,
+            "w": 342,
+            "text": "name@westmonroe.com"
+          }
+        ],
+        "whiteboard": [
+          {
+            "x": 561,
+            "y": 36,
+            "w": 342,
+            "h": 126,
+            "fade": "bottom"
+          }
+        ]
+      }
+    }
+  ]
+}

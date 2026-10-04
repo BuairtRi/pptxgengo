@@ -1,0 +1,1 @@
+225 extracted words include source chrome/scaffold; full business copy exceeds small direct-shared budgets. Unequal panels retain grouping; a right-panel alternative emphasizes outcomes but reduces heard-item width.

@@ -1,0 +1,535 @@
+{
+  "key": "offers-onepager/approach-table-split",
+  "source_file": "templates/library/offers.json",
+  "source_sha256": "b21d3126f6dce1e8db9d15c23f922c7a4a0f634428eed59e54a7519bca3e26ac",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "block"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "text"
+    }
+  ],
+  "family": "offers",
+  "tier": "core",
+  "name": "One-page proposal · approach table, tall right",
+  "purpose": "A tall approach table in the wide column (five phases, each with what we do and what you get) leads; the narrow column carries the offer narrative, fee and assumptions.",
+  "uses": [
+    "table.dense (bullets)",
+    "text",
+    "text.stat-sm",
+    "block",
+    "split.tall-right"
+  ],
+  "source_advisory_budget": {
+    "words": 202,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "offer narrative",
+      "maxChars": 170
+    },
+    {
+      "slot": "phase bullet (x3)",
+      "maxChars": 42
+    },
+    {
+      "slot": "you get",
+      "maxChars": 34
+    },
+    {
+      "slot": "fee",
+      "maxChars": 8
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 270,
+          "x": 57,
+          "y": 306
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 246,
+          "x": 69,
+          "y": 315
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 108,
+          "x": 69,
+          "y": 333
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 132,
+          "x": 183,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 390
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-right",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Offerings"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "ERP readiness review: a costed roadmap and a clear go or stop call"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Phase"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "What we do"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "What you get"
+    },
+    {
+      "name": "node01.rows.item01.a.item01",
+      "source_pointer": "/body/0/rows/0/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Confirm goals, scope and sponsors"
+    },
+    {
+      "name": "node01.rows.item01.a.item02",
+      "source_pointer": "/body/0/rows/0/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Inventory 14 interfaces and modules"
+    },
+    {
+      "name": "node01.rows.item01.a.item03",
+      "source_pointer": "/body/0/rows/0/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Agree success criteria"
+    },
+    {
+      "name": "node01.rows.item01.o",
+      "source_pointer": "/body/0/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "Scope and criteria"
+    },
+    {
+      "name": "node01.rows.item01.p.text",
+      "source_pointer": "/body/0/rows/0/p/text",
+      "kind": "string",
+      "synthetic_source_example": "Scope"
+    },
+    {
+      "name": "node01.rows.item01.p.sub",
+      "source_pointer": "/body/0/rows/0/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Week 1"
+    },
+    {
+      "name": "node01.rows.item02.a.item01",
+      "source_pointer": "/body/0/rows/1/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Review finance and supply processes"
+    },
+    {
+      "name": "node01.rows.item02.a.item02",
+      "source_pointer": "/body/0/rows/1/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Rate fit gaps by module"
+    },
+    {
+      "name": "node01.rows.item02.a.item03",
+      "source_pointer": "/body/0/rows/1/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Interview 15 process owners"
+    },
+    {
+      "name": "node01.rows.item02.o",
+      "source_pointer": "/body/0/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "Fit-gap register"
+    },
+    {
+      "name": "node01.rows.item02.p.text",
+      "source_pointer": "/body/0/rows/1/p/text",
+      "kind": "string",
+      "synthetic_source_example": "Assess"
+    },
+    {
+      "name": "node01.rows.item02.p.sub",
+      "source_pointer": "/body/0/rows/1/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 2 to 3"
+    },
+    {
+      "name": "node01.rows.item03.a.item01",
+      "source_pointer": "/body/0/rows/2/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Draft target process and data model"
+    },
+    {
+      "name": "node01.rows.item03.a.item02",
+      "source_pointer": "/body/0/rows/2/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Map integrations and cutover risks"
+    },
+    {
+      "name": "node01.rows.item03.a.item03",
+      "source_pointer": "/body/0/rows/2/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Size the data clean-up"
+    },
+    {
+      "name": "node01.rows.item03.o",
+      "source_pointer": "/body/0/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "Target-state blueprint"
+    },
+    {
+      "name": "node01.rows.item03.p.text",
+      "source_pointer": "/body/0/rows/2/p/text",
+      "kind": "string",
+      "synthetic_source_example": "Design"
+    },
+    {
+      "name": "node01.rows.item03.p.sub",
+      "source_pointer": "/body/0/rows/2/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 4 to 5"
+    },
+    {
+      "name": "node01.rows.item04.a.item01",
+      "source_pointer": "/body/0/rows/3/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Sequence waves and release plan"
+    },
+    {
+      "name": "node01.rows.item04.a.item02",
+      "source_pointer": "/body/0/rows/3/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Build the budget and staffing case"
+    },
+    {
+      "name": "node01.rows.item04.a.item03",
+      "source_pointer": "/body/0/rows/3/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Set governance and decision rights"
+    },
+    {
+      "name": "node01.rows.item04.o",
+      "source_pointer": "/body/0/rows/3/o",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap, budget, risks"
+    },
+    {
+      "name": "node01.rows.item04.p.text",
+      "source_pointer": "/body/0/rows/3/p/text",
+      "kind": "string",
+      "synthetic_source_example": "Plan"
+    },
+    {
+      "name": "node01.rows.item04.p.sub",
+      "source_pointer": "/body/0/rows/3/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Week 6"
+    },
+    {
+      "name": "node01.rows.item05.a.item01",
+      "source_pointer": "/body/0/rows/4/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Present options to the steering group"
+    },
+    {
+      "name": "node01.rows.item05.a.item02",
+      "source_pointer": "/body/0/rows/4/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Resolve open decisions"
+    },
+    {
+      "name": "node01.rows.item05.a.item03",
+      "source_pointer": "/body/0/rows/4/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Agree the go, wait or stop call"
+    },
+    {
+      "name": "node01.rows.item05.o",
+      "source_pointer": "/body/0/rows/4/o",
+      "kind": "string",
+      "synthetic_source_example": "Decision readout"
+    },
+    {
+      "name": "node01.rows.item05.p.text",
+      "source_pointer": "/body/0/rows/4/p/text",
+      "kind": "string",
+      "synthetic_source_example": "Decide"
+    },
+    {
+      "name": "node01.rows.item05.p.sub",
+      "source_pointer": "/body/0/rows/4/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Week 7"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "1 · What we will do"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Know before you commit. In seven weeks we test how well your ERP fits Northfield's finance and supply processes, and give the board a costed roadmap and a clear go, wait or stop call."
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "3 · Fixed fee"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "$130K"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "7 weeks, 2 invoices"
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "Team: lead, ERP architect, two analysts. Needs a named business owner in week 1."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item05.a",
+      "source_pointer": "/body/0/rows/4/a",
+      "count": 3
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

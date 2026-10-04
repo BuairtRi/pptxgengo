@@ -1,0 +1,477 @@
+{
+  "key": "fixed-fee/with-assumptions",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "text"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "text"
+    }
+  ],
+  "family": "commercials",
+  "tier": "core",
+  "name": "Fixed fee · fee table and assumptions · right panel",
+  "purpose": "A phase-level fee table with the assumptions the fee depends on on a right panel, so scope and price are read together.",
+  "uses": [
+    "pricing.set",
+    "table.standard (fees preset)",
+    "text"
+  ],
+  "source_advisory_budget": {
+    "words": 78,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "phase",
+      "maxChars": 24
+    },
+    {
+      "slot": "timing",
+      "maxChars": 12
+    },
+    {
+      "slot": "fee",
+      "maxChars": 10
+    },
+    {
+      "slot": "assumption",
+      "maxChars": 56,
+      "note": "four short assumptions on the 273 pt right panel"
+    },
+    {
+      "slot": "term",
+      "maxChars": 44
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "rule",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/2/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 378
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 402
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 195
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 240
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 285
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 339
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 357
+        }
+      }
+    ],
+    "frame": {
+      "rail": "right",
+      "footer": "tall",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Commercials"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "$720K rests on four assumptions"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Phase"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Timing"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Share"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Fee"
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "$216K"
+    },
+    {
+      "name": "node01.rows.item01.p",
+      "source_pointer": "/body/0/rows/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Diagnose"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "30%"
+    },
+    {
+      "name": "node01.rows.item01.t",
+      "source_pointer": "/body/0/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 1–4"
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "$288K"
+    },
+    {
+      "name": "node01.rows.item02.p",
+      "source_pointer": "/body/0/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Design"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "40%"
+    },
+    {
+      "name": "node01.rows.item02.t",
+      "source_pointer": "/body/0/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 5–10"
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "$216K"
+    },
+    {
+      "name": "node01.rows.item03.p",
+      "source_pointer": "/body/0/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "30%"
+    },
+    {
+      "name": "node01.rows.item03.t",
+      "source_pointer": "/body/0/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 11–14"
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "$720K"
+    },
+    {
+      "name": "node01.rows.item04.p",
+      "source_pointer": "/body/0/rows/3/p",
+      "kind": "string",
+      "synthetic_source_example": "Total fixed fee"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "How it is paid"
+    },
+    {
+      "name": "node03.items.item01",
+      "source_pointer": "/body/2/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Invoiced as each phase is accepted, net 30"
+    },
+    {
+      "name": "node03.items.item02",
+      "source_pointer": "/body/2/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Expenses at cost, capped at 8% of fees"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Assumptions"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "14 business units in scope"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Data access in week 1"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Decisions within 5 business days"
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "One ERP instance, no new modules"
+    },
+    {
+      "name": "node10.text",
+      "source_pointer": "/body/9/text",
+      "kind": "string",
+      "synthetic_source_example": "Changes follow the change process."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 4
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 4
+    },
+    {
+      "name": "node03.items",
+      "source_pointer": "/body/2/items",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "pptxgengo.independent-intake-review.v1",
+  "source": "planning/wm-design-contracts/v4/intake-20261003/source/explorations/components.src.html",
+  "source_sha256": "a7f1f046d38723cb86d6e0dbacd97886c183784df1e4949192322e74d6a33cf6",
+  "areas": [
+    "venn",
+    "maturity",
+    "teamcurve",
+    "table heat and scores"
+  ],
+  "findings_resolved": [
+    {
+      "area": "venn",
+      "finding": "Bullet resource counter and copy budget previously local per group; now node-wide128items/65536runes including point labels",
+      "reference": "internal/wmdesign/scene_intake_venn.go:187",
+      "owner": "authoring_contract_research"
+    },
+    {
+      "area": "maturity",
+      "finding": "Frozen headroom placement missing and auxiliary text unbounded; owner added finite headroom and bounded copy",
+      "reference": "internal/wmdesign/scene_intake_maturity.go:234",
+      "owner": "refresh_proof_evidence"
+    },
+    {
+      "area": "table",
+      "finding": "Heat underlays prepended percell causing growing-tail copies; now gathered separately and assembled once",
+      "reference": "internal/wmdesign/scene_tables.go",
+      "owner": "skill_catalog_research"
+    },
+    {
+      "area": "table",
+      "finding": "Scalar shortcut bypassed score shape footprints; guard now precedes shortcut",
+      "reference": "internal/wmdesign/scene_table_enhancements.go:73",
+      "owner": "skill_catalog_research"
+    },
+    {
+      "area": "heat",
+      "finding": "Source finite overcapacity colors saturate; engine now clamps before division and preserves raw label",
+      "reference": "internal/wmdesign/scene_heat.go:27",
+      "owner": "skill_catalog_research"
+    },
+    {
+      "area": "table",
+      "finding": "All native paragraphs inherited main leading; now effective per-paragraph style/font with maximum run leading",
+      "reference": "internal/wmdesign/scene_table_xml.go:251",
+      "owner": "skill_catalog_research"
+    },
+    {
+      "area": "heat",
+      "finding": "Hardcoded white gutters differed from frozen inverse/deep surface; now effective cell surface background",
+      "reference": "internal/wmdesign/scene_table_enhancements.go",
+      "owner": "skill_catalog_research"
+    }
+  ],
+  "additional_unresolved_concrete_findings": [],
+  "checks": [
+    {
+      "command": "go test ./internal/wmdesign -run TestTableHeat|TestTablePlain|TestHeatBlocks|TestTableEnhancement|TestTableLegacy|TestTableScoreFootprints -bench BenchmarkTableHeatDense -benchtime=1x -count=1",
+      "status": "passed",
+      "seconds": 0.706
+    },
+    {
+      "command": "go test -race ./internal/wmdesign -run TestTableHeat|TestTablePlain|TestHeatBlocks|TestTableEnhancement|TestTableLegacy|TestTableScoreFootprints|TestIntakeVenn|TestIntakeMaturity|TestIntakeCurve -count=1",
+      "status": "passed",
+      "seconds": 6.921
+    }
+  ],
+  "dense_benchmark": {
+    "cells": 720,
+    "ns_per_op": 2611875,
+    "bytes_per_op": 4877112,
+    "allocs_per_op": 36991,
+    "iterations": 1,
+    "qualification": "single iteration diagnostic; not a performance acceptance threshold"
+  },
+  "limits": "Code/source review and package-level XML/race checks only. Native PowerPoint visual acceptance pending. Earlier full frozen v3 generation248slides was before final fixes; root owns final integration source smoke."
+}

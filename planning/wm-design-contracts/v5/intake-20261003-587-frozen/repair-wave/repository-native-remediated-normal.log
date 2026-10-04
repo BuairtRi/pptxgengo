@@ -1,0 +1,100 @@
+# Full repository uncached normal — 2026-10-03T22:26:56.830746+00:00
+# Cached Go1.27.1, GOPROXY=off, GOTOOLCHAIN=local. Installed release unchanged.
+$ go test -count=1 ./...
+?   	github.com/buairtri/pptxgengo/cmd/pptxadapt	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxanchor	0.337s
+?   	github.com/buairtri/pptxgengo/cmd/pptxcomponent	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxcompose	0.558s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdesign	1.616s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdiff	0.715s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxgengo	1.116s
+?   	github.com/buairtri/pptxgengo/cmd/pptxlib	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxscene	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxtemplate	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/adapt	0.764s
+?   	github.com/buairtri/pptxgengo/internal/component	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/compose	0.986s
+ok  	github.com/buairtri/pptxgengo/internal/deckproject	6.783s
+ok  	github.com/buairtri/pptxgengo/internal/library	3.246s
+ok  	github.com/buairtri/pptxgengo/internal/nativepkg	1.406s
+ok  	github.com/buairtri/pptxgengo/internal/textlayout	2.550s
+--- FAIL: TestV5QuadrantBadgeReservesMeasuredHeader (0.02s)
+    scene_native_word_fit_test.go:99: scene.unsupported_source_field: binding.unsupported_field_or_invalid_value: scene.quadrant_key_requires_boolean_or_markers
+FAIL
+FAIL	github.com/buairtri/pptxgengo/internal/wmdesign	16.159s
+ok  	github.com/buairtri/pptxgengo/pptx	2.638s
+FAIL
+exit_code=1
+
+# Final rerun after production-path quadrant fixture fix — 2026-10-03T22:29:25.331581+00:00
+$ go test -count=1 ./...
+?   	github.com/buairtri/pptxgengo/cmd/pptxadapt	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxanchor	0.217s
+?   	github.com/buairtri/pptxgengo/cmd/pptxcomponent	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxcompose	0.540s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdesign	2.538s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdiff	0.178s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxgengo	0.450s
+?   	github.com/buairtri/pptxgengo/cmd/pptxlib	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxscene	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxtemplate	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/adapt	0.604s
+?   	github.com/buairtri/pptxgengo/internal/component	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/compose	0.299s
+ok  	github.com/buairtri/pptxgengo/internal/deckproject	7.521s
+ok  	github.com/buairtri/pptxgengo/internal/library	2.493s
+ok  	github.com/buairtri/pptxgengo/internal/nativepkg	1.313s
+ok  	github.com/buairtri/pptxgengo/internal/textlayout	2.083s
+ok  	github.com/buairtri/pptxgengo/internal/wmdesign	16.773s
+ok  	github.com/buairtri/pptxgengo/pptx	2.112s
+exit_code=0
+
+# Final full rerun after quadrant fixture and staged published-default / existing-pin migration — 2026-10-03T22:37:10.960064+00:00
+$ go test -count=1 ./...
+?   	github.com/buairtri/pptxgengo/cmd/pptxadapt	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxanchor	0.282s
+?   	github.com/buairtri/pptxgengo/cmd/pptxcomponent	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxcompose	0.492s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdesign	5.340s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdiff	0.413s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxgengo	0.935s
+?   	github.com/buairtri/pptxgengo/cmd/pptxlib	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxscene	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxtemplate	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/adapt	0.791s
+?   	github.com/buairtri/pptxgengo/internal/component	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/compose	1.146s
+ok  	github.com/buairtri/pptxgengo/internal/deckproject	7.891s
+ok  	github.com/buairtri/pptxgengo/internal/library	2.918s
+ok  	github.com/buairtri/pptxgengo/internal/nativepkg	1.838s
+ok  	github.com/buairtri/pptxgengo/internal/textlayout	2.408s
+--- FAIL: TestLibraryV5InheritedBindingsPreserveV4Amendments (0.43s)
+    library_v5_test.go:153: inherited amendment changed: value-types/hard-soft-right
+FAIL
+FAIL	github.com/buairtri/pptxgengo/internal/wmdesign	16.361s
+ok  	github.com/buairtri/pptxgengo/pptx	3.158s
+FAIL
+exit_code=1
+
+# Definitive stable-production v3c rerun: full source587/bound586 and7033nodes/0errors, all focused fixes merged — 2026-10-03T22:41:51.674815+00:00
+$ go test -count=1 ./...
+?   	github.com/buairtri/pptxgengo/cmd/pptxadapt	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxanchor	0.221s
+?   	github.com/buairtri/pptxgengo/cmd/pptxcomponent	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxcompose	0.422s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdesign	7.258s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdiff	0.211s
+ok  	github.com/buairtri/pptxgengo/cmd/pptxgengo	0.565s
+?   	github.com/buairtri/pptxgengo/cmd/pptxlib	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxscene	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxtemplate	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/adapt	2.213s
+?   	github.com/buairtri/pptxgengo/internal/component	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/compose	0.858s
+ok  	github.com/buairtri/pptxgengo/internal/deckproject	7.486s
+ok  	github.com/buairtri/pptxgengo/internal/library	3.386s
+ok  	github.com/buairtri/pptxgengo/internal/nativepkg	0.818s
+ok  	github.com/buairtri/pptxgengo/internal/textlayout	0.819s
+ok  	github.com/buairtri/pptxgengo/internal/wmdesign	16.506s
+ok  	github.com/buairtri/pptxgengo/pptx	2.498s
+exit_code=0

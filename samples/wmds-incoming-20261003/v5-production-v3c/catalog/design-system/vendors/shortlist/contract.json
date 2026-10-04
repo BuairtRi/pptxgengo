@@ -1,0 +1,606 @@
+{
+  "key": "vendors/shortlist",
+  "source_file": "templates/library/argument.json",
+  "source_sha256": "a6cbe304790ef6def6566f82233f5cdc59cdd8fbfbdff6d4bf70fc19083df196",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "chevron"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "chevron"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "card"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "text"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "text"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "text"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "chevron"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "card"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "text"
+    },
+    {
+      "id": "node16",
+      "source_pointer": "/body/15",
+      "expected_type": "text"
+    },
+    {
+      "id": "node17",
+      "source_pointer": "/body/16",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node18",
+      "source_pointer": "/body/17",
+      "expected_type": "text"
+    },
+    {
+      "id": "node19",
+      "source_pointer": "/body/18",
+      "expected_type": "block"
+    }
+  ],
+  "family": "argument",
+  "tier": "working",
+  "name": "Vendor selection · stepped shortlist from long list to recommendation",
+  "purpose": "Narrow vendors in three steps, from long list to short list to a single recommendation, with the criteria applied and the vendors dropped at each step.",
+  "uses": [
+    "shape.chevron",
+    "card.options",
+    "list.set"
+  ],
+  "source_advisory_budget": {
+    "words": 96,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "stage label",
+      "maxChars": 14
+    },
+    {
+      "slot": "count",
+      "maxChars": 12
+    },
+    {
+      "slot": "criterion",
+      "maxChars": 38
+    },
+    {
+      "slot": "outcome",
+      "maxChars": 44
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "sequence-item"
+    ],
+    "structures": [
+      "process",
+      "repeated-items",
+      "sequence"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "bullets",
+      "card",
+      "chevron",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/4/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/10/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/16/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "source_bounds": {
+          "h": 36,
+          "w": 270,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 234,
+          "w": 270,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 75,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 75,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 75,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 75,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "source_bounds": {
+          "h": 36,
+          "w": 270,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 216,
+          "w": 270,
+          "x": 345,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 363,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 363,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 363,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 363,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "source_bounds": {
+          "h": 36,
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 198,
+          "w": 270,
+          "x": 633,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 651,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/15",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 651,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/16",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 651,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/17",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 234,
+          "x": 651,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/18",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 846,
+          "x": 57,
+          "y": 432
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Vendor selection"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Three steps narrowed twelve vendors to one"
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Long list"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "12 vendors"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Criteria applied"
+    },
+    {
+      "name": "node05.items.item01",
+      "source_pointer": "/body/4/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Serves healthcare payers"
+    },
+    {
+      "name": "node05.items.item02",
+      "source_pointer": "/body/4/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Supports our ERP platform"
+    },
+    {
+      "name": "node05.items.item03",
+      "source_pointer": "/body/4/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Offers a cloud delivery model"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "8 vendors out: missing a must-have"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Short list"
+    },
+    {
+      "name": "node09.text",
+      "source_pointer": "/body/8/text",
+      "kind": "string",
+      "synthetic_source_example": "4 vendors"
+    },
+    {
+      "name": "node10.text",
+      "source_pointer": "/body/9/text",
+      "kind": "string",
+      "synthetic_source_example": "Criteria applied"
+    },
+    {
+      "name": "node11.items.item01",
+      "source_pointer": "/body/10/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Scripted demo against five use cases"
+    },
+    {
+      "name": "node11.items.item02",
+      "source_pointer": "/body/10/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Reference calls with two peers"
+    },
+    {
+      "name": "node11.items.item03",
+      "source_pointer": "/body/10/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Security and cost review"
+    },
+    {
+      "name": "node12.text",
+      "source_pointer": "/body/11/text",
+      "kind": "string",
+      "synthetic_source_example": "3 vendors out: weaker fit or higher cost"
+    },
+    {
+      "name": "node13.text",
+      "source_pointer": "/body/12/text",
+      "kind": "string",
+      "synthetic_source_example": "Recommended"
+    },
+    {
+      "name": "node15.text",
+      "source_pointer": "/body/14/text",
+      "kind": "string",
+      "synthetic_source_example": "1 vendor"
+    },
+    {
+      "name": "node16.text",
+      "source_pointer": "/body/15/text",
+      "kind": "string",
+      "synthetic_source_example": "Criteria applied"
+    },
+    {
+      "name": "node17.items.item01",
+      "source_pointer": "/body/16/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Weighted scorecard result"
+    },
+    {
+      "name": "node17.items.item02",
+      "source_pointer": "/body/16/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Steering committee review"
+    },
+    {
+      "name": "node17.items.item03",
+      "source_pointer": "/body/16/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Negotiation terms confirmed"
+    },
+    {
+      "name": "node18.text",
+      "source_pointer": "/body/17/text",
+      "kind": "string",
+      "synthetic_source_example": "Vendor B proceeds to contract"
+    },
+    {
+      "name": "node19.text",
+      "source_pointer": "/body/18/text",
+      "kind": "string",
+      "synthetic_source_example": "Each step tightens the test: must-haves first, then fit, then total value."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node05.items",
+      "source_pointer": "/body/4/items",
+      "count": 3
+    },
+    {
+      "name": "node11.items",
+      "source_pointer": "/body/10/items",
+      "count": 3
+    },
+    {
+      "name": "node17.items",
+      "source_pointer": "/body/16/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

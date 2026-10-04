@@ -251,6 +251,10 @@ type diagramSpec struct {
 	Rows      []json.RawMessage `json:"rows"`
 	Left      string            `json:"left"`
 	Right     string            `json:"right"`
+	Arrow     string            `json:"arrow,omitempty"`
+	Heat      *float64          `json:"heat,omitempty"`
+	HeatMax   *float64          `json:"heatMax,omitempty"`
+	HeatScale string            `json:"heatScale,omitempty"`
 }
 
 func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneContext) (*scenePlan, bool, error) {
@@ -260,7 +264,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 	if e := json.Unmarshal(raw, &tag); e != nil {
 		return nil, false, e
 	}
-	fields := map[string]string{"block": "x y w h surface text style align", "frame": "id x y w h style label", "chevron": "x y w h first surface text style number sub", "textarrow": "x y w h dir surface text style", "connector": "points label labelPos style head elbow ink startDot dashed", "container": "id x y w h style label labelPos bullets", "cylinder": "x y w h surface text sub", "node": "x y w h surface icon text sub layout", "layerrow": "x y w h surface n label text highlight", "matrix": "x y w labels labelW cols cellH gap rowGap style rows", "beforeafter": "x y w left right rows"}
+	fields := map[string]string{"block": "x y w h surface text style align heat heatMax heatScale", "frame": "id x y w h style label", "chevron": "x y w h first surface text style number sub", "textarrow": "x y w h dir surface text style", "connector": "points label labelPos style head elbow ink startDot dashed", "container": "id x y w h style label labelPos bullets", "cylinder": "x y w h surface text sub", "node": "x y w h surface icon text sub layout style", "layerrow": "x y w h surface n label text highlight", "matrix": "x y w labels labelW cols cellH gap rowGap style rows", "beforeafter": "x y w left right rows arrow"}
 	allowed, ok := fields[tag.Type]
 	if !ok {
 		return nil, false, nil
@@ -291,7 +295,21 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 	}
 	switch n.Type {
 	case "block":
-		rect("surface", b, surface)
+		heatInk := ""
+		if n.Heat != nil {
+			fill, ink, e := sceneHeat(*n.Heat, n.HeatMax, n.HeatScale)
+			if e != nil {
+				return nil, true, e
+			}
+			heatInk = ink
+			err = r.diagramShape(p, id+".surface", b, pptx.ShapeTypeRect, fill, "", 0, "", nil)
+			p.Warnings = append(p.Warnings, SceneHeatContract+" source_sha256="+SceneHeatSourceSHA256+"; native specimen review pending")
+		} else {
+			if n.HeatMax != nil || n.HeatScale != "" {
+				return nil, true, fmt.Errorf("scene.block_heat_requires_value")
+			}
+			rect("surface", b, surface)
+		}
 		token := n.Style
 		if token == "" {
 			token = "body"
@@ -301,11 +319,38 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 			a = "center"
 		}
 		pad := 12.0
-		if token == "label" && b.H <= 18 {
+		if r.source.Revision == LibraryRevisionV5 {
+			st, e := r.sceneStyle(token)
+			if e != nil {
+				return nil, true, e
+			}
+			pad, _, e = r.v5WordInsets(n.Text, st, b.W, pad, pad)
+			if e != nil {
+				return nil, true, e
+			}
+		}
+		incomingCompact := isExpandedLibrary(r.source.Revision) && ((token == "number" && b.W <= 54) || (token == "small" && b.W <= 72))
+		// Retain the compact small/label policy established by the preceding
+		// intake wave; only number badges and the72pt small block are new here.
+		if incomingCompact || (token == "label" || token == "small") && (b.H <= 18 || b.W <= 54) {
 			pad = math.Min(6, b.W/6)
 			p.Warnings = append(p.Warnings, "Adapter resolution wmds.compact-label-block.v1: preserve native shape/font sizes; compact label padding is6pt (3pt for18pt badges).")
 		}
 		text("text", n.Text, token, Rect{b.X + pad, b.Y, b.W - 2*pad, b.H}, surface, "display", a, 0, true)
+		if heatInk != "" {
+			for i := range p.Items {
+				if p.Items[i].Text != nil {
+					p.Items[i].Text.Color = heatInk
+					if p.Items[i].Text.Rich != nil {
+						for j := range p.Items[i].Text.Rich.Paragraphs {
+							for k := range p.Items[i].Text.Rich.Paragraphs[j].Runs {
+								p.Items[i].Text.Rich.Paragraphs[j].Runs[k].Color = heatInk
+							}
+						}
+					}
+				}
+			}
+		}
 	case "frame", "container":
 		fill, line, dash, weight := "", "", "solid", 1.0
 		if n.Type == "frame" {
@@ -436,6 +481,9 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 		token := n.Style
 		if token == "" {
 			token = "body"
+			if n.Type == "chevron" && (n.Number != "" || n.Sub != "") {
+				token = "small"
+			}
 		}
 		if n.Type == "chevron" {
 			d := math.Round(b.H / 3)
@@ -473,6 +521,37 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 		}
 		if err == nil {
 			err = r.diagramPolygon(p, id+".surface", b, surface, "", pts)
+		}
+		if isExpandedLibrary(r.source.Revision) && n.Type == "chevron" && n.Number != "" && n.Sub == "" && b.H >= 54 && b.W <= 126 {
+			// Compact numbered options have enough height for two rows.
+			// Sharing their width horizontally splits single-word headings.
+			nst, e := r.sceneStyle("number")
+			if e != nil {
+				return nil, true, e
+			}
+			st, e := r.sceneStyle(token)
+			if e != nil {
+				return nil, true, e
+			}
+			st.Weight = 600
+			nl, e := r.typeEngine.Measure(n.Number, nst, tx.W)
+			if e != nil {
+				return nil, true, e
+			}
+			l, e := r.typeEngine.Measure(n.Text, st, tx.W)
+			if e != nil {
+				return nil, true, e
+			}
+			nh := math.Max(nl.AllocationHeight, nl.OccupiedTop+nl.EstimatedOccupiedHeight)
+			th := math.Max(l.AllocationHeight, l.OccupiedTop+l.EstimatedOccupiedHeight)
+			if len(nl.Lines) != 1 || len(l.Lines) != 1 || nh+th > tx.H+.02 {
+				return nil, true, fmt.Errorf("scene.chevron_compact_stack_overflow: %s", id)
+			}
+			top := tx.Y + (tx.H-nh-th)/2
+			text("number", n.Number, "number", Rect{tx.X, top, tx.W, nh}, surface, "emphasis", "center", 0, false)
+			text("text", n.Text, token, Rect{tx.X, top + nh, tx.W, th}, surface, "display", "center", 600, false)
+			p.Warnings = append(p.Warnings, "wmds.v4.compact-chevron-number-above-heading")
+			break
 		}
 		if n.Number != "" || n.Sub != "" {
 			x := tx.X
@@ -600,7 +679,11 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 		} else if n.Layout != "" {
 			return nil, true, fmt.Errorf("scene.unknown_node_layout")
 		}
-		titleStyle, e := r.sceneStyle("body")
+		titleToken := n.Style
+		if titleToken == "" {
+			titleToken = "body"
+		}
+		titleStyle, e := r.sceneStyle(titleToken)
 		if e != nil {
 			return nil, true, e
 		}
@@ -1013,8 +1096,21 @@ func (r *renderer) planDiagramBeforeAfter(p *scenePlan, id string, n diagramSpec
 			return e
 		}
 		arrow := Rect{n.X + cw + 18, y + 15, 90, 24}
-		if e := r.diagramPolygon(p, pre+".arrow", arrow, "inverse", "", [][2]float64{{0, 6}, {78, 6}, {78, 0}, {90, 12}, {78, 24}, {78, 18}, {0, 18}}); e != nil {
-			return e
+		if n.Arrow != "" {
+			// Preserve the supplied artwork's aspect ratio and center it in
+			// the row gutter, with the same 18pt clearance on both sides.
+			arrow.H = 0
+			im, e := r.primitiveArtworkImage(pre+".arrow", n.Arrow, arrow, ctx.Surface, "strong")
+			if e != nil {
+				return e
+			}
+			centerY := pptx.Inches((y+27)/72 - im.H.Val/2)
+			im.Y = &centerY
+			p.Items = append(p.Items, sceneItem{Image: im})
+		} else {
+			if e := r.diagramPolygon(p, pre+".arrow", arrow, "inverse", "", [][2]float64{{0, 6}, {78, 6}, {78, 0}, {90, 12}, {78, 24}, {78, 18}, {0, 18}}); e != nil {
+				return e
+			}
 		}
 		y += 63
 	}

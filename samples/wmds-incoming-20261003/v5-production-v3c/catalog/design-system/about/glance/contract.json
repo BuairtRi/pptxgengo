@@ -1,0 +1,463 @@
+{
+  "key": "about/glance",
+  "source_file": "templates/library/about.json",
+  "source_sha256": "93c473ab188520706fdb1d951a4a06d135fe27fe71e67eeb414d3fb02273f8d5",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "grouplabel"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "grouplabel"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "block"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "text"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "metric"
+    }
+  ],
+  "family": "about",
+  "tier": "working",
+  "name": "About us · firm at a glance",
+  "purpose": "Summarize the firm: one positioning statement, a short client quote, what we do and where, and three proof statistics on a dark panel.",
+  "uses": [
+    "text",
+    "grouplabel",
+    "pullquote",
+    "bullets",
+    "shape.block",
+    "data.metric"
+  ],
+  "source_advisory_budget": {
+    "words": 113,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 36
+    },
+    {
+      "slot": "positioning",
+      "maxChars": 150
+    },
+    {
+      "slot": "quote",
+      "maxChars": 60
+    },
+    {
+      "slot": "capability",
+      "count": 3,
+      "maxChars": 28
+    },
+    {
+      "slot": "industry",
+      "count": 6,
+      "maxChars": 24
+    },
+    {
+      "slot": "statistic value",
+      "count": 3,
+      "maxChars": 5
+    },
+    {
+      "slot": "statistic label",
+      "count": 3,
+      "maxChars": 44
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "metric",
+      "point",
+      "quotation"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "bullets",
+      "card",
+      "grouplabel",
+      "metric",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "metric",
+        "role": "metric",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/3/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/5/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "quotation",
+        "source_bounds": {
+          "h": 144,
+          "w": 270,
+          "x": 57,
+          "y": 306
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "grouplabel",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "grouplabel",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 180,
+          "w": 558,
+          "x": 345,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 522,
+          "x": 363,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 162,
+          "x": 363,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 162,
+          "x": 543,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 162,
+          "x": 723,
+          "y": 342
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "About us"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "[[West Monroe]] at a glance"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "We are tech-forward advisors who draw on decades of industry experience to create value quickly and execute with precision."
+    },
+    {
+      "name": "node02.quote.by",
+      "source_pointer": "/body/1/quote/by",
+      "kind": "string",
+      "synthetic_source_example": "Chief data officer, regional payer"
+    },
+    {
+      "name": "node02.quote.text",
+      "source_pointer": "/body/1/quote/text",
+      "kind": "string",
+      "synthetic_source_example": "A team that excels at every phase of complex work."
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "What we do"
+    },
+    {
+      "name": "node04.items.item01",
+      "source_pointer": "/body/3/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Artificial intelligence"
+    },
+    {
+      "name": "node04.items.item02",
+      "source_pointer": "/body/3/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Operations and technology"
+    },
+    {
+      "name": "node04.items.item03",
+      "source_pointer": "/body/3/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Organization and people"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Where we do it"
+    },
+    {
+      "name": "node06.items.item01",
+      "source_pointer": "/body/5/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Healthcare and life sciences"
+    },
+    {
+      "name": "node06.items.item02",
+      "source_pointer": "/body/5/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Financial services and insurance"
+    },
+    {
+      "name": "node06.items.item03",
+      "source_pointer": "/body/5/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Energy, industrial and high-tech"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "People are at the core of everything we do"
+    },
+    {
+      "name": "node09.label",
+      "source_pointer": "/body/8/label",
+      "kind": "string",
+      "synthetic_source_example": "of clients consider us a strategic advisor"
+    },
+    {
+      "name": "node09.value",
+      "source_pointer": "/body/8/value",
+      "kind": "string",
+      "synthetic_source_example": "99%"
+    },
+    {
+      "name": "node10.label",
+      "source_pointer": "/body/9/label",
+      "kind": "string",
+      "synthetic_source_example": "of employees say their work has real impact"
+    },
+    {
+      "name": "node10.value",
+      "source_pointer": "/body/9/value",
+      "kind": "string",
+      "synthetic_source_example": "71%"
+    },
+    {
+      "name": "node11.label",
+      "source_pointer": "/body/10/label",
+      "kind": "string",
+      "synthetic_source_example": "pro-bono and volunteer hours last year"
+    },
+    {
+      "name": "node11.value",
+      "source_pointer": "/body/10/value",
+      "kind": "string",
+      "synthetic_source_example": "10K+"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node04.items",
+      "source_pointer": "/body/3/items",
+      "count": 3
+    },
+    {
+      "name": "node06.items",
+      "source_pointer": "/body/5/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 2,
+  "revised": "2026-10-03",
+  "status": "active"
+}

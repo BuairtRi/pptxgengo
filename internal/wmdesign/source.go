@@ -20,6 +20,19 @@ const bundleSHA256 = "02a975693995f9aca88602cd64e159e054da5a9771d8e3205d3beffd3d
 
 const LibraryRevisionV1 = "wmds-library.v1"
 const LibraryRevisionV2 = "wmds-library.v2"
+const LibraryRevisionV3 = "wmds-library.v3"
+const LibraryRevisionV4 = "wmds-library.v4"
+const LibraryRevisionV5 = "wmds-library.v5"
+
+// Expanded revisions share the incoming diagram, fit and data semantics. Named
+// composition amendments remain gated by each revision's frozen identity map.
+func isExpandedLibrary(revision string) bool {
+	return revision == LibraryRevisionV4 || revision == LibraryRevisionV5
+}
+
+func isModernLibrary(revision string) bool {
+	return revision == LibraryRevisionV2 || revision == LibraryRevisionV3 || isExpandedLibrary(revision)
+}
 
 type sourcePin struct {
 	Inventory, Revision string
@@ -28,6 +41,9 @@ type sourcePin struct {
 var sourcePins = map[string]sourcePin{
 	bundleSHA256: {inventorySHA256, LibraryRevisionV1},
 	"c0926ec4e65d36b3a9fd53e74ae0a3204d03acd5d0ba9fe4919849700c8f3690": {"8e70c96c07b5346906c983f0893e686cd433fd73fae4c31642a71984f395dce3", LibraryRevisionV2},
+	"38819ed1eb6f48288935e30afe5894a471dda068488d067364585a1aa79706fa": {"56968b1e859945f7cea178fce43e5f1bacc66280cbe515c532c99b37924774cf", LibraryRevisionV3},
+	"1e70050967a80c2d232b6109ac8428f321062fc829ba0358a9a56b54726d14b3": {"f9bcc2b425fb04feb6be9d9d0b5e5838f3c70799ff873b2f01d78d9d0c90e804", LibraryRevisionV4},
+	"0bdb3c6c7b327ed98a62b0527826068db371cb5d9cb43a1c6f44a1d4a74bf7eb": {"c4c64f6fc07eba612ccb2af6d05e70402fb26d583e42f44bbaa1325e49a57090", LibraryRevisionV5},
 }
 
 func checkBundle(root string) error {

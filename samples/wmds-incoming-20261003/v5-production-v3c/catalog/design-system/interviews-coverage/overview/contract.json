@@ -1,0 +1,533 @@
+{
+  "key": "interviews-coverage/overview",
+  "source_file": "templates/library/interviews.json",
+  "source_sha256": "d62be1c2fe3d0015929413af45741fbee87918ac22969ebf48e893743dbf5d42",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "chart"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "chart"
+    }
+  ],
+  "family": "interviews",
+  "tier": "core",
+  "name": "Interview coverage · long-engagement overview",
+  "purpose": "For engagements with many interviews: headline counts, interviews per week and interviews by department.",
+  "uses": [
+    "metric",
+    "chart.column",
+    "chart.bar"
+  ],
+  "source_advisory_budget": {
+    "words": 71,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "metric label",
+      "maxChars": 28
+    },
+    {
+      "slot": "chart title",
+      "maxChars": 30
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "metric",
+      "numeric-data"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "chart"
+    ],
+    "component_types": [
+      "chart",
+      "metric"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "chart",
+        "role": "numeric-data",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "metric",
+        "role": "metric",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 273,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 489,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "chart",
+        "role": "numeric-data",
+        "source_bounds": {
+          "h": 234,
+          "w": 414,
+          "x": 57,
+          "y": 216
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "chart",
+        "role": "numeric-data",
+        "source_bounds": {
+          "h": 234,
+          "w": 414,
+          "x": 489,
+          "y": 216
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Stakeholder interviews"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "42 interviews over ten weeks cover seven departments"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample names for layout only; replace with engagement stakeholders before use."
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "interviews held"
+    },
+    {
+      "name": "node01.value",
+      "source_pointer": "/body/0/value",
+      "kind": "string",
+      "synthetic_source_example": "42"
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "weeks of fieldwork"
+    },
+    {
+      "name": "node02.value",
+      "source_pointer": "/body/1/value",
+      "kind": "string",
+      "synthetic_source_example": "10"
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "of planned stakeholders met"
+    },
+    {
+      "name": "node03.value",
+      "source_pointer": "/body/2/value",
+      "kind": "string",
+      "synthetic_source_example": "88%"
+    },
+    {
+      "name": "node04.label",
+      "source_pointer": "/body/3/label",
+      "kind": "string",
+      "synthetic_source_example": "still to schedule"
+    },
+    {
+      "name": "node04.value",
+      "source_pointer": "/body/3/value",
+      "kind": "string",
+      "synthetic_source_example": "6"
+    },
+    {
+      "name": "node05.categories.item01",
+      "source_pointer": "/body/4/categories/0",
+      "kind": "string",
+      "synthetic_source_example": "W1"
+    },
+    {
+      "name": "node05.categories.item02",
+      "source_pointer": "/body/4/categories/1",
+      "kind": "string",
+      "synthetic_source_example": "W2"
+    },
+    {
+      "name": "node05.categories.item03",
+      "source_pointer": "/body/4/categories/2",
+      "kind": "string",
+      "synthetic_source_example": "W3"
+    },
+    {
+      "name": "node05.categories.item04",
+      "source_pointer": "/body/4/categories/3",
+      "kind": "string",
+      "synthetic_source_example": "W4"
+    },
+    {
+      "name": "node05.categories.item05",
+      "source_pointer": "/body/4/categories/4",
+      "kind": "string",
+      "synthetic_source_example": "W5"
+    },
+    {
+      "name": "node05.categories.item06",
+      "source_pointer": "/body/4/categories/5",
+      "kind": "string",
+      "synthetic_source_example": "W6"
+    },
+    {
+      "name": "node05.categories.item07",
+      "source_pointer": "/body/4/categories/6",
+      "kind": "string",
+      "synthetic_source_example": "W7"
+    },
+    {
+      "name": "node05.categories.item08",
+      "source_pointer": "/body/4/categories/7",
+      "kind": "string",
+      "synthetic_source_example": "W8"
+    },
+    {
+      "name": "node05.categories.item09",
+      "source_pointer": "/body/4/categories/8",
+      "kind": "string",
+      "synthetic_source_example": "W9"
+    },
+    {
+      "name": "node05.categories.item10",
+      "source_pointer": "/body/4/categories/9",
+      "kind": "string",
+      "synthetic_source_example": "W10"
+    },
+    {
+      "name": "node05.series.item01.name",
+      "source_pointer": "/body/4/series/0/name",
+      "kind": "string",
+      "synthetic_source_example": "Held"
+    },
+    {
+      "name": "node05.series.item01.values.item01",
+      "source_pointer": "/body/4/series/0/values/0",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node05.series.item01.values.item02",
+      "source_pointer": "/body/4/series/0/values/1",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node05.series.item01.values.item03",
+      "source_pointer": "/body/4/series/0/values/2",
+      "kind": "number",
+      "synthetic_source_example": 5
+    },
+    {
+      "name": "node05.series.item01.values.item04",
+      "source_pointer": "/body/4/series/0/values/3",
+      "kind": "number",
+      "synthetic_source_example": 6
+    },
+    {
+      "name": "node05.series.item01.values.item05",
+      "source_pointer": "/body/4/series/0/values/4",
+      "kind": "number",
+      "synthetic_source_example": 6
+    },
+    {
+      "name": "node05.series.item01.values.item06",
+      "source_pointer": "/body/4/series/0/values/5",
+      "kind": "number",
+      "synthetic_source_example": 5
+    },
+    {
+      "name": "node05.series.item01.values.item07",
+      "source_pointer": "/body/4/series/0/values/6",
+      "kind": "number",
+      "synthetic_source_example": 5
+    },
+    {
+      "name": "node05.series.item01.values.item08",
+      "source_pointer": "/body/4/series/0/values/7",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node05.series.item01.values.item09",
+      "source_pointer": "/body/4/series/0/values/8",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node05.series.item01.values.item10",
+      "source_pointer": "/body/4/series/0/values/9",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node05.title",
+      "source_pointer": "/body/4/title",
+      "kind": "string",
+      "synthetic_source_example": "Interviews by week"
+    },
+    {
+      "name": "node05.units",
+      "source_pointer": "/body/4/units",
+      "kind": "string",
+      "synthetic_source_example": "count"
+    },
+    {
+      "name": "node06.categories.item01",
+      "source_pointer": "/body/5/categories/0",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle"
+    },
+    {
+      "name": "node06.categories.item02",
+      "source_pointer": "/body/5/categories/1",
+      "kind": "string",
+      "synthetic_source_example": "Patient access"
+    },
+    {
+      "name": "node06.categories.item03",
+      "source_pointer": "/body/5/categories/2",
+      "kind": "string",
+      "synthetic_source_example": "IT"
+    },
+    {
+      "name": "node06.categories.item04",
+      "source_pointer": "/body/5/categories/3",
+      "kind": "string",
+      "synthetic_source_example": "Finance"
+    },
+    {
+      "name": "node06.categories.item05",
+      "source_pointer": "/body/5/categories/4",
+      "kind": "string",
+      "synthetic_source_example": "Clinical ops"
+    },
+    {
+      "name": "node06.categories.item06",
+      "source_pointer": "/body/5/categories/5",
+      "kind": "string",
+      "synthetic_source_example": "Compliance"
+    },
+    {
+      "name": "node06.categories.item07",
+      "source_pointer": "/body/5/categories/6",
+      "kind": "string",
+      "synthetic_source_example": "HIM"
+    },
+    {
+      "name": "node06.series.item01.name",
+      "source_pointer": "/body/5/series/0/name",
+      "kind": "string",
+      "synthetic_source_example": "Held"
+    },
+    {
+      "name": "node06.series.item01.values.item01",
+      "source_pointer": "/body/5/series/0/values/0",
+      "kind": "number",
+      "synthetic_source_example": 9
+    },
+    {
+      "name": "node06.series.item01.values.item02",
+      "source_pointer": "/body/5/series/0/values/1",
+      "kind": "number",
+      "synthetic_source_example": 7
+    },
+    {
+      "name": "node06.series.item01.values.item03",
+      "source_pointer": "/body/5/series/0/values/2",
+      "kind": "number",
+      "synthetic_source_example": 6
+    },
+    {
+      "name": "node06.series.item01.values.item04",
+      "source_pointer": "/body/5/series/0/values/3",
+      "kind": "number",
+      "synthetic_source_example": 6
+    },
+    {
+      "name": "node06.series.item01.values.item05",
+      "source_pointer": "/body/5/series/0/values/4",
+      "kind": "number",
+      "synthetic_source_example": 7
+    },
+    {
+      "name": "node06.series.item01.values.item06",
+      "source_pointer": "/body/5/series/0/values/5",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node06.series.item01.values.item07",
+      "source_pointer": "/body/5/series/0/values/6",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node06.title",
+      "source_pointer": "/body/5/title",
+      "kind": "string",
+      "synthetic_source_example": "Interviews by department"
+    },
+    {
+      "name": "node06.units",
+      "source_pointer": "/body/5/units",
+      "kind": "string",
+      "synthetic_source_example": "count"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node05.categories",
+      "source_pointer": "/body/4/categories",
+      "count": 10
+    },
+    {
+      "name": "node05.series.item01.values",
+      "source_pointer": "/body/4/series/0/values",
+      "count": 10
+    },
+    {
+      "name": "node05.series",
+      "source_pointer": "/body/4/series",
+      "count": 1
+    },
+    {
+      "name": "node06.categories",
+      "source_pointer": "/body/5/categories",
+      "count": 7
+    },
+    {
+      "name": "node06.series.item01.values",
+      "source_pointer": "/body/5/series/0/values",
+      "count": 7
+    },
+    {
+      "name": "node06.series",
+      "source_pointer": "/body/5/series",
+      "count": 1
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "pptxgengo.wmds-template-document.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "library-455",
+      "template": "runbook/validation-plan",
+      "content_kind": "synthetic_example",
+      "values": {
+        "slots": {
+          "eyebrow": "Data validation",
+          "node01.cols.item01.label": "Reconciliation check",
+          "node01.cols.item02.label": "Owner",
+          "node01.cols.item03.label": "Method",
+          "node01.cols.item04.label": "Threshold",
+          "node01.cols.item05.label": "Result",
+          "node01.rows.item01.c": "GL trial balance to legacy",
+          "node01.rows.item01.m": "Compare totals by entity and account",
+          "node01.rows.item01.o": "Controller",
+          "node01.rows.item01.s": "pass",
+          "node01.rows.item01.t": "Zero variance",
+          "node01.rows.item02.c": "Open payables invoices",
+          "node01.rows.item02.m": "Count and sum by vendor",
+          "node01.rows.item02.o": "AP lead",
+          "node01.rows.item02.s": "pass",
+          "node01.rows.item02.t": "Under $1 per vendor",
+          "node01.rows.item03.c": "Open receivables invoices",
+          "node01.rows.item03.m": "Tie aging buckets to legacy",
+          "node01.rows.item03.o": "AR lead",
+          "node01.rows.item03.s": "progress",
+          "node01.rows.item03.t": "Under $1 per customer",
+          "node01.rows.item04.c": "Bank balances",
+          "node01.rows.item04.m": "Statement balance to ledger",
+          "node01.rows.item04.o": "Treasury",
+          "node01.rows.item04.s": "pass",
+          "node01.rows.item04.t": "Zero variance",
+          "node01.rows.item05.c": "Vendor master records",
+          "node01.rows.item05.m": "Record count plus 50-record sample",
+          "node01.rows.item05.o": "Data lead",
+          "node01.rows.item05.s": "pass",
+          "node01.rows.item05.t": "100% match",
+          "node01.rows.item06.c": "Customer master records",
+          "node01.rows.item06.m": "Record count plus 50-record sample",
+          "node01.rows.item06.o": "Data lead",
+          "node01.rows.item06.s": "pass",
+          "node01.rows.item06.t": "100% match",
+          "node01.rows.item07.c": "Intercompany balances",
+          "node01.rows.item07.m": "Pair offsets by entity",
+          "node01.rows.item07.o": "Shared services",
+          "node01.rows.item07.s": "progress",
+          "node01.rows.item07.t": "Nets to zero",
+          "node01.rows.item08.c": "Journal history",
+          "node01.rows.item08.m": "Row counts and totals by period",
+          "node01.rows.item08.o": "Data lead",
+          "node01.rows.item08.s": "fail",
+          "node01.rows.item08.t": "100% match",
+          "title": "Five of eight reconciliations already [[tie]]"
+        },
+        "keys": {
+          "node01.cols": [
+            "example-001",
+            "example-002",
+            "example-003",
+            "example-004",
+            "example-005"
+          ],
+          "node01.rows": [
+            "example-001",
+            "example-002",
+            "example-003",
+            "example-004",
+            "example-005",
+            "example-006",
+            "example-007",
+            "example-008"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,815 @@
+{
+  "key": "value-phases/self-funding",
+  "source_file": "templates/library/value.json",
+  "source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "block"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "block"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "text"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "text"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "block"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "text"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "text"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "text"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node16",
+      "source_pointer": "/body/15",
+      "expected_type": "text"
+    },
+    {
+      "id": "node17",
+      "source_pointer": "/body/16",
+      "expected_type": "block"
+    },
+    {
+      "id": "node18",
+      "source_pointer": "/body/17",
+      "expected_type": "text"
+    },
+    {
+      "id": "node19",
+      "source_pointer": "/body/18",
+      "expected_type": "block"
+    },
+    {
+      "id": "node20",
+      "source_pointer": "/body/19",
+      "expected_type": "text"
+    },
+    {
+      "id": "node21",
+      "source_pointer": "/body/20",
+      "expected_type": "text"
+    },
+    {
+      "id": "node22",
+      "source_pointer": "/body/21",
+      "expected_type": "block"
+    },
+    {
+      "id": "node23",
+      "source_pointer": "/body/22",
+      "expected_type": "text"
+    },
+    {
+      "id": "node24",
+      "source_pointer": "/body/23",
+      "expected_type": "text"
+    },
+    {
+      "id": "node25",
+      "source_pointer": "/body/24",
+      "expected_type": "text"
+    },
+    {
+      "id": "node26",
+      "source_pointer": "/body/25",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node27",
+      "source_pointer": "/body/26",
+      "expected_type": "text"
+    },
+    {
+      "id": "node28",
+      "source_pointer": "/body/27",
+      "expected_type": "block"
+    },
+    {
+      "id": "node29",
+      "source_pointer": "/body/28",
+      "expected_type": "text"
+    },
+    {
+      "id": "node30",
+      "source_pointer": "/body/29",
+      "expected_type": "block"
+    },
+    {
+      "id": "node31",
+      "source_pointer": "/body/30",
+      "expected_type": "text"
+    },
+    {
+      "id": "node32",
+      "source_pointer": "/body/31",
+      "expected_type": "text"
+    },
+    {
+      "id": "node33",
+      "source_pointer": "/body/32",
+      "expected_type": "block"
+    }
+  ],
+  "family": "value",
+  "tier": "core",
+  "name": "Value by wave · self-funding waves",
+  "purpose": "Investment and value for each wave as paired bars with the net result, showing where value starts to fund the next wave.",
+  "uses": [
+    "text",
+    "block (bars)",
+    "rule"
+  ],
+  "source_advisory_budget": {
+    "words": 106,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "wave label",
+      "maxChars": 28
+    },
+    {
+      "slot": "wave name",
+      "maxChars": 14
+    },
+    {
+      "slot": "scope",
+      "maxChars": 56
+    },
+    {
+      "slot": "bar caption",
+      "maxChars": 28
+    },
+    {
+      "slot": "net",
+      "maxChars": 8
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "rule",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "block",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 186
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 246
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 18,
+          "w": 240,
+          "x": 57,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 300
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 18,
+          "w": 60,
+          "x": 57,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 144,
+          "x": 57,
+          "y": 378
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 201,
+          "y": 378
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 186
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/15",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 246
+        }
+      },
+      {
+        "source_pointer": "/body/16",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 18,
+          "w": 130,
+          "x": 345,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/17",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 300
+        }
+      },
+      {
+        "source_pointer": "/body/18",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 18,
+          "w": 180,
+          "x": 345,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/19",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/20",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 144,
+          "x": 345,
+          "y": 378
+        }
+      },
+      {
+        "source_pointer": "/body/21",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 489,
+          "y": 378
+        }
+      },
+      {
+        "source_pointer": "/body/22",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/23",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/24",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 186
+        }
+      },
+      {
+        "source_pointer": "/body/25",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/26",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 246
+        }
+      },
+      {
+        "source_pointer": "/body/27",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 18,
+          "w": 50,
+          "x": 633,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/28",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 300
+        }
+      },
+      {
+        "source_pointer": "/body/29",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 18,
+          "w": 260,
+          "x": 633,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/30",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/31",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 144,
+          "x": 633,
+          "y": 378
+        }
+      },
+      {
+        "source_pointer": "/body/32",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 777,
+          "y": 378
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Investment and value"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "From wave two, new value funds the next wave"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current program data before use."
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 · Months 1 to 12"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Foundation"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Data platform, close automation in three entities"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Investment $2.4M"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Value in the wave $0.6M"
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node09.text",
+      "source_pointer": "/body/8/text",
+      "kind": "string",
+      "synthetic_source_example": "Net in the wave"
+    },
+    {
+      "name": "node10.text",
+      "source_pointer": "/body/9/text",
+      "kind": "string",
+      "synthetic_source_example": "-$1.8M"
+    },
+    {
+      "name": "node11.text",
+      "source_pointer": "/body/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Budget-funded"
+    },
+    {
+      "name": "node12.text",
+      "source_pointer": "/body/11/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 2 · Months 13 to 24"
+    },
+    {
+      "name": "node13.text",
+      "source_pointer": "/body/12/text",
+      "kind": "string",
+      "synthetic_source_example": "Scale"
+    },
+    {
+      "name": "node14.text",
+      "source_pointer": "/body/13/text",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle and procure-to-pay across all entities"
+    },
+    {
+      "name": "node16.text",
+      "source_pointer": "/body/15/text",
+      "kind": "string",
+      "synthetic_source_example": "Investment $1.3M"
+    },
+    {
+      "name": "node17.text",
+      "source_pointer": "/body/16/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node18.text",
+      "source_pointer": "/body/17/text",
+      "kind": "string",
+      "synthetic_source_example": "Value in the wave $1.8M"
+    },
+    {
+      "name": "node19.text",
+      "source_pointer": "/body/18/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node20.text",
+      "source_pointer": "/body/19/text",
+      "kind": "string",
+      "synthetic_source_example": "Net in the wave"
+    },
+    {
+      "name": "node21.text",
+      "source_pointer": "/body/20/text",
+      "kind": "string",
+      "synthetic_source_example": "+$0.5M"
+    },
+    {
+      "name": "node22.text",
+      "source_pointer": "/body/21/text",
+      "kind": "string",
+      "synthetic_source_example": "Self-funding"
+    },
+    {
+      "name": "node23.text",
+      "source_pointer": "/body/22/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 3 · Months 25 to 36"
+    },
+    {
+      "name": "node24.text",
+      "source_pointer": "/body/23/text",
+      "kind": "string",
+      "synthetic_source_example": "Optimize"
+    },
+    {
+      "name": "node25.text",
+      "source_pointer": "/body/24/text",
+      "kind": "string",
+      "synthetic_source_example": "Controls, analytics and run handover"
+    },
+    {
+      "name": "node27.text",
+      "source_pointer": "/body/26/text",
+      "kind": "string",
+      "synthetic_source_example": "Investment $0.5M"
+    },
+    {
+      "name": "node28.text",
+      "source_pointer": "/body/27/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node29.text",
+      "source_pointer": "/body/28/text",
+      "kind": "string",
+      "synthetic_source_example": "Value in the wave $2.6M"
+    },
+    {
+      "name": "node30.text",
+      "source_pointer": "/body/29/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node31.text",
+      "source_pointer": "/body/30/text",
+      "kind": "string",
+      "synthetic_source_example": "Net in the wave"
+    },
+    {
+      "name": "node32.text",
+      "source_pointer": "/body/31/text",
+      "kind": "string",
+      "synthetic_source_example": "+$2.1M"
+    },
+    {
+      "name": "node33.text",
+      "source_pointer": "/body/32/text",
+      "kind": "string",
+      "synthetic_source_example": "Self-funding"
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

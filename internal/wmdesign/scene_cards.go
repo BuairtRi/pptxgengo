@@ -83,9 +83,11 @@ type sceneCardSource struct {
 		Secondary []sceneMetricValue `json:"secondary"`
 	} `json:"metricGroup,omitempty"`
 	Quote *struct {
-		Text    string `json:"text"`
-		By      string `json:"by"`
-		MarkInk string `json:"markInk,omitempty"`
+		Text      string `json:"text"`
+		By        string `json:"by"`
+		MarkInk   string `json:"markInk,omitempty"`
+		Layout    string `json:"layout,omitempty"`
+		TextStyle string `json:"textStyle,omitempty"`
 	} `json:"quote,omitempty"`
 	Person *struct {
 		Initials string `json:"initials"`
@@ -131,6 +133,7 @@ type sceneCardSource struct {
 type sceneBodyBlock struct {
 	P         string            `json:"p,omitempty"`
 	Label     string            `json:"label,omitempty"`
+	Size      string            `json:"size,omitempty"`
 	Bullets   []json.RawMessage `json:"bullets,omitempty"`
 	Checklist []struct {
 		Text string `json:"text"`
@@ -384,6 +387,22 @@ func (r *renderer) sceneBodyFlow(p *scenePlan, id string, blocks []json.RawMessa
 		if e := sceneDecode(raw, &bl); e != nil {
 			return y, e
 		}
+		blockSize := size
+		if bl.Size != "" {
+			if r.source.Revision != LibraryRevisionV5 || len(bl.Bullets) == 0 || bl.Size != "small" && bl.Size != "body" {
+				return y, fmt.Errorf("scene.unsupported_body_block_size")
+			}
+			blockSize = bl.Size
+			p.Warnings = append(p.Warnings, "wmds.body-block-explicit-size.v5: authored bullets size overrides the enclosing card body size; the source JS ignored this block option; pinned v1-v4 behavior unchanged.")
+		}
+		blockStyle := "body"
+		if blockSize == "small" {
+			blockStyle = "small"
+		}
+		st, e = r.sceneDataToken(blockStyle, 0)
+		if e != nil {
+			return y, e
+		}
 		key, e := sceneDataKey(ctx, path, i)
 		if e != nil {
 			return y, e
@@ -470,7 +489,7 @@ func (r *renderer) sceneBodyFlow(p *scenePlan, id string, blocks []json.RawMessa
 			w := (b.W - 18*float64(len(bl.Columns)-1)) / float64(len(bl.Columns))
 			bottom := y
 			for j, col := range bl.Columns {
-				end, e := r.sceneBodyFlow(p, part+fmt.Sprintf(".column-%d", j+1), col, ctx, fmt.Sprintf("%s/%d/columns/%d", path, i, j), Rect{b.X + float64(j)*(w+18), y, w, 0}, surface, size, gap)
+				end, e := r.sceneBodyFlow(p, part+fmt.Sprintf(".column-%d", j+1), col, ctx, fmt.Sprintf("%s/%d/columns/%d", path, i, j), Rect{b.X + float64(j)*(w+18), y, w, 0}, surface, blockSize, gap)
 				if e != nil {
 					return y, e
 				}
@@ -1043,6 +1062,9 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 	}
 	if n.Quote != nil {
 		q := n.Quote
+		if q.Layout != "" && q.Layout != "stack" && q.Layout != "side" {
+			return nil, fmt.Errorf("scene.invalid_quote_layout")
+		}
 		st, _ := r.sceneDataToken("heading", 0)
 		st.Size = 48
 		if strings.HasSuffix(st.Tracking, "em") {
@@ -1062,8 +1084,20 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 		if e != nil {
 			return nil, e
 		}
-		y = tr.Rect.Y + tr.Rect.H + n.Gap
-		st, _ = r.sceneDataToken("subhead", 0)
+		if q.Layout == "side" {
+			x += 36
+			w -= 36
+		} else {
+			y = tr.Rect.Y + tr.Rect.H + n.Gap
+		}
+		quoteStyle := q.TextStyle
+		if quoteStyle == "" {
+			quoteStyle = "subhead"
+		}
+		st, e = r.sceneDataToken(quoteStyle, 0)
+		if e != nil {
+			return nil, e
+		}
 		tr, e = r.sceneDataText(p, id+".quote.text", q.Text, st, Rect{x, y, w, 0}, surface, "display", "left", ctx)
 		if e != nil {
 			return nil, e
@@ -1519,14 +1553,14 @@ secondary:
 		y += 6
 		xx := b.X
 		if m.Status != "" {
-			name, ok := map[string]string{"on": "On track", "risk": "At risk", "off": "Off track"}[m.Status]
+			status, ok := sceneStatuses[m.Status]
 			if !ok {
 				return y, fmt.Errorf("scene.status_enum")
 			}
-			color := strings.TrimPrefix(r.source.Tokens.Colors.Dataviz.KPI[m.Status], "#")
-			navy, _ := r.sceneColor("light", "display")
-			r.sceneDataShape(p, id+".footer.status.outline", Rect{xx, y + 2, 8, 8}, pptx.ShapeTypeRect, navy, nil)
-			r.sceneDataShape(p, id+".footer.status.mark", Rect{xx + 1, y + 3, 6, 6}, pptx.ShapeTypeRect, color, nil)
+			name := status.Label
+			if e := r.sceneTableStatus(p, id+".footer", Rect{xx, y + 2, 8, 8}, surface, m.Status); e != nil {
+				return y, e
+			}
 			st, _ := r.sceneDataToken("label", 0)
 			ll, e := r.typeEngine.Measure(name, st, b.W-14)
 			if e != nil {
@@ -1585,23 +1619,31 @@ func (r *renderer) sceneDirectMetric(id string, raw json.RawMessage, ctx SceneCo
 			Value     string            `json:"value"`
 			Text      string            `json:"text"`
 			Secondary *sceneMetricValue `json:"secondary,omitempty"`
+			Surface   string            `json:"surface,omitempty"`
 		}
 		if e = sceneDecode(raw, &c); e != nil {
 			return nil, e
 		}
 		n = sceneMetricSource{Type: c.Type, X: c.X, Y: c.Y, W: c.W, H: c.H, Label: c.Text, Value: c.Value}
+		surface := c.Surface
+		if surface == "" {
+			surface = "callout"
+		}
+		if surface != "callout" && surface != "inverse" {
+			return nil, fmt.Errorf("scene.callout_surface: %s", surface)
+		}
 		p := &scenePlan{ID: id}
 		b := Rect{c.X, c.Y, c.W, c.H}
-		if e = r.sceneRect(p, id+".container", Rect{c.X, c.Y, c.W, 1}, "callout"); e != nil {
+		if e = r.sceneRect(p, id+".container", Rect{c.X, c.Y, c.W, 1}, surface); e != nil {
 			return nil, e
 		}
 		st, _ := r.sceneDataToken("eyebrow", 0)
-		tr, e := r.sceneDataText(p, id+".eyebrow", c.Label, st, Rect{c.X + 18, c.Y + 18, c.W - 36, 0}, "callout", "primary", "left", ctx)
+		tr, e := r.sceneDataText(p, id+".eyebrow", c.Label, st, Rect{c.X + 18, c.Y + 18, c.W - 36, 0}, surface, "primary", "left", ctx)
 		if e != nil {
 			return nil, e
 		}
 		n.Secondary, _ = json.Marshal(c.Secondary)
-		end, e := r.sceneMetricFlow(p, id+".metric", n, ctx, Rect{c.X + 18, tr.Rect.Y + tr.Rect.H + 6, c.W - 36, 0}, "callout", false, false)
+		end, e := r.sceneMetricFlow(p, id+".metric", n, ctx, Rect{c.X + 18, tr.Rect.Y + tr.Rect.H + 6, c.W - 36, 0}, surface, false, false)
 		if e != nil {
 			return nil, e
 		}

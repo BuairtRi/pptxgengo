@@ -1,0 +1,1 @@
+Preserve all seven connector relationships, interfaces, device icons, SQL Anywhere/C++/.NET claims and issue copy. Nested diagram plus 300 extracted words needs local space; layer-map alternative changes the spatial emphasis.

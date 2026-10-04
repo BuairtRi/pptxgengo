@@ -1,0 +1,497 @@
+{
+  "key": "adoption/dashboard-split",
+  "source_file": "templates/library/change.json",
+  "source_sha256": "50c9b7c2bbd968fda1adb78ff0c4efdd2f823df0d17e6043514d442834c033ac",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "chart"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "table"
+    }
+  ],
+  "family": "change",
+  "tier": "working",
+  "name": "Adoption tracking dashboard (split)",
+  "purpose": "A tall site-by-site adoption table and trend with the headline numbers in the short column.",
+  "uses": [
+    "data.metric",
+    "table.standard",
+    "chart.column",
+    "frame.split"
+  ],
+  "source_advisory_budget": {
+    "words": 67,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 50
+    },
+    {
+      "slot": "metric label",
+      "maxChars": 30
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "metric",
+      "numeric-data",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "chart",
+      "table"
+    ],
+    "component_types": [
+      "chart",
+      "metric",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "metric",
+        "role": "metric",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/4/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/4/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "chart",
+        "role": "numeric-data",
+        "source_bounds": {
+          "h": 198,
+          "w": 558,
+          "x": 345,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 252
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-right",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Adoption tracking"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Adoption trails plan at three of five sites"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield platform telemetry, week 4; sample figures."
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "of bookings in the platform"
+    },
+    {
+      "name": "node01.value",
+      "source_pointer": "/body/0/value",
+      "kind": "string",
+      "synthetic_source_example": "61%"
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "training complete"
+    },
+    {
+      "name": "node02.value",
+      "source_pointer": "/body/1/value",
+      "kind": "string",
+      "synthetic_source_example": "92%"
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "open tickets per day"
+    },
+    {
+      "name": "node03.value",
+      "source_pointer": "/body/2/value",
+      "kind": "string",
+      "synthetic_source_example": "38"
+    },
+    {
+      "name": "node04.categories.item01",
+      "source_pointer": "/body/3/categories/0",
+      "kind": "string",
+      "synthetic_source_example": "Main campus"
+    },
+    {
+      "name": "node04.categories.item02",
+      "source_pointer": "/body/3/categories/1",
+      "kind": "string",
+      "synthetic_source_example": "Lakeside"
+    },
+    {
+      "name": "node04.categories.item03",
+      "source_pointer": "/body/3/categories/2",
+      "kind": "string",
+      "synthetic_source_example": "Eastgate"
+    },
+    {
+      "name": "node04.categories.item04",
+      "source_pointer": "/body/3/categories/3",
+      "kind": "string",
+      "synthetic_source_example": "Ridgeview"
+    },
+    {
+      "name": "node04.categories.item05",
+      "source_pointer": "/body/3/categories/4",
+      "kind": "string",
+      "synthetic_source_example": "Harbor Clinics"
+    },
+    {
+      "name": "node04.series.item01.name",
+      "source_pointer": "/body/3/series/0/name",
+      "kind": "string",
+      "synthetic_source_example": "Share"
+    },
+    {
+      "name": "node04.series.item01.values.item01",
+      "source_pointer": "/body/3/series/0/values/0",
+      "kind": "number",
+      "synthetic_source_example": 91
+    },
+    {
+      "name": "node04.series.item01.values.item02",
+      "source_pointer": "/body/3/series/0/values/1",
+      "kind": "number",
+      "synthetic_source_example": 84
+    },
+    {
+      "name": "node04.series.item01.values.item03",
+      "source_pointer": "/body/3/series/0/values/2",
+      "kind": "number",
+      "synthetic_source_example": 72
+    },
+    {
+      "name": "node04.series.item01.values.item04",
+      "source_pointer": "/body/3/series/0/values/3",
+      "kind": "number",
+      "synthetic_source_example": 58
+    },
+    {
+      "name": "node04.series.item01.values.item05",
+      "source_pointer": "/body/3/series/0/values/4",
+      "kind": "number",
+      "synthetic_source_example": 41
+    },
+    {
+      "name": "node04.title",
+      "source_pointer": "/body/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Adoption by site"
+    },
+    {
+      "name": "node04.units",
+      "source_pointer": "/body/3/units",
+      "kind": "string",
+      "synthetic_source_example": "Percent of bookings"
+    },
+    {
+      "name": "node05.cols.item01.label",
+      "source_pointer": "/body/4/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Site"
+    },
+    {
+      "name": "node05.cols.item02.label",
+      "source_pointer": "/body/4/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Adopt."
+    },
+    {
+      "name": "node05.cols.item03.label",
+      "source_pointer": "/body/4/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Status"
+    },
+    {
+      "name": "node05.cols.item04.label",
+      "source_pointer": "/body/4/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Support"
+    },
+    {
+      "name": "node05.rows.item01.a",
+      "source_pointer": "/body/4/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "Main campus"
+    },
+    {
+      "name": "node05.rows.item01.b",
+      "source_pointer": "/body/4/rows/0/b",
+      "kind": "string",
+      "synthetic_source_example": "91%"
+    },
+    {
+      "name": "node05.rows.item01.c",
+      "source_pointer": "/body/4/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node05.rows.item01.d",
+      "source_pointer": "/body/4/rows/0/d",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node05.rows.item02.a",
+      "source_pointer": "/body/4/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "Lakeside"
+    },
+    {
+      "name": "node05.rows.item02.b",
+      "source_pointer": "/body/4/rows/1/b",
+      "kind": "string",
+      "synthetic_source_example": "84%"
+    },
+    {
+      "name": "node05.rows.item02.c",
+      "source_pointer": "/body/4/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node05.rows.item02.d",
+      "source_pointer": "/body/4/rows/1/d",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node05.rows.item03.a",
+      "source_pointer": "/body/4/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "Eastgate"
+    },
+    {
+      "name": "node05.rows.item03.b",
+      "source_pointer": "/body/4/rows/2/b",
+      "kind": "string",
+      "synthetic_source_example": "72%"
+    },
+    {
+      "name": "node05.rows.item03.c",
+      "source_pointer": "/body/4/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node05.rows.item03.d",
+      "source_pointer": "/body/4/rows/2/d",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node05.rows.item04.a",
+      "source_pointer": "/body/4/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "Ridgeview"
+    },
+    {
+      "name": "node05.rows.item04.b",
+      "source_pointer": "/body/4/rows/3/b",
+      "kind": "string",
+      "synthetic_source_example": "58%"
+    },
+    {
+      "name": "node05.rows.item04.c",
+      "source_pointer": "/body/4/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node05.rows.item04.d",
+      "source_pointer": "/body/4/rows/3/d",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node05.rows.item05.a",
+      "source_pointer": "/body/4/rows/4/a",
+      "kind": "string",
+      "synthetic_source_example": "Harbor Clinics"
+    },
+    {
+      "name": "node05.rows.item05.b",
+      "source_pointer": "/body/4/rows/4/b",
+      "kind": "string",
+      "synthetic_source_example": "41%"
+    },
+    {
+      "name": "node05.rows.item05.c",
+      "source_pointer": "/body/4/rows/4/c",
+      "kind": "string",
+      "synthetic_source_example": "off"
+    },
+    {
+      "name": "node05.rows.item05.d",
+      "source_pointer": "/body/4/rows/4/d",
+      "kind": "number",
+      "synthetic_source_example": 1
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node04.categories",
+      "source_pointer": "/body/3/categories",
+      "count": 5
+    },
+    {
+      "name": "node04.series.item01.values",
+      "source_pointer": "/body/3/series/0/values",
+      "count": 5
+    },
+    {
+      "name": "node04.series",
+      "source_pointer": "/body/3/series",
+      "count": 1
+    },
+    {
+      "name": "node05.cols",
+      "source_pointer": "/body/4/cols",
+      "count": 4
+    },
+    {
+      "name": "node05.rows",
+      "source_pointer": "/body/4/rows",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

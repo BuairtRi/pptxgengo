@@ -16,6 +16,7 @@ import (
 // bindings project named slots into the pinned source node; this does not expose
 // source pointers or geometry mutation through the template authoring API.
 type SceneSpec struct {
+	Allocation  *Rect               `json:"allocation,omitempty"`
 	Node        json.RawMessage     `json:"node"`
 	Path        string              `json:"source_pointer"`
 	Keys        map[string][]string `json:"keys,omitempty"`
@@ -256,7 +257,7 @@ func (r *renderer) sceneRect(p *scenePlan, id string, box Rect, surface string) 
 		return fmt.Errorf("scene.invalid_shape_geometry: %s", id)
 	}
 	props := pptx.ShapeProps{PositionProps: pos(box), ObjectNameProps: pptx.ObjectNameProps{ObjectName: id}, Fill: &pptx.ShapeFillProps{Color: color}, Line: &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}}
-	if r.source.Revision == LibraryRevisionV2 && surface == "outline" {
+	if isModernLibrary(r.source.Revision) && surface == "outline" {
 		// The source surface uses an inset 1pt border. Keep its outer bounds
 		// fixed while centering the native stroke half a point inside them.
 		if box.W <= 1 || box.H <= 1 {
@@ -276,7 +277,7 @@ func (r *renderer) planSceneNode(id string, raw json.RawMessage, ctx SceneContex
 	if r.typeEngine.engine != CandidateEngine {
 		return nil, fmt.Errorf("scene.requires_v2")
 	}
-	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
+	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planIntakeGaugeScene, r.planIntakeCycleScene, r.planIntakeRoadScene, r.planIntakeScoreLegendScene, r.planIntakeRound12Scene, r.planIntakeVennScene, r.planIntakeMaturityScene, r.planIntakeArchitectureScene, r.planIntakeGeographyScene, r.planIntakeCurveScene, r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
 		plan, handled, err := handler(id, raw, ctx)
 		if handled || err != nil {
 			if err == nil {

@@ -578,12 +578,11 @@ func makeChartType(chartType ChartType, data []ChartData, opts *ChartOptions, va
 			strXml.WriteString(`    <c:numCache>`)
 			strXml.WriteString(`      <c:formatCode>` + strOr(strOr(opts.ValLabelFormatCode, opts.DataTableFormatCode), "General") + `</c:formatCode>`)
 			strXml.WriteString(`      <c:ptCount val="` + itoa(len(obj.Labels[0])) + `"/>`)
-			// Minor (gen-charts.ts:537): TS guards each point with
-			// `if (value || value === 0)` to skip JS array holes (undefined). Go's
-			// Values is []float64, which cannot hold a hole (every index is a real
-			// number), so the guard is inert and unrepresentable — no change needed.
-			// (Do NOT switch Values to []*float64 to model JS holes; out of scope.)
+			// Omit absent observations while retaining their original category indices.
 			for idx, value := range obj.Values {
+				if chartValueMissing(*obj, idx) {
+					continue
+				}
 				strXml.WriteString(`<c:pt idx="` + itoa(idx) + `"><c:v>` + ftoa(value) + `</c:v></c:pt>`)
 			}
 			strXml.WriteString(`    </c:numCache>`)
@@ -1830,6 +1829,13 @@ func numTruthy(v float64) string {
 	return ""
 }
 
+func workbookValue(arr []float64, idx int, preserveZeros bool) string {
+	if preserveZeros {
+		return numAt(arr, idx)
+	}
+	return numTruthy(numOrEmptyRaw(arr, idx))
+}
+
 // isBlankLabel mirrors `/^ *$/.test(label)` (empty or spaces only).
 func isBlankLabel(s string) bool {
 	return strings.TrimLeft(s, " ") == ""
@@ -2048,6 +2054,10 @@ func createExcelWorksheet(chartObject *SlideRelChart, bc *buildContext) ([]byte,
 // buildSheet1 ports the worksheets/sheet1.xml body of createExcelWorksheet.
 func buildSheet1(data []ChartData, opts *ChartOptions, intBubbleCols int, isBubble, isScatter, isMultiCatAxes bool) string {
 	var s strings.Builder
+	sparse := false
+	for _, series := range data {
+		sparse = sparse || len(series.MissingValues) > 0
+	}
 	s.WriteString(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>`)
 	s.WriteString(`<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">`)
 
@@ -2075,9 +2085,9 @@ func buildSheet1(data []ChartData, opts *ChartOptions, intBubbleCols int, isBubb
 			s.WriteString(`<c r="A` + itoa(idx+2) + `"><v>` + ftoa(val) + `</v></c>`)
 			idxColLtr := 2
 			for idy := 1; idy < len(data); idy++ {
-				s.WriteString(`<c r="` + getExcelColName(idxColLtr) + itoa(idx+2) + `"><v>` + numTruthy(numOrEmptyRaw(data[idy].Values, idx)) + `</v></c>`)
+				s.WriteString(`<c r="` + getExcelColName(idxColLtr) + itoa(idx+2) + `"><v>` + workbookValue(data[idy].Values, idx, opts.PreserveWorkbookZeros) + `</v></c>`)
 				idxColLtr++
-				s.WriteString(`<c r="` + getExcelColName(idxColLtr) + itoa(idx+2) + `"><v>` + numTruthy(numOrEmptyRaw(data[idy].Sizes, idx)) + `</v></c>`)
+				s.WriteString(`<c r="` + getExcelColName(idxColLtr) + itoa(idx+2) + `"><v>` + workbookValue(data[idy].Sizes, idx, opts.PreserveWorkbookZeros) + `</v></c>`)
 				idxColLtr++
 			}
 			s.WriteString(`</row>`)
@@ -2115,7 +2125,15 @@ func buildSheet1(data []ChartData, opts *ChartOptions, intBubbleCols int, isBubb
 				s.WriteString(`</c>`)
 			}
 			for idy := range data {
-				s.WriteString(`<c r="` + getExcelColName(len(data[0].Labels)+idy+1) + itoa(idx+2) + `"><v>` + numTruthy(numOrEmptyRaw(data[idy].Values, idx)) + `</v></c>`)
+				if chartValueMissing(data[idy], idx) {
+					continue
+				}
+				v := workbookValue(data[idy].Values, idx, opts.PreserveWorkbookZeros)
+				// An observed zero is not a missing observation.
+				if sparse && !opts.PreserveWorkbookZeros {
+					v = ftoa(numOrEmptyRaw(data[idy].Values, idx))
+				}
+				s.WriteString(`<c r="` + getExcelColName(len(data[0].Labels)+idy+1) + itoa(idx+2) + `"><v>` + v + `</v></c>`)
 			}
 			s.WriteString(`</row>`)
 		}
@@ -2152,11 +2170,18 @@ func buildSheet1(data []ChartData, opts *ChartOptions, intBubbleCols int, isBubb
 				}
 			}
 			for idy := 0; idy < totSer; idy++ {
+				if chartValueMissing(data[idy], idx) {
+					continue
+				}
 				v := 0.0
 				if idx < len(data[idy].Values) {
 					v = data[idy].Values[idx]
 				}
-				s.WriteString(`<c r="` + getExcelColName(totLvl+idy+1) + itoa(idx+2) + `"><v>` + ftoa(v) + `</v></c>`)
+				value := ftoa(v)
+				if opts.PreserveWorkbookZeros {
+					value = numAt(data[idy].Values, idx)
+				}
+				s.WriteString(`<c r="` + getExcelColName(totLvl+idy+1) + itoa(idx+2) + `"><v>` + value + `</v></c>`)
 			}
 			s.WriteString(`</row>`)
 		}
@@ -2193,4 +2218,9 @@ func reversedLabels(labels [][]string) [][]string {
 		out[len(labels)-1-i] = labels[i]
 	}
 	return out
+}
+
+// chartValueMissing preserves category indices while omitting absent observations.
+func chartValueMissing(d ChartData, idx int) bool {
+	return idx < len(d.MissingValues) && d.MissingValues[idx]
 }

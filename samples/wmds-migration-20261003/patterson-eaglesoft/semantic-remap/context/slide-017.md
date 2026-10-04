@@ -1,0 +1,1 @@
+Source overlay hides four existing columns; preserve underlying business text and the overlay instruction, expose both without overlap. Do not reconcile Workers’ Comp/EnableComp with Eaglesoft or change six-week versus12-month wording. Neither source topology includes a supplied risk band; do not invent risks.

@@ -2,9 +2,10 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-version="$(cat "$repo_root/release/VERSION")"
-if [[ ! "$version" =~ ^0\.1\.0-local\.[0-9]+$ ]]; then
-  echo "invalid release/VERSION: $version" >&2
+published_version="$(cat "$repo_root/release/VERSION")"
+version="$published_version"
+if [[ ! "$published_version" =~ ^0\.1\.0-local\.[0-9]+$ ]]; then
+  echo "invalid release/VERSION: $published_version" >&2
   exit 1
 fi
 release_parent="${HOME}/.local/share/pptxgengo/releases"
@@ -12,13 +13,54 @@ release_dir="${release_parent}/${version}"
 launcher="${HOME}/.local/bin/pptxgengo"
 skill_link="${HOME}/.codex/skills/west-monroe-presentations"
 stage_only=false
-if [[ $# -gt 0 ]]; then
-  if [[ $# -ne 2 || "$1" != "--stage-only" ]]; then
-    echo "usage: scripts/install-local-release.sh [--stage-only NEW_DIRECTORY]" >&2
-    exit 1
+published_bundle=v3
+if [[ -f "$repo_root/release/default-bundle.txt" ]]; then
+  published_bundle="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).read_text().strip())' "$repo_root/release/default-bundle.txt")"
+fi
+bundle_revision="$published_bundle"
+catalog_input="$repo_root/release/catalog"
+verification_input=""
+stage_destination=""
+usage() {
+  echo "usage: scripts/install-local-release.sh [--stage-only NEW_DIRECTORY] [--bundle v3|v4|v5] [--catalog DIRECTORY] [--version VERSION] [--verification RECEIPT]" >&2
+}
+while [[ $# -gt 0 ]]; do
+  if [[ $# -lt 2 ]]; then usage; exit 1; fi
+  case "$1" in
+    --stage-only) stage_only=true; stage_destination="$2" ;;
+    --bundle) bundle_revision="$2" ;;
+    --catalog) catalog_input="$2" ;;
+    --version) version="$2" ;;
+    --verification) verification_input="$2" ;;
+    *) usage; exit 1 ;;
+  esac
+  shift 2
+done
+if [[ "$bundle_revision" != v3 && "$bundle_revision" != v4 && "$bundle_revision" != v5 ]]; then
+  echo "--bundle must be v3, v4 or v5" >&2; exit 1
+fi
+if [[ ! "$version" =~ ^0\.1\.0-local\.[0-9]+(-candidate)?$ ]]; then
+  echo "invalid package version: $version" >&2; exit 1
+fi
+catalog_input="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$catalog_input")"
+if [[ -n "$verification_input" ]]; then
+  verification_input="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$verification_input")"
+fi
+if [[ "$bundle_revision" != "$published_bundle" && "$version" != *-candidate ]]; then
+  echo "$bundle_revision staging requires an explicit --version ending in -candidate" >&2; exit 1
+fi
+if [[ "$stage_only" == false && ( "$bundle_revision" != "$published_bundle" || "$version" != "$published_version" || "$catalog_input" != "$repo_root/release/catalog" || -n "$verification_input" ) ]]; then
+  echo "candidate bundle/catalog/version/verification overrides require --stage-only; activation remains gated" >&2
+  exit 1
+fi
+if [[ -z "$verification_input" && "$version" != *-candidate && ( "$bundle_revision" == v4 || "$bundle_revision" == v5 ) ]]; then
+  verification_input="$repo_root/release/verification-wmds-${bundle_revision}.json"
+  if [[ ! -f "$verification_input" ]]; then
+    echo "published $bundle_revision requires its native release verification receipt" >&2; exit 1
   fi
-  stage_only=true
-  release_dir="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$2")"
+fi
+if [[ "$stage_only" == true ]]; then
+  release_dir="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$stage_destination")"
   release_parent="$(dirname "$release_dir")"
 fi
 
@@ -34,7 +76,7 @@ if [[ "$stage_only" == false && -e "$skill_link" && ! -L "$skill_link" ]]; then
   echo "skill path exists and is not a symlink: $skill_link" >&2
   exit 1
 fi
-python3 - "$repo_root/release/catalog" "$repo_root/release/README.md" "$version" <<'PY'
+python3 - "$repo_root/release/catalog" "$repo_root/release/README.md" "$published_version" "$catalog_input" "$version" "$repo_root/library/wm-design-system/$bundle_revision" "$verification_input" <<'PY'
 import json
 from pathlib import Path
 import sys
@@ -45,6 +87,34 @@ if any(not p.is_file() for p in [catalog / 'index.json', *pages]):
     raise SystemExit('catalog landing, both galleries, and index.json are required')
 if json.loads((catalog / 'index.json').read_text()).get('version') != version or any(version not in p.read_text() for p in pages) or version not in readme.read_text():
     raise SystemExit(f'catalog and release README must declare {version}')
+selected = Path(sys.argv[4]).resolve()
+selected_version = sys.argv[5]
+bundle = json.loads((Path(sys.argv[6]) / 'bundle.json').read_text())
+designs = json.loads((selected / 'design-system/index.json').read_text())
+landing = json.loads((selected / 'index.json').read_text())
+if not (selected / 'design-system.html').is_file():
+    raise SystemExit('selected gallery requires design-system.html')
+if designs.get('version') != selected_version or landing.get('version') != selected_version or selected_version not in (selected / 'design-system.html').read_text():
+    raise SystemExit(f'selected gallery must declare candidate version {selected_version}')
+for field in ('source_revision', 'source_commit'):
+    if designs.get(field) != bundle[field] or landing.get('design_system', {}).get(field) != bundle[field]:
+        raise SystemExit(f'selected gallery does not match bundle {field}')
+if len(designs['designs']) != bundle['template_count'] or designs.get('entries') != bundle['template_count']:
+    raise SystemExit('selected gallery does not match bundle template count')
+if sys.argv[7]:
+    receipt = json.loads(Path(sys.argv[7]).read_text())
+    if receipt.get('schema') != 'pptxgengo.wmds-release-verification.v1' or any(receipt.get(field) != bundle[field] for field in ('source_revision', 'source_commit')) or receipt.get('version') != selected_version:
+        raise SystemExit('verification receipt must identify the selected candidate version/revision/commit')
+    if not selected_version.endswith('-candidate') and bundle['source_revision'] in ('wmds-library.v4', 'wmds-library.v5'):
+        pages = receipt.get('pages', [])
+        by_key = {page.get('template'): page for page in pages}
+        if receipt.get('reviewed_pages') != bundle['template_count'] or len(pages) != bundle['template_count'] or len(by_key) != len(pages):
+            raise SystemExit('published expanded bundle requires every source specimen in its native receipt')
+        if set(by_key) != {row['template'] for row in designs['designs']}:
+            raise SystemExit('published native receipt and source gallery identities differ')
+        for row in designs['designs']:
+            if row.get('native_review') != 'reviewed_source_specimen' or not row.get('source_preview_sha256') or by_key[row['template']].get('sha256') != row['source_preview_sha256']:
+                raise SystemExit(f"published native receipt does not match reviewed preview: {row['template']}")
 PY
 
 mkdir -p "$release_parent"
@@ -65,7 +135,7 @@ for tool in pptxgengo pptxtemplate pptxcompose pptxscene pptxcomponent pptxlib p
   fi
 done
 
-python3 - "$repo_root" "$stage" "$version" <<'PY'
+python3 - "$repo_root" "$stage" "$version" "$bundle_revision" "$catalog_input" "$verification_input" "$published_version" <<'PY'
 import hashlib
 import json
 import os
@@ -76,6 +146,10 @@ import sys
 
 src, dst = map(Path, sys.argv[1:3])
 version = sys.argv[3]
+bundle_revision = sys.argv[4]
+selected_catalog = Path(sys.argv[5]).resolve()
+verification_input = Path(sys.argv[6]).resolve() if sys.argv[6] else None
+published_version = sys.argv[7]
 prior_root = os.environ.get('PPTXGENGO_PRIOR_RELEASE_ROOT')
 prior = Path(prior_root).resolve() if prior_root else None
 prior_manifest = json.loads((prior / 'release-manifest.json').read_text()) if prior else None
@@ -109,16 +183,89 @@ def copy(path):
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, target)
 
+def copy_project_tree(path):
+    path = Path(path)
+    if path.is_absolute() or '..' in path.parts:
+        raise ValueError(f'nonlocal release project: {path}')
+    if (src / path).is_dir():
+        shutil.copytree(src / path, dst / path)
+        return
+    # Retained source projects may have been removed by sample cleanup. Copy
+    # only declared immutable files from the explicitly selected prior release.
+    prefix = str(path) + '/'
+    members = sorted(p for p in (prior_manifest or {}).get('files_sha256', {}) if p.startswith(prefix))
+    if not members:
+        raise FileNotFoundError(src / path)
+    for member in members:
+        copy(member)
+
 shutil.copytree(src / 'library', dst / 'library')
 shutil.copytree(src / 'release/catalog', dst / 'catalog')
+if selected_catalog != (src / 'release/catalog').resolve():
+    catalog = dst / 'catalog'
+    old_index = json.loads((catalog / 'design-system/index.json').read_text())
+    previous = old_index['source_revision'].rsplit('.', 1)[-1]
+    if previous != bundle_revision:
+        historical = catalog / ('design-system-' + previous)
+        if not historical.exists():
+            shutil.copytree(catalog / 'design-system', historical)
+            def historical_links(value):
+                if isinstance(value, dict): return {k: historical_links(v) for k, v in value.items()}
+                if isinstance(value, list): return [historical_links(v) for v in value]
+                if isinstance(value, str) and value.startswith('design-system/'):
+                    return historical.name + '/' + value[len('design-system/'):]
+                return value
+            (historical / 'index.json').write_text(json.dumps(historical_links(old_index), indent=2) + '\n')
+        historical_page = catalog / ('design-system-' + previous + '.html')
+        if not historical_page.exists():
+            historical_page.write_text((catalog / 'design-system.html').read_text().replace('design-system/', historical.name + '/'))
+    shutil.rmtree(catalog / 'design-system')
+    shutil.copytree(selected_catalog / 'design-system', catalog / 'design-system')
+    shutil.copy2(selected_catalog / 'design-system.html', catalog / 'design-system.html')
+    for item in selected_catalog.glob('design-system-v*'):
+        target = catalog / item.name
+        if not target.exists():
+            if item.is_dir(): shutil.copytree(item, target)
+            elif item.is_file(): shutil.copy2(item, target)
+    landing = json.loads((catalog / 'index.json').read_text())
+    landing['design_system'] = json.loads((selected_catalog / 'index.json').read_text())['design_system']
+    landing['version'] = version
+    (catalog / 'index.json').write_text(json.dumps(landing, indent=2) + '\n')
+    for name in ('index.html', 'templates.html', 'components.html'):
+        page = catalog / name
+        page.write_text(page.read_text().replace(published_version, version))
 shutil.copytree(src / 'skills/west-monroe-presentations', dst / 'skills/west-monroe-presentations')
 shutil.copytree(src / 'planning/release-0.1', dst / 'planning/release-0.1')
 shutil.copytree(src / 'planning/adaptive', dst / 'planning/adaptive')
 shutil.copytree(src / 'planning/requested-templates', dst / 'planning/requested-templates')
 shutil.copytree(src / 'planning/wm-design-contracts', dst / 'planning/wm-design-contracts')
-for release_doc in ('release/README.md', 'release/cleanup.json', 'release/verification.json', 'release/verification-wmds-v2.json'):
+shutil.copytree(src / 'schemas', dst / 'schemas')
+shutil.copytree(src / 'examples/deck-project', dst / 'examples/deck-project')
+if bundle_revision in ('v4', 'v5'):
+    shutil.copytree(src / 'examples/v4-local-composition', dst / 'examples/v4-local-composition')
+for name in ('PLAN.md', 'deck-source-contract.md', 'catalog-discovery-contract.md',
+             'media-optimization-contract.md', 'template-intake-contract.md',
+             'wave1-review.md', 'waves2-3-review.md', 'next-intake-delta-20261003.json'):
+    copy(Path('docs/skill-planning') / name)
+copy('docs/skill-planning/examples/deck.yaml')
+for release_doc in ('release/README.md', 'release/cleanup.json', 'release/verification.json', 'release/verification-wmds-v2.json', 'release/verification-wmds-v3.json'):
     if (src / release_doc).is_file():
         copy(release_doc)
+if verification_input:
+    target = dst / 'release' / ('verification-wmds-' + bundle_revision + '.json')
+    shutil.copy2(verification_input, target)
+if version.endswith('-candidate'):
+    shutil.copy2(dst / 'release/README.md', dst / 'release/historical-README.md')
+    bundle = json.loads((dst / 'library/wm-design-system' / bundle_revision / 'bundle.json').read_text())
+    (dst / 'release/README.md').write_text(
+        f'# Isolated candidate {version}\n\n'
+        f'Selected source: {bundle["source_revision"]}, commit {bundle["source_commit"]}, '
+        f'{bundle["template_count"]} definitions. This package was staged without activation.\n\n'
+        'Production qualification and installed migration remain separate gates. '
+        f'The isolated launcher defaults to {bundle_revision}; installed release '
+        'and skill links are unchanged. Native review applies only to '
+        'specimens carrying matching preview and review evidence.\n\n'
+        'Prior release notes are retained in `historical-README.md`.\n')
 
 # The modern Go renderer uses registered, hash-pinned artwork. Package the whole
 # registry so caller-selected photos/icons/marks work without a home-directory
@@ -152,7 +299,7 @@ for asset in assets:
 
 assignments = json.loads((src / 'library/templates/rollout/assignments.json').read_text())['entries']
 for project in sorted({row['source_project'] for row in assignments}):
-    shutil.copytree(src / project, dst / project)
+    copy_project_tree(project)
 for row in assignments:
     metadata = json.loads((src / row['implementation_directory'] / 'implementation.json').read_text())
     copy(metadata['preview']['path'])
@@ -276,16 +423,25 @@ for path in [
     'scripts/build-requested-template-gallery.py',
     'scripts/import-requested-templates.py',
     'scripts/build-wmds-release-gallery.py',
+    'scripts/build-wmds-production-gallery.py',
     'scripts/render-contact-sheet.swift',
 ]:
     copy(path)
 (dst / 'VERSION').write_text(version + '\n')
-(dst / 'packaging-inputs.json').write_text(json.dumps({'recovered_legacy_evidence': recovered_inputs}, indent=2) + '\n')
+(dst / 'release/default-bundle.txt').write_text(bundle_revision + '\n')
+(dst / 'packaging-inputs.json').write_text(json.dumps({
+    'recovered_legacy_evidence': recovered_inputs,
+    'selected_bundle': bundle_revision,
+    'selected_catalog': str(selected_catalog),
+    'verification_receipt_sha256': hashlib.sha256(verification_input.read_bytes()).hexdigest() if verification_input else None,
+    'activation_performed_during_packaging': False,
+}, indent=2) + '\n')
 PY
 
 "$stage/bin/pptxlib" index --root "$stage" --out "$stage/library/catalog-library.sqlite" >/dev/null
+"$stage/bin/pptxdesign" library-index --bundle "$stage/library/wm-design-system/$bundle_revision" --legacy-index "$stage/library/catalog-library.sqlite" --legacy-root "$stage" --gallery "$stage/catalog" --out "$stage/catalog/library.sqlite" >/dev/null
 
-python3 - "$stage" "$version" <<'PY'
+python3 - "$stage" "$version" "$bundle_revision" "$stage_only" <<'PY'
 import hashlib
 from html.parser import HTMLParser
 import json
@@ -297,6 +453,8 @@ from urllib.parse import unquote, urlsplit
 
 root = Path(sys.argv[1])
 version = sys.argv[2]
+bundle_revision = sys.argv[3]
+candidate_bundle = bundle_revision in ('v4', 'v5') and sys.argv[4] == 'true' and version.endswith('-candidate')
 assignments = json.loads((root / 'library/templates/rollout/assignments.json').read_text())
 if assignments['target'] != 101 or len(assignments['entries']) != 101:
     raise SystemExit('release requires exactly 101 registered templates')
@@ -345,16 +503,58 @@ for name in ('index.html', 'templates.html', 'components.html', 'design-system.h
 
 design_index = json.loads((catalog / 'design-system/index.json').read_text())
 design_rows = design_index['designs']
-if len(design_rows) != 167 or sum(row['status'] != 'deprecated' for row in design_rows) != 166:
-    raise SystemExit('WMDS gallery must include 167 designs, 166 active')
-if any(row['native_review'] != 'accepted_paired_specimens' for row in design_rows):
-    raise SystemExit('WMDS release requires accepted paired native review')
-if index.get('design_system', {}).get('entries') != 167:
-    raise SystemExit('WMDS landing index is missing the separate 167-design catalog')
-result = subprocess.run([str(root / 'bin/pptxgengo'), 'design', 'library-catalog', '--include-deprecated'],
+bundle = json.loads((root / 'library/wm-design-system' / bundle_revision / 'bundle.json').read_text())
+result = subprocess.run([str(root / 'bin/pptxgengo'), 'design', 'library-catalog', '--bundle', bundle_revision, '--include-deprecated'],
                         cwd='/tmp', capture_output=True, text=True, check=True)
-if len(json.loads(result.stdout)) != 167:
-    raise SystemExit('packaged WMDS catalog is incomplete outside the repository')
+source_rows = json.loads(result.stdout)
+expected_count = bundle['template_count']
+expected_active = sum(row['status'] != 'deprecated' for row in source_rows)
+if len(source_rows) != expected_count or len(design_rows) != expected_count or sum(row['status'] != 'deprecated' for row in design_rows) != expected_active:
+    raise SystemExit('WMDS source/gallery counts do not match the selected bundle')
+source_by_key = {row['key']: row for row in source_rows}
+if len(source_by_key) != expected_count or {row['template'] for row in design_rows} != set(source_by_key):
+    raise SystemExit('WMDS gallery identities do not match source catalog')
+if design_index['source_revision'] != bundle['source_revision'] or design_index['source_commit'] != bundle['source_commit']:
+    raise SystemExit('WMDS gallery source identity mismatch')
+reviewed = 0
+for row in design_rows:
+    source_row = source_by_key[row['template']]
+    if row.get('source_commit') != bundle['source_commit'] or any(row.get(field) != source_row.get(field) for field in ('source_revision', 'status')):
+        raise SystemExit(f"WMDS gallery source identity mismatch: {row['template']}")
+    contract_path = (catalog / row['contract']).resolve()
+    if not contract_path.is_relative_to(catalog.resolve()):
+        raise SystemExit(f"WMDS contract escapes catalog: {row['template']}")
+    contract = json.loads(contract_path.read_text())
+    if any(contract.get(field) != source_row.get(field) for field in ('key', 'source_file', 'source_revision', 'source_sha256')):
+        raise SystemExit(f"WMDS contract source identity mismatch: {row['template']}")
+    if row['native_review'] not in ('not_reviewed', 'native_exported_visual_review_pending', 'reviewed_source_specimen'):
+        raise SystemExit(f"WMDS unknown native review status: {row['template']}")
+    if not candidate_bundle and row['native_review'] != 'reviewed_source_specimen':
+        raise SystemExit(f"WMDS source specimen remains unreviewed: {row['template']}")
+    if row.get('source_preview'):
+        preview = (catalog / row['source_preview']).resolve()
+        if not preview.is_relative_to(catalog.resolve()) or hashlib.sha256(preview.read_bytes()).hexdigest() != row.get('source_preview_sha256'):
+            raise SystemExit(f"WMDS native preview hash mismatch: {row['template']}")
+    elif row['native_review'] != 'not_reviewed':
+        raise SystemExit(f"WMDS native review claimed without preview: {row['template']}")
+    reviewed += row['native_review'] == 'reviewed_source_specimen'
+if design_index.get('qualification', {}).get('reviewed_source_specimens') != reviewed:
+    raise SystemExit('WMDS reviewed specimen count does not match row evidence')
+if (design_index.get('entries') != expected_count or design_index.get('active') != expected_active or
+        index.get('design_system', {}).get('entries') != expected_count or index['design_system'].get('active') != expected_active):
+    raise SystemExit('WMDS landing index does not match selected bundle counts')
+if any(index['design_system'].get(field) != bundle[field] for field in ('source_revision', 'source_commit')):
+    raise SystemExit('WMDS landing index does not match selected source pins')
+if index['design_system'].get('qualification') != design_index.get('qualification'):
+    raise SystemExit('WMDS landing and gallery qualification metadata differ')
+result = subprocess.run([str(root / 'bin/pptxgengo'), 'design', 'library-find', '--bundle', bundle_revision, '--namespace', 'wmds', '--query', 'weekly status'],
+                        cwd='/tmp', capture_output=True, text=True, check=True)
+if not json.loads(result.stdout).get('matches'):
+    raise SystemExit('packaged unified discovery has no modern results')
+result = subprocess.run([str(root / 'bin/pptxgengo'), 'design', 'library-find', '--namespace', 'wmds', '--query', 'weekly status'],
+                        cwd='/tmp', capture_output=True, text=True, check=True)
+if not json.loads(result.stdout).get('matches'):
+    raise SystemExit('packaged default discovery has no modern results')
 def catalog_assets(value):
     if isinstance(value, dict):
         for child in value.values():
@@ -362,7 +562,7 @@ def catalog_assets(value):
     elif isinstance(value, list):
         for child in value:
             yield from catalog_assets(child)
-    elif isinstance(value, str) and value.startswith(('templates/', 'components/', 'assets/', 'compose/', 'recipes/', 'design-system/')):
+    elif isinstance(value, str) and (value.startswith(('templates/', 'components/', 'assets/', 'compose/', 'recipes/', 'design-system/')) or re.match(r'^design-system-v[1-5]/', value)):
         yield value
 
 for value in list(catalog_assets(index)) + list(catalog_assets(design_index)):
@@ -392,6 +592,13 @@ for path in sorted(root.rglob('*')):
 (root / 'release-manifest.json').write_text(json.dumps({
     'schema': 'pptxgengo.local-release-manifest.v1',
     'version': version,
+    'selected_bundle': bundle_revision,
+    'source_revision': bundle['source_revision'],
+    'source_commit': bundle['source_commit'],
+    'template_count': expected_count,
+    'active_template_count': expected_active,
+    'native_reviewed_source_specimens': reviewed,
+    'qualification': 'isolated_candidate_release_gates_pending' if candidate_bundle else 'reviewed_source_specimens',
     'file_count': len(files),
     'files_sha256': files,
 }, indent=2) + '\n')

@@ -11,6 +11,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 
@@ -60,7 +61,18 @@ func NewResolver(roots []string) (*Resolver, error) {
 	if len(roots) == 0 {
 		var err error
 		roots, err = fontscan.DefaultFontDirectories(log.New(io.Discard, "", 0))
-		if err != nil {
+		// fontscan expands ~ through os/user.Current. Sandboxed macOS
+		// processes can have a valid HOME without a directory-service user
+		// record, so also resolve the user font directory through UserHomeDir.
+		if runtime.GOOS == "darwin" {
+			if home, homeErr := os.UserHomeDir(); homeErr == nil {
+				userFonts := filepath.Join(home, "Library", "Fonts")
+				if info, statErr := os.Stat(userFonts); statErr == nil && info.IsDir() {
+					roots = append(roots, userFonts)
+				}
+			}
+		}
+		if err != nil && len(roots) == 0 {
 			return nil, err
 		}
 	}

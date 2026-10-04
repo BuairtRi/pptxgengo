@@ -1,0 +1,1 @@
+Keep all source [add concise definition] placeholders, roles, reporting edges and fulltime/parttime assignments. Org-chart alternative reduces role-definition room; do not remove definitions to force fit.

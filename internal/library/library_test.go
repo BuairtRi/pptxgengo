@@ -2,6 +2,7 @@ package library
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -92,7 +93,8 @@ func TestNarrativeQuoteMustMatchHashedSource(t *testing.T) {
 	}
 }
 func TestExistingCatalogInventoryFind(t *testing.T) {
-	s, err := NewStore("../..")
+	root, pin := existingCatalogFixture(t)
+	s, err := NewStore(root)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -104,6 +106,10 @@ func TestExistingCatalogInventoryFind(t *testing.T) {
 	if report.InventoryCount < 17000 {
 		t.Fatalf("catalog projection too small: %+v", report)
 	}
+	if report.CatalogSHA256 != pin.SHA256 {
+		t.Fatalf("inventory source pin changed: %+v", report)
+	}
+	t.Logf("frozen inventory indexed: %d occurrences, %d contracts, %d aliases", report.InventoryCount, report.ContractCount, report.AliasCount)
 	hits, err := s.Find(index, FindOptions{Query: "governance", Inventory: true, Limit: 5})
 	if err != nil {
 		t.Fatal(err)
@@ -119,6 +125,69 @@ func TestExistingCatalogInventoryFind(t *testing.T) {
 	if !strings.Contains(string(b), "avoid") {
 		t.Fatalf("preference overlay missing: %s", b)
 	}
+}
+
+// The large legacy inventory is intentionally absent from a cleaned checkout.
+// Use the real installed release only when its manifest and SQLite bytes match
+// the repository's frozen source pin. Never substitute a generated inventory.
+func existingCatalogFixture(t *testing.T) (string, Artifact) {
+	t.Helper()
+	repo, err := filepath.Abs("../..")
+	if err != nil {
+		t.Fatal(err)
+	}
+	readPin := func(root string) (Artifact, error) {
+		b, err := os.ReadFile(filepath.Join(root, "library/catalog-manifest.json"))
+		if err != nil {
+			return Artifact{}, err
+		}
+		var manifest struct {
+			Artifacts map[string]Artifact `json:"artifacts"`
+		}
+		if err := json.Unmarshal(b, &manifest); err != nil {
+			return Artifact{}, err
+		}
+		pin := manifest.Artifacts["sqlite"]
+		if pin.Path == "" || !hex64.MatchString(pin.SHA256) {
+			return Artifact{}, fmt.Errorf("manifest lacks a pinned SQLite inventory")
+		}
+		return pin, nil
+	}
+	pin, err := readPin(repo)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roots := []string{repo, os.Getenv("PPTXGENGO_PRIOR_RELEASE_ROOT"), os.Getenv("PPTXGENGO_RELEASE_ROOT")}
+	version, err := os.ReadFile(filepath.Join(repo, "release/VERSION"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if home, err := os.UserHomeDir(); err == nil {
+		roots = append(roots, filepath.Join(home, ".local/share/pptxgengo/releases", strings.TrimSpace(string(version))))
+	}
+	var failures []string
+	for _, root := range roots {
+		if root == "" {
+			continue
+		}
+		candidatePin, err := readPin(root)
+		if err != nil || candidatePin.Path != pin.Path || candidatePin.SHA256 != pin.SHA256 {
+			failures = append(failures, root+": manifest does not match frozen inventory pin")
+			continue
+		}
+		s, err := NewStore(root)
+		if err == nil {
+			err = s.VerifyArtifact(pin)
+		}
+		if err != nil {
+			failures = append(failures, root+": "+err.Error())
+			continue
+		}
+		t.Logf("using frozen inventory %s from %s", pin.SHA256, root)
+		return root, pin
+	}
+	t.Fatalf("frozen legacy inventory unavailable; set PPTXGENGO_PRIOR_RELEASE_ROOT to a matching complete release: %s", strings.Join(failures, "; "))
+	return "", Artifact{}
 }
 
 func TestIndexedContractInstantiateBoundedArray(t *testing.T) {

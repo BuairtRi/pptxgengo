@@ -1,0 +1,392 @@
+{
+  "key": "value-scenarios/table-nav",
+  "source_file": "templates/library/value.json",
+  "source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "value",
+  "tier": "core",
+  "name": "Value scenarios · assumptions and outputs · nav rail",
+  "purpose": "Scenario assumptions and outputs in one table, three cases across, on the nav rail.",
+  "uses": [
+    "rail.nav",
+    "table.standard"
+  ],
+  "source_advisory_budget": {
+    "words": 84,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "measure",
+      "maxChars": 36
+    },
+    {
+      "slot": "value",
+      "maxChars": 10
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "navigation",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 8,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Investment and value"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Payback ranges from month 28 to month 41"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current program data before use."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Measure"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Conservative"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Expected"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Aggressive"
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "75%"
+    },
+    {
+      "name": "node01.rows.item01.b",
+      "source_pointer": "/body/0/rows/0/b",
+      "kind": "string",
+      "synthetic_source_example": "100%"
+    },
+    {
+      "name": "node01.rows.item01.c",
+      "source_pointer": "/body/0/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "115%"
+    },
+    {
+      "name": "node01.rows.item01.m",
+      "source_pointer": "/body/0/rows/0/m",
+      "kind": "string",
+      "synthetic_source_example": "Share of planned value realized"
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "70%"
+    },
+    {
+      "name": "node01.rows.item02.b",
+      "source_pointer": "/body/0/rows/1/b",
+      "kind": "string",
+      "synthetic_source_example": "85%"
+    },
+    {
+      "name": "node01.rows.item02.c",
+      "source_pointer": "/body/0/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "95%"
+    },
+    {
+      "name": "node01.rows.item02.m",
+      "source_pointer": "/body/0/rows/1/m",
+      "kind": "string",
+      "synthetic_source_example": "Adoption at the end of year two"
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "$4.6M"
+    },
+    {
+      "name": "node01.rows.item03.b",
+      "source_pointer": "/body/0/rows/2/b",
+      "kind": "string",
+      "synthetic_source_example": "$4.2M"
+    },
+    {
+      "name": "node01.rows.item03.c",
+      "source_pointer": "/body/0/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "$4.0M"
+    },
+    {
+      "name": "node01.rows.item03.m",
+      "source_pointer": "/body/0/rows/2/m",
+      "kind": "string",
+      "synthetic_source_example": "Investment"
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "$7.6M"
+    },
+    {
+      "name": "node01.rows.item04.b",
+      "source_pointer": "/body/0/rows/3/b",
+      "kind": "string",
+      "synthetic_source_example": "$10.2M"
+    },
+    {
+      "name": "node01.rows.item04.c",
+      "source_pointer": "/body/0/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "$11.7M"
+    },
+    {
+      "name": "node01.rows.item04.m",
+      "source_pointer": "/body/0/rows/3/m",
+      "kind": "string",
+      "synthetic_source_example": "Five-year value"
+    },
+    {
+      "name": "node01.rows.item05.a",
+      "source_pointer": "/body/0/rows/4/a",
+      "kind": "string",
+      "synthetic_source_example": "$3.0M"
+    },
+    {
+      "name": "node01.rows.item05.b",
+      "source_pointer": "/body/0/rows/4/b",
+      "kind": "string",
+      "synthetic_source_example": "$6.0M"
+    },
+    {
+      "name": "node01.rows.item05.c",
+      "source_pointer": "/body/0/rows/4/c",
+      "kind": "string",
+      "synthetic_source_example": "$7.7M"
+    },
+    {
+      "name": "node01.rows.item05.m",
+      "source_pointer": "/body/0/rows/4/m",
+      "kind": "string",
+      "synthetic_source_example": "Net value"
+    },
+    {
+      "name": "node01.rows.item06.a",
+      "source_pointer": "/body/0/rows/5/a",
+      "kind": "string",
+      "synthetic_source_example": "65%"
+    },
+    {
+      "name": "node01.rows.item06.b",
+      "source_pointer": "/body/0/rows/5/b",
+      "kind": "string",
+      "synthetic_source_example": "143%"
+    },
+    {
+      "name": "node01.rows.item06.c",
+      "source_pointer": "/body/0/rows/5/c",
+      "kind": "string",
+      "synthetic_source_example": "193%"
+    },
+    {
+      "name": "node01.rows.item06.m",
+      "source_pointer": "/body/0/rows/5/m",
+      "kind": "string",
+      "synthetic_source_example": "Five-year ROI"
+    },
+    {
+      "name": "node01.rows.item07.a",
+      "source_pointer": "/body/0/rows/6/a",
+      "kind": "string",
+      "synthetic_source_example": "month 41"
+    },
+    {
+      "name": "node01.rows.item07.b",
+      "source_pointer": "/body/0/rows/6/b",
+      "kind": "string",
+      "synthetic_source_example": "month 31"
+    },
+    {
+      "name": "node01.rows.item07.c",
+      "source_pointer": "/body/0/rows/6/c",
+      "kind": "string",
+      "synthetic_source_example": "month 28"
+    },
+    {
+      "name": "node01.rows.item07.m",
+      "source_pointer": "/body/0/rows/6/m",
+      "kind": "string",
+      "synthetic_source_example": "Payback"
+    },
+    {
+      "name": "node01.rows.item08.a",
+      "source_pointer": "/body/0/rows/7/a",
+      "kind": "string",
+      "synthetic_source_example": "$1.8M"
+    },
+    {
+      "name": "node01.rows.item08.b",
+      "source_pointer": "/body/0/rows/7/b",
+      "kind": "string",
+      "synthetic_source_example": "$4.1M"
+    },
+    {
+      "name": "node01.rows.item08.c",
+      "source_pointer": "/body/0/rows/7/c",
+      "kind": "string",
+      "synthetic_source_example": "$5.5M"
+    },
+    {
+      "name": "node01.rows.item08.m",
+      "source_pointer": "/body/0/rows/7/m",
+      "kind": "string",
+      "synthetic_source_example": "NPV at 8%"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 4
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 8
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Context"
+        },
+        {
+          "key": "section-02",
+          "label": "Approach"
+        },
+        {
+          "key": "section-03",
+          "label": "Business case"
+        },
+        {
+          "key": "section-04",
+          "label": "Roadmap"
+        },
+        {
+          "key": "section-05",
+          "label": "Next steps"
+        }
+      ],
+      "active": "section-03"
+    }
+  }
+}

@@ -1,0 +1,383 @@
+{
+  "key": "deliverables/index",
+  "source_file": "templates/library/proof.json",
+  "source_sha256": "e34e8d1846ae7aaf3bd52656d8ad37d34773db3bd3bd695c1e5e3f42c319593b",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "thumbnail"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "thumbnail"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "thumbnail"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "thumbnail"
+    }
+  ],
+  "family": "proof",
+  "tier": "working",
+  "name": "Deliverable index · phase, format, audience",
+  "purpose": "A table of every deliverable with its phase, format and audience, and a sample page beside each row.",
+  "uses": [
+    "table",
+    "prim.thumbnail"
+  ],
+  "source_advisory_budget": {
+    "words": 58,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "deliverable",
+      "count": 4,
+      "maxChars": 28
+    },
+    {
+      "slot": "phase",
+      "maxChars": 14
+    },
+    {
+      "slot": "format",
+      "maxChars": 14
+    },
+    {
+      "slot": "audience",
+      "maxChars": 28
+    },
+    {
+      "slot": "sample",
+      "kind": "image"
+    },
+    {
+      "slot": "source",
+      "maxChars": 100
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table",
+      "thumbnail"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "thumbnail",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 126,
+          "x": 777,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "thumbnail",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 126,
+          "x": 777,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "thumbnail",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 126,
+          "x": 777,
+          "y": 306
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "thumbnail",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 126,
+          "x": 777,
+          "y": 378
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Deliverables"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Four deliverables, each built for a named audience"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Illustrative samples. Final outputs are tailored to Northfield's data and confirmed priorities."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Deliverable"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Phase"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Format"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Audience"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Sample"
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "Finance leadership"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "Operating baseline"
+    },
+    {
+      "name": "node01.rows.item01.f",
+      "source_pointer": "/body/0/rows/0/f",
+      "kind": "string",
+      "synthetic_source_example": "Slide deck"
+    },
+    {
+      "name": "node01.rows.item01.p",
+      "source_pointer": "/body/0/rows/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 1–4"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "Steering committee"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "Redesign portfolio"
+    },
+    {
+      "name": "node01.rows.item02.f",
+      "source_pointer": "/body/0/rows/1/f",
+      "kind": "string",
+      "synthetic_source_example": "Workbook"
+    },
+    {
+      "name": "node01.rows.item02.p",
+      "source_pointer": "/body/0/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 5–8"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "Business unit leads"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "Adoption plan"
+    },
+    {
+      "name": "node01.rows.item03.f",
+      "source_pointer": "/body/0/rows/2/f",
+      "kind": "string",
+      "synthetic_source_example": "Slide deck"
+    },
+    {
+      "name": "node01.rows.item03.p",
+      "source_pointer": "/body/0/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 9–10"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "CFO and controllers"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "KPI scorecard"
+    },
+    {
+      "name": "node01.rows.item04.f",
+      "source_pointer": "/body/0/rows/3/f",
+      "kind": "string",
+      "synthetic_source_example": "Dashboard"
+    },
+    {
+      "name": "node01.rows.item04.p",
+      "source_pointer": "/body/0/rows/3/p",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 11–12"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 5
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active"
+}

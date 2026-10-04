@@ -1,0 +1,161 @@
+?   	github.com/buairtri/pptxgengo/cmd/pptxadapt	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxanchor	(cached)
+?   	github.com/buairtri/pptxgengo/cmd/pptxcomponent	[no test files]
+ok  	github.com/buairtri/pptxgengo/cmd/pptxcompose	(cached)
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdesign	(cached)
+ok  	github.com/buairtri/pptxgengo/cmd/pptxdiff	(cached)
+ok  	github.com/buairtri/pptxgengo/cmd/pptxgengo	(cached)
+?   	github.com/buairtri/pptxgengo/cmd/pptxlib	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxscene	[no test files]
+?   	github.com/buairtri/pptxgengo/cmd/pptxtemplate	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/adapt	(cached)
+?   	github.com/buairtri/pptxgengo/internal/component	[no test files]
+ok  	github.com/buairtri/pptxgengo/internal/compose	(cached)
+ok  	github.com/buairtri/pptxgengo/internal/deckproject	(cached)
+--- FAIL: TestExistingCatalogInventoryFind (0.00s)
+    library_test.go:102: lstat /Users/rscott/Projects/pptxgengo/samples/showcase: no such file or directory
+FAIL
+FAIL	github.com/buairtri/pptxgengo/internal/library	1.994s
+ok  	github.com/buairtri/pptxgengo/internal/nativepkg	(cached)
+--- FAIL: TestInstalledFontsShapingAndVariableStyles (0.20s)
+    layout_test.go:230: request text: font family "IBM Plex Sans" style regular not found; install the face or supply --font-dir (no font substitution)
+FAIL
+FAIL	github.com/buairtri/pptxgengo/internal/textlayout	0.657s
+ok  	github.com/buairtri/pptxgengo/internal/wmdesign	(cached)
+ok  	github.com/buairtri/pptxgengo/pptx	1.292s
+FAIL
+
+# Frozen inventory and macOS HOME-font remediation — 2026-10-03T22:25:38.780875+00:00
+# Prior full-repository failures above are retained as historical evidence. Checks below cover both complete owned packages.
+# Inventory fixture: installed local.7 frozen SQLite matches repository manifest SHA ed89eb99c2765785aff74ec4ad0f1919dfd71de083e50c38b147ddb4e4fb0d33; no installed mutation.
+# Font discovery: UID502 has no os/user.Current record; os.UserHomeDir resolves real macOS HOME. Exact family/style selection and explicit-root isolation retained.
+
+$ go test -count=1 -v ./internal/library ./internal/textlayout
+=== RUN   TestAssembleDeterministicRepeatedTemplateAndPage
+--- PASS: TestAssembleDeterministicRepeatedTemplateAndPage (0.20s)
+=== RUN   TestAssembleRejectsDuplicateExistingAndNarrativeMismatchAtomically
+--- PASS: TestAssembleRejectsDuplicateExistingAndNarrativeMismatchAtomically (0.16s)
+=== RUN   TestFingerprintSemanticVariantsAndDifferences
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/font
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/asset
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/geometry
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/shape_count
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/routing
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/target
+--- PASS: TestFingerprintSemanticVariantsAndDifferences (0.01s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/font (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/asset (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/geometry (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/shape_count (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/routing (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/target (0.00s)
+=== RUN   TestFingerprintKeepsUnverifiedAssetPath
+--- PASS: TestFingerprintKeepsUnverifiedAssetPath (0.01s)
+=== RUN   TestFingerprintScopedContainerReferences
+--- PASS: TestFingerprintScopedContainerReferences (0.00s)
+=== RUN   TestIndexAliasRetainsIndependentSourceAndReview
+--- PASS: TestIndexAliasRetainsIndependentSourceAndReview (0.24s)
+=== RUN   TestPointerAndBoundedRepeat
+--- PASS: TestPointerAndBoundedRepeat (0.00s)
+=== RUN   TestStyleTokensOnlyTouchColorFields
+--- PASS: TestStyleTokensOnlyTouchColorFields (0.00s)
+=== RUN   TestContractRejectsStaleProofAndUnboundedArray
+--- PASS: TestContractRejectsStaleProofAndUnboundedArray (0.00s)
+=== RUN   TestNarrativeQuoteMustMatchHashedSource
+--- PASS: TestNarrativeQuoteMustMatchHashedSource (0.00s)
+=== RUN   TestExistingCatalogInventoryFind
+    library_test.go:96: using frozen inventory ed89eb99c2765785aff74ec4ad0f1919dfd71de083e50c38b147ddb4e4fb0d33 from /Users/rscott/.local/share/pptxgengo/releases/0.1.0-local.7
+    library_test.go:112: frozen inventory indexed: 17740 occurrences, 13 contracts, 0 aliases
+--- PASS: TestExistingCatalogInventoryFind (0.43s)
+=== RUN   TestIndexedContractInstantiateBoundedArray
+--- PASS: TestIndexedContractInstantiateBoundedArray (0.11s)
+PASS
+ok  	github.com/buairtri/pptxgengo/internal/library	1.464s
+=== RUN   TestWrapHardBreakAndPointSizes
+--- PASS: TestWrapHardBreakAndPointSizes (0.02s)
+=== RUN   TestWrapAtMeasuredBoundary
+--- PASS: TestWrapAtMeasuredBoundary (0.01s)
+=== RUN   TestStylesMixedRunsAndSpacing
+--- PASS: TestStylesMixedRunsAndSpacing (0.02s)
+=== RUN   TestAlignmentAndBullets
+--- PASS: TestAlignmentAndBullets (0.01s)
+=== RUN   TestMissingFontsAndUnsupportedFeaturesFail
+--- PASS: TestMissingFontsAndUnsupportedFeaturesFail (0.01s)
+=== RUN   TestVariableWeightSelection
+--- PASS: TestVariableWeightSelection (0.00s)
+=== RUN   TestLongWordAndAccents
+--- PASS: TestLongWordAndAccents (0.01s)
+=== RUN   TestDefaultResolverIncludesUserHomeFonts
+--- PASS: TestDefaultResolverIncludesUserHomeFonts (0.07s)
+=== RUN   TestExplicitResolverRootsRemainIsolated
+--- PASS: TestExplicitResolverRootsRemainIsolated (0.00s)
+=== RUN   TestInstalledFontsShapingAndVariableStyles
+--- PASS: TestInstalledFontsShapingAndVariableStyles (0.08s)
+PASS
+ok  	github.com/buairtri/pptxgengo/internal/textlayout	0.648s
+exit_code=0
+
+$ go test -count=1 -v -race ./internal/library ./internal/textlayout
+=== RUN   TestAssembleDeterministicRepeatedTemplateAndPage
+--- PASS: TestAssembleDeterministicRepeatedTemplateAndPage (0.33s)
+=== RUN   TestAssembleRejectsDuplicateExistingAndNarrativeMismatchAtomically
+--- PASS: TestAssembleRejectsDuplicateExistingAndNarrativeMismatchAtomically (0.18s)
+=== RUN   TestFingerprintSemanticVariantsAndDifferences
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/shape_count
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/routing
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/target
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/font
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/asset
+=== RUN   TestFingerprintSemanticVariantsAndDifferences/geometry
+--- PASS: TestFingerprintSemanticVariantsAndDifferences (0.03s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/shape_count (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/routing (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/target (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/font (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/asset (0.00s)
+    --- PASS: TestFingerprintSemanticVariantsAndDifferences/geometry (0.00s)
+=== RUN   TestFingerprintKeepsUnverifiedAssetPath
+--- PASS: TestFingerprintKeepsUnverifiedAssetPath (0.00s)
+=== RUN   TestFingerprintScopedContainerReferences
+--- PASS: TestFingerprintScopedContainerReferences (0.00s)
+=== RUN   TestIndexAliasRetainsIndependentSourceAndReview
+--- PASS: TestIndexAliasRetainsIndependentSourceAndReview (0.23s)
+=== RUN   TestPointerAndBoundedRepeat
+--- PASS: TestPointerAndBoundedRepeat (0.00s)
+=== RUN   TestStyleTokensOnlyTouchColorFields
+--- PASS: TestStyleTokensOnlyTouchColorFields (0.00s)
+=== RUN   TestContractRejectsStaleProofAndUnboundedArray
+--- PASS: TestContractRejectsStaleProofAndUnboundedArray (0.00s)
+=== RUN   TestNarrativeQuoteMustMatchHashedSource
+--- PASS: TestNarrativeQuoteMustMatchHashedSource (0.01s)
+=== RUN   TestExistingCatalogInventoryFind
+    library_test.go:96: using frozen inventory ed89eb99c2765785aff74ec4ad0f1919dfd71de083e50c38b147ddb4e4fb0d33 from /Users/rscott/.local/share/pptxgengo/releases/0.1.0-local.7
+    library_test.go:112: frozen inventory indexed: 17740 occurrences, 13 contracts, 0 aliases
+--- PASS: TestExistingCatalogInventoryFind (1.03s)
+=== RUN   TestIndexedContractInstantiateBoundedArray
+--- PASS: TestIndexedContractInstantiateBoundedArray (0.12s)
+PASS
+ok  	github.com/buairtri/pptxgengo/internal/library	3.246s
+=== RUN   TestWrapHardBreakAndPointSizes
+--- PASS: TestWrapHardBreakAndPointSizes (0.02s)
+=== RUN   TestWrapAtMeasuredBoundary
+--- PASS: TestWrapAtMeasuredBoundary (0.01s)
+=== RUN   TestStylesMixedRunsAndSpacing
+--- PASS: TestStylesMixedRunsAndSpacing (0.02s)
+=== RUN   TestAlignmentAndBullets
+--- PASS: TestAlignmentAndBullets (0.02s)
+=== RUN   TestMissingFontsAndUnsupportedFeaturesFail
+--- PASS: TestMissingFontsAndUnsupportedFeaturesFail (0.02s)
+=== RUN   TestVariableWeightSelection
+--- PASS: TestVariableWeightSelection (0.00s)
+=== RUN   TestLongWordAndAccents
+--- PASS: TestLongWordAndAccents (0.01s)
+=== RUN   TestDefaultResolverIncludesUserHomeFonts
+--- PASS: TestDefaultResolverIncludesUserHomeFonts (0.10s)
+=== RUN   TestExplicitResolverRootsRemainIsolated
+--- PASS: TestExplicitResolverRootsRemainIsolated (0.00s)
+=== RUN   TestInstalledFontsShapingAndVariableStyles
+--- PASS: TestInstalledFontsShapingAndVariableStyles (0.14s)
+PASS
+ok  	github.com/buairtri/pptxgengo/internal/textlayout	1.745s
+exit_code=0

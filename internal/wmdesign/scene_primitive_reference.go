@@ -5,6 +5,7 @@ import "encoding/json"
 // primitiveAssetRegistry pins canonical local bytes. Runtime roots may relocate
 // these files but cannot alter any registered payload.
 var primitiveAssetRegistry = map[string]primitiveAsset{
+	"arrow-straight":                        {Path: "assets/graphics/arrows/left-facing-arrow-navy.svg", SHA256: "115a8f5079b158c346e9f9ca6c6eeecb7567bbab70f4cd058c365f09ed10290e"},
 	"arrow-connecting":                      {Path: "assets/graphics/arrows/wm_handrawn_connecting_arrow_rgb_240912.svg", SHA256: "646a5a89f976631f409f2aff52223cc21f54ba077b6552537613a45d956307ed"},
 	"arrow-dashed":                          {Path: "assets/graphics/arrows/wm_handrawn_dashed_arrow_rgb_240912.svg", SHA256: "5c4b6a1f0f78a1a3349583d7f90ba83afb9ed605c41297339d0e8f9f63095f00"},
 	"arrow-double":                          {Path: "assets/graphics/arrows/wm_handrawn_double_arrow_rgb_240912.svg", SHA256: "bb18d27bee7209d892014a61bb1c3d80b8000610bef4994a77ef0a944fa38a56"},

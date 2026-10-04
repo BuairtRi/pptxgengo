@@ -1,0 +1,1 @@
+Keep hidden. This particular source architecture is a raster image, not editable source shapes; retain its exact pixels as evidence. Preserve all paragraphcopy including doubleperiod and offcanvas Update text. Never claim a raster is editable.

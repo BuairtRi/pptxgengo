@@ -5,8 +5,10 @@
 package pptx
 
 import (
+	"crypto/sha256"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 )
@@ -56,7 +58,8 @@ type Presentation struct {
 	// uuidFunc, when non-nil, supplies the section GUID emitted in
 	// ppt/presentation.xml (mirrors PORTING.md's promised uuid hook). Nil =
 	// getUuid (random). Tests may pin it to make section GUIDs deterministic.
-	uuidFunc func(format string) string
+	uuidFunc      func(format string) string
+	buildIdentity *BuildIdentity
 
 	// chartCtr assigns each chart its 1-based part index (chart1.xml, ...).
 	// Per-Presentation and concurrency-safe — see the chartCounter doc comment.
@@ -76,9 +79,49 @@ type buildContext struct {
 	uuid func(format string) string
 }
 
+// BuildIdentity fixes build metadata and generated section IDs for repeatable
+// authoring. The counter is local to each Write, never shared by presentations.
+type BuildIdentity struct {
+	Timestamp time.Time
+	Seed      string
+}
+
+func (p *Presentation) SetBuildIdentity(identity BuildIdentity) error {
+	if identity.Timestamp.IsZero() || identity.Seed == "" {
+		return fmt.Errorf("pptx: build identity requires timestamp and seed")
+	}
+	identity.Timestamp = identity.Timestamp.UTC()
+	p.buildIdentity = &identity
+	return nil
+}
+
 // newBuildContext builds the context from the Presentation's optional hooks,
 // falling back to wall-clock time and the real getUuid.
 func (p *Presentation) newBuildContext() *buildContext {
+	if p.buildIdentity != nil {
+		identity := *p.buildIdentity
+		counter := 0
+		return &buildContext{now: func() time.Time { return identity.Timestamp }, uuid: func(format string) string {
+			counter++
+			hash := fmt.Sprintf("%x", sha256.Sum256([]byte(fmt.Sprintf("%s:%d", identity.Seed, counter))))
+			var out strings.Builder
+			i := 0
+			for _, c := range format {
+				if c == 'x' || c == 'y' {
+					v := hash[i%len(hash)]
+					i++
+					if c == 'y' {
+						n := strings.IndexByte("0123456789abcdef", v)
+						v = "0123456789abcdef"[(n&3)|8]
+					}
+					out.WriteByte(v)
+				} else {
+					out.WriteRune(c)
+				}
+			}
+			return out.String()
+		}}
+	}
 	now := p.nowFunc
 	if now == nil {
 		now = time.Now

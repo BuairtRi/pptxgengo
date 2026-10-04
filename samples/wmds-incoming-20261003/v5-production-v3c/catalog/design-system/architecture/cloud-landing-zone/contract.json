@@ -1,0 +1,904 @@
+{
+  "key": "architecture/cloud-landing-zone",
+  "source_file": "templates/library/architecture.json",
+  "source_sha256": "08da1866d9969884422dd5a206895c10713edd7e2becf8c8917c691f28eedf75",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "container"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "container"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "container"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "container"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "container"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "container"
+    },
+    {
+      "id": "node16",
+      "source_pointer": "/body/15",
+      "expected_type": "container"
+    },
+    {
+      "id": "node17",
+      "source_pointer": "/body/16",
+      "expected_type": "text"
+    },
+    {
+      "id": "node18",
+      "source_pointer": "/body/17",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node19",
+      "source_pointer": "/body/18",
+      "expected_type": "container"
+    },
+    {
+      "id": "node20",
+      "source_pointer": "/body/19",
+      "expected_type": "text"
+    },
+    {
+      "id": "node21",
+      "source_pointer": "/body/20",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node22",
+      "source_pointer": "/body/21",
+      "expected_type": "container"
+    },
+    {
+      "id": "node23",
+      "source_pointer": "/body/22",
+      "expected_type": "text"
+    },
+    {
+      "id": "node24",
+      "source_pointer": "/body/23",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node25",
+      "source_pointer": "/body/24",
+      "expected_type": "container"
+    },
+    {
+      "id": "node26",
+      "source_pointer": "/body/25",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node27",
+      "source_pointer": "/body/26",
+      "expected_type": "container"
+    },
+    {
+      "id": "node28",
+      "source_pointer": "/body/27",
+      "expected_type": "container"
+    },
+    {
+      "id": "node29",
+      "source_pointer": "/body/28",
+      "expected_type": "text"
+    },
+    {
+      "id": "node30",
+      "source_pointer": "/body/29",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node31",
+      "source_pointer": "/body/30",
+      "expected_type": "container"
+    },
+    {
+      "id": "node32",
+      "source_pointer": "/body/31",
+      "expected_type": "text"
+    },
+    {
+      "id": "node33",
+      "source_pointer": "/body/32",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node34",
+      "source_pointer": "/body/33",
+      "expected_type": "container"
+    },
+    {
+      "id": "node35",
+      "source_pointer": "/body/34",
+      "expected_type": "text"
+    },
+    {
+      "id": "node36",
+      "source_pointer": "/body/35",
+      "expected_type": "logoslot"
+    },
+    {
+      "id": "node37",
+      "source_pointer": "/body/36",
+      "expected_type": "connector"
+    },
+    {
+      "id": "node38",
+      "source_pointer": "/body/37",
+      "expected_type": "connector"
+    }
+  ],
+  "family": "architecture",
+  "tier": "working",
+  "name": "Architecture · cloud landing zone (AWS)",
+  "purpose": "A traditional landing-zone map: an organization boundary, governance accounts (management, security and logging, network hub), and production and non-production workload accounts with a VPC, public and private subnets and the managed services that compose them.",
+  "uses": [
+    "cloud architecture",
+    "landing zone",
+    "header.slide"
+  ],
+  "source_advisory_budget": {
+    "words": 98,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "maxChars": 32,
+      "slot": "eyebrow"
+    },
+    {
+      "maxChars": 60,
+      "slot": "title"
+    },
+    {
+      "maxChars": 32,
+      "slot": "organization boundary"
+    },
+    {
+      "note": "3 accounts, 2-4 service logo slots each, service name 22 chars",
+      "slot": "governance accounts"
+    },
+    {
+      "note": "production and non-production, each a network with public, private app and private data subnets",
+      "slot": "workload accounts"
+    },
+    {
+      "note": "a logo slot or icon node per service; AWS names in this sample; swap services and logos per provider",
+      "slot": "cloud services"
+    },
+    {
+      "maxChars": 110,
+      "slot": "source"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "image",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "network",
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "diagram",
+      "image",
+      "text"
+    ],
+    "component_types": [
+      "connector",
+      "container",
+      "logoslot",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "logoslot",
+        "role": "image",
+        "exact_count": 16,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 324,
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 324,
+          "x": 75,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 96.0,
+          "x": 87.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 96.0,
+          "x": 189.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 96.0,
+          "x": 291.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 270,
+          "x": 417,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 78.0,
+          "x": 429.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 78.0,
+          "x": 513.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 78.0,
+          "x": 597.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 180,
+          "x": 705,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 75.0,
+          "x": 717.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 30,
+          "w": 75.0,
+          "x": 798.0,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 180,
+          "w": 396,
+          "x": 75,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 24,
+          "w": 72,
+          "x": 387,
+          "y": 258
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 126,
+          "w": 354,
+          "x": 93,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/15",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 102,
+          "x": 111,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/16",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 90,
+          "x": 117,
+          "y": 327
+        }
+      },
+      {
+        "source_pointer": "/body/17",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 90,
+          "x": 117,
+          "y": 351
+        }
+      },
+      {
+        "source_pointer": "/body/18",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 102,
+          "x": 219,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/19",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 90,
+          "x": 225,
+          "y": 327
+        }
+      },
+      {
+        "source_pointer": "/body/20",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 90,
+          "x": 225,
+          "y": 351
+        }
+      },
+      {
+        "source_pointer": "/body/21",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 102,
+          "x": 327,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/22",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 90,
+          "x": 333,
+          "y": 327
+        }
+      },
+      {
+        "source_pointer": "/body/23",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 90,
+          "x": 333,
+          "y": 351
+        }
+      },
+      {
+        "source_pointer": "/body/24",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 180,
+          "w": 396,
+          "x": 489,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/25",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 24,
+          "w": 72,
+          "x": 801,
+          "y": 258
+        }
+      },
+      {
+        "source_pointer": "/body/26",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 126,
+          "w": 354,
+          "x": 507,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/27",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 102,
+          "x": 525,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/28",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 90,
+          "x": 531,
+          "y": 327
+        }
+      },
+      {
+        "source_pointer": "/body/29",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 90,
+          "x": 531,
+          "y": 351
+        }
+      },
+      {
+        "source_pointer": "/body/30",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 102,
+          "x": 633,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/31",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 90,
+          "x": 639,
+          "y": 327
+        }
+      },
+      {
+        "source_pointer": "/body/32",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 90,
+          "x": 639,
+          "y": 351
+        }
+      },
+      {
+        "source_pointer": "/body/33",
+        "component_type": "container",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 102,
+          "x": 741,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/34",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 90,
+          "x": 747,
+          "y": 327
+        }
+      },
+      {
+        "source_pointer": "/body/35",
+        "component_type": "logoslot",
+        "role": "image",
+        "source_bounds": {
+          "h": 36,
+          "w": 90,
+          "x": 747,
+          "y": 351
+        }
+      },
+      {
+        "source_pointer": "/body/36",
+        "component_type": "connector",
+        "role": "content"
+      },
+      {
+        "source_pointer": "/body/37",
+        "component_type": "connector",
+        "role": "content"
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Cloud architecture"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Workloads land in a governed multi-account foundation"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample AWS services; logos and services swap per provider, and an Azure or GCP variant keeps the same structure."
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Northfield AWS organization"
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Management account"
+    },
+    {
+      "name": "node03.name",
+      "source_pointer": "/body/2/name",
+      "kind": "string",
+      "synthetic_source_example": "Organizations"
+    },
+    {
+      "name": "node04.name",
+      "source_pointer": "/body/3/name",
+      "kind": "string",
+      "synthetic_source_example": "Control Tower"
+    },
+    {
+      "name": "node05.name",
+      "source_pointer": "/body/4/name",
+      "kind": "string",
+      "synthetic_source_example": "IAM Identity Center"
+    },
+    {
+      "name": "node06.label",
+      "source_pointer": "/body/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Security and logging account"
+    },
+    {
+      "name": "node07.name",
+      "source_pointer": "/body/6/name",
+      "kind": "string",
+      "synthetic_source_example": "GuardDuty"
+    },
+    {
+      "name": "node08.name",
+      "source_pointer": "/body/7/name",
+      "kind": "string",
+      "synthetic_source_example": "CloudWatch"
+    },
+    {
+      "name": "node09.name",
+      "source_pointer": "/body/8/name",
+      "kind": "string",
+      "synthetic_source_example": "S3 log archive"
+    },
+    {
+      "name": "node10.label",
+      "source_pointer": "/body/9/label",
+      "kind": "string",
+      "synthetic_source_example": "Network hub"
+    },
+    {
+      "name": "node11.name",
+      "source_pointer": "/body/10/name",
+      "kind": "string",
+      "synthetic_source_example": "Transit Gateway"
+    },
+    {
+      "name": "node12.name",
+      "source_pointer": "/body/11/name",
+      "kind": "string",
+      "synthetic_source_example": "Route 53"
+    },
+    {
+      "name": "node13.label",
+      "source_pointer": "/body/12/label",
+      "kind": "string",
+      "synthetic_source_example": "Workload account · Production"
+    },
+    {
+      "name": "node14.name",
+      "source_pointer": "/body/13/name",
+      "kind": "string",
+      "synthetic_source_example": "KMS"
+    },
+    {
+      "name": "node15.label",
+      "source_pointer": "/body/14/label",
+      "kind": "string",
+      "synthetic_source_example": "VPC · production"
+    },
+    {
+      "name": "node17.text",
+      "source_pointer": "/body/16/text",
+      "kind": "string",
+      "synthetic_source_example": "Public"
+    },
+    {
+      "name": "node18.name",
+      "source_pointer": "/body/17/name",
+      "kind": "string",
+      "synthetic_source_example": "Application Load Balancer"
+    },
+    {
+      "name": "node20.text",
+      "source_pointer": "/body/19/text",
+      "kind": "string",
+      "synthetic_source_example": "Private app"
+    },
+    {
+      "name": "node21.name",
+      "source_pointer": "/body/20/name",
+      "kind": "string",
+      "synthetic_source_example": "ECS on Fargate"
+    },
+    {
+      "name": "node23.text",
+      "source_pointer": "/body/22/text",
+      "kind": "string",
+      "synthetic_source_example": "Private data"
+    },
+    {
+      "name": "node24.name",
+      "source_pointer": "/body/23/name",
+      "kind": "string",
+      "synthetic_source_example": "RDS for PostgreSQL"
+    },
+    {
+      "name": "node25.label",
+      "source_pointer": "/body/24/label",
+      "kind": "string",
+      "synthetic_source_example": "Workload account · Non-production"
+    },
+    {
+      "name": "node26.name",
+      "source_pointer": "/body/25/name",
+      "kind": "string",
+      "synthetic_source_example": "KMS"
+    },
+    {
+      "name": "node27.label",
+      "source_pointer": "/body/26/label",
+      "kind": "string",
+      "synthetic_source_example": "VPC · non-production"
+    },
+    {
+      "name": "node29.text",
+      "source_pointer": "/body/28/text",
+      "kind": "string",
+      "synthetic_source_example": "Public"
+    },
+    {
+      "name": "node30.name",
+      "source_pointer": "/body/29/name",
+      "kind": "string",
+      "synthetic_source_example": "Application Load Balancer"
+    },
+    {
+      "name": "node32.text",
+      "source_pointer": "/body/31/text",
+      "kind": "string",
+      "synthetic_source_example": "Private app"
+    },
+    {
+      "name": "node33.name",
+      "source_pointer": "/body/32/name",
+      "kind": "string",
+      "synthetic_source_example": "ECS on Fargate"
+    },
+    {
+      "name": "node35.text",
+      "source_pointer": "/body/34/text",
+      "kind": "string",
+      "synthetic_source_example": "Private data"
+    },
+    {
+      "name": "node36.name",
+      "source_pointer": "/body/35/name",
+      "kind": "string",
+      "synthetic_source_example": "RDS for PostgreSQL"
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

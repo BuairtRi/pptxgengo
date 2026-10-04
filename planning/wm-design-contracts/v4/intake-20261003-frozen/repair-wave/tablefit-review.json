@@ -1,0 +1,80 @@
+{
+  "schema": "pptxgengo.wmds-intake-tablefit-review.v1",
+  "source_revision": "wmds-library.v4 (unreleased intake only)",
+  "source_head": "8f9f16ab8a7e2a6fff45a97627308668f4a12753",
+  "snapshot": "planning/wm-design-contracts/v4/intake-20261003-frozen",
+  "owned_files": [
+    "internal/wmdesign/intake_repairs_tablefit.go",
+    "internal/wmdesign/intake_repairs_tablefit_test.go"
+  ],
+  "amendments": {
+    "stakeholders/quadrant-split": {
+      "rowHeight": 21.4,
+      "note_y": 396,
+      "schedule_bottom": 394
+    },
+    "readiness/scorecard": {
+      "columns": [
+        270,
+        126,
+        90,
+        108
+      ]
+    },
+    "activities/by-phase-table": {
+      "columns": [
+        108,
+        192,
+        312,
+        144,
+        90
+      ]
+    },
+    "activities/ownership-split": {
+      "columns": [
+        156,
+        102,
+        102,
+        108,
+        90
+      ]
+    },
+    "value-tracking/planned-vs-realized": {
+      "columns": [
+        174,
+        78,
+        78,
+        84
+      ]
+    }
+  },
+  "evidence": {
+    "normal": "go test ./internal/wmdesign -run ^TestIncomingTableFit -count=1 passed",
+    "race": "go test -race ./internal/wmdesign -run ^TestIncomingTableFit -count=1 passed (3.954s final)",
+    "full_native_slide_count": 5,
+    "native_zip_tables": 4,
+    "readiness_later_nodes": "6 editable blockArc bands plus caption and trailing 3 of 7 metric",
+    "v3_no_op": true,
+    "idempotence": true,
+    "resolution_receipts": true,
+    "semantic_copy_data_preserved": true,
+    "atomic_malformed_topology_cases": 41,
+    "source_hashes_checked": true
+  },
+  "independent_review": "authoring_contract_research: no material defect, pending native visual readability",
+  "visual_qualification": "pending PowerPoint review; native XML checks are not visual qualification",
+  "no_commit_release": true,
+  "sparse_chart_review": {
+    "findings": [
+      "shared category mismatch truncated workbook observation",
+      "combo component DataIndex mismatch shared B formula",
+      "multi-level workbook category columns unsafe for new sparse API"
+    ],
+    "root_fixes_observed": [
+      "common category grid and finite dense companion validation",
+      "sparse-only component DataIndex normalization without mutating callers",
+      "sparse labels limited to one level"
+    ],
+    "tests": "Focused TestChartMissingValues and TestSceneChartMissingValues passed after all three root fixes (pptx0.279s; wmdesign0.474s)."
+  }
+}

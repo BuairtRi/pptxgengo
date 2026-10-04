@@ -1,0 +1,494 @@
+{
+  "key": "decision-log/table-nav",
+  "source_file": "templates/library/decisions.json",
+  "source_sha256": "0455927617ecb1f376fbd9fabdc92166771192cd91200d31f2e0fce20012e95a",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "decisions",
+  "tier": "core",
+  "name": "Decision log · nav rail",
+  "purpose": "A register of decisions with ID, date, owner, status and the link to each ADR, in the nav rail.",
+  "uses": [
+    "table.tag",
+    "header.slide"
+  ],
+  "source_advisory_budget": {
+    "words": 120,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "log rows",
+      "note": "8 rows (10 in split); ID, date, decision 44 chars, owner, status tag, ADR link"
+    },
+    {
+      "slot": "summary",
+      "note": "split only: counts and note"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "navigation",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 8,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Decision log"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Platform decisions at a glance, newest first"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "ID"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Date"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Decision"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Owner"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Status"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "ADR link"
+    },
+    {
+      "name": "node01.rows.item01.adr",
+      "source_pointer": "/body/0/rows/0/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-021"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "29 Sep"
+    },
+    {
+      "name": "node01.rows.item01.id",
+      "source_pointer": "/body/0/rows/0/id",
+      "kind": "string",
+      "synthetic_source_example": "D-021"
+    },
+    {
+      "name": "node01.rows.item01.o",
+      "source_pointer": "/body/0/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "Data architect"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "Accepted"
+    },
+    {
+      "name": "node01.rows.item01.t",
+      "source_pointer": "/body/0/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "Standardize on FHIR R4 for new APIs"
+    },
+    {
+      "name": "node01.rows.item02.adr",
+      "source_pointer": "/body/0/rows/1/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-020"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "26 Sep"
+    },
+    {
+      "name": "node01.rows.item02.id",
+      "source_pointer": "/body/0/rows/1/id",
+      "kind": "string",
+      "synthetic_source_example": "D-020"
+    },
+    {
+      "name": "node01.rows.item02.o",
+      "source_pointer": "/body/0/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "Platform lead"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "Proposed"
+    },
+    {
+      "name": "node01.rows.item02.t",
+      "source_pointer": "/body/0/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "Retire the legacy scheduling database"
+    },
+    {
+      "name": "node01.rows.item03.adr",
+      "source_pointer": "/body/0/rows/2/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-019"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "24 Sep"
+    },
+    {
+      "name": "node01.rows.item03.id",
+      "source_pointer": "/body/0/rows/2/id",
+      "kind": "string",
+      "synthetic_source_example": "D-019"
+    },
+    {
+      "name": "node01.rows.item03.o",
+      "source_pointer": "/body/0/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "Security lead"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "Accepted"
+    },
+    {
+      "name": "node01.rows.item03.t",
+      "source_pointer": "/body/0/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "Adopt single sign-on for clinician apps"
+    },
+    {
+      "name": "node01.rows.item04.adr",
+      "source_pointer": "/body/0/rows/3/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-018"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "22 Sep"
+    },
+    {
+      "name": "node01.rows.item04.id",
+      "source_pointer": "/body/0/rows/3/id",
+      "kind": "string",
+      "synthetic_source_example": "D-018"
+    },
+    {
+      "name": "node01.rows.item04.o",
+      "source_pointer": "/body/0/rows/3/o",
+      "kind": "string",
+      "synthetic_source_example": "Finance partner"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "Rejected"
+    },
+    {
+      "name": "node01.rows.item04.t",
+      "source_pointer": "/body/0/rows/3/t",
+      "kind": "string",
+      "synthetic_source_example": "Keep nightly batch for payer remittance"
+    },
+    {
+      "name": "node01.rows.item05.adr",
+      "source_pointer": "/body/0/rows/4/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-017"
+    },
+    {
+      "name": "node01.rows.item05.d",
+      "source_pointer": "/body/0/rows/4/d",
+      "kind": "string",
+      "synthetic_source_example": "19 Sep"
+    },
+    {
+      "name": "node01.rows.item05.id",
+      "source_pointer": "/body/0/rows/4/id",
+      "kind": "string",
+      "synthetic_source_example": "D-017"
+    },
+    {
+      "name": "node01.rows.item05.o",
+      "source_pointer": "/body/0/rows/4/o",
+      "kind": "string",
+      "synthetic_source_example": "Infrastructure lead"
+    },
+    {
+      "name": "node01.rows.item05.s",
+      "source_pointer": "/body/0/rows/4/s",
+      "kind": "string",
+      "synthetic_source_example": "Accepted"
+    },
+    {
+      "name": "node01.rows.item05.t",
+      "source_pointer": "/body/0/rows/4/t",
+      "kind": "string",
+      "synthetic_source_example": "Host the analytics platform in a private cloud"
+    },
+    {
+      "name": "node01.rows.item06.adr",
+      "source_pointer": "/body/0/rows/5/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-015"
+    },
+    {
+      "name": "node01.rows.item06.d",
+      "source_pointer": "/body/0/rows/5/d",
+      "kind": "string",
+      "synthetic_source_example": "15 Sep"
+    },
+    {
+      "name": "node01.rows.item06.id",
+      "source_pointer": "/body/0/rows/5/id",
+      "kind": "string",
+      "synthetic_source_example": "D-015"
+    },
+    {
+      "name": "node01.rows.item06.o",
+      "source_pointer": "/body/0/rows/5/o",
+      "kind": "string",
+      "synthetic_source_example": "Platform lead"
+    },
+    {
+      "name": "node01.rows.item06.s",
+      "source_pointer": "/body/0/rows/5/s",
+      "kind": "string",
+      "synthetic_source_example": "Accepted"
+    },
+    {
+      "name": "node01.rows.item06.t",
+      "source_pointer": "/body/0/rows/5/t",
+      "kind": "string",
+      "synthetic_source_example": "Move interface monitoring to one console"
+    },
+    {
+      "name": "node01.rows.item07.adr",
+      "source_pointer": "/body/0/rows/6/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-014"
+    },
+    {
+      "name": "node01.rows.item07.d",
+      "source_pointer": "/body/0/rows/6/d",
+      "kind": "string",
+      "synthetic_source_example": "12 Sep"
+    },
+    {
+      "name": "node01.rows.item07.id",
+      "source_pointer": "/body/0/rows/6/id",
+      "kind": "string",
+      "synthetic_source_example": "D-014"
+    },
+    {
+      "name": "node01.rows.item07.o",
+      "source_pointer": "/body/0/rows/6/o",
+      "kind": "string",
+      "synthetic_source_example": "Chief architect"
+    },
+    {
+      "name": "node01.rows.item07.s",
+      "source_pointer": "/body/0/rows/6/s",
+      "kind": "string",
+      "synthetic_source_example": "Accepted"
+    },
+    {
+      "name": "node01.rows.item07.t",
+      "source_pointer": "/body/0/rows/6/t",
+      "kind": "string",
+      "synthetic_source_example": "Route clinical events through an event bus"
+    },
+    {
+      "name": "node01.rows.item08.adr",
+      "source_pointer": "/body/0/rows/7/adr",
+      "kind": "string",
+      "synthetic_source_example": "ADR-009"
+    },
+    {
+      "name": "node01.rows.item08.d",
+      "source_pointer": "/body/0/rows/7/d",
+      "kind": "string",
+      "synthetic_source_example": "11 Mar 2024"
+    },
+    {
+      "name": "node01.rows.item08.id",
+      "source_pointer": "/body/0/rows/7/id",
+      "kind": "string",
+      "synthetic_source_example": "D-009"
+    },
+    {
+      "name": "node01.rows.item08.o",
+      "source_pointer": "/body/0/rows/7/o",
+      "kind": "string",
+      "synthetic_source_example": "Chief architect"
+    },
+    {
+      "name": "node01.rows.item08.s",
+      "source_pointer": "/body/0/rows/7/s",
+      "kind": "string",
+      "synthetic_source_example": "Superseded"
+    },
+    {
+      "name": "node01.rows.item08.t",
+      "source_pointer": "/body/0/rows/7/t",
+      "kind": "string",
+      "synthetic_source_example": "Connect systems with point-to-point HL7 feeds"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 6
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 8
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Principles"
+        },
+        {
+          "key": "section-02",
+          "label": "Decisions"
+        },
+        {
+          "key": "section-03",
+          "label": "Standards"
+        },
+        {
+          "key": "section-04",
+          "label": "Roadmap"
+        }
+      ],
+      "active": "section-02"
+    }
+  }
+}

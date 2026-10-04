@@ -1,0 +1,351 @@
+{
+  "key": "scope/service-value",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "commercials",
+  "tier": "working",
+  "name": "Scope · optional services, scope and value",
+  "purpose": "Optional scope laid out by service: what is added, the value it unlocks and how it is priced, in one dense table a sponsor can strike items from.",
+  "uses": [
+    "table.standard",
+    "list.set"
+  ],
+  "source_advisory_budget": {
+    "words": 122,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 52
+    },
+    {
+      "slot": "service",
+      "maxChars": 30
+    },
+    {
+      "slot": "scope bullet",
+      "maxChars": 50
+    },
+    {
+      "slot": "value bullet",
+      "maxChars": 34
+    },
+    {
+      "slot": "pricing basis",
+      "maxChars": 28
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Our approach"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Optional scope can be added as demand grows"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Service"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Additional scope"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Unlocked value"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Pricing basis"
+    },
+    {
+      "name": "node01.rows.item01.a.item01",
+      "source_pointer": "/body/0/rows/0/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Assess and select three more adopter teams"
+    },
+    {
+      "name": "node01.rows.item01.a.item02",
+      "source_pointer": "/body/0/rows/0/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Workload-specific design and implementation"
+    },
+    {
+      "name": "node01.rows.item01.a.item03",
+      "source_pointer": "/body/0/rows/0/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Provisioning and operational validation"
+    },
+    {
+      "name": "node01.rows.item01.a.item04",
+      "source_pointer": "/body/0/rows/0/a/3",
+      "kind": "string",
+      "synthetic_source_example": "Workload hypercare and enhancements"
+    },
+    {
+      "name": "node01.rows.item01.p",
+      "source_pointer": "/body/0/rows/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Fixed fee per added team"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "Early-adopter expansion"
+    },
+    {
+      "name": "node01.rows.item01.v.item01",
+      "source_pointer": "/body/0/rows/0/v/0",
+      "kind": "string",
+      "synthetic_source_example": "Twice the workloads onboarded"
+    },
+    {
+      "name": "node01.rows.item01.v.item02",
+      "source_pointer": "/body/0/rows/0/v/1",
+      "kind": "string",
+      "synthetic_source_example": "Higher value per workload"
+    },
+    {
+      "name": "node01.rows.item01.v.item03",
+      "source_pointer": "/body/0/rows/0/v/2",
+      "kind": "string",
+      "synthetic_source_example": "Faster user adoption"
+    },
+    {
+      "name": "node01.rows.item02.a.item01",
+      "source_pointer": "/body/0/rows/1/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Lead end-to-end change for platform rollout"
+    },
+    {
+      "name": "node01.rows.item02.a.item02",
+      "source_pointer": "/body/0/rows/1/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Readiness assessment and champion program"
+    },
+    {
+      "name": "node01.rows.item02.a.item03",
+      "source_pointer": "/body/0/rows/1/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Reusable onboarding and adoption playbook"
+    },
+    {
+      "name": "node01.rows.item02.a.item04",
+      "source_pointer": "/body/0/rows/1/a/3",
+      "kind": "string",
+      "synthetic_source_example": "Program communications and socialization"
+    },
+    {
+      "name": "node01.rows.item02.p",
+      "source_pointer": "/body/0/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Fixed fee by phase"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "Change management ownership"
+    },
+    {
+      "name": "node01.rows.item02.v.item01",
+      "source_pointer": "/body/0/rows/1/v/0",
+      "kind": "string",
+      "synthetic_source_example": "Stickier adoption"
+    },
+    {
+      "name": "node01.rows.item02.v.item02",
+      "source_pointer": "/body/0/rows/1/v/1",
+      "kind": "string",
+      "synthetic_source_example": "Less ongoing user support"
+    },
+    {
+      "name": "node01.rows.item02.v.item03",
+      "source_pointer": "/body/0/rows/1/v/2",
+      "kind": "string",
+      "synthetic_source_example": "Faster onboarding of future teams"
+    },
+    {
+      "name": "node01.rows.item03.a.item01",
+      "source_pointer": "/body/0/rows/2/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Continued cloud architecture and engineering"
+    },
+    {
+      "name": "node01.rows.item03.a.item02",
+      "source_pointer": "/body/0/rows/2/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Post-deployment environment optimization"
+    },
+    {
+      "name": "node01.rows.item03.a.item03",
+      "source_pointer": "/body/0/rows/2/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Ad hoc performance and scaling troubleshooting"
+    },
+    {
+      "name": "node01.rows.item03.p",
+      "source_pointer": "/body/0/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "Team run-rate, monthly"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "Cloud engineering surge"
+    },
+    {
+      "name": "node01.rows.item03.v.item01",
+      "source_pointer": "/body/0/rows/2/v/0",
+      "kind": "string",
+      "synthetic_source_example": "More capacity for workload growth"
+    },
+    {
+      "name": "node01.rows.item03.v.item02",
+      "source_pointer": "/body/0/rows/2/v/1",
+      "kind": "string",
+      "synthetic_source_example": "Faster cost optimization after launch"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 4
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "count": 4
+    },
+    {
+      "name": "node01.rows.item01.v",
+      "source_pointer": "/body/0/rows/0/v",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "count": 4
+    },
+    {
+      "name": "node01.rows.item02.v",
+      "source_pointer": "/body/0/rows/1/v",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item03.v",
+      "source_pointer": "/body/0/rows/2/v",
+      "count": 2
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

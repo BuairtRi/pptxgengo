@@ -1,0 +1,77 @@
+{
+  "schema": "pptxgengo.source-intake-capabilities.v1",
+  "implemented": [
+    "funnel",
+    "pyramid levels/stages syntax",
+    "bracket",
+    "road"
+  ],
+  "legacy_preservation": "Pyramid bands/mode inputs fall through to the original sequence adapter. Defaults for line joins serialize no new XML.",
+  "basis": {
+    "snapshot": "planning/wm-design-contracts/v4/intake-20261003-round12/source",
+    "commit": "a60912d441b0a1d3d03650407354f14aadbf3e63",
+    "renderer_sha256": "3284f866ee67e37d8960a252fbc579ac10f332db1212f7806c98d70d45eacc64",
+    "latest_renderer_sha256": "72057c4f23f077f095e7b6f22705b35bbb538eee55d9d9da6cf752f6cc10d20c",
+    "latest_snapshot": "planning/wm-design-contracts/v4/intake-20261003-frozen/source",
+    "latest_comparison": "funnel, road and bracket switch cases byte-identical"
+  },
+  "fixtures": {
+    "funnel_nodes": 9,
+    "new_pyramid_nodes": 5,
+    "bracket_nodes": 7,
+    "road_nodes": 6
+  },
+  "capabilities": {
+    "bands": "Native filled trapezoid/triangle paths, 1 decimal source geometry, exact authored identities, value mono, inside/side labels and dotted leaders; measured per-part stacks with source footnotes and literal brackets.",
+    "bracket": "Four directional brackets with native strokes and optional measured labels, actual ink extents.",
+    "road": "121 sample native polyline with rounded joins and caps, exact 7pt on/off native white centerline, mirrored direction, editable pins/ticks/numbers, measured alternating labels, actual bounds."
+  },
+  "limits": {
+    "bands": "1..12 bands; finite1920x1080 node; shapeW0..w,neck(0,1],nonnegative gap; 2048label/8192text/65536total runes.",
+    "road": "1..24 milestones;1920x1080 node; roadW(0,120],abs amp<=1,waves(0,12];8192 native dash points;2048label/date,8192text,65536total runes.",
+    "bracket": "depth(0,180],finite span and geometry,2048label runes."
+  },
+  "line_join_api": {
+    "property": "pptx.ShapeLineProps.LineJoin",
+    "allowed": [
+      "",
+      "round",
+      "bevel",
+      "miter"
+    ],
+    "validation": "AddShape/AddImage/AddText preflight",
+    "serialization": "whitelisted OOXML join element; empty byte-neutral",
+    "road_use": "Navy main road uses round; white source-default centerline unchanged."
+  },
+  "checks": [
+    {
+      "command": "go test -race ./pptx ./internal/wmdesign -run TestShape(LineJoin|EmptyLineJoin)|TestRound12(Funnel|Pyramid|Bracket|Strict|Frozen|Native|Stack|Road) -count=1",
+      "pptx_seconds": 1.365,
+      "wmdesign_seconds": 2.226,
+      "status": "passed"
+    }
+  ],
+  "independent_review": {
+    "Gaussian_teamcurve": "No concrete bugs identified; cumulative edges/line behavior match frozen source, bounded241samples/12series/720radius and finite-path validation.",
+    "Venn_round12": "Exclusive301sample overlap search and13/11pt mono sizes match frozen source; aggregate copy/resources remain bounded.",
+    "Build_extraction": "Public builds retain registered Load source pins; internal helper is diagnostic only.",
+    "Cycle": "Concrete raw-copy vs rich-footnote measure mismatch sent owner. Preset dashed loop spacing is a prototype approximation to source5on/4off. Other geometry/count/finite/index/quadratic-bounds checks sound.",
+    "LineJoin": "Second agent independently reviewed and passed named focused tests; no material defect found."
+  },
+  "qualification": "Go/native-package XML checks only; native PowerPoint visual acceptance and frozen-bundle promotion remain pending; no commit/push/install performed.",
+  "root_integration_review": {
+    "repair_count": 27,
+    "original_20_cases": "closed; source copy preserved",
+    "extra_7_cases": "closed; maturity insets, empty callout eyebrow, cycle height, strict string-boolean amendment",
+    "findings_fixed": [
+      "Tint omitted from shared chrome cache identity",
+      "Direct IR tint bypassed source decoder validation",
+      "Cycle measurement did not use emitted rich/footnote copy",
+      "Road default miter joins could exceed stated ink bounds",
+      "Standalone gauge hidden behind an earlier table-width failure"
+    ],
+    "repair_safety": "Revision-gated, atomic clone, idempotent, source-topology guard; frozen v3 unchanged",
+    "pending": "Native visual review, incoming 27 full-slide fit/chart cases, versioned bundle adoption",
+    "gauge_review": "Independent second review found no material defects; six gauge tests cover native XML, strict limits, closed bindings, copy/footnotes and derived-height local composition. Native visual review pending."
+  }
+}

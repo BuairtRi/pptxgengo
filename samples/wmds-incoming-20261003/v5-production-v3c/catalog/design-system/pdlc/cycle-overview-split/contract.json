@@ -1,0 +1,314 @@
+{
+  "key": "pdlc/cycle-overview-split",
+  "source_file": "templates/library/lifecycle.json",
+  "source_sha256": "0c159e90675f86812ec73a897d0a7ace628e025e19bfb2f2a675814905288fe7",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "cycle"
+    }
+  ],
+  "family": "lifecycle",
+  "tier": "working",
+  "name": "PDLC cycle, tall column",
+  "purpose": "The PDLC cycle at full height in the tall column with the three loop-back rules in the short column.",
+  "uses": [
+    "diagram.cycle",
+    "list.bullets"
+  ],
+  "source_advisory_budget": {
+    "words": 71,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 46
+    },
+    {
+      "slot": "phase",
+      "maxChars": 10
+    },
+    {
+      "slot": "phase line",
+      "maxChars": 52
+    },
+    {
+      "slot": "loop rule",
+      "maxChars": 60
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "cycle",
+      "process",
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "card",
+      "cycle"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/2/items",
+        "component_type": "cycle",
+        "role": "relationship",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/2/loops",
+        "component_type": "cycle",
+        "role": "relationship",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 90,
+          "w": 270,
+          "x": 57,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "cycle",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 414,
+          "w": 558,
+          "x": 345,
+          "y": 54
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-right",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Product lifecycle"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Phases loop back as evidence arrives"
+    },
+    {
+      "name": "node01.items.item01.lead",
+      "source_pointer": "/body/0/items/0/lead",
+      "kind": "string",
+      "synthetic_source_example": "Build to Define."
+    },
+    {
+      "name": "node01.items.item01.text",
+      "source_pointer": "/body/0/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Test findings reshape scope."
+    },
+    {
+      "name": "node01.items.item02.lead",
+      "source_pointer": "/body/0/items/1/lead",
+      "kind": "string",
+      "synthetic_source_example": "Optimize to Define."
+    },
+    {
+      "name": "node01.items.item02.text",
+      "source_pointer": "/body/0/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Live data reopens the design."
+    },
+    {
+      "name": "node01.items.item03.lead",
+      "source_pointer": "/body/0/items/2/lead",
+      "kind": "string",
+      "synthetic_source_example": "Any phase."
+    },
+    {
+      "name": "node01.items.item03.text",
+      "source_pointer": "/body/0/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "New problems enter at any time."
+    },
+    {
+      "name": "node02.body.item01.p",
+      "source_pointer": "/body/1/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Solid arrows are the plan; dashed arrows are rework."
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Reading the cycle"
+    },
+    {
+      "name": "node03.center.label",
+      "source_pointer": "/body/2/center/label",
+      "kind": "string",
+      "synthetic_source_example": "PDLC"
+    },
+    {
+      "name": "node03.center.title",
+      "source_pointer": "/body/2/center/title",
+      "kind": "string",
+      "synthetic_source_example": "Product lifecycle"
+    },
+    {
+      "name": "node03.items.item01.label",
+      "source_pointer": "/body/2/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Identify"
+    },
+    {
+      "name": "node03.items.item01.text",
+      "source_pointer": "/body/2/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Find the problems worth solving."
+    },
+    {
+      "name": "node03.items.item02.label",
+      "source_pointer": "/body/2/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Define"
+    },
+    {
+      "name": "node03.items.item02.text",
+      "source_pointer": "/body/2/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Shape the product and the plan."
+    },
+    {
+      "name": "node03.items.item03.label",
+      "source_pointer": "/body/2/items/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Build"
+    },
+    {
+      "name": "node03.items.item03.text",
+      "source_pointer": "/body/2/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Ship tested software in releases."
+    },
+    {
+      "name": "node03.items.item04.label",
+      "source_pointer": "/body/2/items/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Optimize"
+    },
+    {
+      "name": "node03.items.item04.text",
+      "source_pointer": "/body/2/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Prove value, then improve."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.items",
+      "source_pointer": "/body/0/items",
+      "count": 3
+    },
+    {
+      "name": "node02.body",
+      "source_pointer": "/body/1/body",
+      "count": 1
+    },
+    {
+      "name": "node03.items",
+      "source_pointer": "/body/2/items",
+      "count": 4
+    },
+    {
+      "name": "node03.loops",
+      "source_pointer": "/body/2/loops",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

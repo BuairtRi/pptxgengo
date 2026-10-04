@@ -1,0 +1,383 @@
+{
+  "key": "fixed-fee/add-ons",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "feesummary"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "table"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    }
+  ],
+  "family": "commercials",
+  "tier": "core",
+  "name": "Fixed fee · base fee plus optional add-ons",
+  "purpose": "A base fixed fee with optional add-ons, each priced as its own fixed fee, so a sponsor can choose and strike items.",
+  "uses": [
+    "pricing.set",
+    "feesummary",
+    "table.standard"
+  ],
+  "source_advisory_budget": {
+    "words": 81,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "fee summary line",
+      "maxChars": 30
+    },
+    {
+      "slot": "term",
+      "maxChars": 44
+    },
+    {
+      "slot": "add-on",
+      "maxChars": 28
+    },
+    {
+      "slot": "add-on detail",
+      "maxChars": 44
+    },
+    {
+      "slot": "add-on fee",
+      "maxChars": 10
+    },
+    {
+      "slot": "footnote",
+      "maxChars": 70
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "feesummary",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/2/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/2/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "feesummary",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 414
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "tall",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Commercials"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "A fixed base fee with four optional add-ons"
+    },
+    {
+      "name": "node01.lines.item01.item01",
+      "source_pointer": "/body/0/lines/0/0",
+      "kind": "string",
+      "synthetic_source_example": "Diagnose and design"
+    },
+    {
+      "name": "node01.lines.item01.item02",
+      "source_pointer": "/body/0/lines/0/1",
+      "kind": "string",
+      "synthetic_source_example": "$504K"
+    },
+    {
+      "name": "node01.lines.item02.item01",
+      "source_pointer": "/body/0/lines/1/0",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap and handover"
+    },
+    {
+      "name": "node01.lines.item02.item02",
+      "source_pointer": "/body/0/lines/1/1",
+      "kind": "string",
+      "synthetic_source_example": "$216K"
+    },
+    {
+      "name": "node01.model",
+      "source_pointer": "/body/0/model",
+      "kind": "string",
+      "synthetic_source_example": "Base fee"
+    },
+    {
+      "name": "node01.terms.item01",
+      "source_pointer": "/body/0/terms/0",
+      "kind": "string",
+      "synthetic_source_example": "Invoiced on phase acceptance"
+    },
+    {
+      "name": "node01.terms.item02",
+      "source_pointer": "/body/0/terms/1",
+      "kind": "string",
+      "synthetic_source_example": "Expenses capped at 8% of fees"
+    },
+    {
+      "name": "node01.total",
+      "source_pointer": "/body/0/total",
+      "kind": "string",
+      "synthetic_source_example": "$720K"
+    },
+    {
+      "name": "node01.totalLabel",
+      "source_pointer": "/body/0/totalLabel",
+      "kind": "string",
+      "synthetic_source_example": "fixed fee, 14 weeks"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Optional add-ons, each a fixed fee"
+    },
+    {
+      "name": "node03.cols.item01.label",
+      "source_pointer": "/body/2/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Add-on"
+    },
+    {
+      "name": "node03.cols.item02.label",
+      "source_pointer": "/body/2/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "What it adds"
+    },
+    {
+      "name": "node03.cols.item03.label",
+      "source_pointer": "/body/2/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Fee"
+    },
+    {
+      "name": "node03.rows.item01.a",
+      "source_pointer": "/body/2/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "Wave 2 entity rollout"
+    },
+    {
+      "name": "node03.rows.item01.d",
+      "source_pointer": "/body/2/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "Five more entities"
+    },
+    {
+      "name": "node03.rows.item01.f",
+      "source_pointer": "/body/2/rows/0/f",
+      "kind": "string",
+      "synthetic_source_example": "$144K"
+    },
+    {
+      "name": "node03.rows.item02.a",
+      "source_pointer": "/body/2/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "Training academy"
+    },
+    {
+      "name": "node03.rows.item02.d",
+      "source_pointer": "/body/2/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "Role-based courses"
+    },
+    {
+      "name": "node03.rows.item02.f",
+      "source_pointer": "/body/2/rows/1/f",
+      "kind": "string",
+      "synthetic_source_example": "$96K"
+    },
+    {
+      "name": "node03.rows.item03.a",
+      "source_pointer": "/body/2/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "Hypercare, 90 days"
+    },
+    {
+      "name": "node03.rows.item03.d",
+      "source_pointer": "/body/2/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "Post-go-live support"
+    },
+    {
+      "name": "node03.rows.item03.f",
+      "source_pointer": "/body/2/rows/2/f",
+      "kind": "string",
+      "synthetic_source_example": "$72K"
+    },
+    {
+      "name": "node03.rows.item04.a",
+      "source_pointer": "/body/2/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "Benefits tracking"
+    },
+    {
+      "name": "node03.rows.item04.d",
+      "source_pointer": "/body/2/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "Quarterly value review"
+    },
+    {
+      "name": "node03.rows.item04.f",
+      "source_pointer": "/body/2/rows/3/f",
+      "kind": "string",
+      "synthetic_source_example": "$48K"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Add-ons can be elected until design sign-off at the prices shown."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.lines.item01",
+      "source_pointer": "/body/0/lines/0",
+      "count": 2
+    },
+    {
+      "name": "node01.lines.item02",
+      "source_pointer": "/body/0/lines/1",
+      "count": 2
+    },
+    {
+      "name": "node01.lines",
+      "source_pointer": "/body/0/lines",
+      "count": 2
+    },
+    {
+      "name": "node01.terms",
+      "source_pointer": "/body/0/terms",
+      "count": 2
+    },
+    {
+      "name": "node03.cols",
+      "source_pointer": "/body/2/cols",
+      "count": 3
+    },
+    {
+      "name": "node03.rows",
+      "source_pointer": "/body/2/rows",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

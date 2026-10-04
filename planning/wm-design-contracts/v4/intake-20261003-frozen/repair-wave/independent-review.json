@@ -1,0 +1,31 @@
+{
+  "schema": "pptxgengo.frozen-intake-repair-review.v1",
+  "repairs": {
+    "card_nodes": 43,
+    "card_templates": 14,
+    "table_templates": 5,
+    "text_header_footer_templates": 7,
+    "native_missing_chart_templates": 1,
+    "closed_full_slide_cases": 27
+  },
+  "preserved": [
+    "supplied copy and data",
+    "font sizes",
+    "source identifiers",
+    "pre-turn compact small/label policy and accepted v3 amendments",
+    "source snapshot hashes"
+  ],
+  "fixes_from_independent_review": [
+    "Sparse common-category alignment across series",
+    "Sparse combo global DataIndex normalization without caller mutation",
+    "Reject unsupported sparse multi-category and mixed-type workbook schemas",
+    "Preserve observed zero in dense companions to sparse charts",
+    "Timeline fixed text allocations prevent longer supplied copy overlapping later rows",
+    "Seven-R width-by-position guard prevents overlapping cards"
+  ],
+  "limits": {
+    "sparse_API": "line-only, one category level, at least one observation/series, finite values, aligned mask/categories, <=10k points per series/64series/100k totalpoints/1MiBcopy",
+    "native_visual": "pending operator capture",
+    "binding_followup": "Versioned bundle promotion must include nullable chart-value content binding, so future observations can be filled without editing the shared template."
+  }
+}

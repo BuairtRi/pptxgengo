@@ -1,0 +1,1 @@
+Five source columns are unequal in text volume. Preserve all numbered phase names and outputs, exact stop/rescope wording; avoid specimen risk copy. Alternative retains equal column ordering but uses less decorative numbering.

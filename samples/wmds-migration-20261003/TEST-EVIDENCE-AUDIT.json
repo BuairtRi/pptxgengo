@@ -1,0 +1,95 @@
+{
+  "status": "PASS",
+  "scope": "Latest uncached whole-repository normal and race suites following data-final runtime changes; earlier failing and passing historical logs preserved.",
+  "compiler_sha256": "8b20aa7d69af5db8d2da4c8fc09b6642a83311599261bff2126eea2c45eb84cf",
+  "suites": [
+    {
+      "kind": "normal",
+      "command": {
+        "argv": [
+          "/Users/rscott/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.1.darwin-arm64/bin/go",
+          "test",
+          "./...",
+          "-count=1"
+        ],
+        "cwd": "/Users/rscott/Projects/pptxgengo",
+        "env": {
+          "GOMODCACHE": "/tmp/pptxgengo-modcache",
+          "GOCACHE": "/tmp/pptxgengo-gocache",
+          "GOPROXY": "off",
+          "GOTOOLCHAIN": "local"
+        }
+      },
+      "exit_code": 0,
+      "tested_packages": 13,
+      "no_test_packages": 7,
+      "log": "software-modernization/review/runtime/data-final/final-repository-normal.log",
+      "log_sha256": "044730f43efb16cdc0747eb7b7dd72ba0843dbc073ac9d2e20f4214d136c5ba0",
+      "passed_packages": [
+        "github.com/buairtri/pptxgengo/cmd/pptxanchor",
+        "github.com/buairtri/pptxgengo/cmd/pptxcompose",
+        "github.com/buairtri/pptxgengo/cmd/pptxdesign",
+        "github.com/buairtri/pptxgengo/cmd/pptxdiff",
+        "github.com/buairtri/pptxgengo/cmd/pptxgengo",
+        "github.com/buairtri/pptxgengo/internal/adapt",
+        "github.com/buairtri/pptxgengo/internal/compose",
+        "github.com/buairtri/pptxgengo/internal/deckproject",
+        "github.com/buairtri/pptxgengo/internal/library",
+        "github.com/buairtri/pptxgengo/internal/nativepkg",
+        "github.com/buairtri/pptxgengo/internal/textlayout",
+        "github.com/buairtri/pptxgengo/internal/wmdesign",
+        "github.com/buairtri/pptxgengo/pptx"
+      ]
+    },
+    {
+      "kind": "race",
+      "command": {
+        "argv": [
+          "/Users/rscott/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.1.darwin-arm64/bin/go",
+          "test",
+          "-race",
+          "./...",
+          "-count=1"
+        ],
+        "cwd": "/Users/rscott/Projects/pptxgengo",
+        "env": {
+          "GOMODCACHE": "/tmp/pptxgengo-modcache",
+          "GOCACHE": "/tmp/pptxgengo-gocache",
+          "GOPROXY": "off",
+          "GOTOOLCHAIN": "local"
+        }
+      },
+      "exit_code": 0,
+      "tested_packages": 13,
+      "no_test_packages": 7,
+      "log": "software-modernization/review/runtime/data-final/final-repository-race.log",
+      "log_sha256": "13277fce6657f957eed91f9a2f2a8bac3277bc30ff1779b435b8c7d15b18beda",
+      "passed_packages": [
+        "github.com/buairtri/pptxgengo/cmd/pptxanchor",
+        "github.com/buairtri/pptxgengo/cmd/pptxcompose",
+        "github.com/buairtri/pptxgengo/cmd/pptxdesign",
+        "github.com/buairtri/pptxgengo/cmd/pptxdiff",
+        "github.com/buairtri/pptxgengo/cmd/pptxgengo",
+        "github.com/buairtri/pptxgengo/internal/adapt",
+        "github.com/buairtri/pptxgengo/internal/compose",
+        "github.com/buairtri/pptxgengo/internal/deckproject",
+        "github.com/buairtri/pptxgengo/internal/library",
+        "github.com/buairtri/pptxgengo/internal/nativepkg",
+        "github.com/buairtri/pptxgengo/internal/textlayout",
+        "github.com/buairtri/pptxgengo/internal/wmdesign",
+        "github.com/buairtri/pptxgengo/pptx"
+      ]
+    }
+  ],
+  "reviewed_production_and_regression_files_still_match": {
+    "pptx/types.go": true,
+    "pptx/charts.go": true,
+    "internal/wmdesign/scene_charts.go": true,
+    "pptx/charts_workbook_zeros_test.go": true,
+    "internal/wmdesign/scene_chart_preserve_workbook_zeros_test.go": true,
+    "internal/wmdesign/scene_composition.go": true
+  },
+  "section_native_pilot": "sections-pilot/review/native-powerpoint-review.json",
+  "source587_gallery_and_bound586_runtime_carry": "software-modernization/review/runtime/data-final/final-full-gallery-comparison.json",
+  "no_new_tests_run_by_this_audit": true
+}

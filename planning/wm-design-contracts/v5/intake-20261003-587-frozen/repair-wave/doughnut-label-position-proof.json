@@ -1,0 +1,41 @@
+{
+  "schema": "pptxgengo.doughnut-label-position-proof.v1",
+  "implementation_files": [
+    "pptx/types.go",
+    "pptx/objects.go",
+    "pptx/charts.go",
+    "pptx/doughnut_label_position_test.go"
+  ],
+  "option": "ChartOptions.EnableDoughnutLabelPosition",
+  "default": false,
+  "supported_positions": [
+    "bestFit",
+    "ctr",
+    "inEnd",
+    "outEnd"
+  ],
+  "evidence": {
+    "focused_tests": "pass",
+    "full_pptx_suite_including_existing_goldens": "pass",
+    "full_pptx_race_suite": "pass",
+    "native_visual_acceptance": "rejected: PowerPoint content repair alert",
+    "xml_checks": [
+      "complete XML is well formed",
+      "per-point and group positions immediately after txPr and before showLegendKey",
+      "3 categories produce3 point positions plus1 group position",
+      "removing inserted position tags restores exact legacy XML",
+      "invalid opt-in positions do not serialize"
+    ],
+    "workbook_checks": "Every decompressed worksheet workbook part identical between legacy and opt-in; labels and numeric values unchanged."
+  },
+  "test_outputs": {
+    "focused": "ok github.com/buairtri/pptxgengo/pptx 0.530s",
+    "normal": "ok github.com/buairtri/pptxgengo/pptx 0.875s",
+    "race": "ok github.com/buairtri/pptxgengo/pptx 7.080s"
+  },
+  "primary_schema_reference": "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.charts.datalabels?view=openxml-3.0.1",
+  "limitation": "XML well-formedness and expected child ordering did not establish native compatibility. Doughnut dLblPos opt-in and its focused tests were removed; default prior serialization retained.",
+  "outcome": "rejected_native",
+  "implementation_reverted": true,
+  "native_rejection": "Root focused566 export triggered PowerPoint content repair alert; cancelled without saving."
+}

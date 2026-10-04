@@ -1,0 +1,310 @@
+{
+  "key": "funnel/insights",
+  "source_file": "templates/library/diagrams.json",
+  "source_sha256": "b79cf191621a7cfd9bc1b837201cd34ab001703490bd9738a9cd7732c7d9d90e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "funnel"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "card"
+    }
+  ],
+  "family": "diagrams",
+  "tier": "core",
+  "name": "Funnel with insight cards",
+  "purpose": "A funnel on the left with three insight cards stacked on the right that interpret the narrowing: where it leaks, why, and what to test.",
+  "uses": [
+    "funnel",
+    "card"
+  ],
+  "source_advisory_budget": {
+    "words": 84,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "stage label",
+      "count": 4,
+      "maxChars": 22
+    },
+    {
+      "slot": "stage value",
+      "count": 4,
+      "maxChars": 8
+    },
+    {
+      "slot": "card label",
+      "count": 3,
+      "maxChars": 14
+    },
+    {
+      "slot": "card title",
+      "count": 3,
+      "maxChars": 36
+    },
+    {
+      "slot": "card body",
+      "count": 3,
+      "maxChars": 96
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "funnel",
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "card",
+      "funnel"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/0/stages",
+        "component_type": "funnel",
+        "role": "relationship",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "funnel",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 312,
+          "w": 414,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 96,
+          "w": 414,
+          "x": 489,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 96,
+          "w": 414,
+          "x": 489,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 96,
+          "w": 414,
+          "x": 489,
+          "y": 342
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Digital front door"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Three insights explain where patients drop away"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.stages.item01.label",
+      "source_pointer": "/body/0/stages/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Invited"
+    },
+    {
+      "name": "node01.stages.item01.value",
+      "source_pointer": "/body/0/stages/0/value",
+      "kind": "string",
+      "synthetic_source_example": "41,200"
+    },
+    {
+      "name": "node01.stages.item02.label",
+      "source_pointer": "/body/0/stages/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Registered"
+    },
+    {
+      "name": "node01.stages.item02.value",
+      "source_pointer": "/body/0/stages/1/value",
+      "kind": "string",
+      "synthetic_source_example": "22,600"
+    },
+    {
+      "name": "node01.stages.item03.label",
+      "source_pointer": "/body/0/stages/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Booked online"
+    },
+    {
+      "name": "node01.stages.item03.value",
+      "source_pointer": "/body/0/stages/2/value",
+      "kind": "string",
+      "synthetic_source_example": "13,900"
+    },
+    {
+      "name": "node01.stages.item04.label",
+      "source_pointer": "/body/0/stages/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Completed visit"
+    },
+    {
+      "name": "node01.stages.item04.value",
+      "source_pointer": "/body/0/stages/3/value",
+      "kind": "string",
+      "synthetic_source_example": "9,700"
+    },
+    {
+      "name": "node02.body.item01.p",
+      "source_pointer": "/body/1/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Identity checks fail on the first try for one in five."
+    },
+    {
+      "name": "node02.title",
+      "source_pointer": "/body/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Insight 1: Registration loses 45% of invitees"
+    },
+    {
+      "name": "node03.body.item01.p",
+      "source_pointer": "/body/2/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Patients over 65 book 3x more by phone than online."
+    },
+    {
+      "name": "node03.title",
+      "source_pointer": "/body/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Insight 2: Booking is a phone habit"
+    },
+    {
+      "name": "node04.body.item01.p",
+      "source_pointer": "/body/3/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "70% of online bookings are completed, above phone."
+    },
+    {
+      "name": "node04.title",
+      "source_pointer": "/body/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Insight 3: Visits convert once booked"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.stages",
+      "source_pointer": "/body/0/stages",
+      "count": 4
+    },
+    {
+      "name": "node02.body",
+      "source_pointer": "/body/1/body",
+      "count": 1
+    },
+    {
+      "name": "node03.body",
+      "source_pointer": "/body/2/body",
+      "count": 1
+    },
+    {
+      "name": "node04.body",
+      "source_pointer": "/body/3/body",
+      "count": 1
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

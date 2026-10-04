@@ -1,0 +1,331 @@
+{
+  "key": "runbook/escalation",
+  "source_file": "templates/library/runbooks.json",
+  "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "block"
+    }
+  ],
+  "family": "runbooks",
+  "tier": "working",
+  "name": "Runbook · escalation path",
+  "purpose": "A dedicated escalation path: each level with its trigger, time threshold, contact and the decisions it owns.",
+  "uses": [
+    "composite.table",
+    "shape.block"
+  ],
+  "source_advisory_budget": {
+    "words": 149,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "level",
+      "maxChars": 26
+    },
+    {
+      "slot": "trigger",
+      "maxChars": 42
+    },
+    {
+      "slot": "time threshold",
+      "maxChars": 14
+    },
+    {
+      "slot": "contact or owner",
+      "maxChars": 34
+    },
+    {
+      "slot": "decision",
+      "maxChars": 36
+    },
+    {
+      "slot": "escalation rule",
+      "maxChars": 120
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 846,
+          "x": 57,
+          "y": 396
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Cutover runbook"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Four levels put every [[issue]] in front of a decision-maker"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Level"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Trigger"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Time threshold"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Contact or owner"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "What this level decides"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "Retry the step or apply its rollback"
+    },
+    {
+      "name": "node01.rows.item01.l",
+      "source_pointer": "/body/0/rows/0/l",
+      "kind": "string",
+      "synthetic_source_example": "L1 · Workstream lead"
+    },
+    {
+      "name": "node01.rows.item01.m",
+      "source_pointer": "/body/0/rows/0/m",
+      "kind": "string",
+      "synthetic_source_example": "0–15 min"
+    },
+    {
+      "name": "node01.rows.item01.o",
+      "source_pointer": "/body/0/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "Workstream lead · bridge line"
+    },
+    {
+      "name": "node01.rows.item01.t",
+      "source_pointer": "/body/0/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "A step runs late or a check fails"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "Re-sequence steps; extend a window"
+    },
+    {
+      "name": "node01.rows.item02.l",
+      "source_pointer": "/body/0/rows/1/l",
+      "kind": "string",
+      "synthetic_source_example": "L2 · Cutover lead"
+    },
+    {
+      "name": "node01.rows.item02.m",
+      "source_pointer": "/body/0/rows/1/m",
+      "kind": "string",
+      "synthetic_source_example": "15–30 min"
+    },
+    {
+      "name": "node01.rows.item02.o",
+      "source_pointer": "/body/0/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "Program director · ext. 4410"
+    },
+    {
+      "name": "node01.rows.item02.t",
+      "source_pointer": "/body/0/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "L1 cannot clear it, or the window slips"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "Go or no-go; invoke full rollback"
+    },
+    {
+      "name": "node01.rows.item03.l",
+      "source_pointer": "/body/0/rows/2/l",
+      "kind": "string",
+      "synthetic_source_example": "L3 · Controller and CIO"
+    },
+    {
+      "name": "node01.rows.item03.m",
+      "source_pointer": "/body/0/rows/2/m",
+      "kind": "string",
+      "synthetic_source_example": "30–60 min"
+    },
+    {
+      "name": "node01.rows.item03.o",
+      "source_pointer": "/body/0/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "Controller and CIO · ext. 4420"
+    },
+    {
+      "name": "node01.rows.item03.t",
+      "source_pointer": "/body/0/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "Balances do not tie, or a gate is at risk"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "Reset the date; approve a new plan"
+    },
+    {
+      "name": "node01.rows.item04.l",
+      "source_pointer": "/body/0/rows/3/l",
+      "kind": "string",
+      "synthetic_source_example": "L4 · Steering committee"
+    },
+    {
+      "name": "node01.rows.item04.m",
+      "source_pointer": "/body/0/rows/3/m",
+      "kind": "string",
+      "synthetic_source_example": "60+ min"
+    },
+    {
+      "name": "node01.rows.item04.o",
+      "source_pointer": "/body/0/rows/3/o",
+      "kind": "string",
+      "synthetic_source_example": "Executive sponsor · ext. 4430"
+    },
+    {
+      "name": "node01.rows.item04.t",
+      "source_pointer": "/body/0/rows/3/t",
+      "kind": "string",
+      "synthetic_source_example": "Rollback invoked or go-live date at risk"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Rule: the clock runs from the first alert. If a level has not acknowledged within its threshold, page the next level."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 5
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active"
+}

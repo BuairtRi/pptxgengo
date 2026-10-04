@@ -6,6 +6,37 @@ Each subdirectory contains the extracted XML/rels/media parts of a .pptx produce
 
 To regenerate: `/opt/node22/bin/node scripts/gen-golden.mjs` from the repo root (requires `npm install --omit=dev` first).
 
+## Native compatibility migration, 2026-10-03
+
+The original JS fixtures were amended in **14 explicitly scoped files** to
+reflect the already committed production corrections in
+`5cb282408f2014961faee1c1b9f96cbd3a80f315`. This is a fixture migration, not
+a new writer change. Regenerating with the original JS generator reproduces
+the old defects and requires applying these documented corrections again.
+
+- Eight `presentation.xml` files omit the optional notes-master list. All notes
+  parts, text, slide numbers, relationships, and required page dimensions are
+  retained. The original list followed the slide list, violating presentation
+  order; moving it into schema order still triggered native Mac repair. See
+  [the isolated native acceptance evidence](../../../../planning/wm-design-contracts/v1/notes-master-native-compatibility.md).
+- Two chart files put series data labels after marker/point nodes and remove
+  an undeclared third axis from 2D charts. The line chart also gains its required
+  `standard` grouping and omits bar-only `invertIfNegative`. Existing series,
+  colors, label content, categories, and values are preserved. Ordering and
+  allowed elements follow the [official Open XML SDK chart schema](https://raw.githubusercontent.com/dotnet/Open-XML-SDK/main/data/schemas/schemas_openxmlformats_org_drawingml_2006_chart.json).
+- Three embedded workbooks remove one trailing apostrophe from the table's A1
+  range. All other decompressed workbook parts remain byte-identical.
+- The two-slide content-types file removes its override for nonexistent
+  `slideMaster2.xml`. The existing sole master remains declared.
+
+Original and migrated hashes, per-file operations, and workbook inner-part
+hashes are recorded in [native-compatibility-migration.json](native-compatibility-migration.json).
+The strict byte comparisons and allowed timestamp/UUID normalizations are
+unchanged. `native_compatibility_test.go` independently checks XML order, axis
+targets, exact workbook ranges and their last cells, complete package relationship
+and content-type targets, and notes preservation with empty, populated, and mixed
+notes decks. This prevents fixture regeneration from silently restoring defects.
+
 ## Cases
 
 - `01-basic/` — 20 files

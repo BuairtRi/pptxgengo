@@ -16,10 +16,7 @@ pptxgengo template components --id t053-graphics-and-layouts-049
 `paths` returns JSON keys `root`, `library`, `scripts`, `catalog`,
 `catalog_templates`, `catalog_components`, and `skill`. Open a gallery with
 `pptxgengo catalog --templates` or `pptxgengo catalog --components`; add
-`--open` to open it or `--print` to print its packaged path. The current package
-catalog contains 101 source contracts, 124 executable source component groups,
-8 visual-only groups, and 132 component occurrences. Occurrences are repeated
-uses, not unique designs; totals can change with package releases. The inspected
+`--open` to open it or `--print` to print its packaged path. Catalog totals change between releases; read them from the catalog. Component occurrences are repeated uses, not unique designs. The inspected
 contract and values are under `library/templates/rollout/<lane>/<id>/` beneath
 the installed root. `inspect` reports slot names, each slot's ordered source
 binding IDs, profiles, and source identity. `components --id` reports grouped
@@ -69,13 +66,14 @@ When the ask requires substantially different hierarchy, added rows, or a combin
 ## Native render and optional phrase accents
 
 Resolve `release_root` from `pptxgengo paths` (JSON field `root`), then use the
-existing approved native workspace. For this installation:
+operator's established native workspace (`$NATIVE_WORKSPACE` below; ask the
+operator if you do not know it):
 
 ```sh
 release_root="$(pptxgengo paths | python3 -c 'import json,sys; print(json.load(sys.stdin)["root"])')"
 python3 "$release_root/scripts/render-template-review.py" /path/to/new-review-bundle \
   --name unique-review-version \
-  --native-workspace /Users/rscott/Projects/pptxgengo/samples/visual-wave3
+  --native-workspace "$NATIVE_WORKSPACE"
 ```
 
 The output's `native-render.json` links exact native artifacts and PNGs. Render
@@ -98,7 +96,7 @@ pptxgengo template adapt-accents --bundle /path/to/new-review-bundle \
   --name unique-accent-version \
   --anchor-bin "$release_root/bin/pptxanchor" \
   --scene-bin "$release_root/bin/pptxscene" \
-  --native-workspace /Users/rscott/Projects/pptxgengo/samples/visual-wave3
+  --native-workspace "$NATIVE_WORKSPACE"
 ```
 
 This measures the phrase, solves supported artwork placement, and rebuilds a new

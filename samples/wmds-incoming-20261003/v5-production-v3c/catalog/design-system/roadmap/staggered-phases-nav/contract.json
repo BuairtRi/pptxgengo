@@ -1,0 +1,691 @@
+{
+  "key": "roadmap/staggered-phases-nav",
+  "source_file": "templates/library/approach.json",
+  "source_sha256": "88b70640b6093775f23af71a783a79e3f83a873580d79cc5b49483c4de5a6a65",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "gantt"
+    }
+  ],
+  "family": "approach",
+  "tier": "working",
+  "name": "Roadmap · staggered phases with nav rail",
+  "purpose": "The staggered roadmap in a long deck: section tabs down the left edge show where the roadmap sits (compact footer).",
+  "uses": [
+    "advanced.gantt",
+    "seq.timeaxis"
+  ],
+  "source_advisory_budget": {
+    "words": 111,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 52
+    },
+    {
+      "slot": "lane title",
+      "maxChars": 28
+    },
+    {
+      "slot": "lane subtitle",
+      "maxChars": 30
+    },
+    {
+      "slot": "bar label",
+      "maxChars": 40
+    },
+    {
+      "slot": "milestone",
+      "maxChars": 30
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "icon",
+      "key-message",
+      "navigation",
+      "sequence-item"
+    ],
+    "structures": [
+      "gantt",
+      "repeated-items",
+      "sequence",
+      "timeline"
+    ],
+    "visual_forms": [
+      "icon"
+    ],
+    "component_types": [
+      "gantt"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/groups/0/lanes/0/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/0/lanes/1/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/0/lanes/2/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/0/lanes/3/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 1,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/0/lanes",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/1/lanes/0/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 1,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/1/lanes",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 1,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/phases",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Our approach"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Nine months from build to Northfield ownership"
+    },
+    {
+      "name": "node01.events.star.label",
+      "source_pointer": "/body/0/events/star/label",
+      "kind": "string",
+      "synthetic_source_example": "Milestone"
+    },
+    {
+      "name": "node01.groups.item01.label",
+      "source_pointer": "/body/0/groups/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Delivery"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.icon",
+      "source_pointer": "/body/0/groups/0/lanes/0/icon",
+      "kind": "string",
+      "synthetic_source_example": "connected-cube"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item01.from",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item01.label",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Foundation"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item01.softEnd",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/0/softEnd",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item01.to",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 3.5
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item02.at",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/1/at",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item02.label",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Architecture approved"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.sub",
+      "source_pointer": "/body/0/groups/0/lanes/0/sub",
+      "kind": "string",
+      "synthetic_source_example": "Architecture and guardrails"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.title",
+      "source_pointer": "/body/0/groups/0/lanes/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Phase 01 · Foundation"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.icon",
+      "source_pointer": "/body/0/groups/0/lanes/1/icon",
+      "kind": "string",
+      "synthetic_source_example": "people-network"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item01.from",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 3.5
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item01.label",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Scale and early adoption"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item01.softEnd",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/0/softEnd",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item01.to",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 8
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item02.at",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/1/at",
+      "kind": "number",
+      "synthetic_source_example": 9
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item02.label",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Targeted release"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.sub",
+      "source_pointer": "/body/0/groups/0/lanes/1/sub",
+      "kind": "string",
+      "synthetic_source_example": "Three early adopters"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.title",
+      "source_pointer": "/body/0/groups/0/lanes/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Phase 02 · Scale"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.icon",
+      "source_pointer": "/body/0/groups/0/lanes/2/icon",
+      "kind": "string",
+      "synthetic_source_example": "rocket"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.items.item01.from",
+      "source_pointer": "/body/0/groups/0/lanes/2/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 7
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.items.item01.label",
+      "source_pointer": "/body/0/groups/0/lanes/2/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Availability"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.items.item01.softEnd",
+      "source_pointer": "/body/0/groups/0/lanes/2/items/0/softEnd",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.items.item01.to",
+      "source_pointer": "/body/0/groups/0/lanes/2/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 9.5
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.items.item02.at",
+      "source_pointer": "/body/0/groups/0/lanes/2/items/1/at",
+      "kind": "number",
+      "synthetic_source_example": 10
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.items.item02.label",
+      "source_pointer": "/body/0/groups/0/lanes/2/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Launch"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.sub",
+      "source_pointer": "/body/0/groups/0/lanes/2/sub",
+      "kind": "string",
+      "synthetic_source_example": "General availability"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.title",
+      "source_pointer": "/body/0/groups/0/lanes/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Phase 03 · Availability"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item04.icon",
+      "source_pointer": "/body/0/groups/0/lanes/3/icon",
+      "kind": "string",
+      "synthetic_source_example": "handshake"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item04.items.item01.from",
+      "source_pointer": "/body/0/groups/0/lanes/3/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 9.5
+    },
+    {
+      "name": "node01.groups.item01.lanes.item04.items.item01.label",
+      "source_pointer": "/body/0/groups/0/lanes/3/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Onboarding and handover"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item04.items.item01.to",
+      "source_pointer": "/body/0/groups/0/lanes/3/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 13
+    },
+    {
+      "name": "node01.groups.item01.lanes.item04.sub",
+      "source_pointer": "/body/0/groups/0/lanes/3/sub",
+      "kind": "string",
+      "synthetic_source_example": "Northfield ownership"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item04.title",
+      "source_pointer": "/body/0/groups/0/lanes/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Onboarding"
+    },
+    {
+      "name": "node01.groups.item02.label",
+      "source_pointer": "/body/0/groups/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Program"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.icon",
+      "source_pointer": "/body/0/groups/1/lanes/0/icon",
+      "kind": "string",
+      "synthetic_source_example": "task-list-cycle"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items.item01.from",
+      "source_pointer": "/body/0/groups/1/lanes/0/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items.item01.label",
+      "source_pointer": "/body/0/groups/1/lanes/0/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Ongoing project and product management"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items.item01.to",
+      "source_pointer": "/body/0/groups/1/lanes/0/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 9.5
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.sub",
+      "source_pointer": "/body/0/groups/1/lanes/0/sub",
+      "kind": "string",
+      "synthetic_source_example": "Project and product"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.title",
+      "source_pointer": "/body/0/groups/1/lanes/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Program management"
+    },
+    {
+      "name": "node01.kinds.ga.label",
+      "source_pointer": "/body/0/kinds/ga/label",
+      "kind": "string",
+      "synthetic_source_example": "Onboarding"
+    },
+    {
+      "name": "node01.kinds.p1.label",
+      "source_pointer": "/body/0/kinds/p1/label",
+      "kind": "string",
+      "synthetic_source_example": "Phase 01"
+    },
+    {
+      "name": "node01.kinds.p2.label",
+      "source_pointer": "/body/0/kinds/p2/label",
+      "kind": "string",
+      "synthetic_source_example": "Phase 02"
+    },
+    {
+      "name": "node01.kinds.p3.label",
+      "source_pointer": "/body/0/kinds/p3/label",
+      "kind": "string",
+      "synthetic_source_example": "Phase 03"
+    },
+    {
+      "name": "node01.kinds.pm.label",
+      "source_pointer": "/body/0/kinds/pm/label",
+      "kind": "string",
+      "synthetic_source_example": "Ongoing"
+    },
+    {
+      "name": "node01.periods.labels.item01",
+      "source_pointer": "/body/0/periods/labels/0",
+      "kind": "string",
+      "synthetic_source_example": "M1"
+    },
+    {
+      "name": "node01.periods.labels.item02",
+      "source_pointer": "/body/0/periods/labels/1",
+      "kind": "string",
+      "synthetic_source_example": "M2"
+    },
+    {
+      "name": "node01.periods.labels.item03",
+      "source_pointer": "/body/0/periods/labels/2",
+      "kind": "string",
+      "synthetic_source_example": "M3"
+    },
+    {
+      "name": "node01.periods.labels.item04",
+      "source_pointer": "/body/0/periods/labels/3",
+      "kind": "string",
+      "synthetic_source_example": "M4"
+    },
+    {
+      "name": "node01.periods.labels.item05",
+      "source_pointer": "/body/0/periods/labels/4",
+      "kind": "string",
+      "synthetic_source_example": "M5"
+    },
+    {
+      "name": "node01.periods.labels.item06",
+      "source_pointer": "/body/0/periods/labels/5",
+      "kind": "string",
+      "synthetic_source_example": "M6"
+    },
+    {
+      "name": "node01.periods.labels.item07",
+      "source_pointer": "/body/0/periods/labels/6",
+      "kind": "string",
+      "synthetic_source_example": "M7"
+    },
+    {
+      "name": "node01.periods.labels.item08",
+      "source_pointer": "/body/0/periods/labels/7",
+      "kind": "string",
+      "synthetic_source_example": "M8"
+    },
+    {
+      "name": "node01.periods.labels.item09",
+      "source_pointer": "/body/0/periods/labels/8",
+      "kind": "string",
+      "synthetic_source_example": "M9"
+    },
+    {
+      "name": "node01.periods.labels.item10",
+      "source_pointer": "/body/0/periods/labels/9",
+      "kind": "string",
+      "synthetic_source_example": "M10"
+    },
+    {
+      "name": "node01.periods.labels.item11",
+      "source_pointer": "/body/0/periods/labels/10",
+      "kind": "string",
+      "synthetic_source_example": "M11"
+    },
+    {
+      "name": "node01.periods.labels.item12",
+      "source_pointer": "/body/0/periods/labels/11",
+      "kind": "string",
+      "synthetic_source_example": "M12"
+    },
+    {
+      "name": "node01.periods.labels.item13",
+      "source_pointer": "/body/0/periods/labels/12",
+      "kind": "string",
+      "synthetic_source_example": "Later"
+    },
+    {
+      "name": "node01.phases.item01.from",
+      "source_pointer": "/body/0/phases/0/from",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.phases.item01.label",
+      "source_pointer": "/body/0/phases/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Build the platform"
+    },
+    {
+      "name": "node01.phases.item01.to",
+      "source_pointer": "/body/0/phases/0/to",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node01.phases.item02.from",
+      "source_pointer": "/body/0/phases/1/from",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node01.phases.item02.label",
+      "source_pointer": "/body/0/phases/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Prove and scale"
+    },
+    {
+      "name": "node01.phases.item02.to",
+      "source_pointer": "/body/0/phases/1/to",
+      "kind": "number",
+      "synthetic_source_example": 9
+    },
+    {
+      "name": "node01.phases.item03.from",
+      "source_pointer": "/body/0/phases/2/from",
+      "kind": "number",
+      "synthetic_source_example": 9
+    },
+    {
+      "name": "node01.phases.item03.label",
+      "source_pointer": "/body/0/phases/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Hand over"
+    },
+    {
+      "name": "node01.phases.item03.to",
+      "source_pointer": "/body/0/phases/2/to",
+      "kind": "number",
+      "synthetic_source_example": 13
+    },
+    {
+      "name": "node01.sidebarLabel",
+      "source_pointer": "/body/0/sidebarLabel",
+      "kind": "string",
+      "synthetic_source_example": "Phase · scope"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.groups.item01.lanes.item01.items",
+      "source_pointer": "/body/0/groups/0/lanes/0/items",
+      "count": 2
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items",
+      "source_pointer": "/body/0/groups/0/lanes/1/items",
+      "count": 2
+    },
+    {
+      "name": "node01.groups.item01.lanes.item03.items",
+      "source_pointer": "/body/0/groups/0/lanes/2/items",
+      "count": 2
+    },
+    {
+      "name": "node01.groups.item01.lanes.item04.items",
+      "source_pointer": "/body/0/groups/0/lanes/3/items",
+      "count": 1
+    },
+    {
+      "name": "node01.groups.item01.lanes",
+      "source_pointer": "/body/0/groups/0/lanes",
+      "count": 4
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items",
+      "source_pointer": "/body/0/groups/1/lanes/0/items",
+      "count": 1
+    },
+    {
+      "name": "node01.groups.item02.lanes",
+      "source_pointer": "/body/0/groups/1/lanes",
+      "count": 1
+    },
+    {
+      "name": "node01.groups",
+      "source_pointer": "/body/0/groups",
+      "count": 2
+    },
+    {
+      "name": "node01.periods.labels",
+      "source_pointer": "/body/0/periods/labels",
+      "count": 13
+    },
+    {
+      "name": "node01.phases",
+      "source_pointer": "/body/0/phases",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Context"
+        },
+        {
+          "key": "section-02",
+          "label": "Approach"
+        },
+        {
+          "key": "section-03",
+          "label": "Commercials"
+        },
+        {
+          "key": "section-04",
+          "label": "Team"
+        }
+      ],
+      "active": "section-02"
+    }
+  }
+}

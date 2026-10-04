@@ -248,7 +248,18 @@ func sceneTableCellTextXML(tr TextRecord) ([]byte, error) {
 			if para.ParagraphGapAfter < 0 {
 				return nil, fmt.Errorf("scene.table_negative_paragraph_gap")
 			}
-			text.Write(richParagraphXML(one, sceneTableParagraphProperties(tr, para.ParagraphGapAfter, para.Bullet)))
+			// Each paragraph may have its own token (e.g. body plus small subtitle).
+			// Use the first run as the paragraph default and the greatest run leading
+			// for mixed spans, matching the shaped paragraph's allocation.
+			if len(para.Runs) > 0 {
+				one.Layout.Style = para.Runs[0].Style
+				one.Layout.Font = para.Runs[0].Font
+				one.Color = para.Runs[0].Color
+				for _, run := range para.Runs[1:] {
+					one.Layout.Style.Leading = math.Max(one.Layout.Style.Leading, run.Style.Leading)
+				}
+			}
+			text.Write(richParagraphXML(one, sceneTableParagraphProperties(one, para.ParagraphGapAfter, para.Bullet)))
 		}
 	}
 	if tr.Rich == nil || len(tr.Rich.Paragraphs) == 0 {

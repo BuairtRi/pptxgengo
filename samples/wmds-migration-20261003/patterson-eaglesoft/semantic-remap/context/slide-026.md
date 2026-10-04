@@ -1,0 +1,1 @@
+Keep all obscured business copy and values: $110,000-$125,000, ~$90,000/month,3weeks,3–6months, TBDmonthly. Retain PatientCare/Traumasoft source names as flagged carryover. No invented price correction.314words needs more space than either template.

@@ -1,0 +1,619 @@
+{
+  "key": "phase-detail/rail-matrix",
+  "source_file": "templates/library/approach.json",
+  "source_sha256": "88b70640b6093775f23af71a783a79e3f83a873580d79cc5b49483c4de5a6a65",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "chevron"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "chevron"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "chevron"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "text"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "text"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "text"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "text"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "text"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "table"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "block"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "block"
+    }
+  ],
+  "family": "approach",
+  "tier": "working",
+  "name": "Phase detail · repeatable process matrix",
+  "purpose": "A phase rail beside a step-by-step matrix of platform service, workload activity and evidence, with the fixed and variable scope stated underneath.",
+  "uses": [
+    "frame.rail-left",
+    "table.standard",
+    "shape.chevron",
+    "shape.block"
+  ],
+  "source_advisory_budget": {
+    "words": 183,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "phase name",
+      "maxChars": 28
+    },
+    {
+      "slot": "weeks",
+      "maxChars": 14
+    },
+    {
+      "slot": "objective",
+      "maxChars": 150
+    },
+    {
+      "slot": "step",
+      "maxChars": 10
+    },
+    {
+      "slot": "service",
+      "maxChars": 56
+    },
+    {
+      "slot": "activity",
+      "maxChars": 62
+    },
+    {
+      "slot": "evidence",
+      "maxChars": 46
+    },
+    {
+      "slot": "scope line",
+      "maxChars": 96
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "point",
+      "sequence-item",
+      "tabular-data"
+    ],
+    "structures": [
+      "process",
+      "repeated-items",
+      "sequence",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "chevron",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "block",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/12/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/12/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 60
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 84
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "source_bounds": {
+          "h": 18,
+          "w": 72,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "source_bounds": {
+          "h": 18,
+          "w": 72,
+          "x": 129,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "chevron",
+        "role": "sequence-item",
+        "source_bounds": {
+          "h": 18,
+          "w": 54,
+          "x": 201,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 216
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 243
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 369
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 414
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 54
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 558,
+          "x": 345,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 558,
+          "x": 345,
+          "y": 432
+        }
+      }
+    ],
+    "frame": {
+      "rail": "left",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Our approach"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Phase 02"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Scale and Early Adoption"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Weeks 17–34"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "Objective"
+    },
+    {
+      "name": "node09.text",
+      "source_pointer": "/body/8/text",
+      "kind": "string",
+      "synthetic_source_example": "Prove that Northfield can assess, onboard, enable, govern and support a workload through one repeatable enterprise process."
+    },
+    {
+      "name": "node10.text",
+      "source_pointer": "/body/9/text",
+      "kind": "string",
+      "synthetic_source_example": "Fixed or variable"
+    },
+    {
+      "name": "node11.text",
+      "source_pointer": "/body/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Shared services are fixed and priced once."
+    },
+    {
+      "name": "node12.text",
+      "source_pointer": "/body/11/text",
+      "kind": "string",
+      "synthetic_source_example": "Workload delivery varies with the number of early adopters."
+    },
+    {
+      "name": "node13.cols.item01.label",
+      "source_pointer": "/body/12/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Step"
+    },
+    {
+      "name": "node13.cols.item02.label",
+      "source_pointer": "/body/12/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Platform service"
+    },
+    {
+      "name": "node13.cols.item03.label",
+      "source_pointer": "/body/12/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Workload activity"
+    },
+    {
+      "name": "node13.cols.item04.label",
+      "source_pointer": "/body/12/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Evidence"
+    },
+    {
+      "name": "node13.rows.item01.e",
+      "source_pointer": "/body/12/rows/0/e",
+      "kind": "string",
+      "synthetic_source_example": "Approved placement decision and scope"
+    },
+    {
+      "name": "node13.rows.item01.p",
+      "source_pointer": "/body/12/rows/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Intake, workload placement and readiness assessment"
+    },
+    {
+      "name": "node13.rows.item01.s",
+      "source_pointer": "/body/12/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "Assess"
+    },
+    {
+      "name": "node13.rows.item01.w",
+      "source_pointer": "/body/12/rows/0/w",
+      "kind": "string",
+      "synthetic_source_example": "Confirm outcomes, data and team readiness; list dependencies"
+    },
+    {
+      "name": "node13.rows.item02.e",
+      "source_pointer": "/body/12/rows/1/e",
+      "kind": "string",
+      "synthetic_source_example": "Signed design, exceptions and delivery backlog"
+    },
+    {
+      "name": "node13.rows.item02.p",
+      "source_pointer": "/body/12/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Approved patterns, security model and governance"
+    },
+    {
+      "name": "node13.rows.item02.s",
+      "source_pointer": "/body/12/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "Design"
+    },
+    {
+      "name": "node13.rows.item02.w",
+      "source_pointer": "/body/12/rows/1/w",
+      "kind": "string",
+      "synthetic_source_example": "Complete solution design and confirm component ownership"
+    },
+    {
+      "name": "node13.rows.item03.e",
+      "source_pointer": "/body/12/rows/2/e",
+      "kind": "string",
+      "synthetic_source_example": "Compliant environment with controls active"
+    },
+    {
+      "name": "node13.rows.item03.p",
+      "source_pointer": "/body/12/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "Workspace automation, access and policy assignment"
+    },
+    {
+      "name": "node13.rows.item03.s",
+      "source_pointer": "/body/12/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "Provision"
+    },
+    {
+      "name": "node13.rows.item03.w",
+      "source_pointer": "/body/12/rows/2/w",
+      "kind": "string",
+      "synthetic_source_example": "Confirm users, roles, connections and monitoring needs"
+    },
+    {
+      "name": "node13.rows.item04.e",
+      "source_pointer": "/body/12/rows/3/e",
+      "kind": "string",
+      "synthetic_source_example": "Readiness decision and acceptance record"
+    },
+    {
+      "name": "node13.rows.item04.p",
+      "source_pointer": "/body/12/rows/3/p",
+      "kind": "string",
+      "synthetic_source_example": "Production-readiness criteria and governance checks"
+    },
+    {
+      "name": "node13.rows.item04.s",
+      "source_pointer": "/body/12/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "Validate"
+    },
+    {
+      "name": "node13.rows.item04.w",
+      "source_pointer": "/body/12/rows/3/w",
+      "kind": "string",
+      "synthetic_source_example": "Test the workload, resolve defects, secure acceptance"
+    },
+    {
+      "name": "node13.rows.item05.e",
+      "source_pointer": "/body/12/rows/4/e",
+      "kind": "string",
+      "synthetic_source_example": "Support model validated; lessons defined"
+    },
+    {
+      "name": "node13.rows.item05.p",
+      "source_pointer": "/body/12/rows/4/p",
+      "kind": "string",
+      "synthetic_source_example": "Monitoring, support, escalation and service management"
+    },
+    {
+      "name": "node13.rows.item05.s",
+      "source_pointer": "/body/12/rows/4/s",
+      "kind": "string",
+      "synthetic_source_example": "Operate"
+    },
+    {
+      "name": "node13.rows.item05.w",
+      "source_pointer": "/body/12/rows/4/w",
+      "kind": "string",
+      "synthetic_source_example": "Assume ownership; respond to issues; track value and usage"
+    },
+    {
+      "name": "node14.text",
+      "source_pointer": "/body/13/text",
+      "kind": "string",
+      "synthetic_source_example": "Fixed shared services: intake · placement · provisioning · governance · monitoring · support"
+    },
+    {
+      "name": "node15.text",
+      "source_pointer": "/body/14/text",
+      "kind": "string",
+      "synthetic_source_example": "Variable delivery: solution design · build · data integration · testing · launch · hypercare"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node13.cols",
+      "source_pointer": "/body/12/cols",
+      "count": 4
+    },
+    {
+      "name": "node13.rows",
+      "source_pointer": "/body/12/rows",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

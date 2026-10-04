@@ -1,0 +1,1 @@
+Keep hidden; preserve six capability descriptions, all eight logo occurrences, obscured content and source EMS terminology. Matrix alternative must not infer specific capabilities for individual logos.

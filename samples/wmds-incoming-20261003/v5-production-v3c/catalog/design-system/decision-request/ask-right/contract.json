@@ -1,0 +1,528 @@
+{
+  "key": "decision-request/ask-right",
+  "source_file": "templates/library/decisions.json",
+  "source_sha256": "0455927617ecb1f376fbd9fabdc92166771192cd91200d31f2e0fce20012e95a",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "table"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "text"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "text"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "text"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "text"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "text"
+    }
+  ],
+  "family": "decisions",
+  "tier": "core",
+  "name": "Decision request · right panel",
+  "purpose": "An ask to a steering committee: the recommendation, the options, and the decision date in the right panel.",
+  "uses": [
+    "table.tag",
+    "header.slide"
+  ],
+  "source_advisory_budget": {
+    "words": 119,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "recommendation",
+      "maxChars": 190
+    },
+    {
+      "slot": "options table",
+      "note": "3 rows: option, cost, duration, tag"
+    },
+    {
+      "slot": "rail ask",
+      "maxChars": 50
+    },
+    {
+      "slot": "decision date",
+      "maxChars": 10
+    },
+    {
+      "slot": "consequence of delay",
+      "maxChars": 80
+    },
+    {
+      "slot": "source",
+      "maxChars": 70
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "rule",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/2/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/2/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 414
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 378
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 414
+        }
+      }
+    ],
+    "frame": {
+      "rail": "right",
+      "footer": "tall",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Decision request"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "[[Approve]] the event bus by 17 October"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Costs are sample figures for layout only; replace with current estimates before use."
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Our recommendation"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Fund Option B and retire the 61 point-to-point feeds in three waves. It scores highest against the criteria and is the only option that stops feed growth."
+    },
+    {
+      "name": "node03.cols.item01.label",
+      "source_pointer": "/body/2/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Option"
+    },
+    {
+      "name": "node03.cols.item02.label",
+      "source_pointer": "/body/2/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "3-year cost"
+    },
+    {
+      "name": "node03.cols.item03.label",
+      "source_pointer": "/body/2/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Duration"
+    },
+    {
+      "name": "node03.cols.item04.label",
+      "source_pointer": "/body/2/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Stance"
+    },
+    {
+      "name": "node03.rows.item01.c",
+      "source_pointer": "/body/2/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "$6.2M"
+    },
+    {
+      "name": "node03.rows.item01.d",
+      "source_pointer": "/body/2/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "None"
+    },
+    {
+      "name": "node03.rows.item01.o",
+      "source_pointer": "/body/2/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "A · Keep point-to-point"
+    },
+    {
+      "name": "node03.rows.item01.t",
+      "source_pointer": "/body/2/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "Not advised"
+    },
+    {
+      "name": "node03.rows.item02.c",
+      "source_pointer": "/body/2/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "$4.4M"
+    },
+    {
+      "name": "node03.rows.item02.d",
+      "source_pointer": "/body/2/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "9 months"
+    },
+    {
+      "name": "node03.rows.item02.o",
+      "source_pointer": "/body/2/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "B · Managed event bus"
+    },
+    {
+      "name": "node03.rows.item02.t",
+      "source_pointer": "/body/2/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "Recommended"
+    },
+    {
+      "name": "node03.rows.item03.c",
+      "source_pointer": "/body/2/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "$7.1M"
+    },
+    {
+      "name": "node03.rows.item03.d",
+      "source_pointer": "/body/2/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "14 months"
+    },
+    {
+      "name": "node03.rows.item03.o",
+      "source_pointer": "/body/2/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "C · Integration suite"
+    },
+    {
+      "name": "node03.rows.item03.t",
+      "source_pointer": "/body/2/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "Alternative"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "If we wait"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Each quarter adds about four feeds and delays the 2027 scheduling migration."
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "The ask"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Approve Option B and its $4.4M budget"
+    },
+    {
+      "name": "node09.text",
+      "source_pointer": "/body/8/text",
+      "kind": "string",
+      "synthetic_source_example": "Decision needed by"
+    },
+    {
+      "name": "node10.text",
+      "source_pointer": "/body/9/text",
+      "kind": "string",
+      "synthetic_source_example": "17 Oct"
+    },
+    {
+      "name": "node11.text",
+      "source_pointer": "/body/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Next steering committee meeting."
+    },
+    {
+      "name": "node13.text",
+      "source_pointer": "/body/12/text",
+      "kind": "string",
+      "synthetic_source_example": "Decision owner"
+    },
+    {
+      "name": "node14.text",
+      "source_pointer": "/body/13/text",
+      "kind": "string",
+      "synthetic_source_example": "Steering committee chair"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node03.cols",
+      "source_pointer": "/body/2/cols",
+      "count": 4
+    },
+    {
+      "name": "node03.rows",
+      "source_pointer": "/body/2/rows",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

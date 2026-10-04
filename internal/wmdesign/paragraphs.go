@@ -3,6 +3,7 @@ package wmdesign
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -34,6 +35,7 @@ func candidateParagraphs(raw []byte, records map[int][]TextRecord) ([]byte, erro
 		parts[f.Name] = b
 	}
 	catalog := map[string]map[string]TextRecord{}
+	layoutNames := map[string]map[string]bool{}
 	for slide, rs := range records {
 		name := fmt.Sprintf("ppt/slides/slide%d.xml", slide)
 		catalog[name] = map[string]TextRecord{}
@@ -53,11 +55,38 @@ func candidateParagraphs(raw []byte, records map[int][]TextRecord) ([]byte, erro
 			}
 		}
 		if layout != "" {
-			catalog[layout] = map[string]TextRecord{}
+			if catalog[layout] == nil {
+				catalog[layout] = map[string]TextRecord{}
+				layoutNames[layout] = map[string]bool{}
+				d := xml.NewDecoder(bytes.NewReader(parts[layout]))
+				for {
+					token, err := d.Token()
+					if err == io.EOF {
+						break
+					}
+					if err != nil {
+						return nil, err
+					}
+					if start, ok := token.(xml.StartElement); ok && start.Name.Space == "http://schemas.openxmlformats.org/presentationml/2006/main" && start.Name.Local == "cNvPr" {
+						for _, a := range start.Attr {
+							if a.Name.Space == "" && a.Name.Local == "name" {
+								layoutNames[layout][a.Value] = true
+							}
+						}
+					}
+				}
+			}
 		}
 		for _, r := range rs {
 			catalog[name][r.ID] = r
-			if layout != "" {
+			if layout != "" && layoutNames[layout][r.ID] {
+				if prior, ok := catalog[layout][r.ID]; ok {
+					a, _ := json.Marshal(prior)
+					b, _ := json.Marshal(r)
+					if !bytes.Equal(a, b) {
+						return nil, fmt.Errorf("text.shared_layout_record_conflict: %s/%s", layout, r.ID)
+					}
+				}
 				catalog[layout][r.ID] = r
 			}
 		}

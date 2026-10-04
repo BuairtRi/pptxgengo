@@ -1,0 +1,175 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-464",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 3,
+        "density": "",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false,
+        "split": "tall-left"
+      },
+      "eyebrow": "Software lifecycle",
+      "title": "Defects and gaps loop back inside the SDLC",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "center": {
+                "label": "SDLC"
+              },
+              "closed": false,
+              "h": 414,
+              "items": [
+                {
+                  "label": "Design",
+                  "text": "Wireframes and API contracts"
+                },
+                {
+                  "label": "Build",
+                  "text": "Code and integrate"
+                },
+                {
+                  "label": "Test",
+                  "text": "Automated and exploratory"
+                },
+                {
+                  "label": "Verify",
+                  "text": "Clinician acceptance"
+                },
+                {
+                  "label": "Release",
+                  "text": "Staged rollout"
+                }
+              ],
+              "loops": [
+                {
+                  "bend": 0.25,
+                  "from": 2,
+                  "to": 1
+                },
+                {
+                  "bend": 0.25,
+                  "from": 3,
+                  "to": 0
+                }
+              ],
+              "nodeH": 90,
+              "nodeW": 144,
+              "type": "cycle",
+              "w": 558,
+              "x": 57,
+              "y": 54
+            },
+            "source_pointer": "/body/0",
+            "resolutions": [
+              "wmds.v4.lifecycle-cycle-node-allocation-90"
+            ]
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "bullets",
+              "x": 633,
+              "y": 180,
+              "w": 270,
+              "items": [
+                {
+                  "lead": "Test to Build.",
+                  "text": "Defects return to the sprint."
+                },
+                {
+                  "lead": "Verify to Design.",
+                  "text": "Clinician gaps reopen the design."
+                }
+              ]
+            },
+            "source_pointer": "/body/1"
+          }
+        },
+        {
+          "id": "node03",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "card",
+              "x": 633,
+              "y": 342,
+              "w": 270,
+              "h": 108,
+              "surface": "inverse",
+              "pad": 12,
+              "label": "Hand-off",
+              "body": [
+                {
+                  "p": "Release feeds Optimize, where live usage data starts the next PDLC loop."
+                }
+              ]
+            },
+            "source_pointer": "/body/2"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-464",
+        "template": "sdlc/cycle-split",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/lifecycle.json",
+        "source_sha256": "0c159e90675f86812ec73a897d0a7ace628e025e19bfb2f2a675814905288fe7",
+        "source_revision": "wmds-library.v5",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "cycle"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "bullets"
+          },
+          {
+            "id": "node03",
+            "source_pointer": "/body/2",
+            "expected_type": "card"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

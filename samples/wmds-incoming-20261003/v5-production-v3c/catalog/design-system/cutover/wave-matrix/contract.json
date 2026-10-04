@@ -1,0 +1,459 @@
+{
+  "key": "cutover/wave-matrix",
+  "source_file": "templates/library/approach.json",
+  "source_sha256": "88b70640b6093775f23af71a783a79e3f83a873580d79cc5b49483c4de5a6a65",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "numhead"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "numhead"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "numhead"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "grouplabel"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "matrix"
+    }
+  ],
+  "family": "approach",
+  "tier": "working",
+  "name": "Cutover · AI support and wave matrix",
+  "purpose": "How a phased cutover is run: three kinds of AI support across every wave, then a slice-by-wave matrix showing legacy, coexistence and modern state.",
+  "uses": [
+    "heading.group",
+    "shape.block",
+    "text.block"
+  ],
+  "source_advisory_budget": {
+    "words": 107,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 100
+    },
+    {
+      "slot": "support title",
+      "maxChars": 14
+    },
+    {
+      "slot": "support text",
+      "maxChars": 90
+    },
+    {
+      "slot": "slice",
+      "maxChars": 28
+    },
+    {
+      "slot": "state",
+      "maxChars": 14
+    },
+    {
+      "slot": "source",
+      "maxChars": 100
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "matrix",
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "grouplabel",
+      "matrix",
+      "numhead",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/7/cols",
+        "component_type": "matrix",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/7/rows",
+        "component_type": "matrix",
+        "role": "tabular-data",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "numhead",
+        "role": "content",
+        "source_bounds": {
+          "w": 252,
+          "x": 57,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 252,
+          "x": 57,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "numhead",
+        "role": "content",
+        "source_bounds": {
+          "w": 252,
+          "x": 345,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 252,
+          "x": 345,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "numhead",
+        "role": "content",
+        "source_bounds": {
+          "w": 252,
+          "x": 633,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 252,
+          "x": 633,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "grouplabel",
+        "role": "content",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 264
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "matrix",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 288
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Phase 03 approach"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "AI sequences each cutover wave and watches coexistence; people hold every go or no-go decision"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Illustrative. The migration unit is a business-viable capability slice, not a single technical component."
+    },
+    {
+      "name": "node01.n",
+      "source_pointer": "/body/0/n",
+      "kind": "string",
+      "synthetic_source_example": "1"
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Sequence"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Find viable capability slices, expose hidden dependencies and simulate fallback paths."
+    },
+    {
+      "name": "node03.n",
+      "source_pointer": "/body/2/n",
+      "kind": "string",
+      "synthetic_source_example": "2"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Prepare"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Profile and map data; draft test scenarios, runbooks, communications and support."
+    },
+    {
+      "name": "node05.n",
+      "source_pointer": "/body/4/n",
+      "kind": "string",
+      "synthetic_source_example": "3"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Monitor"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Compare transactions and outcomes, flag exceptions and trace anomalies to dependencies."
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Illustrative phased cutover"
+    },
+    {
+      "name": "node08.cols.item01",
+      "source_pointer": "/body/7/cols/0",
+      "kind": "string",
+      "synthetic_source_example": "Current state"
+    },
+    {
+      "name": "node08.cols.item02",
+      "source_pointer": "/body/7/cols/1",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1"
+    },
+    {
+      "name": "node08.cols.item03",
+      "source_pointer": "/body/7/cols/2",
+      "kind": "string",
+      "synthetic_source_example": "Wave 2"
+    },
+    {
+      "name": "node08.cols.item04",
+      "source_pointer": "/body/7/cols/3",
+      "kind": "string",
+      "synthetic_source_example": "Wave 3"
+    },
+    {
+      "name": "node08.rows.item01.cells.item01.text",
+      "source_pointer": "/body/7/rows/0/cells/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Legacy"
+    },
+    {
+      "name": "node08.rows.item01.cells.item02.text",
+      "source_pointer": "/body/7/rows/0/cells/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Coexistence"
+    },
+    {
+      "name": "node08.rows.item01.cells.item03.text",
+      "source_pointer": "/body/7/rows/0/cells/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Modern"
+    },
+    {
+      "name": "node08.rows.item01.cells.item04.text",
+      "source_pointer": "/body/7/rows/0/cells/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Modern"
+    },
+    {
+      "name": "node08.rows.item01.label",
+      "source_pointer": "/body/7/rows/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Close and consolidation"
+    },
+    {
+      "name": "node08.rows.item02.cells.item01.text",
+      "source_pointer": "/body/7/rows/1/cells/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Legacy"
+    },
+    {
+      "name": "node08.rows.item02.cells.item02.text",
+      "source_pointer": "/body/7/rows/1/cells/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Legacy"
+    },
+    {
+      "name": "node08.rows.item02.cells.item03.text",
+      "source_pointer": "/body/7/rows/1/cells/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Coexistence"
+    },
+    {
+      "name": "node08.rows.item02.cells.item04.text",
+      "source_pointer": "/body/7/rows/1/cells/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Modern"
+    },
+    {
+      "name": "node08.rows.item02.label",
+      "source_pointer": "/body/7/rows/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Intercompany and payables"
+    },
+    {
+      "name": "node08.rows.item03.cells.item01.text",
+      "source_pointer": "/body/7/rows/2/cells/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Legacy"
+    },
+    {
+      "name": "node08.rows.item03.cells.item02.text",
+      "source_pointer": "/body/7/rows/2/cells/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Legacy"
+    },
+    {
+      "name": "node08.rows.item03.cells.item03.text",
+      "source_pointer": "/body/7/rows/2/cells/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Legacy"
+    },
+    {
+      "name": "node08.rows.item03.cells.item04.text",
+      "source_pointer": "/body/7/rows/2/cells/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Coexistence"
+    },
+    {
+      "name": "node08.rows.item03.label",
+      "source_pointer": "/body/7/rows/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Planning and reporting"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node08.cols",
+      "source_pointer": "/body/7/cols",
+      "count": 4
+    },
+    {
+      "name": "node08.rows.item01.cells",
+      "source_pointer": "/body/7/rows/0/cells",
+      "count": 4
+    },
+    {
+      "name": "node08.rows.item02.cells",
+      "source_pointer": "/body/7/rows/1/cells",
+      "count": 4
+    },
+    {
+      "name": "node08.rows.item03.cells",
+      "source_pointer": "/body/7/rows/2/cells",
+      "count": 4
+    },
+    {
+      "name": "node08.rows",
+      "source_pointer": "/body/7/rows",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

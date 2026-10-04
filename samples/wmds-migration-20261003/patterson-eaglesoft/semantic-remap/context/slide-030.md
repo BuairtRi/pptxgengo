@@ -1,0 +1,1 @@
+Preserve all three screenshots and their visible labels/pixel bytes; do not regenerate or crop content. Exhibit alternative privileges image space; metrics-exhibits offers more room for the three results.197words requires local enlargement.

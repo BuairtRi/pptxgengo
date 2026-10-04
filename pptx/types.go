@@ -132,7 +132,9 @@ type ShapeFillProps struct {
 // ShapeLineProps describes a shape outline. Embeds ShapeFillProps.
 type ShapeLineProps struct {
 	ShapeFillProps
-	Width          float64
+	Width float64
+	// LineJoin is optional: round, bevel or miter. Empty preserves legacy XML.
+	LineJoin       string
 	DashType       string
 	BeginArrowType string
 	EndArrowType   string
@@ -536,6 +538,13 @@ type ChartData struct {
 	Name      string
 	Sizes     []float64
 	Values    []float64
+	// MissingValues is an optional single-level line-chart mask, aligned with Values and Labels.
+	// True positions have no observation: omit them from caches and workbook cells.
+	// Values at those positions are ignored; they must still be finite.
+	// Sparse charts require a common category grid; combos contain only lines.
+	// Limits: 10,000 points/series, 64 series, 100,000 points total, 1 MiB copy
+	// (at most 4,096 bytes per label/name). Dense-only charts are unaffected.
+	MissingValues []bool
 }
 
 // IChartMulti is one component of a multi-type (combo) chart.
@@ -576,6 +585,10 @@ type ChartOptions struct {
 	MultiTypes []IChartMulti
 
 	AltText string
+
+	// PreserveWorkbookZeros keeps observed zero values as numeric workbook
+	// cells. False retains historical serialization; missing indices stay blank.
+	PreserveWorkbookZeros bool
 
 	// --- OptsChartGridLine (top-level; Color/Style shared w/ TextBaseProps.Color) ---
 	Cap   string

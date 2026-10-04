@@ -1,0 +1,6266 @@
+{
+  "schema": "wmds.templates.v2",
+  "family": "runbooks",
+  "name": "Runbooks",
+  "summary": "Runbook overview, roles, escalation, step lists, step details and go/no-go checklists.",
+  "templates": [
+    {
+      "id": "runbook",
+      "variant": "overview",
+      "name": "Runbook · overview, roles and escalation",
+      "tier": "working",
+      "purpose": "One-page runbook front sheet: purpose, scope, role owners, entry and exit criteria and a timed escalation path.",
+      "uses": [
+        "text.label",
+        "composite.table",
+        "card",
+        "seq.stepper"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 128,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "purpose",
+          "maxChars": 110
+        },
+        {
+          "slot": "scope item",
+          "maxChars": 34
+        },
+        {
+          "slot": "role",
+          "maxChars": 16
+        },
+        {
+          "slot": "accountability",
+          "maxChars": 38
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 30
+        },
+        {
+          "slot": "escalation tier",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "One runbook governs every [[wave 1]] cutover decision",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Purpose"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Move close and consolidation to the new ledger over one weekend, with a tested way back at every step."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 216,
+            "w": 270,
+            "text": "Scope"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "items": [
+              "General ledger and subledgers",
+              "Bank and intercompany interfaces",
+              "Excludes planning and reporting"
+            ]
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "cols": [
+              {
+                "k": "r",
+                "label": "Role",
+                "w": 144
+              },
+              {
+                "k": "h",
+                "label": "Held by",
+                "w": 126
+              },
+              {
+                "k": "a",
+                "label": "Accountable for",
+                "w": 288
+              }
+            ],
+            "rows": [
+              {
+                "r": "Cutover lead",
+                "h": "Program director",
+                "a": "Runs the bridge; calls go or no-go"
+              },
+              {
+                "r": "Ledger owner",
+                "h": "Controller",
+                "a": "Signs balances; opens the ledger"
+              },
+              {
+                "r": "Technical lead",
+                "h": "Finance IT",
+                "a": "Runs loads and interface switch"
+              },
+              {
+                "r": "Support lead",
+                "h": "Shared services",
+                "a": "User comms and hypercare"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 288,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "Entry criteria",
+            "body": [
+              {
+                "bullets": [
+                  "Dress rehearsal signed off",
+                  "Rollback plan approved"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 288,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "Exit criteria",
+            "body": [
+              {
+                "bullets": [
+                  "Day 1 postings reconciled",
+                  "Hypercare handover accepted"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 378,
+            "w": 846,
+            "text": "Escalation path"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "subtle",
+            "number": "0–15 min",
+            "text": "Workstream lead",
+            "first": true
+          },
+          {
+            "type": "chevron",
+            "x": 273,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "subtle",
+            "number": "15–30 min",
+            "text": "Cutover lead"
+          },
+          {
+            "type": "chevron",
+            "x": 489,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "strong",
+            "number": "30–60 min",
+            "text": "Controller and CIO"
+          },
+          {
+            "type": "chevron",
+            "x": 705,
+            "y": 396,
+            "w": 198,
+            "h": 54,
+            "surface": "inverse",
+            "number": "60+ min",
+            "text": "Steering committee"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "overview-nav",
+      "name": "Runbook · overview, roles and escalation · nav rail, tall footer",
+      "tier": "working",
+      "purpose": "One-page runbook front sheet: purpose, scope, role owners, entry and exit criteria and a timed escalation path.",
+      "uses": [
+        "text.label",
+        "composite.table",
+        "card",
+        "seq.stepper"
+      ],
+      "legacy": "nav variant of runbook/overview",
+      "budget": {
+        "words": 128,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "purpose",
+          "maxChars": 110
+        },
+        {
+          "slot": "scope item",
+          "maxChars": 34
+        },
+        {
+          "slot": "role",
+          "maxChars": 16
+        },
+        {
+          "slot": "accountability",
+          "maxChars": 38
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 30
+        },
+        {
+          "slot": "escalation tier",
+          "maxChars": 22
+        },
+        {
+          "slot": "nav item",
+          "count": "2–6",
+          "maxChars": 12
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "tall",
+        "eyebrow": "Cutover runbook",
+        "title": "One runbook governs every [[wave 1]] cutover decision",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Purpose"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Move close and consolidation to the new ledger over one weekend, with a tested way back at every step."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 216,
+            "w": 270,
+            "text": "Scope"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "items": [
+              "General ledger and subledgers",
+              "Bank and intercompany interfaces",
+              "Excludes planning and reporting"
+            ]
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "cols": [
+              {
+                "k": "r",
+                "label": "Role",
+                "w": 144
+              },
+              {
+                "k": "h",
+                "label": "Held by",
+                "w": 126
+              },
+              {
+                "k": "a",
+                "label": "Accountable for",
+                "w": 288
+              }
+            ],
+            "rows": [
+              {
+                "r": "Cutover lead",
+                "h": "Program director",
+                "a": "Runs the bridge; calls go or no-go"
+              },
+              {
+                "r": "Ledger owner",
+                "h": "Controller",
+                "a": "Signs balances; opens the ledger"
+              },
+              {
+                "r": "Technical lead",
+                "h": "Finance IT",
+                "a": "Runs loads and interface switch"
+              },
+              {
+                "r": "Support lead",
+                "h": "Shared services",
+                "a": "User comms and hypercare"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 288,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "Entry criteria",
+            "body": [
+              {
+                "bullets": [
+                  "Dress rehearsal signed off",
+                  "Rollback plan approved"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 288,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "Exit criteria",
+            "body": [
+              {
+                "bullets": [
+                  "Day 1 postings reconciled",
+                  "Hypercare handover accepted"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 378,
+            "w": 846,
+            "text": "Escalation path"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "subtle",
+            "number": "0–15 min",
+            "text": "Workstream lead",
+            "first": true
+          },
+          {
+            "type": "chevron",
+            "x": 273,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "subtle",
+            "number": "15–30 min",
+            "text": "Cutover lead"
+          },
+          {
+            "type": "chevron",
+            "x": 489,
+            "y": 396,
+            "w": 216,
+            "h": 54,
+            "surface": "strong",
+            "number": "30–60 min",
+            "text": "Controller and CIO"
+          },
+          {
+            "type": "chevron",
+            "x": 705,
+            "y": 396,
+            "w": 198,
+            "h": 54,
+            "surface": "inverse",
+            "number": "60+ min",
+            "text": "Steering committee"
+          }
+        ],
+        "nav": {
+          "items": [
+            "Prepare",
+            "Cutover",
+            "Hypercare",
+            "Handover"
+          ],
+          "active": 0
+        }
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-table",
+      "name": "Runbook · step-by-step table",
+      "tier": "working",
+      "purpose": "The working runbook: numbered steps with owner, time window, verification check and rollback action for each.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 182,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "action",
+          "maxChars": 36
+        },
+        {
+          "slot": "owner",
+          "maxChars": 16
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "verification",
+          "maxChars": 42
+        },
+        {
+          "slot": "rollback",
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Eight steps take the ledger from freeze to [[go-live]]",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "n",
+                "label": "Step",
+                "w": 54
+              },
+              {
+                "k": "a",
+                "label": "Action",
+                "w": 192
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 132
+              },
+              {
+                "k": "w",
+                "label": "Window",
+                "w": 126
+              },
+              {
+                "k": "v",
+                "label": "Verification check",
+                "w": 198
+              },
+              {
+                "k": "b",
+                "label": "Rollback",
+                "w": 144
+              }
+            ],
+            "rows": [
+              {
+                "n": "1",
+                "a": "Freeze legacy postings",
+                "o": "Controller",
+                "w": "Fri 18:00 · 30m",
+                "v": "Subledger lock report shows no open batches",
+                "b": "Lift the freeze flag"
+              },
+              {
+                "n": "2",
+                "a": "Take the final legacy backup",
+                "o": "Finance IT",
+                "w": "Fri 18:30 · 1h",
+                "v": "Checksums match the source",
+                "b": "Restore the snapshot"
+              },
+              {
+                "n": "3",
+                "a": "Extract open balances",
+                "o": "Data lead",
+                "w": "Fri 19:30 · 3h",
+                "v": "Trial balance ties to the legacy ledger",
+                "b": "Re-extract the data"
+              },
+              {
+                "n": "4",
+                "a": "Load balances to new ledger",
+                "o": "Finance IT",
+                "w": "Fri 22:30 · 2h",
+                "v": "Row counts and totals reconcile",
+                "b": "Purge target; reopen legacy"
+              },
+              {
+                "n": "5",
+                "a": "Run the reconciliation rules",
+                "o": "Shared services",
+                "w": "Sat 00:30 · 2h",
+                "v": "Auto-match rate above 90%",
+                "b": "Hold; rerun prior rules"
+              },
+              {
+                "n": "6",
+                "a": "Switch the interfaces",
+                "o": "Integration lead",
+                "w": "Sat 02:30 · 1h",
+                "v": "Test postings flow end to end",
+                "b": "Repoint to legacy endpoints"
+              },
+              {
+                "n": "7",
+                "a": "Hold the go or no-go decision",
+                "o": "Cutover lead",
+                "w": "Sat 03:30 · 30m",
+                "v": "Every check is signed on the log",
+                "b": "Invoke the full rollback"
+              },
+              {
+                "n": "8",
+                "a": "Open the ledger to users",
+                "o": "Controller",
+                "w": "Sat 06:00 · 1h",
+                "v": "First live posting is accepted",
+                "b": "Close the ledger; notify users"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "cutover-timeline",
+      "name": "Runbook · T-minus cutover timeline",
+      "tier": "working",
+      "purpose": "A T-minus axis with go/no-go gates marked as milestones and one card per window listing the work and the gate owner.",
+      "uses": [
+        "seq.timeaxis",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 132,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "period",
+          "maxChars": 8
+        },
+        {
+          "slot": "gate",
+          "maxChars": 24
+        },
+        {
+          "slot": "window",
+          "maxChars": 16
+        },
+        {
+          "slot": "window title",
+          "maxChars": 22
+        },
+        {
+          "slot": "action",
+          "maxChars": 34
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Four go/no-go gates pace the [[weekend]] cutover",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "timeaxis",
+            "x": 57,
+            "y": 162,
+            "w": 846,
+            "periods": [
+              "T-12h",
+              "T-6h",
+              "T-0",
+              "T+6h",
+              "T+12h",
+              "T+18h",
+              "T+24h",
+              "T+36h"
+            ],
+            "milestones": [
+              {
+                "at": 0.125,
+                "label": "G1 · Ready to freeze"
+              },
+              {
+                "at": 0.4,
+                "label": "G2 · Data tied out"
+              },
+              {
+                "at": 0.58,
+                "label": "G3 · Open ledger"
+              },
+              {
+                "at": 0.9,
+                "label": "G4 · Exit to hypercare"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T-12h to T-0",
+            "title": "Prepare",
+            "body": [
+              {
+                "bullets": [
+                  "Sign the rollback plan",
+                  "Open the support bridge"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G1 · Cutover lead confirms rollback and bridge ready"
+          },
+          {
+            "type": "card",
+            "x": 273,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T-0 to T+6h",
+            "title": "Freeze and migrate",
+            "body": [
+              {
+                "bullets": [
+                  "Lock legacy; take backup",
+                  "Extract, load and reconcile"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 273,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G2 · Controller confirms balances tie to legacy"
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T+6h to T+12h",
+            "title": "Validate and open",
+            "body": [
+              {
+                "bullets": [
+                  "Switch interfaces; test posting",
+                  "Leads sign off balances"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 489,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G3 · Controller opens the ledger to users"
+          },
+          {
+            "type": "card",
+            "x": 705,
+            "y": 216,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "T+12h to T+36h",
+            "title": "Stabilize",
+            "body": [
+              {
+                "bullets": [
+                  "Watch posting and match rates",
+                  "Triage defects every 2 hours"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 705,
+            "y": 396,
+            "w": 198,
+            "h": 72,
+            "surface": "inverse",
+            "style": "small",
+            "align": "left",
+            "text": "G4 · Support lead accepts the exit to hypercare"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "go-no-go",
+      "name": "Runbook · go/no-go checklist",
+      "tier": "working",
+      "purpose": "Criteria with owner, evidence, RAG status and a go tick, closed by the decision rule the cutover lead applies.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 120,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 46
+        },
+        {
+          "slot": "owner",
+          "maxChars": 18
+        },
+        {
+          "slot": "evidence",
+          "maxChars": 30
+        },
+        {
+          "slot": "decision rule",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Wave 1 goes live only when every criterion is [[green]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "c",
+                "label": "Go/no-go criterion",
+                "w": 318
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 132
+              },
+              {
+                "k": "e",
+                "label": "Evidence",
+                "w": 204
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 120,
+                "type": "status"
+              },
+              {
+                "k": "g",
+                "label": "Go",
+                "w": 72,
+                "type": "check"
+              }
+            ],
+            "rows": [
+              {
+                "c": "Dress rehearsal passed with no open defects",
+                "o": "Test lead",
+                "e": "Rehearsal log, run 3",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Balances tie to the legacy trial balance",
+                "o": "Controller",
+                "e": "Reconciliation report",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Interfaces tested end to end",
+                "o": "Integration lead",
+                "e": "Interface test pack",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Rollback rehearsed within the window",
+                "o": "Technical lead",
+                "e": "Timed rollback record",
+                "s": "risk",
+                "g": false
+              },
+              {
+                "c": "Users trained and access confirmed",
+                "o": "Support lead",
+                "e": "Training roster, 94%",
+                "s": "risk",
+                "g": false
+              },
+              {
+                "c": "Support bridge staffed for 36 hours",
+                "o": "Support lead",
+                "e": "Rota signed by leads",
+                "s": "on",
+                "g": true
+              },
+              {
+                "c": "Audit sign-off on migration controls",
+                "o": "Internal audit",
+                "e": "Control walkthrough memo",
+                "s": "off",
+                "g": false
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 432,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Decision rule: any red criterion is a no-go; an amber criterion needs a written mitigation from the Cutover lead."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "go-no-go-right",
+      "name": "Runbook · go/no-go checklist · right panel",
+      "tier": "working",
+      "purpose": "The go/no-go checklist with the decision rule and green count moved onto a right panel.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "right panel variant of runbook/go-no-go",
+      "budget": {
+        "words": 123,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 46
+        },
+        {
+          "slot": "owner",
+          "maxChars": 18
+        },
+        {
+          "slot": "evidence",
+          "maxChars": 30
+        },
+        {
+          "slot": "decision rule",
+          "maxChars": 120
+        },
+        {
+          "slot": "panel content",
+          "note": "key message on the 273 pt panel, inverse inks"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Wave 1 needs every check [[green]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "c",
+                "label": "Go/no-go criterion",
+                "w": 198
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 96
+              },
+              {
+                "k": "e",
+                "label": "Evidence",
+                "w": 138
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 126,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "c": "Dress rehearsal passed with no open defects",
+                "o": "Test lead",
+                "e": "Rehearsal log, run 3",
+                "s": "on"
+              },
+              {
+                "c": "Balances tie to the legacy trial balance",
+                "o": "Controller",
+                "e": "Reconciliation report",
+                "s": "on"
+              },
+              {
+                "c": "Interfaces tested end to end",
+                "o": "Integration lead",
+                "e": "Interface test pack",
+                "s": "on"
+              },
+              {
+                "c": "Rollback rehearsed within the window",
+                "o": "Technical lead",
+                "e": "Timed rollback record",
+                "s": "risk"
+              },
+              {
+                "c": "Users trained and access confirmed",
+                "o": "Support lead",
+                "e": "Training roster, 94%",
+                "s": "risk"
+              },
+              {
+                "c": "Support bridge staffed for 36 hours",
+                "o": "Support lead",
+                "e": "Rota signed by leads",
+                "s": "on"
+              },
+              {
+                "c": "Audit sign-off on migration controls",
+                "o": "Internal audit",
+                "e": "Control walkthrough memo",
+                "s": "off"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Where we stand",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "display",
+            "x": 705,
+            "y": 144,
+            "w": 198,
+            "text": "4 of 7",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 198,
+            "w": 198,
+            "text": "criteria are green",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 705,
+            "y": 252,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 270,
+            "w": 198,
+            "text": "Decision rule",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 705,
+            "y": 288,
+            "w": 198,
+            "text": "Any red criterion is a no-go. An amber criterion needs a written mitigation from the Cutover lead.",
+            "on": "inverse"
+          }
+        ],
+        "railSurface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-table-nav",
+      "name": "Runbook · step table with nav rail",
+      "tier": "working",
+      "purpose": "The step-by-step runbook table in a long runbook pack: section tabs down the left edge (tall footer).",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 186,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "action",
+          "maxChars": 36
+        },
+        {
+          "slot": "owner",
+          "maxChars": 16
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "verification",
+          "maxChars": 42
+        },
+        {
+          "slot": "rollback",
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "tall",
+        "eyebrow": "Cutover runbook",
+        "title": "Eight steps take the ledger from freeze to [[go-live]]",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "n",
+                "label": "Step",
+                "w": 54
+              },
+              {
+                "k": "a",
+                "label": "Action",
+                "w": 192
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 132
+              },
+              {
+                "k": "w",
+                "label": "Window",
+                "w": 126
+              },
+              {
+                "k": "v",
+                "label": "Verification check",
+                "w": 198
+              },
+              {
+                "k": "b",
+                "label": "Rollback",
+                "w": 144
+              }
+            ],
+            "rows": [
+              {
+                "n": "1",
+                "a": "Freeze legacy postings",
+                "o": "Controller",
+                "w": "Fri 18:00 · 30m",
+                "v": "Subledger lock report shows no open batches",
+                "b": "Lift the freeze flag"
+              },
+              {
+                "n": "2",
+                "a": "Take the final legacy backup",
+                "o": "Finance IT",
+                "w": "Fri 18:30 · 1h",
+                "v": "Checksums match the source",
+                "b": "Restore the snapshot"
+              },
+              {
+                "n": "3",
+                "a": "Extract open balances",
+                "o": "Data lead",
+                "w": "Fri 19:30 · 3h",
+                "v": "Trial balance ties to the legacy ledger",
+                "b": "Re-extract the data"
+              },
+              {
+                "n": "4",
+                "a": "Load balances to new ledger",
+                "o": "Finance IT",
+                "w": "Fri 22:30 · 2h",
+                "v": "Row counts and totals reconcile",
+                "b": "Purge target; reopen legacy"
+              },
+              {
+                "n": "5",
+                "a": "Run the reconciliation rules",
+                "o": "Shared services",
+                "w": "Sat 00:30 · 2h",
+                "v": "Auto-match rate above 90%",
+                "b": "Hold; rerun prior rules"
+              },
+              {
+                "n": "6",
+                "a": "Switch the interfaces",
+                "o": "Integration lead",
+                "w": "Sat 02:30 · 1h",
+                "v": "Test postings flow end to end",
+                "b": "Repoint to legacy endpoints"
+              },
+              {
+                "n": "7",
+                "a": "Hold the go or no-go decision",
+                "o": "Cutover lead",
+                "w": "Sat 03:30 · 30m",
+                "v": "Every check is signed on the log",
+                "b": "Invoke the full rollback"
+              },
+              {
+                "n": "8",
+                "a": "Open the ledger to users",
+                "o": "Controller",
+                "w": "Sat 06:00 · 1h",
+                "v": "First live posting is accepted",
+                "b": "Close the ledger; notify users"
+              }
+            ]
+          }
+        ],
+        "nav": {
+          "items": [
+            "Prepare",
+            "Cutover",
+            "Hypercare",
+            "Handover"
+          ],
+          "active": 1
+        }
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "roles",
+      "name": "Runbook · roles and authority",
+      "tier": "working",
+      "purpose": "A dedicated role list for the cutover: who holds each role, what they are accountable for, the decisions they may take alone and who covers them.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 114,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "role",
+          "maxChars": 18
+        },
+        {
+          "slot": "held by",
+          "maxChars": 24
+        },
+        {
+          "slot": "accountable for",
+          "maxChars": 34
+        },
+        {
+          "slot": "decisions and authority",
+          "maxChars": 38
+        },
+        {
+          "slot": "backup",
+          "maxChars": 26
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Six roles hold every [[cutover]] decision, each with a backup",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 48,
+            "cols": [
+              {
+                "k": "r",
+                "label": "Role",
+                "w": 144
+              },
+              {
+                "k": "h",
+                "label": "Held by",
+                "w": 144
+              },
+              {
+                "k": "a",
+                "label": "Accountable for",
+                "w": 198
+              },
+              {
+                "k": "d",
+                "label": "Decisions and authority",
+                "w": 216
+              },
+              {
+                "k": "b",
+                "label": "Backup",
+                "w": 144
+              }
+            ],
+            "rows": [
+              {
+                "r": "Cutover lead",
+                "h": "Program director",
+                "a": "The runbook and the bridge",
+                "d": "Calls go or no-go; invokes rollback",
+                "b": "Deputy program director"
+              },
+              {
+                "r": "Ledger owner",
+                "h": "Controller",
+                "a": "Balances and ledger opening",
+                "d": "Signs balances; opens the ledger",
+                "b": "Assistant controller"
+              },
+              {
+                "r": "Technical lead",
+                "h": "Finance IT",
+                "a": "Loads, jobs and environments",
+                "d": "Pauses a load; restores a snapshot",
+                "b": "Platform engineer"
+              },
+              {
+                "r": "Integration lead",
+                "h": "Enterprise architecture",
+                "a": "Interface switch and testing",
+                "d": "Repoints interfaces to legacy",
+                "b": "Integration engineer"
+              },
+              {
+                "r": "Data lead",
+                "h": "Data engineering",
+                "a": "Extracts and reconciliation",
+                "d": "Stops a load on a variance",
+                "b": "Senior data analyst"
+              },
+              {
+                "r": "Support lead",
+                "h": "Shared services",
+                "a": "User comms and hypercare",
+                "d": "Sends notices; triages defects",
+                "b": "Service desk manager"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "roles-raci",
+      "name": "Runbook · roles as a RACI",
+      "tier": "working",
+      "purpose": "A RACI version of the cutover roles: runbook steps down the side, the six roles across the top and R, A, C or I in each cell, with a note on who can sign a step off.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 111,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "cutover step",
+          "maxChars": 36
+        },
+        {
+          "slot": "role",
+          "maxChars": 18
+        },
+        {
+          "slot": "R, A, C or I",
+          "maxChars": 3
+        },
+        {
+          "slot": "authority note",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Every cutover step has exactly one [[accountable]] role",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "rowHeader": true,
+            "preset": "raci",
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "act",
+                "label": "Cutover step",
+                "w": 270
+              },
+              {
+                "k": "c",
+                "label": "Cutover lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "l",
+                "label": "Ledger owner",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "t",
+                "label": "Technical lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "i",
+                "label": "Integration lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "d",
+                "label": "Data lead",
+                "w": 96,
+                "type": "raci"
+              },
+              {
+                "k": "s",
+                "label": "Support lead",
+                "w": 96,
+                "type": "raci"
+              }
+            ],
+            "rows": [
+              {
+                "act": "Freeze legacy postings",
+                "c": "A",
+                "l": "C",
+                "t": "R",
+                "i": "I",
+                "d": "I",
+                "s": "I"
+              },
+              {
+                "act": "Extract and reconcile balances",
+                "c": "I",
+                "l": "A",
+                "t": "C",
+                "i": "I",
+                "d": "R",
+                "s": "I"
+              },
+              {
+                "act": "Load balances to the new ledger",
+                "c": "I",
+                "l": "A",
+                "t": "R",
+                "i": "I",
+                "d": "C",
+                "s": "I"
+              },
+              {
+                "act": "Switch interfaces to the new ledger",
+                "c": "I",
+                "l": "I",
+                "t": "C",
+                "i": "A/R",
+                "d": "C",
+                "s": "I"
+              },
+              {
+                "act": "Hold the go or no-go decision",
+                "c": "A/R",
+                "l": "C",
+                "t": "C",
+                "i": "C",
+                "d": "C",
+                "s": "I"
+              },
+              {
+                "act": "Notify users and open hypercare",
+                "c": "A",
+                "l": "I",
+                "t": "I",
+                "i": "I",
+                "d": "I",
+                "s": "R"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Authority: only the accountable role signs a step off. The cutover lead's go or no-go call overrides any other sign-off."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "escalation",
+      "name": "Runbook · escalation path",
+      "tier": "working",
+      "purpose": "A dedicated escalation path: each level with its trigger, time threshold, contact and the decisions it owns.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 149,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level",
+          "maxChars": 26
+        },
+        {
+          "slot": "trigger",
+          "maxChars": 42
+        },
+        {
+          "slot": "time threshold",
+          "maxChars": 14
+        },
+        {
+          "slot": "contact or owner",
+          "maxChars": 34
+        },
+        {
+          "slot": "decision",
+          "maxChars": 36
+        },
+        {
+          "slot": "escalation rule",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Four levels put every [[issue]] in front of a decision-maker",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 54,
+            "cols": [
+              {
+                "k": "l",
+                "label": "Level",
+                "w": 180
+              },
+              {
+                "k": "t",
+                "label": "Trigger",
+                "w": 216
+              },
+              {
+                "k": "m",
+                "label": "Time threshold",
+                "w": 108
+              },
+              {
+                "k": "o",
+                "label": "Contact or owner",
+                "w": 162
+              },
+              {
+                "k": "d",
+                "label": "What this level decides",
+                "w": 180
+              }
+            ],
+            "rows": [
+              {
+                "l": "L1 · Workstream lead",
+                "t": "A step runs late or a check fails",
+                "m": "0–15 min",
+                "o": "Workstream lead · bridge line",
+                "d": "Retry the step or apply its rollback"
+              },
+              {
+                "l": "L2 · Cutover lead",
+                "t": "L1 cannot clear it, or the window slips",
+                "m": "15–30 min",
+                "o": "Program director · ext. 4410",
+                "d": "Re-sequence steps; extend a window"
+              },
+              {
+                "l": "L3 · Controller and CIO",
+                "t": "Balances do not tie, or a gate is at risk",
+                "m": "30–60 min",
+                "o": "Controller and CIO · ext. 4420",
+                "d": "Go or no-go; invoke full rollback"
+              },
+              {
+                "l": "L4 · Steering committee",
+                "t": "Rollback invoked or go-live date at risk",
+                "m": "60+ min",
+                "o": "Executive sponsor · ext. 4430",
+                "d": "Reset the date; approve a new plan"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Rule: the clock runs from the first alert. If a level has not acknowledged within its threshold, page the next level."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "escalation-flow",
+      "name": "Runbook · escalation path as a flow",
+      "tier": "working",
+      "purpose": "The escalation path drawn as a flow: a trigger, four levels joined by connectors that carry the time thresholds, and a resolved exit under each level.",
+      "uses": [
+        "shape.block",
+        "shape.connector",
+        "text"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 110,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level and owner",
+          "maxChars": 26
+        },
+        {
+          "slot": "time threshold",
+          "maxChars": 8
+        },
+        {
+          "slot": "exit label",
+          "maxChars": 16
+        },
+        {
+          "slot": "decision at the level",
+          "maxChars": 40
+        },
+        {
+          "slot": "escalation rule",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Each missed threshold moves an [[issue]] up one level",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "style": "small",
+            "text": "Trigger"
+          },
+          {
+            "type": "block",
+            "x": 237,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L1 · Workstream lead"
+          },
+          {
+            "type": "block",
+            "x": 417,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L2 · Cutover lead"
+          },
+          {
+            "type": "block",
+            "x": 597,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L3 · Controller and CIO"
+          },
+          {
+            "type": "block",
+            "x": 777,
+            "y": 144,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "L4 · Steering committee"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                183,
+                171
+              ],
+              [
+                237,
+                171
+              ]
+            ],
+            "label": "Alert",
+            "labelPos": "above"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                363,
+                171
+              ],
+              [
+                417,
+                171
+              ]
+            ],
+            "label": "15 min",
+            "labelPos": "above"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                543,
+                171
+              ],
+              [
+                597,
+                171
+              ]
+            ],
+            "label": "30 min",
+            "labelPos": "above"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                723,
+                171
+              ],
+              [
+                777,
+                171
+              ]
+            ],
+            "label": "60 min",
+            "labelPos": "above",
+            "head": "both"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                300,
+                198
+              ],
+              [
+                300,
+                252
+              ]
+            ],
+            "label": "Resolved",
+            "style": "dashed"
+          },
+          {
+            "type": "block",
+            "x": 237,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Closed at L1"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                480,
+                198
+              ],
+              [
+                480,
+                252
+              ]
+            ],
+            "label": "Resolved",
+            "style": "dashed"
+          },
+          {
+            "type": "block",
+            "x": 417,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Closed at L2"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                660,
+                198
+              ],
+              [
+                660,
+                252
+              ]
+            ],
+            "label": "Resolved",
+            "style": "dashed"
+          },
+          {
+            "type": "block",
+            "x": 597,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Closed at L3"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                840,
+                198
+              ],
+              [
+                840,
+                252
+              ]
+            ],
+            "style": "dashed",
+            "label": "Decision"
+          },
+          {
+            "type": "block",
+            "x": 777,
+            "y": 252,
+            "w": 126,
+            "h": 36,
+            "surface": "outline",
+            "style": "small",
+            "text": "Plan reset"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 324,
+            "w": 126,
+            "text": "The first alert on the bridge line starts the clock."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 237,
+            "y": 324,
+            "w": 126,
+            "text": "Retry the step or apply its rollback."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 417,
+            "y": 324,
+            "w": 126,
+            "text": "Re-sequence steps or extend a window."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 324,
+            "w": 126,
+            "text": "Go or no-go; invoke full rollback."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 777,
+            "y": 324,
+            "w": 126,
+            "text": "Reset the date and approve a new plan."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Rule: if a level has not acknowledged within its threshold, page the next level. Steering hears the outcome of every rollback."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-list",
+      "name": "Runbook · step list with continuation",
+      "tier": "working",
+      "purpose": "Four or five runbook steps, each with two or three actions, an owner and a window, and an optional continuation indicator for steps that run to a second page.",
+      "uses": [
+        "numhead",
+        "list.bullets",
+        "text",
+        "rule"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 116,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step title",
+          "maxChars": 24
+        },
+        {
+          "slot": "action",
+          "maxChars": 30
+        },
+        {
+          "slot": "owner",
+          "maxChars": 24
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "continuation indicator (optional)",
+          "maxChars": 48
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Steps 1 to 4 lock the legacy ledger and [[move]] its balances",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 135,
+            "w": 270,
+            "n": "1",
+            "text": "Freeze legacy postings",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 132,
+            "w": 342,
+            "items": [
+              "Close open batches",
+              "Lock subledgers",
+              "Publish the freeze notice"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 135,
+            "w": 198,
+            "text": "Owner: Controller"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 153,
+            "w": 198,
+            "text": "Fri 18:00 · 30m"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 198,
+            "w": 846
+          },
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 207,
+            "w": 270,
+            "n": "2",
+            "text": "Take the final backup",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 204,
+            "w": 342,
+            "items": [
+              "Snapshot the legacy ledger",
+              "Verify checksums"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 207,
+            "w": 198,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 225,
+            "w": 198,
+            "text": "Fri 18:30 · 1h"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 270,
+            "w": 846
+          },
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 279,
+            "w": 270,
+            "n": "3",
+            "text": "Extract open balances",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 276,
+            "w": 342,
+            "items": [
+              "Run the extract jobs",
+              "Tie to the trial balance",
+              "Log variances"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 279,
+            "w": 198,
+            "text": "Owner: Data lead"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 297,
+            "w": 198,
+            "text": "Fri 19:30 · 3h"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 342,
+            "w": 846
+          },
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 351,
+            "w": 270,
+            "n": "4",
+            "text": "Load the new ledger",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 345,
+            "y": 348,
+            "w": 342,
+            "items": [
+              "Load by entity",
+              "Check counts and totals",
+              "Park rejected rows"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 351,
+            "w": 198,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 369,
+            "w": 198,
+            "text": "Fri 22:30 · 2h"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 432,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Step 4 · page 1 of 2 · Continued on next page"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-detail",
+      "name": "Runbook · single step in detail",
+      "tier": "working",
+      "purpose": "One runbook step on a whole slide: name and description, owners and window, sub-steps, rules and the criteria that clear the gate to the next step.",
+      "uses": [
+        "text",
+        "list.ol",
+        "list.bullets",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 126,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step name",
+          "maxChars": 28
+        },
+        {
+          "slot": "description",
+          "maxChars": 100
+        },
+        {
+          "slot": "owner",
+          "maxChars": 32
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "sub-step",
+          "maxChars": 36
+        },
+        {
+          "slot": "rule",
+          "maxChars": 36
+        },
+        {
+          "slot": "gate criterion",
+          "maxChars": 44
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Step 1 freezes every [[legacy posting]] before any data moves",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Step 1"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Freeze legacy postings"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 186,
+            "w": 270,
+            "text": "Stop every posting to the legacy ledger so the extract is one stable cut of the books."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 270,
+            "w": 270,
+            "text": "Owners"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 288,
+            "w": 270,
+            "items": [
+              "Controller · accountable",
+              "Finance IT · executes",
+              "Internal audit · observes"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "text": "Window"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "text": "Fri 18:00 · 30 min"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "text": "Sub-steps"
+          },
+          {
+            "type": "ol",
+            "size": "small",
+            "x": 345,
+            "y": 144,
+            "w": 270,
+            "items": [
+              "Announce the freeze on the bridge",
+              "Close and post open batches",
+              "Lock subledgers and the calendar",
+              "Run the subledger lock report",
+              "Publish the freeze notice"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "Rules"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 144,
+            "w": 270,
+            "items": [
+              "No manual journals after freeze",
+              "Exceptions need the Cutover lead",
+              "Late items are queued, not posted",
+              "Record the freeze time on the log"
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 324,
+            "w": 558,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "Gate clearance",
+            "body": [
+              {
+                "bullets": [
+                  "Lock report shows no open batches",
+                  "Controller confirms the freeze on the log",
+                  "Cutover lead releases step 2"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-detail-data",
+      "name": "Runbook · data migration step in detail",
+      "tier": "working",
+      "purpose": "A data migration step as a checklist to execute: owners and window, reconciliation checks with legacy figures and tolerances, an empty tick box and a blank for the new-ledger figure per check, sub-steps and acceptance criteria.",
+      "uses": [
+        "text",
+        "composite.table",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 114,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step name",
+          "maxChars": 28
+        },
+        {
+          "slot": "description",
+          "maxChars": 100
+        },
+        {
+          "slot": "owner",
+          "maxChars": 32
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "check",
+          "maxChars": 28
+        },
+        {
+          "slot": "value",
+          "maxChars": 10
+        },
+        {
+          "slot": "tolerance",
+          "maxChars": 10
+        },
+        {
+          "slot": "sub-step",
+          "maxChars": 32
+        },
+        {
+          "slot": "acceptance criterion",
+          "maxChars": 36
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Tick every [[reconciliation]] before step 4 loads balances",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Step 4"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Load balances to the new ledger"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 186,
+            "w": 270,
+            "text": "Load the extracted open balances by entity and prove they match the legacy books."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 270,
+            "w": 270,
+            "text": "Owners"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 288,
+            "w": 270,
+            "items": [
+              "Finance IT · executes",
+              "Data lead · reconciles",
+              "Controller · accountable"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "text": "Window"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "text": "Fri 22:30 · 2 h"
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "d",
+                "label": "Done",
+                "w": 54,
+                "type": "checkbox"
+              },
+              {
+                "k": "c",
+                "label": "Reconciliation check",
+                "w": 174
+              },
+              {
+                "k": "l",
+                "label": "Legacy",
+                "w": 90
+              },
+              {
+                "k": "t",
+                "label": "Tolerance",
+                "w": 84
+              },
+              {
+                "k": "n",
+                "label": "New ledger",
+                "w": 156
+              }
+            ],
+            "rows": [
+              {
+                "d": false,
+                "c": "Row count by entity",
+                "l": "412,806",
+                "t": "Zero",
+                "n": ""
+              },
+              {
+                "d": false,
+                "c": "Debit and credit totals",
+                "l": "$1.284bn",
+                "t": "$0",
+                "n": ""
+              },
+              {
+                "d": false,
+                "c": "Open items by entity",
+                "l": "9,418",
+                "t": "±0.1%",
+                "n": ""
+              },
+              {
+                "d": false,
+                "c": "Intercompany balances",
+                "l": "$38.2m",
+                "t": "±0.5%",
+                "n": ""
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "Sub-steps",
+            "body": [
+              {
+                "bullets": [
+                  "Load by entity, parents last",
+                  "Run the count and total checks",
+                  "Park rejected rows",
+                  "Log each variance"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "Acceptance",
+            "body": [
+              {
+                "bullets": [
+                  "Every check inside tolerance",
+                  "Variances explained and signed",
+                  "Data lead releases step 5"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-detail-gate",
+      "name": "Runbook · decision gate step in detail",
+      "tier": "working",
+      "purpose": "A decision or gate step as a checklist to execute: go criteria with evidence and approver and an empty tick box per criterion, the owners and window, and what happens on a go or a no-go.",
+      "uses": [
+        "text",
+        "composite.table",
+        "card"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 123,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step name",
+          "maxChars": 28
+        },
+        {
+          "slot": "description",
+          "maxChars": 100
+        },
+        {
+          "slot": "owner",
+          "maxChars": 32
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 28
+        },
+        {
+          "slot": "evidence",
+          "maxChars": 26
+        },
+        {
+          "slot": "approver",
+          "maxChars": 18
+        },
+        {
+          "slot": "outcome action",
+          "maxChars": 32
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Tick every criterion before step 7 opens the [[ledger]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "text": "Step 7"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 270,
+            "text": "Hold the go or no-go decision"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 186,
+            "w": 270,
+            "text": "Review the evidence for every criterion and decide whether the ledger opens to users."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 270,
+            "w": 270,
+            "text": "Owners"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 57,
+            "y": 288,
+            "w": 270,
+            "items": [
+              "Cutover lead · decides",
+              "Controller · signs balances",
+              "CIO · endorses"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "text": "Window"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "text": "Sat 03:30 · 30 min"
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "g",
+                "label": "Go",
+                "w": 54,
+                "type": "checkbox"
+              },
+              {
+                "k": "c",
+                "label": "Go criterion",
+                "w": 186
+              },
+              {
+                "k": "e",
+                "label": "Evidence",
+                "w": 168
+              },
+              {
+                "k": "a",
+                "label": "Approver",
+                "w": 150
+              }
+            ],
+            "rows": [
+              {
+                "c": "Balances tie to legacy",
+                "e": "Reconciliation report",
+                "a": "Controller",
+                "g": false
+              },
+              {
+                "c": "Interfaces pass end to end",
+                "e": "Interface test pack",
+                "a": "Integration lead",
+                "g": false
+              },
+              {
+                "c": "Rollback fits the window",
+                "e": "Timed rollback record",
+                "a": "Technical lead",
+                "g": false
+              },
+              {
+                "c": "Support bridge staffed",
+                "e": "Signed rota",
+                "a": "Support lead",
+                "g": false
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "If go",
+            "body": [
+              {
+                "bullets": [
+                  "Controller opens the ledger",
+                  "Support lead sends the notice",
+                  "Log the decision and time"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 324,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "bodySize": "small",
+            "label": "If no-go",
+            "body": [
+              {
+                "bullets": [
+                  "Cutover lead invokes rollback",
+                  "Escalate to level 3",
+                  "Reset the date at steering"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "escalation-split",
+      "name": "Runbook · escalation path, tall ladder",
+      "tier": "working",
+      "purpose": "Split-frame escalation path: four stacked level cards in the tall column, each with its time threshold, trigger and the decision it owns.",
+      "uses": [
+        "card",
+        "text",
+        "shape.block"
+      ],
+      "legacy": "split variant of runbook/escalation",
+      "budget": {
+        "words": 144,
+        "marks": 3
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "short-column note",
+          "maxChars": 110
+        },
+        {
+          "slot": "level",
+          "maxChars": 4
+        },
+        {
+          "slot": "time threshold",
+          "maxChars": 14
+        },
+        {
+          "slot": "level owner",
+          "maxChars": 24
+        },
+        {
+          "slot": "trigger",
+          "maxChars": 42
+        },
+        {
+          "slot": "decision",
+          "maxChars": 36
+        },
+        {
+          "slot": "escalation rule",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Four levels put every issue in front of a decision-maker",
+        "body": [
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Each level owns one class of decision. If a level has not acknowledged within its threshold, page the next level."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "The clock runs from the first alert, not from the escalation."
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L4 · Steering committee · 60+ min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: rollback invoked or go-live date at risk",
+                  "Decides: reset the date; approve a new plan"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 144,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L3 · Controller and CIO · 30–60 min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: balances do not tie, or a gate is at risk",
+                  "Decides: go or no-go; invoke full rollback"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 252,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L2 · Cutover lead · 15–30 min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: L1 cannot clear it, or the window slips",
+                  "Decides: re-sequence steps; extend a window"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 360,
+            "w": 558,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "bodySize": "small",
+            "label": "L1 · Workstream lead · 0–15 min",
+            "body": [
+              {
+                "bullets": [
+                  "Trigger: a step runs late or a check fails",
+                  "Decides: retry the step or apply its rollback"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "mark",
+            "mark": "arrow-right-angle",
+            "x": 369,
+            "y": 105,
+            "w": 36,
+            "rotate": -90
+          },
+          {
+            "type": "mark",
+            "mark": "arrow-right-angle",
+            "x": 369,
+            "y": 213,
+            "w": 36,
+            "rotate": -90
+          },
+          {
+            "type": "mark",
+            "mark": "arrow-right-angle",
+            "x": 369,
+            "y": 321,
+            "w": 36,
+            "rotate": -90
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 3
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-list-split",
+      "name": "Runbook · step list, tall column",
+      "tier": "working",
+      "purpose": "Split-frame step list: four steps down the tall column, each with actions, owner and window, and an optional continuation indicator in the short column.",
+      "uses": [
+        "numhead",
+        "list.bullets",
+        "text",
+        "shape.block"
+      ],
+      "legacy": "split variant of runbook/step-list",
+      "budget": {
+        "words": 138,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "short-column note",
+          "maxChars": 110
+        },
+        {
+          "slot": "step title",
+          "maxChars": 24
+        },
+        {
+          "slot": "action",
+          "maxChars": 30
+        },
+        {
+          "slot": "owner",
+          "maxChars": 24
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "continuation indicator (optional)",
+          "maxChars": 48
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Steps 1 to 4 lock the legacy ledger and [[move]] its balances",
+        "emphasis": "underscore",
+        "body": [
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Each step has an owner and a window. Work to the actions in order and log each one as it completes."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Step 4 · page 1 of 2 · Continued on next page"
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 45,
+            "w": 270,
+            "n": "1",
+            "text": "Freeze legacy postings",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 81,
+            "w": 270,
+            "text": "Owner: Controller"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 99,
+            "w": 270,
+            "text": "Fri 18:00 · 30m"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 42,
+            "w": 270,
+            "items": [
+              "Close open batches",
+              "Lock subledgers",
+              "Publish the freeze notice"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 144,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 153,
+            "w": 270,
+            "n": "2",
+            "text": "Take the final backup",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 189,
+            "w": 270,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 207,
+            "w": 270,
+            "text": "Fri 18:30 · 1h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 150,
+            "w": 270,
+            "items": [
+              "Snapshot the legacy ledger",
+              "Verify checksums"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 252,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 261,
+            "w": 270,
+            "n": "3",
+            "text": "Extract open balances",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 297,
+            "w": 270,
+            "text": "Owner: Data lead"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 315,
+            "w": 270,
+            "text": "Fri 19:30 · 3h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 258,
+            "w": 270,
+            "items": [
+              "Run the extract jobs",
+              "Tie to the trial balance",
+              "Log variances"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 360,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 369,
+            "w": 270,
+            "n": "4",
+            "text": "Load the new ledger",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 405,
+            "w": 270,
+            "text": "Owner: Finance IT"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 423,
+            "w": 270,
+            "text": "Fri 22:30 · 2h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 366,
+            "w": 270,
+            "items": [
+              "Load by entity",
+              "Check counts and totals",
+              "Park rejected rows"
+            ]
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 3
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "runbook",
+      "variant": "step-list-left",
+      "name": "Runbook · step list · left panel",
+      "tier": "working",
+      "purpose": "The step list with the runbook purpose, owner and window on a left panel; four steps, each with actions, owner and window, fill the main area.",
+      "uses": [
+        "numhead",
+        "list.bullets",
+        "text",
+        "rule"
+      ],
+      "legacy": "left panel variant of runbook/step-list",
+      "budget": {
+        "words": 142,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "step title",
+          "maxChars": 24
+        },
+        {
+          "slot": "action",
+          "maxChars": 28
+        },
+        {
+          "slot": "owner",
+          "maxChars": 24
+        },
+        {
+          "slot": "window",
+          "maxChars": 22
+        },
+        {
+          "slot": "panel content",
+          "note": "purpose, owner, window and continuation on the 273 pt left panel, inverse inks"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "railSurface": "inverse",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Steps 1 to 4 lock the legacy ledger and [[move]] its balances",
+        "emphasis": "underscore",
+        "titleLines": 2,
+        "body": [
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 162,
+            "w": 270,
+            "n": "1",
+            "text": "Freeze legacy postings",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 198,
+            "w": 270,
+            "text": "Controller · Fri 18:00 · 30m"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 159,
+            "w": 270,
+            "items": [
+              "Close open batches",
+              "Lock subledgers",
+              "Publish the freeze notice"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 225,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 234,
+            "w": 270,
+            "n": "2",
+            "text": "Take the final backup",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 270,
+            "w": 270,
+            "text": "Finance IT · Fri 18:30 · 1h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 231,
+            "w": 270,
+            "items": [
+              "Snapshot the legacy ledger",
+              "Verify checksums"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 297,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 306,
+            "w": 270,
+            "n": "3",
+            "text": "Extract open balances",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 342,
+            "w": 270,
+            "text": "Data lead · Fri 19:30 · 3h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 303,
+            "w": 270,
+            "items": [
+              "Run the extract jobs",
+              "Tie to the trial balance",
+              "Log variances"
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 369,
+            "w": 558
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 378,
+            "w": 270,
+            "n": "4",
+            "text": "Load the new ledger",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 414,
+            "w": 270,
+            "text": "Finance IT · Fri 22:30 · 2h"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 375,
+            "w": 270,
+            "items": [
+              "Load by entity",
+              "Check counts and totals",
+              "Park rejected rows"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "Runbook purpose",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 144,
+            "w": 198,
+            "text": "Lock the legacy ledger and move its balances to the new platform in one window.",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 252,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 270,
+            "w": 198,
+            "text": "Runbook owner",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 288,
+            "w": 198,
+            "text": "Cutover lead",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 324,
+            "w": 198,
+            "text": "Window: Fri 18:00 to Sat 02:00",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 378,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 396,
+            "w": 198,
+            "text": "Step 4 · page 1 of 2 · continued on next page",
+            "on": "inverse"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "rollback-decision",
+      "name": "Runbook · rollback decision path",
+      "tier": "working",
+      "purpose": "The rollback decision drawn as a flow: trigger, assess, decide, then roll back or fix forward, with the time thresholds on the path.",
+      "uses": [
+        "shape.block",
+        "shape.connector",
+        "text"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 96,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage",
+          "maxChars": 16
+        },
+        {
+          "slot": "time threshold",
+          "maxChars": 14
+        },
+        {
+          "slot": "stage guidance",
+          "maxChars": 64
+        },
+        {
+          "slot": "branch condition",
+          "maxChars": 32
+        },
+        {
+          "slot": "point of no return",
+          "maxChars": 110
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "A rollback is a [[decision]] with a clock on it",
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 180,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "style": "small",
+            "text": "Trigger"
+          },
+          {
+            "type": "block",
+            "x": 237,
+            "y": 180,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Assess"
+          },
+          {
+            "type": "block",
+            "x": 417,
+            "y": 180,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Decide"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                183,
+                207
+              ],
+              [
+                237,
+                207
+              ]
+            ],
+            "label": "Alert",
+            "labelPos": "above"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                363,
+                207
+              ],
+              [
+                417,
+                207
+              ]
+            ],
+            "label": "15 min",
+            "labelPos": "above"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 126,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "style": "small",
+            "text": "Roll back"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 234,
+            "w": 126,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Fix forward"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                543,
+                207
+              ],
+              [
+                633,
+                153
+              ]
+            ],
+            "elbow": "h"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                543,
+                207
+              ],
+              [
+                633,
+                261
+              ]
+            ],
+            "elbow": "h"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 633,
+            "y": 183,
+            "w": 126,
+            "text": "Fix cannot land in 30 min."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 633,
+            "y": 291,
+            "w": 126,
+            "text": "Fix lands inside the window."
+          },
+          {
+            "type": "block",
+            "x": 795,
+            "y": 126,
+            "w": 108,
+            "h": 54,
+            "surface": "outline",
+            "style": "small",
+            "text": "Legacy reopened"
+          },
+          {
+            "type": "block",
+            "x": 795,
+            "y": 234,
+            "w": 108,
+            "h": 54,
+            "surface": "outline",
+            "style": "small",
+            "text": "Retry, then verify"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                759,
+                153
+              ],
+              [
+                795,
+                153
+              ]
+            ]
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                759,
+                261
+              ],
+              [
+                795,
+                261
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 270,
+            "w": 126,
+            "text": "0 to 15 min"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 288,
+            "w": 126,
+            "text": "Workstream lead confirms the failing check and its blast radius."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 237,
+            "y": 270,
+            "w": 126,
+            "text": "15 to 30 min"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 237,
+            "y": 288,
+            "w": 126,
+            "text": "Cutover lead and Technical lead size the fix and its time."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 417,
+            "y": 270,
+            "w": 126,
+            "text": "By 30 min"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 417,
+            "y": 288,
+            "w": 126,
+            "text": "Controller decides. A late decision defaults to roll back."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 846,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Point of no return: 04:30 Saturday. After it, the rollback cannot finish before users arrive."
+          }
+        ],
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "rollback-steps-nav",
+      "name": "Runbook · rollback step table · nav rail",
+      "tier": "working",
+      "purpose": "The rollback as a numbered step table with owner, time budget, verification and a tick-off box for the walk-through; nav rail for a long runbook deck.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "nav variant of runbook/step-table",
+      "budget": {
+        "words": 140,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "action",
+          "maxChars": 44
+        },
+        {
+          "slot": "owner",
+          "maxChars": 16
+        },
+        {
+          "slot": "time budget",
+          "maxChars": 8
+        },
+        {
+          "slot": "verification",
+          "maxChars": 36
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Eight steps return the ledger to legacy in [[three hours]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "n",
+                "label": "Step",
+                "w": 54
+              },
+              {
+                "k": "a",
+                "label": "Rollback action",
+                "w": 252
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 120
+              },
+              {
+                "k": "t",
+                "label": "Budget",
+                "w": 84
+              },
+              {
+                "k": "v",
+                "label": "Verification check",
+                "w": 228
+              },
+              {
+                "k": "d",
+                "label": "Done",
+                "w": 108,
+                "type": "checkbox"
+              }
+            ],
+            "rows": [
+              {
+                "n": "1",
+                "a": "Call the rollback on the bridge",
+                "o": "Cutover lead",
+                "t": "5 min",
+                "v": "Call logged with time and reason",
+                "d": true
+              },
+              {
+                "n": "2",
+                "a": "Stop postings in the new ledger",
+                "o": "Controller",
+                "t": "10 min",
+                "v": "Subledger lock report is clean",
+                "d": true
+              },
+              {
+                "n": "3",
+                "a": "Disable the new interfaces",
+                "o": "Integration lead",
+                "t": "15 min",
+                "v": "Queues show zero in flight",
+                "d": false
+              },
+              {
+                "n": "4",
+                "a": "Repoint feeds to the legacy endpoints",
+                "o": "Integration lead",
+                "t": "20 min",
+                "v": "Test postings reach legacy",
+                "d": false
+              },
+              {
+                "n": "5",
+                "a": "Restore the legacy snapshot",
+                "o": "Finance IT",
+                "t": "60 min",
+                "v": "Checksums match the backup",
+                "d": false
+              },
+              {
+                "n": "6",
+                "a": "Tie legacy to the pre-cutover trial balance",
+                "o": "Data lead",
+                "t": "45 min",
+                "v": "Zero variance by entity",
+                "d": false
+              },
+              {
+                "n": "7",
+                "a": "Reopen the legacy ledger to users",
+                "o": "Controller",
+                "t": "15 min",
+                "v": "First posting accepted",
+                "d": false
+              },
+              {
+                "n": "8",
+                "a": "Notify users and Steering",
+                "o": "Comms lead",
+                "t": "10 min",
+                "v": "Notice sent and acknowledged",
+                "d": false
+              }
+            ]
+          }
+        ],
+        "nav": {
+          "items": [
+            "Prepare",
+            "Cutover",
+            "Rollback",
+            "Hypercare"
+          ],
+          "active": 2
+        },
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "war-room-contacts-split",
+      "name": "Runbook · war-room contact sheet · tall table",
+      "tier": "working",
+      "purpose": "The war-room contact sheet: role, name, phone and shift start in a tall table, with the shift pattern and the bridge line in the short column.",
+      "uses": [
+        "composite.table",
+        "text",
+        "shape.block"
+      ],
+      "legacy": "split variant of runbook/roles",
+      "budget": {
+        "words": 161,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "shift note",
+          "maxChars": 110
+        },
+        {
+          "slot": "role",
+          "maxChars": 18
+        },
+        {
+          "slot": "name",
+          "maxChars": 20
+        },
+        {
+          "slot": "phone",
+          "maxChars": 14
+        },
+        {
+          "slot": "shift",
+          "maxChars": 16
+        },
+        {
+          "slot": "bridge line",
+          "maxChars": 44
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "The war room runs on [[named]] roles and one bridge",
+        "body": [
+          {
+            "type": "table",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 42,
+            "cols": [
+              {
+                "k": "r",
+                "label": "Role",
+                "w": 144
+              },
+              {
+                "k": "n",
+                "label": "Name",
+                "w": 144
+              },
+              {
+                "k": "p",
+                "label": "Phone",
+                "w": 144
+              },
+              {
+                "k": "s",
+                "label": "Shift starts",
+                "w": 126
+              }
+            ],
+            "rows": [
+              {
+                "r": "Cutover lead",
+                "n": "Maya Okafor",
+                "p": "+1 555 0101",
+                "s": "A · Fri 18:00"
+              },
+              {
+                "r": "Technical lead",
+                "n": "Daniel Reyes",
+                "p": "+1 555 0102",
+                "s": "A · Fri 18:00"
+              },
+              {
+                "r": "Controller",
+                "n": "Priya Raman",
+                "p": "+1 555 0103",
+                "s": "A · Fri 18:00"
+              },
+              {
+                "r": "Data lead",
+                "n": "Tomas Lindqvist",
+                "p": "+1 555 0104",
+                "s": "A · Fri 18:00"
+              },
+              {
+                "r": "Integration lead",
+                "n": "Hannah Cole",
+                "p": "+1 555 0105",
+                "s": "B · Sat 06:00"
+              },
+              {
+                "r": "Test lead",
+                "n": "Samir Haddad",
+                "p": "+1 555 0106",
+                "s": "B · Sat 06:00"
+              },
+              {
+                "r": "Support lead",
+                "n": "Lena Fischer",
+                "p": "+1 555 0107",
+                "s": "B · Sat 06:00"
+              },
+              {
+                "r": "Comms lead",
+                "n": "Owen Parker",
+                "p": "+1 555 0108",
+                "s": "B · Sat 06:00"
+              },
+              {
+                "r": "Exec sponsor",
+                "n": "Grace Whitfield",
+                "p": "+1 555 0109",
+                "s": "On call"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Shifts"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 198,
+            "w": 270,
+            "text": "Shift A runs Friday 18:00 to Saturday 06:00. Shift B takes over on the bridge at 06:00 and runs to 18:00."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 306,
+            "w": 270,
+            "text": "Handover"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 324,
+            "w": 270,
+            "text": "Outgoing leads brief their successor on the bridge and update the log before they leave."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Bridge: +1 555 0100 · access code 000000",
+            "align": "left"
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 3,
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "war-room-rhythm-right",
+      "name": "Runbook · war-room operating rhythm · right panel",
+      "tier": "working",
+      "purpose": "The war-room operating rhythm: when each check-in happens, its forum, lead and purpose, with the cadence and ground rules on a right panel.",
+      "uses": [
+        "composite.table",
+        "shape.block",
+        "text",
+        "rule"
+      ],
+      "legacy": "right panel variant of runbook/roles",
+      "budget": {
+        "words": 138,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "when",
+          "maxChars": 16
+        },
+        {
+          "slot": "forum",
+          "maxChars": 22
+        },
+        {
+          "slot": "lead",
+          "maxChars": 16
+        },
+        {
+          "slot": "purpose",
+          "maxChars": 36
+        },
+        {
+          "slot": "panel content",
+          "note": "cadence and ground rules on the 273 pt panel, inverse inks"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "The bridge checks in every [[30 minutes]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "w",
+                "label": "When",
+                "w": 108
+              },
+              {
+                "k": "f",
+                "label": "Forum",
+                "w": 132
+              },
+              {
+                "k": "l",
+                "label": "Lead",
+                "w": 108
+              },
+              {
+                "k": "p",
+                "label": "Purpose",
+                "w": 210
+              }
+            ],
+            "rows": [
+              {
+                "w": "Every 30 min",
+                "f": "Workstream roll call",
+                "l": "Cutover lead",
+                "p": "Status, blockers and next step"
+              },
+              {
+                "w": "Every 2 hours",
+                "f": "Step checkpoint",
+                "l": "Technical lead",
+                "p": "Verify and sign the step on the log"
+              },
+              {
+                "w": "At each gate",
+                "f": "Go or no-go call",
+                "l": "Cutover lead",
+                "p": "Decide with the Controller"
+              },
+              {
+                "w": "06:00 / 18:00",
+                "f": "Shift handover",
+                "l": "Shift leads",
+                "p": "Hand over open issues"
+              },
+              {
+                "w": "Every 4 hours",
+                "f": "Steering update",
+                "l": "Exec sponsor",
+                "p": "Send the one-page status"
+              },
+              {
+                "w": "On demand",
+                "f": "Swarm room",
+                "l": "Issue owner",
+                "p": "Fix one blocker; report back"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 558,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Every check-in ends with one line on the log: who owns the next action and by when.",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Check-in cadence",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "display",
+            "x": 705,
+            "y": 144,
+            "w": 198,
+            "text": "30 min",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 198,
+            "w": 198,
+            "text": "between workstream roll calls, all night",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 705,
+            "y": 252,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 270,
+            "w": 198,
+            "text": "Ground rules",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 705,
+            "y": 288,
+            "w": 198,
+            "text": "One voice at a time. Issues go on the log before they go to a side call. Decisions are read back.",
+            "on": "inverse"
+          }
+        ],
+        "railSurface": "inverse",
+        "emphasis": "highlight"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "hypercare-checklist",
+      "name": "Runbook · hypercare daily checklist",
+      "tier": "working",
+      "purpose": "The daily hypercare checklist: eight checks with owner, deadline, where it is recorded and a tick-off box.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 97,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "check",
+          "maxChars": 40
+        },
+        {
+          "slot": "owner",
+          "maxChars": 18
+        },
+        {
+          "slot": "time",
+          "maxChars": 6
+        },
+        {
+          "slot": "record",
+          "maxChars": 20
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Hypercare",
+        "title": "Hypercare starts every day with the same [[eight checks]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "c",
+                "label": "Daily hypercare check",
+                "w": 306
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 150
+              },
+              {
+                "k": "t",
+                "label": "By",
+                "w": 84
+              },
+              {
+                "k": "e",
+                "label": "Recorded in",
+                "w": 198
+              },
+              {
+                "k": "d",
+                "label": "Done",
+                "w": 108,
+                "type": "checkbox"
+              }
+            ],
+            "rows": [
+              {
+                "c": "Review overnight batch jobs",
+                "o": "Data lead",
+                "t": "08:00",
+                "e": "Job monitor",
+                "d": true
+              },
+              {
+                "c": "Check posting and period errors",
+                "o": "Controller",
+                "t": "08:30",
+                "e": "Error log",
+                "d": true
+              },
+              {
+                "c": "Confirm interface queues are clear",
+                "o": "Integration lead",
+                "t": "09:00",
+                "e": "Queue dashboard",
+                "d": true
+              },
+              {
+                "c": "Triage new tickets by severity",
+                "o": "Support lead",
+                "t": "09:30",
+                "e": "Ticket board",
+                "d": false
+              },
+              {
+                "c": "Review the top five user questions",
+                "o": "Support lead",
+                "t": "10:00",
+                "e": "Support notes",
+                "d": false
+              },
+              {
+                "c": "Compare performance with baseline",
+                "o": "Technical lead",
+                "t": "11:00",
+                "e": "Monitoring pack",
+                "d": false
+              },
+              {
+                "c": "Post the daily status to Steering",
+                "o": "Cutover lead",
+                "t": "16:00",
+                "e": "Status page",
+                "d": false
+              },
+              {
+                "c": "Log lessons for the retrospective",
+                "o": "Test lead",
+                "t": "17:00",
+                "e": "Lessons log",
+                "d": false
+              }
+            ]
+          }
+        ],
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "hypercare-dashboard",
+      "name": "Runbook · hypercare dashboard",
+      "tier": "working",
+      "purpose": "A hypercare dashboard: four headline metrics with their week-on-week change, then open tickets and status by workstream.",
+      "uses": [
+        "data.metric",
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 78,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "metric value",
+          "maxChars": 8
+        },
+        {
+          "slot": "metric label",
+          "maxChars": 28
+        },
+        {
+          "slot": "change",
+          "maxChars": 20
+        },
+        {
+          "slot": "workstream",
+          "maxChars": 24
+        },
+        {
+          "slot": "tickets",
+          "maxChars": 4
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Hypercare",
+        "title": "Hypercare day 9: tickets are [[falling]] in every stream",
+        "body": [
+          {
+            "type": "metric",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "value": "42",
+            "label": "open tickets",
+            "change": {
+              "dir": "down",
+              "text": "18 since Monday"
+            }
+          },
+          {
+            "type": "metric",
+            "x": 273,
+            "y": 126,
+            "w": 198,
+            "value": "3",
+            "label": "Sev 1 and 2 open",
+            "change": {
+              "dir": "down",
+              "text": "2 since Monday"
+            }
+          },
+          {
+            "type": "metric",
+            "x": 489,
+            "y": 126,
+            "w": 198,
+            "value": "93%",
+            "label": "auto-match rate",
+            "change": {
+              "dir": "up",
+              "text": "3 points"
+            }
+          },
+          {
+            "type": "metric",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "value": "1,180",
+            "label": "active users of 1,260",
+            "change": {
+              "dir": "up",
+              "text": "64 since Monday"
+            }
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 252,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "a",
+                "label": "Workstream",
+                "w": 252
+              },
+              {
+                "k": "o",
+                "label": "Open tickets",
+                "w": 126,
+                "type": "num"
+              },
+              {
+                "k": "s",
+                "label": "Sev 1 and 2",
+                "w": 126,
+                "type": "num"
+              },
+              {
+                "k": "d",
+                "label": "Change in week",
+                "w": 144,
+                "type": "num"
+              },
+              {
+                "k": "t",
+                "label": "Status",
+                "w": 198,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "a": "Record to report",
+                "o": 14,
+                "s": 1,
+                "d": "−6",
+                "t": "on"
+              },
+              {
+                "a": "Procure to pay",
+                "o": 11,
+                "s": 1,
+                "d": "−4",
+                "t": "on"
+              },
+              {
+                "a": "Order to cash",
+                "o": 9,
+                "s": 1,
+                "d": "−5",
+                "t": "risk"
+              },
+              {
+                "a": "Treasury and cash",
+                "o": 5,
+                "s": 0,
+                "d": "−2",
+                "t": "on"
+              },
+              {
+                "a": "Reporting and close",
+                "o": 3,
+                "s": 0,
+                "d": "−1",
+                "t": "risk"
+              }
+            ]
+          }
+        ],
+        "emphasis": "highlight"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "hypercare-exit-left",
+      "name": "Runbook · hypercare exit criteria · left panel",
+      "tier": "working",
+      "purpose": "The hypercare exit criteria with target, current value and status, and the day count and exit rule on a left panel.",
+      "uses": [
+        "composite.table",
+        "text",
+        "rule"
+      ],
+      "legacy": "left panel variant of runbook/go-no-go",
+      "budget": {
+        "words": 102,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 40
+        },
+        {
+          "slot": "target",
+          "maxChars": 14
+        },
+        {
+          "slot": "current",
+          "maxChars": 12
+        },
+        {
+          "slot": "panel content",
+          "note": "day count and exit rule on the 273 pt left panel, inverse inks"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "eyebrow": "Hypercare",
+        "title": "Hypercare exits when [[seven]] criteria hold for two days",
+        "body": [
+          {
+            "type": "table",
+            "x": 345,
+            "y": 162,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "c",
+                "label": "Exit criterion",
+                "w": 204
+              },
+              {
+                "k": "t",
+                "label": "Target",
+                "w": 108
+              },
+              {
+                "k": "u",
+                "label": "Current",
+                "w": 90
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 156,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "c": "No Sev 1 or 2 defect open",
+                "t": "5 days",
+                "u": "5 days",
+                "s": "on"
+              },
+              {
+                "c": "Auto-match rate",
+                "t": "92% or more",
+                "u": "93%",
+                "s": "on"
+              },
+              {
+                "c": "Open tickets",
+                "t": "Under 25",
+                "u": "42",
+                "s": "risk"
+              },
+              {
+                "c": "Month-end close completed",
+                "t": "1 close",
+                "u": "In progress",
+                "s": "risk"
+              },
+              {
+                "c": "Ticket backlog age",
+                "t": "Under 3 days",
+                "u": "2.4 days",
+                "s": "on"
+              },
+              {
+                "c": "User satisfaction pulse",
+                "t": "80% or more",
+                "u": "76%",
+                "s": "risk"
+              },
+              {
+                "c": "Run-team handover signed",
+                "t": "Signed",
+                "u": "Pending",
+                "s": "notstarted"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "Hypercare exit",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 198,
+            "text": "Day 9",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 198,
+            "text": "of 14 in hypercare. 3 of 7 criteria are met.",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 252,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 270,
+            "w": 198,
+            "text": "Exit rule",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 288,
+            "w": 198,
+            "text": "Hypercare ends when every criterion is green on two consecutive days. Steering signs the exit.",
+            "on": "inverse"
+          }
+        ],
+        "railSurface": "inverse",
+        "emphasis": "underscore",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "smoke-test",
+      "name": "Runbook · smoke test checklist by system",
+      "tier": "working",
+      "purpose": "A post-cutover smoke test: one fast test per system with an owner, run time, pass tick and status.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 105,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "system",
+          "maxChars": 18
+        },
+        {
+          "slot": "test",
+          "maxChars": 34
+        },
+        {
+          "slot": "owner",
+          "maxChars": 18
+        },
+        {
+          "slot": "run time",
+          "maxChars": 12
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Six of eight smoke tests [[passed]] on the first run",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "s",
+                "label": "System",
+                "w": 144
+              },
+              {
+                "k": "t",
+                "label": "Smoke test",
+                "w": 252
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 132
+              },
+              {
+                "k": "w",
+                "label": "Run at",
+                "w": 102
+              },
+              {
+                "k": "p",
+                "label": "Pass",
+                "w": 72,
+                "type": "check"
+              },
+              {
+                "k": "r",
+                "label": "Status",
+                "w": 144,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "s": "General ledger",
+                "t": "Post and reverse a journal",
+                "o": "Controller",
+                "w": "Fri 05:00",
+                "p": true,
+                "r": "pass"
+              },
+              {
+                "s": "Payables",
+                "t": "Enter and approve an invoice",
+                "o": "AP lead",
+                "w": "Fri 05:15",
+                "p": true,
+                "r": "pass"
+              },
+              {
+                "s": "Receivables",
+                "t": "Raise an invoice; apply cash",
+                "o": "AR lead",
+                "w": "Fri 05:30",
+                "p": true,
+                "r": "pass"
+              },
+              {
+                "s": "Treasury",
+                "t": "Import one bank statement",
+                "o": "Treasury",
+                "w": "Fri 05:45",
+                "p": false,
+                "r": "progress"
+              },
+              {
+                "s": "Reporting",
+                "t": "Run the trial balance",
+                "o": "Reporting lead",
+                "w": "Fri 06:00",
+                "p": true,
+                "r": "pass"
+              },
+              {
+                "s": "Single sign-on",
+                "t": "Log in as each of five roles",
+                "o": "Security lead",
+                "w": "Fri 06:15",
+                "p": true,
+                "r": "pass"
+              },
+              {
+                "s": "Integrations",
+                "t": "Payroll journal arrives",
+                "o": "Integration lead",
+                "w": "Fri 06:30",
+                "p": false,
+                "r": "fail"
+              },
+              {
+                "s": "Data warehouse",
+                "t": "Nightly refresh completes",
+                "o": "Data lead",
+                "w": "Fri 06:45",
+                "p": true,
+                "r": "pass"
+              }
+            ]
+          }
+        ],
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "validation-plan",
+      "name": "Runbook · data validation plan",
+      "tier": "working",
+      "purpose": "The validation plan: eight reconciliation checks, each with an owner, a method, a pass threshold and a result status.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 120,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "check",
+          "maxChars": 28
+        },
+        {
+          "slot": "owner",
+          "maxChars": 16
+        },
+        {
+          "slot": "method",
+          "maxChars": 40
+        },
+        {
+          "slot": "threshold",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Data validation",
+        "title": "Five of eight reconciliations already [[tie]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "c",
+                "label": "Reconciliation check",
+                "w": 210
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 114
+              },
+              {
+                "k": "m",
+                "label": "Method",
+                "w": 228
+              },
+              {
+                "k": "t",
+                "label": "Threshold",
+                "w": 162
+              },
+              {
+                "k": "s",
+                "label": "Result",
+                "w": 132,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "c": "GL trial balance to legacy",
+                "o": "Controller",
+                "m": "Compare totals by entity and account",
+                "t": "Zero variance",
+                "s": "pass"
+              },
+              {
+                "c": "Open payables invoices",
+                "o": "AP lead",
+                "m": "Count and sum by vendor",
+                "t": "Under $1 per vendor",
+                "s": "pass"
+              },
+              {
+                "c": "Open receivables invoices",
+                "o": "AR lead",
+                "m": "Tie aging buckets to legacy",
+                "t": "Under $1 per customer",
+                "s": "progress"
+              },
+              {
+                "c": "Bank balances",
+                "o": "Treasury",
+                "m": "Statement balance to ledger",
+                "t": "Zero variance",
+                "s": "pass"
+              },
+              {
+                "c": "Vendor master records",
+                "o": "Data lead",
+                "m": "Record count plus 50-record sample",
+                "t": "100% match",
+                "s": "pass"
+              },
+              {
+                "c": "Customer master records",
+                "o": "Data lead",
+                "m": "Record count plus 50-record sample",
+                "t": "100% match",
+                "s": "pass"
+              },
+              {
+                "c": "Intercompany balances",
+                "o": "Shared services",
+                "m": "Pair offsets by entity",
+                "t": "Nets to zero",
+                "s": "progress"
+              },
+              {
+                "c": "Journal history",
+                "o": "Data lead",
+                "m": "Row counts and totals by period",
+                "t": "100% match",
+                "s": "fail"
+              }
+            ]
+          }
+        ],
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "uat-scripts",
+      "name": "Runbook · UAT scripts overview",
+      "tier": "working",
+      "purpose": "A UAT scripts overview: script id, scenario, steps summary, expected result and status for eight business scenarios.",
+      "uses": [
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 131,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "scenario",
+          "maxChars": 26
+        },
+        {
+          "slot": "steps summary",
+          "maxChars": 38
+        },
+        {
+          "slot": "expected result",
+          "maxChars": 34
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "User acceptance testing",
+        "title": "Eight UAT scripts cover the finance [[month-end]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "i",
+                "label": "Script",
+                "w": 72
+              },
+              {
+                "k": "s",
+                "label": "Scenario",
+                "w": 168
+              },
+              {
+                "k": "t",
+                "label": "Steps summary",
+                "w": 240
+              },
+              {
+                "k": "e",
+                "label": "Expected result",
+                "w": 228
+              },
+              {
+                "k": "st",
+                "label": "Status",
+                "w": 138,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "i": "UAT-01",
+                "s": "Post a manual journal",
+                "t": "Create, route, approve and post",
+                "e": "Posts to the correct period",
+                "st": "pass"
+              },
+              {
+                "i": "UAT-02",
+                "s": "Pay a vendor invoice",
+                "t": "Enter, match, approve, run payment",
+                "e": "Payment file made; ledger updated",
+                "st": "pass"
+              },
+              {
+                "i": "UAT-03",
+                "s": "Apply customer cash",
+                "t": "Import remittance; clear exceptions",
+                "e": "Cash applied; aging updated",
+                "st": "progress"
+              },
+              {
+                "i": "UAT-04",
+                "s": "Close a period",
+                "t": "Accruals, reconcile, lock period",
+                "e": "Period locked; no open items",
+                "st": "pass"
+              },
+              {
+                "i": "UAT-05",
+                "s": "Intercompany transfer",
+                "t": "Raise, confirm and eliminate",
+                "e": "Both entities match",
+                "st": "progress"
+              },
+              {
+                "i": "UAT-06",
+                "s": "Month-end report pack",
+                "t": "Run the pack for all entities",
+                "e": "Totals tie to the ledger",
+                "st": "fail"
+              },
+              {
+                "i": "UAT-07",
+                "s": "Role-based access",
+                "t": "Log in as each of five roles",
+                "e": "Access matches the matrix",
+                "st": "pass"
+              },
+              {
+                "i": "UAT-08",
+                "s": "Add a fixed asset",
+                "t": "Capitalize, depreciate, dispose",
+                "e": "Schedule and ledger agree",
+                "st": "fail"
+              }
+            ]
+          }
+        ],
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "uat-progress",
+      "name": "Runbook · UAT progress by area",
+      "tier": "working",
+      "purpose": "UAT progress: four headline numbers, then scripts, executed and passed gauges, open defects and status by area.",
+      "uses": [
+        "data.metric",
+        "composite.table"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 54,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "metric value",
+          "maxChars": 8
+        },
+        {
+          "slot": "metric label",
+          "maxChars": 28
+        },
+        {
+          "slot": "area",
+          "maxChars": 24
+        },
+        {
+          "slot": "scripts",
+          "maxChars": 4
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "User acceptance testing",
+        "title": "UAT is 73% executed; [[reporting]] and treasury lag",
+        "body": [
+          {
+            "type": "metric",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "value": "180",
+            "label": "scripts in scope"
+          },
+          {
+            "type": "metric",
+            "x": 273,
+            "y": 126,
+            "w": 198,
+            "value": "73%",
+            "label": "executed to date"
+          },
+          {
+            "type": "metric",
+            "x": 489,
+            "y": 126,
+            "w": 198,
+            "value": "66%",
+            "label": "passed first time"
+          },
+          {
+            "type": "metric",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "value": "16",
+            "label": "open defects"
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 252,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 36,
+            "cols": [
+              {
+                "k": "a",
+                "label": "Area",
+                "w": 216
+              },
+              {
+                "k": "n",
+                "label": "Scripts",
+                "w": 96,
+                "type": "num"
+              },
+              {
+                "k": "e",
+                "label": "Executed",
+                "w": 138,
+                "type": "heat"
+              },
+              {
+                "k": "p",
+                "label": "Passed",
+                "w": 138,
+                "type": "heat"
+              },
+              {
+                "k": "d",
+                "label": "Open defects",
+                "w": 120,
+                "type": "num"
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 138,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "a": "General ledger",
+                "n": 46,
+                "e": {
+                  "value": 4,
+                  "text": "95%"
+                },
+                "p": {
+                  "value": 4,
+                  "text": "90%"
+                },
+                "d": 2,
+                "s": "on"
+              },
+              {
+                "a": "Payables",
+                "n": 38,
+                "e": {
+                  "value": 3,
+                  "text": "85%"
+                },
+                "p": {
+                  "value": 3,
+                  "text": "80%"
+                },
+                "d": 3,
+                "s": "risk"
+              },
+              {
+                "a": "Receivables",
+                "n": 42,
+                "e": {
+                  "value": 3,
+                  "text": "70%"
+                },
+                "p": {
+                  "value": 2,
+                  "text": "60%"
+                },
+                "d": 5,
+                "s": "risk"
+              },
+              {
+                "a": "Treasury",
+                "n": 24,
+                "e": {
+                  "value": 2,
+                  "text": "55%"
+                },
+                "p": {
+                  "value": 2,
+                  "text": "50%"
+                },
+                "d": 2,
+                "s": "risk"
+              },
+              {
+                "a": "Reporting",
+                "n": 30,
+                "e": {
+                  "value": 2,
+                  "text": "40%"
+                },
+                "p": {
+                  "value": 1,
+                  "text": "35%"
+                },
+                "d": 4,
+                "s": "off"
+              }
+            ]
+          }
+        ],
+        "emphasis": "highlight"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "uat-defects",
+      "name": "Runbook · UAT defect triage summary",
+      "tier": "working",
+      "purpose": "A defect triage summary: defect counts by severity and stage on a risk heat grid, headline numbers, triage rules and the exit rule.",
+      "uses": [
+        "composite.table",
+        "data.metric",
+        "list.bullets",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 124,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "severity",
+          "maxChars": 18
+        },
+        {
+          "slot": "count",
+          "maxChars": 3
+        },
+        {
+          "slot": "triage rule",
+          "maxChars": 40
+        },
+        {
+          "slot": "exit rule",
+          "maxChars": 90
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "User acceptance testing",
+        "title": "Sixteen defects are open and none is [[critical]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 522,
+            "header": "dark",
+            "dense": true,
+            "rowH": 45,
+            "cols": [
+              {
+                "k": "s",
+                "label": "Severity",
+                "w": 126
+              },
+              {
+                "k": "a",
+                "label": "New",
+                "w": 54,
+                "type": "heat",
+                "max": 6,
+                "scale": "risk",
+                "showValue": true
+              },
+              {
+                "k": "b",
+                "label": "Triage",
+                "w": 66,
+                "type": "heat",
+                "max": 6,
+                "scale": "risk",
+                "showValue": true
+              },
+              {
+                "k": "c",
+                "label": "Fix",
+                "w": 60,
+                "type": "heat",
+                "max": 6,
+                "scale": "risk",
+                "showValue": true
+              },
+              {
+                "k": "d",
+                "label": "Retest",
+                "w": 66,
+                "type": "heat",
+                "max": 6,
+                "scale": "risk",
+                "showValue": true
+              },
+              {
+                "k": "e",
+                "label": "Closed",
+                "w": 66,
+                "type": "num"
+              },
+              {
+                "k": "f",
+                "label": "Fix by",
+                "w": 84
+              }
+            ],
+            "rows": [
+              {
+                "s": "Sev 1 · Critical",
+                "a": 0,
+                "b": 0,
+                "c": 0,
+                "d": 0,
+                "e": 1,
+                "f": "4 h"
+              },
+              {
+                "s": "Sev 2 · High",
+                "a": 0,
+                "b": 1,
+                "c": 1,
+                "d": 1,
+                "e": 6,
+                "f": "1 day"
+              },
+              {
+                "s": "Sev 3 · Medium",
+                "a": 2,
+                "b": 3,
+                "c": 2,
+                "d": 1,
+                "e": 12,
+                "f": "3 days"
+              },
+              {
+                "s": "Sev 4 · Low",
+                "a": 1,
+                "b": 2,
+                "c": 1,
+                "d": 1,
+                "e": 9,
+                "f": "Release 2"
+              }
+            ]
+          },
+          {
+            "type": "metric",
+            "x": 57,
+            "y": 360,
+            "w": 162,
+            "value": "16",
+            "label": "open defects"
+          },
+          {
+            "type": "metric",
+            "x": 237,
+            "y": 360,
+            "w": 162,
+            "value": "1.8",
+            "label": "days mean time to fix"
+          },
+          {
+            "type": "metric",
+            "x": 417,
+            "y": 360,
+            "w": 162,
+            "value": "3",
+            "label": "awaiting retest"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 597,
+            "y": 126,
+            "w": 306,
+            "text": "Triage rules"
+          },
+          {
+            "type": "bullets",
+            "x": 597,
+            "y": 144,
+            "w": 306,
+            "size": "small",
+            "items": [
+              "Triage twice a day at 09:00 and 16:00.",
+              "Sev 1 and 2 go straight to the fix team.",
+              "Sev 3 needs a workaround before go-live.",
+              "Sev 4 moves to the post-go-live backlog."
+            ]
+          },
+          {
+            "type": "block",
+            "x": 597,
+            "y": 252,
+            "w": 306,
+            "h": 90,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Exit rule: no Sev 1 or 2 open, and every Sev 3 has an approved workaround.",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 597,
+            "y": 360,
+            "w": 306,
+            "text": "The test lead triages with the process owner. The Controller signs the exit."
+          }
+        ],
+        "emphasis": "highlight"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "cutover-comms-checkpoints",
+      "name": "Runbook · cutover communications checkpoints",
+      "tier": "working",
+      "purpose": "Six communications checkpoints on the cutover timeline with the audience, message, sender and a sent box; a pointer to the change comms plan.",
+      "uses": [
+        "composite.table",
+        "shape.block"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 103,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "when",
+          "maxChars": 10
+        },
+        {
+          "slot": "audience",
+          "maxChars": 24
+        },
+        {
+          "slot": "message",
+          "maxChars": 40
+        },
+        {
+          "slot": "sender",
+          "maxChars": 16
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Six checkpoints keep users and leaders [[informed]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 42,
+            "cols": [
+              {
+                "k": "i",
+                "label": "Check",
+                "w": 72
+              },
+              {
+                "k": "w",
+                "label": "When",
+                "w": 96
+              },
+              {
+                "k": "a",
+                "label": "Audience",
+                "w": 180
+              },
+              {
+                "k": "m",
+                "label": "Message",
+                "w": 252
+              },
+              {
+                "k": "s",
+                "label": "Sender",
+                "w": 138
+              },
+              {
+                "k": "d",
+                "label": "Sent",
+                "w": 108,
+                "type": "checkbox"
+              }
+            ],
+            "rows": [
+              {
+                "i": "C1",
+                "w": "Fri 16:00",
+                "a": "All finance users",
+                "m": "Freeze starts at 18:00",
+                "s": "Controller",
+                "d": true
+              },
+              {
+                "i": "C2",
+                "w": "Fri 18:00",
+                "a": "Finance and IT leads",
+                "m": "Freeze confirmed; cutover begins",
+                "s": "Cutover lead",
+                "d": true
+              },
+              {
+                "i": "C3",
+                "w": "Sat 00:00",
+                "a": "Steering committee",
+                "m": "Midpoint status and any risks",
+                "s": "Exec sponsor",
+                "d": false
+              },
+              {
+                "i": "C4",
+                "w": "Sat 03:30",
+                "a": "Steering committee",
+                "m": "Go or no-go decision",
+                "s": "Cutover lead",
+                "d": false
+              },
+              {
+                "i": "C5",
+                "w": "Sat 06:00",
+                "a": "All finance users",
+                "m": "New ledger is open; where to get help",
+                "s": "Comms lead",
+                "d": false
+              },
+              {
+                "i": "C6",
+                "w": "Sat 18:00",
+                "a": "Business leaders",
+                "m": "End-of-day status and next steps",
+                "s": "Exec sponsor",
+                "d": false
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 432,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "text": "The full message plan, templates and approvals sit in the change communications plan."
+          }
+        ],
+        "emphasis": "underscore"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "runbook",
+      "variant": "go-no-go-split",
+      "name": "Runbook · go/no-go checklist · tall table",
+      "tier": "working",
+      "purpose": "The go/no-go checklist as a tall table in the wide column, with the green count and decision rule in the short column.",
+      "uses": [
+        "composite.table",
+        "text",
+        "shape.block"
+      ],
+      "legacy": "split variant of runbook/go-no-go",
+      "budget": {
+        "words": 95,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 42
+        },
+        {
+          "slot": "owner",
+          "maxChars": 18
+        },
+        {
+          "slot": "decision rule",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Cutover runbook",
+        "title": "Wave 1 needs every check [[green]]",
+        "body": [
+          {
+            "type": "table",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 54,
+            "cols": [
+              {
+                "k": "c",
+                "label": "Go/no-go criterion",
+                "w": 240
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 120
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 198,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "c": "Dress rehearsal passed, no defects",
+                "o": "Test lead",
+                "s": "on"
+              },
+              {
+                "c": "Balances tie to legacy trial balance",
+                "o": "Controller",
+                "s": "on"
+              },
+              {
+                "c": "Interfaces tested end to end",
+                "o": "Integration lead",
+                "s": "on"
+              },
+              {
+                "c": "Rollback rehearsed in the window",
+                "o": "Technical lead",
+                "s": "risk"
+              },
+              {
+                "c": "Users trained, access confirmed",
+                "o": "Support lead",
+                "s": "risk"
+              },
+              {
+                "c": "Bridge staffed for 36 hours",
+                "o": "Support lead",
+                "s": "on"
+              },
+              {
+                "c": "Audit sign-off on migration controls",
+                "o": "Internal audit",
+                "s": "off"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Where we stand"
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "display",
+            "x": 57,
+            "y": 198,
+            "w": 270,
+            "text": "4 of 7"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "secondary",
+            "x": 57,
+            "y": 252,
+            "w": 270,
+            "text": "criteria are green"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "h": 90,
+            "surface": "subtle",
+            "style": "small",
+            "text": "Any red criterion is a no-go. An amber one needs a written mitigation from the Cutover lead.",
+            "align": "left"
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2,
+        "emphasis": "highlight"
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    }
+  ]
+}

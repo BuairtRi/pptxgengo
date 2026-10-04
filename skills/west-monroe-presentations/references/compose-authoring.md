@@ -83,19 +83,19 @@ To start from the packaged working cards recipe, make a copy of `library/dynamic
 ```sh
 pptxgengo paths
 pptxgengo compose probe --spec /path/to/copied-cards.json --out /tmp/wm-probes
-pptxgengo compose measure --bundle /tmp/wm-probes --native-workspace /Users/rscott/Projects/pptxgengo/samples/visual-wave3 --out /tmp/wm-evidence.json
+pptxgengo compose measure --bundle /tmp/wm-probes --native-workspace "$NATIVE_WORKSPACE" --out /tmp/wm-evidence.json
 pptxgengo compose fit-report --spec /path/to/copied-cards.json --bundle /tmp/wm-probes \
   --evidence /tmp/wm-evidence.json --out /tmp/wm-fit.json
 pptxgengo compose build --spec /path/to/copied-cards.json --bundle /tmp/wm-probes \
   --evidence /tmp/wm-evidence.json --out /tmp/wm-built
-pptxgengo compose verify --bundle /tmp/wm-built --native-workspace /Users/rscott/Projects/pptxgengo/samples/visual-wave3 --out /tmp/wm-verification.json
+pptxgengo compose verify --bundle /tmp/wm-built --native-workspace "$NATIVE_WORKSPACE" --out /tmp/wm-verification.json
 ```
 
 `pptxgengo paths` supplies the installed package root; the source file is `<root>/library/dynamic-components/cards.json`. Use unique new output paths. The recipe contains two slides in a single spec, so probe/measure/build/verify the deck together.
 
-The relevant component checkpoint reports six native-verified, visually reviewed Wave 1 grid/panel slides. Five dense proposal recipes have exact native verification/visual-review records. These are bounded accepted specimens; neither proves arbitrary layouts or changed-content reflow. Dynamic pods/teams support variable roles within their own contract. Components include numbered and metric cards; explicit canvas text/surface/line/image/shape types; measured layouts; phases/legend; connectors; and supported accent specs. Images must use local pinned PNG/JPEG bytes and SHA-256. Measured text supports explicit installed font families (for example `IBM Plex Sans`); font files and requested styles are checked before measurement. Cards accept optional `font_face` (Arial by default). See `library/dynamic-components/fonts.md`. Rich-text support is bounded; check the packaged schema and docs for the particular component before authoring.
+Reviewed grid/panel slides and dense proposal recipes are accepted specimens for their exact content; they do not prove arbitrary layouts or changed-content reflow. Dynamic pods/teams support variable roles within their own contract. Components include numbered and metric cards; explicit canvas text/surface/line/image/shape types; measured layouts; phases/legend; connectors; and supported accent specs. Images must use local pinned PNG/JPEG bytes and SHA-256. Measured text supports explicit installed font families (for example `IBM Plex Sans`); font files and requested styles are checked before measurement. Cards accept optional `font_face` (Arial by default). See `library/dynamic-components/fonts.md`. Rich-text support is bounded; check the packaged schema and docs for the particular component before authoring.
 
-For broader semantic library contracts, first use `pptxgengo lib find --help` and then inspect an exact record with `pptxgengo lib inspect --id ID`. The initial thirteen portable contracts are candidates; the qualified default search may be empty. Exploratory inventory or fixture state is not approval. Candidate instantiation requires explicit experimental override and the same native QA below.
+For broader semantic library contracts, first use `pptxgengo lib find --help` and then inspect an exact record with `pptxgengo lib inspect --id ID`. The qualified default search may return few or no records. Exploratory inventory or fixture state is not approval. Candidate instantiation requires explicit experimental override and the same native QA below.
 
 ## Native measurement and build loop
 
@@ -113,6 +113,6 @@ pptxgengo compose verify --bundle /path/to/built --out /path/to/verification.jso
 
 Measurement and final verification use native PowerPoint. These calls run serially. Use a stable installed binary for the qualification run; rebuilding can invalidate native evidence/cache environment. Never measure a same-named open presentation with unsaved work. Probe/evidence must match the exact spec and deck hashes; changed copy needs new measurements. `fit-report` reveals fixed-zone overflow and planner/layout failures separately. A successful command exit on the report means only that the report was written.
 
-The approved native working directory for this checkout is `/Users/rscott/Projects/pptxgengo/samples/visual-wave3`. Pass `--native-workspace /Users/rscott/Projects/pptxgengo/samples/visual-wave3` explicitly to both `measure` and `verify`, as in the commands above. Native PowerPoint operations run serially. Reuse this established folder; do not create a new native workspace. In a different environment where it is unavailable, use that environment's existing approved workspace.
+`$NATIVE_WORKSPACE` stands for the operator's established native PowerPoint workspace. Pass it explicitly to both `measure` and `verify`, as in the commands above. Reuse that folder; do not create a new native workspace. If you do not know which folder it is, ask the operator. Native PowerPoint operations run serially.
 
 After verify, export/render every page and inspect at presentation size. Measurement validates declared text/font/frame/color/bounds; it cannot determine whether the argument is persuasive, hierarchy is effective, a retained asset is appropriate, or every collision is visually acceptable. Resolve overflow with better geometry, a different pattern, divided argument, or carefully revised copy while retaining essential evidence and qualifications.

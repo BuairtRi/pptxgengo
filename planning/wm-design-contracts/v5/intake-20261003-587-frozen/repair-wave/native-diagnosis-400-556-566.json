@@ -1,0 +1,93 @@
+{
+  "schema": "pptxgengo.native-visual-diagnosis.v1",
+  "scope": "read-only diagnostics; no production changes",
+  "original_implementation": "587d83bd58",
+  "pages": [
+    {
+      "page": 400,
+      "key": "risk-heat/annotated",
+      "native_png_sha256": "25e6db57eae51012705b56e3d8651ffb064f1d7ac68045dc29d10aaaeacae504",
+      "frozen_source_sha256": "f5d51a0c9c9ad109e5e719da24a06344f7d95be171a4bd52cf7606bce207d9ba",
+      "compiled_node01_equals_frozen_body0": true,
+      "status": "no_reproduced_defect",
+      "finding": "Original native PNG separates LIKELIHOOD and first impact header 1 by about165px; no fused LIKELIHOOD1 or collision. Native table XML preserves distinct row1 cells c0/c1.",
+      "geometry": {
+        "first_col_width_pt": 120,
+        "impact_col_width_pt": 72,
+        "insets_pt": [
+          12,
+          12
+        ],
+        "header_font": "IBM Plex Mono SemiBold",
+        "header_font_size_pt": 9,
+        "header_tracking_pt": 0.54
+      },
+      "recommendation": "Retain original source and header geometry. A text-extraction concatenation should not trigger an unnecessary layout change."
+    },
+    {
+      "page": 556,
+      "key": "value-phases/wave-table",
+      "native_png_sha256": "33f53572fbf57258521d39c0f0d16b00c8a3b1096bd85ddf7482aefcb79a31ca",
+      "frozen_source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+      "compiled_node01_equals_frozen_body0": true,
+      "status": "geometry_diagnosed",
+      "finding": "Native PowerPoint wraps the leading minus of intact source/XML -$1.8M onto a line above $1.8M.",
+      "geometry": {
+        "net_col_width_pt": 72,
+        "old_insets_pt": [
+          12,
+          12
+        ],
+        "old_usable_width_pt": 48,
+        "font": "IBM Plex Mono SemiBold",
+        "size_pt": 14,
+        "glyph_advance_pt": 8.4,
+        "six_glyphs_advance_pt": 50.4,
+        "sequenceInlineWidth_reserve_pt": 2,
+        "guarded_width_pt": 52.4,
+        "new_insets_pt": [
+          6,
+          6
+        ],
+        "new_usable_width_pt": 60
+      },
+      "recommendation": "Existing pending v5WordInsets should return6/6 because52.4>48 and52.4<=60; sceneNativeCell invokes it before measuring and writes margins throughTableCellProps. This preserves copy/font/column width. Confirm after native rerender; no separate556 special case is indicated."
+    },
+    {
+      "page": 566,
+      "key": "value-types/hard-soft-right",
+      "native_png_sha256": "59a3559be5d333725acd4e6097acaaff080d9a74288dc13855af5340a486f150",
+      "frozen_source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+      "compiled_node01_equals_frozen_body0": true,
+      "status": "geometry_diagnosed",
+      "finding": "Capacity label crosses left outer donut arc, independent of optional decimal anomaly $1.M. Source specifies categories and values, no label placement. Native chart23.xml includes neither dLblPos nor manualLayout for any point.",
+      "geometry": {
+        "native_chart_rect_pt": {
+          "x": 57,
+          "y": 159,
+          "w": 270,
+          "h": 273
+        },
+        "observed_ring_outer_radius_pt_approx": 107.5,
+        "hole_percent": 60,
+        "ring_radial_thickness_pt_approx": 43,
+        "category_glyph_count": 8,
+        "category_font_size_pt": 10,
+        "category_advance_pt": 48,
+        "native_category_x_px_approx": [
+          165,
+          261
+        ],
+        "nearby_outer_arc_x_px_approx": 171
+      },
+      "runtime_cause": [
+        "scene_charts.go sets DataLabelPosition outEnd for pie/doughnut.",
+        "pptx/objects.go strips DataLabelPosition for doughnut.",
+        "pptx/charts.go emits per-point dLblPos only for pie.",
+        "PowerPoint consequently places the long label near the left ring midpoint; 48pt category width exceeds about43pt ring thickness."
+      ],
+      "recommendation": "Do not rely on setting outEnd in scene_charts.go alone. Smallest candidate retaining native editable labels is a V5 chart native placement pass that emits an explicit supported/manual layout for doughnut labels, with Capacity outside the ring and a leaderline plus a plot reserve for its measured48pt width. Confirm placement in native render. If native positioning fails, derive external labels from the same source data and hide only their native duplicates; this is a larger fallback. Fixed-decimal formatting repairs $1.M separately and cannot prove geometry repaired.",
+      "confidence": "Cause established from original source/XML/native image; candidate placement requires native validation."
+    }
+  ]
+}

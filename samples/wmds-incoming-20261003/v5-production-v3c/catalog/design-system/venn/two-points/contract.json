@@ -1,0 +1,307 @@
+{
+  "key": "venn/two-points",
+  "source_file": "templates/library/venn.json",
+  "source_sha256": "b156a3631224c6f80d62fd8808f6425582dfa726e6e93e605810fb8070a3b331",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "venn"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "strongnum"
+    }
+  ],
+  "family": "venn",
+  "tier": "core",
+  "name": "Venn, two sets with plotted items",
+  "purpose": "Two overlapping circles on the left of a split frame with numbered initiatives plotted by where they land, and a numbered legend in the short column.",
+  "uses": [
+    "venn",
+    "list.numbered"
+  ],
+  "source_advisory_budget": {
+    "words": 58,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 42
+    },
+    {
+      "slot": "set label",
+      "maxChars": 16
+    },
+    {
+      "slot": "point label",
+      "maxChars": 2
+    },
+    {
+      "slot": "legend title",
+      "maxChars": 24
+    },
+    {
+      "slot": "legend text",
+      "maxChars": 32
+    },
+    {
+      "slot": "source",
+      "maxChars": 60
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "repeated-items",
+      "venn"
+    ],
+    "visual_forms": [
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "strongnum",
+      "venn"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/points",
+        "component_type": "venn",
+        "role": "point",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/sets",
+        "component_type": "venn",
+        "role": "relationship",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "strongnum",
+        "role": "point",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "relationships": [
+      {
+        "kind": "intersection",
+        "basis": "explicit_venn_component",
+        "source_pointers": [
+          "/body/0"
+        ]
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "venn",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 432,
+          "w": 558,
+          "x": 57,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "strongnum",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 180
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-left",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Initiative portfolio"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Most AI initiatives cut cost, few grow revenue"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield finance and operations workshops, Sep 2026."
+    },
+    {
+      "name": "node01.points.item01.label",
+      "source_pointer": "/body/0/points/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Claims bot"
+    },
+    {
+      "name": "node01.points.item02.label",
+      "source_pointer": "/body/0/points/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Staffing"
+    },
+    {
+      "name": "node01.points.item03.label",
+      "source_pointer": "/body/0/points/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Referrals"
+    },
+    {
+      "name": "node01.points.item04.label",
+      "source_pointer": "/body/0/points/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Outreach"
+    },
+    {
+      "name": "node01.points.item05.label",
+      "source_pointer": "/body/0/points/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Pricing"
+    },
+    {
+      "name": "node01.sets.item01.label",
+      "source_pointer": "/body/0/sets/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Cost out"
+    },
+    {
+      "name": "node01.sets.item02.label",
+      "source_pointer": "/body/0/sets/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Revenue up"
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Cost out only."
+    },
+    {
+      "name": "node02.items.item01.title",
+      "source_pointer": "/body/1/items/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Claims status bot"
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Mostly cost out."
+    },
+    {
+      "name": "node02.items.item02.title",
+      "source_pointer": "/body/1/items/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Staffing forecast"
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Both, at the overlap."
+    },
+    {
+      "name": "node02.items.item03.title",
+      "source_pointer": "/body/1/items/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Referral matching"
+    },
+    {
+      "name": "node02.items.item04.text",
+      "source_pointer": "/body/1/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Mostly revenue."
+    },
+    {
+      "name": "node02.items.item04.title",
+      "source_pointer": "/body/1/items/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Outreach scoring"
+    },
+    {
+      "name": "node02.items.item05.text",
+      "source_pointer": "/body/1/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Revenue up only."
+    },
+    {
+      "name": "node02.items.item05.title",
+      "source_pointer": "/body/1/items/4/title",
+      "kind": "string",
+      "synthetic_source_example": "Pricing analytics"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.points",
+      "source_pointer": "/body/0/points",
+      "count": 5
+    },
+    {
+      "name": "node01.sets",
+      "source_pointer": "/body/0/sets",
+      "count": 2
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 	"unicode"
+
+	"github.com/buairtri/pptxgengo/pptx"
 )
 
 // TemplateBindingsContract is an executable, typed v2 adapter. The historical
@@ -34,9 +36,10 @@ type TemplateDefinition struct {
 	Guidance       []TemplateGuidance `json:"guidance,omitempty"`
 }
 type BoundDocument struct {
-	Schema string       `json:"schema"`
-	Year   int          `json:"year"`
-	Slides []BoundSlide `json:"slides"`
+	Schema            string                         `json:"schema"`
+	Year              int                            `json:"year"`
+	Slides            []BoundSlide                   `json:"slides"`
+	MediaOptimization *pptx.MediaOptimizationOptions `json:"media_optimization,omitempty"`
 }
 type BoundSlide struct {
 	ID          string          `json:"id"`
@@ -493,7 +496,7 @@ func BindTemplates(bundle, sourceOverride string, input BoundDocument) (Document
 	if err != nil {
 		return doc, report, err
 	}
-	doc = Document{Schema: "pptxgengo.wmds-foundation.v1", Year: input.Year}
+	doc = Document{Schema: "pptxgengo.wmds-foundation.v1", Year: input.Year, MediaOptimization: input.MediaOptimization}
 	report = BindingReport{Schema: "pptxgengo.wmds-binding-report.v1", Contract: TemplateBindingsContract, Profile: CandidateProfile, Engine: CandidateEngine, SourceFiles: s.Files, Policy: map[string]string{
 		"execution":     "closed typed v2 adapters; frozen geometry/styles; source pointers identify provenance and are not mutation commands",
 		"content":       "all required values supplied explicitly; no source example fallback; strings never inferred as numeric data",

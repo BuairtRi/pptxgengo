@@ -1,0 +1,508 @@
+{
+  "key": "runbook/war-room-contacts-split",
+  "source_file": "templates/library/runbooks.json",
+  "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "block"
+    }
+  ],
+  "family": "runbooks",
+  "tier": "working",
+  "name": "Runbook · war-room contact sheet · tall table",
+  "purpose": "The war-room contact sheet: role, name, phone and shift start in a tall table, with the shift pattern and the bridge line in the short column.",
+  "uses": [
+    "composite.table",
+    "text",
+    "shape.block"
+  ],
+  "source_advisory_budget": {
+    "words": 161,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "shift note",
+      "maxChars": 110
+    },
+    {
+      "slot": "role",
+      "maxChars": 18
+    },
+    {
+      "slot": "name",
+      "maxChars": 20
+    },
+    {
+      "slot": "phone",
+      "maxChars": 14
+    },
+    {
+      "slot": "shift",
+      "maxChars": 16
+    },
+    {
+      "slot": "bridge line",
+      "maxChars": 44
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 9,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 306
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 54,
+          "w": 270,
+          "x": 57,
+          "y": 414
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-right",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Cutover runbook"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "The war room runs on [[named]] roles and one bridge"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Role"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Name"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Phone"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Shift starts"
+    },
+    {
+      "name": "node01.rows.item01.n",
+      "source_pointer": "/body/0/rows/0/n",
+      "kind": "string",
+      "synthetic_source_example": "Maya Okafor"
+    },
+    {
+      "name": "node01.rows.item01.p",
+      "source_pointer": "/body/0/rows/0/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0101"
+    },
+    {
+      "name": "node01.rows.item01.r",
+      "source_pointer": "/body/0/rows/0/r",
+      "kind": "string",
+      "synthetic_source_example": "Cutover lead"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "A · Fri 18:00"
+    },
+    {
+      "name": "node01.rows.item02.n",
+      "source_pointer": "/body/0/rows/1/n",
+      "kind": "string",
+      "synthetic_source_example": "Daniel Reyes"
+    },
+    {
+      "name": "node01.rows.item02.p",
+      "source_pointer": "/body/0/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0102"
+    },
+    {
+      "name": "node01.rows.item02.r",
+      "source_pointer": "/body/0/rows/1/r",
+      "kind": "string",
+      "synthetic_source_example": "Technical lead"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "A · Fri 18:00"
+    },
+    {
+      "name": "node01.rows.item03.n",
+      "source_pointer": "/body/0/rows/2/n",
+      "kind": "string",
+      "synthetic_source_example": "Priya Raman"
+    },
+    {
+      "name": "node01.rows.item03.p",
+      "source_pointer": "/body/0/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0103"
+    },
+    {
+      "name": "node01.rows.item03.r",
+      "source_pointer": "/body/0/rows/2/r",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "A · Fri 18:00"
+    },
+    {
+      "name": "node01.rows.item04.n",
+      "source_pointer": "/body/0/rows/3/n",
+      "kind": "string",
+      "synthetic_source_example": "Tomas Lindqvist"
+    },
+    {
+      "name": "node01.rows.item04.p",
+      "source_pointer": "/body/0/rows/3/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0104"
+    },
+    {
+      "name": "node01.rows.item04.r",
+      "source_pointer": "/body/0/rows/3/r",
+      "kind": "string",
+      "synthetic_source_example": "Data lead"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "A · Fri 18:00"
+    },
+    {
+      "name": "node01.rows.item05.n",
+      "source_pointer": "/body/0/rows/4/n",
+      "kind": "string",
+      "synthetic_source_example": "Hannah Cole"
+    },
+    {
+      "name": "node01.rows.item05.p",
+      "source_pointer": "/body/0/rows/4/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0105"
+    },
+    {
+      "name": "node01.rows.item05.r",
+      "source_pointer": "/body/0/rows/4/r",
+      "kind": "string",
+      "synthetic_source_example": "Integration lead"
+    },
+    {
+      "name": "node01.rows.item05.s",
+      "source_pointer": "/body/0/rows/4/s",
+      "kind": "string",
+      "synthetic_source_example": "B · Sat 06:00"
+    },
+    {
+      "name": "node01.rows.item06.n",
+      "source_pointer": "/body/0/rows/5/n",
+      "kind": "string",
+      "synthetic_source_example": "Samir Haddad"
+    },
+    {
+      "name": "node01.rows.item06.p",
+      "source_pointer": "/body/0/rows/5/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0106"
+    },
+    {
+      "name": "node01.rows.item06.r",
+      "source_pointer": "/body/0/rows/5/r",
+      "kind": "string",
+      "synthetic_source_example": "Test lead"
+    },
+    {
+      "name": "node01.rows.item06.s",
+      "source_pointer": "/body/0/rows/5/s",
+      "kind": "string",
+      "synthetic_source_example": "B · Sat 06:00"
+    },
+    {
+      "name": "node01.rows.item07.n",
+      "source_pointer": "/body/0/rows/6/n",
+      "kind": "string",
+      "synthetic_source_example": "Lena Fischer"
+    },
+    {
+      "name": "node01.rows.item07.p",
+      "source_pointer": "/body/0/rows/6/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0107"
+    },
+    {
+      "name": "node01.rows.item07.r",
+      "source_pointer": "/body/0/rows/6/r",
+      "kind": "string",
+      "synthetic_source_example": "Support lead"
+    },
+    {
+      "name": "node01.rows.item07.s",
+      "source_pointer": "/body/0/rows/6/s",
+      "kind": "string",
+      "synthetic_source_example": "B · Sat 06:00"
+    },
+    {
+      "name": "node01.rows.item08.n",
+      "source_pointer": "/body/0/rows/7/n",
+      "kind": "string",
+      "synthetic_source_example": "Owen Parker"
+    },
+    {
+      "name": "node01.rows.item08.p",
+      "source_pointer": "/body/0/rows/7/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0108"
+    },
+    {
+      "name": "node01.rows.item08.r",
+      "source_pointer": "/body/0/rows/7/r",
+      "kind": "string",
+      "synthetic_source_example": "Comms lead"
+    },
+    {
+      "name": "node01.rows.item08.s",
+      "source_pointer": "/body/0/rows/7/s",
+      "kind": "string",
+      "synthetic_source_example": "B · Sat 06:00"
+    },
+    {
+      "name": "node01.rows.item09.n",
+      "source_pointer": "/body/0/rows/8/n",
+      "kind": "string",
+      "synthetic_source_example": "Grace Whitfield"
+    },
+    {
+      "name": "node01.rows.item09.p",
+      "source_pointer": "/body/0/rows/8/p",
+      "kind": "string",
+      "synthetic_source_example": "+1 555 0109"
+    },
+    {
+      "name": "node01.rows.item09.r",
+      "source_pointer": "/body/0/rows/8/r",
+      "kind": "string",
+      "synthetic_source_example": "Exec sponsor"
+    },
+    {
+      "name": "node01.rows.item09.s",
+      "source_pointer": "/body/0/rows/8/s",
+      "kind": "string",
+      "synthetic_source_example": "On call"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Shifts"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Shift A runs Friday 18:00 to Saturday 06:00. Shift B takes over on the bridge at 06:00 and runs to 18:00."
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Handover"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Outgoing leads brief their successor on the bridge and update the log before they leave."
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Bridge: +1 555 0100 · access code 000000"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 4
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 9
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

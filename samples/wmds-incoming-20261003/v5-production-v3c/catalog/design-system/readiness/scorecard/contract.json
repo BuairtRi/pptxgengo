@@ -1,0 +1,418 @@
+{
+  "key": "readiness/scorecard",
+  "source_file": "templates/library/change.json",
+  "source_sha256": "50c9b7c2bbd968fda1adb78ff0c4efdd2f823df0d17e6043514d442834c033ac",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "gauge"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "metric"
+    }
+  ],
+  "family": "change",
+  "tier": "working",
+  "name": "Change readiness scorecard",
+  "purpose": "Score readiness on each dimension against its go-live target with a status and an overall gauge.",
+  "uses": [
+    "table.standard (dots, status)",
+    "data.gauge"
+  ],
+  "source_advisory_budget": {
+    "words": 85,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "dimension",
+      "maxChars": 32
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "metric",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "gauge",
+      "metric",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 594,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "gauge",
+        "role": "metric",
+        "source_bounds": {
+          "w": 216,
+          "x": 687,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 216,
+          "x": 687,
+          "y": 360
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Change readiness"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Capacity and skills are the two dimensions below target"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield Health System readiness survey, Sep 2026."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Dimension"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Score of 4"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Target"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Status"
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "Leadership sponsorship"
+    },
+    {
+      "name": "node01.rows.item01.b.value",
+      "source_pointer": "/body/0/rows/0/b/value",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node01.rows.item01.c",
+      "source_pointer": "/body/0/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "Awareness of the change"
+    },
+    {
+      "name": "node01.rows.item02.b.value",
+      "source_pointer": "/body/0/rows/1/b/value",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item02.c",
+      "source_pointer": "/body/0/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "Skills and training"
+    },
+    {
+      "name": "node01.rows.item03.b.value",
+      "source_pointer": "/body/0/rows/2/b/value",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item03.c",
+      "source_pointer": "/body/0/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "Local champions in place"
+    },
+    {
+      "name": "node01.rows.item04.b.value",
+      "source_pointer": "/body/0/rows/3/b/value",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item04.c",
+      "source_pointer": "/body/0/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item05.a",
+      "source_pointer": "/body/0/rows/4/a",
+      "kind": "string",
+      "synthetic_source_example": "Tools and sandbox access"
+    },
+    {
+      "name": "node01.rows.item05.b.value",
+      "source_pointer": "/body/0/rows/4/b/value",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.c",
+      "source_pointer": "/body/0/rows/4/c",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node01.rows.item05.d",
+      "source_pointer": "/body/0/rows/4/d",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item06.a",
+      "source_pointer": "/body/0/rows/5/a",
+      "kind": "string",
+      "synthetic_source_example": "Capacity to absorb change"
+    },
+    {
+      "name": "node01.rows.item06.b.value",
+      "source_pointer": "/body/0/rows/5/b/value",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item06.c",
+      "source_pointer": "/body/0/rows/5/c",
+      "kind": "string",
+      "synthetic_source_example": "3"
+    },
+    {
+      "name": "node01.rows.item06.d",
+      "source_pointer": "/body/0/rows/5/d",
+      "kind": "string",
+      "synthetic_source_example": "off"
+    },
+    {
+      "name": "node01.rows.item07.a",
+      "source_pointer": "/body/0/rows/6/a",
+      "kind": "string",
+      "synthetic_source_example": "Support model readiness"
+    },
+    {
+      "name": "node01.rows.item07.b.value",
+      "source_pointer": "/body/0/rows/6/b/value",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item07.c",
+      "source_pointer": "/body/0/rows/6/c",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node01.rows.item07.d",
+      "source_pointer": "/body/0/rows/6/d",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node02.caption",
+      "source_pointer": "/body/1/caption",
+      "kind": "string",
+      "synthetic_source_example": "Overall readiness (of 4)"
+    },
+    {
+      "name": "node02.ends.item01",
+      "source_pointer": "/body/1/ends/0",
+      "kind": "string",
+      "synthetic_source_example": "Not ready"
+    },
+    {
+      "name": "node02.ends.item02",
+      "source_pointer": "/body/1/ends/1",
+      "kind": "string",
+      "synthetic_source_example": "Ready"
+    },
+    {
+      "name": "node02.value",
+      "source_pointer": "/body/1/value",
+      "kind": "number",
+      "synthetic_source_example": 0.58
+    },
+    {
+      "name": "node02.valueText",
+      "source_pointer": "/body/1/valueText",
+      "kind": "string",
+      "synthetic_source_example": "2.6"
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "at target; wave 1 needs five"
+    },
+    {
+      "name": "node03.value",
+      "source_pointer": "/body/2/value",
+      "kind": "string",
+      "synthetic_source_example": "3 of 7"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 4
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 7
+    },
+    {
+      "name": "node02.ends",
+      "source_pointer": "/body/1/ends",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

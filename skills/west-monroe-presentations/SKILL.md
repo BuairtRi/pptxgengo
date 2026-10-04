@@ -1,40 +1,52 @@
 ---
 name: west-monroe-presentations
-description: Create or adapt West Monroe PowerPoint presentations with pptxgengo, using its packaged source templates, native scene edits, component library, or measured composition workflows. Use for West Monroe proposal, pursuit, and client presentation decks; it does not imply arbitrary-content template qualification.
+description: Create and revise West Monroe presentations (proposals, pursuits, perspectives, findings, status decks) from source materials, conversations or existing decks. Frames the argument with the operator, writes slide copy in the West Monroe brand voice and Ri's personal voice, runs independent reviews, and builds editable PowerPoint with pptxgengo's template and component library.
 ---
 
 # West Monroe presentations
 
-Use the installed `pptxgengo` command. Do not assume repository-local Go binaries, mutable checkout paths, or the legacy `generate-west-monroe-slides` skill are installed. Use the packaged library and assets exposed by the command.
+You help the operator turn an opportunity into a clear, persuasive deck, and you build it as editable PowerPoint with `pptxgengo`. Work as a collaborator: bring observations and recommendations, say what supports them, and let the operator decide.
 
-Choose the narrowest route:
+Start at the stage the request needs. Keep work that has already been approved. Read only the reference you need for the next decision.
 
-- `pptxgengo design` to use the modern WM design system: fill a closed template content contract or build an editable foundation composition. This packaged route defaults to the bundled v2 library and Go engine `wmds-go-foundation.v2`; select `--bundle v1` explicitly for the earlier design library. Browse with `pptxgengo catalog --design-system --open` and read the [design-system authoring reference](references/design-system-authoring.md) for this route.
-- `pptxgengo template` to adapt supported text/style bindings in an available source-bound template contract and produce a review deck.
-- `pptxgengo adapt` to generate editable roadmap, architecture, process, team, or comparison compositions from semantic content and variable counts. Read the [adaptive family reference](references/adaptive-authoring.md) only for this route.
-- `pptxgengo compose` to author new editable slides from supported components, saved library contracts, or explicit composition specs. This supports genuinely new slides assembled from native editable components; it is bounded composition, not an unrestricted slide designer.
-- `pptxgengo scene` to extract and rebuild source slides while preserving supported native structure/resources.
-- `pptxgengo component` to inspect and apply reviewed source-bound text/color contracts in an extracted scene.
-- `pptxgengo lib` to find, inspect, preview, instantiate, or assemble saved semantic library contracts. Qualification state matters; candidates are not approved templates.
-- `pptxgengo anchor` to calculate measured placement for supported phrase accents. It emits placement data and does not independently author slide content.
-- `pptxgengo diff` to compare two same-sized rendered PNGs; it writes a pixel-difference report and overlay, not a structural PPTX diff.
-- Use `pptxgengo catalog --templates` or `pptxgengo catalog --components` to print the matching packaged gallery path; add `--open` to open it. `pptxgengo paths` reports the installed gallery/resource paths.
+## Voice: always on
 
-If needed, consult `pptxgengo --help` and `pptxgengo <route> --help` for installed syntax. Read only the relevant route reference:
+Every deck is written in the [West Monroe brand voice](references/brand-voice.md) and in [Ri's slide voice](references/ri-slide-voice.md). Apply both by default; the operator does not need to ask. Read both before writing any visible copy: titles, bullets, labels, callouts or closings.
 
-- [Design-system authoring](references/design-system-authoring.md), for the packaged modern WM library
-- [Workflow routes and limits](references/workflows.md)
-- [Fixed-source template authoring](references/template-authoring.md)
-- [Component and template customization](references/component-customization.md), when a request includes palette, gauge, or accent choices
-- [New slide composition](references/compose-authoring.md), when selecting between supported editable recipes
-- [West Monroe content and narrative guidance](references/content.md)
-- [Component composition and visual review](references/composition-and-review.md)
+The short version: sentence-case titles that state the conclusion as a full sentence; personal, direct copy about the reader's situation; concrete mechanisms, owners and numbers; no buzzwords or marketing language; bullets with short bolded lead-ins; visual structure wherever the content has relationships.
 
-## Essential constraints
+## Where to start
 
-- Keep evidence-backed claims, hypotheses, assumptions, and synthetic examples distinct. Do not invent client facts, metrics, commitments, or quotations.
-- Write a decision-led story for the stated audience. Preserve substantive details, qualifications, ownership, dependencies, acceptance conditions, and evidence; resolve overflow by improving the argument, choosing a suitable composition, or splitting a slide.
-- Source-template contracts support bounded changes while preserving fixed source geometry and many source details. Their successful build does not show that arbitrary replacement content fits or that the original layout structurally adapts.
-- Packaged library contracts and component examples have distinct qualification states. Do not imply general template approval from a catalog hit, a successful build, or a passing fixture.
-- Normal `design` builds measure and lay out text in Go using bundled font metrics. Output retains normal IBM Plex Sans and IBM Plex Mono family names; no per-deck native measurement capture or font alias is required. The 167-design catalog has 166 active designs and one deprecated design; paired specimen review is not arbitrary-copy qualification.
-- Measure and inspect final decks in PowerPoint at presentation size. A structural check or measurement alone does not establish visual quality.
+| The request | Read |
+| --- | --- |
+| Resume an existing deck project | [Project and resumption](references/project-and-resume.md); run `pptxgengo design project status` before drafting |
+| Develop a deck from materials or a conversation | [Intake and framing](references/intake-and-framing.md) |
+| Write or revise the narrative, outline or slide copy | [Narrative and copy](references/narrative-and-copy.md), plus both voice references |
+| Choose how a page should look, build variations, review renders | [Slide composition](references/slide-composition.md) |
+| Find templates and compare real-content alternatives | [Template selection](references/template-selection.md) |
+| Edit `deck.yaml` or create a local page design | [Source format](references/source-format.md) |
+| Run an outline, content, deck or source review | [Review packets](references/review-packets.md) |
+| Create project files (project, sources, audience, claims) | [Project templates](references/project-templates.md) |
+| Use a specific pptxgengo route directly | [Workflow routes](references/workflows.md) |
+
+## Production sequence
+
+1. **Intake.** Inventory and index the sources. Interview the operator only about gaps that change a decision, and keep working while you wait for answers.
+2. **Frame.** Propose the opportunity, core argument, audience, reading mode, communication job, intended outcome, depth and evidence gaps. Record the operator's corrections.
+3. **Outline.** Write the narrative and an outline with each page's full-sentence title, support and transition. Read the titles alone; they should tell the story. Run an independent outline review, revise, and get the operator's approval before writing full copy, unless they have already told you to proceed.
+4. **Content.** Write the exact visible copy for each page in both voices. Run the self-check in [narrative and copy](references/narrative-and-copy.md), then an independent content clarity review. Keep internal briefs out of the reviewer packet.
+5. **Composition.** Choose the visual form from each page's content relationship, visual first. Match existing templates first, aiming for roughly 80% template reuse on substantive pages, but never at the cost of the argument. When a page's style is uncertain, build two to four variations for Ri to choose from. If a template would force a material content change, show the operator the tradeoff before applying it.
+6. **Build and QA.** Build from `deck.yaml`. Look at every rendered page at presentation size. Verify claims against the sources. Put every fix back into the source files.
+7. **Review and deliver.** Walk the operator through the deck and the decisions that shaped it. Run the agreed finished-deck review. Package the deck for its audience, keep the maintainer package, and state which reviews are still pending.
+
+Approvals record real decisions; do not ask again for something already approved. Routine edits proceed under the existing instruction. Bring back changes to the argument, commitments or required evidence.
+
+## Rules that always apply
+
+- **Never invent** facts, client names, metrics, quotations, anecdotes or commitments. Use a visible placeholder and add an open question instead.
+- Keep facts, inferences, hypotheses and illustrative examples distinct, and mark illustrative content on the page. Keep units, bases, caveats, sources, owners and dependencies with the claims they qualify.
+- A catalog match, successful binding, Go fit report or reviewed specimen does not prove that new copy fits. Inspect the candidate's contract and render the result.
+- `design` builds lay out text in Go with bundled IBM Plex font metrics. Native PowerPoint rendering and visual review are separate steps.
+- Shared library definitions are pinned within a project build. Make deliberate design changes as local derived templates; never edit the shared library to fix one deck.
+- Generated builds are immutable baselines. If someone edits the generated PowerPoint by hand, keep that file and reconcile the changes into `deck.yaml` explicitly; there is no automatic round trip.
+- Use `pptxgengo --help`, the route's `--help` and `pptxgengo paths` for current syntax and packaged resources. Library sizes come from the current catalog.

@@ -1,0 +1,136 @@
+{
+  "schema": "pptxgengo.native-access-diagnostic.v1",
+  "observed_at": "2026-10-03T20:28:18.613160+00:00",
+  "uid": 502,
+  "pid": 71084,
+  "ppid": 71083,
+  "environment": {
+    "HOME": "/Users/rscott",
+    "TMPDIR": "/var/folders/yj/217tn79n5znb8b5rqxytgczr0000gp/T/",
+    "XPC_SERVICE_NAME": "0",
+    "XPC_FLAGS": "0x2",
+    "SECURITYSESSIONID": ""
+  },
+  "launchd": [
+    {
+      "argv": [
+        "/bin/launchctl",
+        "manageruid"
+      ],
+      "exit_code": 153,
+      "stdout": "",
+      "stderr": "Could not get manager UID."
+    },
+    {
+      "argv": [
+        "/bin/launchctl",
+        "managername"
+      ],
+      "exit_code": 153,
+      "stdout": "",
+      "stderr": "Could not get manager name."
+    }
+  ],
+  "ancestors": [
+    {
+      "argv": [
+        "/bin/ps",
+        "-p",
+        "71084",
+        "-o",
+        "pid=,ppid=,uid=,comm="
+      ],
+      "exit_code": 0,
+      "stdout": "71084 71083   502 python3",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/bin/ps",
+        "-p",
+        "71083",
+        "-o",
+        "pid=,ppid=,uid=,comm="
+      ],
+      "exit_code": 0,
+      "stdout": "71083 43692   502 bash",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/bin/ps",
+        "-p",
+        "43692",
+        "-o",
+        "pid=,ppid=,uid=,comm="
+      ],
+      "exit_code": 0,
+      "stdout": "43692 13364   502 /Users/rscott/.codex/packages/app-server-daemon/releases/0.159.3-aarch64-apple-darwin/bin/codex",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/bin/ps",
+        "-p",
+        "13364",
+        "-o",
+        "pid=,ppid=,uid=,comm="
+      ],
+      "exit_code": 0,
+      "stdout": "13364     1   502 /Users/rscott/.codex/packages/app-server-daemon/releases/0.159.3-aarch64-apple-darwin/bin/codex",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/bin/ps",
+        "-p",
+        "1",
+        "-o",
+        "pid=,ppid=,uid=,comm="
+      ],
+      "exit_code": 0,
+      "stdout": "1     0     0 /sbin/launchd",
+      "stderr": ""
+    }
+  ],
+  "applescript_arithmetic": {
+    "argv": [
+      "/usr/bin/osascript",
+      "-e",
+      "1 + 1"
+    ],
+    "exit_code": 0,
+    "stdout": "2",
+    "stderr": ""
+  },
+  "powerpoint_running": [
+    {
+      "pid": 53736,
+      "uid": 502,
+      "executable": "/Applications/Microsoft PowerPoint.app/Contents/MacOS/Microsoft PowerPoint"
+    }
+  ],
+  "powerpoint_count": {
+    "argv": [
+      "/usr/bin/osascript",
+      "-e",
+      "tell application \"/Applications/Microsoft PowerPoint.app\" to count presentations"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "61:80: execution error: An error of type -10827 has occurred. (-10827)"
+  },
+  "mach_bootstrap": {
+    "task_self": 515,
+    "global_bootstrap_port": 0,
+    "task_get_special_port_status": 0,
+    "task_bootstrap_port": 4294967295,
+    "task_bootstrap_dead": true,
+    "task_bootstrap_null": false,
+    "launchservices_lookup": {
+      "status": 268435459,
+      "description": "(ipc/send) invalid destination port",
+      "port": 0
+    }
+  }
+}

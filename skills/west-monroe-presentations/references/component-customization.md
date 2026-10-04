@@ -80,19 +80,16 @@ There are two materially different paths today:
   from caller-supplied `value`, `scale_min`, `scale_max`, `target_min`, and
   `target_max`. It positions the target highlight and pointer separately. The
   target highlight follows `state.active`; the track follows `state.inactive`.
-  The pointer uses contrast-resolved ink based on its track/target context, so it
-  has no independent `gauge.pointer` color role yet. This is a concrete component
-  model gap for continuously scaled gauges when a user asks to choose pointer
-  color independently.
+  The pointer uses contrast-resolved ink based on its track/target context; it
+  has no independent color role. If the operator asks for a specific pointer
+  color, explain that this route cannot set it.
 
 For a T045 request, copy the packaged gauge values example and set each row's
 `highlight_cells` and `highlight_color`; set `pointer_cell` only when its intended
 position differs from the single highlighted cell. Preserve the source legend's
 meaning and do not imply continuous numeric interpolation. For a
 new comparison composition, keep actual and target geometry tied to the supplied
-numbers. A future continuous-gauge style contract should expose distinct
-`gauge.track`, `gauge.target`, and `gauge.pointer` roles, with contrast checks
-and legend semantics, while keeping value and target geometry independent.
+numbers.
 
 ## Accents belong to components
 

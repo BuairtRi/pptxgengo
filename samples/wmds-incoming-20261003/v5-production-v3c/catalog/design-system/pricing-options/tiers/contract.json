@@ -1,0 +1,460 @@
+{
+  "key": "pricing-options/tiers",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "card"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    }
+  ],
+  "family": "commercials",
+  "tier": "core",
+  "name": "Pricing options · good, better, best",
+  "purpose": "Three tiers of the same engagement, each adding scope to the one before, so the client sees what the next price step buys.",
+  "uses": [
+    "pricing.set",
+    "card.states",
+    "card.checklist"
+  ],
+  "source_advisory_budget": {
+    "words": 83,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "tier label",
+      "maxChars": 24
+    },
+    {
+      "slot": "tier title",
+      "maxChars": 24
+    },
+    {
+      "slot": "checklist item",
+      "maxChars": 30,
+      "note": "same five items on every tier"
+    },
+    {
+      "slot": "fee value",
+      "maxChars": 20
+    },
+    {
+      "slot": "fee label",
+      "maxChars": 32
+    },
+    {
+      "slot": "tag",
+      "maxChars": 16
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "card"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 324,
+          "w": 270,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 324,
+          "w": 270,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 324,
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Commercials"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Three tiers, each building on the one before"
+    },
+    {
+      "name": "node01.body.item01.checklist.item01.on",
+      "source_pointer": "/body/0/body/0/checklist/0/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node01.body.item01.checklist.item01.text",
+      "source_pointer": "/body/0/body/0/checklist/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Close diagnostic"
+    },
+    {
+      "name": "node01.body.item01.checklist.item02.on",
+      "source_pointer": "/body/0/body/0/checklist/1/on",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.body.item01.checklist.item02.text",
+      "source_pointer": "/body/0/body/0/checklist/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Target design"
+    },
+    {
+      "name": "node01.body.item01.checklist.item03.on",
+      "source_pointer": "/body/0/body/0/checklist/2/on",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.body.item01.checklist.item03.text",
+      "source_pointer": "/body/0/body/0/checklist/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap and business case"
+    },
+    {
+      "name": "node01.body.item01.checklist.item04.on",
+      "source_pointer": "/body/0/body/0/checklist/3/on",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.body.item01.checklist.item04.text",
+      "source_pointer": "/body/0/body/0/checklist/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 build"
+    },
+    {
+      "name": "node01.body.item01.checklist.item05.on",
+      "source_pointer": "/body/0/body/0/checklist/4/on",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.body.item01.checklist.item05.text",
+      "source_pointer": "/body/0/body/0/checklist/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Training and hypercare"
+    },
+    {
+      "name": "node01.fee.label",
+      "source_pointer": "/body/0/fee/label",
+      "kind": "string",
+      "synthetic_source_example": "fixed fee, 4 weeks"
+    },
+    {
+      "name": "node01.fee.value",
+      "source_pointer": "/body/0/fee/value",
+      "kind": "string",
+      "synthetic_source_example": "$288K"
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Good · fixed fee"
+    },
+    {
+      "name": "node01.title",
+      "source_pointer": "/body/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Foundation"
+    },
+    {
+      "name": "node02.body.item01.checklist.item01.on",
+      "source_pointer": "/body/1/body/0/checklist/0/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node02.body.item01.checklist.item01.text",
+      "source_pointer": "/body/1/body/0/checklist/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Close diagnostic"
+    },
+    {
+      "name": "node02.body.item01.checklist.item02.on",
+      "source_pointer": "/body/1/body/0/checklist/1/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node02.body.item01.checklist.item02.text",
+      "source_pointer": "/body/1/body/0/checklist/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Target design"
+    },
+    {
+      "name": "node02.body.item01.checklist.item03.on",
+      "source_pointer": "/body/1/body/0/checklist/2/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node02.body.item01.checklist.item03.text",
+      "source_pointer": "/body/1/body/0/checklist/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap and business case"
+    },
+    {
+      "name": "node02.body.item01.checklist.item04.on",
+      "source_pointer": "/body/1/body/0/checklist/3/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node02.body.item01.checklist.item04.text",
+      "source_pointer": "/body/1/body/0/checklist/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 build"
+    },
+    {
+      "name": "node02.body.item01.checklist.item05.on",
+      "source_pointer": "/body/1/body/0/checklist/4/on",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node02.body.item01.checklist.item05.text",
+      "source_pointer": "/body/1/body/0/checklist/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Training and hypercare"
+    },
+    {
+      "name": "node02.fee.label",
+      "source_pointer": "/body/1/fee/label",
+      "kind": "string",
+      "synthetic_source_example": "fixed fee, 24 weeks"
+    },
+    {
+      "name": "node02.fee.value",
+      "source_pointer": "/body/1/fee/value",
+      "kind": "string",
+      "synthetic_source_example": "$720K"
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Better · fixed fee"
+    },
+    {
+      "name": "node02.tag",
+      "source_pointer": "/body/1/tag",
+      "kind": "string",
+      "synthetic_source_example": "Recommended"
+    },
+    {
+      "name": "node02.title",
+      "source_pointer": "/body/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Accelerate"
+    },
+    {
+      "name": "node03.body.item01.checklist.item01.on",
+      "source_pointer": "/body/2/body/0/checklist/0/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node03.body.item01.checklist.item01.text",
+      "source_pointer": "/body/2/body/0/checklist/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Close diagnostic"
+    },
+    {
+      "name": "node03.body.item01.checklist.item02.on",
+      "source_pointer": "/body/2/body/0/checklist/1/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node03.body.item01.checklist.item02.text",
+      "source_pointer": "/body/2/body/0/checklist/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Target design"
+    },
+    {
+      "name": "node03.body.item01.checklist.item03.on",
+      "source_pointer": "/body/2/body/0/checklist/2/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node03.body.item01.checklist.item03.text",
+      "source_pointer": "/body/2/body/0/checklist/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap and business case"
+    },
+    {
+      "name": "node03.body.item01.checklist.item04.on",
+      "source_pointer": "/body/2/body/0/checklist/3/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node03.body.item01.checklist.item04.text",
+      "source_pointer": "/body/2/body/0/checklist/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 build"
+    },
+    {
+      "name": "node03.body.item01.checklist.item05.on",
+      "source_pointer": "/body/2/body/0/checklist/4/on",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node03.body.item01.checklist.item05.text",
+      "source_pointer": "/body/2/body/0/checklist/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Training and hypercare"
+    },
+    {
+      "name": "node03.fee.label",
+      "source_pointer": "/body/2/fee/label",
+      "kind": "string",
+      "synthetic_source_example": "fixed fee, 36 weeks"
+    },
+    {
+      "name": "node03.fee.value",
+      "source_pointer": "/body/2/fee/value",
+      "kind": "string",
+      "synthetic_source_example": "$1.14M"
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Best · fixed fee"
+    },
+    {
+      "name": "node03.title",
+      "source_pointer": "/body/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Transform"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.body.item01.checklist",
+      "source_pointer": "/body/0/body/0/checklist",
+      "count": 5
+    },
+    {
+      "name": "node01.body",
+      "source_pointer": "/body/0/body",
+      "count": 1
+    },
+    {
+      "name": "node02.body.item01.checklist",
+      "source_pointer": "/body/1/body/0/checklist",
+      "count": 5
+    },
+    {
+      "name": "node02.body",
+      "source_pointer": "/body/1/body",
+      "count": 1
+    },
+    {
+      "name": "node03.body.item01.checklist",
+      "source_pointer": "/body/2/body/0/checklist",
+      "count": 5
+    },
+    {
+      "name": "node03.body",
+      "source_pointer": "/body/2/body",
+      "count": 1
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -1,0 +1,1 @@
+Nine source connectors and all recommendation bullets/principles remain editable. Systems alternative gives wider external-system zones but less recommendation space. Repair off-edge draft scaffold as recorded administrative treatment.

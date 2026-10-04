@@ -1,0 +1,489 @@
+{
+  "key": "interviews-access/escalation-split",
+  "source_file": "templates/library/interviews.json",
+  "source_sha256": "d62be1c2fe3d0015929413af45741fbee87918ac22969ebf48e893743dbf5d42",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "card"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "card"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "callout"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "textblock"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "bullets"
+    }
+  ],
+  "family": "interviews",
+  "tier": "working",
+  "name": "Access difficulties · escalation split",
+  "purpose": "Four stakeholder cards, each with days outstanding, the escalation ask and the open questions; a tall column sizes the problem and lists this week's asks.",
+  "uses": [
+    "split.tall-right-narrow",
+    "card (label, edge)",
+    "metric",
+    "callout",
+    "bullets"
+  ],
+  "source_advisory_budget": {
+    "words": 149,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 50
+    },
+    {
+      "slot": "card label",
+      "maxChars": 28
+    },
+    {
+      "slot": "card title",
+      "maxChars": 50
+    },
+    {
+      "slot": "bullet",
+      "maxChars": 50
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "metric",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "callout",
+      "card",
+      "metric",
+      "textblock"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/0/body/0/bullets",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/body/0/bullets",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/2/body/0/bullets",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/3/body/0/bullets",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/7/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 144,
+          "w": 270,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 144,
+          "w": 270,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 144,
+          "w": 270,
+          "x": 57,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 144,
+          "w": 270,
+          "x": 345,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "callout",
+        "role": "key-message",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "textblock",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 306
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 330
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-right-narrow",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Stakeholder interviews"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Four stakeholders need a sponsor push"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample names for layout only; replace with engagement stakeholders before use."
+    },
+    {
+      "name": "node01.body.item01.bullets.item01",
+      "source_pointer": "/body/0/body/0/bullets/0",
+      "kind": "string",
+      "synthetic_source_example": "Ask: CEO office holds 45 minutes"
+    },
+    {
+      "name": "node01.body.item01.bullets.item02",
+      "source_pointer": "/body/0/body/0/bullets/1",
+      "kind": "string",
+      "synthetic_source_example": "Open: who owns documentation standards"
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Blocked · 34 days"
+    },
+    {
+      "name": "node01.title",
+      "source_pointer": "/body/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Chief Medical Officer · Clinical ops"
+    },
+    {
+      "name": "node02.body.item01.bullets.item01",
+      "source_pointer": "/body/1/body/0/bullets/0",
+      "kind": "string",
+      "synthetic_source_example": "Ask: COO releases team for 60 minutes"
+    },
+    {
+      "name": "node02.body.item01.bullets.item02",
+      "source_pointer": "/body/1/body/0/bullets/1",
+      "kind": "string",
+      "synthetic_source_example": "Open: where registration errors are found"
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "No response · 21 days"
+    },
+    {
+      "name": "node02.title",
+      "source_pointer": "/body/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Patient Access Supervisors"
+    },
+    {
+      "name": "node03.body.item01.bullets.item01",
+      "source_pointer": "/body/2/body/0/bullets/0",
+      "kind": "string",
+      "synthetic_source_example": "Ask: shared Thursday slot"
+    },
+    {
+      "name": "node03.body.item01.bullets.item02",
+      "source_pointer": "/body/2/body/0/bullets/1",
+      "kind": "string",
+      "synthetic_source_example": "Open: spend outside contracts"
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Rescheduled · 12 days"
+    },
+    {
+      "name": "node03.title",
+      "source_pointer": "/body/2/title",
+      "kind": "string",
+      "synthetic_source_example": "VP Supply Chain · Finance"
+    },
+    {
+      "name": "node04.body.item01.bullets.item01",
+      "source_pointer": "/body/3/body/0/bullets/0",
+      "kind": "string",
+      "synthetic_source_example": "Ask: sponsor note on priority"
+    },
+    {
+      "name": "node04.body.item01.bullets.item02",
+      "source_pointer": "/body/3/body/0/bullets/1",
+      "kind": "string",
+      "synthetic_source_example": "Open: platform roadmap fit"
+    },
+    {
+      "name": "node04.label",
+      "source_pointer": "/body/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Rescheduled · 9 days"
+    },
+    {
+      "name": "node04.title",
+      "source_pointer": "/body/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Chief Digital Officer · IT"
+    },
+    {
+      "name": "node05.label",
+      "source_pointer": "/body/4/label",
+      "kind": "string",
+      "synthetic_source_example": "average wait across the four"
+    },
+    {
+      "name": "node05.value",
+      "source_pointer": "/body/4/value",
+      "kind": "string",
+      "synthetic_source_example": "19 days"
+    },
+    {
+      "name": "node06.label",
+      "source_pointer": "/body/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Risk if unresolved"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "findings stay unvalidated at the readout on Nov 3."
+    },
+    {
+      "name": "node06.value",
+      "source_pointer": "/body/5/value",
+      "kind": "string",
+      "synthetic_source_example": "2"
+    },
+    {
+      "name": "node07.label",
+      "source_pointer": "/body/6/label",
+      "kind": "string",
+      "synthetic_source_example": "Asks this week"
+    },
+    {
+      "name": "node08.items.item01",
+      "source_pointer": "/body/7/items/0",
+      "kind": "string",
+      "synthetic_source_example": "CEO office: 45 minutes for the CMO"
+    },
+    {
+      "name": "node08.items.item02",
+      "source_pointer": "/body/7/items/1",
+      "kind": "string",
+      "synthetic_source_example": "COO: release registrars for 60 minutes"
+    },
+    {
+      "name": "node08.items.item03",
+      "source_pointer": "/body/7/items/2",
+      "kind": "string",
+      "synthetic_source_example": "CFO: route the board chair request"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.body.item01.bullets",
+      "source_pointer": "/body/0/body/0/bullets",
+      "count": 2
+    },
+    {
+      "name": "node01.body",
+      "source_pointer": "/body/0/body",
+      "count": 1
+    },
+    {
+      "name": "node02.body.item01.bullets",
+      "source_pointer": "/body/1/body/0/bullets",
+      "count": 2
+    },
+    {
+      "name": "node02.body",
+      "source_pointer": "/body/1/body",
+      "count": 1
+    },
+    {
+      "name": "node03.body.item01.bullets",
+      "source_pointer": "/body/2/body/0/bullets",
+      "count": 2
+    },
+    {
+      "name": "node03.body",
+      "source_pointer": "/body/2/body",
+      "count": 1
+    },
+    {
+      "name": "node04.body.item01.bullets",
+      "source_pointer": "/body/3/body/0/bullets",
+      "count": 2
+    },
+    {
+      "name": "node04.body",
+      "source_pointer": "/body/3/body",
+      "count": 1
+    },
+    {
+      "name": "node08.items",
+      "source_pointer": "/body/7/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

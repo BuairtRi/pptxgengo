@@ -1,0 +1,74 @@
+{
+  "schema": "pptxgengo.frozen-intake-repair-checks.v1",
+  "full_catalog": {
+    "attempted": 522,
+    "compiled": 522,
+    "rejected": 0,
+    "seconds": 81.051,
+    "deck_sha256": "68a13cbc0e0ba140db97615817cc71e2251750c918f3e58c7f0b7140674bfa2a"
+  },
+  "all_scene_nodes": {
+    "attempted": 6307,
+    "rejected": 0,
+    "unsupported_types": 0,
+    "seconds": 11.442
+  },
+  "normal": {
+    "packages": [
+      "internal/wmdesign",
+      "internal/deckproject",
+      "cmd/pptxdesign",
+      "cmd/pptxgengo"
+    ],
+    "seconds": [
+      10.692,
+      7.133,
+      1.299
+    ],
+    "status": "passed; pptxgengo has no tests"
+  },
+  "race": {
+    "packages": [
+      "internal/wmdesign",
+      "internal/deckproject",
+      "cmd/pptxdesign"
+    ],
+    "seconds": [
+      95.066,
+      48.703,
+      4.906
+    ],
+    "status": "passed"
+  },
+  "focused_sparse_chart_and_card_race": {
+    "packages": [
+      "pptx",
+      "internal/wmdesign"
+    ],
+    "seconds": [
+      1.302,
+      12.893
+    ],
+    "status": "passed"
+  },
+  "v3_reference_rebuild": {
+    "slides": 248,
+    "status": "passed"
+  },
+  "review_subset_rebuild": {
+    "slides": 50,
+    "status": "byte-identical after final guard/validation fixes",
+    "sha256": "e3c137c94e8c1f273bc93fe388fc31f85642704d2e59720bd18c60abb4dee899",
+    "seconds": 4.731
+  },
+  "capture_script": {
+    "bash_syntax": "passed",
+    "AppleScript_compile": "passed",
+    "native_runtime": "operator capture in progress; not qualified"
+  },
+  "limits": [
+    "Native visual review pending",
+    "Full pptx suite not claimed green; existing line golden mismatch predates sparse changes",
+    "Unreleased source/frame semantics use frozen v3 assets/fonts, complete catalog bundle promotion remains pending"
+  ]
+}

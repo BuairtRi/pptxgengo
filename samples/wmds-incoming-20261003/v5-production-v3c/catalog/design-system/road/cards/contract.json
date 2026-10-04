@@ -1,0 +1,295 @@
+{
+  "key": "road/cards",
+  "source_file": "templates/library/diagrams.json",
+  "source_sha256": "b79cf191621a7cfd9bc1b837201cd34ab001703490bd9738a9cd7732c7d9d90e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "road"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "cardrow"
+    }
+  ],
+  "family": "diagrams",
+  "tier": "working",
+  "name": "Roadmap with milestone detail cards",
+  "purpose": "A shorter road across the top with four milestones, and one detail card per milestone in a row below.",
+  "uses": [
+    "road",
+    "card"
+  ],
+  "source_advisory_budget": {
+    "words": 76,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "milestone label",
+      "count": 4,
+      "maxChars": 22
+    },
+    {
+      "slot": "milestone date",
+      "count": 4,
+      "maxChars": 10
+    },
+    {
+      "slot": "card title",
+      "count": 4,
+      "maxChars": 18
+    },
+    {
+      "slot": "card body",
+      "count": 4,
+      "maxChars": 66
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "repeated-items",
+      "timeline"
+    ],
+    "visual_forms": [
+      "cards",
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "cardrow",
+      "road"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/milestones",
+        "component_type": "road",
+        "role": "relationship",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "cardrow",
+        "role": "point",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "road",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 216,
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "cardrow",
+        "role": "point",
+        "source_bounds": {
+          "h": 90,
+          "w": 198,
+          "x": 57,
+          "y": 360
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "The first four milestones land inside 12 months"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.milestones.item01.date",
+      "source_pointer": "/body/0/milestones/0/date",
+      "kind": "string",
+      "synthetic_source_example": "Q4 2026"
+    },
+    {
+      "name": "node01.milestones.item01.label",
+      "source_pointer": "/body/0/milestones/0/label",
+      "kind": "string",
+      "synthetic_source_example": "One sign-in"
+    },
+    {
+      "name": "node01.milestones.item02.date",
+      "source_pointer": "/body/0/milestones/1/date",
+      "kind": "string",
+      "synthetic_source_example": "Q1 2027"
+    },
+    {
+      "name": "node01.milestones.item02.label",
+      "source_pointer": "/body/0/milestones/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Online scheduling"
+    },
+    {
+      "name": "node01.milestones.item03.date",
+      "source_pointer": "/body/0/milestones/2/date",
+      "kind": "string",
+      "synthetic_source_example": "Q2 2027"
+    },
+    {
+      "name": "node01.milestones.item03.label",
+      "source_pointer": "/body/0/milestones/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Digital intake"
+    },
+    {
+      "name": "node01.milestones.item04.date",
+      "source_pointer": "/body/0/milestones/3/date",
+      "kind": "string",
+      "synthetic_source_example": "Q3 2027"
+    },
+    {
+      "name": "node01.milestones.item04.label",
+      "source_pointer": "/body/0/milestones/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Smart reminders"
+    },
+    {
+      "name": "node02.items.item01.body.item01.p",
+      "source_pointer": "/body/1/items/0/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Replaces three logins; 60% migrate in 90 days."
+    },
+    {
+      "name": "node02.items.item01.title",
+      "source_pointer": "/body/1/items/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Sign-in"
+    },
+    {
+      "name": "node02.items.item02.body.item01.p",
+      "source_pointer": "/body/1/items/1/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Primary care first, then specialty clinics."
+    },
+    {
+      "name": "node02.items.item02.title",
+      "source_pointer": "/body/1/items/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Self-booking"
+    },
+    {
+      "name": "node02.items.item03.body.item01.p",
+      "source_pointer": "/body/1/items/2/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Forms and coverage checks before arrival."
+    },
+    {
+      "name": "node02.items.item03.title",
+      "source_pointer": "/body/1/items/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Digital intake"
+    },
+    {
+      "name": "node02.items.item04.body.item01.p",
+      "source_pointer": "/body/1/items/3/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Two-way text cuts no-shows by a quarter."
+    },
+    {
+      "name": "node02.items.item04.title",
+      "source_pointer": "/body/1/items/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Reminders"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.milestones",
+      "source_pointer": "/body/0/milestones",
+      "count": 4
+    },
+    {
+      "name": "node02.items.item01.body",
+      "source_pointer": "/body/1/items/0/body",
+      "count": 1
+    },
+    {
+      "name": "node02.items.item02.body",
+      "source_pointer": "/body/1/items/1/body",
+      "count": 1
+    },
+    {
+      "name": "node02.items.item03.body",
+      "source_pointer": "/body/1/items/2/body",
+      "count": 1
+    },
+    {
+      "name": "node02.items.item04.body",
+      "source_pointer": "/body/1/items/3/body",
+      "count": 1
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -1,0 +1,331 @@
+{
+  "key": "venn/three-points",
+  "source_file": "templates/library/venn.json",
+  "source_sha256": "b156a3631224c6f80d62fd8808f6425582dfa726e6e93e605810fb8070a3b331",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "venn"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "strongnum"
+    }
+  ],
+  "family": "venn",
+  "tier": "core",
+  "name": "Venn, three sets with plotted items",
+  "purpose": "Three circles with numbered items plotted by which capabilities they draw on, and a numbered list in the short column.",
+  "uses": [
+    "venn",
+    "list.numbered"
+  ],
+  "source_advisory_budget": {
+    "words": 58,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 42
+    },
+    {
+      "slot": "set label",
+      "maxChars": 12
+    },
+    {
+      "slot": "point label",
+      "maxChars": 2
+    },
+    {
+      "slot": "list title",
+      "maxChars": 24
+    },
+    {
+      "slot": "list text",
+      "maxChars": 32
+    },
+    {
+      "slot": "source",
+      "maxChars": 60
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "repeated-items",
+      "venn"
+    ],
+    "visual_forms": [
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "strongnum",
+      "venn"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/points",
+        "component_type": "venn",
+        "role": "point",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/sets",
+        "component_type": "venn",
+        "role": "relationship",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "strongnum",
+        "role": "point",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "relationships": [
+      {
+        "kind": "intersection",
+        "basis": "explicit_venn_component",
+        "source_pointers": [
+          "/body/0"
+        ]
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "venn",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 414,
+          "w": 558,
+          "x": 345,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "strongnum",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 162
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-right",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Initiative portfolio"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Six initiatives mapped to three capabilities"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield finance and operations workshops, Sep 2026."
+    },
+    {
+      "name": "node01.points.item01.label",
+      "source_pointer": "/body/0/points/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Denial"
+    },
+    {
+      "name": "node01.points.item02.label",
+      "source_pointer": "/body/0/points/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Intake"
+    },
+    {
+      "name": "node01.points.item03.label",
+      "source_pointer": "/body/0/points/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Master index"
+    },
+    {
+      "name": "node01.points.item04.label",
+      "source_pointer": "/body/0/points/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Appeals"
+    },
+    {
+      "name": "node01.points.item05.label",
+      "source_pointer": "/body/0/points/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Claims"
+    },
+    {
+      "name": "node01.points.item06.label",
+      "source_pointer": "/body/0/points/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Coding"
+    },
+    {
+      "name": "node01.sets.item01.label",
+      "source_pointer": "/body/0/sets/0/label",
+      "kind": "string",
+      "synthetic_source_example": "AI"
+    },
+    {
+      "name": "node01.sets.item02.label",
+      "source_pointer": "/body/0/sets/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Process"
+    },
+    {
+      "name": "node01.sets.item03.label",
+      "source_pointer": "/body/0/sets/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Data"
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "AI only."
+    },
+    {
+      "name": "node02.items.item01.title",
+      "source_pointer": "/body/1/items/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Denial prediction"
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Process only."
+    },
+    {
+      "name": "node02.items.item02.title",
+      "source_pointer": "/body/1/items/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Intake redesign"
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Data only."
+    },
+    {
+      "name": "node02.items.item03.title",
+      "source_pointer": "/body/1/items/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Patient master index"
+    },
+    {
+      "name": "node02.items.item04.text",
+      "source_pointer": "/body/1/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "AI and process."
+    },
+    {
+      "name": "node02.items.item04.title",
+      "source_pointer": "/body/1/items/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Appeal drafting"
+    },
+    {
+      "name": "node02.items.item05.text",
+      "source_pointer": "/body/1/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "AI and data."
+    },
+    {
+      "name": "node02.items.item05.title",
+      "source_pointer": "/body/1/items/4/title",
+      "kind": "string",
+      "synthetic_source_example": "Claims analytics"
+    },
+    {
+      "name": "node02.items.item06.text",
+      "source_pointer": "/body/1/items/5/text",
+      "kind": "string",
+      "synthetic_source_example": "All three."
+    },
+    {
+      "name": "node02.items.item06.title",
+      "source_pointer": "/body/1/items/5/title",
+      "kind": "string",
+      "synthetic_source_example": "Autonomous coding"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.points",
+      "source_pointer": "/body/0/points",
+      "count": 6
+    },
+    {
+      "name": "node01.sets",
+      "source_pointer": "/body/0/sets",
+      "count": 3
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 6
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

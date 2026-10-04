@@ -340,6 +340,7 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 				if opts.Line.DashType != "" {
 					strSlideXml += `<a:prstDash val="` + opts.Line.DashType + `"/>`
 				}
+				strSlideXml += shapeLineJoinXML(opts.Line.LineJoin)
 				if opts.Line.BeginArrowType != "" {
 					strSlideXml += `<a:headEnd type="` + opts.Line.BeginArrowType + `"/>`
 				}
@@ -698,6 +699,7 @@ func slideObjectImageToXml(slideItemObj *SlideObject, slide *SlideBaseProps, pla
 	if opts.Line != nil && opts.Line.Type != "none" && opts.Line.Color != "" && opts.Line.Width > 0 {
 		s.WriteString(`<a:ln w="` + itoa(valToPts(opts.Line.Width)) + `">`)
 		s.WriteString(genXmlColorSelection(&opts.Line.ShapeFillProps))
+		s.WriteString(shapeLineJoinXML(opts.Line.LineJoin))
 		s.WriteString(`</a:ln>`)
 	}
 
@@ -2020,6 +2022,12 @@ func makeXmlRootRels() string {
 
 func makeXmlApp(slides []PresSlide, company string) string {
 	n := len(slides)
+	hiddenCount := 0
+	for _, slide := range slides {
+		if boolDeref(slide.Hidden) {
+			hiddenCount++
+		}
+	}
 	var slideTitles strings.Builder
 	for idx := range slides {
 		slideTitles.WriteString(`<vt:lpstr>Slide ` + itoa(idx+1) + `</vt:lpstr>`)
@@ -2032,7 +2040,7 @@ func makeXmlApp(slides []PresSlide, company string) string {
 	<Paragraphs>0</Paragraphs>
 	<Slides>` + itoa(n) + `</Slides>
 	<Notes>` + itoa(n) + `</Notes>
-	<HiddenSlides>0</HiddenSlides>
+	<HiddenSlides>` + itoa(hiddenCount) + `</HiddenSlides>
 	<MMClips>0</MMClips>
 	<ScaleCrop>false</ScaleCrop>
 	<HeadingPairs>
@@ -2475,4 +2483,18 @@ func makeXmlTableStyles() string {
 
 func makeXmlViewProps() string {
 	return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` + CRLF + `<p:viewPr xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:normalViewPr horzBarState="maximized"><p:restoredLeft sz="15611"/><p:restoredTop sz="94610"/></p:normalViewPr><p:slideViewPr><p:cSldViewPr snapToGrid="0" snapToObjects="1"><p:cViewPr varScale="1"><p:scale><a:sx n="136" d="100"/><a:sy n="136" d="100"/></p:scale><p:origin x="216" y="312"/></p:cViewPr><p:guideLst/></p:cSldViewPr></p:slideViewPr><p:notesTextViewPr><p:cViewPr><p:scale><a:sx n="1" d="1"/><a:sy n="1" d="1"/></p:scale><p:origin x="0" y="0"/></p:cViewPr></p:notesTextViewPr><p:gridSpacing cx="76200" cy="76200"/></p:viewPr>`
+}
+
+// Only enum values are serialized; empty is deliberately byte-neutral.
+func shapeLineJoinXML(join string) string {
+	switch join {
+	case "round":
+		return `<a:round/>`
+	case "bevel":
+		return `<a:bevel/>`
+	case "miter":
+		return `<a:miter/>`
+	default:
+		return ""
+	}
 }

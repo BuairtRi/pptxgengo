@@ -1,0 +1,692 @@
+{
+  "key": "bios/leadership-specialists-nav",
+  "source_file": "templates/library/team.json",
+  "source_sha256": "a138b809a4d3e069e84c9252179b8f633751a48609c34d9ac82492ac219bc8ae",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "grouplabel"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "card"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "card"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "grouplabel"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "person"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "person"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "person"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "person"
+    }
+  ],
+  "family": "team",
+  "tier": "working",
+  "name": "Team · leadership bios with specialist row · nav rail",
+  "purpose": "Introduce four engagement leaders as mini bios with credentials and proof points, plus a row of on-call specialists.",
+  "uses": [
+    "card.bio",
+    "people.person",
+    "heading.group"
+  ],
+  "source_advisory_budget": {
+    "words": 122,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 50
+    },
+    {
+      "slot": "name",
+      "maxChars": 22
+    },
+    {
+      "slot": "title and role",
+      "maxChars": 28
+    },
+    {
+      "slot": "tag",
+      "maxChars": 12
+    },
+    {
+      "slot": "proof point",
+      "maxChars": 34
+    },
+    {
+      "slot": "photo or initials",
+      "kind": "image"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "image",
+      "key-message",
+      "navigation",
+      "person"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "image"
+    ],
+    "component_types": [
+      "card",
+      "grouplabel",
+      "person"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "person",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "person",
+        "role": "person",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/1/bio/points",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/2/bio/points",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/3/bio/points",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/4/bio/points",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "grouplabel",
+        "role": "content",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "person",
+        "source_bounds": {
+          "h": 198,
+          "w": 198,
+          "x": 57,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "person",
+        "source_bounds": {
+          "h": 198,
+          "w": 198,
+          "x": 273,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "card",
+        "role": "person",
+        "source_bounds": {
+          "h": 198,
+          "w": 198,
+          "x": 489,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "card",
+        "role": "person",
+        "source_bounds": {
+          "h": 198,
+          "w": 198,
+          "x": 705,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "grouplabel",
+        "role": "content",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "person",
+        "role": "person",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "person",
+        "role": "person",
+        "source_bounds": {
+          "w": 198,
+          "x": 273,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "person",
+        "role": "person",
+        "source_bounds": {
+          "w": 198,
+          "x": 489,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "person",
+        "role": "person",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 396
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Our team"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "A senior team that has done this before"
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Engagement leadership"
+    },
+    {
+      "name": "node02.bio.initials",
+      "source_pointer": "/body/1/bio/initials",
+      "kind": "string",
+      "synthetic_source_example": "PR"
+    },
+    {
+      "name": "node02.bio.name",
+      "source_pointer": "/body/1/bio/name",
+      "kind": "string",
+      "synthetic_source_example": "Priya Raman"
+    },
+    {
+      "name": "node02.bio.points.item01",
+      "source_pointer": "/body/1/bio/points/0",
+      "kind": "string",
+      "synthetic_source_example": "30+ finance transformations"
+    },
+    {
+      "name": "node02.bio.points.item02",
+      "source_pointer": "/body/1/bio/points/1",
+      "kind": "string",
+      "synthetic_source_example": "Led a 14-entity data redesign"
+    },
+    {
+      "name": "node02.bio.points.item03",
+      "source_pointer": "/body/1/bio/points/2",
+      "kind": "string",
+      "synthetic_source_example": "Speaks at CFO forums"
+    },
+    {
+      "name": "node02.bio.role",
+      "source_pointer": "/body/1/bio/role",
+      "kind": "string",
+      "synthetic_source_example": "Engagement lead"
+    },
+    {
+      "name": "node02.bio.tags.item01",
+      "source_pointer": "/body/1/bio/tags/0",
+      "kind": "string",
+      "synthetic_source_example": "Finance"
+    },
+    {
+      "name": "node02.bio.tags.item02",
+      "source_pointer": "/body/1/bio/tags/1",
+      "kind": "string",
+      "synthetic_source_example": "Data"
+    },
+    {
+      "name": "node02.bio.title",
+      "source_pointer": "/body/1/bio/title",
+      "kind": "string",
+      "synthetic_source_example": "Managing director"
+    },
+    {
+      "name": "node03.bio.name",
+      "source_pointer": "/body/2/bio/name",
+      "kind": "string",
+      "synthetic_source_example": "Sam Ibarra"
+    },
+    {
+      "name": "node03.bio.photo",
+      "source_pointer": "/body/2/bio/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-headshot-face"
+    },
+    {
+      "name": "node03.bio.points.item01",
+      "source_pointer": "/body/2/bio/points/0",
+      "kind": "string",
+      "synthetic_source_example": "Built 3 governed platforms"
+    },
+    {
+      "name": "node03.bio.points.item02",
+      "source_pointer": "/body/2/bio/points/1",
+      "kind": "string",
+      "synthetic_source_example": "Former controller"
+    },
+    {
+      "name": "node03.bio.points.item03",
+      "source_pointer": "/body/2/bio/points/2",
+      "kind": "string",
+      "synthetic_source_example": "Agile coach for 40 teams"
+    },
+    {
+      "name": "node03.bio.role",
+      "source_pointer": "/body/2/bio/role",
+      "kind": "string",
+      "synthetic_source_example": "Delivery lead"
+    },
+    {
+      "name": "node03.bio.tags.item01",
+      "source_pointer": "/body/2/bio/tags/0",
+      "kind": "string",
+      "synthetic_source_example": "Agile"
+    },
+    {
+      "name": "node03.bio.tags.item02",
+      "source_pointer": "/body/2/bio/tags/1",
+      "kind": "string",
+      "synthetic_source_example": "Cloud"
+    },
+    {
+      "name": "node03.bio.title",
+      "source_pointer": "/body/2/bio/title",
+      "kind": "string",
+      "synthetic_source_example": "Senior manager"
+    },
+    {
+      "name": "node04.bio.initials",
+      "source_pointer": "/body/3/bio/initials",
+      "kind": "string",
+      "synthetic_source_example": "TB"
+    },
+    {
+      "name": "node04.bio.name",
+      "source_pointer": "/body/3/bio/name",
+      "kind": "string",
+      "synthetic_source_example": "Tomas Berg"
+    },
+    {
+      "name": "node04.bio.points.item01",
+      "source_pointer": "/body/3/bio/points/0",
+      "kind": "string",
+      "synthetic_source_example": "Designed 2 finance data hubs"
+    },
+    {
+      "name": "node04.bio.points.item02",
+      "source_pointer": "/body/3/bio/points/1",
+      "kind": "string",
+      "synthetic_source_example": "Leads architecture practice"
+    },
+    {
+      "name": "node04.bio.points.item03",
+      "source_pointer": "/body/3/bio/points/2",
+      "kind": "string",
+      "synthetic_source_example": "Patent holder, data lineage"
+    },
+    {
+      "name": "node04.bio.role",
+      "source_pointer": "/body/3/bio/role",
+      "kind": "string",
+      "synthetic_source_example": "Solution architect"
+    },
+    {
+      "name": "node04.bio.tags.item01",
+      "source_pointer": "/body/3/bio/tags/0",
+      "kind": "string",
+      "synthetic_source_example": "Data"
+    },
+    {
+      "name": "node04.bio.tags.item02",
+      "source_pointer": "/body/3/bio/tags/1",
+      "kind": "string",
+      "synthetic_source_example": "Security"
+    },
+    {
+      "name": "node04.bio.title",
+      "source_pointer": "/body/3/bio/title",
+      "kind": "string",
+      "synthetic_source_example": "Director"
+    },
+    {
+      "name": "node05.bio.initials",
+      "source_pointer": "/body/4/bio/initials",
+      "kind": "string",
+      "synthetic_source_example": "AO"
+    },
+    {
+      "name": "node05.bio.name",
+      "source_pointer": "/body/4/bio/name",
+      "kind": "string",
+      "synthetic_source_example": "Aisha Okafor"
+    },
+    {
+      "name": "node05.bio.points.item01",
+      "source_pointer": "/body/4/bio/points/0",
+      "kind": "string",
+      "synthetic_source_example": "Ran 12 enterprise rollouts"
+    },
+    {
+      "name": "node05.bio.points.item02",
+      "source_pointer": "/body/4/bio/points/1",
+      "kind": "string",
+      "synthetic_source_example": "Certified change lead"
+    },
+    {
+      "name": "node05.bio.points.item03",
+      "source_pointer": "/body/4/bio/points/2",
+      "kind": "string",
+      "synthetic_source_example": "Trained 3,000 end users"
+    },
+    {
+      "name": "node05.bio.role",
+      "source_pointer": "/body/4/bio/role",
+      "kind": "string",
+      "synthetic_source_example": "Change and adoption"
+    },
+    {
+      "name": "node05.bio.tags.item01",
+      "source_pointer": "/body/4/bio/tags/0",
+      "kind": "string",
+      "synthetic_source_example": "Training"
+    },
+    {
+      "name": "node05.bio.tags.item02",
+      "source_pointer": "/body/4/bio/tags/1",
+      "kind": "string",
+      "synthetic_source_example": "Health"
+    },
+    {
+      "name": "node05.bio.title",
+      "source_pointer": "/body/4/bio/title",
+      "kind": "string",
+      "synthetic_source_example": "Principal"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Specialists on call"
+    },
+    {
+      "name": "node07.initials",
+      "source_pointer": "/body/6/initials",
+      "kind": "string",
+      "synthetic_source_example": "HB"
+    },
+    {
+      "name": "node07.name",
+      "source_pointer": "/body/6/name",
+      "kind": "string",
+      "synthetic_source_example": "Helen Brandt"
+    },
+    {
+      "name": "node07.role",
+      "source_pointer": "/body/6/role",
+      "kind": "string",
+      "synthetic_source_example": "Governance, controls"
+    },
+    {
+      "name": "node08.initials",
+      "source_pointer": "/body/7/initials",
+      "kind": "string",
+      "synthetic_source_example": "RM"
+    },
+    {
+      "name": "node08.name",
+      "source_pointer": "/body/7/name",
+      "kind": "string",
+      "synthetic_source_example": "Ravi Menon"
+    },
+    {
+      "name": "node08.role",
+      "source_pointer": "/body/7/role",
+      "kind": "string",
+      "synthetic_source_example": "Finance data design"
+    },
+    {
+      "name": "node09.initials",
+      "source_pointer": "/body/8/initials",
+      "kind": "string",
+      "synthetic_source_example": "CD"
+    },
+    {
+      "name": "node09.name",
+      "source_pointer": "/body/8/name",
+      "kind": "string",
+      "synthetic_source_example": "Claire Dubois"
+    },
+    {
+      "name": "node09.role",
+      "source_pointer": "/body/8/role",
+      "kind": "string",
+      "synthetic_source_example": "Treasury and payments"
+    },
+    {
+      "name": "node10.initials",
+      "source_pointer": "/body/9/initials",
+      "kind": "string",
+      "synthetic_source_example": "JW"
+    },
+    {
+      "name": "node10.name",
+      "source_pointer": "/body/9/name",
+      "kind": "string",
+      "synthetic_source_example": "Jonas Weber"
+    },
+    {
+      "name": "node10.role",
+      "source_pointer": "/body/9/role",
+      "kind": "string",
+      "synthetic_source_example": "Cybersecurity"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node02.bio.points",
+      "source_pointer": "/body/1/bio/points",
+      "count": 3
+    },
+    {
+      "name": "node02.bio.tags",
+      "source_pointer": "/body/1/bio/tags",
+      "count": 2
+    },
+    {
+      "name": "node03.bio.points",
+      "source_pointer": "/body/2/bio/points",
+      "count": 3
+    },
+    {
+      "name": "node03.bio.tags",
+      "source_pointer": "/body/2/bio/tags",
+      "count": 2
+    },
+    {
+      "name": "node04.bio.points",
+      "source_pointer": "/body/3/bio/points",
+      "count": 3
+    },
+    {
+      "name": "node04.bio.tags",
+      "source_pointer": "/body/3/bio/tags",
+      "count": 2
+    },
+    {
+      "name": "node05.bio.points",
+      "source_pointer": "/body/4/bio/points",
+      "count": 3
+    },
+    {
+      "name": "node05.bio.tags",
+      "source_pointer": "/body/4/bio/tags",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Context"
+        },
+        {
+          "key": "section-02",
+          "label": "Approach"
+        },
+        {
+          "key": "section-03",
+          "label": "Team"
+        },
+        {
+          "key": "section-04",
+          "label": "Commercials"
+        },
+        {
+          "key": "section-05",
+          "label": "Next steps"
+        }
+      ],
+      "active": "section-03"
+    }
+  }
+}

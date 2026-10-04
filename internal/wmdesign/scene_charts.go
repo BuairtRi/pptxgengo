@@ -49,27 +49,59 @@ func (k sceneQuadrantKey) numbered() bool    { return k != "" }
 func (k sceneQuadrantKey) ownLegend() bool   { return k == "legend" }
 func (k sceneQuadrantKey) markersOnly() bool { return k == "markers" }
 
+// Explicit opt-in retains authored category text. Omitted/false preserves the
+// historical chart typography; null and non-boolean values are rejected.
+type scenePreserveCategories bool
+
+type scenePreserveWorkbookZeros bool
+
+func (p *scenePreserveWorkbookZeros) UnmarshalJSON(raw []byte) error {
+	switch strings.TrimSpace(string(raw)) {
+	case "true":
+		*p = true
+	case "false":
+		*p = false
+	default:
+		return fmt.Errorf("scene.chart_preserve_workbook_zeros_requires_boolean")
+	}
+	return nil
+}
+
+func (p *scenePreserveCategories) UnmarshalJSON(raw []byte) error {
+	switch strings.TrimSpace(string(raw)) {
+	case "true":
+		*p = true
+	case "false":
+		*p = false
+	default:
+		return fmt.Errorf("scene.chart_preserve_categories_requires_boolean")
+	}
+	return nil
+}
+
 type sceneChartSource struct {
-	Type        string             `json:"type"`
-	Kind        string             `json:"kind"`
-	X           float64            `json:"x"`
-	Y           float64            `json:"y"`
-	W           float64            `json:"w"`
-	H           float64            `json:"h"`
-	Title       string             `json:"title,omitempty"`
-	Units       string             `json:"units,omitempty"`
-	Source      string             `json:"source,omitempty"`
-	Categories  []string           `json:"categories,omitempty"`
-	Series      []sceneChartSeries `json:"series,omitempty"`
-	Colors      []string           `json:"colors,omitempty"`
-	Highlight   []int              `json:"highlight,omitempty"`
-	Mode        string             `json:"mode,omitempty"`
-	Format      *NumberFormatSpec  `json:"format,omitempty"`
-	ValueSuffix string             `json:"valueSuffix,omitempty"`
-	YMin        *float64           `json:"yMin,omitempty"`
-	XTitle      string             `json:"xTitle,omitempty"`
-	YTitle      string             `json:"yTitle,omitempty"`
-	Target      *struct {
+	Type                  string                     `json:"type"`
+	Kind                  string                     `json:"kind"`
+	X                     float64                    `json:"x"`
+	Y                     float64                    `json:"y"`
+	W                     float64                    `json:"w"`
+	H                     float64                    `json:"h"`
+	Title                 string                     `json:"title,omitempty"`
+	Units                 string                     `json:"units,omitempty"`
+	Source                string                     `json:"source,omitempty"`
+	Categories            []string                   `json:"categories,omitempty"`
+	PreserveCategories    scenePreserveCategories    `json:"preserveCategories,omitempty"`
+	PreserveWorkbookZeros scenePreserveWorkbookZeros `json:"preserveWorkbookZeros,omitempty"`
+	Series                []sceneChartSeries         `json:"series,omitempty"`
+	Colors                []string                   `json:"colors,omitempty"`
+	Highlight             []int                      `json:"highlight,omitempty"`
+	Mode                  string                     `json:"mode,omitempty"`
+	Format                *NumberFormatSpec          `json:"format,omitempty"`
+	ValueSuffix           string                     `json:"valueSuffix,omitempty"`
+	YMin                  *float64                   `json:"yMin,omitempty"`
+	XTitle                string                     `json:"xTitle,omitempty"`
+	YTitle                string                     `json:"yTitle,omitempty"`
+	Target                *struct {
 		Value float64 `json:"value"`
 		Label string  `json:"label"`
 	} `json:"target,omitempty"`
@@ -85,6 +117,7 @@ type sceneChartSource struct {
 	Fill         string                   `json:"fill,omitempty"`
 	StrongState  string                   `json:"strongState,omitempty"`
 	PositionMode string                   `json:"positionMode,omitempty"`
+	HoleSize     *float64                 `json:"holeSize,omitempty"`
 }
 
 func (r *renderer) planChartScene(id string, raw json.RawMessage, ctx SceneContext) (*scenePlan, bool, error) {
@@ -220,9 +253,42 @@ func sceneChartFormatCode(n sceneChartSource) (string, error) {
 }
 
 func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneContext) (*scenePlan, error) {
+	if n.HoleSize != nil && (r.source.Revision != LibraryRevisionV5 || n.Kind != "doughnut" || math.IsNaN(*n.HoleSize) || math.IsInf(*n.HoleSize, 0) || *n.HoleSize < 30 || *n.HoleSize > 80) {
+		return nil, fmt.Errorf("scene.chart_hole_size_requires_v5_doughnut_30_to_80")
+	}
 	b := Rect{n.X, n.Y, n.W, n.H}
 	if b.W <= 0 || b.H <= 0 || math.IsNaN(b.X+b.Y+b.W+b.H) || math.IsInf(b.X+b.Y+b.W+b.H, 0) {
 		return nil, fmt.Errorf("scene.chart_invalid_geometry")
+	}
+	if n.Kind == "line" && isExpandedLibrary(r.source.Revision) {
+		if len(n.Categories) == 0 || len(n.Categories) > 60 || len(n.Series) == 0 || len(n.Series) > 4 {
+			return nil, fmt.Errorf("scene.chart_category_or_series_count")
+		}
+		copyBytes := len(n.Title) + len(n.Units) + len(n.Source) + len(n.XTitle) + len(n.YTitle) + len(n.ValueSuffix)
+		if n.Target != nil {
+			copyBytes += len(n.Target.Label)
+		}
+		for _, c := range n.Categories {
+			if len(c) > 4096 {
+				return nil, fmt.Errorf("scene.chart_line_copy_limit")
+			}
+			copyBytes += len(c)
+		}
+		for _, series := range n.Series {
+			if len(series.Name) > 4096 {
+				return nil, fmt.Errorf("scene.chart_line_copy_limit")
+			}
+			copyBytes += len(series.Name)
+		}
+		if copyBytes > 65536 {
+			return nil, fmt.Errorf("scene.chart_line_copy_limit")
+		}
+		if n.YMin != nil && (math.IsNaN(*n.YMin) || math.IsInf(*n.YMin, 0) || math.Abs(*n.YMin) > 1e9) {
+			return nil, fmt.Errorf("scene.chart_invalid_y_min")
+		}
+		if n.Target != nil && (math.IsNaN(n.Target.Value) || math.IsInf(n.Target.Value, 0)) {
+			return nil, fmt.Errorf("scene.chart_invalid_target")
+		}
 	}
 	surface := ctx.Surface
 	if surface == "" {
@@ -252,7 +318,7 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 		}
 		bottom -= 18
 	}
-	if n.Kind != "quadrant" || r.source.Revision != LibraryRevisionV2 {
+	if n.Kind != "quadrant" || !isModernLibrary(r.source.Revision) {
 		top += 9
 	}
 	plot := Rect{b.X, top, b.W, bottom - top}
@@ -263,7 +329,7 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 		if err := r.sceneQuadrantChart(p, id, n, plot, surface, ctx); err != nil {
 			return nil, err
 		}
-		if r.source.Revision == LibraryRevisionV2 {
+		if isModernLibrary(r.source.Revision) {
 			p.Bounds = Rect{}
 			for _, item := range p.Items {
 				if item.Shape != nil {
@@ -284,7 +350,14 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 	if err != nil {
 		return nil, err
 	}
+	o.PreserveWorkbookZeros = bool(n.PreserveWorkbookZeros)
 	o.DataLabelFormatCode, err = sceneChartFormatCode(n)
+	if r.source.Revision == LibraryRevisionV5 {
+		// PowerPoint's optional decimals can display integers as "1." or
+		// scaled currency as "$1.M". Preserve each format's precision with
+		// explicit decimal places, leaving source values and suffixes intact.
+		o.DataLabelFormatCode = v5NativeChartFormat(o.DataLabelFormatCode)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -315,20 +388,33 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 		} else {
 			typ = pptx.ChartTypeDoughnut
 			o.HoleSize = sceneChartFloat(60)
+			if n.HoleSize != nil {
+				o.HoleSize = sceneChartFloat(*n.HoleSize)
+			}
 		}
 		o.DataLabelPosition = "outEnd"
 		o.ShowLabel = ptrSceneBool(true)
 		o.ShowLeaderLines = ptrSceneBool(true)
 	}
-	if len(n.Categories) == 0 || len(n.Categories) > 12 || len(n.Series) == 0 || len(n.Series) > 4 {
+	categoryLimit := 12
+	if n.Kind == "line" && isExpandedLibrary(r.source.Revision) {
+		categoryLimit = 60
+	}
+	if len(n.Categories) == 0 || len(n.Categories) > categoryLimit || len(n.Series) == 0 || len(n.Series) > 4 {
 		return nil, fmt.Errorf("scene.chart_category_or_series_count")
 	}
-	if n.Kind == "column" && len(n.Categories) > 8 {
+	columnLimit := 8
+	if r.source.Revision == LibraryRevisionV5 {
+		columnLimit = 10
+	}
+	if n.Kind == "column" && len(n.Categories) > columnLimit {
 		return nil, fmt.Errorf("scene.chart_column_category_count")
 	}
+
 	categorySet := map[string]bool{}
 	for i, label := range n.Categories {
-		if strings.TrimSpace(label) == "" || categorySet[label] {
+		sparseLabel := n.Kind == "line" && isExpandedLibrary(r.source.Revision) && label == ""
+		if !sparseLabel && (strings.TrimSpace(label) == "" || categorySet[label]) {
 			return nil, fmt.Errorf("scene.chart_duplicate_or_empty_category")
 		}
 		categorySet[label] = true
@@ -336,7 +422,9 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 			return nil, err
 		}
 	}
+	allowMissingLine := n.Kind == "line" && isExpandedLibrary(r.source.Revision)
 	data := make([]pptx.ChartData, len(n.Series))
+	allowSignedLine := n.Kind == "line" && isExpandedLibrary(r.source.Revision) && n.YMin != nil && !math.IsNaN(*n.YMin) && !math.IsInf(*n.YMin, 0)
 	colors := make([]string, len(n.Series))
 	max := 0.
 	nameSet := map[string]bool{}
@@ -360,23 +448,46 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 			return nil, err
 		}
 		vals := make([]float64, len(s.Values))
+		var missing []bool
+		observed := 0
 		for j, v := range s.Values {
 			if v == nil {
-				return nil, fmt.Errorf("scene.chart_native_missing_value_not_supported: %s/%d", s.Name, j)
+				if !allowMissingLine {
+					return nil, fmt.Errorf("scene.chart_native_missing_value_not_supported: %s/%d", s.Name, j)
+				}
+				if n.Mode != "" {
+					return nil, fmt.Errorf("scene.chart_missing_line_mode_unsupported")
+				}
+				if missing == nil {
+					missing = make([]bool, len(s.Values))
+				}
+				missing[j] = true
+				continue
 			}
-			if math.IsNaN(*v) || math.IsInf(*v, 0) || *v < 0 {
+			observed++
+			if allowMissingLine && math.Abs(*v) > 1e9 {
+				return nil, fmt.Errorf("scene.chart_line_value_out_of_range")
+			}
+			if math.IsNaN(*v) || math.IsInf(*v, 0) || *v < 0 && !(allowSignedLine && *v >= *n.YMin) {
 				return nil, fmt.Errorf("scene.chart_requires_finite_nonnegative_values")
 			}
 			vals[j] = *v
 			max = math.Max(max, *v)
 		}
+		if allowMissingLine && observed == 0 {
+			return nil, fmt.Errorf("scene.chart_series_has_no_observed_values: %s", s.Name)
+		}
+		// Frozen source joins recorded observations across blanks.
+		if missing != nil {
+			o.DisplayBlanksAs = "span"
+		}
 		labels := append([]string(nil), n.Categories...)
-		if n.Kind == "column" || n.Kind == "line" {
+		if !n.PreserveCategories && (n.Kind == "column" || n.Kind == "line") {
 			for j := range labels {
 				labels[j] = strings.ToUpper(labels[j])
 			}
 		}
-		data[i] = pptx.ChartData{DataIndex: i, Name: s.Name, Labels: [][]string{labels}, Values: vals}
+		data[i] = pptx.ChartData{DataIndex: i, Name: s.Name, Labels: [][]string{labels}, Values: vals, MissingValues: missing}
 	}
 	if n.Format == nil && n.ValueSuffix == "" {
 		integerData := true
@@ -784,7 +895,7 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 	if n.Key.ownLegend() {
 		plotW = b.W - 330
 	}
-	if r.source.Revision == LibraryRevisionV2 {
+	if isModernLibrary(r.source.Revision) {
 		availableW := b.W - 36
 		if n.Key.ownLegend() {
 			availableW = b.W - 300
@@ -859,8 +970,9 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 		if qp[0] == 1 {
 			align = "right"
 		}
-		if _, err := r.sceneDataText(p, id+".name."+key, q.Name, st, Rect{box.X + 9, ny, midX - 18, 0}, on, "primary", align); err != nil {
-			return err
+		nameRecord, nameErr := r.sceneDataText(p, id+".name."+key, q.Name, st, Rect{box.X + 9, ny, midX - 18, 0}, on, "primary", align)
+		if nameErr != nil {
+			return nameErr
 		}
 		if q.Tag != "" {
 			ts := st
@@ -879,6 +991,9 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 				tx = box.X + midX - 9 - tw
 			}
 			ty := ny + 18
+			if r.source.Revision == LibraryRevisionV5 && qp[1] == 0 {
+				ty = ny + math.Max(18, nameRecord.Rect.H+4)
+			}
 			if qp[1] == 1 {
 				ty = ny - 18
 			}
@@ -995,7 +1110,7 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 				continue
 			}
 			keyGap := 24.
-			if r.source.Revision == LibraryRevisionV2 {
+			if isModernLibrary(r.source.Revision) {
 				keyGap = 36
 			}
 			kx, ky := x+plotW+keyGap, y+6+float64(i)*24

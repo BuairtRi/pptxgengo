@@ -5,6 +5,62 @@ reviewed source snapshot, resolves static fonts by numeric weight, resolves grid
 and frame geometry, and writes editable PowerPoint objects and a layout report.
 Generation has no AppleScript, PowerPoint, browser, Python, or network dependency.
 
+## Semantic template selection and authored repairs
+
+Read [the discovery workflow](../../docs/semantic-template-discovery.md) for
+purpose/structure search, verified screenshots, content zones and SQLite views.
+`library-find --summary` avoids full source definitions and includes verified
+screenshot paths. `library-inspect --summary` returns the purpose, topology,
+named slots and their content-zone mapping without borrowed specimen copy.
+
+```sh
+pptxdesign library-index --bundle library/wm-design-system/v5 \
+  --gallery MATCHING-CATALOG-ROOT --out NEW-library.sqlite
+pptxdesign library-find --index NEW-library.sqlite --kinds template \
+  --query 'buy build modernization economics' --limit 5 --summary
+pptxdesign library-inspect --index NEW-library.sqlite \
+  --id decision/buy-build-economics --summary
+pptxdesign project scaffold --bundle library/wm-design-system/v5 \
+  --template lifecycle/three-phases \
+  --reason 'Preserve 4 Rationalize, 4 Build and 3 Sustain phases' \
+  --out NEW-local-scaffold.json
+pptxdesign project edit --project MY-PROJECT --patch slide-edits.json
+pptxdesign project measure --report MY-BUILD/layout-report.json
+```
+
+`project scaffold` emits an uninstalled local component definition with verified
+shared ancestry and separately labelled synthetic source values. Replace those
+values with actual content. Optional `--omit-nodes node43,node45` explicitly
+records omitted source nodes; a reason is required. Generic scene definitions
+are supported; typed legacy bindings, stamp/tint/source-note chrome and geometry
+outside supported local frame zones fail explicitly. A scaffold is not a native
+acceptance receipt or automatic semantic mapping.
+
+`project edit` accepts a YAML or JSON mapping keyed by stable slide ID. Allowed fields
+are a complete `values` object, a `template` reference and/or a `brief` project-relative
+path to a page brief file (for example, `context/page-briefs/decision.md`):
+
+```json
+{
+  "decision-slide": {
+    "template": {"scope": "shared", "id": "decision/buy-build-economics"},
+    "values": {"slots": {"REQUIRED-SLOT": "Actual content"}, "keys": {}}
+  }
+}
+```
+
+The abbreviated values above are illustrative; the chosen contract requires
+all its real slots and arrays. The command validates the resulting source and
+bindings before atomic replacement, saves the exact predecessor and decision
+receipt, preserves notes/hidden state/section membership, and retains untouched
+YAML nodes. Complete arrays are replaced deliberately. Leading blank paragraphs
+are retained using quoted scalar encoding. Build and native review follow edits.
+
+`project measure` analyzes a saved renderer report without mutating source or
+creating another build. Estimated text intersections and card-panel spills are
+advisory review findings. Rotated text and chart/table internal geometry need
+separate inspection; successful measurement is not visual acceptance.
+
 This repository command is separate from the installed local release. Build from
 the repository root with Go 1.27.1 or newer:
 
@@ -429,6 +485,14 @@ unqualified for arbitrary content and exact native font-file selection. Generati
 is Go-only; no per-deck character capture is required. No tests were added or run.
 
 ## Refreshed library: split frames and caller navigation
+
+The [October 3 library review corrections](../../planning/wm-design-contracts/v2/library-feedback-2026-10-03.md)
+add explicit source-scene options for compact Gantt tracks/legends (`trackPitch`,
+`legendSize`, `legendFullWidth`), proportional legend sizing (`size`), group-label
+rule end padding (`ruleEndGap`) and registered hand-drawn before/after arrows
+(`arrow`). Named v2 refinements select them after closed content binding; these
+are composition geometry, not additional caller content slots. Native review of
+the corrected library remains pending as described in that receipt.
 
 Select round-4 source explicitly with `--bundle library/wm-design-system/v2`.
 The original v1 bundle remains the default. Source revision and typography engine

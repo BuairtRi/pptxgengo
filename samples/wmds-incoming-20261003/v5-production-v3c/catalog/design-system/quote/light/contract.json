@@ -1,0 +1,144 @@
+{
+  "key": "quote/light",
+  "source_file": "templates/library/core.json",
+  "source_sha256": "3a3bccfcb82d3a9984779f06ea35937deb3cfa68871b54bfc1f62f59737acf69",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "pullquote"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "square"
+    }
+  ],
+  "family": "core",
+  "tier": "core",
+  "name": "Quote · light",
+  "purpose": "A client voice in their own words at heading size, with a single quiet square.",
+  "uses": [
+    "data.callout (quote)"
+  ],
+  "source_advisory_budget": {
+    "words": 30,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "quote",
+      "maxChars": 100
+    },
+    {
+      "slot": "attribution",
+      "maxChars": 60
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "image",
+      "point",
+      "quotation"
+    ],
+    "structures": [],
+    "visual_forms": [
+      "image",
+      "text"
+    ],
+    "component_types": [
+      "pullquote",
+      "square",
+      "text"
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 414,
+          "x": 57,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "pullquote",
+        "role": "quotation",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "square",
+        "role": "content",
+        "source_bounds": {
+          "x": 705,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "What we heard"
+    },
+    {
+      "name": "node02.by",
+      "source_pointer": "/body/1/by",
+      "kind": "string",
+      "synthetic_source_example": "Corporate controller · Northfield Health System"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "We do not need faster spreadsheets. We need to stop finding problems on day nine."
+    },
+    {
+      "name": "node03.photo",
+      "source_pointer": "/body/2/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-working-session"
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

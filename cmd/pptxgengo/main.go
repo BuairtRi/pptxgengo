@@ -50,6 +50,55 @@ func hasFlag(args []string, flag string) bool {
 	return false
 }
 
+func publishedBundle(root string) (string, error) {
+	path := filepath.Join(root, "release", "default-bundle.txt")
+	b, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return "v3", nil
+	}
+	if err != nil {
+		return "", err
+	}
+	value := strings.TrimSpace(string(b))
+	if value != "v1" && value != "v2" && value != "v3" && value != "v4" && value != "v5" {
+		return "", fmt.Errorf("invalid published bundle in %s: %q", path, value)
+	}
+	return value, nil
+}
+
+func designArgs(root string, input []string) ([]string, error) {
+	args := append([]string{}, input...)
+	if len(args) == 0 {
+		return args, nil
+	}
+	command := args[0]
+	if command != "project" && !hasFlag(args, "--bundle") {
+		bundle, err := publishedBundle(root)
+		if err != nil {
+			return nil, err
+		}
+		args = append(args, "--bundle", filepath.Join(root, "library", "wm-design-system", bundle))
+	}
+	indexRead := command == "library-find" || command == "library-inspect" || command == "library-preview"
+	if indexRead && !hasFlag(args, "--index") {
+		args = append(args, "--index", filepath.Join(root, "catalog", "library.sqlite"))
+		if !hasFlag(args, "--gallery") {
+			args = append(args, "--gallery", filepath.Join(root, "catalog"))
+		}
+		if !hasFlag(args, "--legacy-index") {
+			args = append(args, "--legacy-index", filepath.Join(root, "library", "catalog-library.sqlite"))
+		}
+		if !hasFlag(args, "--legacy-root") {
+			args = append(args, "--legacy-root", root)
+		}
+	}
+	engineAllowed := command != "library-index" && command != "library-inspect" && command != "library-preview" && command != "project"
+	if engineAllowed && !hasFlag(args, "--engine") {
+		args = append(args, "--engine", "wmds-go-foundation.v2")
+	}
+	return args, nil
+}
+
 func run() error {
 	if len(os.Args) < 2 {
 		usage()
@@ -112,6 +161,10 @@ func run() error {
 		if len(os.Args) != 2 {
 			return fmt.Errorf("usage: pptxgengo paths")
 		}
+		bundle, err := publishedBundle(root)
+		if err != nil {
+			return err
+		}
 		paths := map[string]string{
 			"root":                  root,
 			"library":               filepath.Join(root, "library"),
@@ -121,6 +174,12 @@ func run() error {
 			"catalog_components":    filepath.Join(root, "catalog", "components.html"),
 			"catalog_design_system": filepath.Join(root, "catalog", "design-system.html"),
 			"design_system_v2":      filepath.Join(root, "library", "wm-design-system", "v2"),
+			"design_system_v3":      filepath.Join(root, "library", "wm-design-system", "v3"),
+			"design_system_v4":      filepath.Join(root, "library", "wm-design-system", "v4"),
+			"design_system_v5":      filepath.Join(root, "library", "wm-design-system", "v5"),
+			"design_system_default": filepath.Join(root, "library", "wm-design-system", bundle),
+			"design_index":          filepath.Join(root, "catalog", "library.sqlite"),
+			"project_example":       filepath.Join(root, "examples", "deck-project"),
 			"skill":                 filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
 		}
 		return json.NewEncoder(os.Stdout).Encode(paths)
@@ -141,11 +200,9 @@ func run() error {
 	path := filepath.Join(root, "bin", tool)
 	args := append([]string{}, os.Args[2:]...)
 	if tool == "pptxdesign" && len(args) > 0 {
-		if !hasFlag(args, "--bundle") {
-			args = append(args, "--bundle", filepath.Join(root, "library", "wm-design-system", "v2"))
-		}
-		if !hasFlag(args, "--engine") {
-			args = append(args, "--engine", "wmds-go-foundation.v2")
+		args, err = designArgs(root, args)
+		if err != nil {
+			return err
 		}
 	}
 	if (tool == "pptxtemplate" || tool == "pptxlib" || tool == "pptxadapt") && !hasRoot(args) && len(args) > 0 && !(tool == "pptxtemplate" && (args[0] == "apply-accent" || args[0] == "apply-gauge")) {

@@ -1,0 +1,307 @@
+{
+  "key": "impact/group-detail",
+  "source_file": "templates/library/change.json",
+  "source_sha256": "50c9b7c2bbd968fda1adb78ff0c4efdd2f823df0d17e6043514d442834c033ac",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "cardrow"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    }
+  ],
+  "family": "change",
+  "tier": "working",
+  "name": "Change impact detail for one group",
+  "purpose": "Show exactly what changes for one stakeholder group on each dimension, with its impact rating and the support planned.",
+  "uses": [
+    "card.standard (cardrow)",
+    "data.legend"
+  ],
+  "source_advisory_budget": {
+    "words": 125,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "card label",
+      "maxChars": 16
+    },
+    {
+      "slot": "card body",
+      "maxChars": 150
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "card",
+      "cardrow"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/0/items",
+        "component_type": "cardrow",
+        "role": "point",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "cardrow",
+        "role": "point",
+        "source_bounds": {
+          "h": 216,
+          "w": 198,
+          "x": 57,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 54,
+          "w": 414,
+          "x": 57,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 54,
+          "w": 414,
+          "x": 489,
+          "y": 396
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Change impact: front-desk schedulers"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Front-desk schedulers are hit hardest on process, technology and role"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield Health System change impact assessment, Sep 2026."
+    },
+    {
+      "name": "node01.items.item01.body.item01.p",
+      "source_pointer": "/body/0/items/0/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Walk-in and phone booking merge into one scheduling workflow with new double-booking rules."
+    },
+    {
+      "name": "node01.items.item01.body.item02.p",
+      "source_pointer": "/body/0/items/0/body/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Support: Redesign sessions with five clinics."
+    },
+    {
+      "name": "node01.items.item01.label",
+      "source_pointer": "/body/0/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "High impact"
+    },
+    {
+      "name": "node01.items.item01.title",
+      "source_pointer": "/body/0/items/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Process"
+    },
+    {
+      "name": "node01.items.item02.body.item01.p",
+      "source_pointer": "/body/0/items/1/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Three legacy schedule screens are replaced by a single web platform with new login."
+    },
+    {
+      "name": "node01.items.item02.body.item02.p",
+      "source_pointer": "/body/0/items/1/body/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Support: Sandbox practice from week 6."
+    },
+    {
+      "name": "node01.items.item02.label",
+      "source_pointer": "/body/0/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "High impact"
+    },
+    {
+      "name": "node01.items.item02.title",
+      "source_pointer": "/body/0/items/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Technology"
+    },
+    {
+      "name": "node01.items.item03.body.item01.p",
+      "source_pointer": "/body/0/items/2/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Schedulers own referral holds and waitlist outreach that used to sit with nurses."
+    },
+    {
+      "name": "node01.items.item03.body.item02.p",
+      "source_pointer": "/body/0/items/2/body/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Support: Updated role cards and job aids."
+    },
+    {
+      "name": "node01.items.item03.label",
+      "source_pointer": "/body/0/items/2/label",
+      "kind": "string",
+      "synthetic_source_example": "High impact"
+    },
+    {
+      "name": "node01.items.item03.title",
+      "source_pointer": "/body/0/items/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Role"
+    },
+    {
+      "name": "node01.items.item04.body.item01.p",
+      "source_pointer": "/body/0/items/3/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Template building and rules-based overbooking are new skills for the team."
+    },
+    {
+      "name": "node01.items.item04.body.item02.p",
+      "source_pointer": "/body/0/items/3/body/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Support: Eight hours of role-based training."
+    },
+    {
+      "name": "node01.items.item04.label",
+      "source_pointer": "/body/0/items/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Medium impact"
+    },
+    {
+      "name": "node01.items.item04.title",
+      "source_pointer": "/body/0/items/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Skills"
+    },
+    {
+      "name": "node02.title",
+      "source_pointer": "/body/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Scale: 142 schedulers, nine sites"
+    },
+    {
+      "name": "node03.title",
+      "source_pointer": "/body/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Limit: 61 work part time"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.items.item01.body",
+      "source_pointer": "/body/0/items/0/body",
+      "count": 2
+    },
+    {
+      "name": "node01.items.item02.body",
+      "source_pointer": "/body/0/items/1/body",
+      "count": 2
+    },
+    {
+      "name": "node01.items.item03.body",
+      "source_pointer": "/body/0/items/2/body",
+      "count": 2
+    },
+    {
+      "name": "node01.items.item04.body",
+      "source_pointer": "/body/0/items/3/body",
+      "count": 2
+    },
+    {
+      "name": "node01.items",
+      "source_pointer": "/body/0/items",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

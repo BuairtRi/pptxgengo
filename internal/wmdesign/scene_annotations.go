@@ -117,7 +117,7 @@ func (r *renderer) planAnnotationScene(id string, raw json.RawMessage, ctx Scene
 	if n.Size <= 0 || n.Callout.W <= 24 || math.IsNaN(n.Size+n.Callout.W) || math.IsInf(n.Size+n.Callout.W, 0) || strings.TrimSpace(n.Callout.Text) == "" {
 		return nil, true, fmt.Errorf("scene.annotation_invalid_size_or_copy")
 	}
-	data, asset, err := primitiveAssetBytes(n.Arrow)
+	data, asset, err := r.primitiveAssetBytes(n.Arrow)
 	if err != nil {
 		return nil, true, err
 	}

@@ -1,0 +1,35 @@
+{
+  "schema": "pptxgengo.repository-zone-role-test-evidence.v1",
+  "status": "PASS",
+  "scope": "current repository only; frozen semantic runtime v4 and locked deliveries unchanged",
+  "commands": [
+    {
+      "command": "go test -count=1 ./...",
+      "exit_code": 0,
+      "log": "repository-semantic-zone-role-normal.log"
+    },
+    {
+      "command": "go test -race -count=1 ./...",
+      "exit_code": 0,
+      "log": "repository-semantic-zone-role-race.log"
+    }
+  ],
+  "environment": {
+    "go": "cached darwin-arm64 Go 1.27.1",
+    "GOMODCACHE": "/tmp/pptxgengo-modcache",
+    "GOCACHE": "/tmp/pptxgengo-gocache",
+    "GOPROXY": "off",
+    "GOTOOLCHAIN": "local"
+  },
+  "tested_packages": 13,
+  "packages_without_tests": 7,
+  "sha256": {
+    "internal/deckproject/load.go": "867c81aa5684848ad74a7e496348a572a37dd42c700be0598cdf71ccaf0d9bc5",
+    "internal/deckproject/zone_role_test.go": "50da40deed61fbfc313f0b4c79d754b9eee9c9bcb72d48cbffd57163ee4f65a8",
+    "internal/deckproject/README.md": "56861639e276b4a118010ae6726c1f33578e06d2eeba17a12b8d4a866b2e52a2",
+    "planning/wm-design-contracts/v5/intake-20261003-587-frozen/repair-wave/repository-semantic-zone-role-normal.log": "49b2a49c856a41874e332ec84a2e0fba4204515fac976d75576c5ef8459fe022",
+    "planning/wm-design-contracts/v5/intake-20261003-587-frozen/repair-wave/repository-semantic-zone-role-race.log": "13cf581a86bb780308a876bae78627d65800023d923e4c9121b7555cfd83b4f3"
+  },
+  "frozen_semantic_v4_sha256": "370c08c471eb0dc13f6bcb9e57ca6c9d199a1aa467bd831ec9eaf849ff3b2e20",
+  "validation": "Frame roles slide-title/eyebrow/source/nav are consumed implicitly; custom roles require explicit node binding; unbound zones fail at Load with source role path."
+}

@@ -1,0 +1,118 @@
+{
+  "key": "cards/4",
+  "source_file": "templates/library/core.json",
+  "source_sha256": "3a3bccfcb82d3a9984779f06ea35937deb3cfa68871b54bfc1f62f59737acf69",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "cardrow"
+    }
+  ],
+  "family": "core",
+  "tier": "core",
+  "name": "Cards · four columns",
+  "purpose": "Four short parallel ideas on subtle cards with inline numbers.",
+  "uses": [
+    "header.slide",
+    "card row"
+  ],
+  "source_advisory_budget": {
+    "words": 60,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "cards",
+      "count": 4,
+      "titleMax": 16,
+      "bodyMax": 50
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "cardrow"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "values/cards",
+        "component_type": "cardrow",
+        "role": "point",
+        "exact_count": 4,
+        "basis": "typed_values_exact_count",
+        "scope": "primary"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "cardrow",
+        "role": "point",
+        "source_bounds": {
+          "h": 198,
+          "w": 198,
+          "x": 57,
+          "y": 144
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-template-bindings.v2",
+  "value_schema": {
+    "kind": "typed_values",
+    "go_type": "BoundCardRowsContent",
+    "reference": "planning/wm-design-contracts/v1/template-execution.md",
+    "fields": {
+      "cards": "array of {key:string,title:string,body:string}; unique authored keys; array order controls card order",
+      "eyebrow": "string",
+      "title": "string"
+    },
+    "exact_counts": {
+      "cards": 4
+    }
+  },
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "This template retains its typed v2 values API; the library slots/keys projection is not accepted.",
+    "All declared typed content is required; geometry/base styles remain frozen.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

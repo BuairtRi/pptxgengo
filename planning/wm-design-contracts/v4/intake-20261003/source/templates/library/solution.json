@@ -1,0 +1,4593 @@
+{
+  "schema": "wmds.templates.v2",
+  "family": "solution",
+  "name": "Solution and architecture",
+  "summary": "Solution views: process flows, workstreams, readiness, pathways and context models.",
+  "templates": [
+    {
+      "id": "process",
+      "variant": "swimlane",
+      "name": "Process · swimlane",
+      "tier": "core",
+      "purpose": "Who does what, in order: four actor lanes, one decision, two flagged pain points and a one-line key.",
+      "uses": [
+        "process.swimlane",
+        "header.slide"
+      ],
+      "legacy": "Process maps",
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "lanes",
+          "note": "3–5 actors"
+        },
+        {
+          "slot": "steps",
+          "note": "up to 8, 24 chars"
+        },
+        {
+          "slot": "key line",
+          "maxChars": 60
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Current state",
+        "title": "Journal review hands off four times before posting",
+        "source": {
+          "text": "Northfield close interviews, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "swimlane",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "cols": 6,
+            "lanes": [
+              "Preparer",
+              "Rules engine",
+              "Reviewer",
+              "Controller"
+            ],
+            "steps": [
+              {
+                "id": "s1",
+                "lane": 0,
+                "col": 0,
+                "text": "Post entry",
+                "kind": "start"
+              },
+              {
+                "id": "s2",
+                "lane": 1,
+                "col": 1,
+                "text": "Check against rules"
+              },
+              {
+                "id": "d1",
+                "lane": 1,
+                "col": 2,
+                "text": "Passes?",
+                "kind": "decision"
+              },
+              {
+                "id": "s3",
+                "lane": 0,
+                "col": 2,
+                "text": "Fix and repost",
+                "pain": true
+              },
+              {
+                "id": "s4",
+                "lane": 2,
+                "col": 3,
+                "text": "Review exception"
+              },
+              {
+                "id": "s5",
+                "lane": 3,
+                "col": 4,
+                "text": "Approve large entries",
+                "pain": true
+              },
+              {
+                "id": "s6",
+                "lane": 1,
+                "col": 5,
+                "text": "Post to ledger",
+                "kind": "end"
+              }
+            ],
+            "links": [
+              [
+                "s1",
+                "s2"
+              ],
+              [
+                "s2",
+                "d1"
+              ],
+              [
+                "d1",
+                "s3",
+                "No",
+                "up"
+              ],
+              [
+                "s3",
+                "s2"
+              ],
+              [
+                "d1",
+                "s6",
+                "Yes",
+                "right"
+              ],
+              [
+                "d1",
+                "s4",
+                "Exception",
+                "down"
+              ],
+              [
+                "s4",
+                "s5"
+              ],
+              [
+                "s5",
+                "s6"
+              ]
+            ],
+            "painNote": "Pain point raised in interviews"
+          }
+        ]
+      }
+    },
+    {
+      "id": "process",
+      "variant": "hierarchy",
+      "name": "Process · L1 to L2 hierarchy",
+      "tier": "core",
+      "purpose": "A process hierarchy on one page: five level-one value-chain processes as interlocking chevrons, each with a level-two sub-process list, an owner and its systems, and the in-scope processes in dark.",
+      "uses": [
+        "shape.chevron",
+        "card.plain",
+        "text.label",
+        "bullets",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-02",
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "level-one process",
+          "note": "5, 18 chars"
+        },
+        {
+          "slot": "level-two list",
+          "note": "4 per process, 20 chars"
+        },
+        {
+          "slot": "owner",
+          "note": "5, 22 chars"
+        },
+        {
+          "slot": "systems",
+          "note": "5, 22 chars"
+        },
+        {
+          "slot": "scope note",
+          "maxChars": 100
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Process hierarchy",
+        "title": "Wave one covers two of five end-to-end finance processes",
+        "source": {
+          "text": "Northfield Health System process inventory, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 126,
+            "w": 172.8,
+            "h": 54,
+            "first": true,
+            "surface": "strong",
+            "text": "Plan to perform"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 198,
+            "w": 154.8,
+            "h": 216,
+            "pad": 12,
+            "surface": "subtle",
+            "body": []
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 69,
+            "y": 210,
+            "w": 130.8,
+            "text": "Process elements"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 69,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Budgeting",
+              "Forecasting",
+              "Capital planning",
+              "Workforce planning"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 69,
+            "y": 318,
+            "w": 130.8,
+            "text": "Owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 69,
+            "y": 336,
+            "w": 130.8,
+            "text": "VP, FP&A"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 69,
+            "y": 366,
+            "w": 130.8,
+            "text": "Systems"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 69,
+            "y": 384,
+            "w": 130.8,
+            "text": "Planning platform"
+          },
+          {
+            "type": "chevron",
+            "x": 229.8,
+            "y": 126,
+            "w": 172.8,
+            "h": 54,
+            "surface": "strong",
+            "text": "Order to cash"
+          },
+          {
+            "type": "card",
+            "x": 229.8,
+            "y": 198,
+            "w": 154.8,
+            "h": 216,
+            "pad": 12,
+            "surface": "subtle",
+            "body": []
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 241.8,
+            "y": 210,
+            "w": 130.8,
+            "text": "Process elements"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 241.8,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Customer onboarding",
+              "Billing",
+              "Cash application",
+              "Collections"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 241.8,
+            "y": 318,
+            "w": 130.8,
+            "text": "Owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 241.8,
+            "y": 336,
+            "w": 130.8,
+            "text": "Controller"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 241.8,
+            "y": 366,
+            "w": 130.8,
+            "text": "Systems"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 241.8,
+            "y": 384,
+            "w": 130.8,
+            "text": "ERP billing module"
+          },
+          {
+            "type": "chevron",
+            "x": 402.6,
+            "y": 126,
+            "w": 172.8,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Procure to pay"
+          },
+          {
+            "type": "card",
+            "x": 402.6,
+            "y": 198,
+            "w": 154.8,
+            "h": 216,
+            "pad": 12,
+            "surface": "strong",
+            "body": []
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 414.6,
+            "y": 210,
+            "w": 130.8,
+            "text": "Process elements"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 414.6,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Sourcing",
+              "Purchase orders",
+              "Invoice processing",
+              "Vendor payments"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 414.6,
+            "y": 318,
+            "w": 130.8,
+            "text": "Owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 414.6,
+            "y": 336,
+            "w": 130.8,
+            "text": "Director, AP"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 414.6,
+            "y": 366,
+            "w": 130.8,
+            "text": "Systems"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 414.6,
+            "y": 384,
+            "w": 130.8,
+            "text": "ERP and AP automation"
+          },
+          {
+            "type": "chevron",
+            "x": 575.4,
+            "y": 126,
+            "w": 172.8,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Record to report"
+          },
+          {
+            "type": "card",
+            "x": 575.4,
+            "y": 198,
+            "w": 154.8,
+            "h": 216,
+            "pad": 12,
+            "surface": "strong",
+            "body": []
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 587.4,
+            "y": 210,
+            "w": 130.8,
+            "text": "Process elements"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 587.4,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Journal entries",
+              "Reconciliation",
+              "Consolidation",
+              "Financial reporting"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 587.4,
+            "y": 318,
+            "w": 130.8,
+            "text": "Owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 587.4,
+            "y": 336,
+            "w": 130.8,
+            "text": "Corporate controller"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 587.4,
+            "y": 366,
+            "w": 130.8,
+            "text": "Systems"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 587.4,
+            "y": 384,
+            "w": 130.8,
+            "text": "ERP general ledger"
+          },
+          {
+            "type": "chevron",
+            "x": 748.2,
+            "y": 126,
+            "w": 154.8,
+            "h": 54,
+            "surface": "strong",
+            "text": "Treasury & tax"
+          },
+          {
+            "type": "card",
+            "x": 748.2,
+            "y": 198,
+            "w": 154.8,
+            "h": 216,
+            "pad": 12,
+            "surface": "subtle",
+            "body": []
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 760.2,
+            "y": 210,
+            "w": 130.8,
+            "text": "Process elements"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 760.2,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Cash positioning",
+              "Debt and investment",
+              "Tax provision",
+              "Tax filings"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 760.2,
+            "y": 318,
+            "w": 130.8,
+            "text": "Owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 760.2,
+            "y": 336,
+            "w": 130.8,
+            "text": "Treasurer"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 760.2,
+            "y": 366,
+            "w": 130.8,
+            "text": "Systems"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 760.2,
+            "y": 384,
+            "w": 130.8,
+            "text": "Treasury workstation"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 426,
+            "w": 846,
+            "text": "Dark chevrons are in scope for wave one. Enablers: shared services, finance IT and master data."
+          }
+        ]
+      },
+      "rev": 2,
+      "added": "2026-10-02",
+      "budget": {
+        "words": 130,
+        "marks": 0
+      },
+      "revised": "2026-10-02"
+    },
+    {
+      "id": "process",
+      "variant": "sipoc",
+      "name": "Process · SIPOC",
+      "tier": "core",
+      "purpose": "Scopes one process before it is mapped: suppliers, inputs, process steps, outputs and customers in five columns, with start, end and out-of-scope cards beneath.",
+      "uses": [
+        "card.plain",
+        "shape.block",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-02",
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "column list",
+          "note": "4–5 items, 20 chars"
+        },
+        {
+          "slot": "start, end and out-of-scope cards",
+          "maxChars": 40
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Process scope",
+        "title": "A SIPOC fixes the scope of invoice to pay before we map it",
+        "source": {
+          "text": "Northfield Health System scoping workshop, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 126,
+            "w": 154.8,
+            "h": 36,
+            "surface": "strong",
+            "style": "body",
+            "text": "Suppliers"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 180,
+            "w": 154.8,
+            "h": 162,
+            "pad": 12,
+            "surface": "subtle",
+            "bodySize": "small",
+            "body": [
+              {
+                "bullets": [
+                  "Vendors",
+                  "Procurement team",
+                  "Receiving dock",
+                  "ERP master data"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 229.8,
+            "y": 126,
+            "w": 154.8,
+            "h": 36,
+            "surface": "strong",
+            "style": "body",
+            "text": "Inputs"
+          },
+          {
+            "type": "card",
+            "x": 229.8,
+            "y": 180,
+            "w": 154.8,
+            "h": 162,
+            "pad": 12,
+            "surface": "subtle",
+            "bodySize": "small",
+            "body": [
+              {
+                "bullets": [
+                  "Vendor invoices",
+                  "Purchase orders",
+                  "Goods receipts",
+                  "Payment terms"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 402.6,
+            "y": 126,
+            "w": 154.8,
+            "h": 36,
+            "surface": "inverse",
+            "style": "body",
+            "text": "Process"
+          },
+          {
+            "type": "card",
+            "x": 402.6,
+            "y": 180,
+            "w": 154.8,
+            "h": 162,
+            "pad": 12,
+            "surface": "strong",
+            "bodySize": "small",
+            "body": [
+              {
+                "bullets": [
+                  "Receive invoice",
+                  "Match to order",
+                  "Resolve exceptions",
+                  "Approve",
+                  "Pay and post"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 575.4,
+            "y": 126,
+            "w": 154.8,
+            "h": 36,
+            "surface": "strong",
+            "style": "body",
+            "text": "Outputs"
+          },
+          {
+            "type": "card",
+            "x": 575.4,
+            "y": 180,
+            "w": 154.8,
+            "h": 162,
+            "pad": 12,
+            "surface": "subtle",
+            "bodySize": "small",
+            "body": [
+              {
+                "bullets": [
+                  "Posted liability",
+                  "Vendor payment",
+                  "Remittance advice",
+                  "Accrual report"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 748.2,
+            "y": 126,
+            "w": 154.8,
+            "h": 36,
+            "surface": "strong",
+            "style": "body",
+            "text": "Customers"
+          },
+          {
+            "type": "card",
+            "x": 748.2,
+            "y": 180,
+            "w": 154.8,
+            "h": 162,
+            "pad": 12,
+            "surface": "subtle",
+            "bodySize": "small",
+            "body": [
+              {
+                "bullets": [
+                  "Vendors",
+                  "Controller",
+                  "Treasury",
+                  "Budget owners"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "h": 90,
+            "pad": 12,
+            "surface": "outline",
+            "label": "Starts when",
+            "body": [
+              {
+                "p": "A vendor invoice arrives"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 360,
+            "w": 270,
+            "h": 90,
+            "pad": 12,
+            "surface": "outline",
+            "label": "Ends when",
+            "body": [
+              {
+                "p": "Payment is posted and reconciled"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 360,
+            "w": 270,
+            "h": 90,
+            "pad": 12,
+            "surface": "outline",
+            "label": "Out of scope",
+            "body": [
+              {
+                "p": "Vendor onboarding and disputes"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02",
+      "budget": {
+        "words": 92,
+        "marks": 0
+      }
+    },
+    {
+      "id": "process",
+      "variant": "current-future",
+      "name": "Process · current and future state",
+      "tier": "core",
+      "purpose": "Two flows on one page: today's steps with the pain points flagged in magenta, and the redesigned flow beneath with a note on each improvement and a result strip.",
+      "uses": [
+        "shape.chevron",
+        "text.small",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-02",
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "current steps",
+          "note": "5 chevrons, 12 chars"
+        },
+        {
+          "slot": "pain notes",
+          "note": "one per step, 30 chars"
+        },
+        {
+          "slot": "future steps",
+          "note": "3–5 chevrons, may span columns"
+        },
+        {
+          "slot": "improvement notes",
+          "maxChars": 36
+        },
+        {
+          "slot": "result strip",
+          "maxChars": 80
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Current and future state",
+        "title": "Redesign cuts invoice handling from six handoffs to two",
+        "source": {
+          "text": "Northfield Health System invoice sample, Q3 FY26."
+        },
+        "body": [
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 126,
+            "w": 126,
+            "text": "Current state"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 180,
+            "w": 126,
+            "text": "Magenta marks a pain point"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 270,
+            "w": 126,
+            "text": "Future state"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 324,
+            "w": 126,
+            "text": "Fewer steps, two handoffs"
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 126,
+            "w": 138,
+            "h": 54,
+            "surface": "strong",
+            "text": "Capture",
+            "first": true
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 201,
+            "y": 198,
+            "w": 126,
+            "text": "Paper and email intake"
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 126,
+            "w": 138,
+            "h": 54,
+            "surface": "strong",
+            "text": "Code"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 198,
+            "w": 126,
+            "text": "11% of lines miscoded"
+          },
+          {
+            "type": "chevron",
+            "x": 489,
+            "y": 126,
+            "w": 138,
+            "h": 54,
+            "surface": "callout",
+            "text": "Route"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 489,
+            "y": 198,
+            "w": 126,
+            "text": "Four handoffs by email"
+          },
+          {
+            "type": "chevron",
+            "x": 633,
+            "y": 126,
+            "w": 138,
+            "h": 54,
+            "surface": "callout",
+            "text": "Approve"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 633,
+            "y": 198,
+            "w": 126,
+            "text": "Six days waiting to approve"
+          },
+          {
+            "type": "chevron",
+            "x": 777,
+            "y": 126,
+            "w": 126,
+            "h": 54,
+            "surface": "strong",
+            "text": "Post"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 777,
+            "y": 198,
+            "w": 126,
+            "text": "Rekeyed into the ledger"
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 270,
+            "w": 138,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Capture and code",
+            "first": true
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 201,
+            "y": 342,
+            "w": 126,
+            "text": "Intelligent capture codes 95% of lines"
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 270,
+            "w": 282,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Match and route"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 342,
+            "w": 270,
+            "text": "Rules route by risk, no email"
+          },
+          {
+            "type": "chevron",
+            "x": 633,
+            "y": 270,
+            "w": 138,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Approve by exception"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 633,
+            "y": 342,
+            "w": 126,
+            "text": "Only exceptions need a reviewer"
+          },
+          {
+            "type": "chevron",
+            "x": 777,
+            "y": 270,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Post"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 777,
+            "y": 342,
+            "w": 126,
+            "text": "Posts with no rekeying"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "inverse",
+            "style": "small",
+            "text": "Cycle time 14 days to 5 days  ·  Handoffs 6 to 2  ·  Rekeying removed"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02",
+      "budget": {
+        "words": 105,
+        "marks": 0
+      }
+    },
+    {
+      "id": "process",
+      "variant": "current-future-right",
+      "name": "Process · current and future state · right panel",
+      "tier": "core",
+      "purpose": "Today’s flow with its pain points and the redesigned flow beneath, with the result stated in a dark right panel.",
+      "uses": [
+        "shape.chevron",
+        "text.small",
+        "header.slide"
+      ],
+      "legacy": "right panel variant of process/current-future",
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "current steps",
+          "note": "5 chevrons, 12 chars"
+        },
+        {
+          "slot": "pain notes",
+          "note": "one per step, 30 chars"
+        },
+        {
+          "slot": "future steps",
+          "note": "3–5 chevrons, may span columns"
+        },
+        {
+          "slot": "improvement notes",
+          "maxChars": 36
+        },
+        {
+          "slot": "result strip",
+          "maxChars": 80
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        },
+        {
+          "slot": "panel content",
+          "note": "key message on the 273 pt panel, inverse inks"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "footer": "compact",
+        "eyebrow": "Current and future state",
+        "title": "Redesign cuts handoffs from six to two",
+        "source": {
+          "text": "Northfield Health System invoice sample, Q3 FY26."
+        },
+        "body": [
+          {
+            "type": "text",
+            "style": "subhead",
+            "x": 57,
+            "y": 126,
+            "w": 378,
+            "text": "Current state: magenta marks a pain point"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 162,
+            "w": 102,
+            "h": 54,
+            "surface": "strong",
+            "text": "Capture"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 57,
+            "y": 228,
+            "w": 96,
+            "text": "Paper and email intake"
+          },
+          {
+            "type": "chevron",
+            "x": 165,
+            "y": 162,
+            "w": 102,
+            "h": 54,
+            "surface": "strong",
+            "text": "Code"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 165,
+            "y": 228,
+            "w": 96,
+            "text": "11% of lines miscoded"
+          },
+          {
+            "type": "chevron",
+            "x": 273,
+            "y": 162,
+            "w": 102,
+            "h": 54,
+            "surface": "callout",
+            "text": "Route"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 273,
+            "y": 228,
+            "w": 96,
+            "text": "Four handoffs by email"
+          },
+          {
+            "type": "chevron",
+            "x": 381,
+            "y": 162,
+            "w": 102,
+            "h": 54,
+            "surface": "callout",
+            "text": "Approve"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 381,
+            "y": 228,
+            "w": 96,
+            "text": "Six days waiting"
+          },
+          {
+            "type": "chevron",
+            "x": 489,
+            "y": 162,
+            "w": 102,
+            "h": 54,
+            "surface": "strong",
+            "text": "Post"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 489,
+            "y": 228,
+            "w": 96,
+            "text": "Rekeyed into the ledger"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "x": 57,
+            "y": 288,
+            "w": 378,
+            "text": "Future state: fewer steps, two handoffs"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 324,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Capture and code"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 57,
+            "y": 390,
+            "w": 114,
+            "text": "Intelligent capture codes 95% of lines"
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 324,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Match and route"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 201,
+            "y": 390,
+            "w": 114,
+            "text": "Rules route by risk, no email"
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 324,
+            "w": 126,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Approve"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 345,
+            "y": 390,
+            "w": 114,
+            "text": "Only exceptions need a reviewer"
+          },
+          {
+            "type": "chevron",
+            "x": 489,
+            "y": 324,
+            "w": 102,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Post"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "x": 489,
+            "y": 390,
+            "w": 96,
+            "text": "Posts with no rekeying"
+          },
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Result",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 705,
+            "y": 144,
+            "w": 198,
+            "text": "14 days down to 5",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 234,
+            "w": 198,
+            "text": "Handoffs fall from six to two, and no invoice is rekeyed.",
+            "on": "inverse"
+          }
+        ],
+        "railSurface": "inverse"
+      },
+      "rev": 1,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 101,
+        "marks": 0
+      }
+    },
+    {
+      "id": "process",
+      "variant": "metrics",
+      "name": "Process · end-to-end with step metrics",
+      "tier": "core",
+      "purpose": "One process as five chevrons with a metric row under each step (cycle time, handoffs, volume, rework) and the bottleneck step in dark with a tinted column.",
+      "uses": [
+        "shape.chevron",
+        "text.heading",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-02",
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "step",
+          "note": "5, 16 chars"
+        },
+        {
+          "slot": "metric rows",
+          "note": "4 rows, label 18 chars, value 8 chars"
+        },
+        {
+          "slot": "takeaway strip",
+          "maxChars": 90
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Invoice to pay · baseline",
+        "title": "Approval holds most of the 14-day invoice cycle",
+        "source": {
+          "text": "Northfield Health System AP system data, Q3 FY26."
+        },
+        "body": [
+          {
+            "type": "block",
+            "x": 471,
+            "y": 180,
+            "w": 138,
+            "h": 216,
+            "surface": "subtle",
+            "style": "small",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 183,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "strong",
+            "text": "Receive",
+            "first": true
+          },
+          {
+            "type": "chevron",
+            "x": 327,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "strong",
+            "text": "Match"
+          },
+          {
+            "type": "chevron",
+            "x": 471,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Approve"
+          },
+          {
+            "type": "chevron",
+            "x": 615,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "strong",
+            "text": "Pay"
+          },
+          {
+            "type": "chevron",
+            "x": 759,
+            "y": 126,
+            "w": 144,
+            "h": 36,
+            "surface": "strong",
+            "text": "Reconcile"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 180,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 198,
+            "w": 120,
+            "text": "Cycle time"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 192,
+            "w": 126,
+            "text": "1.5 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 192,
+            "w": 126,
+            "text": "2.0 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "emphasis",
+            "x": 477,
+            "y": 192,
+            "w": 126,
+            "text": "8.0 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 192,
+            "w": 126,
+            "text": "1.5 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 192,
+            "w": 126,
+            "text": "1.0 day"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 234,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 252,
+            "w": 120,
+            "text": "Handoffs"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 246,
+            "w": 126,
+            "text": "1"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 246,
+            "w": 126,
+            "text": "2"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 477,
+            "y": 246,
+            "w": 126,
+            "text": "4"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 246,
+            "w": 126,
+            "text": "1"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 246,
+            "w": 126,
+            "text": "1"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 288,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 306,
+            "w": 120,
+            "text": "Invoices a month"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 300,
+            "w": 126,
+            "text": "12,400"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 300,
+            "w": 126,
+            "text": "12,400"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 477,
+            "y": 300,
+            "w": 126,
+            "text": "12,400"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 300,
+            "w": 126,
+            "text": "11,900"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 300,
+            "w": 126,
+            "text": "11,900"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 342,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 360,
+            "w": 120,
+            "text": "Rework rate"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 354,
+            "w": 126,
+            "text": "4%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 354,
+            "w": 126,
+            "text": "11%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 477,
+            "y": 354,
+            "w": 126,
+            "text": "9%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 354,
+            "w": 126,
+            "text": "2%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 354,
+            "w": 126,
+            "text": "1%"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "inverse",
+            "style": "small",
+            "text": "Approval holds 57% of the 14-day cycle and four of nine handoffs: redesign it first."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02",
+      "budget": {
+        "words": 74,
+        "marks": 0
+      }
+    },
+    {
+      "id": "process",
+      "variant": "metrics-nav",
+      "name": "Process · step metrics · nav rail",
+      "tier": "working",
+      "purpose": "The step-metrics flow with the nav rail and the tall footer, for a long proposal or readout.",
+      "uses": [
+        "shape.chevron",
+        "text.heading",
+        "header.slide"
+      ],
+      "legacy": "nav variant of process/metrics",
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "step",
+          "note": "5, 16 chars"
+        },
+        {
+          "slot": "metric rows",
+          "note": "4 rows, label 18 chars, value 8 chars"
+        },
+        {
+          "slot": "takeaway strip",
+          "maxChars": 90
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "tall",
+        "eyebrow": "Invoice to pay · baseline",
+        "title": "Approval holds most of the 14-day invoice cycle",
+        "source": {
+          "text": "Northfield Health System AP system data, Q3 FY26."
+        },
+        "body": [
+          {
+            "type": "block",
+            "x": 471,
+            "y": 180,
+            "w": 138,
+            "h": 216,
+            "surface": "subtle",
+            "style": "small",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 183,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "strong",
+            "text": "Receive",
+            "first": true
+          },
+          {
+            "type": "chevron",
+            "x": 327,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "strong",
+            "text": "Match"
+          },
+          {
+            "type": "chevron",
+            "x": 471,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Approve"
+          },
+          {
+            "type": "chevron",
+            "x": 615,
+            "y": 126,
+            "w": 138,
+            "h": 36,
+            "surface": "strong",
+            "text": "Pay"
+          },
+          {
+            "type": "chevron",
+            "x": 759,
+            "y": 126,
+            "w": 144,
+            "h": 36,
+            "surface": "strong",
+            "text": "Reconcile"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 180,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 198,
+            "w": 120,
+            "text": "Cycle time"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 192,
+            "w": 126,
+            "text": "1.5 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 192,
+            "w": 126,
+            "text": "2.0 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "emphasis",
+            "x": 477,
+            "y": 192,
+            "w": 126,
+            "text": "8.0 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 192,
+            "w": 126,
+            "text": "1.5 days"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 192,
+            "w": 126,
+            "text": "1.0 day"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 234,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 252,
+            "w": 120,
+            "text": "Handoffs"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 246,
+            "w": 126,
+            "text": "1"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 246,
+            "w": 126,
+            "text": "2"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 477,
+            "y": 246,
+            "w": 126,
+            "text": "4"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 246,
+            "w": 126,
+            "text": "1"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 246,
+            "w": 126,
+            "text": "1"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 288,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 306,
+            "w": 120,
+            "text": "Invoices a month"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 300,
+            "w": 126,
+            "text": "12,400"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 300,
+            "w": 126,
+            "text": "12,400"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 477,
+            "y": 300,
+            "w": 126,
+            "text": "12,400"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 300,
+            "w": 126,
+            "text": "11,900"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 300,
+            "w": 126,
+            "text": "11,900"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 342,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 360,
+            "w": 120,
+            "text": "Rework rate"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 189,
+            "y": 354,
+            "w": 126,
+            "text": "4%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 333,
+            "y": 354,
+            "w": 126,
+            "text": "11%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 477,
+            "y": 354,
+            "w": 126,
+            "text": "9%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 621,
+            "y": 354,
+            "w": 126,
+            "text": "2%"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "primary",
+            "x": 765,
+            "y": 354,
+            "w": 126,
+            "text": "1%"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "inverse",
+            "style": "small",
+            "text": "Approval holds 57% of the 14-day cycle and four of nine handoffs: redesign it first."
+          }
+        ],
+        "nav": {
+          "items": [
+            "Context",
+            "Solution",
+            "Approach",
+            "Team"
+          ],
+          "active": 0
+        }
+      },
+      "rev": 1,
+      "added": "2026-10-02",
+      "budget": {
+        "words": 78,
+        "marks": 0
+      }
+    },
+    {
+      "id": "workstreams",
+      "variant": "five-with-risks",
+      "name": "Five workstreams with a risk band",
+      "tier": "working",
+      "purpose": "Five numbered workstream headers, each with an activities list and an output beneath its own label, and a full-width band of five risks if the work is not done right.",
+      "uses": [
+        "header.slide",
+        "card (inline number)",
+        "container (layer)",
+        "text.label",
+        "bullets",
+        "block",
+        "text"
+      ],
+      "legacy": "pptxgengo t005-uhg-012",
+      "budget": {
+        "words": 154,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "workstream title",
+          "count": 5,
+          "maxChars": 30
+        },
+        {
+          "slot": "activity",
+          "count": 10,
+          "maxChars": 34
+        },
+        {
+          "slot": "output",
+          "count": 5,
+          "maxChars": 20
+        },
+        {
+          "slot": "risk",
+          "count": 5,
+          "maxChars": 40
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "titleLines": 1,
+        "eyebrow": "Our perspective",
+        "title": "Design general availability in from the start",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "01",
+            "numInk": "emphasis",
+            "title": "Define the service catalog",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 57,
+            "y": 198,
+            "w": 154.8,
+            "h": 180
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 69,
+            "y": 210,
+            "w": 130.8,
+            "text": "Activities"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 69,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Name the workloads served",
+              "Split central from team services"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 69,
+            "y": 324,
+            "w": 130.8,
+            "text": "Output"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 69,
+            "y": 342,
+            "w": 130.8,
+            "text": "Published catalog"
+          },
+          {
+            "type": "card",
+            "x": 229.8,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "02",
+            "numInk": "emphasis",
+            "title": "Set the standards",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 229.8,
+            "y": 198,
+            "w": 154.8,
+            "h": 180
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 241.8,
+            "y": 210,
+            "w": 130.8,
+            "text": "Activities"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 241.8,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Approve patterns per environment",
+              "Agree workload placement rules"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 241.8,
+            "y": 324,
+            "w": 130.8,
+            "text": "Output"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 241.8,
+            "y": 342,
+            "w": 130.8,
+            "text": "Signed-off standards"
+          },
+          {
+            "type": "card",
+            "x": 402.6,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "03",
+            "numInk": "emphasis",
+            "title": "Industrialize delivery",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 402.6,
+            "y": 198,
+            "w": 154.8,
+            "h": 180
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 414.6,
+            "y": 210,
+            "w": 130.8,
+            "text": "Activities"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 414.6,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Automate provisioning",
+              "Build CI/CD promotion paths"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 414.6,
+            "y": 324,
+            "w": 130.8,
+            "text": "Output"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 414.6,
+            "y": 342,
+            "w": 130.8,
+            "text": "Release pipeline"
+          },
+          {
+            "type": "card",
+            "x": 575.4,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "04",
+            "numInk": "emphasis",
+            "title": "Drive adoption and ownership",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 575.4,
+            "y": 198,
+            "w": 154.8,
+            "h": 180
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 587.4,
+            "y": 210,
+            "w": 130.8,
+            "text": "Activities"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 587.4,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Open intake and onboarding",
+              "Define the self-service path"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 587.4,
+            "y": 324,
+            "w": 130.8,
+            "text": "Output"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 587.4,
+            "y": 342,
+            "w": 130.8,
+            "text": "Trained owner teams"
+          },
+          {
+            "type": "card",
+            "x": 748.2,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "05",
+            "numInk": "emphasis",
+            "title": "Prove value and cost",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 748.2,
+            "y": 198,
+            "w": 154.8,
+            "h": 180
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 760.2,
+            "y": 210,
+            "w": 130.8,
+            "text": "Activities"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 760.2,
+            "y": 228,
+            "w": 130.8,
+            "items": [
+              "Baseline cost per workload",
+              "Track savings against plan"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 760.2,
+            "y": 324,
+            "w": 130.8,
+            "text": "Output"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 760.2,
+            "y": 342,
+            "w": 130.8,
+            "text": "Value report"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 846,
+            "h": 72,
+            "surface": "subtle",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 66,
+            "y": 402,
+            "w": 810,
+            "text": "Key risks if the work is not done right"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 414,
+            "w": 154.8,
+            "h": 54,
+            "pad": 9,
+            "surface": "subtle",
+            "body": [
+              {
+                "p": "The platform becomes an IT silo"
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "card",
+            "x": 229.8,
+            "y": 414,
+            "w": 154.8,
+            "h": 54,
+            "pad": 9,
+            "surface": "subtle",
+            "body": [
+              {
+                "p": "It stays a project, not a service"
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "card",
+            "x": 402.6,
+            "y": 414,
+            "w": 154.8,
+            "h": 54,
+            "pad": 9,
+            "surface": "subtle",
+            "body": [
+              {
+                "p": "Costs rise faster than usage"
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "card",
+            "x": 575.4,
+            "y": 414,
+            "w": 154.8,
+            "h": 54,
+            "pad": 9,
+            "surface": "subtle",
+            "body": [
+              {
+                "p": "Adoption stalls at capacity limits"
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "card",
+            "x": 748.2,
+            "y": 414,
+            "w": 154.8,
+            "h": 54,
+            "pad": 9,
+            "surface": "subtle",
+            "body": [
+              {
+                "p": "Value is never shown to funders"
+              }
+            ],
+            "bodySize": "small"
+          }
+        ]
+      },
+      "rev": 2,
+      "revised": "2026-10-02"
+    },
+    {
+      "id": "workstreams",
+      "variant": "five-narrative",
+      "name": "Five workstreams with narrative and risks",
+      "tier": "working",
+      "purpose": "Five numbered workstreams in a 5-up grid: a short narrative paragraph on top, then a Key risks label with two bullets at the foot of each column.",
+      "uses": [
+        "header.slide",
+        "card (inline number)",
+        "container (layer)",
+        "text.label",
+        "bullets",
+        "block",
+        "text"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 189,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "workstream title",
+          "count": 5,
+          "maxChars": 30
+        },
+        {
+          "slot": "narrative",
+          "count": 5,
+          "maxChars": 110
+        },
+        {
+          "slot": "risk",
+          "count": 10,
+          "maxChars": 36
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "titleLines": 1,
+        "eyebrow": "Our approach",
+        "title": "Five workstreams take the platform from project to service",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "01",
+            "numInk": "emphasis",
+            "title": "Define the service catalog",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 57,
+            "y": 198,
+            "w": 154.8,
+            "h": 270
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 69,
+            "y": 210,
+            "w": 130.8,
+            "text": "Name who the platform serves and what it offers, so every team knows what is central and what is theirs."
+          },
+          {
+            "type": "rule",
+            "x": 69,
+            "y": 342,
+            "w": 130.8
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 69,
+            "y": 354,
+            "w": 130.8,
+            "text": "Key risks"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 69,
+            "y": 372,
+            "w": 130.8,
+            "items": [
+              "The platform becomes an IT silo",
+              "Catalog goes stale within months"
+            ]
+          },
+          {
+            "type": "card",
+            "x": 229.8,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "02",
+            "numInk": "emphasis",
+            "title": "Set the standards",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 229.8,
+            "y": 198,
+            "w": 154.8,
+            "h": 270
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 241.8,
+            "y": 210,
+            "w": 130.8,
+            "text": "Agree the patterns, workspace rules and data sharing standards that every environment follows."
+          },
+          {
+            "type": "rule",
+            "x": 241.8,
+            "y": 342,
+            "w": 130.8
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 241.8,
+            "y": 354,
+            "w": 130.8,
+            "text": "Key risks"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 241.8,
+            "y": 372,
+            "w": 130.8,
+            "items": [
+              "Standards are ignored in practice",
+              "Exceptions outnumber patterns"
+            ]
+          },
+          {
+            "type": "card",
+            "x": 402.6,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "03",
+            "numInk": "emphasis",
+            "title": "Industrialize delivery",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 402.6,
+            "y": 198,
+            "w": 154.8,
+            "h": 270
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 414.6,
+            "y": 210,
+            "w": 130.8,
+            "text": "Automate provisioning, release and monitoring so a new workload goes live without a project."
+          },
+          {
+            "type": "rule",
+            "x": 414.6,
+            "y": 342,
+            "w": 130.8
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 414.6,
+            "y": 354,
+            "w": 130.8,
+            "text": "Key risks"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 414.6,
+            "y": 372,
+            "w": 130.8,
+            "items": [
+              "It stays a project, not a service",
+              "Manual steps slow every launch"
+            ]
+          },
+          {
+            "type": "card",
+            "x": 575.4,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "04",
+            "numInk": "emphasis",
+            "title": "Drive adoption and ownership",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 575.4,
+            "y": 198,
+            "w": 154.8,
+            "h": 270
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 587.4,
+            "y": 210,
+            "w": 130.8,
+            "text": "Open intake, training and a self-service path, then hand day-to-day ownership to Northfield teams."
+          },
+          {
+            "type": "rule",
+            "x": 587.4,
+            "y": 342,
+            "w": 130.8
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 587.4,
+            "y": 354,
+            "w": 130.8,
+            "text": "Key risks"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 587.4,
+            "y": 372,
+            "w": 130.8,
+            "items": [
+              "Adoption stalls at capacity limits",
+              "Owners are never named"
+            ]
+          },
+          {
+            "type": "card",
+            "x": 748.2,
+            "y": 126,
+            "w": 154.8,
+            "h": 72,
+            "pad": 12,
+            "surface": "inverse",
+            "inlineNumber": "05",
+            "numInk": "emphasis",
+            "title": "Prove value and cost",
+            "titleStyle": "body",
+            "titleInk": "display",
+            "body": []
+          },
+          {
+            "type": "container",
+            "style": "layer",
+            "x": 748.2,
+            "y": 198,
+            "w": 154.8,
+            "h": 270
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 760.2,
+            "y": 210,
+            "w": 130.8,
+            "text": "Baseline what workloads cost today, track savings against plan and report value to sponsors."
+          },
+          {
+            "type": "rule",
+            "x": 760.2,
+            "y": 342,
+            "w": 130.8
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 760.2,
+            "y": 354,
+            "w": 130.8,
+            "text": "Key risks"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 760.2,
+            "y": 372,
+            "w": 130.8,
+            "items": [
+              "Costs rise faster than usage",
+              "Value is never shown to funders"
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "context",
+      "variant": "three-zones",
+      "name": "Context flow · carried, layered, applied",
+      "tier": "working",
+      "purpose": "Three zones read left to right: context carried forward, a central panel with a five-step chain, and four numbered build activities, closed by a one-line shift statement.",
+      "uses": [
+        "header.slide",
+        "block",
+        "text",
+        "connector"
+      ],
+      "legacy": "pptxgengo t026-uhg-030",
+      "budget": {
+        "words": 133,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "carried item",
+          "count": 3
+        },
+        {
+          "slot": "chain step",
+          "count": 5,
+          "note": "key + 24 chars"
+        },
+        {
+          "slot": "activity",
+          "count": 4,
+          "note": "title, outcome tag, one line"
+        },
+        {
+          "slot": "shift statement",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "titleLines": 2,
+        "eyebrow": "Build acceleration",
+        "title": "Persistent, agent-ready context can compress the path from prototype to production",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 162,
+            "w": 234,
+            "text": "Context carried forward"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 180,
+            "w": 6,
+            "h": 216,
+            "surface": "callout",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 81,
+            "y": 186,
+            "w": 228,
+            "text": "Evidence database"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 81,
+            "y": 210,
+            "w": 228,
+            "text": "Source code, components, data and controls, with confidence."
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 81,
+            "y": 256,
+            "w": 228,
+            "text": "Business process map"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 81,
+            "y": 280,
+            "w": 228,
+            "text": "Steps, rules, exceptions and users linked to technology."
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 81,
+            "y": 326,
+            "w": 228,
+            "text": "Decision trail"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 81,
+            "y": 350,
+            "w": 228,
+            "text": "Approved outcomes, design choices and open questions."
+          },
+          {
+            "type": "block",
+            "x": 327,
+            "y": 162,
+            "w": 270,
+            "h": 234,
+            "surface": "subtle",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 345,
+            "y": 174,
+            "w": 234,
+            "text": "Agent-ready context layer"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 216,
+            "w": 18,
+            "h": 18,
+            "surface": "inverse",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                354,
+                234
+              ],
+              [
+                354,
+                252
+              ]
+            ],
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "primary",
+            "x": 375,
+            "y": 219,
+            "w": 90,
+            "text": "Process"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 465,
+            "y": 216,
+            "w": 123,
+            "text": "business activity"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 252,
+            "w": 18,
+            "h": 18,
+            "surface": "inverse",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                354,
+                270
+              ],
+              [
+                354,
+                288
+              ]
+            ],
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "primary",
+            "x": 375,
+            "y": 255,
+            "w": 90,
+            "text": "Rule"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 465,
+            "y": 252,
+            "w": 123,
+            "text": "what must hold true"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 288,
+            "w": 18,
+            "h": 18,
+            "surface": "inverse",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                354,
+                306
+              ],
+              [
+                354,
+                324
+              ]
+            ],
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "primary",
+            "x": 375,
+            "y": 291,
+            "w": 90,
+            "text": "Component"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 465,
+            "y": 288,
+            "w": 123,
+            "text": "where behavior lives"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 324,
+            "w": 18,
+            "h": 18,
+            "surface": "callout",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                354,
+                342
+              ],
+              [
+                354,
+                360
+              ]
+            ],
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "primary",
+            "x": 375,
+            "y": 327,
+            "w": 90,
+            "text": "Requirement"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 465,
+            "y": 324,
+            "w": 123,
+            "text": "what must change"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 360,
+            "w": 18,
+            "h": 18,
+            "surface": "inverse",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "primary",
+            "x": 375,
+            "y": 363,
+            "w": 90,
+            "text": "Test"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 465,
+            "y": 360,
+            "w": 123,
+            "text": "how it is proven"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                597,
+                279
+              ],
+              [
+                633,
+                279
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 162,
+            "w": 264,
+            "text": "Build work accelerated"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 180,
+            "w": 18,
+            "h": 18,
+            "surface": "inverse",
+            "text": "1",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 663,
+            "y": 180,
+            "w": 108,
+            "text": "Prototype"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 783,
+            "y": 186,
+            "w": 120,
+            "text": "Faster feedback"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 663,
+            "y": 204,
+            "w": 240,
+            "text": "Options grounded in current behavior"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 234,
+            "w": 18,
+            "h": 18,
+            "surface": "inverse",
+            "text": "2",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 663,
+            "y": 234,
+            "w": 108,
+            "text": "Specify"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 783,
+            "y": 240,
+            "w": 120,
+            "text": "Less rediscovery"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 663,
+            "y": 258,
+            "w": 240,
+            "text": "Traceable stories and edge cases"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 288,
+            "w": 18,
+            "h": 18,
+            "surface": "inverse",
+            "text": "3",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 663,
+            "y": 288,
+            "w": 108,
+            "text": "Build"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 783,
+            "y": 294,
+            "w": 120,
+            "text": "First-pass fit"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 663,
+            "y": 312,
+            "w": 240,
+            "text": "Relevant rules and design decisions"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 342,
+            "w": 18,
+            "h": 18,
+            "surface": "callout",
+            "text": "4",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 663,
+            "y": 342,
+            "w": 108,
+            "text": "Test"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 783,
+            "y": 348,
+            "w": 120,
+            "text": "Earlier defects"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 663,
+            "y": 366,
+            "w": 240,
+            "text": "Known states turned into tests"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 108,
+            "h": 36,
+            "surface": "callout",
+            "text": "The shift",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 165,
+            "y": 414,
+            "w": 738,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Retrieve the right context for the next task instead of rediscovering it, with review and testing still authoritative.",
+            "style": "small"
+          }
+        ]
+      }
+    },
+    {
+      "id": "context",
+      "variant": "build-sustain",
+      "name": "Foundation with Build and Sustain panels",
+      "tier": "working",
+      "purpose": "A shared-foundation card beside two stacked panels, one dark and one light, each with a how-it-is-used and a value-opportunity column, closed by a dark statement bar.",
+      "uses": [
+        "header.slide",
+        "card (edge)",
+        "block",
+        "text"
+      ],
+      "legacy": "pptxgengo t029-software-modernization-034",
+      "budget": {
+        "words": 130,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "foundation item",
+          "count": 4
+        },
+        {
+          "slot": "panel heading",
+          "count": 2
+        },
+        {
+          "slot": "how used",
+          "count": 2,
+          "maxChars": 120
+        },
+        {
+          "slot": "value",
+          "count": 2,
+          "maxChars": 100
+        },
+        {
+          "slot": "statement",
+          "maxChars": 110
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "titleLines": 1,
+        "eyebrow": "Build and sustain",
+        "title": "Shared context supports both [[Build and Sustain]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "h": 270,
+            "surface": "subtle",
+            "edge": {
+              "side": "left",
+              "weight": 6,
+              "ink": "emphasis"
+            },
+            "label": "Shared foundation",
+            "body": [
+              {
+                "bullets": [
+                  {
+                    "lead": "Source-backed evidence",
+                    "text": "from code and data."
+                  },
+                  {
+                    "lead": "Validated process context",
+                    "text": "owned by the business."
+                  },
+                  {
+                    "lead": "Approved decisions",
+                    "text": "and current artifacts."
+                  },
+                  {
+                    "lead": "Review and test results",
+                    "text": "kept beside the evidence."
+                  }
+                ]
+              },
+              {
+                "p": "Governed retrieval connects the foundation to bounded work."
+              }
+            ],
+            "bodySize": "small"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "h": 126,
+            "surface": "inverse",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 138,
+            "w": 522,
+            "text": "Build",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 363,
+            "y": 168,
+            "w": 252,
+            "text": "How context is used",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 363,
+            "y": 184,
+            "w": 252,
+            "text": "Retrieve process, rules, requirements and open questions for a bounded design, coding, testing or cutover task.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "primary",
+            "x": 633,
+            "y": 168,
+            "w": 252,
+            "text": "Value opportunity",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 633,
+            "y": 184,
+            "w": 252,
+            "text": "Warmer handoffs, faster prototyping, stronger traceability and earlier visibility of gaps.",
+            "on": "inverse"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 270,
+            "w": 558,
+            "h": 126,
+            "surface": "subtle",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 282,
+            "w": 522,
+            "text": "Sustain"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 363,
+            "y": 312,
+            "w": 252,
+            "text": "How context is used"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 363,
+            "y": 328,
+            "w": 252,
+            "text": "Connect bug reports and change requests to documented intent, architecture and tests for impact analysis."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 312,
+            "w": 252,
+            "text": "Value opportunity"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 633,
+            "y": 328,
+            "w": 252,
+            "text": "Faster investigation, better knowledge preservation and less maintenance effort over time."
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "inverse",
+            "text": "The context layer compounds in value only while teams keep it current, governed and source-linked.",
+            "style": "small"
+          }
+        ]
+      }
+    },
+    {
+      "id": "patterns",
+      "variant": "three-rows",
+      "name": "Three patterns with decisions to validate",
+      "tier": "working",
+      "purpose": "Three stacked pattern rows, each with a coloured header, a flow line and role statement, and a right column of decisions to validate.",
+      "uses": [
+        "header.slide",
+        "block",
+        "text"
+      ],
+      "legacy": "pptxgengo t051-uhg-025",
+      "budget": {
+        "words": 149,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "pattern header",
+          "count": 3,
+          "maxChars": 78
+        },
+        {
+          "slot": "flow",
+          "count": 3,
+          "maxChars": 62
+        },
+        {
+          "slot": "role",
+          "count": 3,
+          "maxChars": 85
+        },
+        {
+          "slot": "decision",
+          "count": 9,
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "titleLines": 1,
+        "eyebrow": "Our approach · Phase 1",
+        "title": "Three patterns define the lakehouse role",
+        "source": {
+          "text": "West Monroe analysis of the Northfield data estate."
+        },
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 126,
+            "w": 630,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Pattern 1: Lakehouse as the analytics layer over the existing warehouse",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Key decisions to validate",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 75,
+            "y": 174,
+            "w": 600,
+            "text": "Curated warehouse → Semantic services → BI layer"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 75,
+            "y": 204,
+            "w": 600,
+            "text": "ROLE: Native analytics and consumption over data governed in the warehouse"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 705,
+            "y": 168,
+            "w": 198,
+            "items": [
+              "Data access versus movement",
+              "Semantic model ownership",
+              "Security and lineage"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 234,
+            "w": 630,
+            "h": 36,
+            "surface": "strong",
+            "text": "Pattern 2: Lakehouse as the consumption layer for the engineering platform",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 705,
+            "y": 234,
+            "w": 198,
+            "h": 36,
+            "surface": "strong",
+            "text": "Key decisions to validate",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 75,
+            "y": 282,
+            "w": 600,
+            "text": "Engineering platform → Curated layer → BI layer"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 75,
+            "y": 312,
+            "w": 600,
+            "text": "ROLE: Business consumption while engineering and curation stay put"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 705,
+            "y": 276,
+            "w": 198,
+            "items": [
+              "Open formats and shortcuts",
+              "Metadata and lineage sync",
+              "Curated layer ownership"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 342,
+            "w": 630,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Pattern 3: End-to-end lakehouse platform",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 705,
+            "y": 342,
+            "w": 198,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Key decisions to validate",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 75,
+            "y": 390,
+            "w": 600,
+            "text": "Ingestion and engineering → Lakehouse → Semantic and reporting"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 75,
+            "y": 420,
+            "w": 600,
+            "text": "ROLE: One platform for qualified net-new workloads"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 705,
+            "y": 384,
+            "w": 198,
+            "items": [
+              "Fit with placement criteria",
+              "Capacity and isolation",
+              "Engineering standards"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "readiness",
+      "variant": "six-criteria",
+      "name": "Readiness criteria · six checklists",
+      "tier": "working",
+      "purpose": "A dark statement panel overlapping the top of a light region that holds six criteria groups of three checks each.",
+      "uses": [
+        "header.slide",
+        "block",
+        "container (region)",
+        "text"
+      ],
+      "legacy": "pptxgengo t084-uhg-020",
+      "budget": {
+        "words": 142,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "statement",
+          "maxChars": 140
+        },
+        {
+          "slot": "criteria group",
+          "count": 6,
+          "maxChars": 28
+        },
+        {
+          "slot": "check",
+          "count": 18,
+          "maxChars": 38
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "titleLines": 2,
+        "eyebrow": "Our perspective",
+        "title": "The platform is generally available when Northfield can run it as one owned service",
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 162,
+            "w": 270,
+            "h": 288,
+            "surface": "inverse",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 75,
+            "y": 180,
+            "w": 234,
+            "text": "Ready for GA when Northfield can confidently",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "callout",
+            "x": 75,
+            "y": 276,
+            "w": 234,
+            "text": "say yes to the next qualified workload",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 75,
+            "y": 348,
+            "w": 234,
+            "text": "and fulfill the request through one standard enterprise service.",
+            "on": "inverse"
+          },
+          {
+            "type": "container",
+            "style": "region",
+            "x": 345,
+            "y": 162,
+            "w": 558,
+            "h": 288
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 168,
+            "w": 252,
+            "text": "Architecture approved"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 192,
+            "w": 252,
+            "items": [
+              "Role in the data estate is clear",
+              "Placement criteria documented",
+              "Approved patterns established"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 168,
+            "w": 252,
+            "text": "Secure and governed"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 192,
+            "w": 252,
+            "items": [
+              "Identity and workspace segmentation",
+              "Lineage and catalog integration",
+              "Controls tested, remediation defined"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 264,
+            "w": 252,
+            "text": "Automated and repeatable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 288,
+            "w": 252,
+            "items": [
+              "Environments provisioned consistently",
+              "Policies embedded in automation",
+              "Manual activities kept to a minimum"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 264,
+            "w": 252,
+            "text": "Observable and supportable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 288,
+            "w": 252,
+            "items": [
+              "Health, usage and cost visible",
+              "Alerting and runbooks in place",
+              "Ownership and support established"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 360,
+            "w": 252,
+            "text": "Adoptable and consumable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 384,
+            "w": 252,
+            "items": [
+              "Clear intake and onboarding",
+              "Documentation and training ready",
+              "Teams know when to use it"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 360,
+            "w": 252,
+            "text": "Owned and sustainable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 384,
+            "w": 252,
+            "items": [
+              "Roles and decision rights clear",
+              "Northfield teams can operate it",
+              "Chargeback mechanisms in place"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "readiness",
+      "variant": "six-criteria-split",
+      "name": "Readiness criteria · statement beside six checklists",
+      "tier": "working",
+      "purpose": "A dark statement panel under the title in the short column, and a tall region holding six criteria groups of three checks each.",
+      "uses": [
+        "header.slide",
+        "block",
+        "container (region)",
+        "text",
+        "split frame (tall-right)"
+      ],
+      "legacy": "split variant of readiness/six-criteria",
+      "budget": {
+        "words": 138,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "statement",
+          "maxChars": 140
+        },
+        {
+          "slot": "criteria group",
+          "count": 6,
+          "maxChars": 28
+        },
+        {
+          "slot": "check",
+          "count": 18,
+          "maxChars": 38
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "titleLines": 3,
+        "eyebrow": "Our perspective",
+        "title": "GA means Northfield runs it as one owned service",
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "h": 270,
+            "surface": "inverse",
+            "text": "",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 75,
+            "y": 198,
+            "w": 234,
+            "text": "Ready for GA when Northfield can confidently",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "callout",
+            "x": 75,
+            "y": 288,
+            "w": 234,
+            "text": "say yes to the next qualified workload",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 75,
+            "y": 378,
+            "w": 234,
+            "text": "and fulfill the request through one standard enterprise service.",
+            "on": "inverse"
+          },
+          {
+            "type": "container",
+            "style": "region",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 414
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 54,
+            "w": 252,
+            "text": "Architecture approved"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 78,
+            "w": 252,
+            "items": [
+              "Role in the data estate is clear",
+              "Placement criteria documented",
+              "Approved patterns established"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 54,
+            "w": 252,
+            "text": "Secure and governed"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 78,
+            "w": 252,
+            "items": [
+              "Identity and workspace segmentation",
+              "Lineage and catalog integration",
+              "Controls tested, remediation defined"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 180,
+            "w": 252,
+            "text": "Automated and repeatable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 204,
+            "w": 252,
+            "items": [
+              "Environments provisioned consistently",
+              "Policies embedded in automation",
+              "Manual activities kept to a minimum"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 180,
+            "w": 252,
+            "text": "Observable and supportable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 204,
+            "w": 252,
+            "items": [
+              "Health, usage and cost visible",
+              "Alerting and runbooks in place",
+              "Ownership and support established"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 363,
+            "y": 306,
+            "w": 252,
+            "text": "Adoptable and consumable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 363,
+            "y": 330,
+            "w": 252,
+            "items": [
+              "Clear intake and onboarding",
+              "Documentation and training ready",
+              "Teams know when to use it"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 306,
+            "w": 252,
+            "text": "Owned and sustainable"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "x": 633,
+            "y": 330,
+            "w": 252,
+            "items": [
+              "Roles and decision rights clear",
+              "Northfield teams can operate it",
+              "Chargeback mechanisms in place"
+            ]
+          }
+        ],
+        "split": "tall-right"
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "pathways",
+      "variant": "two-lanes",
+      "name": "Two pathways with a left rail",
+      "tier": "working",
+      "purpose": "A dark left rail with the key message and four commitments beside two five-step chevron pathways and a result bar.",
+      "uses": [
+        "frame (left rail)",
+        "text",
+        "chevron",
+        "block"
+      ],
+      "legacy": "pptxgengo t094-uhg-036",
+      "budget": {
+        "words": 119,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "rail heading",
+          "maxChars": 30
+        },
+        {
+          "slot": "rail commitment",
+          "count": 5
+        },
+        {
+          "slot": "pathway heading",
+          "count": 2,
+          "maxChars": 50
+        },
+        {
+          "slot": "step",
+          "count": 10,
+          "maxChars": 20
+        },
+        {
+          "slot": "result",
+          "maxChars": 80
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "inverse",
+        "titleLines": 2,
+        "eyebrow": "Our approach · Phase 3",
+        "title": "Governance runs through rollout and optimization",
+        "source": {
+          "notes": [
+            "Designed to align with Northfield’s governance structure, data enablement team and operational support functions."
+          ]
+        },
+        "body": [
+          {
+            "type": "phasehead",
+            "x": 57,
+            "y": 54,
+            "w": 198,
+            "n": "Phase 3",
+            "title": "General availability",
+            "duration": "Weeks 35–42",
+            "rule": "callout",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 57,
+            "y": 162,
+            "w": 198,
+            "text": "Make governance executable",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 234,
+            "w": 198,
+            "text": "Scale depends on clear decision rights, auditable controls and operational handoffs, not one-time enablement.",
+            "on": "inverse"
+          },
+          {
+            "type": "bullets",
+            "size": "small",
+            "on": "inverse",
+            "x": 57,
+            "y": 318,
+            "w": 198,
+            "items": [
+              "Named approvers per decision",
+              "SLA tracking on every request",
+              "Access controls by pattern",
+              "Adoption measured by team",
+              "Exceptions reviewed quarterly"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 162,
+            "w": 558,
+            "text": "Two critical pathways to operationalize platform governance"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 345,
+            "y": 180,
+            "w": 558,
+            "text": "01  Request intake: team to approved pattern access"
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 216,
+            "w": 120,
+            "h": 54,
+            "first": true,
+            "surface": "subtle",
+            "text": "Team identified",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 453,
+            "y": 216,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "subtle",
+            "text": "Pattern mapping",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 561,
+            "y": 216,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "subtle",
+            "text": "Security approval",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 669,
+            "y": 216,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "subtle",
+            "text": "Provisioning",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 777,
+            "y": 216,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "subtle",
+            "text": "SLA tracking",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 345,
+            "y": 288,
+            "w": 558,
+            "text": "02  Use-case intake: idea to governed build"
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 324,
+            "w": 120,
+            "h": 54,
+            "first": true,
+            "surface": "inverse",
+            "text": "Use-case proposal",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 453,
+            "y": 324,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Governance review",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 561,
+            "y": 324,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Risk assessment",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 669,
+            "y": 324,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Approved deploy",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 777,
+            "y": 324,
+            "w": 120,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Monitoring",
+            "style": "small"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 396,
+            "w": 558,
+            "h": 36,
+            "surface": "callout",
+            "text": "Result: controlled scale, approval-only tool access and a repeatable model.",
+            "style": "small"
+          }
+        ]
+      }
+    }
+  ]
+}

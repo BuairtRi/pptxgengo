@@ -2,9 +2,8 @@
 
 ## Availability and route choice
 
-The stable 0.1.0-local.4 release includes this installed `adapt` route. Use
-`pptxgengo --help` and `pptxgengo adapt --help` for the syntax exposed by the
-active package; do not use repository-local Go commands as a runtime fallback.
+Use `pptxgengo --help` and `pptxgengo adapt --help` for the syntax exposed by
+the active package; do not use repository-local Go commands as a runtime fallback.
 
 Use `adapt` when counts, relationships, or semantic states should drive new
 editable geometry. Use `template` for the existing source-bound text/style

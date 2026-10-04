@@ -1,0 +1,262 @@
+{
+  "key": "image-text/frame-right-split",
+  "source_file": "templates/library/evidence.json",
+  "source_sha256": "b629a77c53c4400c6bc3430af120202f06e541560b68913bd30bcf22284a80ce",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "imageframe"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    }
+  ],
+  "family": "evidence",
+  "tier": "core",
+  "name": "Image with text, tall photo",
+  "purpose": "A tall portrait photo in the narrow left column, with the point, a short paragraph and two proof lines beside it.",
+  "uses": [
+    "media.imageframe",
+    "text.block",
+    "list.set"
+  ],
+  "source_advisory_budget": {
+    "words": 63,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "subhead",
+      "maxChars": 40
+    },
+    {
+      "slot": "body",
+      "maxChars": 150
+    },
+    {
+      "slot": "bullet lead",
+      "maxChars": 18
+    },
+    {
+      "slot": "bullet text",
+      "maxChars": 44
+    },
+    {
+      "slot": "caption",
+      "maxChars": 44
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "image",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "image",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "imageframe",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/3/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "imageframe",
+        "role": "image",
+        "source_bounds": {
+          "h": 432,
+          "w": 270,
+          "x": 57,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 414
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-left-narrow",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Operating model"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Shared services close from one queue"
+    },
+    {
+      "name": "node01.alt",
+      "source_pointer": "/body/0/alt",
+      "kind": "string",
+      "synthetic_source_example": "Shared services team reviewing an exception queue"
+    },
+    {
+      "name": "node01.photo",
+      "source_pointer": "/body/0/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-warehouse"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "One team, one list of exceptions"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Work moves to whoever has capacity, so no entity waits for its own team to catch up. Controllers review the queue each morning."
+    },
+    {
+      "name": "node04.items.item01.lead",
+      "source_pointer": "/body/3/items/0/lead",
+      "kind": "string",
+      "synthetic_source_example": "Less waiting."
+    },
+    {
+      "name": "node04.items.item01.text",
+      "source_pointer": "/body/3/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Capacity follows the queue."
+    },
+    {
+      "name": "node04.items.item02.lead",
+      "source_pointer": "/body/3/items/1/lead",
+      "kind": "string",
+      "synthetic_source_example": "Faster fixes."
+    },
+    {
+      "name": "node04.items.item02.text",
+      "source_pointer": "/body/3/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Exceptions are reviewed daily."
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Shared services hub, wave 1 pilot."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node04.items",
+      "source_pointer": "/body/3/items",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active"
+}

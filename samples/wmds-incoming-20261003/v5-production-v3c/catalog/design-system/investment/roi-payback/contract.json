@@ -1,0 +1,499 @@
+{
+  "key": "investment/roi-payback",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "chart"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "bullets"
+    }
+  ],
+  "family": "commercials",
+  "tier": "core",
+  "name": "Investment · ROI and payback",
+  "purpose": "Total investment, annual benefit, payback and return as four numbers, with a cumulative net value chart that crosses zero at payback.",
+  "uses": [
+    "metric",
+    "chart.line",
+    "text"
+  ],
+  "source_advisory_budget": {
+    "words": 75,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "metric value",
+      "maxChars": 8
+    },
+    {
+      "slot": "metric label",
+      "maxChars": 28
+    },
+    {
+      "slot": "chart title",
+      "maxChars": 40
+    },
+    {
+      "slot": "takeaway",
+      "maxChars": 80
+    },
+    {
+      "slot": "source",
+      "maxChars": 70
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "metric",
+      "numeric-data",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "chart",
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "chart",
+      "metric",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "metric",
+        "role": "metric",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/6/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 273,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 489,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "chart",
+        "role": "numeric-data",
+        "source_bounds": {
+          "h": 198,
+          "w": 558,
+          "x": 57,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 258
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Commercials"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "A $1.8M investment pays back in 14 months"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Illustrative Northfield business case; replace with validated figures before use."
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "total investment"
+    },
+    {
+      "name": "node01.value",
+      "source_pointer": "/body/0/value",
+      "kind": "string",
+      "synthetic_source_example": "$1.8M"
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "annual run-rate benefit"
+    },
+    {
+      "name": "node02.value",
+      "source_pointer": "/body/1/value",
+      "kind": "string",
+      "synthetic_source_example": "$2.6M"
+    },
+    {
+      "name": "node03.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "months to payback"
+    },
+    {
+      "name": "node03.value",
+      "source_pointer": "/body/2/value",
+      "kind": "string",
+      "synthetic_source_example": "14"
+    },
+    {
+      "name": "node04.label",
+      "source_pointer": "/body/3/label",
+      "kind": "string",
+      "synthetic_source_example": "three-year return"
+    },
+    {
+      "name": "node04.value",
+      "source_pointer": "/body/3/value",
+      "kind": "string",
+      "synthetic_source_example": "330%"
+    },
+    {
+      "name": "node05.categories.item01",
+      "source_pointer": "/body/4/categories/0",
+      "kind": "string",
+      "synthetic_source_example": "Q1"
+    },
+    {
+      "name": "node05.categories.item02",
+      "source_pointer": "/body/4/categories/1",
+      "kind": "string",
+      "synthetic_source_example": "Q2"
+    },
+    {
+      "name": "node05.categories.item03",
+      "source_pointer": "/body/4/categories/2",
+      "kind": "string",
+      "synthetic_source_example": "Q3"
+    },
+    {
+      "name": "node05.categories.item04",
+      "source_pointer": "/body/4/categories/3",
+      "kind": "string",
+      "synthetic_source_example": "Q4"
+    },
+    {
+      "name": "node05.categories.item05",
+      "source_pointer": "/body/4/categories/4",
+      "kind": "string",
+      "synthetic_source_example": "Q5"
+    },
+    {
+      "name": "node05.categories.item06",
+      "source_pointer": "/body/4/categories/5",
+      "kind": "string",
+      "synthetic_source_example": "Q6"
+    },
+    {
+      "name": "node05.categories.item07",
+      "source_pointer": "/body/4/categories/6",
+      "kind": "string",
+      "synthetic_source_example": "Q7"
+    },
+    {
+      "name": "node05.categories.item08",
+      "source_pointer": "/body/4/categories/7",
+      "kind": "string",
+      "synthetic_source_example": "Q8"
+    },
+    {
+      "name": "node05.categories.item09",
+      "source_pointer": "/body/4/categories/8",
+      "kind": "string",
+      "synthetic_source_example": "Q9"
+    },
+    {
+      "name": "node05.categories.item10",
+      "source_pointer": "/body/4/categories/9",
+      "kind": "string",
+      "synthetic_source_example": "Q10"
+    },
+    {
+      "name": "node05.categories.item11",
+      "source_pointer": "/body/4/categories/10",
+      "kind": "string",
+      "synthetic_source_example": "Q11"
+    },
+    {
+      "name": "node05.categories.item12",
+      "source_pointer": "/body/4/categories/11",
+      "kind": "string",
+      "synthetic_source_example": "Q12"
+    },
+    {
+      "name": "node05.series.item01.name",
+      "source_pointer": "/body/4/series/0/name",
+      "kind": "string",
+      "synthetic_source_example": "Net value"
+    },
+    {
+      "name": "node05.series.item01.values.item01",
+      "source_pointer": "/body/4/series/0/values/0",
+      "kind": "nullable_number",
+      "synthetic_source_example": -0.6
+    },
+    {
+      "name": "node05.series.item01.values.item02",
+      "source_pointer": "/body/4/series/0/values/1",
+      "kind": "nullable_number",
+      "synthetic_source_example": -1.2
+    },
+    {
+      "name": "node05.series.item01.values.item03",
+      "source_pointer": "/body/4/series/0/values/2",
+      "kind": "nullable_number",
+      "synthetic_source_example": -1.4
+    },
+    {
+      "name": "node05.series.item01.values.item04",
+      "source_pointer": "/body/4/series/0/values/3",
+      "kind": "nullable_number",
+      "synthetic_source_example": -0.7
+    },
+    {
+      "name": "node05.series.item01.values.item05",
+      "source_pointer": "/body/4/series/0/values/4",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node05.series.item01.values.item06",
+      "source_pointer": "/body/4/series/0/values/5",
+      "kind": "nullable_number",
+      "synthetic_source_example": 0.9
+    },
+    {
+      "name": "node05.series.item01.values.item07",
+      "source_pointer": "/body/4/series/0/values/6",
+      "kind": "nullable_number",
+      "synthetic_source_example": 1.7
+    },
+    {
+      "name": "node05.series.item01.values.item08",
+      "source_pointer": "/body/4/series/0/values/7",
+      "kind": "nullable_number",
+      "synthetic_source_example": 2.6
+    },
+    {
+      "name": "node05.series.item01.values.item09",
+      "source_pointer": "/body/4/series/0/values/8",
+      "kind": "nullable_number",
+      "synthetic_source_example": 3.4
+    },
+    {
+      "name": "node05.series.item01.values.item10",
+      "source_pointer": "/body/4/series/0/values/9",
+      "kind": "nullable_number",
+      "synthetic_source_example": 4.3
+    },
+    {
+      "name": "node05.series.item01.values.item11",
+      "source_pointer": "/body/4/series/0/values/10",
+      "kind": "nullable_number",
+      "synthetic_source_example": 5.1
+    },
+    {
+      "name": "node05.series.item01.values.item12",
+      "source_pointer": "/body/4/series/0/values/11",
+      "kind": "nullable_number",
+      "synthetic_source_example": 6.0
+    },
+    {
+      "name": "node05.title",
+      "source_pointer": "/body/4/title",
+      "kind": "string",
+      "synthetic_source_example": "Cumulative net value"
+    },
+    {
+      "name": "node05.units",
+      "source_pointer": "/body/4/units",
+      "kind": "string",
+      "synthetic_source_example": "$M, by quarter"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "What it means"
+    },
+    {
+      "name": "node07.items.item01",
+      "source_pointer": "/body/6/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Investment peaks in quarter 3"
+    },
+    {
+      "name": "node07.items.item02",
+      "source_pointer": "/body/6/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Net value turns positive in quarter 5"
+    },
+    {
+      "name": "node07.items.item03",
+      "source_pointer": "/body/6/items/2",
+      "kind": "string",
+      "synthetic_source_example": "$6.0M net value by year three"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node05.categories",
+      "source_pointer": "/body/4/categories",
+      "count": 12
+    },
+    {
+      "name": "node05.series.item01.values",
+      "source_pointer": "/body/4/series/0/values",
+      "count": 12
+    },
+    {
+      "name": "node05.series",
+      "source_pointer": "/body/4/series",
+      "count": 1
+    },
+    {
+      "name": "node07.items",
+      "source_pointer": "/body/6/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

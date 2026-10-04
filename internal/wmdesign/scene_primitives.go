@@ -17,40 +17,41 @@ import (
 const PrimitiveSceneContract = "pptxgengo.wmds-source-primitives.v1"
 
 type primitiveSource struct {
-	Type      string            `json:"type"`
-	ID        string            `json:"id,omitempty"`
-	X         float64           `json:"x"`
-	Y         float64           `json:"y"`
-	W         float64           `json:"w"`
-	H         float64           `json:"h,omitempty"`
-	Style     string            `json:"style,omitempty"`
-	Ink       string            `json:"ink,omitempty"`
-	On        string            `json:"on,omitempty"`
-	Text      string            `json:"text,omitempty"`
-	Align     string            `json:"align,omitempty"`
-	VAlign    string            `json:"valign,omitempty"`
-	Emphasis  string            `json:"emphasis,omitempty"`
-	MarkInk   string            `json:"markInk,omitempty"`
-	Variant   json.RawMessage   `json:"variant,omitempty"`
-	Label     string            `json:"label,omitempty"`
-	Title     string            `json:"title,omitempty"`
-	Body      string            `json:"body,omitempty"`
-	N         string            `json:"n,omitempty"`
-	NumInk    string            `json:"numInk,omitempty"`
-	NumStyle  string            `json:"numStyle,omitempty"`
-	Size      string            `json:"size,omitempty"`
-	Rule      string            `json:"rule,omitempty"`
-	Weight    float64           `json:"weight,omitempty"`
-	By        string            `json:"by,omitempty"`
-	Items     []json.RawMessage `json:"items,omitempty"`
-	RowHeight float64           `json:"rowHeight,omitempty"`
-	KeyW      float64           `json:"keyW,omitempty"`
-	KeyInk    string            `json:"keyInk,omitempty"`
-	K         string            `json:"k,omitempty"`
+	Type       string            `json:"type"`
+	ID         string            `json:"id,omitempty"`
+	X          float64           `json:"x"`
+	Y          float64           `json:"y"`
+	W          float64           `json:"w"`
+	H          float64           `json:"h,omitempty"`
+	Style      string            `json:"style,omitempty"`
+	Ink        string            `json:"ink,omitempty"`
+	On         string            `json:"on,omitempty"`
+	Text       string            `json:"text,omitempty"`
+	Align      string            `json:"align,omitempty"`
+	VAlign     string            `json:"valign,omitempty"`
+	Emphasis   string            `json:"emphasis,omitempty"`
+	MarkInk    string            `json:"markInk,omitempty"`
+	Variant    json.RawMessage   `json:"variant,omitempty"`
+	Label      string            `json:"label,omitempty"`
+	Title      string            `json:"title,omitempty"`
+	Body       string            `json:"body,omitempty"`
+	N          string            `json:"n,omitempty"`
+	NumInk     string            `json:"numInk,omitempty"`
+	NumStyle   string            `json:"numStyle,omitempty"`
+	Size       string            `json:"size,omitempty"`
+	Rule       string            `json:"rule,omitempty"`
+	RuleEndGap float64           `json:"ruleEndGap,omitempty"`
+	Weight     float64           `json:"weight,omitempty"`
+	By         string            `json:"by,omitempty"`
+	Items      []json.RawMessage `json:"items,omitempty"`
+	RowHeight  float64           `json:"rowHeight,omitempty"`
+	KeyW       float64           `json:"keyW,omitempty"`
+	KeyInk     string            `json:"keyInk,omitempty"`
+	K          string            `json:"k,omitempty"`
 }
 
 var primitiveFields = map[string]string{
-	"text": "style ink on text align valign emphasis markInk variant h weight", "textblock": "label title body h", "bullets": "items size on k label", "ol": "items size on", "list": "items variant rowHeight", "schedule": "items keyInk keyW rowHeight", "grouplabel": "text", "numhead": "n text numInk ink", "colhead": "rule weight label title", "strongnum": "items numInk numStyle size", "pullquote": "text by markInk",
+	"text": "style ink on text align valign emphasis markInk variant h weight", "textblock": "label title body h", "bullets": "items size on k label", "ol": "items size on", "list": "items variant rowHeight", "schedule": "items keyInk keyW rowHeight", "grouplabel": "text ruleEndGap", "numhead": "n text numInk ink", "colhead": "rule weight label title", "strongnum": "items numInk numStyle size", "pullquote": "text by markInk",
 }
 
 func primitiveDecode(raw json.RawMessage, target any, allowed string) error {
@@ -246,7 +247,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 			}
 		}
 	case "textblock":
-		if n.Body == "" {
+		if n.Body == "" && (r.source.Revision != LibraryRevisionV5 || n.Label == "" && n.Title == "") {
 			err = fmt.Errorf("scene.missing_textblock_body: %s", id)
 			break
 		}
@@ -341,8 +342,18 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 		}
 		err = add("label", n.Text, "label", "secondary", n.X, labelW, 18, 0)
 		if err == nil {
-			err = r.primitiveShape(p, id+".rule", Rect{X: n.X + l.Lines[0].Advance + 12, Y: n.Y + 8.625, W: n.W - l.Lines[0].Advance - 12, H: .75}, surface, "line", false)
-			p.Warnings = append(p.Warnings, "wmds.grouplabel-native-width.v1: "+id+" reserves2pt within the label-to-rule gap; source font and rule endpoint preserved.")
+			if n.RuleEndGap < 0 || n.RuleEndGap > n.W || math.IsNaN(n.RuleEndGap) || math.IsInf(n.RuleEndGap, 0) {
+				err = fmt.Errorf("scene.group_label_rule_end_gap: %s", id)
+				break
+			}
+			// Start follows the shaped label, while the end reserves space
+			// before the next column. Omit the rule if the label uses that space.
+			start := n.X + l.Lines[0].Advance + 12
+			end := n.X + n.W - n.RuleEndGap
+			if end > start {
+				err = r.primitiveShape(p, id+".rule", Rect{X: start, Y: n.Y + 8.625, W: end - start, H: .75}, surface, "line", false)
+			}
+			p.Warnings = append(p.Warnings, "wmds.grouplabel-native-width.v2: "+id+" reserves2pt in its text box; rule starts12pt after the measured label and respects the explicit end gap.")
 		}
 	case "pullquote":
 		st, e := r.sceneStyle("heading")
@@ -1063,6 +1074,12 @@ func PrimitiveAssetCatalog() []PrimitiveAssetReference {
 // all keys for that exact pinned hash are returned. Packaging should deduplicate
 // Path+SHA256 (e.g. the full headshot and its face crop share source bytes).
 func UsedPrimitiveAssets(raw []byte) ([]PrimitiveAssetReference, error) {
+	return UsedPrimitiveAssetsWithProjectHashes(raw, nil)
+}
+
+// UsedPrimitiveAssetsWithProjectHashes returns registry artwork dependencies
+// while recognizing separately packaged, hash-verified project originals.
+func UsedPrimitiveAssetsWithProjectHashes(raw []byte, projectHashes map[string]bool) ([]PrimitiveAssetReference, error) {
 	z, e := zip.NewReader(bytes.NewReader(raw), int64(len(raw)))
 	if e != nil {
 		return nil, e
@@ -1122,6 +1139,9 @@ func UsedPrimitiveAssets(raw []byte) ([]PrimitiveAssetReference, error) {
 			}
 			keys := byHash[hash]
 			if len(keys) == 0 {
+				if projectHashes[hash] {
+					continue
+				}
 				return nil, fmt.Errorf("scene.asset_unregistered_picture_hash: %s", hash)
 			}
 			key := strings.TrimSpace(strings.SplitN(descr, ";", 2)[0])

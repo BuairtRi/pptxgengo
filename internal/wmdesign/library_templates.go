@@ -27,6 +27,12 @@ type LibraryChrome struct {
 	Whiteboard       []LibraryWhiteboard `json:"whiteboard,omitempty"`
 	CustomWhiteboard bool                `json:"custom_whiteboard,omitempty"`
 	Notes            []string            `json:"notes,omitempty"`
+	Tint             []LibraryTint       `json:"tint,omitempty"`
+}
+type LibraryTint struct {
+	X       float64 `json:"x"`
+	W       float64 `json:"w"`
+	Surface string  `json:"surface,omitempty"`
 }
 type librarySlide struct {
 	Type        string      `json:"type"`
@@ -49,6 +55,7 @@ type librarySlide struct {
 		Notes []string `json:"notes,omitempty"`
 	} `json:"source,omitempty"`
 	Whiteboard json.RawMessage   `json:"whiteboard,omitempty"`
+	Tint       json.RawMessage   `json:"tint,omitempty"`
 	Body       []json.RawMessage `json:"body"`
 }
 type libraryNav struct {
@@ -97,6 +104,11 @@ type LibraryTemplate struct {
 	Family              string              `json:"family"`
 	Tier                string              `json:"tier"`
 	Name                string              `json:"name"`
+	Purpose             string              `json:"purpose,omitempty"`
+	Uses                []string            `json:"uses,omitempty"`
+	AdvisoryBudget      json.RawMessage     `json:"source_advisory_budget,omitempty"`
+	AdvisorySlots       json.RawMessage     `json:"source_advisory_slots,omitempty"`
+	Discovery           LibraryDiscovery    `json:"discovery"`
 	ContentContract     string              `json:"content_contract"`
 	ValueSchema         *LibraryValueSchema `json:"value_schema,omitempty"`
 	Slots               []LibrarySlot       `json:"slots,omitempty"`
@@ -143,7 +155,7 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 		if err := sceneDecode(raw, &catalog); err != nil {
 			return nil, err
 		}
-		if catalog.Schema != "wmds.templates.v2" {
+		if catalog.Schema != "wmds.templates.v2" && !v4UnversionedFamily(s.Revision, path, catalog) {
 			return nil, fmt.Errorf("library.unsupported_schema: %s", path)
 		}
 		digest := fmt.Sprintf("%x", sha256.Sum256(raw))
@@ -175,6 +187,9 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 			}
 			def := LibraryTemplate{TemplateDefinition: TemplateDefinition{Key: key, SourceFile: path, SourceSHA256: digest}, Family: catalog.Family, Tier: entry.Tier, Name: entry.Name, ContentContract: LibraryBindingsContract, RawSlide: entry.Slide, RenderStatus: "binding_defined_render_review_pending", Policy: []string{"Named content slots and exact-count key overlays; geometry/base styles remain frozen.", "Source slot metadata is advisory; this definition explicitly names the drawn content fields.", "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.", "Binding availability does not establish successful rendering, native review or a qualified envelope."}}
 			def.SourceRevision = s.Revision
+			def.Purpose, def.Uses = entry.Purpose, append([]string(nil), entry.Uses...)
+			def.AdvisoryBudget = append(json.RawMessage(nil), entry.Budget...)
+			def.AdvisorySlots = append(json.RawMessage(nil), entry.Slots...)
 			def.Revision, def.Added, def.Revised, def.Status, def.ReplacedBy = entry.Revision, entry.Added, entry.Revised, entry.Status, entry.ReplacedBy
 			if def.Revision == 0 {
 				def.Revision = 1
@@ -244,13 +259,23 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 				def.Slots, def.Arrays = nil, nil
 				def.Policy = []string{"This template retains its typed v2 values API; the library slots/keys projection is not accepted.", "All declared typed content is required; geometry/base styles remain frozen.", "Binding availability does not establish successful rendering, native review or a qualified envelope."}
 			}
+			def.Discovery = libraryDiscovery(def, obj)
 			out = append(out, def)
 		}
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Key < out[j].Key })
 	expected := 97
-	if s.Revision == LibraryRevisionV2 {
+	if isModernLibrary(s.Revision) {
 		expected = 167
+	}
+	if s.Revision == LibraryRevisionV3 {
+		expected = 248
+	}
+	if s.Revision == LibraryRevisionV4 {
+		expected = 522
+	}
+	if s.Revision == LibraryRevisionV5 {
+		expected = 587
 	}
 	if len(out) != expected {
 		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
@@ -258,9 +283,22 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 	return out, nil
 }
 
+// Nine family files in the immutable v4/v5 intakes omit the schema key. Accept
+// only their exact pinned family identities; earlier revisions keep the v2 gate.
+func v4UnversionedFamily(revision, path string, catalog templateSourceCatalog) bool {
+	if !isExpandedLibrary(revision) || catalog.Schema != "" || path != "templates/library/"+catalog.Family+".json" {
+		return false
+	}
+	switch catalog.Family {
+	case "change", "diagrams", "heatmaps", "lifecycle", "maturity", "software", "status", "team-curves", "venn":
+		return true
+	}
+	return false
+}
+
 // Only the unchanged card APIs carry forward into the refreshed source revision.
 func usesLegacyTemplate(revision, key string) bool {
-	return legacyTemplate(key) && (revision != LibraryRevisionV2 || key == "cards/3" || key == "cards/4")
+	return legacyTemplate(key) && (!isModernLibrary(revision) || key == "cards/3" || key == "cards/4")
 }
 
 func LibraryCatalog(bundle, override string) ([]LibraryTemplate, error) {
@@ -285,10 +323,12 @@ func libraryObject(raw []byte) (map[string]any, error) {
 // geometry or structural discriminator never becomes an editable content slot.
 var libraryFixedString = map[string]bool{"target": true, "placement": true, "arrow": true, "type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "corner": true, "event": true}
 var libraryNumbers = map[string]bool{"values": true, "value": true, "alloc": true, "from": true, "to": true, "at": true, "softStart": true, "softEnd": true}
+var libraryIntakeFixedString = map[string]bool{"curve": true, "labelStyle": true, "scale": true, "heatScale": true, "orient": true, "ramp": true, "direction": true, "rowHeader": true}
 
 type libraryProjectionContext struct {
-	NodeType string
-	Parent   string
+	NodeType  string
+	Parent    string
+	ChartKind string
 }
 
 func libraryLegacyValueSchema(key string) *LibraryValueSchema {
@@ -338,6 +378,10 @@ func libraryScalarSlot(def *LibraryTemplate, v any, pointer, name, kind string) 
 		if _, ok := v.(json.Number); !ok {
 			return false
 		}
+	case "nullable_number":
+		if _, ok := v.(json.Number); !ok && v != nil {
+			return false
+		}
 	case "boolean":
 		if _, ok := v.(bool); !ok {
 			return false
@@ -362,9 +406,27 @@ func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind strin
 		return false
 	}
 	switch kind {
-	case "", "status", "tag", "raci":
+	case "":
+		if obj, ok := v.(map[string]any); ok {
+			found := false
+			for _, k := range []string{"text", "sub"} {
+				found = libraryScalarSlot(def, obj[k], libraryPointerChild(pointer, k), name+"."+k, "string") || found
+			}
+			return found
+		}
 		return libraryScalarSlot(def, v, pointer, name, "string")
-	case "delta", "rating", "allocation", "harvey", "gauge":
+	case "status", "tag", "raci":
+		return libraryScalarSlot(def, v, pointer, name, "string")
+	case "rating", "dots", "harvey", "heat":
+		if obj, ok := v.(map[string]any); ok {
+			found := libraryScalarSlot(def, obj["value"], pointer+"/value", name+".value", "number")
+			if kind == "dots" || kind == "heat" {
+				found = libraryCellTextWalk(def, obj["text"], pointer+"/text", name+".text", kind == "dots") || found
+			}
+			return found
+		}
+		return libraryScalarSlot(def, v, pointer, name, "number")
+	case "delta", "allocation", "gauge":
 		return libraryScalarSlot(def, v, pointer, name, "number")
 	case "check", "checkbox":
 		return libraryScalarSlot(def, v, pointer, name, "boolean")
@@ -416,6 +478,30 @@ func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind strin
 			}
 			return found
 		}
+	}
+	return false
+}
+
+// Score-cell supporting bullets have their own stable keys. Cell policy fields
+// (max, ink and scale) remain frozen template definitions rather than content.
+func libraryCellTextWalk(def *LibraryTemplate, v any, pointer, name string, bullets bool) bool {
+	if libraryScalarSlot(def, v, pointer, name, "string") {
+		return true
+	}
+	if !bullets {
+		return false
+	}
+	values, ok := v.([]any)
+	if !ok || len(values) == 0 {
+		return false
+	}
+	start := len(def.Slots)
+	for i, value := range values {
+		libraryContentWalk(def, value, pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1), "array_content", libraryProjectionContext{})
+	}
+	if len(def.Slots) > start {
+		def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(values)})
+		return true
 	}
 	return false
 }
@@ -485,6 +571,7 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 	case map[string]any:
 		if typ, ok := x["type"].(string); ok {
 			ctx.NodeType = typ
+			ctx.ChartKind, _ = x["kind"].(string)
 		}
 		keys := make([]string, 0, len(x))
 		for k := range x {
@@ -493,6 +580,9 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 		sort.Strings(keys)
 		found := false
 		for _, k := range keys {
+			if ctx.NodeType == "gauge" && k == "segments" {
+				continue
+			}
 			childPointer := libraryPointerChild(pointer, k)
 			childName := name + "." + k
 			if ctx.NodeType == "table" && k == "rows" {
@@ -506,7 +596,21 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 			if x["type"] == "connector" && (k == "from" || k == "to" || k == "points") {
 				continue
 			}
-			if def.SourceRevision == LibraryRevisionV2 && ctx.NodeType == "table" && ctx.Parent == "groups" && (k == "from" || k == "to") {
+			if ctx.NodeType == "maturity" && k == "at" {
+				// Stage positions are the template's authored curve geometry.
+				continue
+			}
+			if ctx.NodeType == "maturity" && ctx.Parent == "branch" && k == "from" {
+				// The branch anchor is source geometry, not a visible stage label.
+				continue
+			}
+			if ctx.NodeType == "road" && ctx.Parent == "milestones" && k == "at" {
+				continue
+			}
+			if ctx.NodeType == "cycle" && ctx.Parent == "loops" && (k == "from" || k == "to") {
+				continue
+			}
+			if isModernLibrary(def.SourceRevision) && ctx.NodeType == "table" && ctx.Parent == "groups" && (k == "from" || k == "to") {
 				// Group row boundaries are topology, not numeric table data.
 				// The visible group label remains a required content slot.
 				continue
@@ -514,12 +618,12 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 			if k == "text" && x["fill"] != nil && strings.HasPrefix(fmt.Sprint(x[k]), "#") {
 				continue
 			}
-			childCtx := libraryProjectionContext{NodeType: ctx.NodeType, Parent: k}
+			childCtx := libraryProjectionContext{NodeType: ctx.NodeType, Parent: k, ChartKind: ctx.ChartKind}
 			if k == "metric" {
 				childCtx.NodeType = "metric"
 			}
 			projectedField := k
-			if def.SourceRevision == LibraryRevisionV2 && ctx.NodeType == "chart" && ctx.Parent == "items" && (k == "x" || k == "y") {
+			if isModernLibrary(def.SourceRevision) && ctx.NodeType == "chart" && ctx.Parent == "items" && (k == "x" || k == "y") {
 				projectedField = "quadrant_coordinate_content"
 			}
 			if k == "icon" {
@@ -533,6 +637,9 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 			if k == "status" && ctx.NodeType == "metric" {
 				projectedField = "metric_status_content"
 			}
+			if def.SourceRevision == LibraryRevisionV5 && k == "status" && ctx.NodeType == "legend" {
+				projectedField = "legend_status_content"
+			}
 			if k == "state" && (ctx.NodeType == "stepper" || ctx.NodeType == "vstepper") && ctx.Parent == "steps" {
 				projectedField = "step_state_content"
 			}
@@ -540,11 +647,30 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 				found = libraryScalarSlot(def, x[k], childPointer, childName, "boolean") || found
 				continue
 			}
+			if k == "n" && (ctx.NodeType == "maturity" || ctx.NodeType == "venn" || ctx.NodeType == "road" || ctx.NodeType == "cycle") || k == "active" && (ctx.NodeType == "maturity" || ctx.NodeType == "cycle") || k == "heat" && (ctx.NodeType == "block" || ctx.NodeType == "legend") {
+				if libraryScalarSlot(def, x[k], childPointer, childName, "number") {
+					found = true
+					continue
+				}
+			}
 			found = libraryContentWalk(def, x[k], childPointer, childName, projectedField, childCtx) || found
 		}
 		return found
 	case []any:
 		start := len(def.Slots)
+		if isExpandedLibrary(def.SourceRevision) && ctx.NodeType == "chart" && ctx.ChartKind == "line" && field == "values" {
+			for i, item := range x {
+				if !libraryScalarSlot(def, item, pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1), "nullable_number") {
+					// Malformed source values stay visible to source validation.
+					continue
+				}
+			}
+			if len(def.Slots) > start {
+				def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(x)})
+				return true
+			}
+			return false
+		}
 		arrayField := field
 		if field == "labels" || field == "bands" || field == "points" {
 			arrayField = "array_content"
@@ -552,12 +678,13 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 		for i, item := range x {
 			libraryContentWalk(def, item, pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1), arrayField, ctx)
 		}
-		if (len(def.Slots) > start || field == "items" && ctx.NodeType == "chart") && len(x) > 0 {
+		identityArray := field == "items" && ctx.NodeType == "chart" || ctx.NodeType == "venn" && (field == "sets" || field == "regions" || field == "points") || ctx.NodeType == "maturity" && field == "stages" || ctx.NodeType == "funnel" && field == "stages" || ctx.NodeType == "pyramid" && (field == "levels" || field == "stages") || ctx.NodeType == "road" && field == "milestones" || ctx.NodeType == "cycle" && (field == "items" || field == "loops")
+		if (len(def.Slots) > start || identityArray) && len(x) > 0 {
 			def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(x)})
 			return true
 		}
 	case string:
-		if libraryFixedString[field] || field == "h" || field == "w" || field == "points" || field == "links" || field == "page" && pointer == "/page" {
+		if libraryFixedString[field] || libraryIntakeFixedString[field] || field == "h" || field == "w" || field == "points" || field == "links" || field == "page" && pointer == "/page" {
 			return false
 		}
 		return libraryScalarSlot(def, x, pointer, name, "string")
@@ -596,6 +723,27 @@ func compileLibrarySlide(raw json.RawMessage, keys map[string][]string) (SlideSp
 		q.TitleLines = 1
 	}
 	chrome := &LibraryChrome{Emphasis: src.Emphasis, Stamp: src.Stamp}
+	if len(src.Tint) > 0 {
+		raw := bytes.TrimSpace(src.Tint)
+		if len(raw) > 0 && raw[0] == '{' {
+			raw = append(append([]byte{'['}, raw...), ']')
+		}
+		if err := bindingStrictDecode(raw, &chrome.Tint); err != nil {
+			return SlideSpec{}, fmt.Errorf("library.invalid_tint: %w", err)
+		}
+		if len(chrome.Tint) < 1 || len(chrome.Tint) > 8 {
+			return SlideSpec{}, fmt.Errorf("library.invalid_tint_count")
+		}
+		for i := range chrome.Tint {
+			p := &chrome.Tint[i]
+			if !intakeFinite(p.X, p.W) || p.X < 0 || p.W <= 0 || p.X+p.W > 960 {
+				return SlideSpec{}, fmt.Errorf("library.invalid_tint_geometry")
+			}
+			if p.Surface == "" {
+				p.Surface = "subtle"
+			}
+		}
+	}
 	doc := SlideSpec{Frame: q, Eyebrow: src.Eyebrow, Title: src.Title, LibraryChrome: chrome}
 	if src.Source != nil {
 		chrome.Notes = src.Source.Notes

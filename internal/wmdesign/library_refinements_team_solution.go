@@ -8,7 +8,7 @@ import (
 // applyTeamSolutionLibraryRefinements applies recorded v2 family amendments.
 // These preserve the pinned source and caller copy; they are never font shrink.
 func applyTeamSolutionLibraryRefinements(key, revision string, doc *SlideSpec) error {
-	if revision != LibraryRevisionV2 || key != "team/org-roles-nav" {
+	if !isModernLibrary(revision) || key != "team/org-roles-nav" {
 		return nil
 	}
 	for i := range doc.Nodes {

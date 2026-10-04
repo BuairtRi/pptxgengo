@@ -66,7 +66,11 @@ func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 		case item.Text != nil:
 			tr := *item.Text
 			s, id := tr.Layout.Style, tr.Layout.Font
-			opts := &pptx.TextPropsOptions{PositionProps: pos(tr.Rect), ObjectNameProps: pptx.ObjectNameProps{ObjectName: tr.ID}, TextBaseProps: pptx.TextBaseProps{FontFace: id.Typeface, FontSize: s.Size, Bold: &id.Bold, Italic: &id.NativeItalic, Color: tr.Color, Align: pptx.HAlign(tr.Align)}, CharSpacing: s.TrackingPt, LineSpacing: s.Leading, ParaSpaceBefore: zero(), ParaSpaceAfter: zero(), Margin: pptx.Margin{0}, Fit: "none", Valign: pptx.VAlign("top"), Rotate: tr.Rotation}
+			valign := pptx.VAlign("top")
+			if tr.VerticalAlign != "" {
+				valign = pptx.VAlign(tr.VerticalAlign)
+			}
+			opts := &pptx.TextPropsOptions{PositionProps: pos(tr.Rect), ObjectNameProps: pptx.ObjectNameProps{ObjectName: tr.ID}, TextBaseProps: pptx.TextBaseProps{FontFace: id.Typeface, FontSize: s.Size, Bold: &id.Bold, Italic: &id.NativeItalic, Color: tr.Color, Align: pptx.HAlign(tr.Align)}, CharSpacing: s.TrackingPt, LineSpacing: s.Leading, ParaSpaceBefore: zero(), ParaSpaceAfter: zero(), Margin: pptx.Margin{0}, Fit: "none", Valign: valign, Rotate: tr.Rotation}
 			if err := r.slide.AddText([]pptx.TextProps{{Text: tr.Layout.Displayed}}, opts); err != nil {
 				return err
 			}

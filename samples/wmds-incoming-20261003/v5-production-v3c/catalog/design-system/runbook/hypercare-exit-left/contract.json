@@ -1,0 +1,466 @@
+{
+  "key": "runbook/hypercare-exit-left",
+  "source_file": "templates/library/runbooks.json",
+  "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    }
+  ],
+  "family": "runbooks",
+  "tier": "working",
+  "name": "Runbook · hypercare exit criteria · left panel",
+  "purpose": "The hypercare exit criteria with target, current value and status, and the day count and exit rule on a left panel.",
+  "uses": [
+    "composite.table",
+    "text",
+    "rule"
+  ],
+  "source_advisory_budget": {
+    "words": 102,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "criterion",
+      "maxChars": 40
+    },
+    {
+      "slot": "target",
+      "maxChars": 14
+    },
+    {
+      "slot": "current",
+      "maxChars": 12
+    },
+    {
+      "slot": "panel content",
+      "note": "day count and exit rule on the 273 pt left panel, inverse inks"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "rule",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 558,
+          "x": 345,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 288
+        }
+      }
+    ],
+    "frame": {
+      "rail": "left",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Hypercare"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Hypercare exits when [[seven]] criteria hold for two days"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Exit criterion"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Target"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Current"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Status"
+    },
+    {
+      "name": "node01.rows.item01.c",
+      "source_pointer": "/body/0/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "No Sev 1 or 2 defect open"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item01.t",
+      "source_pointer": "/body/0/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "5 days"
+    },
+    {
+      "name": "node01.rows.item01.u",
+      "source_pointer": "/body/0/rows/0/u",
+      "kind": "string",
+      "synthetic_source_example": "5 days"
+    },
+    {
+      "name": "node01.rows.item02.c",
+      "source_pointer": "/body/0/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "Auto-match rate"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item02.t",
+      "source_pointer": "/body/0/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "92% or more"
+    },
+    {
+      "name": "node01.rows.item02.u",
+      "source_pointer": "/body/0/rows/1/u",
+      "kind": "string",
+      "synthetic_source_example": "93%"
+    },
+    {
+      "name": "node01.rows.item03.c",
+      "source_pointer": "/body/0/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "Open tickets"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item03.t",
+      "source_pointer": "/body/0/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "Under 25"
+    },
+    {
+      "name": "node01.rows.item03.u",
+      "source_pointer": "/body/0/rows/2/u",
+      "kind": "string",
+      "synthetic_source_example": "42"
+    },
+    {
+      "name": "node01.rows.item04.c",
+      "source_pointer": "/body/0/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "Month-end close completed"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item04.t",
+      "source_pointer": "/body/0/rows/3/t",
+      "kind": "string",
+      "synthetic_source_example": "1 close"
+    },
+    {
+      "name": "node01.rows.item04.u",
+      "source_pointer": "/body/0/rows/3/u",
+      "kind": "string",
+      "synthetic_source_example": "In progress"
+    },
+    {
+      "name": "node01.rows.item05.c",
+      "source_pointer": "/body/0/rows/4/c",
+      "kind": "string",
+      "synthetic_source_example": "Ticket backlog age"
+    },
+    {
+      "name": "node01.rows.item05.s",
+      "source_pointer": "/body/0/rows/4/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item05.t",
+      "source_pointer": "/body/0/rows/4/t",
+      "kind": "string",
+      "synthetic_source_example": "Under 3 days"
+    },
+    {
+      "name": "node01.rows.item05.u",
+      "source_pointer": "/body/0/rows/4/u",
+      "kind": "string",
+      "synthetic_source_example": "2.4 days"
+    },
+    {
+      "name": "node01.rows.item06.c",
+      "source_pointer": "/body/0/rows/5/c",
+      "kind": "string",
+      "synthetic_source_example": "User satisfaction pulse"
+    },
+    {
+      "name": "node01.rows.item06.s",
+      "source_pointer": "/body/0/rows/5/s",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item06.t",
+      "source_pointer": "/body/0/rows/5/t",
+      "kind": "string",
+      "synthetic_source_example": "80% or more"
+    },
+    {
+      "name": "node01.rows.item06.u",
+      "source_pointer": "/body/0/rows/5/u",
+      "kind": "string",
+      "synthetic_source_example": "76%"
+    },
+    {
+      "name": "node01.rows.item07.c",
+      "source_pointer": "/body/0/rows/6/c",
+      "kind": "string",
+      "synthetic_source_example": "Run-team handover signed"
+    },
+    {
+      "name": "node01.rows.item07.s",
+      "source_pointer": "/body/0/rows/6/s",
+      "kind": "string",
+      "synthetic_source_example": "notstarted"
+    },
+    {
+      "name": "node01.rows.item07.t",
+      "source_pointer": "/body/0/rows/6/t",
+      "kind": "string",
+      "synthetic_source_example": "Signed"
+    },
+    {
+      "name": "node01.rows.item07.u",
+      "source_pointer": "/body/0/rows/6/u",
+      "kind": "string",
+      "synthetic_source_example": "Pending"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Hypercare exit"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Day 9"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "of 14 in hypercare. 3 of 7 criteria are met."
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Exit rule"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Hypercare ends when every criterion is green on two consecutive days. Steering signs the exit."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 4
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 7
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

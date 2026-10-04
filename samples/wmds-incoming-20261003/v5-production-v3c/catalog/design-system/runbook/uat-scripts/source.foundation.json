@@ -1,0 +1,154 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-455",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "User acceptance testing",
+      "title": "Eight UAT scripts cover the finance [[month-end]]",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "header": "dark",
+              "dense": true,
+              "rowH": 36,
+              "cols": [
+                {
+                  "k": "i",
+                  "label": "Script",
+                  "w": 72
+                },
+                {
+                  "k": "s",
+                  "label": "Scenario",
+                  "w": 168
+                },
+                {
+                  "k": "t",
+                  "label": "Steps summary",
+                  "w": 240
+                },
+                {
+                  "k": "e",
+                  "label": "Expected result",
+                  "w": 228
+                },
+                {
+                  "k": "st",
+                  "label": "Status",
+                  "w": 138,
+                  "type": "status"
+                }
+              ],
+              "rows": [
+                {
+                  "i": "UAT-01",
+                  "s": "Post a manual journal",
+                  "t": "Create, route, approve and post",
+                  "e": "Posts to the correct period",
+                  "st": "pass"
+                },
+                {
+                  "i": "UAT-02",
+                  "s": "Pay a vendor invoice",
+                  "t": "Enter, match, approve, run payment",
+                  "e": "Payment file made; ledger updated",
+                  "st": "pass"
+                },
+                {
+                  "i": "UAT-03",
+                  "s": "Apply customer cash",
+                  "t": "Import remittance; clear exceptions",
+                  "e": "Cash applied; aging updated",
+                  "st": "progress"
+                },
+                {
+                  "i": "UAT-04",
+                  "s": "Close a period",
+                  "t": "Accruals, reconcile, lock period",
+                  "e": "Period locked; no open items",
+                  "st": "pass"
+                },
+                {
+                  "i": "UAT-05",
+                  "s": "Intercompany transfer",
+                  "t": "Raise, confirm and eliminate",
+                  "e": "Both entities match",
+                  "st": "progress"
+                },
+                {
+                  "i": "UAT-06",
+                  "s": "Month-end report pack",
+                  "t": "Run the pack for all entities",
+                  "e": "Totals tie to the ledger",
+                  "st": "fail"
+                },
+                {
+                  "i": "UAT-07",
+                  "s": "Role-based access",
+                  "t": "Log in as each of five roles",
+                  "e": "Access matches the matrix",
+                  "st": "pass"
+                },
+                {
+                  "i": "UAT-08",
+                  "s": "Add a fixed asset",
+                  "t": "Capitalize, depreciate, dispose",
+                  "e": "Schedule and ledger agree",
+                  "st": "fail"
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-455",
+        "template": "runbook/uat-scripts",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/runbooks.json",
+        "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+        "source_revision": "wmds-library.v5",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {
+        "emphasis": "underscore"
+      }
+    }
+  ]
+}

@@ -1,0 +1,507 @@
+{
+  "key": "value-tracking/owners-nav",
+  "source_file": "templates/library/value.json",
+  "source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    }
+  ],
+  "family": "value",
+  "tier": "core",
+  "name": "Value tracking · KPI owners · nav rail",
+  "purpose": "The value KPIs with owner, baseline, target, current reading, status and review cadence, on the nav rail.",
+  "uses": [
+    "rail.nav",
+    "table.standard",
+    "status"
+  ],
+  "source_advisory_budget": {
+    "words": 98,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "KPI",
+      "maxChars": 28
+    },
+    {
+      "slot": "owner",
+      "maxChars": 28
+    },
+    {
+      "slot": "reading",
+      "maxChars": 8
+    },
+    {
+      "slot": "status",
+      "maxChars": 8
+    },
+    {
+      "slot": "governance note",
+      "maxChars": 90
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "navigation",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 402
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 414,
+          "x": 57,
+          "y": 420
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 414,
+          "x": 489,
+          "y": 420
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Investment and value"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Every value KPI has a named owner and a cadence"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current program data before use."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "KPI"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Owner"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Baseline"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Target"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Current"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Status"
+    },
+    {
+      "name": "node01.cols.item07.label",
+      "source_pointer": "/body/0/cols/6/label",
+      "kind": "string",
+      "synthetic_source_example": "Review"
+    },
+    {
+      "name": "node01.rows.item01.b",
+      "source_pointer": "/body/0/rows/0/b",
+      "kind": "string",
+      "synthetic_source_example": "4,200"
+    },
+    {
+      "name": "node01.rows.item01.c",
+      "source_pointer": "/body/0/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "3,100"
+    },
+    {
+      "name": "node01.rows.item01.k",
+      "source_pointer": "/body/0/rows/0/k",
+      "kind": "string",
+      "synthetic_source_example": "Hours per close cycle"
+    },
+    {
+      "name": "node01.rows.item01.o",
+      "source_pointer": "/body/0/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item01.r",
+      "source_pointer": "/body/0/rows/0/r",
+      "kind": "string",
+      "synthetic_source_example": "Monthly"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item01.t",
+      "source_pointer": "/body/0/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "2,400"
+    },
+    {
+      "name": "node01.rows.item02.b",
+      "source_pointer": "/body/0/rows/1/b",
+      "kind": "string",
+      "synthetic_source_example": "9.1%"
+    },
+    {
+      "name": "node01.rows.item02.c",
+      "source_pointer": "/body/0/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "8.2%"
+    },
+    {
+      "name": "node01.rows.item02.k",
+      "source_pointer": "/body/0/rows/1/k",
+      "kind": "string",
+      "synthetic_source_example": "Denial rate"
+    },
+    {
+      "name": "node01.rows.item02.o",
+      "source_pointer": "/body/0/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "VP Revenue Cycle"
+    },
+    {
+      "name": "node01.rows.item02.r",
+      "source_pointer": "/body/0/rows/1/r",
+      "kind": "string",
+      "synthetic_source_example": "Monthly"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item02.t",
+      "source_pointer": "/body/0/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "6.4%"
+    },
+    {
+      "name": "node01.rows.item03.b",
+      "source_pointer": "/body/0/rows/2/b",
+      "kind": "string",
+      "synthetic_source_example": "54%"
+    },
+    {
+      "name": "node01.rows.item03.c",
+      "source_pointer": "/body/0/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "66%"
+    },
+    {
+      "name": "node01.rows.item03.k",
+      "source_pointer": "/body/0/rows/2/k",
+      "kind": "string",
+      "synthetic_source_example": "Spend under contract"
+    },
+    {
+      "name": "node01.rows.item03.o",
+      "source_pointer": "/body/0/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "Supply Chain Director"
+    },
+    {
+      "name": "node01.rows.item03.r",
+      "source_pointer": "/body/0/rows/2/r",
+      "kind": "string",
+      "synthetic_source_example": "Quarterly"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item03.t",
+      "source_pointer": "/body/0/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "72%"
+    },
+    {
+      "name": "node01.rows.item04.b",
+      "source_pointer": "/body/0/rows/3/b",
+      "kind": "string",
+      "synthetic_source_example": "310"
+    },
+    {
+      "name": "node01.rows.item04.c",
+      "source_pointer": "/body/0/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "190"
+    },
+    {
+      "name": "node01.rows.item04.k",
+      "source_pointer": "/body/0/rows/3/k",
+      "kind": "string",
+      "synthetic_source_example": "Corrections a month"
+    },
+    {
+      "name": "node01.rows.item04.o",
+      "source_pointer": "/body/0/rows/3/o",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item04.r",
+      "source_pointer": "/body/0/rows/3/r",
+      "kind": "string",
+      "synthetic_source_example": "Monthly"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item04.t",
+      "source_pointer": "/body/0/rows/3/t",
+      "kind": "string",
+      "synthetic_source_example": "120"
+    },
+    {
+      "name": "node01.rows.item05.b",
+      "source_pointer": "/body/0/rows/4/b",
+      "kind": "string",
+      "synthetic_source_example": "14"
+    },
+    {
+      "name": "node01.rows.item05.c",
+      "source_pointer": "/body/0/rows/4/c",
+      "kind": "string",
+      "synthetic_source_example": "9"
+    },
+    {
+      "name": "node01.rows.item05.k",
+      "source_pointer": "/body/0/rows/4/k",
+      "kind": "string",
+      "synthetic_source_example": "Open audit findings"
+    },
+    {
+      "name": "node01.rows.item05.o",
+      "source_pointer": "/body/0/rows/4/o",
+      "kind": "string",
+      "synthetic_source_example": "Compliance Officer"
+    },
+    {
+      "name": "node01.rows.item05.r",
+      "source_pointer": "/body/0/rows/4/r",
+      "kind": "string",
+      "synthetic_source_example": "Quarterly"
+    },
+    {
+      "name": "node01.rows.item05.s",
+      "source_pointer": "/body/0/rows/4/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item05.t",
+      "source_pointer": "/body/0/rows/4/t",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "How value is confirmed"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Finance validates every realized dollar against the ledger."
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "The CFO chairs a monthly value review; the PMO owns the tracker."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 7
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Context"
+        },
+        {
+          "key": "section-02",
+          "label": "Approach"
+        },
+        {
+          "key": "section-03",
+          "label": "Business case"
+        },
+        {
+          "key": "section-04",
+          "label": "Governance"
+        },
+        {
+          "key": "section-05",
+          "label": "Next steps"
+        }
+      ],
+      "active": "section-04"
+    }
+  }
+}

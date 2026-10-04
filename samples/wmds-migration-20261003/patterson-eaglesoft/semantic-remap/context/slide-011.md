@@ -1,0 +1,1 @@
+Keep all three routes, source option caveats, alternative frameworks and the visible Tyler editorial reminder. Preserve 311 extracted words, common convergence topology and notes. Three-row alternative improves comparisons; routing alternative emphasizes coexistence.

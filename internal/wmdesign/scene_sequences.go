@@ -392,6 +392,10 @@ func (r *renderer) planSequenceScene(id string, raw json.RawMessage, ctx SceneCo
 		if len(n.Phases) == 0 {
 			return nil, true, fmt.Errorf("scene.phases_empty")
 		}
+		// The axis is background chrome; opaque gate diamonds paint above it.
+		if e = r.diagramLine(p, id+".axis", [2]float64{n.X, n.Y + 288}, [2]float64{n.X + n.W, n.Y + 288}, line, 1, "solid"); e != nil {
+			return nil, true, e
+		}
 		cw := (n.W - 18*float64(len(n.Phases)-1)) / float64(len(n.Phases))
 		seen := map[string]bool{}
 		for i, ph := range n.Phases {
@@ -486,9 +490,6 @@ func (r *renderer) planSequenceScene(id string, raw json.RawMessage, ctx SceneCo
 					return nil, true, e
 				}
 			}
-		}
-		if e = r.diagramLine(p, id+".axis", [2]float64{n.X, n.Y + 288}, [2]float64{n.X + n.W, n.Y + 288}, line, 1, "solid"); e != nil {
-			return nil, true, e
 		}
 	case "pyramid":
 		if len(n.Bands) == 0 || len(n.Bands) > 5 || n.H <= 6*float64(len(n.Bands)-1) {
@@ -617,11 +618,14 @@ type ganttPhase struct {
 	Label string  `json:"label"`
 }
 type ganttSpec struct {
-	Type string  `json:"type"`
-	X    float64 `json:"x"`
-	Y    float64 `json:"y"`
-	W    float64 `json:"w"`
-	Cols struct {
+	Type            string  `json:"type"`
+	X               float64 `json:"x"`
+	Y               float64 `json:"y"`
+	W               float64 `json:"w"`
+	TrackPitch      float64 `json:"trackPitch,omitempty"`
+	LegendSize      float64 `json:"legendSize,omitempty"`
+	LegendFullWidth bool    `json:"legendFullWidth,omitempty"`
+	Cols            struct {
 		Group float64 `json:"group"`
 		Lane  float64 `json:"lane"`
 	} `json:"cols"`
@@ -679,8 +683,15 @@ func (r *renderer) sequenceHatch(p *scenePlan, id string, b Rect, fill, strong s
 }
 func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneContext) (*scenePlan, error) {
 	var n ganttSpec
-	if e := diagramDecode(raw, "x y w cols periods phases gates today sidebarLabel kinds events groups", &n); e != nil {
+	if e := diagramDecode(raw, "x y w cols periods phases gates today sidebarLabel kinds events groups trackPitch legendSize legendFullWidth", &n); e != nil {
 		return nil, e
+	}
+	trackPitch := n.TrackPitch
+	if trackPitch == 0 {
+		trackPitch = 30
+	}
+	if trackPitch < 24 || trackPitch > 60 || math.IsNaN(trackPitch) || math.IsInf(trackPitch, 0) {
+		return nil, fmt.Errorf("scene.gantt_track_pitch: expected24_to60pt")
 	}
 	np := len(n.Periods.Labels)
 	gw, lw := n.Cols.Group, n.Cols.Lane
@@ -802,7 +813,7 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 			if L.tracks < 1 {
 				L.tracks = 1
 			}
-			L.h = math.Max(42, float64(L.tracks)*30+12)
+			L.h = math.Max(42, float64(L.tracks)*trackPitch+12)
 			layouts = append(layouts, L)
 			top += L.h
 		}
@@ -1005,11 +1016,11 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		if e = r.diagramLine(p, pre+".separator", [2]float64{sepX, L.top + L.h - weight/2}, [2]float64{sepX + sepW, L.top + L.h - weight/2}, sepC, weight, "solid"); e != nil {
 			return nil, e
 		}
-		base := L.top + (L.h-float64(L.tracks)*30)/2 + 4
+		base := L.top + (L.h-float64(L.tracks)*trackPitch)/2 + 4
 		for _, o := range L.items {
 			it := o.it
 			part := pre + ".items." + o.key
-			y := base + float64(o.track)*30
+			y := base + float64(o.track)*trackPitch
 			labelX, labelW, color := X(it.At)+11, o.width, strong
 			if it.Kind != "" {
 				usedKinds[it.Kind] = true
@@ -1121,6 +1132,10 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		}
 	}
 	ly := bodyBottom + 14
+	if n.LegendSize != 0 {
+		st, _ := r.sceneStyle("small")
+		ly = bodyBottom + 14*n.LegendSize/st.Size
+	}
 	if n.Today != nil {
 		ly = bodyBottom + 26
 	}
@@ -1160,6 +1175,12 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 	lc.Keys = nil
 	lc.Path = ctx.Path + "/derived-legend"
 	legendNode := map[string]any{"type": "legend", "x": tx, "y": ly, "w": tw, "items": legendItems, "layout": "horizontal"}
+	if n.LegendSize != 0 {
+		legendNode["size"] = n.LegendSize
+	}
+	if n.LegendFullWidth {
+		legendNode["x"], legendNode["w"] = n.X, n.W
+	}
 	legendRaw, _ := json.Marshal(legendNode)
 	measureCtx := lc
 	measureCtx.Zone = Rect{0, 0, 960, 540}
@@ -1168,7 +1189,7 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		return nil, e
 	}
 	if ctx.Zone.H > 0 && legend.Bounds.Y+legend.Bounds.H > ctx.Zone.Y+ctx.Zone.H+.02 {
-		if n.Y == 108 && gw == 24 && lw == 210 && np == 8 && len(n.Groups) == 3 {
+		if n.LegendSize == 0 && n.TrackPitch == 0 && n.Y == 108 && gw == 24 && lw == 210 && np == 8 && len(n.Groups) == 3 {
 			legendNode["x"], legendNode["y"], legendNode["w"] = n.X, n.Y-18, n.W
 			legendRaw, _ = json.Marshal(legendNode)
 			legend, e = r.planSceneNode(id+".legend", legendRaw, lc)

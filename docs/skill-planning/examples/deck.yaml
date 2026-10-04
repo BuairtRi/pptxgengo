@@ -1,0 +1,188 @@
+# Wave 1 proposed source format, not accepted by today's CLI.
+# Synthetic content. Requires proposed shared frame/grid definitions, custom asset
+# payload and a resolved lockfile before Wave 2 can build it. The provenance hash
+# below is an illustrative value, not a claim of an existing accepted source pin.
+schema: pptxgengo.deck-document.v1
+id: operating-model-discussion
+title: Operating model discussion
+year: 2026
+toolchain:
+  lockfile: toolchain.lock.json
+media_optimization:
+  deduplicate: true
+  resize_jpeg: true
+  compression: true
+  pixels_per_inch: 220
+  jpeg_quality: 90
+  min_savings_percent: 10
+context:
+  project: context/presentation-project.md
+  audience: context/audience-context.md
+  outline: context/outline.md
+  sources: evidence/source-index.yaml
+  claims: evidence/claim-ledger.yaml
+  decisions: decisions/decisions.yaml
+  state: state.json
+
+assets:
+  workshop-photo:
+    path: assets/originals/workshop.jpg
+    description: Supplied workshop photo retained as the original asset.
+
+# Local templates use the same composition language as shared definitions.
+# This example forks an architecture starter and adds a photo. Three content
+# layers are deliberately fixed here; another grouping warrants a local revision.
+local_templates:
+  architecture-with-photo:
+    name: Three architecture layers with a workshop photo
+    description: A local architecture starter for this discussion deck.
+    provenance:
+      operation: fork
+      parent:
+        scope: shared
+        id: architecture/layers-nav
+        revision: "1"
+      definition_sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+      reason: Keep the content editable while reserving space for a supplied photo.
+    frame:
+      scope: shared
+      id: wmds/frame/none-compact
+    grid:
+      scope: shared
+      id: wmds/grid/12-columns
+    zones:
+      title:
+        role: slide-title
+        required: true
+        schema: {type: string, minLength: 1}
+      eyebrow:
+        role: slide-eyebrow
+        required: true
+        schema: {type: string, minLength: 1}
+      summary:
+        role: explanatory-copy
+        required: true
+        schema: {type: string, minLength: 1}
+      business:
+        role: architecture-layer
+        required: true
+        schema: {type: string, minLength: 1}
+      product:
+        role: architecture-layer
+        required: true
+        schema: {type: string, minLength: 1}
+      platform:
+        role: architecture-layer
+        required: true
+        schema: {type: string, minLength: 1}
+      photo:
+        role: supporting-image
+        required: true
+        schema: {type: string, minLength: 1}
+        description: A declared asset ID, not a filesystem path embedded in a node.
+    nodes:
+      - id: summary
+        kind: text
+        placement:
+          zone: body
+          span: {start: 1, count: 7, y_pt: 0, height_pt: 72}
+        style: body
+        ink: primary
+        text: {binding: summary}
+      - id: layers
+        kind: group
+        nodes:
+          - id: business-box
+            kind: box
+            placement:
+              zone: body
+              span: {start: 1, count: 7, y_pt: 90, height_pt: 54}
+            surface: subtle
+          - id: business-label
+            kind: text
+            placement:
+              zone: body
+              rect: {x_pt: 18, y_pt: 108, width_pt: 450, height_pt: 24}
+            style: body
+            text: {binding: business}
+          - id: product-box
+            kind: box
+            placement:
+              zone: body
+              span: {start: 1, count: 7, y_pt: 162, height_pt: 54}
+            surface: subtle
+          - id: product-label
+            kind: text
+            placement:
+              zone: body
+              rect: {x_pt: 18, y_pt: 180, width_pt: 450, height_pt: 24}
+            style: body
+            text: {binding: product}
+          - id: platform-box
+            kind: box
+            placement:
+              zone: body
+              span: {start: 1, count: 7, y_pt: 234, height_pt: 54}
+            surface: subtle
+          - id: platform-label
+            kind: text
+            placement:
+              zone: body
+              rect: {x_pt: 18, y_pt: 252, width_pt: 450, height_pt: 24}
+            style: body
+            text: {binding: platform}
+      - id: workshop
+        kind: image
+        placement:
+          zone: body
+          span: {start: 9, count: 4, y_pt: 90, height_pt: 198}
+        asset: {binding: photo}
+        fit: cover
+
+# Array order determines page order; IDs remain stable when slides move.
+slides:
+  - id: operating-priorities
+    content_kind: synthetic_example
+    template: {scope: shared, id: cards/3}
+    values:
+      eyebrow: Operating model discussion
+      title: Agree ownership before adding more process
+      cards:
+        - key: ownership
+          title: Clear ownership
+          body: Name the accountable owner for each decision.
+        - key: evidence
+          title: Shared evidence
+          body: Use the same facts to assess priorities and tradeoffs.
+        - key: cadence
+          title: A useful cadence
+          body: Meet when a decision or dependency needs attention.
+    brief: context/page-briefs/operating-priorities.md
+
+  - id: proposed-architecture
+    content_kind: synthetic_example
+    template: {scope: local, id: architecture-with-photo}
+    values:
+      title: Give each layer a clear decision boundary
+      eyebrow: Proposed architecture
+      summary: |-
+        Separate business choices, product decisions and platform responsibilities
+        so teams can see where each decision belongs.
+      business: Business — priorities, investment and outcomes
+      product: Product — customer needs and release choices
+      platform: Platform — shared services and reliability
+      photo: workshop-photo
+    brief: context/page-briefs/proposed-architecture.md
+
+  - id: architecture-decision-rights
+    content_kind: synthetic_example
+    template: {scope: local, id: architecture-with-photo}
+    values:
+      title: Name the owner of each architecture decision
+      eyebrow: Decision rights
+      summary: Reuse the same local composition to explain who decides at each layer.
+      business: Business — sponsor approves the investment priorities
+      product: Product — product owner chooses release scope
+      platform: Platform — platform owner sets service commitments
+      photo: workshop-photo
+    brief: context/page-briefs/architecture-decision-rights.md

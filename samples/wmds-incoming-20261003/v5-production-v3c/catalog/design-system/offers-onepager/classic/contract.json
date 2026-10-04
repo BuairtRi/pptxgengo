@@ -1,0 +1,850 @@
+{
+  "key": "offers-onepager/classic",
+  "source_file": "templates/library/offers.json",
+  "source_sha256": "b21d3126f6dce1e8db9d15c23f922c7a4a0f634428eed59e54a7519bca3e26ac",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "block"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "text"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "text"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "text"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "text"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "text"
+    },
+    {
+      "id": "node16",
+      "source_pointer": "/body/15",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node17",
+      "source_pointer": "/body/16",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node18",
+      "source_pointer": "/body/17",
+      "expected_type": "text"
+    },
+    {
+      "id": "node19",
+      "source_pointer": "/body/18",
+      "expected_type": "text"
+    },
+    {
+      "id": "node20",
+      "source_pointer": "/body/19",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node21",
+      "source_pointer": "/body/20",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node22",
+      "source_pointer": "/body/21",
+      "expected_type": "text"
+    },
+    {
+      "id": "node23",
+      "source_pointer": "/body/22",
+      "expected_type": "text"
+    },
+    {
+      "id": "node24",
+      "source_pointer": "/body/23",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node25",
+      "source_pointer": "/body/24",
+      "expected_type": "block"
+    },
+    {
+      "id": "node26",
+      "source_pointer": "/body/25",
+      "expected_type": "text"
+    },
+    {
+      "id": "node27",
+      "source_pointer": "/body/26",
+      "expected_type": "text"
+    },
+    {
+      "id": "node28",
+      "source_pointer": "/body/27",
+      "expected_type": "block"
+    },
+    {
+      "id": "node29",
+      "source_pointer": "/body/28",
+      "expected_type": "text"
+    },
+    {
+      "id": "node30",
+      "source_pointer": "/body/29",
+      "expected_type": "text"
+    }
+  ],
+  "family": "offers",
+  "tier": "core",
+  "name": "One-page proposal · classic full width",
+  "purpose": "A packaged offer on one dense page in priority order: what we will do, how we will do it in four phases, then the fixed fee, with deliverables and assumptions as a strip.",
+  "uses": [
+    "text",
+    "text.stat-sm",
+    "bullets",
+    "block",
+    "rule"
+  ],
+  "source_advisory_budget": {
+    "words": 206,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "offer narrative",
+      "maxChars": 230
+    },
+    {
+      "slot": "phase title",
+      "maxChars": 16
+    },
+    {
+      "slot": "phase bullet (x3)",
+      "maxChars": 44
+    },
+    {
+      "slot": "fee",
+      "maxChars": 8
+    },
+    {
+      "slot": "deliverables",
+      "maxChars": 90
+    },
+    {
+      "slot": "assumptions",
+      "maxChars": 90
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "bullets",
+      "rule",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/11/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/15/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/19/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/23/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 546,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 546,
+          "x": 57,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 90,
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 246,
+          "x": 645,
+          "y": 138
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 120,
+          "x": 645,
+          "y": 156
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 765,
+          "y": 159
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 765,
+          "y": 177
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 228
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 249
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 258
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 276
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 303
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 273,
+          "y": 249
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 273,
+          "y": 258
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 273,
+          "y": 276
+        }
+      },
+      {
+        "source_pointer": "/body/15",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 273,
+          "y": 303
+        }
+      },
+      {
+        "source_pointer": "/body/16",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 489,
+          "y": 249
+        }
+      },
+      {
+        "source_pointer": "/body/17",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 489,
+          "y": 258
+        }
+      },
+      {
+        "source_pointer": "/body/18",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 489,
+          "y": 276
+        }
+      },
+      {
+        "source_pointer": "/body/19",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 489,
+          "y": 303
+        }
+      },
+      {
+        "source_pointer": "/body/20",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 249
+        }
+      },
+      {
+        "source_pointer": "/body/21",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 258
+        }
+      },
+      {
+        "source_pointer": "/body/22",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 276
+        }
+      },
+      {
+        "source_pointer": "/body/23",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 303
+        }
+      },
+      {
+        "source_pointer": "/body/24",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 54,
+          "w": 414,
+          "x": 57,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/25",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 96,
+          "x": 69,
+          "y": 405
+        }
+      },
+      {
+        "source_pointer": "/body/26",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 294,
+          "x": 165,
+          "y": 402
+        }
+      },
+      {
+        "source_pointer": "/body/27",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 54,
+          "w": 414,
+          "x": 489,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/28",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 96,
+          "x": 501,
+          "y": 405
+        }
+      },
+      {
+        "source_pointer": "/body/29",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 294,
+          "x": 597,
+          "y": 402
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Offerings"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "AI readiness assessment: one page, one fixed fee"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "1 · What we will do"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Health systems are piloting AI faster than they can govern it. In eight weeks we assess data, people, risk and use cases across Northfield, rank what to do first and leave a funded, sequenced first wave."
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Fixed fee"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "$185K"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "fixed fee, 8 weeks"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "2 invoices, net 30"
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "2 · How we will do it · 8 weeks"
+    },
+    {
+      "name": "node10.text",
+      "source_pointer": "/body/9/text",
+      "kind": "string",
+      "synthetic_source_example": "01 · Weeks 1 to 2"
+    },
+    {
+      "name": "node11.text",
+      "source_pointer": "/body/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Align"
+    },
+    {
+      "name": "node12.items.item01",
+      "source_pointer": "/body/11/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Confirm sponsor goals and risk appetite"
+    },
+    {
+      "name": "node12.items.item02",
+      "source_pointer": "/body/11/items/1",
+      "kind": "string",
+      "synthetic_source_example": "20 stakeholder interviews"
+    },
+    {
+      "name": "node12.items.item03",
+      "source_pointer": "/body/11/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Agree scoring criteria"
+    },
+    {
+      "name": "node14.text",
+      "source_pointer": "/body/13/text",
+      "kind": "string",
+      "synthetic_source_example": "02 · Weeks 3 to 5"
+    },
+    {
+      "name": "node15.text",
+      "source_pointer": "/body/14/text",
+      "kind": "string",
+      "synthetic_source_example": "Assess"
+    },
+    {
+      "name": "node16.items.item01",
+      "source_pointer": "/body/15/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Scan data, platform and talent against five domains"
+    },
+    {
+      "name": "node16.items.item02",
+      "source_pointer": "/body/15/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Score each domain 1 to 5"
+    },
+    {
+      "name": "node16.items.item03",
+      "source_pointer": "/body/15/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Compare with peer systems"
+    },
+    {
+      "name": "node18.text",
+      "source_pointer": "/body/17/text",
+      "kind": "string",
+      "synthetic_source_example": "03 · Weeks 6 to 7"
+    },
+    {
+      "name": "node19.text",
+      "source_pointer": "/body/18/text",
+      "kind": "string",
+      "synthetic_source_example": "Prioritize"
+    },
+    {
+      "name": "node20.items.item01",
+      "source_pointer": "/body/19/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Long-list 30 use cases with clinical and finance leads"
+    },
+    {
+      "name": "node20.items.item02",
+      "source_pointer": "/body/19/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Rank on value, risk and readiness"
+    },
+    {
+      "name": "node20.items.item03",
+      "source_pointer": "/body/19/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Agree the top ten"
+    },
+    {
+      "name": "node22.text",
+      "source_pointer": "/body/21/text",
+      "kind": "string",
+      "synthetic_source_example": "04 · Week 8"
+    },
+    {
+      "name": "node23.text",
+      "source_pointer": "/body/22/text",
+      "kind": "string",
+      "synthetic_source_example": "Plan"
+    },
+    {
+      "name": "node24.items.item01",
+      "source_pointer": "/body/23/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Governance and risk model with review gates"
+    },
+    {
+      "name": "node24.items.item02",
+      "source_pointer": "/body/23/items/1",
+      "kind": "string",
+      "synthetic_source_example": "90-day roadmap with owners"
+    },
+    {
+      "name": "node24.items.item03",
+      "source_pointer": "/body/23/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Business case and readout"
+    },
+    {
+      "name": "node25.text",
+      "source_pointer": "/body/24/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node26.text",
+      "source_pointer": "/body/25/text",
+      "kind": "string",
+      "synthetic_source_example": "Deliverables"
+    },
+    {
+      "name": "node27.text",
+      "source_pointer": "/body/26/text",
+      "kind": "string",
+      "synthetic_source_example": "Readiness scorecard, ranked use-case portfolio, governance model, 90-day roadmap"
+    },
+    {
+      "name": "node28.text",
+      "source_pointer": "/body/27/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node29.text",
+      "source_pointer": "/body/28/text",
+      "kind": "string",
+      "synthetic_source_example": "Assumptions"
+    },
+    {
+      "name": "node30.text",
+      "source_pointer": "/body/29/text",
+      "kind": "string",
+      "synthetic_source_example": "Data access and a data owner in week 1; sponsors decide in five days; no model build"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node12.items",
+      "source_pointer": "/body/11/items",
+      "count": 3
+    },
+    {
+      "name": "node16.items",
+      "source_pointer": "/body/15/items",
+      "count": 3
+    },
+    {
+      "name": "node20.items",
+      "source_pointer": "/body/19/items",
+      "count": 3
+    },
+    {
+      "name": "node24.items",
+      "source_pointer": "/body/23/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

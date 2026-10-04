@@ -120,7 +120,14 @@ func primitiveFocus(focus string) (float64, float64, error) {
 	return out[0], out[1], nil
 }
 func (r *renderer) primitiveMediaImage(id, asset string, b Rect, focus string, gray bool) (*pptx.ImageProps, error) {
-	data, a, e := primitiveAssetBytes(asset)
+	return r.primitiveMediaImageFit(id, asset, b, focus, gray, "cover")
+}
+
+func (r *renderer) primitiveMediaImageFit(id, asset string, b Rect, focus string, gray bool, fit string) (*pptx.ImageProps, error) {
+	if fit != "" && fit != "cover" && fit != "contain" {
+		return nil, fmt.Errorf("scene.invalid_image_fit: %s", fit)
+	}
+	data, a, e := r.primitiveAssetBytes(asset)
 	if e != nil {
 		return nil, e
 	}
@@ -139,6 +146,12 @@ func (r *renderer) primitiveMediaImage(id, asset string, b Rect, focus string, g
 		vb, e := primitiveSVGViewBox(data)
 		if e != nil {
 			return nil, e
+		}
+		if fit == "contain" {
+			scale := math.Min(b.W/vb[2], b.H/vb[3])
+			w, h := vb[2]*scale, vb[3]*scale
+			b = Rect{b.X + (b.W-w)/2, b.Y + (b.H-h)/2, w, h}
+			props.PositionProps = pos(b)
 		}
 		fallback, e := primitiveRasterSVG(data, int(math.Ceil(b.W*3)), int(math.Ceil(b.H*3)), vb)
 		if e != nil {
@@ -189,6 +202,12 @@ func (r *renderer) primitiveMediaImage(id, asset string, b Rect, focus string, g
 		mime = "image/jpeg"
 	}
 	props.Data = primitiveDataURI(mime, data)
+	if fit == "contain" {
+		scale := math.Min(b.W/float64(bounds.Dx()), b.H/float64(bounds.Dy()))
+		w, h := float64(bounds.Dx())*scale, float64(bounds.Dy())*scale
+		props.PositionProps = pos(Rect{b.X + (b.W-w)/2, b.Y + (b.H-h)/2, w, h})
+		return props, nil
+	}
 	// Explicit crop fractions preserve object-position on the native picture.
 	iw, ih := float64(bounds.Dx()), float64(bounds.Dy())
 	scale := math.Max(b.W/iw, b.H/ih)
@@ -205,6 +224,7 @@ func (r *renderer) primitiveMediaImage(id, asset string, b Rect, focus string, g
 }
 
 type mediaSource struct {
+	Fit          string  `json:"fit,omitempty"`
 	Type         string  `json:"type"`
 	ID           string  `json:"id,omitempty"`
 	X            float64 `json:"x"`
@@ -232,7 +252,15 @@ type mediaSource struct {
 	CaptionStyle string  `json:"captionStyle,omitempty"`
 }
 
-var mediaFields = map[string]string{"imageframe": "h photo focus grayscale alt", "logo": "variant", "art": "src alt", "square": "size photo focus grayscale surface stat label", "mark": "h mark ink rotate flipX flipY", "thumbnail": "h kind stack caption captionStyle photo src"}
+var mediaFields = map[string]string{"imageframe": "h photo focus grayscale alt fit rotate", "logo": "variant", "art": "src alt", "square": "size photo focus grayscale surface stat label", "mark": "h mark ink rotate flipX flipY", "thumbnail": "h kind stack caption captionStyle photo src"}
+
+func sceneMediaRotation(degrees float64) (float64, error) {
+	if math.IsNaN(degrees) || math.IsInf(degrees, 0) || math.Abs(degrees) > 360000 {
+		return 0, fmt.Errorf("scene.invalid_media_rotation")
+	}
+	// Normalize complete turns before DrawingML's integer angle conversion.
+	return math.Mod(degrees, 360), nil
+}
 
 func (r *renderer) planMediaScene(id string, raw json.RawMessage, ctx SceneContext) (*scenePlan, bool, error) {
 	var head struct {
@@ -264,13 +292,23 @@ func (r *renderer) planMediaScene(id string, raw json.RawMessage, ctx SceneConte
 	}
 	var err error
 	picture := func(asset, focus string, gray bool) error {
-		im, e := r.primitiveMediaImage(id+".image", asset, b, focus, gray)
+		im, e := r.primitiveMediaImageFit(id+".image", asset, b, focus, gray, n.Fit)
 		if e != nil {
 			return e
 		}
 		if n.Alt != "" {
-			im.AltText = n.Alt + "; canonical SHA256=" + primitiveAssetRegistry[asset].SHA256
+			im.AltText = n.Alt + "; " + im.AltText
 		}
+		rotation, err := sceneMediaRotation(n.Rotate)
+		if err != nil {
+			return err
+		}
+		im.Rotate = rotation
+		pictureBounds := b
+		if n.Fit == "contain" {
+			pictureBounds = Rect{im.X.Val * 72, im.Y.Val * 72, im.W.Val * 72, im.H.Val * 72}
+		}
+		p.Bounds = diagramRotatedRect(pictureBounds, rotation)
 		p.Items = append(p.Items, sceneItem{Image: im})
 		return nil
 	}
@@ -290,7 +328,7 @@ func (r *renderer) planMediaScene(id string, raw json.RawMessage, ctx SceneConte
 			}
 			asset = "logo-" + n.Variant
 		}
-		data, _, e := primitiveAssetBytes(asset)
+		data, _, e := r.primitiveAssetBytes(asset)
 		if e != nil {
 			err = e
 			break
@@ -360,14 +398,21 @@ func (r *renderer) planMediaScene(id string, raw json.RawMessage, ctx SceneConte
 			err = fmt.Errorf("scene.square_label_requires_stat: %s", id)
 		}
 	case "mark":
+		rotation, e := sceneMediaRotation(n.Rotate)
+		if e != nil {
+			err = e
+			break
+		}
 		im, e := r.primitiveArtworkImage(id+".mark", n.Mark, b, surface, n.Ink)
 		if e != nil {
 			err = e
 			break
 		}
-		im.Rotate = n.Rotate
+		im.Rotate = rotation
 		im.FlipH = &n.FlipX
 		im.FlipV = &n.FlipY
+		actual := Rect{im.X.Val * 72, im.Y.Val * 72, im.W.Val * 72, im.H.Val * 72}
+		p.Bounds = diagramRotatedRect(actual, rotation)
 		p.Items = append(p.Items, sceneItem{Image: im})
 	case "thumbnail":
 		err = r.primitiveThumbnail(p, n, ctx)
@@ -420,7 +465,7 @@ func (r *renderer) planIconScene(id, name string, size float64, b Rect, surface,
 	return p, nil
 }
 func (r *renderer) primitiveArtworkImage(id, asset string, b Rect, surface, ink string) (*pptx.ImageProps, error) {
-	data, a, e := primitiveAssetBytes(asset)
+	data, a, e := r.primitiveAssetBytes(asset)
 	if e != nil {
 		return nil, e
 	}

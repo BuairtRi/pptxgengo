@@ -1,3 +1,28 @@
+# Local release 0.1.0-local.7
+
+The current release combines the native Go presentation compiler, the resumable YAML project runtime, the West Monroe skill pack, and a hash-pinned unified SQLite catalog.
+
+## Current capabilities
+
+- One human-editable `deck.yaml` references persistent shared templates or deck-local compositions.
+- Strict source validation, custom/shared assets, reproducible builds, provenance reports, output drift protection, scoped approvals, and portable project exports.
+- Native SQLite discovery across modern definitions and legacy inventory, with detailed inspection and actual-content alternatives.
+- 248 source-pinned design definitions (247 active), including 81 additions and revised `about/glance`; native logo, map, team-curve, device, and plane adapters.
+- Automatic image deduplication, conservative photo resizing, ZIP compression, and shared frame layouts.
+- A progressively disclosed skill with content, source, selection, voice, and independent review references.
+
+Run `pptxgengo paths` to locate the installed example, skill, catalog, and library. Start with `pptxgengo design project init --help` or the packaged `examples/deck-project/README.md`. Search with `pptxgengo design library-find --query 'weekly status'`; inspect and fit supplied content before delivery.
+
+## Evidence and limits
+
+The current gallery records native preview and review state for each illustrated source specimen. These states qualify those specific specimens; supplied content requires its own fit and review. Historical v2 paired specimens remain labeled v2. The frozen v3 source is commit `e91e0d7771000b7386f1ea52f51252f0f0a134fd`.
+
+Projects preserve ordinary IBM Plex font names. Native capture is calibration/review evidence; normal compilation uses the Go engine. Baseline drift protection is implemented; importing arbitrary PowerPoint edits back into YAML is a later workstream. Voice guidance uses local source snapshots until the live brand examples can be reviewed. Raster optimization conservatively retains unsupported or color-sensitive originals.
+
+See `release/verification-wmds-v3.json` and the tracked implementation review for exact evidence and remaining limits.
+
+## Historical release notes
+
 # Local West Monroe presentation release
 
 Version: **0.1.0-local.6**. This is a frozen local authoring release, not a published package.

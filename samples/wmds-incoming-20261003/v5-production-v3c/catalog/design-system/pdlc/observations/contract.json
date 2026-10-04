@@ -1,0 +1,327 @@
+{
+  "key": "pdlc/observations",
+  "source_file": "templates/library/lifecycle.json",
+  "source_sha256": "0c159e90675f86812ec73a897d0a7ace628e025e19bfb2f2a675814905288fe7",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "cycle"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "table"
+    }
+  ],
+  "family": "lifecycle",
+  "tier": "working",
+  "name": "PDLC with observations and activities",
+  "purpose": "The PDLC cycle on the left, with a table of what we typically observe and what we do in each phase.",
+  "uses": [
+    "diagram.cycle",
+    "table.standard"
+  ],
+  "source_advisory_budget": {
+    "words": 80,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "phase",
+      "maxChars": 10
+    },
+    {
+      "slot": "observation",
+      "maxChars": 46
+    },
+    {
+      "slot": "activity",
+      "maxChars": 46
+    },
+    {
+      "slot": "source",
+      "maxChars": 70
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "relationship",
+      "tabular-data"
+    ],
+    "structures": [
+      "cycle",
+      "process",
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "diagram",
+      "table"
+    ],
+    "component_types": [
+      "cycle",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/items",
+        "component_type": "cycle",
+        "role": "relationship",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/loops",
+        "component_type": "cycle",
+        "role": "relationship",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "cycle",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 306,
+          "w": 306,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 504,
+          "x": 399,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Product lifecycle"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "What we see and do in each phase"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield Health System lifecycle review, Sep 2026."
+    },
+    {
+      "name": "node01.center.label",
+      "source_pointer": "/body/0/center/label",
+      "kind": "string",
+      "synthetic_source_example": "PDLC"
+    },
+    {
+      "name": "node01.items.item01.label",
+      "source_pointer": "/body/0/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Identify"
+    },
+    {
+      "name": "node01.items.item02.label",
+      "source_pointer": "/body/0/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Define"
+    },
+    {
+      "name": "node01.items.item03.label",
+      "source_pointer": "/body/0/items/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Build"
+    },
+    {
+      "name": "node01.items.item04.label",
+      "source_pointer": "/body/0/items/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Optimize"
+    },
+    {
+      "name": "node02.cols.item01.label",
+      "source_pointer": "/body/1/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Phase"
+    },
+    {
+      "name": "node02.cols.item02.label",
+      "source_pointer": "/body/1/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "What we observe"
+    },
+    {
+      "name": "node02.cols.item03.label",
+      "source_pointer": "/body/1/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "What we do"
+    },
+    {
+      "name": "node02.rows.item01.a",
+      "source_pointer": "/body/1/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "Interview patients and staff; rank the bets"
+    },
+    {
+      "name": "node02.rows.item01.o",
+      "source_pointer": "/body/1/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "38% of patients abandon booking at step 3"
+    },
+    {
+      "name": "node02.rows.item01.p",
+      "source_pointer": "/body/1/rows/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Identify"
+    },
+    {
+      "name": "node02.rows.item02.a",
+      "source_pointer": "/body/1/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "Shape one journey; plan releases and risks"
+    },
+    {
+      "name": "node02.rows.item02.o",
+      "source_pointer": "/body/1/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "Three booking journeys overlap"
+    },
+    {
+      "name": "node02.rows.item02.p",
+      "source_pointer": "/body/1/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Define"
+    },
+    {
+      "name": "node02.rows.item03.a",
+      "source_pointer": "/body/1/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "Two-week sprints; automate tests"
+    },
+    {
+      "name": "node02.rows.item03.o",
+      "source_pointer": "/body/1/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "Eight-week cycle; manual regression tests"
+    },
+    {
+      "name": "node02.rows.item03.p",
+      "source_pointer": "/body/1/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "Build"
+    },
+    {
+      "name": "node02.rows.item04.a",
+      "source_pointer": "/body/1/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "Track adoption; run experiments"
+    },
+    {
+      "name": "node02.rows.item04.o",
+      "source_pointer": "/body/1/rows/3/o",
+      "kind": "string",
+      "synthetic_source_example": "Adoption plateaus with no loop to the backlog"
+    },
+    {
+      "name": "node02.rows.item04.p",
+      "source_pointer": "/body/1/rows/3/p",
+      "kind": "string",
+      "synthetic_source_example": "Optimize"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.items",
+      "source_pointer": "/body/0/items",
+      "count": 4
+    },
+    {
+      "name": "node01.loops",
+      "source_pointer": "/body/0/loops",
+      "count": 2
+    },
+    {
+      "name": "node02.cols",
+      "source_pointer": "/body/1/cols",
+      "count": 3
+    },
+    {
+      "name": "node02.rows",
+      "source_pointer": "/body/1/rows",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

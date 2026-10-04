@@ -458,6 +458,130 @@ func addChartDefinition(target *PresSlide, cc *chartCounter, chartType ChartType
 		}
 	}
 
+	// Validate the additive sparse-line API before mutating the chart model.
+	validateMissing := func(kind ChartType, series []ChartData, options *ChartOptions) error {
+		for _, d := range series {
+			if len(d.MissingValues) == 0 {
+				continue
+			}
+			if kind != ChartTypeLine || len(d.MissingValues) != len(d.Values) || len(d.Labels) != 1 || len(d.Labels[0]) != len(d.Values) || len(d.Values) == 0 || len(d.Values) > 10000 {
+				return fmt.Errorf("chart missing values require an aligned bounded single-level line series")
+			}
+
+			if options != nil && (options.BarGrouping == "stacked" || options.BarGrouping == "percentStacked") {
+				return fmt.Errorf("chart missing values do not support stacked lines")
+			}
+			observed := false
+			for i, v := range d.Values {
+				if math.IsNaN(v) || math.IsInf(v, 0) {
+					return fmt.Errorf("chart missing values require finite values")
+				}
+				observed = observed || !d.MissingValues[i]
+			}
+			if !observed {
+				return fmt.Errorf("chart series has no observed values")
+			}
+		}
+		return nil
+	}
+	if len(multiTypes) == 0 {
+		if err := validateMissing(chartType, data, opt); err != nil {
+			return nil, err
+		}
+	} else {
+		for _, m := range multiTypes {
+			if err := validateMissing(m.Type, m.Data, opt); err != nil {
+				return nil, err
+			}
+			if err := validateMissing(m.Type, m.Data, m.Options); err != nil {
+				return nil, err
+			}
+		}
+	}
+	// All series share one worksheet category axis. Once sparse values are used,
+	// each series must preserve that same full category grid, including dense
+	// companion series and flattened combo components.
+	common := data
+	if len(multiTypes) > 0 {
+		common = nil
+		for _, m := range multiTypes {
+			common = append(common, m.Data...)
+		}
+	}
+	sparse := false
+	for _, d := range common {
+		sparse = sparse || len(d.MissingValues) > 0
+	}
+	if sparse {
+		for _, m := range multiTypes {
+			if m.Type != ChartTypeLine {
+				return nil, fmt.Errorf("chart sparse combos support line components only")
+			}
+		}
+		if len(common) > 64 {
+			return nil, fmt.Errorf("chart sparse series resource limit")
+		}
+		copyBytes, points := 0, 0
+		for _, d := range common {
+			if len(d.Labels) != 1 || len(d.Labels[0]) > 10000 {
+				return nil, fmt.Errorf("chart sparse series require a bounded single-level category grid")
+			}
+			points += len(d.Values)
+			if len(d.Name) > 4096 {
+				return nil, fmt.Errorf("chart sparse series copy limit")
+			}
+			copyBytes += len(d.Name)
+			for _, level := range d.Labels {
+				for _, label := range level {
+					if len(label) > 4096 {
+						return nil, fmt.Errorf("chart sparse series copy limit")
+					}
+					copyBytes += len(label)
+				}
+			}
+			if points > 100000 || copyBytes > 1048576 {
+				return nil, fmt.Errorf("chart sparse series resource limit")
+			}
+		}
+		if len(common[0].Labels) == 0 {
+			return nil, fmt.Errorf("chart sparse series require a common category grid")
+		}
+		labels := common[0].Labels
+		for _, d := range common {
+			if len(d.Labels) != len(labels) || len(d.Values) != len(labels[0]) {
+				return nil, fmt.Errorf("chart sparse series require a common category grid")
+			}
+			for level, values := range d.Labels {
+				if len(values) != len(labels[level]) {
+					return nil, fmt.Errorf("chart sparse series require a common category grid")
+				}
+				for i, value := range values {
+					if value != labels[level][i] {
+						return nil, fmt.Errorf("chart sparse series require a common category grid")
+					}
+				}
+			}
+			for _, value := range d.Values {
+				if math.IsNaN(value) || math.IsInf(value, 0) {
+					return nil, fmt.Errorf("chart sparse series require finite companion values")
+				}
+			}
+		}
+	}
+	if sparse && len(multiTypes) > 0 {
+		// The writer reads component Data as well as flattened worksheet Data.
+		// Give both views the same global series indices without rewriting the
+		// caller's component slices or changing dense-only legacy charts.
+		multiTypes = append([]IChartMulti(nil), multiTypes...)
+		index := 0
+		for i := range multiTypes {
+			multiTypes[i].Data = append([]ChartData(nil), multiTypes[i].Data...)
+			for j := range multiTypes[i].Data {
+				multiTypes[i].Data[j].DataIndex = index
+				index++
+			}
+		}
+	}
 	chartID := cc.next()
 
 	isMulti := len(multiTypes) > 0
@@ -800,6 +924,9 @@ func addChartDefinition(target *PresSlide, cc *chartCounter, chartType ChartType
 func addImageDefinition(target *PresSlide, opt *ImageProps) error {
 	if opt == nil {
 		opt = &ImageProps{}
+	}
+	if opt.Line != nil && !validShapeLineJoin(opt.Line.LineJoin) {
+		return errors.New("shape line join must be empty, round, bevel or miter")
 	}
 	newObject := &SlideObject{}
 
@@ -1156,6 +1283,9 @@ func addShapeDefinition(target *PresSlide, shapeName ShapeType, opts *ShapeProps
 	if opts.Line == nil {
 		opts.Line = &ShapeLineProps{ShapeFillProps: ShapeFillProps{Type: "none"}}
 	}
+	if !validShapeLineJoin(opts.Line.LineJoin) {
+		return errors.New("shape line join must be empty, round, bevel or miter")
+	}
 	for name, value := range opts.Adjustments {
 		if name != "adj" || value < 0 || value > 100000 {
 			return errors.New("shape adjustments require adj in [0,100000]")
@@ -1195,6 +1325,7 @@ func addShapeDefinition(target *PresSlide, shapeName ShapeType, opts *ShapeProps
 	newLineOpts.Transparency = line.Transparency
 	newLineOpts.Width = orF(line.Width, 1)
 	newLineOpts.DashType = orStr(line.DashType, "solid")
+	newLineOpts.LineJoin = line.LineJoin
 	newLineOpts.BeginArrowType = line.BeginArrowType
 	newLineOpts.EndArrowType = line.EndArrowType
 	if options.Line != nil && options.Line.Type != "none" {
@@ -1611,6 +1742,7 @@ func addTextDefinition(target *PresSlide, text []TextProps, opts *ObjectOptions,
 			nlo.Transparency = line.Transparency
 			nlo.Width = orF(line.Width, 1)
 			nlo.DashType = orStr(line.DashType, "solid")
+			nlo.LineJoin = line.LineJoin
 			nlo.BeginArrowType = line.BeginArrowType
 			nlo.EndArrowType = line.EndArrowType
 			io.Line = nlo
@@ -1895,5 +2027,14 @@ func registerHyperlink(target *PresSlide, h *HyperlinkProps) {
 				Target: tgt,
 			})
 		}
+	}
+}
+
+func validShapeLineJoin(join string) bool {
+	switch join {
+	case "", "round", "bevel", "miter":
+		return true
+	default:
+		return false
 	}
 }

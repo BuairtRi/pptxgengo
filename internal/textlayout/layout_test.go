@@ -197,6 +197,52 @@ func TestLongWordAndAccents(t *testing.T) {
 	}
 }
 
+func TestDefaultResolverIncludesUserHomeFonts(t *testing.T) {
+	if runtime.GOOS != "darwin" {
+		t.Skip("macOS HOME-based user font directory")
+	}
+	home := t.TempDir()
+	dir := filepath.Join(home, "Library", "Fonts")
+	if err := os.MkdirAll(dir, 0700); err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(dir, "regular.ttf")
+	if err := os.WriteFile(path, goregular.TTF, 0600); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("HOME", home)
+	r, err := NewResolver(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	f, err := r.resolve("Go", false, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if f.record.File != path {
+		t.Fatalf("HOME font fixture was not resolved exactly: %+v", f.record)
+	}
+}
+
+func TestExplicitResolverRootsRemainIsolated(t *testing.T) {
+	home := t.TempDir()
+	dir := filepath.Join(home, "Library", "Fonts")
+	if err := os.MkdirAll(dir, 0700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "regular.ttf"), goregular.TTF, 0600); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("HOME", home)
+	r, err := NewResolver([]string{t.TempDir()})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := r.resolve("Go", false, false); err == nil {
+		t.Fatal("explicit font directories leaked a HOME font")
+	}
+}
+
 // This integration fixture uses the installed families used by the prototype
 // review deck. Portable tests above use fonts bundled with golang.org/x/image.
 func TestInstalledFontsShapingAndVariableStyles(t *testing.T) {
@@ -242,12 +288,22 @@ func TestInstalledFontsShapingAndVariableStyles(t *testing.T) {
 	measured(t, e, q)
 	for _, record := range e.resolver.Records() {
 		if record.Family == "IBM Plex Sans" {
+			wantPath := plex
+			if strings.Contains(record.Style, "italic") {
+				wantPath = filepath.Join(home, "Library/Fonts/IBMPlexSans-Italic-VariableFont_wdth,wght.ttf")
+			}
+			if record.File != wantPath {
+				t.Fatalf("variable fixture resolved a different font file: %+v", record)
+			}
 			want := float32(400)
 			if strings.Contains(record.Style, "bold") {
 				want = 700
 			}
 			if record.Axes["wght"] != want {
 				t.Fatalf("wrong variable instance: %+v", record)
+			}
+			if record.Axes["wdth"] != 100 {
+				t.Fatalf("wrong variable width: %+v", record)
 			}
 		}
 	}

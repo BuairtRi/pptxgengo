@@ -1,0 +1,206 @@
+{
+  "key": "divider/panel-edge",
+  "source_file": "templates/library/covers.json",
+  "source_sha256": "f1b2d8f603007d51678c924e3c7e8cf0d118fe78e79ec88d27ac33ae3e615674",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "block"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "imageframe"
+    }
+  ],
+  "family": "covers",
+  "tier": "core",
+  "name": "Divider · panel with Magenta edge",
+  "purpose": "Grounded panel with a Magenta edge and the section label; the photo fills the white side, over a band of dots.",
+  "uses": [
+    "block",
+    "rule",
+    "header.display",
+    "image.frame"
+  ],
+  "source_advisory_budget": {
+    "words": 14,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "number",
+      "maxChars": 2
+    },
+    {
+      "slot": "title",
+      "maxChars": 36
+    },
+    {
+      "slot": "photo",
+      "kind": "image"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "image",
+      "point"
+    ],
+    "structures": [],
+    "visual_forms": [
+      "image",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "imageframe",
+      "rule",
+      "text"
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "block",
+        "role": "content",
+        "source_bounds": {
+          "h": 396,
+          "w": 561,
+          "x": 0,
+          "y": 72
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 6,
+          "x": 555,
+          "y": 72
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 414,
+          "x": 57,
+          "y": 108
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 468,
+          "x": 57,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "imageframe",
+        "role": "image",
+        "source_bounds": {
+          "h": 288,
+          "w": 324,
+          "x": 579,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Section"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "01"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Introductions and objectives"
+    },
+    {
+      "name": "node06.photo",
+      "source_pointer": "/body/5/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-clinical-leaders"
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

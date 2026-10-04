@@ -8,7 +8,65 @@ import (
 // applyApproachCommercialLibraryRefinements preserves the pinned source and
 // caller copy while documenting fixed, source-specific geometry amendments.
 func applyApproachCommercialLibraryRefinements(key, revision string, doc *SlideSpec) error {
-	if revision != LibraryRevisionV2 {
+	if !isModernLibrary(revision) {
+		return nil
+	}
+	// Review amendments are applied after closed content binding, so every
+	// source and caller specimen uses the same geometry without changing copy.
+	change := func(id, kind, resolution string, values map[string]any) error {
+		for i := range doc.Nodes {
+			n := &doc.Nodes[i]
+			if n.ID != id {
+				continue
+			}
+			if n.Scene == nil {
+				return fmt.Errorf("library.refinement_target_not_scene: %s", id)
+			}
+			raw, err := libraryObject(n.Scene.Node)
+			if err != nil {
+				return err
+			}
+			if raw["type"] != kind {
+				return fmt.Errorf("library.refinement_type_mismatch: %s", id)
+			}
+			for field, value := range values {
+				raw[field] = value
+			}
+			n.Scene.Node, err = json.Marshal(raw)
+			if err != nil {
+				return err
+			}
+			n.Scene.Resolutions = append(n.Scene.Resolutions, resolution)
+			return nil
+		}
+		return fmt.Errorf("library.refinement_target_missing: %s", id)
+	}
+	switch key {
+	case "phases/summary-bands":
+		for _, id := range []string{"node01", "node05"} {
+			if err := change(id, "chevron", "wmds.phase-summary-equal-width.v2", map[string]any{"w": 270}); err != nil {
+				return err
+			}
+		}
+		return nil
+	case "plan/gantt":
+		// 24pt tracks still contain 22pt bars. Retain 42pt single-track lanes
+		// for heading padding; 60pt double-track lanes free a lower legend row.
+		return change("node01", "gantt", "wmds.work-plan-bottom-legend.v2", map[string]any{
+			"trackPitch": 24, "legendSize": 8, "legendFullWidth": true,
+		})
+	case "roadmap/staggered-phases", "roadmap/staggered-phases-nav":
+		return change("node01", "gantt", "wmds.roadmap-compact-legend.v2", map[string]any{
+			"legendSize": 8, "legendFullWidth": true,
+		})
+	case "runbook/escalation-split":
+		for i, id := range []string{"node07", "node08", "node09"} {
+			if err := change(id, "mark", "wmds.escalation-straight-arrow.v2", map[string]any{
+				"mark": "arrow-straight", "rotate": -90, "x": 375, "y": 123.75 + 108*float64(i), "w": 24, "h": 4.5,
+			}); err != nil {
+				return err
+			}
+		}
 		return nil
 	}
 	if key == "runbook/step-list-split" {

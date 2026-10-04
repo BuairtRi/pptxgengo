@@ -8,10 +8,32 @@ import (
 // These named composition amendments preserve the pinned source and caller copy.
 // They are not content-driven shrinking or geometry supplied by a binding.
 func applyLibraryRefinements(key, revision string, doc *SlideSpec) error {
+	if revision == LibraryRevisionV5 {
+		if v5RetainedV4Compositions[key] {
+			if err := applyLibraryRefinements(key, LibraryRevisionV4, doc); err != nil {
+				return err
+			}
+		}
+		if err := ApplyIncomingV5Repairs(key, revision, doc); err != nil {
+			return err
+		}
+		return applyV5NativeChartRefinement(key, doc)
+	}
+	if revision == LibraryRevisionV4 {
+		if v4RetainedV3Compositions[key] {
+			if err := applyLibraryRefinements(key, LibraryRevisionV3, doc); err != nil {
+				return err
+			}
+		}
+		return ApplyIncomingIntakeRepairs(key, revision, doc)
+	}
 	for _, refine := range []func(string, string, *SlideSpec) error{
+		ApplyIncomingIntakeRepairs,
+		applyIntakeLibraryRefinements,
 		applyApproachCommercialLibraryRefinements,
 		applyProofEvidenceLibraryRefinements,
 		applyTeamSolutionLibraryRefinements,
+		applyGeographyLibraryRefinements,
 	} {
 		if err := refine(key, revision, doc); err != nil {
 			return err
@@ -19,7 +41,7 @@ func applyLibraryRefinements(key, revision string, doc *SlideSpec) error {
 	}
 	// The refreshed designs author these elements directly; v1 amendments must
 	// not append a duplicate photo or overwrite the new hand-drawn arrows.
-	if revision == LibraryRevisionV2 && (key == "agenda/schedule" || key == "pillars/four-why-matters") {
+	if isModernLibrary(revision) && (key == "agenda/schedule" || key == "pillars/four-why-matters") {
 		return nil
 	}
 	if err := applyPrimitiveLibraryRefinement(key, doc); err != nil {
@@ -59,7 +81,7 @@ func applyLibraryRefinements(key, revision string, doc *SlideSpec) error {
 	}
 	switch key {
 	case "divider/inverse":
-		if revision == LibraryRevisionV2 {
+		if isModernLibrary(revision) {
 			const resolution = "wmds.inverse-divider-separated-columns.v2"
 			if err := change(1, "square", resolution, map[string]any{"x": 507, "y": 126, "size": 270}); err != nil {
 				return err
@@ -77,7 +99,7 @@ func applyLibraryRefinements(key, revision string, doc *SlideSpec) error {
 			}
 		}
 	case "stats/circled-headline":
-		if revision == LibraryRevisionV2 {
+		if isModernLibrary(revision) {
 			return change(4, "card", "wmds.circled-headline-explanation-capacity.v2", map[string]any{"h": 108})
 		}
 	case "architecture/layer-map":

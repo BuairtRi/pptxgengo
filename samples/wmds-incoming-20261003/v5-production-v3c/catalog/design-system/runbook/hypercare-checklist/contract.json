@@ -1,0 +1,417 @@
+{
+  "key": "runbook/hypercare-checklist",
+  "source_file": "templates/library/runbooks.json",
+  "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "runbooks",
+  "tier": "working",
+  "name": "Runbook · hypercare daily checklist",
+  "purpose": "The daily hypercare checklist: eight checks with owner, deadline, where it is recorded and a tick-off box.",
+  "uses": [
+    "composite.table"
+  ],
+  "source_advisory_budget": {
+    "words": 97,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "check",
+      "maxChars": 40
+    },
+    {
+      "slot": "owner",
+      "maxChars": 18
+    },
+    {
+      "slot": "time",
+      "maxChars": 6
+    },
+    {
+      "slot": "record",
+      "maxChars": 20
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 8,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Hypercare"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Hypercare starts every day with the same [[eight checks]]"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Daily hypercare check"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Owner"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "By"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Recorded in"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Done"
+    },
+    {
+      "name": "node01.rows.item01.c",
+      "source_pointer": "/body/0/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "Review overnight batch jobs"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node01.rows.item01.e",
+      "source_pointer": "/body/0/rows/0/e",
+      "kind": "string",
+      "synthetic_source_example": "Job monitor"
+    },
+    {
+      "name": "node01.rows.item01.o",
+      "source_pointer": "/body/0/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "Data lead"
+    },
+    {
+      "name": "node01.rows.item01.t",
+      "source_pointer": "/body/0/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "08:00"
+    },
+    {
+      "name": "node01.rows.item02.c",
+      "source_pointer": "/body/0/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "Check posting and period errors"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node01.rows.item02.e",
+      "source_pointer": "/body/0/rows/1/e",
+      "kind": "string",
+      "synthetic_source_example": "Error log"
+    },
+    {
+      "name": "node01.rows.item02.o",
+      "source_pointer": "/body/0/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item02.t",
+      "source_pointer": "/body/0/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "08:30"
+    },
+    {
+      "name": "node01.rows.item03.c",
+      "source_pointer": "/body/0/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "Confirm interface queues are clear"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "boolean",
+      "synthetic_source_example": true
+    },
+    {
+      "name": "node01.rows.item03.e",
+      "source_pointer": "/body/0/rows/2/e",
+      "kind": "string",
+      "synthetic_source_example": "Queue dashboard"
+    },
+    {
+      "name": "node01.rows.item03.o",
+      "source_pointer": "/body/0/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "Integration lead"
+    },
+    {
+      "name": "node01.rows.item03.t",
+      "source_pointer": "/body/0/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "09:00"
+    },
+    {
+      "name": "node01.rows.item04.c",
+      "source_pointer": "/body/0/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "Triage new tickets by severity"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item04.e",
+      "source_pointer": "/body/0/rows/3/e",
+      "kind": "string",
+      "synthetic_source_example": "Ticket board"
+    },
+    {
+      "name": "node01.rows.item04.o",
+      "source_pointer": "/body/0/rows/3/o",
+      "kind": "string",
+      "synthetic_source_example": "Support lead"
+    },
+    {
+      "name": "node01.rows.item04.t",
+      "source_pointer": "/body/0/rows/3/t",
+      "kind": "string",
+      "synthetic_source_example": "09:30"
+    },
+    {
+      "name": "node01.rows.item05.c",
+      "source_pointer": "/body/0/rows/4/c",
+      "kind": "string",
+      "synthetic_source_example": "Review the top five user questions"
+    },
+    {
+      "name": "node01.rows.item05.d",
+      "source_pointer": "/body/0/rows/4/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item05.e",
+      "source_pointer": "/body/0/rows/4/e",
+      "kind": "string",
+      "synthetic_source_example": "Support notes"
+    },
+    {
+      "name": "node01.rows.item05.o",
+      "source_pointer": "/body/0/rows/4/o",
+      "kind": "string",
+      "synthetic_source_example": "Support lead"
+    },
+    {
+      "name": "node01.rows.item05.t",
+      "source_pointer": "/body/0/rows/4/t",
+      "kind": "string",
+      "synthetic_source_example": "10:00"
+    },
+    {
+      "name": "node01.rows.item06.c",
+      "source_pointer": "/body/0/rows/5/c",
+      "kind": "string",
+      "synthetic_source_example": "Compare performance with baseline"
+    },
+    {
+      "name": "node01.rows.item06.d",
+      "source_pointer": "/body/0/rows/5/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item06.e",
+      "source_pointer": "/body/0/rows/5/e",
+      "kind": "string",
+      "synthetic_source_example": "Monitoring pack"
+    },
+    {
+      "name": "node01.rows.item06.o",
+      "source_pointer": "/body/0/rows/5/o",
+      "kind": "string",
+      "synthetic_source_example": "Technical lead"
+    },
+    {
+      "name": "node01.rows.item06.t",
+      "source_pointer": "/body/0/rows/5/t",
+      "kind": "string",
+      "synthetic_source_example": "11:00"
+    },
+    {
+      "name": "node01.rows.item07.c",
+      "source_pointer": "/body/0/rows/6/c",
+      "kind": "string",
+      "synthetic_source_example": "Post the daily status to Steering"
+    },
+    {
+      "name": "node01.rows.item07.d",
+      "source_pointer": "/body/0/rows/6/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item07.e",
+      "source_pointer": "/body/0/rows/6/e",
+      "kind": "string",
+      "synthetic_source_example": "Status page"
+    },
+    {
+      "name": "node01.rows.item07.o",
+      "source_pointer": "/body/0/rows/6/o",
+      "kind": "string",
+      "synthetic_source_example": "Cutover lead"
+    },
+    {
+      "name": "node01.rows.item07.t",
+      "source_pointer": "/body/0/rows/6/t",
+      "kind": "string",
+      "synthetic_source_example": "16:00"
+    },
+    {
+      "name": "node01.rows.item08.c",
+      "source_pointer": "/body/0/rows/7/c",
+      "kind": "string",
+      "synthetic_source_example": "Log lessons for the retrospective"
+    },
+    {
+      "name": "node01.rows.item08.d",
+      "source_pointer": "/body/0/rows/7/d",
+      "kind": "boolean",
+      "synthetic_source_example": false
+    },
+    {
+      "name": "node01.rows.item08.e",
+      "source_pointer": "/body/0/rows/7/e",
+      "kind": "string",
+      "synthetic_source_example": "Lessons log"
+    },
+    {
+      "name": "node01.rows.item08.o",
+      "source_pointer": "/body/0/rows/7/o",
+      "kind": "string",
+      "synthetic_source_example": "Test lead"
+    },
+    {
+      "name": "node01.rows.item08.t",
+      "source_pointer": "/body/0/rows/7/t",
+      "kind": "string",
+      "synthetic_source_example": "17:00"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 5
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 8
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

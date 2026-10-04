@@ -8,7 +8,7 @@ import (
 // applyProofEvidenceLibraryRefinements preserves pinned source and caller copy.
 // Amendments allocate explicit grid space; they never shrink text to fit.
 func applyProofEvidenceLibraryRefinements(key, revision string, doc *SlideSpec) error {
-	if revision != LibraryRevisionV2 {
+	if !isModernLibrary(revision) {
 		return nil
 	}
 	change := func(id, kind, resolution string, values map[string]any) error {
@@ -28,7 +28,7 @@ func applyProofEvidenceLibraryRefinements(key, revision string, doc *SlideSpec) 
 				return fmt.Errorf("library.refinement_type_mismatch: %s", id)
 			}
 			for field, value := range values {
-				if _, ok := raw[field]; !ok && !((kind == "textblock" || kind == "text") && field == "h") && !(kind == "card" && field == "contentBottom") {
+				if _, ok := raw[field]; !ok && !((kind == "textblock" || kind == "text") && field == "h") && !(kind == "card" && field == "contentBottom") && !(kind == "grouplabel" && field == "ruleEndGap") && !(kind == "beforeafter" && field == "arrow") && !(kind == "mark" && field == "rotate") {
 					return fmt.Errorf("library.refinement_field_missing: %s/%s", id, field)
 				}
 				raw[field] = value
@@ -43,6 +43,16 @@ func applyProofEvidenceLibraryRefinements(key, revision string, doc *SlideSpec) 
 		return fmt.Errorf("library.refinement_target_missing: %s", id)
 	}
 	switch key {
+	case "from-to/cards":
+		return change("node02", "mark", "wmds.from-to-dashed-arrow-angle.v2", map[string]any{"rotate": 335, "x": 426})
+	case "from-to/rows", "transformation/before-after":
+		return change("node01", "beforeafter", "wmds.before-after-handdrawn-arrow.v2", map[string]any{"arrow": "arrow-straight"})
+	case "frameworks/layer-table":
+		for _, id := range []string{"node01", "node02", "node03", "node04"} {
+			if err := change(id, "grouplabel", "wmds.framework-header-rule-padding.v2", map[string]any{"ruleEndGap": 12}); err != nil {
+				return err
+			}
+		}
 	case "transformation/pain-to-theme":
 		for _, ordinal := range []int{6, 11, 16, 21} {
 			if err := change(fmt.Sprintf("node%02d", ordinal), "text", "wmds.pain-to-theme-fixed-text-capacity.v2", map[string]any{"h": 24}); err != nil {

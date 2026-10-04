@@ -1,0 +1,219 @@
+{
+  "key": "narrative/lead-in-right",
+  "source_file": "templates/library/core.json",
+  "source_sha256": "3a3bccfcb82d3a9984779f06ea35937deb3cfa68871b54bfc1f62f59737acf69",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "bullets"
+    }
+  ],
+  "family": "core",
+  "tier": "core",
+  "name": "Narrative · lead and three points · right panel",
+  "purpose": "A short argument with the lead sentence as the claim on a dark right panel and the three lead-in points in the main column.",
+  "uses": [
+    "header.slide",
+    "list.set"
+  ],
+  "source_advisory_budget": {
+    "words": 73,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "lead",
+      "maxChars": 120
+    },
+    {
+      "slot": "points",
+      "maxItems": 4,
+      "maxChars": 100
+    },
+    {
+      "slot": "source",
+      "maxChars": 80
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "text"
+    ],
+    "component_types": [
+      "bullets",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/2/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 705,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "right",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Current state"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Three causes explain most of the delay"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "West Monroe close calendar analysis, FY26, 14 business units."
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "The short version"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Close takes 12 days today. About 7 of them are spent waiting, not working."
+    },
+    {
+      "name": "node03.items.item01.lead",
+      "source_pointer": "/body/2/items/0/lead",
+      "kind": "string",
+      "synthetic_source_example": "Late reconciliations."
+    },
+    {
+      "name": "node03.items.item01.text",
+      "source_pointer": "/body/2/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Balance-sheet accounts are reconciled after close, not during the month."
+    },
+    {
+      "name": "node03.items.item02.lead",
+      "source_pointer": "/body/2/items/1/lead",
+      "kind": "string",
+      "synthetic_source_example": "Manual intercompany."
+    },
+    {
+      "name": "node03.items.item02.text",
+      "source_pointer": "/body/2/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Eleven entities match balances by email and spreadsheet."
+    },
+    {
+      "name": "node03.items.item03.lead",
+      "source_pointer": "/body/2/items/2/lead",
+      "kind": "string",
+      "synthetic_source_example": "Review at the end."
+    },
+    {
+      "name": "node03.items.item03.text",
+      "source_pointer": "/body/2/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Controllers see most entries for the first time on day nine."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node03.items",
+      "source_pointer": "/body/2/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

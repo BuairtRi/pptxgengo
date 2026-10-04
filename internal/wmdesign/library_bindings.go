@@ -1,6 +1,7 @@
 package wmdesign
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -79,7 +80,8 @@ func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, Temp
 		if !ok {
 			return SlideSpec{}, record, fmt.Errorf("library.binding_missing_slot: %s", slot.Name)
 		}
-		if string(raw) == "null" {
+		isNull := bytes.Equal(bytes.TrimSpace(raw), []byte("null"))
+		if isNull && slot.Kind != "nullable_number" {
 			return SlideSpec{}, record, fmt.Errorf("library.binding_null_slot: %s", slot.Name)
 		}
 		var value any
@@ -93,7 +95,11 @@ func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, Temp
 				return SlideSpec{}, record, fmt.Errorf("library.binding_empty_slot: %s", slot.Name)
 			}
 			value = text
-		case "number":
+		case "number", "nullable_number":
+			if slot.Kind == "nullable_number" && isNull {
+				value = nil
+				break
+			}
 			var number float64
 			if err = bindingStrictDecode(raw, &number); err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
 				return SlideSpec{}, record, fmt.Errorf("library.binding_invalid_number: %s", slot.Name)

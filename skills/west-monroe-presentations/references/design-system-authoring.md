@@ -1,12 +1,16 @@
 # Modern West Monroe design-system authoring
 
 Use the installed packaged route `pptxgengo design`. It defaults to the frozen
-v2 design library and the Go typography engine `wmds-go-foundation.v2`. It uses
+v3 design library and the Go typography engine `wmds-go-foundation.v2`. It uses
 the installed release's library, fonts and registered assets. No repository
 checkout, mutable source path or separate AppleScript is required for a normal
-build. Earlier design contracts are available with explicit `--bundle v1`.
+build. Earlier design contracts are available with explicit `--bundle v1` or `--bundle v2`.
 This route does not alter the legacy `template`, `compose`, `adapt`, `scene`,
 `component` or `lib` workflows.
+
+For source-managed decks, use the [project workflow](project-and-resume.md) and
+[unified discovery/alternatives](template-selection.md). The direct JSON routes
+below remain available for bounded one-slide work.
 
 ## Find a design and inspect its contract
 
@@ -18,7 +22,8 @@ pptxgengo design library-catalog --template-keys architecture/layers-nav
 pptxgengo design asset-catalog
 ```
 
-The library contains **167 designs: 166 active and one deprecated**. The gallery
+The current library size and lifecycle counts come from `design library-catalog`.
+The gallery
 hides the deprecated design by default and identifies its replacement. Choose a
 family/layout that supports the intended argument and content density. Compare
 its source and changed-content specimens, then download the chosen content or
@@ -103,7 +108,7 @@ faces; it does not require measurement aliases. No live PowerPoint character
 capture is required for each deck. Native captures support engine calibration and
 reference qualification; they are not a permanent normal-build dependency.
 
-The candidate Go engine measures wrapping and fixed content capacity. A
+The Go engine measures wrapping and fixed content capacity. A
 successful build is useful evidence, but it does not guarantee native font
 selection or arbitrary replacement-copy fit. Open and inspect the final deck in
 PowerPoint at presentation size, and review a native local-printing PDF export

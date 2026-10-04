@@ -8,17 +8,22 @@ import (
 )
 
 type peopleLegendItem struct {
-	Key    string `json:"key"`
-	Text   string `json:"text"`
-	Label  string `json:"label"`
-	Series int    `json:"series"`
-	Deemph bool   `json:"deemph"`
-	Swatch string `json:"swatch"`
-	Dashed bool   `json:"dashed"`
-	Color  string `json:"color"`
-	Line   bool   `json:"line"`
-	Marker string `json:"marker"`
-	Hatch  bool   `json:"hatch"`
+	Key       string   `json:"key"`
+	Text      string   `json:"text"`
+	Label     string   `json:"label"`
+	Series    int      `json:"series"`
+	Deemph    bool     `json:"deemph"`
+	Swatch    string   `json:"swatch"`
+	Dashed    bool     `json:"dashed"`
+	Color     string   `json:"color"`
+	Line      bool     `json:"line"`
+	Marker    string   `json:"marker"`
+	Hatch     bool     `json:"hatch"`
+	Ink       string   `json:"ink,omitempty"`
+	Heat      *float64 `json:"heat,omitempty"`
+	HeatMax   *float64 `json:"heatMax,omitempty"`
+	HeatScale string   `json:"heatScale,omitempty"`
+	Status    string   `json:"status,omitempty"`
 }
 type peopleOrg struct {
 	Key      string      `json:"key"`
@@ -79,7 +84,7 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 	if e := json.Unmarshal(raw, &tag); e != nil {
 		return nil, false, e
 	}
-	fields := map[string]string{"legend": "x y w title layout items", "pod": "x y w title band roles", "role": "x y w h surface edge title meta", "person": "x y w size photo focus grayscale initials name role org", "orgchart": "x y w root", "governance": "x y w tiers"}
+	fields := map[string]string{"legend": "x y w title layout items size", "pod": "x y w title band roles", "role": "x y w h surface edge title meta", "person": "x y w size photo focus grayscale initials name role org", "orgchart": "x y w root", "governance": "x y w tiers"}
 	allow, ok := fields[tag.Type]
 	if !ok {
 		return nil, false, nil
@@ -96,7 +101,7 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 	line, _ := r.sceneColor(ctx.Surface, "line")
 	switch n.Type {
 	case "legend":
-		if n.W <= 0 {
+		if n.W <= 0 || math.IsNaN(n.X+n.Y+n.W) || math.IsInf(n.X+n.Y+n.W, 0) || len(n.Items) > 100 {
 			return nil, true, fmt.Errorf("scene.legend_geometry")
 		}
 		horiz := n.Layout == "horizontal"
@@ -106,6 +111,20 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 		x, y := n.X, n.Y
 		rowH := 0.0
 		st, _ := r.sceneStyle("small")
+		scale := 1.0
+		if n.Size != 0 {
+			if n.Size < 6 || n.Size > 24 || math.IsNaN(n.Size) || math.IsInf(n.Size, 0) {
+				return nil, true, fmt.Errorf("scene.legend_size: expected6_to24pt")
+			}
+			scale = n.Size / st.Size
+			st.Size, st.Leading, st.TrackingPt = n.Size, st.Leading*scale, st.TrackingPt*scale
+		}
+		labelGap, itemGap := 9*scale, 18*scale
+		if r.source.Revision == LibraryRevisionV5 && n.Size == 0 && horiz {
+			// Use the existing swatch gap for the native text reserve so a
+			// tight one-row source legend retains its packing footprint.
+			labelGap -= sequenceInlineWidth(1, st) - 1
+		}
 		if n.Title != "" {
 			if e = r.diagramText(p, id+".title", n.Title, "label", Rect{x, y, n.W, 0}, ctx.Surface, "secondary", "left", 0, false); e != nil {
 				return nil, true, e
@@ -113,10 +132,10 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 			ls, _ := r.sceneStyle("label")
 			hh, ww, _ := r.sequenceNeed(n.Title, ls, n.W)
 			if horiz {
-				x += ww + 18
+				x += ww + itemGap
 				rowH = hh
 			} else {
-				y += hh + 9
+				y += hh + labelGap
 			}
 		}
 		seen := map[string]bool{}
@@ -130,27 +149,57 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 			if copy == "" {
 				copy = it.Label
 			}
+			var status sceneStatusSpec
+			if it.Status != "" {
+				var ok bool
+				status, ok = sceneStatuses[it.Status]
+				if r.source.Revision != LibraryRevisionV5 || !ok {
+					return nil, true, fmt.Errorf("scene.legend_invalid_status")
+				}
+				if copy == "" {
+					copy = status.Label
+				}
+			}
 			sw := 10.0
-			if it.Swatch == "line" || it.Line || it.Hatch {
+			if it.Heat != nil || it.Swatch == "line" || it.Line || it.Hatch {
 				sw = 18
 			}
-			if it.Marker != "" {
+			if it.Marker != "" && it.Heat == nil {
 				sw = 12
 			}
-			height, width, e := r.sequenceNeed(copy, st, n.W-sw-9)
+			if it.Swatch == "dot" && it.Heat == nil {
+				sw = 8
+			}
+			if it.Status != "" {
+				sw = 8
+			}
+			if it.Swatch != "" && it.Swatch != "line" && it.Swatch != "dot" && it.Swatch != "marker" {
+				return nil, true, fmt.Errorf("scene.legend_swatch")
+			}
+			if it.Heat == nil && (it.HeatMax != nil || it.HeatScale != "") {
+				return nil, true, fmt.Errorf("scene.legend_heat_requires_value")
+			}
+			sw *= scale
+			height, width, e := r.sequenceNeed(copy, st, n.W-sw-labelGap)
 			if e != nil {
 				return nil, true, e
 			}
-			total := sw + 9 + width
+			if n.Size != 0 || r.source.Revision == LibraryRevisionV5 {
+				width = sequenceInlineWidth(width, st)
+			}
+			total := sw + labelGap + width
 			if total > n.W+.02 {
 				return nil, true, fmt.Errorf("scene.legend_item_width")
 			}
 			if horiz && x+total > n.X+n.W+.02 {
 				x = n.X
-				y += rowH + 9
+				y += rowH + labelGap
 				rowH = 0
 			}
-			colRef := it.Color
+			colRef := it.Ink
+			if colRef == "" {
+				colRef = it.Color
+			}
 			if colRef == "" {
 				colRef = "strong"
 				if it.Series > 0 {
@@ -165,16 +214,37 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 				return nil, true, e
 			}
 			cy := y + height/2
-			if it.Swatch == "line" || it.Line {
+			if it.Status != "" {
+				fill, e := r.sceneColor(ctx.Surface, status.Ink)
+				if e != nil {
+					return nil, true, e
+				}
+				if e = r.diagramShape(p, pre+".swatch", Rect{x, cy - 4*scale, sw, 8 * scale}, pptx.ShapeTypeRect, fill, strong, .75*scale, "solid", nil); e != nil {
+					return nil, true, e
+				}
+			} else if it.Heat != nil {
+				fill, _, e := sceneHeat(*it.Heat, it.HeatMax, it.HeatScale)
+				if e != nil {
+					return nil, true, e
+				}
+				if e = r.diagramShape(p, pre+".swatch", Rect{x, cy - 5*scale, sw, 10 * scale}, pptx.ShapeTypeRect, fill, "", 0, "", nil); e != nil {
+					return nil, true, e
+				}
+				p.Warnings = append(p.Warnings, SceneHeatContract+" source_sha256="+SceneHeatSourceSHA256+"; native specimen review pending")
+			} else if it.Swatch == "dot" {
+				if e = r.diagramShape(p, pre+".swatch", Rect{x, cy - 4*scale, sw, 8 * scale}, pptx.ShapeTypeEllipse, col, "", 0, "", nil); e != nil {
+					return nil, true, e
+				}
+			} else if it.Swatch == "line" || it.Line {
 				dash := "solid"
 				if it.Dashed {
 					dash = "dash"
 				}
-				if e = r.diagramLine(p, pre+".swatch", [2]float64{x, cy}, [2]float64{x + sw, cy}, col, 3, dash); e != nil {
+				if e = r.diagramLine(p, pre+".swatch", [2]float64{x, cy}, [2]float64{x + sw, cy}, col, 3*scale, dash); e != nil {
 					return nil, true, e
 				}
 			} else if it.Hatch {
-				if e = r.sequenceHatch(p, pre+".swatch", Rect{x, cy - 5, 18, 10}, col, strong); e != nil {
+				if e = r.sequenceHatch(p, pre+".swatch", Rect{x, cy - 5*scale, sw, 10 * scale}, col, strong); e != nil {
 					return nil, true, e
 				}
 			} else {
@@ -191,18 +261,18 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 				if it.Deemph {
 					col, _ = r.sceneColor(ctx.Surface, "deemph.2")
 				}
-				if e = r.diagramShape(p, pre+".swatch", Rect{x, cy - sw/2, sw, sw}, kind, col, strong, .75, "solid", nil); e != nil {
+				if e = r.diagramShape(p, pre+".swatch", Rect{x, cy - sw/2, sw, sw}, kind, col, strong, .75*scale, "solid", nil); e != nil {
 					return nil, true, e
 				}
 			}
-			if e = r.sceneText(p, pre+".text", copy, st, Rect{x + sw + 9, y, width, height}, ctx.Surface, "primary", "left"); e != nil {
+			if e = r.sceneText(p, pre+".text", copy, st, Rect{x + sw + labelGap, y, width, height}, ctx.Surface, "primary", "left"); e != nil {
 				return nil, true, e
 			}
 			if horiz {
-				x += total + 18
+				x += total + itemGap
 				rowH = math.Max(rowH, height)
 			} else {
-				y += height + 9
+				y += height + labelGap
 			}
 		}
 	case "pod":

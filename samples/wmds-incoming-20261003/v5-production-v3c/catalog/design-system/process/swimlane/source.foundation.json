@@ -1,0 +1,161 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-375",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 1,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Current state",
+      "title": "Journal review hands off four times before posting",
+      "source": "Source: Northfield close interviews, Sep 2026.",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "swimlane",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "cols": 6,
+              "lanes": [
+                "Preparer",
+                "Rules engine",
+                "Reviewer",
+                "Controller"
+              ],
+              "steps": [
+                {
+                  "id": "s1",
+                  "lane": 0,
+                  "col": 0,
+                  "text": "Post entry",
+                  "kind": "start"
+                },
+                {
+                  "id": "s2",
+                  "lane": 1,
+                  "col": 1,
+                  "text": "Check against rules"
+                },
+                {
+                  "id": "d1",
+                  "lane": 1,
+                  "col": 2,
+                  "text": "Passes?",
+                  "kind": "decision"
+                },
+                {
+                  "id": "s3",
+                  "lane": 0,
+                  "col": 2,
+                  "text": "Fix and repost",
+                  "pain": true
+                },
+                {
+                  "id": "s4",
+                  "lane": 2,
+                  "col": 3,
+                  "text": "Review exception"
+                },
+                {
+                  "id": "s5",
+                  "lane": 3,
+                  "col": 4,
+                  "text": "Approve large entries",
+                  "pain": true
+                },
+                {
+                  "id": "s6",
+                  "lane": 1,
+                  "col": 5,
+                  "text": "Post to ledger",
+                  "kind": "end"
+                }
+              ],
+              "links": [
+                [
+                  "s1",
+                  "s2"
+                ],
+                [
+                  "s2",
+                  "d1"
+                ],
+                [
+                  "d1",
+                  "s3",
+                  "No",
+                  "up"
+                ],
+                [
+                  "s3",
+                  "s2"
+                ],
+                [
+                  "d1",
+                  "s6",
+                  "Yes",
+                  "right"
+                ],
+                [
+                  "d1",
+                  "s4",
+                  "Exception",
+                  "down"
+                ],
+                [
+                  "s4",
+                  "s5"
+                ],
+                [
+                  "s5",
+                  "s6"
+                ]
+              ],
+              "painNote": "Pain point raised in interviews"
+            },
+            "source_pointer": "/body/0"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-375",
+        "template": "process/swimlane",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/solution.json",
+        "source_sha256": "6155259c268f5b88418203e228aa4f72667154c78ef84aab8e93a8bfdfe3ba93",
+        "source_revision": "wmds-library.v5",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "swimlane"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

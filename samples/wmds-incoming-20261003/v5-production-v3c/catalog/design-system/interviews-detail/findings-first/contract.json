@@ -1,0 +1,513 @@
+{
+  "key": "interviews-detail/findings-first",
+  "source_file": "templates/library/interviews.json",
+  "source_sha256": "d62be1c2fe3d0015929413af45741fbee87918ac22969ebf48e893743dbf5d42",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "square"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "text"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "strongnum"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "pullquote"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "table"
+    }
+  ],
+  "family": "interviews",
+  "tier": "core",
+  "name": "Interview detail · findings first",
+  "purpose": "Five key findings, each with a headline, supporting detail and a so-what, under a small headshot header, with the quote and follow-ups with status labels at the side.",
+  "uses": [
+    "square",
+    "strongnum",
+    "pullquote",
+    "table"
+  ],
+  "source_advisory_budget": {
+    "words": 145,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "finding",
+      "count": "5"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "image",
+      "key-message",
+      "point",
+      "quotation",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "image",
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "pullquote",
+      "rule",
+      "square",
+      "strongnum",
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/8/items",
+        "component_type": "strongnum",
+        "role": "point",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/11/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/11/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "square",
+        "role": "content",
+        "source_bounds": {
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 180,
+          "x": 129,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 180,
+          "x": 129,
+          "y": 150
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 327,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 327,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 543,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 126,
+          "x": 543,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 612,
+          "x": 57,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "strongnum",
+        "role": "point",
+        "source_bounds": {
+          "w": 612,
+          "x": 57,
+          "y": 210
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 216,
+          "x": 687,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "pullquote",
+        "role": "quotation",
+        "source_bounds": {
+          "w": 216,
+          "x": 687,
+          "y": 138
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 216,
+          "x": 687,
+          "y": 318
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Stakeholder interviews"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Five findings from the revenue cycle interview"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample names for layout only; replace with engagement stakeholders before use."
+    },
+    {
+      "name": "node01.photo",
+      "source_pointer": "/body/0/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-headshot-face"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "J. Alvarez"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "VP Revenue Cycle"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Department and date"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle · Sep 8"
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Interviewers"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "K. Ortiz, W. Lee"
+    },
+    {
+      "name": "node09.items.item01.text",
+      "source_pointer": "/body/8/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "40% of denials trace to missing authorizations. So what: fix intake first."
+    },
+    {
+      "name": "node09.items.item01.title",
+      "source_pointer": "/body/8/items/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Denials start at authorization"
+    },
+    {
+      "name": "node09.items.item02.text",
+      "source_pointer": "/body/8/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Front-desk errors are found three weeks late. So what: add check-in checks."
+    },
+    {
+      "name": "node09.items.item02.title",
+      "source_pointer": "/body/8/items/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Errors surface at billing"
+    },
+    {
+      "name": "node09.items.item03.text",
+      "source_pointer": "/body/8/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Teams work denials in separate queues. So what: build one queue by payer."
+    },
+    {
+      "name": "node09.items.item03.title",
+      "source_pointer": "/body/8/items/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Three queues, no shared view"
+    },
+    {
+      "name": "node09.items.item04.text",
+      "source_pointer": "/body/8/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Two analysts hold the appeal know-how. So what: cross-train and staff the tail."
+    },
+    {
+      "name": "node09.items.item04.title",
+      "source_pointer": "/body/8/items/3/title",
+      "kind": "string",
+      "synthetic_source_example": "Appeals average 45 days"
+    },
+    {
+      "name": "node09.items.item05.text",
+      "source_pointer": "/body/8/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Monthly reports restart in spreadsheets. So what: automate the denial extract."
+    },
+    {
+      "name": "node09.items.item05.title",
+      "source_pointer": "/body/8/items/4/title",
+      "kind": "string",
+      "synthetic_source_example": "Reports are hand-built"
+    },
+    {
+      "name": "node11.by",
+      "source_pointer": "/body/10/by",
+      "kind": "string",
+      "synthetic_source_example": "J. Alvarez"
+    },
+    {
+      "name": "node11.text",
+      "source_pointer": "/body/10/text",
+      "kind": "string",
+      "synthetic_source_example": "We find it at billing, three weeks late."
+    },
+    {
+      "name": "node12.cols.item01.label",
+      "source_pointer": "/body/11/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Follow-up"
+    },
+    {
+      "name": "node12.cols.item02.label",
+      "source_pointer": "/body/11/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Status"
+    },
+    {
+      "name": "node12.cols.item02.labels.done",
+      "source_pointer": "/body/11/cols/1/labels/done",
+      "kind": "string",
+      "synthetic_source_example": "Received"
+    },
+    {
+      "name": "node12.cols.item02.labels.notstarted",
+      "source_pointer": "/body/11/cols/1/labels/notstarted",
+      "kind": "string",
+      "synthetic_source_example": "Open"
+    },
+    {
+      "name": "node12.cols.item02.labels.progress",
+      "source_pointer": "/body/11/cols/1/labels/progress",
+      "kind": "string",
+      "synthetic_source_example": "Pending"
+    },
+    {
+      "name": "node12.rows.item01.s",
+      "source_pointer": "/body/11/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "done"
+    },
+    {
+      "name": "node12.rows.item01.t",
+      "source_pointer": "/body/11/rows/0/t",
+      "kind": "string",
+      "synthetic_source_example": "Denial extract"
+    },
+    {
+      "name": "node12.rows.item02.s",
+      "source_pointer": "/body/11/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "progress"
+    },
+    {
+      "name": "node12.rows.item02.t",
+      "source_pointer": "/body/11/rows/1/t",
+      "kind": "string",
+      "synthetic_source_example": "Appeal staffing"
+    },
+    {
+      "name": "node12.rows.item03.s",
+      "source_pointer": "/body/11/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "notstarted"
+    },
+    {
+      "name": "node12.rows.item03.t",
+      "source_pointer": "/body/11/rows/2/t",
+      "kind": "string",
+      "synthetic_source_example": "Contract owner"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node09.items",
+      "source_pointer": "/body/8/items",
+      "count": 5
+    },
+    {
+      "name": "node12.cols",
+      "source_pointer": "/body/11/cols",
+      "count": 2
+    },
+    {
+      "name": "node12.rows",
+      "source_pointer": "/body/11/rows",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

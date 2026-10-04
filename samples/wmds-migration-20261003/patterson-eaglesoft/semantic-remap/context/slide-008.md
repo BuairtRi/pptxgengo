@@ -1,0 +1,1 @@
+Keep hidden. Preserve the practice boundary, journey-move arrow, source PostgreSQL terminology and initial-phase validation line. Hybrid alternative implies cloud only if source copy says so; do not add cloud.

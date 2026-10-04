@@ -1,0 +1,351 @@
+{
+  "key": "understanding-statement/evidence-grid",
+  "source_file": "templates/library/understanding.json",
+  "source_sha256": "e20792b68279a52f80aaa39c3542506b2d521199affcba5ae50d829aeda16a19",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "table"
+    }
+  ],
+  "family": "understanding",
+  "tier": "working",
+  "name": "Our understanding · statement with what we heard grid",
+  "purpose": "One restatement sentence with a dense grid beneath: each theme we heard, why it matters and what we will do about it.",
+  "uses": [
+    "title",
+    "text.lead",
+    "table"
+  ],
+  "source_advisory_budget": {
+    "words": 173,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "lead",
+      "maxChars": 150
+    },
+    {
+      "slot": "theme",
+      "maxChars": 18
+    },
+    {
+      "slot": "heard",
+      "maxChars": 50
+    },
+    {
+      "slot": "matters",
+      "maxChars": 58
+    },
+    {
+      "slot": "response",
+      "maxChars": 52
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/1/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 198
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Our understanding"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "You asked for [[one front end]], not another tool"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample content for layout only; replace with the client's RFP and engagement facts before use."
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "We heard the same problem from four groups: patient access and billing run as separate programs that Northfield now wants run as one."
+    },
+    {
+      "name": "node02.cols.item01.label",
+      "source_pointer": "/body/1/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Theme"
+    },
+    {
+      "name": "node02.cols.item02.label",
+      "source_pointer": "/body/1/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "What we heard"
+    },
+    {
+      "name": "node02.cols.item03.label",
+      "source_pointer": "/body/1/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Why it matters"
+    },
+    {
+      "name": "node02.cols.item04.label",
+      "source_pointer": "/body/1/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "What we will do"
+    },
+    {
+      "name": "node02.rows.item01.h.text",
+      "source_pointer": "/body/1/rows/0/h/text",
+      "kind": "string",
+      "synthetic_source_example": "Three tools, three ways to register"
+    },
+    {
+      "name": "node02.rows.item01.h.sub",
+      "source_pointer": "/body/1/rows/0/h/sub",
+      "kind": "string",
+      "synthetic_source_example": "Operations, Patient Access"
+    },
+    {
+      "name": "node02.rows.item01.r",
+      "source_pointer": "/body/1/rows/0/r",
+      "kind": "string",
+      "synthetic_source_example": "One scheduling and registration flow at all 71 sites"
+    },
+    {
+      "name": "node02.rows.item01.th.text",
+      "source_pointer": "/body/1/rows/0/th/text",
+      "kind": "string",
+      "synthetic_source_example": "One front door"
+    },
+    {
+      "name": "node02.rows.item01.th.sub",
+      "source_pointer": "/body/1/rows/0/th/sub",
+      "kind": "string",
+      "synthetic_source_example": "Access"
+    },
+    {
+      "name": "node02.rows.item01.w",
+      "source_pointer": "/body/1/rows/0/w",
+      "kind": "string",
+      "synthetic_source_example": "Patients repeat details and sites diverge on quality"
+    },
+    {
+      "name": "node02.rows.item02.h.text",
+      "source_pointer": "/body/1/rows/1/h/text",
+      "kind": "string",
+      "synthetic_source_example": "Front-end errors reach the claim"
+    },
+    {
+      "name": "node02.rows.item02.h.sub",
+      "source_pointer": "/body/1/rows/1/h/sub",
+      "kind": "string",
+      "synthetic_source_example": "Revenue Cycle, Finance"
+    },
+    {
+      "name": "node02.rows.item02.r",
+      "source_pointer": "/body/1/rows/1/r",
+      "kind": "string",
+      "synthetic_source_example": "Edits at entry and one denial work queue"
+    },
+    {
+      "name": "node02.rows.item02.th.text",
+      "source_pointer": "/body/1/rows/1/th/text",
+      "kind": "string",
+      "synthetic_source_example": "One revenue cycle"
+    },
+    {
+      "name": "node02.rows.item02.th.sub",
+      "source_pointer": "/body/1/rows/1/th/sub",
+      "kind": "string",
+      "synthetic_source_example": "Billing"
+    },
+    {
+      "name": "node02.rows.item02.w",
+      "source_pointer": "/body/1/rows/1/w",
+      "kind": "string",
+      "synthetic_source_example": "11% of denials start at registration; A/R runs above peers"
+    },
+    {
+      "name": "node02.rows.item03.h.text",
+      "source_pointer": "/body/1/rows/2/h/text",
+      "kind": "string",
+      "synthetic_source_example": "Cutover next Q3 cannot move"
+    },
+    {
+      "name": "node02.rows.item03.h.sub",
+      "source_pointer": "/body/1/rows/2/h/sub",
+      "kind": "string",
+      "synthetic_source_example": "EHR program, IT"
+    },
+    {
+      "name": "node02.rows.item03.r",
+      "source_pointer": "/body/1/rows/2/r",
+      "kind": "string",
+      "synthetic_source_example": "Waves sequenced around cutover, not beside it"
+    },
+    {
+      "name": "node02.rows.item03.th.text",
+      "source_pointer": "/body/1/rows/2/th/text",
+      "kind": "string",
+      "synthetic_source_example": "One date"
+    },
+    {
+      "name": "node02.rows.item03.th.sub",
+      "source_pointer": "/body/1/rows/2/th/sub",
+      "kind": "string",
+      "synthetic_source_example": "EHR"
+    },
+    {
+      "name": "node02.rows.item03.w",
+      "source_pointer": "/body/1/rows/2/w",
+      "kind": "string",
+      "synthetic_source_example": "Training and workflows must be ready before go-live"
+    },
+    {
+      "name": "node02.rows.item04.h.text",
+      "source_pointer": "/body/1/rows/3/h/text",
+      "kind": "string",
+      "synthetic_source_example": "Access and billing split by leader"
+    },
+    {
+      "name": "node02.rows.item04.h.sub",
+      "source_pointer": "/body/1/rows/3/h/sub",
+      "kind": "string",
+      "synthetic_source_example": "Executive team"
+    },
+    {
+      "name": "node02.rows.item04.r",
+      "source_pointer": "/body/1/rows/3/r",
+      "kind": "string",
+      "synthetic_source_example": "A named owner and measure for each benefit"
+    },
+    {
+      "name": "node02.rows.item04.th.text",
+      "source_pointer": "/body/1/rows/3/th/text",
+      "kind": "string",
+      "synthetic_source_example": "One owner"
+    },
+    {
+      "name": "node02.rows.item04.th.sub",
+      "source_pointer": "/body/1/rows/3/th/sub",
+      "kind": "string",
+      "synthetic_source_example": "Governance"
+    },
+    {
+      "name": "node02.rows.item04.w",
+      "source_pointer": "/body/1/rows/3/w",
+      "kind": "string",
+      "synthetic_source_example": "Benefits fall between two budgets and no owner"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node02.cols",
+      "source_pointer": "/body/1/cols",
+      "count": 4
+    },
+    {
+      "name": "node02.rows",
+      "source_pointer": "/body/1/rows",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

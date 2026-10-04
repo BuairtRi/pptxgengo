@@ -1,0 +1,81 @@
+schema: pptxgengo.deck-document.v1
+id: editable-project
+title: Maintained presentation source
+year: 2026
+toolchain:
+  lockfile: toolchain.lock.json
+context:
+  project: context/project.md
+assets:
+  sample-image:
+    path: assets/originals/sample.png
+    description: Small original gradient used by this executable example
+local_templates:
+  editorial-photo:
+    name: Editable editorial content and image
+    frame: {scope: shared, id: wmds/frame/none-compact}
+    grid: {scope: shared, id: wmds/grid/12-columns}
+    zones:
+      title:
+        role: slide-title
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 70}
+      eyebrow:
+        role: eyebrow
+        required: true
+        schema: {type: string, maxLength: 30}
+      summary:
+        role: body-copy
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 300}
+      photo:
+        role: image-asset
+        required: true
+        schema: {type: string, enum: [sample-image]}
+    nodes:
+      - id: editorial
+        kind: group
+        nodes:
+          - id: summary
+            kind: text
+            placement:
+              zone: body
+              span: {start: 1, count: 7, y_pt: 36, height_pt: 180}
+            style: body
+            ink: primary
+            text: {binding: summary}
+          - id: photo
+            kind: image
+            placement:
+              zone: body
+              span: {start: 8, count: 5, y_pt: 36, height_pt: 180}
+            asset: {binding: photo}
+            fit: contain
+slides:
+  - id: maintain-the-source
+    content_kind: synthetic_example
+    template: {scope: shared, id: cards/3}
+    values:
+      eyebrow: Working model
+      title: Maintain a presentation as an editable project
+      cards:
+        - key: source
+          title: Author
+          body: Edit the human-readable YAML source.
+        - key: build
+          title: Build
+          body: Compile pinned templates, fonts and original assets.
+        - key: review
+          title: Review
+          body: Keep approvals tied to the content they cover.
+  - id: local-composition
+    content_kind: synthetic_example
+    template: {scope: local, id: editorial-photo}
+    values:
+      title: Customize a local template without losing the source
+      eyebrow: Local composition
+      summary: |
+        This paragraph is maintained in deck.yaml.
+        Each slide and visual node keeps a stable identity when slides move.
+        The original image stays separate from generated PowerPoint media.
+      photo: sample-image

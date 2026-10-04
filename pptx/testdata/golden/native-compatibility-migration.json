@@ -1,0 +1,144 @@
+{
+  "migration": "2026-10-03 native compatibility",
+  "production_fix_commit": "5cb282408f2014961faee1c1b9f96cbd3a80f315",
+  "scope": "Explicit fixture migration only; no production writer changes or comparison normalization.",
+  "changes": [
+    {
+      "path": "01-basic/ppt/presentation.xml",
+      "original_sha256": "1263c3193d5c8a90eeb29d32495cf170d9e9f6334e0fc06482fdedad763edbca",
+      "migrated_sha256": "556e88f13ea1400ed7bff500fd7928bbbc875dbe22b702b7835700e66d683c4b",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "02-text-rich/ppt/presentation.xml",
+      "original_sha256": "1263c3193d5c8a90eeb29d32495cf170d9e9f6334e0fc06482fdedad763edbca",
+      "migrated_sha256": "556e88f13ea1400ed7bff500fd7928bbbc875dbe22b702b7835700e66d683c4b",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "03-shapes/ppt/presentation.xml",
+      "original_sha256": "1263c3193d5c8a90eeb29d32495cf170d9e9f6334e0fc06482fdedad763edbca",
+      "migrated_sha256": "556e88f13ea1400ed7bff500fd7928bbbc875dbe22b702b7835700e66d683c4b",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "04-table/ppt/presentation.xml",
+      "original_sha256": "1263c3193d5c8a90eeb29d32495cf170d9e9f6334e0fc06482fdedad763edbca",
+      "migrated_sha256": "556e88f13ea1400ed7bff500fd7928bbbc875dbe22b702b7835700e66d683c4b",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "05-chart-bar/ppt/presentation.xml",
+      "original_sha256": "1263c3193d5c8a90eeb29d32495cf170d9e9f6334e0fc06482fdedad763edbca",
+      "migrated_sha256": "556e88f13ea1400ed7bff500fd7928bbbc875dbe22b702b7835700e66d683c4b",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "06-chart-multi/ppt/presentation.xml",
+      "original_sha256": "2ed128f671b232bb81f0f31bc6665604da2b57216ef82cfb97158813249e3d8b",
+      "migrated_sha256": "534e496073eae48c2dcfbb7ab8e0207a2b965bfc4b810a8db54258993c20b33e",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "07-image/ppt/presentation.xml",
+      "original_sha256": "1263c3193d5c8a90eeb29d32495cf170d9e9f6334e0fc06482fdedad763edbca",
+      "migrated_sha256": "556e88f13ea1400ed7bff500fd7928bbbc875dbe22b702b7835700e66d683c4b",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "08-master/ppt/presentation.xml",
+      "original_sha256": "a71c2fac63c55a90a4e0c8af52152b91e1f728135fca4245590763ac08a9122c",
+      "migrated_sha256": "5fa8c67e587636ca124b29702941c812b989a44ba1871c1e5db429282bb34cc1",
+      "operations": [
+        "Omit optional notesMasterIdLst; preserve all notes parts and relationships."
+      ]
+    },
+    {
+      "path": "05-chart-bar/ppt/charts/chart1.xml",
+      "original_sha256": "f0140780d0d28d7c3dcd5ff123210e0dae22eccbfa9579d5d9bc6d22fbcba6e3",
+      "migrated_sha256": "8ca6ed0f9c129ab4021af2b18db1e28a65c2b8054b295b8ae8d1f34c65f1eca2",
+      "operations": [
+        "Move per-series data labels after point/marker nodes and before categories, preserving label content.",
+        "Remove undeclared 3D series-axis reference from 2D chart."
+      ]
+    },
+    {
+      "path": "06-chart-multi/ppt/charts/chart2.xml",
+      "original_sha256": "2190951ea54159b0c274d3cbdc91210b7649265b240dd82ba48292fa02fe437e",
+      "migrated_sha256": "fd44aae712efb73d9932b22638a0ebf8ab5154dc0ad1d39e3dcd7896a1e3a112",
+      "operations": [
+        "Move per-series data labels after point/marker nodes and before categories, preserving label content.",
+        "Remove undeclared 3D series-axis reference from 2D chart.",
+        "Add required standard line grouping.",
+        "Remove bar-only invertIfNegative from line series."
+      ]
+    },
+    {
+      "path": "06-chart-multi/[Content_Types].xml",
+      "original_sha256": "844e5b377825c1c484315edc9909c2010d89dbc1d869404a8fc20e488790686e",
+      "migrated_sha256": "7b5be10ff58f9723981519d8567809b5fcf4fd9c9e91edc7f46b4a3229c5ec33",
+      "operations": [
+        "Remove content-type override for nonexistent slideMaster2.xml."
+      ]
+    },
+    {
+      "path": "05-chart-bar/ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx",
+      "original_sha256": "ee802ae7f91a986ee97b175b14c572621e61e7403b656f6dbfdb698d68ac56e5",
+      "migrated_sha256": "e385ae6f643c0cb00b4d4985f831223b9c52c90a6fa60c239ac60b42ee993aa2",
+      "operations": [
+        "Remove trailing apostrophe from table A1 range; all other decompressed workbook parts unchanged."
+      ],
+      "inner_changes": [
+        {
+          "path": "xl/tables/table1.xml",
+          "original_sha256": "872d92dcb02d1ae688d9ea0185814a6276926576091897994612923a9373371c",
+          "migrated_sha256": "c3bbb6d95d188eaadb8fb08202c72b8152b78be0b3064e027f1510906c1932c8"
+        }
+      ]
+    },
+    {
+      "path": "06-chart-multi/ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx",
+      "original_sha256": "aed2dbff7e80829073a325c6c50886b3fb15b5c7d41f8a92f8a15d0d6ad1ddac",
+      "migrated_sha256": "cb03f667a5bc6e6e158ed8411f590963b28c057c3af58aa1d3ec23fe5fb21ee9",
+      "operations": [
+        "Remove trailing apostrophe from table A1 range; all other decompressed workbook parts unchanged."
+      ],
+      "inner_changes": [
+        {
+          "path": "xl/tables/table1.xml",
+          "original_sha256": "1e6c9ceae8c0ccdaba7e4a91896b4605f36861004a54481d9d4781c8c119efa3",
+          "migrated_sha256": "21b635976600bea30444450bda799ab722a2f4d9cba1e9c1f69465b3466d58de"
+        }
+      ]
+    },
+    {
+      "path": "06-chart-multi/ppt/embeddings/Microsoft_Excel_Worksheet3.xlsx",
+      "original_sha256": "da7f4348f45b51fc0ab0c85839994ec49deafe9f8cd48614cd022759a51ac383",
+      "migrated_sha256": "765fe0f1131df8196c425ed3dad14245477c28e17fbe2eab306770b7f050a7d9",
+      "operations": [
+        "Remove trailing apostrophe from table A1 range; all other decompressed workbook parts unchanged."
+      ],
+      "inner_changes": [
+        {
+          "path": "xl/tables/table1.xml",
+          "original_sha256": "cf4d746db47d1e815149e57ffc0be0a7d98e9a2b9934914bbb6aff9d43c9ff2f",
+          "migrated_sha256": "2108bdbb8d6f588b612ae0a6f48853b1e08e243eeb2c7c654e3c069c4a18ae24"
+        }
+      ]
+    }
+  ]
+}

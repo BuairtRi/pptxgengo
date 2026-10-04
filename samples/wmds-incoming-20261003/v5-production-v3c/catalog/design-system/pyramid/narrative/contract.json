@@ -1,0 +1,254 @@
+{
+  "key": "pyramid/narrative",
+  "source_file": "templates/library/diagrams.json",
+  "source_sha256": "b79cf191621a7cfd9bc1b837201cd34ab001703490bd9738a9cd7732c7d9d90e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "pyramid"
+    }
+  ],
+  "family": "diagrams",
+  "tier": "working",
+  "name": "Pyramid with narrative panel",
+  "purpose": "A left panel carries the argument in a few sentences; the pyramid with side text sits in the main area.",
+  "uses": [
+    "pyramid",
+    "text.block"
+  ],
+  "source_advisory_budget": {
+    "words": 79,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "level label",
+      "count": 4,
+      "maxChars": 24
+    },
+    {
+      "slot": "level text",
+      "count": 4,
+      "maxChars": 64
+    },
+    {
+      "slot": "panel text",
+      "count": 3,
+      "maxChars": 100
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "hierarchy",
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "pyramid",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/3/levels",
+        "component_type": "pyramid",
+        "role": "relationship",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "pyramid",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 324,
+          "w": 558,
+          "x": 345,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "left",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Care model"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Most patients need light-touch care"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current firm data before use."
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Match effort to need"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Intensive care management is reserved for the few patients who drive most cost."
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Digital tools carry the broad base so nurses can focus on the top two tiers."
+    },
+    {
+      "name": "node04.levels.item01.label",
+      "source_pointer": "/body/3/levels/0/label",
+      "kind": "string",
+      "synthetic_source_example": "5%"
+    },
+    {
+      "name": "node04.levels.item01.text",
+      "source_pointer": "/body/3/levels/0/text",
+      "kind": "string",
+      "synthetic_source_example": "High-risk: a named nurse and a care plan."
+    },
+    {
+      "name": "node04.levels.item02.label",
+      "source_pointer": "/body/3/levels/1/label",
+      "kind": "string",
+      "synthetic_source_example": "15%"
+    },
+    {
+      "name": "node04.levels.item02.text",
+      "source_pointer": "/body/3/levels/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Rising-risk: outreach and a coach."
+    },
+    {
+      "name": "node04.levels.item03.label",
+      "source_pointer": "/body/3/levels/2/label",
+      "kind": "string",
+      "synthetic_source_example": "30%"
+    },
+    {
+      "name": "node04.levels.item03.text",
+      "source_pointer": "/body/3/levels/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Chronic stable: reminders and remote checks."
+    },
+    {
+      "name": "node04.levels.item04.label",
+      "source_pointer": "/body/3/levels/3/label",
+      "kind": "string",
+      "synthetic_source_example": "50%"
+    },
+    {
+      "name": "node04.levels.item04.text",
+      "source_pointer": "/body/3/levels/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Healthy: self-service and prevention nudges."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node04.levels",
+      "source_pointer": "/body/3/levels",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

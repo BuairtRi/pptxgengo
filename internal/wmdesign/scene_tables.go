@@ -11,10 +11,15 @@ import (
 )
 
 type sceneTableColumn struct {
-	Key   string  `json:"k"`
-	Label string  `json:"label"`
-	Width float64 `json:"w"`
-	Type  string  `json:"type,omitempty"`
+	Key       string            `json:"k"`
+	Label     string            `json:"label"`
+	Width     float64           `json:"w"`
+	Type      string            `json:"type,omitempty"`
+	Ink       string            `json:"ink,omitempty"`
+	Scale     string            `json:"scale,omitempty"`
+	Max       *float64          `json:"max,omitempty"`
+	ShowValue bool              `json:"showValue,omitempty"`
+	Labels    map[string]string `json:"labels,omitempty"`
 }
 type sceneTableSource struct {
 	Type      string                       `json:"type"`
@@ -24,11 +29,12 @@ type sceneTableSource struct {
 	Header    string                       `json:"header,omitempty"`
 	Dense     bool                         `json:"dense,omitempty"`
 	RowH      float64                      `json:"rowH,omitempty"`
-	RowHeader bool                         `json:"rowHeader,omitempty"`
+	RowHeader sceneTableRowHeader          `json:"rowHeader,omitempty"`
 	Preset    string                       `json:"preset,omitempty"`
 	Highlight string                       `json:"highlight,omitempty"`
 	Continued string                       `json:"continued,omitempty"`
 	DeltaUnit string                       `json:"deltaUnit,omitempty"`
+	HeatMax   *float64                     `json:"heatMax,omitempty"`
 	Columns   []sceneTableColumn           `json:"cols"`
 	Rows      []map[string]json.RawMessage `json:"rows"`
 	Groups    []struct {
@@ -61,8 +67,13 @@ func (r *renderer) planTableScene(id string, raw json.RawMessage, ctx SceneConte
 }
 
 func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (*scenePlan, error) {
-	if n.W <= 0 || len(n.Columns) < 1 || len(n.Columns) > 12 || len(n.Rows) > 60 {
+	if n.W <= 0 || math.IsNaN(n.X+n.Y+n.W+n.RowH) || math.IsInf(n.X+n.Y+n.W+n.RowH, 0) || len(n.Columns) < 1 || len(n.Columns) > 12 || len(n.Rows) > 60 {
 		return nil, fmt.Errorf("scene.table_invalid_dimensions_or_count: %s", id)
+	}
+	// The v5 source includes "none", but its frozen renderer tests only for
+	// "dark" and still emits the light header row and rule in this case.
+	if n.Header == "none" && r.source.Revision == LibraryRevisionV5 {
+		n.Header = "light"
 	}
 	if n.Header != "" && n.Header != "dark" && n.Header != "light" {
 		return nil, fmt.Errorf("scene.table_invalid_header: %s", n.Header)
@@ -96,10 +107,39 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	colW := make([]float64, len(n.Columns))
 	acc := n.X
 	hi := -1
-	supported := map[string]bool{"": true, "num": true, "delta": true, "status": true, "rating": true, "allocation": true, "harvey": true, "maturity": true, "gauge": true, "tag": true, "raci": true, "bullets": true, "icon": true, "check": true, "checkbox": true}
+	supported := map[string]bool{"": true, "num": true, "delta": true, "status": true, "rating": true, "allocation": true, "harvey": true, "maturity": true, "gauge": true, "tag": true, "raci": true, "bullets": true, "icon": true, "check": true, "checkbox": true, "dots": true, "heat": true}
+	if n.HeatMax != nil {
+		if _, _, e := sceneHeat(0, n.HeatMax, ""); e != nil {
+			return nil, e
+		}
+	}
 	for i, c := range n.Columns {
-		if !validPartKey(c.Key) || c.Width <= 24 || cols[c.Key] != 0 || !supported[c.Type] {
+		if !validPartKey(c.Key) || c.Width <= 24 || math.IsNaN(c.Width) || math.IsInf(c.Width, 0) || cols[c.Key] != 0 || !supported[c.Type] {
 			return nil, fmt.Errorf("scene.table_invalid_column: %s", c.Key)
+		}
+		if err := sceneTableStatusLabels(c); err != nil {
+			return nil, err
+		}
+		if c.Scale != "" && c.Type != "heat" || c.ShowValue && c.Type != "heat" || c.Max != nil && c.Type != "heat" && c.Type != "rating" && c.Type != "dots" {
+			return nil, fmt.Errorf("scene.table_column_options_type: %s", c.Key)
+		}
+		if c.Ink != "" && c.Type != "rating" && c.Type != "dots" && c.Type != "harvey" {
+			return nil, fmt.Errorf("scene.table_column_ink_type: %s", c.Key)
+		}
+		if c.Ink != "" {
+			if _, e := r.sceneColor(surface, c.Ink); e != nil {
+				return nil, e
+			}
+		}
+		if c.Scale != "" || c.Type == "heat" {
+			if _, _, e := sceneHeat(0, c.Max, c.Scale); e != nil {
+				return nil, e
+			}
+		}
+		if c.Max != nil && (c.Type == "dots" || c.Type == "rating") {
+			if e := sceneTableScoreRange(0, *c.Max); e != nil {
+				return nil, e
+			}
 		}
 		cols[c.Key] = i + 1
 		xs[i] = acc
@@ -133,6 +173,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 		return nil, err
 	}
 	p := &scenePlan{ID: id}
+	underlays := &scenePlan{}
 	tab := &sceneTable{ID: id + ".native", Options: pptx.TableProps{TextBaseProps: pptx.TextBaseProps{FontFace: font.Typeface, FontSize: base.Size, Color: strong, Valign: "middle"}, AutoPage: ptrSceneBool(false), ColW: colW, Margin: pptx.Margin{0}, Border: []pptx.BorderProps{{Type: "none", Color: line}}, Fill: &pptx.ShapeFillProps{Color: bg}}}
 	p.Items = append(p.Items, sceneItem{Table: tab})
 	y := n.Y
@@ -217,7 +258,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 			return nil, err
 		}
 		for k := range values {
-			if cols[k] == 0 && k != "group" && k != "total" {
+			if cols[k] == 0 && k != "group" && k != "total" && k != "ink" && k != "scale" {
 				return nil, fmt.Errorf("scene.table_unknown_row_field: %s", k)
 			}
 		}
@@ -231,6 +272,27 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 		if raw, ok := values["total"]; ok {
 			if err := json.Unmarshal(raw, &total); err != nil {
 				return nil, err
+			}
+		}
+		rowInk, rowScale := "", ""
+		for _, field := range []struct {
+			key  string
+			dest *string
+		}{{"ink", &rowInk}, {"scale", &rowScale}} {
+			if raw, ok := values[field.key]; ok {
+				if err := json.Unmarshal(raw, field.dest); err != nil {
+					return nil, fmt.Errorf("scene.table_invalid_row_%s", field.key)
+				}
+			}
+		}
+		if rowInk != "" {
+			if _, e := r.sceneColor(surface, rowInk); e != nil {
+				return nil, e
+			}
+		}
+		if rowScale != "" {
+			if _, _, e := sceneHeat(0, nil, rowScale); e != nil {
+				return nil, e
 			}
 		}
 		if group != "" {
@@ -253,18 +315,27 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 		} else {
 			var row pptx.TableRow
 			for ci, c := range n.Columns {
+				if rowInk != "" {
+					c.Ink = rowInk
+				}
+				if rowScale != "" {
+					c.Scale = rowScale
+				}
+				if c.Type == "heat" && c.Max == nil {
+					c.Max = n.HeatMax
+				}
 				iid := id + ".row." + key + "." + c.Key
 				on := surface
 				if ci == hi || total {
 					on = "subtle"
 				}
 				st := base
-				if n.RowHeader && ci == 0 || total {
+				if bool(n.RowHeader) && ci == 0 || total {
 					st.Weight = 600
 				}
 				cb := Rect{xs[ci], y, c.Width, rowH}
 				v := values[c.Key]
-				cell, tr, err := r.sceneTableValue(p, iid, c, v, st, cb, on, n.DeltaUnit, ctx, fmt.Sprintf("rows/%d/%s", ri, c.Key))
+				cell, tr, err := r.sceneTableValue(p, iid, c, v, st, cb, on, n.DeltaUnit, ctx, fmt.Sprintf("rows/%d/%s", ri, c.Key), underlays)
 				if err != nil {
 					return nil, err
 				}
@@ -322,6 +393,12 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 			return nil, err
 		}
 	}
+	if len(underlays.Items) > 0 {
+		// Gather cell underlays separately, then assemble the paint order once.
+		// This stays linear in cell count rather than copying an ever-growing tail.
+		p.Items = append(underlays.Items, p.Items...)
+		p.Warnings = append(p.Warnings, SceneHeatContract+" source_sha256="+SceneHeatSourceSHA256+"; native specimen review pending")
+	}
 	sceneDataGroup(p, id, "table.native.source", 0, p.Bounds)
 	p.Warnings = append(p.Warnings, "Native table typography and anchored cell adornments require native review; adornments retain their authored coordinates after cell text edits.")
 	return p, nil
@@ -331,7 +408,7 @@ func sceneTableAlign(kind string) string {
 	switch kind {
 	case "num", "delta":
 		return "right"
-	case "check", "checkbox", "harvey", "raci", "gauge":
+	case "check", "checkbox", "harvey", "raci", "gauge", "heat":
 		return "center"
 	}
 	return "left"
@@ -342,6 +419,11 @@ func sceneTableAlign(kind string) string {
 func (r *renderer) sceneNativeCell(id, text string, st Style, b Rect, surface, role, align string, left, right float64, ctx SceneContext) (pptx.TableCell, TextRecord, error) {
 	var cell pptx.TableCell
 	var tr TextRecord
+	var insetErr error
+	left, right, insetErr = r.v5WordInsets(text, st, b.W, left, right)
+	if insetErr != nil {
+		return cell, tr, insetErr
+	}
 	if b.W-left-right <= 0 {
 		return cell, tr, fmt.Errorf("scene.table_cell_negative_width: %s", id)
 	}
@@ -377,7 +459,7 @@ func (r *renderer) sceneNativeCell(id, text string, st Style, b Rect, surface, r
 	return cell, tr, nil
 }
 
-func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, raw json.RawMessage, st Style, b Rect, surface, deltaUnit string, ctx SceneContext, path string) (pptx.TableCell, TextRecord, error) {
+func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, raw json.RawMessage, st Style, b Rect, surface, deltaUnit string, ctx SceneContext, path string, underlays *scenePlan) (pptx.TableCell, TextRecord, error) {
 	var text string
 	left, right := 12., 12.
 	align := sceneTableAlign(c.Type)
@@ -397,12 +479,20 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 	switch c.Type {
 	case "":
 		if err := str(); err != nil {
-			return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_text_requires_string: %s", id)
+			return r.sceneTablePlainCell(id, raw, st, b, surface, ctx)
 		}
+	case "rating", "harvey", "dots":
+		return r.sceneTableScoreCell(p, id, c, raw, st, b, surface, ctx, path)
+	case "heat":
+		return r.sceneTableHeatCell(underlays, id, c, raw, st, b, surface, ctx)
 	case "num":
 		st.Family = "IBM Plex Mono"
 		st.Weight = 600
 		if err := str(); err != nil {
+			if v, err := number(); err == nil {
+				text = strconv.FormatFloat(v, 'f', -1, 64)
+				break
+			}
 			var format NumberFormatSpec
 			if err := sceneDecode(raw, &format); err != nil {
 				return pptx.TableCell{}, TextRecord{}, err
@@ -448,20 +538,17 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 			left += 13
 		}
 	case "status":
-		if err := str(); err != nil {
+		status, label, err := sceneTableStatusValue(raw, c.Labels)
+		if err != nil {
 			return pptx.TableCell{}, TextRecord{}, err
 		}
-		label, ok := map[string]string{"on": "On track", "risk": "At risk", "off": "Off track"}[text]
-		if !ok {
-			return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_status_enum: %s", text)
-		}
-		if err := r.sceneTableStatus(p, id, Rect{b.X + 12, b.Y + (b.H-8)/2, 8, 8}, surface, text); err != nil {
+		if err := r.sceneTableStatus(p, id, Rect{b.X + 12, b.Y + (b.H-8)/2, 8, 8}, surface, status); err != nil {
 			return pptx.TableCell{}, TextRecord{}, err
 		}
 		text = label
 		left += 14
 		st, _ = r.sceneStyle("small")
-	case "rating", "allocation", "harvey", "gauge":
+	case "allocation", "gauge":
 		v, err := number()
 		if err != nil {
 			return pptx.TableCell{}, TextRecord{}, err
@@ -597,12 +684,18 @@ func (r *renderer) sceneDataCheck(p *scenePlan, id string, b Rect, color string)
 }
 func (r *renderer) sceneTableStatus(p *scenePlan, id string, b Rect, surface, status string) error {
 	strong, _ := r.sceneColor("light", "strong")
-	color, err := r.sceneColor(surface, "kpi."+status)
+	definition, ok := sceneStatuses[status]
+	if !ok {
+		return fmt.Errorf("scene.status_enum: %s", status)
+	}
+	color, err := r.sceneColor(surface, definition.Ink)
 	if err != nil {
 		return err
 	}
-	r.sceneDataShape(p, id+".status-border", b, pptx.ShapeTypeRect, strong, nil)
-	r.sceneDataShape(p, id+".status-fill", Rect{b.X + 1, b.Y + 1, b.W - 2, b.H - 2}, pptx.ShapeTypeRect, color, nil)
+	// A single path gives every side the same stroke. Inset the centerline
+	// by half its width so the outside edges retain the original bounds.
+	r.sceneDataShape(p, id+".status-mark", Rect{b.X + .5, b.Y + .5, b.W - 1, b.H - 1}, pptx.ShapeTypeRect, color,
+		&pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Color: strong}, Width: 1})
 	return nil
 }
 func (r *renderer) sceneTableNumericMark(p *scenePlan, id, kind string, v float64, b Rect, surface string) error {

@@ -4,6 +4,8 @@
 // delegates to the gen-objects package functions, mirroring slide.ts exactly.
 package pptx
 
+import "errors"
+
 // Slide is the user-facing handle for a single slide. Obtain one from
 // Presentation.AddSlide. Ports the TS Slide class.
 type Slide struct {
@@ -25,6 +27,9 @@ func (s *Slide) NewAutoPagedSlides() []*PresSlide { return s.newAutoPagedSlides 
 // lives on each TextProps.Options; box-level layout/styling lives on opts.
 // Ports TS addText (array form).
 func (s *Slide) AddText(text []TextProps, opts *TextPropsOptions) error {
+	if opts != nil && opts.Line != nil && !validShapeLineJoin(opts.Line.LineJoin) {
+		return errors.New("shape line join must be empty, round, bevel or miter")
+	}
 	addTextDefinition(s.ps, text, objectOptionsFromTextPropsOptions(opts), false)
 	return nil
 }

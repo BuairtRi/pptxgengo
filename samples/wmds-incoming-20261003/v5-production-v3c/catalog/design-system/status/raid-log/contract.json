@@ -1,0 +1,543 @@
+{
+  "key": "status/raid-log",
+  "source_file": "templates/library/status.json",
+  "source_sha256": "a3c4e81c88ffa4626f732fc8cfb0d1c2a4c243524f823d7cdae79c906458912e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "status",
+  "tier": "working",
+  "name": "RAID log",
+  "purpose": "A dense log of risks, assumptions, issues and dependencies, each with an owner, due date, next action and status.",
+  "uses": [
+    "table.standard (status and tag cells)"
+  ],
+  "source_advisory_budget": {
+    "words": 141,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 52
+    },
+    {
+      "slot": "item",
+      "maxChars": 38
+    },
+    {
+      "slot": "owner",
+      "maxChars": 13
+    },
+    {
+      "slot": "next action",
+      "maxChars": 26
+    },
+    {
+      "slot": "source",
+      "maxChars": 70
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "navigation",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 9,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "RAID log · Sep 2026"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "One issue needs escalation this week"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield program office RAID log, 30 Sep 2026."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Type"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Item"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Owner"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Due"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Next action"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Status"
+    },
+    {
+      "name": "node01.rows.item01.act",
+      "source_pointer": "/body/0/rows/0/act",
+      "kind": "string",
+      "synthetic_source_example": "Daily extract check"
+    },
+    {
+      "name": "node01.rows.item01.due",
+      "source_pointer": "/body/0/rows/0/due",
+      "kind": "string",
+      "synthetic_source_example": "9 Oct"
+    },
+    {
+      "name": "node01.rows.item01.item",
+      "source_pointer": "/body/0/rows/0/item",
+      "kind": "string",
+      "synthetic_source_example": "Late Wave 2 data extracts"
+    },
+    {
+      "name": "node01.rows.item01.own",
+      "source_pointer": "/body/0/rows/0/own",
+      "kind": "string",
+      "synthetic_source_example": "Finance IT"
+    },
+    {
+      "name": "node01.rows.item01.st",
+      "source_pointer": "/body/0/rows/0/st",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item01.type",
+      "source_pointer": "/body/0/rows/0/type",
+      "kind": "string",
+      "synthetic_source_example": "Risk"
+    },
+    {
+      "name": "node01.rows.item02.act",
+      "source_pointer": "/body/0/rows/1/act",
+      "kind": "string",
+      "synthetic_source_example": "Add two reviewers"
+    },
+    {
+      "name": "node01.rows.item02.due",
+      "source_pointer": "/body/0/rows/1/due",
+      "kind": "string",
+      "synthetic_source_example": "16 Oct"
+    },
+    {
+      "name": "node01.rows.item02.item",
+      "source_pointer": "/body/0/rows/1/item",
+      "kind": "string",
+      "synthetic_source_example": "Reviewer capacity at quarter end"
+    },
+    {
+      "name": "node01.rows.item02.own",
+      "source_pointer": "/body/0/rows/1/own",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item02.st",
+      "source_pointer": "/body/0/rows/1/st",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item02.type",
+      "source_pointer": "/body/0/rows/1/type",
+      "kind": "string",
+      "synthetic_source_example": "Risk"
+    },
+    {
+      "name": "node01.rows.item03.act",
+      "source_pointer": "/body/0/rows/2/act",
+      "kind": "string",
+      "synthetic_source_example": "Confirm in testing"
+    },
+    {
+      "name": "node01.rows.item03.due",
+      "source_pointer": "/body/0/rows/2/due",
+      "kind": "string",
+      "synthetic_source_example": "2 Oct"
+    },
+    {
+      "name": "node01.rows.item03.item",
+      "source_pointer": "/body/0/rows/2/item",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 rules carry over"
+    },
+    {
+      "name": "node01.rows.item03.own",
+      "source_pointer": "/body/0/rows/2/own",
+      "kind": "string",
+      "synthetic_source_example": "Program lead"
+    },
+    {
+      "name": "node01.rows.item03.st",
+      "source_pointer": "/body/0/rows/2/st",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item03.type",
+      "source_pointer": "/body/0/rows/2/type",
+      "kind": "string",
+      "synthetic_source_example": "Assumption"
+    },
+    {
+      "name": "node01.rows.item04.act",
+      "source_pointer": "/body/0/rows/3/act",
+      "kind": "string",
+      "synthetic_source_example": "Hold change board"
+    },
+    {
+      "name": "node01.rows.item04.due",
+      "source_pointer": "/body/0/rows/3/due",
+      "kind": "string",
+      "synthetic_source_example": "30 Oct"
+    },
+    {
+      "name": "node01.rows.item04.item",
+      "source_pointer": "/body/0/rows/3/item",
+      "kind": "string",
+      "synthetic_source_example": "Source ERP stays frozen"
+    },
+    {
+      "name": "node01.rows.item04.own",
+      "source_pointer": "/body/0/rows/3/own",
+      "kind": "string",
+      "synthetic_source_example": "Finance IT"
+    },
+    {
+      "name": "node01.rows.item04.st",
+      "source_pointer": "/body/0/rows/3/st",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item04.type",
+      "source_pointer": "/body/0/rows/3/type",
+      "kind": "string",
+      "synthetic_source_example": "Assumption"
+    },
+    {
+      "name": "node01.rows.item05.act",
+      "source_pointer": "/body/0/rows/4/act",
+      "kind": "string",
+      "synthetic_source_example": "Escalate to CIO"
+    },
+    {
+      "name": "node01.rows.item05.due",
+      "source_pointer": "/body/0/rows/4/due",
+      "kind": "string",
+      "synthetic_source_example": "9 Oct"
+    },
+    {
+      "name": "node01.rows.item05.item",
+      "source_pointer": "/body/0/rows/4/item",
+      "kind": "string",
+      "synthetic_source_example": "Cutover overlaps year-end freeze"
+    },
+    {
+      "name": "node01.rows.item05.own",
+      "source_pointer": "/body/0/rows/4/own",
+      "kind": "string",
+      "synthetic_source_example": "PMO lead"
+    },
+    {
+      "name": "node01.rows.item05.st",
+      "source_pointer": "/body/0/rows/4/st",
+      "kind": "string",
+      "synthetic_source_example": "off"
+    },
+    {
+      "name": "node01.rows.item05.type",
+      "source_pointer": "/body/0/rows/4/type",
+      "kind": "string",
+      "synthetic_source_example": "Issue"
+    },
+    {
+      "name": "node01.rows.item06.act",
+      "source_pointer": "/body/0/rows/5/act",
+      "kind": "string",
+      "synthetic_source_example": "Workshop on 4 Oct"
+    },
+    {
+      "name": "node01.rows.item06.due",
+      "source_pointer": "/body/0/rows/5/due",
+      "kind": "string",
+      "synthetic_source_example": "6 Oct"
+    },
+    {
+      "name": "node01.rows.item06.item",
+      "source_pointer": "/body/0/rows/5/item",
+      "kind": "string",
+      "synthetic_source_example": "Two entities miss mapping sign-off"
+    },
+    {
+      "name": "node01.rows.item06.own",
+      "source_pointer": "/body/0/rows/5/own",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item06.st",
+      "source_pointer": "/body/0/rows/5/st",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item06.type",
+      "source_pointer": "/body/0/rows/5/type",
+      "kind": "string",
+      "synthetic_source_example": "Issue"
+    },
+    {
+      "name": "node01.rows.item07.act",
+      "source_pointer": "/body/0/rows/6/act",
+      "kind": "string",
+      "synthetic_source_example": "Weekly sync"
+    },
+    {
+      "name": "node01.rows.item07.due",
+      "source_pointer": "/body/0/rows/6/due",
+      "kind": "string",
+      "synthetic_source_example": "23 Oct"
+    },
+    {
+      "name": "node01.rows.item07.item",
+      "source_pointer": "/body/0/rows/6/item",
+      "kind": "string",
+      "synthetic_source_example": "Payroll interface from HR systems"
+    },
+    {
+      "name": "node01.rows.item07.own",
+      "source_pointer": "/body/0/rows/6/own",
+      "kind": "string",
+      "synthetic_source_example": "HR systems"
+    },
+    {
+      "name": "node01.rows.item07.st",
+      "source_pointer": "/body/0/rows/6/st",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item07.type",
+      "source_pointer": "/body/0/rows/6/type",
+      "kind": "string",
+      "synthetic_source_example": "Dependency"
+    },
+    {
+      "name": "node01.rows.item08.act",
+      "source_pointer": "/body/0/rows/7/act",
+      "kind": "string",
+      "synthetic_source_example": "Vendor test file in"
+    },
+    {
+      "name": "node01.rows.item08.due",
+      "source_pointer": "/body/0/rows/7/due",
+      "kind": "string",
+      "synthetic_source_example": "16 Oct"
+    },
+    {
+      "name": "node01.rows.item08.item",
+      "source_pointer": "/body/0/rows/7/item",
+      "kind": "string",
+      "synthetic_source_example": "Bank file format approval"
+    },
+    {
+      "name": "node01.rows.item08.own",
+      "source_pointer": "/body/0/rows/7/own",
+      "kind": "string",
+      "synthetic_source_example": "Treasury"
+    },
+    {
+      "name": "node01.rows.item08.st",
+      "source_pointer": "/body/0/rows/7/st",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item08.type",
+      "source_pointer": "/body/0/rows/7/type",
+      "kind": "string",
+      "synthetic_source_example": "Dependency"
+    },
+    {
+      "name": "node01.rows.item09.act",
+      "source_pointer": "/body/0/rows/8/act",
+      "kind": "string",
+      "synthetic_source_example": "Book review slot"
+    },
+    {
+      "name": "node01.rows.item09.due",
+      "source_pointer": "/body/0/rows/8/due",
+      "kind": "string",
+      "synthetic_source_example": "30 Oct"
+    },
+    {
+      "name": "node01.rows.item09.item",
+      "source_pointer": "/body/0/rows/8/item",
+      "kind": "string",
+      "synthetic_source_example": "Security review of cockpit"
+    },
+    {
+      "name": "node01.rows.item09.own",
+      "source_pointer": "/body/0/rows/8/own",
+      "kind": "string",
+      "synthetic_source_example": "CISO office"
+    },
+    {
+      "name": "node01.rows.item09.st",
+      "source_pointer": "/body/0/rows/8/st",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item09.type",
+      "source_pointer": "/body/0/rows/8/type",
+      "kind": "string",
+      "synthetic_source_example": "Dependency"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 6
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 9
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Update"
+        },
+        {
+          "key": "section-02",
+          "label": "Plan"
+        },
+        {
+          "key": "section-03",
+          "label": "RAID"
+        },
+        {
+          "key": "section-04",
+          "label": "Asks"
+        }
+      ],
+      "active": "section-03"
+    }
+  }
+}

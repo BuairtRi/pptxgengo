@@ -15,6 +15,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Node struct {
@@ -39,6 +40,8 @@ type Node struct {
 }
 type SlideSpec struct {
 	ID              string               `json:"id"`
+	Hidden          bool                 `json:"hidden,omitempty"`
+	Notes           string               `json:"notes,omitempty"`
 	Frame           FrameRequest         `json:"frame"`
 	Eyebrow         string               `json:"eyebrow"`
 	Title           string               `json:"title"`
@@ -49,21 +52,32 @@ type SlideSpec struct {
 	LibraryChrome   *LibraryChrome       `json:"library_chrome,omitempty"`
 }
 type Document struct {
-	Schema string      `json:"schema"`
-	Year   int         `json:"year"`
-	Slides []SlideSpec `json:"slides"`
+	Title             string                         `json:"title,omitempty"`
+	BuildIdentity     *BuildIdentity                 `json:"build_identity,omitempty"`
+	Schema            string                         `json:"schema"`
+	Year              int                            `json:"year"`
+	Slides            []SlideSpec                    `json:"slides"`
+	Sections          []SectionSpec                  `json:"sections,omitempty"`
+	MediaOptimization *pptx.MediaOptimizationOptions `json:"media_optimization,omitempty"`
+}
+type BuildIdentity struct {
+	Timestamp string `json:"timestamp"`
+	Seed      string `json:"seed"`
 }
 type TextRecord struct {
-	ID       string          `json:"id"`
-	Rect     Rect            `json:"rect"`
-	Color    string          `json:"color"`
-	Align    string          `json:"align"`
-	Layout   TextLayout      `json:"layout"`
-	Rich     *RichTextLayout `json:"rich,omitempty"`
-	Rotation float64         `json:"rotation_deg,omitempty"`
+	ID            string          `json:"id"`
+	Rect          Rect            `json:"rect"`
+	Color         string          `json:"color"`
+	Align         string          `json:"align"`
+	VerticalAlign string          `json:"vertical_align,omitempty"`
+	Layout        TextLayout      `json:"layout"`
+	Rich          *RichTextLayout `json:"rich,omitempty"`
+	Rotation      float64         `json:"rotation_deg,omitempty"`
 }
 type SlideReport struct {
 	ID              string               `json:"id"`
+	Hidden          bool                 `json:"hidden,omitempty"`
+	Notes           string               `json:"notes,omitempty"`
 	Page            int                  `json:"page"`
 	Frame           ResolvedFrame        `json:"frame"`
 	Texts           []TextRecord         `json:"texts"`
@@ -77,23 +91,26 @@ type SlideReport struct {
 	TemplateBinding *TemplateSlideRecord `json:"template_binding,omitempty"`
 }
 type Report struct {
-	Schema             string            `json:"schema"`
-	Profile            string            `json:"profile"`
-	Engine             string            `json:"engine"`
-	SourceRevision     string            `json:"source_revision"`
-	SourceCommit       string            `json:"source_commit,omitempty"`
-	PowerPointVerified bool              `json:"powerpoint_verified"`
-	VisuallyReviewed   bool              `json:"visually_reviewed"`
-	Qualification      string            `json:"qualification"`
-	SourceFiles        []SourceFile      `json:"source_files"`
-	Fonts              []FontIdentity    `json:"fonts"`
-	Assets             []SourceFile      `json:"assets"`
-	Slides             []SlideReport     `json:"slides"`
-	Warnings           []string          `json:"warnings"`
-	MeasurementPolicy  map[string]string `json:"measurement_policy"`
-	PPTXSHA256         string            `json:"pptx_sha256"`
+	Schema             string                        `json:"schema"`
+	Profile            string                        `json:"profile"`
+	Engine             string                        `json:"engine"`
+	SourceRevision     string                        `json:"source_revision"`
+	SourceCommit       string                        `json:"source_commit,omitempty"`
+	PowerPointVerified bool                          `json:"powerpoint_verified"`
+	VisuallyReviewed   bool                          `json:"visually_reviewed"`
+	Qualification      string                        `json:"qualification"`
+	SourceFiles        []SourceFile                  `json:"source_files"`
+	Fonts              []FontIdentity                `json:"fonts"`
+	Assets             []SourceFile                  `json:"assets"`
+	Slides             []SlideReport                 `json:"slides"`
+	Sections           []SectionSpec                 `json:"sections,omitempty"`
+	Warnings           []string                      `json:"warnings"`
+	MeasurementPolicy  map[string]string             `json:"measurement_policy"`
+	PPTXSHA256         string                        `json:"pptx_sha256"`
+	MediaOptimization  *pptx.MediaOptimizationReport `json:"media_optimization,omitempty"`
 }
 type renderer struct {
+	projectAssets map[string]AssetData
 	source        *Source
 	typeEngine    *Typography
 	bundle        string
@@ -231,6 +248,27 @@ func (r *renderer) logo(surface string, b Rect) {
 }
 func (r *renderer) chrome(f ResolvedFrame, year int) {
 	q := f.Request
+	if r.libraryChrome != nil {
+		if len(r.libraryChrome.Tint) > 8 {
+			r.err = fmt.Errorf("library.invalid_tint_count")
+			return
+		}
+		for i, tint := range r.libraryChrome.Tint {
+			if !intakeFinite(tint.X, tint.W) || tint.X < 0 || tint.W <= 0 || tint.X+tint.W > 960 {
+				r.err = fmt.Errorf("library.invalid_tint_geometry")
+				return
+			}
+			if tint.Surface == "" {
+				tint.Surface = "subtle"
+			}
+			color, err := r.sceneColor(tint.Surface, "bg")
+			if err != nil {
+				r.err = err
+				return
+			}
+			r.shape(fmt.Sprintf("wm.tint.%02d", i+1), Rect{tint.X, 0, tint.W, 540}, color, 0)
+		}
+	}
 	if f.Panel.W > 0 {
 		r.shape("wm.rail", f.Panel, r.ink(q.RailSurface, "bg"), 0)
 	}
@@ -269,7 +307,11 @@ func (r *renderer) chrome(f ResolvedFrame, year int) {
 	if q.Rail == "left" {
 		ls = q.RailSurface
 	}
-	r.logo(ls, Rect{57, f.FooterRow.Y + 3, 0, 12})
+	logoY := f.FooterRow.Y + 3
+	if q.Footer == "slim" {
+		logoY = f.FooterRow.Y + (f.FooterRow.H-12)/2
+	}
+	r.logo(ls, Rect{57, logoY, 0, 12})
 	legal := ""
 	for _, c := range r.source.Frames.Chrome {
 		if c.ID == "legal" {
@@ -286,7 +328,22 @@ func (r *renderer) chrome(f ResolvedFrame, year int) {
 	if q.Rail != "right" && !q.NoPage {
 		w -= 30
 	}
-	r.text("wm.legal", legal, st, Rect{x, f.FooterRow.Y, w, 18}, r.ink(fs, "secondary"), "right", 2)
+	legalBox := Rect{x, f.FooterRow.Y, w, 18}
+	if q.Footer == "slim" {
+		legalBox = r.centerFooterText(legal, st, legalBox, f.FooterRow)
+	}
+	r.text("wm.legal", legal, st, legalBox, r.ink(fs, "secondary"), "right", 2)
+}
+
+func (r *renderer) centerFooterText(text string, style Style, box, row Rect) Rect {
+	layout, err := r.typeEngine.Measure(text, style, box.W)
+	if err != nil {
+		r.err = err
+		return box
+	}
+	box.H = math.Max(layout.AllocationHeight, layout.OccupiedTop+layout.EstimatedOccupiedHeight)
+	box.Y = row.Y + (row.H-box.H)/2
+	return box
 }
 func (r *renderer) nav(f ResolvedFrame) {
 	q := f.Request
@@ -303,7 +360,7 @@ func (r *renderer) nav(f ResolvedFrame) {
 		r.shape("nav."+tab.ID, b, r.ink(surf, "bg"), 0)
 		st, _ := r.source.Style("label")
 		labelWidth := h - 12
-		if r.source.Revision == LibraryRevisionV2 {
+		if isModernLibrary(r.source.Revision) {
 			// Source .gtab span is a distinct 8pt/600 Mono style with 0.1em
 			// tracking, rather than the generic 9pt label token. It has no
 			// CSS padding; reserve 2pt at each native end for terminal spacing.
@@ -322,7 +379,7 @@ func (r *renderer) nav(f ResolvedFrame) {
 			return
 		}
 		color := r.ink(surf, "primary")
-		if r.source.Revision == LibraryRevisionV2 && tab.ID != q.Active {
+		if isModernLibrary(r.source.Revision) && tab.ID != q.Active {
 			color = r.ink(surf, "secondary")
 		}
 		p := &pptx.TextPropsOptions{PositionProps: pos(Rect{b.X, b.Y, 18, h}), ObjectNameProps: pptx.ObjectNameProps{ObjectName: "nav.label." + tab.ID}, TextBaseProps: pptx.TextBaseProps{FontFace: id.Typeface, FontSize: st.Size, Bold: &id.Bold, Italic: &id.NativeItalic, Color: color, Align: pptx.HAlign("center")}, CharSpacing: st.TrackingPt, LineSpacing: st.Leading, Margin: pptx.Margin{0}, Valign: pptx.VAlign("mid"), Vert: "vert270", Fit: "none", ParaSpaceBefore: zero(), ParaSpaceAfter: zero()}
@@ -344,11 +401,29 @@ func Build(bundle, sourceOverride string, doc Document) ([]byte, Report, error) 
 }
 
 func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string) ([]byte, Report, error) {
+	return BuildWithEngineAndAssets(bundle, sourceOverride, doc, engine, nil)
+}
+
+// BuildWithEngineAndAssets resolves project-owned media without mutable global
+// registries or environment changes. The caller retains canonical asset paths.
+func BuildWithEngineAndAssets(bundle, sourceOverride string, doc Document, engine string, assets map[string]AssetData) ([]byte, Report, error) {
 	var report Report
 	s, e := Load(bundle, sourceOverride)
 	if e != nil {
 		return nil, report, e
 	}
+	return buildWithLoadedSource(bundle, s, doc, engine, assets)
+}
+
+// buildWithLoadedSource keeps prototype source observations internal. Public
+// builds still require Load's registered, checksum-verified source bundle.
+func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string, assets map[string]AssetData) (output []byte, report Report, buildErr error) {
+	activeSlideID := ""
+	defer func() {
+		if buildErr != nil && activeSlideID != "" && !strings.HasPrefix(buildErr.Error(), "slide "+activeSlideID) {
+			buildErr = fmt.Errorf("slide %s: %w", activeSlideID, buildErr)
+		}
+	}()
 	t, e := NewTypographyEngine(filepath.Join(bundle, "fonts"), engine)
 	if e != nil {
 		return nil, report, e
@@ -361,12 +436,34 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 	if doc.Schema != "pptxgengo.wmds-foundation.v1" || doc.Year < 2000 || doc.Year > 9999 || len(doc.Slides) == 0 {
 		return nil, report, fmt.Errorf("document.invalid_schema_year_or_slides")
 	}
+	slideIDs := make([]string, len(doc.Slides))
+	for i, slide := range doc.Slides {
+		if err := ValidateSpeakerNotes(slide.Notes); err != nil {
+			return nil, report, fmt.Errorf("slide %s: %w", slide.ID, err)
+		}
+		slideIDs[i] = slide.ID
+	}
+	if err := ValidateSections(doc.Sections, slideIDs); err != nil {
+		return nil, report, err
+	}
 	p := pptx.New()
+	if doc.BuildIdentity != nil {
+		ts, err := time.Parse(time.RFC3339, doc.BuildIdentity.Timestamp)
+		if err != nil {
+			return nil, report, fmt.Errorf("document.invalid_build_timestamp: %w", err)
+		}
+		if err = p.SetBuildIdentity(pptx.BuildIdentity{Timestamp: ts, Seed: doc.BuildIdentity.Seed}); err != nil {
+			return nil, report, err
+		}
+	}
 	p.DefineLayout("WMDS", 960.0/72, 540.0/72)
 	if e = p.SetLayout("WMDS"); e != nil {
 		return nil, report, e
 	}
 	p.Title = "WMDS foundation reference"
+	if doc.Title != "" {
+		p.Title = doc.Title
+	}
 	p.Author = "West Monroe"
 	p.Theme = pptx.ThemeProps{HeadFontFace: "IBM Plex Sans SemiBold", BodyFontFace: "IBM Plex Sans"}
 	report = Report{Schema: "pptxgengo.wmds-layout.v1", Profile: ProfileForEngine(engine), Engine: engine, Qualification: "implemented_unqualified", SourceFiles: s.Files, Fonts: t.Fonts(), Warnings: []string{"Go first-baseline/occupied-height predictions require native calibration for the new exact-leading profile.", "Native font identity, wrapping, visual quality and overflow remain unqualified until PowerPoint capture/review.", "Whiteboard variant: editable dots with center-sampled radial opacity; no browser pixel identity claim.", "Source scene components and closed template content bindings require v2. Catalog availability does not establish successful source rendering or native visual qualification."}}
@@ -396,9 +493,22 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 		}
 		report.Assets = append(report.Assets, SourceFile{"assets/" + f.Name(), fmt.Sprintf("%x", sha256.Sum256(b))})
 	}
-	r := renderer{source: s, typeEngine: t, bundle: bundle, pres: p}
+	r := renderer{source: s, typeEngine: t, bundle: bundle, pres: p, projectAssets: assets}
+	type sharedFrame struct {
+		name  string
+		texts []TextRecord
+	}
+	frameLayouts := map[string]sharedFrame{}
 	seen := map[string]bool{}
+	sectionAnchors := map[string]string{}
+	for _, section := range doc.Sections {
+		p.AddSection(pptx.SectionProps{Title: section.Title})
+		sectionAnchors[section.BeforeSlideID] = section.Title
+	}
+	report.Sections = append([]SectionSpec(nil), doc.Sections...)
+	sectionTitle := ""
 	for i, slide := range doc.Slides {
+		activeSlideID = slide.ID
 		if slide.ID == "" || seen[slide.ID] {
 			return nil, report, fmt.Errorf("slide.invalid_or_duplicate_id")
 		}
@@ -416,23 +526,48 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 		if slide.ContentKind != "" && slide.ContentKind != "synthetic_example" && slide.ContentKind != "supplied_content" {
 			return nil, report, fmt.Errorf("slide.invalid_content_kind: %s", slide.ID)
 		}
-		sr := SlideReport{ID: slide.ID, Page: i + 1, Frame: f, TemplateBinding: slide.TemplateBinding}
+		sr := SlideReport{ID: slide.ID, Hidden: slide.Hidden, Page: i + 1, Frame: f, TemplateBinding: slide.TemplateBinding}
 		r.libraryChrome = slide.LibraryChrome
 		if err := r.registerSceneTargets(slide, f); err != nil {
 			return nil, report, err
 		}
 		r.records = &sr.Texts
-		masterName := "wmds." + slide.ID
-		r.master = &pptx.SlideMasterProps{Title: masterName, Background: &pptx.BackgroundProps{ShapeFillProps: pptx.ShapeFillProps{Color: r.ink(f.Request.Surface, "bg")}}, Margin: pptx.Margin{0}}
-		r.chrome(f, doc.Year)
-		if r.err != nil {
-			return nil, report, r.err
+		var tint []LibraryTint
+		if slide.LibraryChrome != nil {
+			tint = slide.LibraryChrome.Tint
 		}
-		if e = p.DefineSlideMaster(r.master); e != nil {
-			return nil, report, e
+		frameKeyBytes, _ := json.Marshal(struct {
+			Frame            ResolvedFrame
+			Year             int
+			CustomWhiteboard bool
+			Tint             []LibraryTint `json:",omitempty"`
+		}{f, doc.Year, slide.LibraryChrome != nil && slide.LibraryChrome.CustomWhiteboard, tint})
+		frameKey := fmt.Sprintf("%x", sha256.Sum256(frameKeyBytes))
+		shared, exists := frameLayouts[frameKey]
+		if !exists {
+			shared.name = "wmds.frame." + frameKey[:20]
+			r.master = &pptx.SlideMasterProps{Title: shared.name, Background: &pptx.BackgroundProps{ShapeFillProps: pptx.ShapeFillProps{Color: r.ink(f.Request.Surface, "bg")}}, Margin: pptx.Margin{0}}
+			r.chrome(f, doc.Year)
+			if r.err != nil {
+				return nil, report, r.err
+			}
+			if e = p.DefineSlideMaster(r.master); e != nil {
+				return nil, report, e
+			}
+			shared.texts = append([]TextRecord(nil), sr.Texts...)
+			frameLayouts[frameKey] = shared
+		} else {
+			sr.Texts = append(sr.Texts, shared.texts...)
 		}
 		r.master = nil
-		r.slide = p.AddSlide(&pptx.AddSlideProps{MasterName: masterName})
+		if title, ok := sectionAnchors[slide.ID]; ok {
+			sectionTitle = title
+		}
+		r.slide = p.AddSlide(&pptx.AddSlideProps{MasterName: shared.name, SectionTitle: sectionTitle})
+		if slide.Hidden {
+			hidden := true
+			r.slide.PresSlide().Hidden = &hidden
+		}
 		r.slide.PresSlide().Name = slide.ID
 		if slide.LibraryChrome != nil && slide.LibraryChrome.CustomWhiteboard {
 			if err := r.drawLibraryWhiteboards(slide.LibraryChrome, f, false); err != nil {
@@ -444,6 +579,9 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 			if n.Kind == "card" || n.Kind == "textblock" || n.Kind == "cardrow" || n.Kind == "metric" || n.Kind == "richtext" {
 				hasComponents = true
 			}
+		}
+		if slide.Notes != "" {
+			r.slide.AddNotes(slide.Notes + "\n\n")
 		}
 		if slide.TemplateBinding != nil {
 			r.slide.AddNotes(fmt.Sprintf("WMDS bound template. Content classification: %s. Frozen source and binding provenance are recorded in layout-report.json and binding-report.json.", slide.ContentKind))
@@ -488,7 +626,11 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 			if f.Request.Rail == "right" {
 				surf = f.Request.RailSurface
 			}
-			r.text("wm.page", fmt.Sprint(i+1), st, Rect{879, f.FooterRow.Y, 24, 18}, r.ink(surf, "primary"), "right", 1)
+			pageBox := Rect{879, f.FooterRow.Y, 24, 18}
+			if f.Request.Footer == "slim" {
+				pageBox = r.centerFooterText(fmt.Sprint(i+1), st, pageBox, f.FooterRow)
+			}
+			r.text("wm.page", fmt.Sprint(i+1), st, pageBox, r.ink(surf, "primary"), "right", 1)
 		}
 		nodeIDs := map[string]bool{}
 		for _, n := range slide.Nodes {
@@ -574,6 +716,9 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 				if err := json.Unmarshal(n.Scene.Node, &sourceTag); err != nil {
 					return nil, report, err
 				}
+				if isExpandedLibrary(s.Revision) && sourceTag.Type == "maturity" {
+					sceneZone = f.Body
+				}
 				if f.Rail.W > 0 && sourceTag.X >= f.Rail.X-.02 && sourceTag.X < f.Rail.X+f.Rail.W {
 					sceneZone = Rect{f.Rail.X, 0, f.Rail.W, f.Rail.Y + f.Rail.H}
 					surf = f.Request.RailSurface
@@ -589,7 +734,7 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 					// The refreshed quadrant allocates its tall plot at y27; its
 					// outer border deliberately bleeds 9pt above the ordinary zone.
 					// Measured text still obeys the ordinary footer reservation.
-					if s.Revision == LibraryRevisionV2 && sourceTag.Type == "chart" && sourceTag.Kind == "quadrant" && sourceTag.Y == 27 && sceneZone == f.TallBody {
+					if isModernLibrary(s.Revision) && sourceTag.Type == "chart" && sourceTag.Kind == "quadrant" && sourceTag.Y == 27 && sceneZone == f.TallBody {
 						sceneZone.Y -= 9
 						sceneZone.H += 9
 					}
@@ -598,13 +743,22 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 				case "imageframe", "square", "logo", "art", "mark", "thumbnail":
 					sceneZone = Rect{0, 0, 960, 540}
 				}
+				if n.Scene.Allocation != nil {
+					// Local components plan within their own complete allocation,
+					// including label headroom and footer clearance. The frame
+					// body may be larger than this component's usable space.
+					sceneZone = *n.Scene.Allocation
+				}
 				ctx := SceneContext{Surface: surf, Zone: sceneZone, Path: n.Scene.Path, Keys: n.Scene.Keys, Notes: n.Scene.Notes}
 				plan, err := r.planSceneNode(n.ID, n.Scene.Node, ctx)
 				if err != nil {
 					return nil, report, fmt.Errorf("slide %s/%s: %w", slide.ID, n.ID, err)
 				}
+				if n.Scene.Allocation != nil && !inside(plan.Bounds, *n.Scene.Allocation) {
+					return nil, report, fmt.Errorf("scene.component_exceeds_allocation: %s at %+v, allocation %+v", n.ID, plan.Bounds, *n.Scene.Allocation)
+				}
 				splitBoundsOK := inside(plan.Bounds, f.ShortBody) || inside(plan.Bounds, f.TallBody)
-				if s.Revision == LibraryRevisionV2 && sourceTag.Type == "chart" && sourceTag.Kind == "quadrant" && sourceTag.Y == 27 && sceneZone.Y == 27 {
+				if isModernLibrary(s.Revision) && sourceTag.Type == "chart" && sourceTag.Kind == "quadrant" && sourceTag.Y == 27 && sceneZone.Y == 27 {
 					splitBoundsOK = inside(plan.Bounds, sceneZone)
 				}
 				if f.Request.Split != "" && sceneZone.W != 960 && !splitBoundsOK {
@@ -738,6 +892,7 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 		}
 		report.Slides = append(report.Slides, sr)
 	}
+	activeSlideID = ""
 	raw, e := p.Write()
 	if e != nil {
 		return nil, report, e
@@ -785,6 +940,15 @@ func BuildWithEngine(bundle, sourceOverride string, doc Document, engine string)
 	if e != nil {
 		return nil, report, e
 	}
+	mediaPolicy := pptx.DeliveryMediaOptions()
+	if doc.MediaOptimization != nil {
+		mediaPolicy = *doc.MediaOptimization
+	}
+	raw, mediaReport, e := pptx.OptimizeMedia(raw, mediaPolicy)
+	if e != nil {
+		return nil, report, e
+	}
+	report.MediaOptimization = &mediaReport
 	report.PPTXSHA256 = fmt.Sprintf("%x", sha256.Sum256(raw))
 	return raw, report, nil
 }

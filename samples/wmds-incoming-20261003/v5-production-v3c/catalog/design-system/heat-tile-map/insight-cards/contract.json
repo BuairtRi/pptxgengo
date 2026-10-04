@@ -1,0 +1,999 @@
+{
+  "key": "heat-tile-map/insight-cards",
+  "source_file": "templates/library/heatmaps.json",
+  "source_sha256": "f5d51a0c9c9ad109e5e719da24a06344f7d95be171a4bd52cf7606bce207d9ba",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "block"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "block"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "block"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "block"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "block"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "block"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "block"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "block"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "block"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "block"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "block"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "block"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "block"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "block"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "block"
+    },
+    {
+      "id": "node16",
+      "source_pointer": "/body/15",
+      "expected_type": "block"
+    },
+    {
+      "id": "node17",
+      "source_pointer": "/body/16",
+      "expected_type": "block"
+    },
+    {
+      "id": "node18",
+      "source_pointer": "/body/17",
+      "expected_type": "block"
+    },
+    {
+      "id": "node19",
+      "source_pointer": "/body/18",
+      "expected_type": "block"
+    },
+    {
+      "id": "node20",
+      "source_pointer": "/body/19",
+      "expected_type": "block"
+    },
+    {
+      "id": "node21",
+      "source_pointer": "/body/20",
+      "expected_type": "block"
+    },
+    {
+      "id": "node22",
+      "source_pointer": "/body/21",
+      "expected_type": "block"
+    },
+    {
+      "id": "node23",
+      "source_pointer": "/body/22",
+      "expected_type": "block"
+    },
+    {
+      "id": "node24",
+      "source_pointer": "/body/23",
+      "expected_type": "block"
+    },
+    {
+      "id": "node25",
+      "source_pointer": "/body/24",
+      "expected_type": "legend"
+    },
+    {
+      "id": "node26",
+      "source_pointer": "/body/25",
+      "expected_type": "card"
+    },
+    {
+      "id": "node27",
+      "source_pointer": "/body/26",
+      "expected_type": "card"
+    },
+    {
+      "id": "node28",
+      "source_pointer": "/body/27",
+      "expected_type": "card"
+    }
+  ],
+  "family": "heatmaps",
+  "tier": "core",
+  "name": "Heat-tile capability map, insight cards",
+  "purpose": "Four domain columns of heat tiles on the left and three insight cards on the right.",
+  "uses": [
+    "shape.block (heat)",
+    "card.standard",
+    "data.legend (heat)"
+  ],
+  "source_advisory_budget": {
+    "words": 125,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "heat values",
+      "maxChars": 3
+    },
+    {
+      "slot": "legend labels",
+      "maxChars": 14
+    },
+    {
+      "slot": "source",
+      "maxChars": 90
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "heatmap",
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "card",
+      "legend"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "block",
+        "role": "point",
+        "exact_count": 20,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "block",
+        "role": "relationship",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "supporting",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/24/items",
+        "component_type": "legend",
+        "role": "content",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "block",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 57,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 57,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 57,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 57,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "block",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 201,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 201,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 201,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 201,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 201,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 201,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "block",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 345,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 345,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/15",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 345,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/16",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 345,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/17",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 345,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/18",
+        "component_type": "block",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 489,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/19",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 489,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/20",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 489,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/21",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 489,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/22",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 489,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/23",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 126,
+          "x": 489,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/24",
+        "component_type": "legend",
+        "role": "content",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 450
+        }
+      },
+      {
+        "source_pointer": "/body/25",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 90,
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/26",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 90,
+          "w": 270,
+          "x": 633,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/27",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 90,
+          "w": 270,
+          "x": 633,
+          "y": 342
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Capability map"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Four domains set the investment order"
+    },
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Access"
+    },
+    {
+      "name": "node02.heat",
+      "source_pointer": "/body/1/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Self-scheduling"
+    },
+    {
+      "name": "node03.heat",
+      "source_pointer": "/body/2/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Find a provider"
+    },
+    {
+      "name": "node04.heat",
+      "source_pointer": "/body/3/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Referral intake"
+    },
+    {
+      "name": "node05.heat",
+      "source_pointer": "/body/4/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Pre-registration"
+    },
+    {
+      "name": "node06.heat",
+      "source_pointer": "/body/5/heat",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node06.text",
+      "source_pointer": "/body/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Clearance"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Care delivery"
+    },
+    {
+      "name": "node08.heat",
+      "source_pointer": "/body/7/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node08.text",
+      "source_pointer": "/body/7/text",
+      "kind": "string",
+      "synthetic_source_example": "Documentation"
+    },
+    {
+      "name": "node09.heat",
+      "source_pointer": "/body/8/heat",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node09.text",
+      "source_pointer": "/body/8/text",
+      "kind": "string",
+      "synthetic_source_example": "Order entry"
+    },
+    {
+      "name": "node10.heat",
+      "source_pointer": "/body/9/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node10.text",
+      "source_pointer": "/body/9/text",
+      "kind": "string",
+      "synthetic_source_example": "Care planning"
+    },
+    {
+      "name": "node11.heat",
+      "source_pointer": "/body/10/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node11.text",
+      "source_pointer": "/body/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Bedside devices"
+    },
+    {
+      "name": "node12.heat",
+      "source_pointer": "/body/11/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node12.text",
+      "source_pointer": "/body/11/text",
+      "kind": "string",
+      "synthetic_source_example": "Virtual care"
+    },
+    {
+      "name": "node13.text",
+      "source_pointer": "/body/12/text",
+      "kind": "string",
+      "synthetic_source_example": "Revenue"
+    },
+    {
+      "name": "node14.heat",
+      "source_pointer": "/body/13/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node14.text",
+      "source_pointer": "/body/13/text",
+      "kind": "string",
+      "synthetic_source_example": "Charge capture"
+    },
+    {
+      "name": "node15.heat",
+      "source_pointer": "/body/14/heat",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node15.text",
+      "source_pointer": "/body/14/text",
+      "kind": "string",
+      "synthetic_source_example": "Claims"
+    },
+    {
+      "name": "node16.heat",
+      "source_pointer": "/body/15/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node16.text",
+      "source_pointer": "/body/15/text",
+      "kind": "string",
+      "synthetic_source_example": "Denials"
+    },
+    {
+      "name": "node17.heat",
+      "source_pointer": "/body/16/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node17.text",
+      "source_pointer": "/body/16/text",
+      "kind": "string",
+      "synthetic_source_example": "Patient billing"
+    },
+    {
+      "name": "node18.heat",
+      "source_pointer": "/body/17/heat",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node18.text",
+      "source_pointer": "/body/17/text",
+      "kind": "string",
+      "synthetic_source_example": "Contracts"
+    },
+    {
+      "name": "node19.text",
+      "source_pointer": "/body/18/text",
+      "kind": "string",
+      "synthetic_source_example": "Data"
+    },
+    {
+      "name": "node20.heat",
+      "source_pointer": "/body/19/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node20.text",
+      "source_pointer": "/body/19/text",
+      "kind": "string",
+      "synthetic_source_example": "Reporting"
+    },
+    {
+      "name": "node21.heat",
+      "source_pointer": "/body/20/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node21.text",
+      "source_pointer": "/body/20/text",
+      "kind": "string",
+      "synthetic_source_example": "Master data"
+    },
+    {
+      "name": "node22.heat",
+      "source_pointer": "/body/21/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node22.text",
+      "source_pointer": "/body/21/text",
+      "kind": "string",
+      "synthetic_source_example": "Data quality"
+    },
+    {
+      "name": "node23.heat",
+      "source_pointer": "/body/22/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node23.text",
+      "source_pointer": "/body/22/text",
+      "kind": "string",
+      "synthetic_source_example": "Interoperability"
+    },
+    {
+      "name": "node24.heat",
+      "source_pointer": "/body/23/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node24.text",
+      "source_pointer": "/body/23/text",
+      "kind": "string",
+      "synthetic_source_example": "Governance"
+    },
+    {
+      "name": "node25.items.item01.heat",
+      "source_pointer": "/body/24/items/0/heat",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node25.items.item01.text",
+      "source_pointer": "/body/24/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "None"
+    },
+    {
+      "name": "node25.items.item02.heat",
+      "source_pointer": "/body/24/items/1/heat",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node25.items.item02.text",
+      "source_pointer": "/body/24/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Low"
+    },
+    {
+      "name": "node25.items.item03.heat",
+      "source_pointer": "/body/24/items/2/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node25.items.item03.text",
+      "source_pointer": "/body/24/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Medium"
+    },
+    {
+      "name": "node25.items.item04.heat",
+      "source_pointer": "/body/24/items/3/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node25.items.item04.text",
+      "source_pointer": "/body/24/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "High"
+    },
+    {
+      "name": "node25.items.item05.heat",
+      "source_pointer": "/body/24/items/4/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node25.items.item05.text",
+      "source_pointer": "/body/24/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Top"
+    },
+    {
+      "name": "node25.title",
+      "source_pointer": "/body/24/title",
+      "kind": "string",
+      "synthetic_source_example": "Priority"
+    },
+    {
+      "name": "node26.body.item01.p",
+      "source_pointer": "/body/25/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Both sit at the top and feed each other: bad data drives denials."
+    },
+    {
+      "name": "node26.label",
+      "source_pointer": "/body/25/label",
+      "kind": "string",
+      "synthetic_source_example": "Highest priority"
+    },
+    {
+      "name": "node26.title",
+      "source_pointer": "/body/25/title",
+      "kind": "string",
+      "synthetic_source_example": "Denials and master data"
+    },
+    {
+      "name": "node27.body.item01.p",
+      "source_pointer": "/body/26/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Highest access need and the lowest build effort in the map."
+    },
+    {
+      "name": "node27.label",
+      "source_pointer": "/body/26/label",
+      "kind": "string",
+      "synthetic_source_example": "Quick win"
+    },
+    {
+      "name": "node27.title",
+      "source_pointer": "/body/26/title",
+      "kind": "string",
+      "synthetic_source_example": "Self-scheduling"
+    },
+    {
+      "name": "node28.body.item01.p",
+      "source_pointer": "/body/27/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Already working; revisit after the revenue cycle program."
+    },
+    {
+      "name": "node28.label",
+      "source_pointer": "/body/27/label",
+      "kind": "string",
+      "synthetic_source_example": "Hold"
+    },
+    {
+      "name": "node28.title",
+      "source_pointer": "/body/27/title",
+      "kind": "string",
+      "synthetic_source_example": "Contracts and claims"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node25.items",
+      "source_pointer": "/body/24/items",
+      "count": 5
+    },
+    {
+      "name": "node26.body",
+      "source_pointer": "/body/25/body",
+      "count": 1
+    },
+    {
+      "name": "node27.body",
+      "source_pointer": "/body/26/body",
+      "count": 1
+    },
+    {
+      "name": "node28.body",
+      "source_pointer": "/body/27/body",
+      "count": 1
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

@@ -1,0 +1,1 @@
+Keep hidden. Preserve16 source connectors, all six inventory fields, Intellio+Codex label, all output criteria and Patterson authority. Sequential alternative simplifies the network but must preserve the fan-in/fan-out relationship explicitly.

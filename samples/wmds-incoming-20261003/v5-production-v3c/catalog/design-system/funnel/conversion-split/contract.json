@@ -1,0 +1,319 @@
+{
+  "key": "funnel/conversion-split",
+  "source_file": "templates/library/diagrams.json",
+  "source_sha256": "b79cf191621a7cfd9bc1b837201cd34ab001703490bd9738a9cd7732c7d9d90e",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "funnel"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    }
+  ],
+  "family": "diagrams",
+  "tier": "working",
+  "name": "Funnel in a split frame",
+  "purpose": "The conversion funnel in the tall column of a split frame with a narrative and a headline stat in the short column.",
+  "uses": [
+    "funnel",
+    "text.block"
+  ],
+  "source_advisory_budget": {
+    "words": 77,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "stage label",
+      "count": 6,
+      "maxChars": 22
+    },
+    {
+      "slot": "stage value",
+      "count": 6,
+      "maxChars": 8
+    },
+    {
+      "slot": "stage text",
+      "count": 6,
+      "maxChars": 60
+    },
+    {
+      "slot": "lead text",
+      "maxChars": 120
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "relationship"
+    ],
+    "structures": [
+      "funnel",
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "diagram",
+      "text"
+    ],
+    "component_types": [
+      "funnel",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/stages",
+        "component_type": "funnel",
+        "role": "relationship",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "funnel",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 414,
+          "w": 558,
+          "x": 345,
+          "y": 36
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 288
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 354
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "split": "tall-right",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Digital front door"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "One in five eligible patients completes a visit"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only."
+    },
+    {
+      "name": "node01.stages.item01.label",
+      "source_pointer": "/body/0/stages/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Eligible"
+    },
+    {
+      "name": "node01.stages.item01.text",
+      "source_pointer": "/body/0/stages/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Verified contact on file."
+    },
+    {
+      "name": "node01.stages.item01.value",
+      "source_pointer": "/body/0/stages/0/value",
+      "kind": "string",
+      "synthetic_source_example": "48,000"
+    },
+    {
+      "name": "node01.stages.item02.label",
+      "source_pointer": "/body/0/stages/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Invited"
+    },
+    {
+      "name": "node01.stages.item02.text",
+      "source_pointer": "/body/0/stages/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Text or email sent."
+    },
+    {
+      "name": "node01.stages.item02.value",
+      "source_pointer": "/body/0/stages/1/value",
+      "kind": "string",
+      "synthetic_source_example": "41,200"
+    },
+    {
+      "name": "node01.stages.item03.label",
+      "source_pointer": "/body/0/stages/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Opened"
+    },
+    {
+      "name": "node01.stages.item03.text",
+      "source_pointer": "/body/0/stages/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Read the invitation."
+    },
+    {
+      "name": "node01.stages.item03.value",
+      "source_pointer": "/body/0/stages/2/value",
+      "kind": "string",
+      "synthetic_source_example": "28,900"
+    },
+    {
+      "name": "node01.stages.item04.label",
+      "source_pointer": "/body/0/stages/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Registered"
+    },
+    {
+      "name": "node01.stages.item04.text",
+      "source_pointer": "/body/0/stages/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Account created."
+    },
+    {
+      "name": "node01.stages.item04.value",
+      "source_pointer": "/body/0/stages/3/value",
+      "kind": "string",
+      "synthetic_source_example": "22,600"
+    },
+    {
+      "name": "node01.stages.item05.label",
+      "source_pointer": "/body/0/stages/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Booked"
+    },
+    {
+      "name": "node01.stages.item05.text",
+      "source_pointer": "/body/0/stages/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Chose a slot online."
+    },
+    {
+      "name": "node01.stages.item05.value",
+      "source_pointer": "/body/0/stages/4/value",
+      "kind": "string",
+      "synthetic_source_example": "13,900"
+    },
+    {
+      "name": "node01.stages.item06.label",
+      "source_pointer": "/body/0/stages/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Visit"
+    },
+    {
+      "name": "node01.stages.item06.text",
+      "source_pointer": "/body/0/stages/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Checked in digitally."
+    },
+    {
+      "name": "node01.stages.item06.value",
+      "source_pointer": "/body/0/stages/5/value",
+      "kind": "string",
+      "synthetic_source_example": "9,700"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Each stage removes patients for a different reason, so each needs its own fix."
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "20%"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "of eligible patients complete a visit online, against a 35% target for FY27."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.stages",
+      "source_pointer": "/body/0/stages",
+      "count": 6
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

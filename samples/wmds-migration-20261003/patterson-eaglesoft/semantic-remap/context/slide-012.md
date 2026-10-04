@@ -1,0 +1,1 @@
+Preserve journey-by-journey retirement semantics and checkmark endpoint. Both shared choices have shorter source budgets; staggered phases keeps alternating spatial rhythm, steps detail favors linear readability.

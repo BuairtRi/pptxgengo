@@ -1,0 +1,364 @@
+{
+  "key": "capacity/ramp",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "chart"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "strongnum"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "metric"
+    }
+  ],
+  "family": "commercials",
+  "tier": "core",
+  "name": "Capacity · ramp-up to steady state",
+  "purpose": "A monthly run-rate chart showing the team ramp up, hold at steady state and roll off, with what happens in each stage.",
+  "uses": [
+    "pricing.set",
+    "chart.column",
+    "strongnum"
+  ],
+  "source_advisory_budget": {
+    "words": 65,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "chart title",
+      "maxChars": 40
+    },
+    {
+      "slot": "month label",
+      "maxChars": 4
+    },
+    {
+      "slot": "stage title",
+      "maxChars": 20
+    },
+    {
+      "slot": "stage text",
+      "maxChars": 60
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "metric",
+      "numeric-data",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "chart",
+      "text"
+    ],
+    "component_types": [
+      "chart",
+      "metric",
+      "rule",
+      "strongnum"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "strongnum",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "chart",
+        "role": "numeric-data",
+        "source_bounds": {
+          "h": 324,
+          "w": 558,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "strongnum",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 360
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 378
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Commercials"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "The run-rate ramps to $210K a month, then holds"
+    },
+    {
+      "name": "node01.categories.item01",
+      "source_pointer": "/body/0/categories/0",
+      "kind": "string",
+      "synthetic_source_example": "M1"
+    },
+    {
+      "name": "node01.categories.item02",
+      "source_pointer": "/body/0/categories/1",
+      "kind": "string",
+      "synthetic_source_example": "M2"
+    },
+    {
+      "name": "node01.categories.item03",
+      "source_pointer": "/body/0/categories/2",
+      "kind": "string",
+      "synthetic_source_example": "M3"
+    },
+    {
+      "name": "node01.categories.item04",
+      "source_pointer": "/body/0/categories/3",
+      "kind": "string",
+      "synthetic_source_example": "M4"
+    },
+    {
+      "name": "node01.categories.item05",
+      "source_pointer": "/body/0/categories/4",
+      "kind": "string",
+      "synthetic_source_example": "M5"
+    },
+    {
+      "name": "node01.categories.item06",
+      "source_pointer": "/body/0/categories/5",
+      "kind": "string",
+      "synthetic_source_example": "M6"
+    },
+    {
+      "name": "node01.categories.item07",
+      "source_pointer": "/body/0/categories/6",
+      "kind": "string",
+      "synthetic_source_example": "M7"
+    },
+    {
+      "name": "node01.categories.item08",
+      "source_pointer": "/body/0/categories/7",
+      "kind": "string",
+      "synthetic_source_example": "M8"
+    },
+    {
+      "name": "node01.series.item01.name",
+      "source_pointer": "/body/0/series/0/name",
+      "kind": "string",
+      "synthetic_source_example": "Team run-rate"
+    },
+    {
+      "name": "node01.series.item01.values.item01",
+      "source_pointer": "/body/0/series/0/values/0",
+      "kind": "number",
+      "synthetic_source_example": 90000
+    },
+    {
+      "name": "node01.series.item01.values.item02",
+      "source_pointer": "/body/0/series/0/values/1",
+      "kind": "number",
+      "synthetic_source_example": 150000
+    },
+    {
+      "name": "node01.series.item01.values.item03",
+      "source_pointer": "/body/0/series/0/values/2",
+      "kind": "number",
+      "synthetic_source_example": 210000
+    },
+    {
+      "name": "node01.series.item01.values.item04",
+      "source_pointer": "/body/0/series/0/values/3",
+      "kind": "number",
+      "synthetic_source_example": 210000
+    },
+    {
+      "name": "node01.series.item01.values.item05",
+      "source_pointer": "/body/0/series/0/values/4",
+      "kind": "number",
+      "synthetic_source_example": 210000
+    },
+    {
+      "name": "node01.series.item01.values.item06",
+      "source_pointer": "/body/0/series/0/values/5",
+      "kind": "number",
+      "synthetic_source_example": 210000
+    },
+    {
+      "name": "node01.series.item01.values.item07",
+      "source_pointer": "/body/0/series/0/values/6",
+      "kind": "number",
+      "synthetic_source_example": 150000
+    },
+    {
+      "name": "node01.series.item01.values.item08",
+      "source_pointer": "/body/0/series/0/values/7",
+      "kind": "number",
+      "synthetic_source_example": 90000
+    },
+    {
+      "name": "node01.title",
+      "source_pointer": "/body/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Team run-rate by month"
+    },
+    {
+      "name": "node01.units",
+      "source_pointer": "/body/0/units",
+      "kind": "string",
+      "synthetic_source_example": "Team monthly run-rate"
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Core team starts; specialists join as workstreams open."
+    },
+    {
+      "name": "node02.items.item01.title",
+      "source_pointer": "/body/1/items/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Ramp-up, months 1–2"
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Full team at $210K a month."
+    },
+    {
+      "name": "node02.items.item02.title",
+      "source_pointer": "/body/1/items/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Steady state, months 3–6"
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Capacity steps down as Northfield takes over."
+    },
+    {
+      "name": "node02.items.item03.title",
+      "source_pointer": "/body/1/items/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Roll-off, months 7–8"
+    },
+    {
+      "name": "node04.label",
+      "source_pointer": "/body/3/label",
+      "kind": "string",
+      "synthetic_source_example": "estimated total, eight months"
+    },
+    {
+      "name": "node04.value",
+      "source_pointer": "/body/3/value",
+      "kind": "string",
+      "synthetic_source_example": "$1.32M"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.categories",
+      "source_pointer": "/body/0/categories",
+      "count": 8
+    },
+    {
+      "name": "node01.series.item01.values",
+      "source_pointer": "/body/0/series/0/values",
+      "count": 8
+    },
+    {
+      "name": "node01.series",
+      "source_pointer": "/body/0/series",
+      "count": 1
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

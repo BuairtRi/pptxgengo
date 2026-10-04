@@ -1,0 +1,870 @@
+{
+  "key": "survey-heat/scores",
+  "source_file": "templates/library/heatmaps.json",
+  "source_sha256": "f5d51a0c9c9ad109e5e719da24a06344f7d95be171a4bd52cf7606bce207d9ba",
+  "source_revision": "wmds-library.v5",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "legend"
+    }
+  ],
+  "family": "heatmaps",
+  "tier": "core",
+  "name": "Survey heat map, scores by group",
+  "purpose": "Survey statements by respondent group, shaded with the lowest scores hottest and the average printed in each cell.",
+  "uses": [
+    "table.standard (heat cells, num)",
+    "data.legend (heat)"
+  ],
+  "source_advisory_budget": {
+    "words": 144,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "heat values",
+      "maxChars": 3
+    },
+    {
+      "slot": "legend labels",
+      "maxChars": 14
+    },
+    {
+      "slot": "source",
+      "maxChars": 90
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "tabular-data"
+    ],
+    "structures": [
+      "heatmap",
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "legend",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 8,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "legend",
+        "role": "content",
+        "exact_count": 5,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "legend",
+        "role": "content",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 426
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Pulse survey"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Time savings and workflow fit score lowest"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield go-live pulse survey, n = 412, Sep 2026."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Statement"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Physicians"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Nurses"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Front desk"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Rev cycle"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Leaders"
+    },
+    {
+      "name": "node01.cols.item07.label",
+      "source_pointer": "/body/0/cols/6/label",
+      "kind": "string",
+      "synthetic_source_example": "All"
+    },
+    {
+      "name": "node01.rows.item01.c0",
+      "source_pointer": "/body/0/rows/0/c0",
+      "kind": "string",
+      "synthetic_source_example": "I understand why we are changing"
+    },
+    {
+      "name": "node01.rows.item01.c1.value",
+      "source_pointer": "/body/0/rows/0/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 0.9000000000000004
+    },
+    {
+      "name": "node01.rows.item01.c1.text",
+      "source_pointer": "/body/0/rows/0/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "4.1"
+    },
+    {
+      "name": "node01.rows.item01.c2.value",
+      "source_pointer": "/body/0/rows/0/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 1.1
+    },
+    {
+      "name": "node01.rows.item01.c2.text",
+      "source_pointer": "/body/0/rows/0/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "3.9"
+    },
+    {
+      "name": "node01.rows.item01.c3.value",
+      "source_pointer": "/body/0/rows/0/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 1.4
+    },
+    {
+      "name": "node01.rows.item01.c3.text",
+      "source_pointer": "/body/0/rows/0/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "3.6"
+    },
+    {
+      "name": "node01.rows.item01.c4.value",
+      "source_pointer": "/body/0/rows/0/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 1.6
+    },
+    {
+      "name": "node01.rows.item01.c4.text",
+      "source_pointer": "/body/0/rows/0/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "3.4"
+    },
+    {
+      "name": "node01.rows.item01.c5.value",
+      "source_pointer": "/body/0/rows/0/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 0.40000000000000036
+    },
+    {
+      "name": "node01.rows.item01.c5.text",
+      "source_pointer": "/body/0/rows/0/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "4.6"
+    },
+    {
+      "name": "node01.rows.item01.c6",
+      "source_pointer": "/body/0/rows/0/c6",
+      "kind": "string",
+      "synthetic_source_example": "3.9"
+    },
+    {
+      "name": "node01.rows.item02.c0",
+      "source_pointer": "/body/0/rows/1/c0",
+      "kind": "string",
+      "synthetic_source_example": "I have the training I need"
+    },
+    {
+      "name": "node01.rows.item02.c1.value",
+      "source_pointer": "/body/0/rows/1/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 1.7999999999999998
+    },
+    {
+      "name": "node01.rows.item02.c1.text",
+      "source_pointer": "/body/0/rows/1/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "3.2"
+    },
+    {
+      "name": "node01.rows.item02.c2.value",
+      "source_pointer": "/body/0/rows/1/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 2.2
+    },
+    {
+      "name": "node01.rows.item02.c2.text",
+      "source_pointer": "/body/0/rows/1/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "2.8"
+    },
+    {
+      "name": "node01.rows.item02.c3.value",
+      "source_pointer": "/body/0/rows/1/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 2.0
+    },
+    {
+      "name": "node01.rows.item02.c3.text",
+      "source_pointer": "/body/0/rows/1/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "3.0"
+    },
+    {
+      "name": "node01.rows.item02.c4.value",
+      "source_pointer": "/body/0/rows/1/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 2.1
+    },
+    {
+      "name": "node01.rows.item02.c4.text",
+      "source_pointer": "/body/0/rows/1/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "2.9"
+    },
+    {
+      "name": "node01.rows.item02.c5.value",
+      "source_pointer": "/body/0/rows/1/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 1.1
+    },
+    {
+      "name": "node01.rows.item02.c5.text",
+      "source_pointer": "/body/0/rows/1/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "3.9"
+    },
+    {
+      "name": "node01.rows.item02.c6",
+      "source_pointer": "/body/0/rows/1/c6",
+      "kind": "string",
+      "synthetic_source_example": "3.1"
+    },
+    {
+      "name": "node01.rows.item03.c0",
+      "source_pointer": "/body/0/rows/2/c0",
+      "kind": "string",
+      "synthetic_source_example": "The new system saves me time"
+    },
+    {
+      "name": "node01.rows.item03.c1.value",
+      "source_pointer": "/body/0/rows/2/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 2.6
+    },
+    {
+      "name": "node01.rows.item03.c1.text",
+      "source_pointer": "/body/0/rows/2/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "2.4"
+    },
+    {
+      "name": "node01.rows.item03.c2.value",
+      "source_pointer": "/body/0/rows/2/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 2.4
+    },
+    {
+      "name": "node01.rows.item03.c2.text",
+      "source_pointer": "/body/0/rows/2/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "2.6"
+    },
+    {
+      "name": "node01.rows.item03.c3.value",
+      "source_pointer": "/body/0/rows/2/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 2.1
+    },
+    {
+      "name": "node01.rows.item03.c3.text",
+      "source_pointer": "/body/0/rows/2/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "2.9"
+    },
+    {
+      "name": "node01.rows.item03.c4.value",
+      "source_pointer": "/body/0/rows/2/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 1.7000000000000002
+    },
+    {
+      "name": "node01.rows.item03.c4.text",
+      "source_pointer": "/body/0/rows/2/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "3.3"
+    },
+    {
+      "name": "node01.rows.item03.c5.value",
+      "source_pointer": "/body/0/rows/2/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 1.2000000000000002
+    },
+    {
+      "name": "node01.rows.item03.c5.text",
+      "source_pointer": "/body/0/rows/2/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "3.8"
+    },
+    {
+      "name": "node01.rows.item03.c6",
+      "source_pointer": "/body/0/rows/2/c6",
+      "kind": "string",
+      "synthetic_source_example": "3.0"
+    },
+    {
+      "name": "node01.rows.item04.c0",
+      "source_pointer": "/body/0/rows/3/c0",
+      "kind": "string",
+      "synthetic_source_example": "My leaders support the change"
+    },
+    {
+      "name": "node01.rows.item04.c1.value",
+      "source_pointer": "/body/0/rows/3/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 1.5
+    },
+    {
+      "name": "node01.rows.item04.c1.text",
+      "source_pointer": "/body/0/rows/3/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "3.5"
+    },
+    {
+      "name": "node01.rows.item04.c2.value",
+      "source_pointer": "/body/0/rows/3/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 1.2999999999999998
+    },
+    {
+      "name": "node01.rows.item04.c2.text",
+      "source_pointer": "/body/0/rows/3/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "3.7"
+    },
+    {
+      "name": "node01.rows.item04.c3.value",
+      "source_pointer": "/body/0/rows/3/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 1.6
+    },
+    {
+      "name": "node01.rows.item04.c3.text",
+      "source_pointer": "/body/0/rows/3/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "3.4"
+    },
+    {
+      "name": "node01.rows.item04.c4.value",
+      "source_pointer": "/body/0/rows/3/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 1.5
+    },
+    {
+      "name": "node01.rows.item04.c4.text",
+      "source_pointer": "/body/0/rows/3/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "3.5"
+    },
+    {
+      "name": "node01.rows.item04.c5.value",
+      "source_pointer": "/body/0/rows/3/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 0.2999999999999998
+    },
+    {
+      "name": "node01.rows.item04.c5.text",
+      "source_pointer": "/body/0/rows/3/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "4.7"
+    },
+    {
+      "name": "node01.rows.item04.c6",
+      "source_pointer": "/body/0/rows/3/c6",
+      "kind": "string",
+      "synthetic_source_example": "3.7"
+    },
+    {
+      "name": "node01.rows.item05.c0",
+      "source_pointer": "/body/0/rows/4/c0",
+      "kind": "string",
+      "synthetic_source_example": "I know who to ask for help"
+    },
+    {
+      "name": "node01.rows.item05.c1.value",
+      "source_pointer": "/body/0/rows/4/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 1.7000000000000002
+    },
+    {
+      "name": "node01.rows.item05.c1.text",
+      "source_pointer": "/body/0/rows/4/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "3.3"
+    },
+    {
+      "name": "node01.rows.item05.c2.value",
+      "source_pointer": "/body/0/rows/4/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 1.2000000000000002
+    },
+    {
+      "name": "node01.rows.item05.c2.text",
+      "source_pointer": "/body/0/rows/4/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "3.8"
+    },
+    {
+      "name": "node01.rows.item05.c3.value",
+      "source_pointer": "/body/0/rows/4/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 1.9
+    },
+    {
+      "name": "node01.rows.item05.c3.text",
+      "source_pointer": "/body/0/rows/4/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "3.1"
+    },
+    {
+      "name": "node01.rows.item05.c4.value",
+      "source_pointer": "/body/0/rows/4/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 1.6
+    },
+    {
+      "name": "node01.rows.item05.c4.text",
+      "source_pointer": "/body/0/rows/4/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "3.4"
+    },
+    {
+      "name": "node01.rows.item05.c5.value",
+      "source_pointer": "/body/0/rows/4/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 0.7999999999999998
+    },
+    {
+      "name": "node01.rows.item05.c5.text",
+      "source_pointer": "/body/0/rows/4/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "4.2"
+    },
+    {
+      "name": "node01.rows.item05.c6",
+      "source_pointer": "/body/0/rows/4/c6",
+      "kind": "string",
+      "synthetic_source_example": "3.6"
+    },
+    {
+      "name": "node01.rows.item06.c0",
+      "source_pointer": "/body/0/rows/5/c0",
+      "kind": "string",
+      "synthetic_source_example": "Workflows fit how I work"
+    },
+    {
+      "name": "node01.rows.item06.c1.value",
+      "source_pointer": "/body/0/rows/5/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 2.9
+    },
+    {
+      "name": "node01.rows.item06.c1.text",
+      "source_pointer": "/body/0/rows/5/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "2.1"
+    },
+    {
+      "name": "node01.rows.item06.c2.value",
+      "source_pointer": "/body/0/rows/5/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 2.5
+    },
+    {
+      "name": "node01.rows.item06.c2.text",
+      "source_pointer": "/body/0/rows/5/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "2.5"
+    },
+    {
+      "name": "node01.rows.item06.c3.value",
+      "source_pointer": "/body/0/rows/5/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 1.7999999999999998
+    },
+    {
+      "name": "node01.rows.item06.c3.text",
+      "source_pointer": "/body/0/rows/5/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "3.2"
+    },
+    {
+      "name": "node01.rows.item06.c4.value",
+      "source_pointer": "/body/0/rows/5/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 2.0
+    },
+    {
+      "name": "node01.rows.item06.c4.text",
+      "source_pointer": "/body/0/rows/5/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "3.0"
+    },
+    {
+      "name": "node01.rows.item06.c5.value",
+      "source_pointer": "/body/0/rows/5/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 1.5
+    },
+    {
+      "name": "node01.rows.item06.c5.text",
+      "source_pointer": "/body/0/rows/5/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "3.5"
+    },
+    {
+      "name": "node01.rows.item06.c6",
+      "source_pointer": "/body/0/rows/5/c6",
+      "kind": "string",
+      "synthetic_source_example": "2.8"
+    },
+    {
+      "name": "node01.rows.item07.c0",
+      "source_pointer": "/body/0/rows/6/c0",
+      "kind": "string",
+      "synthetic_source_example": "Data in the system is trustworthy"
+    },
+    {
+      "name": "node01.rows.item07.c1.value",
+      "source_pointer": "/body/0/rows/6/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 1.9
+    },
+    {
+      "name": "node01.rows.item07.c1.text",
+      "source_pointer": "/body/0/rows/6/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "3.1"
+    },
+    {
+      "name": "node01.rows.item07.c2.value",
+      "source_pointer": "/body/0/rows/6/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 1.7999999999999998
+    },
+    {
+      "name": "node01.rows.item07.c2.text",
+      "source_pointer": "/body/0/rows/6/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "3.2"
+    },
+    {
+      "name": "node01.rows.item07.c3.value",
+      "source_pointer": "/body/0/rows/6/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 2.0
+    },
+    {
+      "name": "node01.rows.item07.c3.text",
+      "source_pointer": "/body/0/rows/6/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "3.0"
+    },
+    {
+      "name": "node01.rows.item07.c4.value",
+      "source_pointer": "/body/0/rows/6/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 2.3
+    },
+    {
+      "name": "node01.rows.item07.c4.text",
+      "source_pointer": "/body/0/rows/6/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "2.7"
+    },
+    {
+      "name": "node01.rows.item07.c5.value",
+      "source_pointer": "/body/0/rows/6/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 1.0
+    },
+    {
+      "name": "node01.rows.item07.c5.text",
+      "source_pointer": "/body/0/rows/6/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "4.0"
+    },
+    {
+      "name": "node01.rows.item07.c6",
+      "source_pointer": "/body/0/rows/6/c6",
+      "kind": "string",
+      "synthetic_source_example": "3.2"
+    },
+    {
+      "name": "node01.rows.item08.c0",
+      "source_pointer": "/body/0/rows/7/c0",
+      "kind": "string",
+      "synthetic_source_example": "I would recommend it to a peer"
+    },
+    {
+      "name": "node01.rows.item08.c1.value",
+      "source_pointer": "/body/0/rows/7/c1/value",
+      "kind": "number",
+      "synthetic_source_example": 2.1
+    },
+    {
+      "name": "node01.rows.item08.c1.text",
+      "source_pointer": "/body/0/rows/7/c1/text",
+      "kind": "string",
+      "synthetic_source_example": "2.9"
+    },
+    {
+      "name": "node01.rows.item08.c2.value",
+      "source_pointer": "/body/0/rows/7/c2/value",
+      "kind": "number",
+      "synthetic_source_example": 1.9
+    },
+    {
+      "name": "node01.rows.item08.c2.text",
+      "source_pointer": "/body/0/rows/7/c2/text",
+      "kind": "string",
+      "synthetic_source_example": "3.1"
+    },
+    {
+      "name": "node01.rows.item08.c3.value",
+      "source_pointer": "/body/0/rows/7/c3/value",
+      "kind": "number",
+      "synthetic_source_example": 1.7000000000000002
+    },
+    {
+      "name": "node01.rows.item08.c3.text",
+      "source_pointer": "/body/0/rows/7/c3/text",
+      "kind": "string",
+      "synthetic_source_example": "3.3"
+    },
+    {
+      "name": "node01.rows.item08.c4.value",
+      "source_pointer": "/body/0/rows/7/c4/value",
+      "kind": "number",
+      "synthetic_source_example": 1.7999999999999998
+    },
+    {
+      "name": "node01.rows.item08.c4.text",
+      "source_pointer": "/body/0/rows/7/c4/text",
+      "kind": "string",
+      "synthetic_source_example": "3.2"
+    },
+    {
+      "name": "node01.rows.item08.c5.value",
+      "source_pointer": "/body/0/rows/7/c5/value",
+      "kind": "number",
+      "synthetic_source_example": 0.5999999999999996
+    },
+    {
+      "name": "node01.rows.item08.c5.text",
+      "source_pointer": "/body/0/rows/7/c5/text",
+      "kind": "string",
+      "synthetic_source_example": "4.4"
+    },
+    {
+      "name": "node01.rows.item08.c6",
+      "source_pointer": "/body/0/rows/7/c6",
+      "kind": "string",
+      "synthetic_source_example": "3.4"
+    },
+    {
+      "name": "node02.items.item01.heat",
+      "source_pointer": "/body/1/items/0/heat",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "4.5–5.0"
+    },
+    {
+      "name": "node02.items.item02.heat",
+      "source_pointer": "/body/1/items/1/heat",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "3.5–4.4"
+    },
+    {
+      "name": "node02.items.item03.heat",
+      "source_pointer": "/body/1/items/2/heat",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "2.5–3.4"
+    },
+    {
+      "name": "node02.items.item04.heat",
+      "source_pointer": "/body/1/items/3/heat",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node02.items.item04.text",
+      "source_pointer": "/body/1/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "1.5–2.4"
+    },
+    {
+      "name": "node02.items.item05.heat",
+      "source_pointer": "/body/1/items/4/heat",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node02.items.item05.text",
+      "source_pointer": "/body/1/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Under 1.5"
+    },
+    {
+      "name": "node02.title",
+      "source_pointer": "/body/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Average score, 1 to 5"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 7
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 8
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 5
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}
