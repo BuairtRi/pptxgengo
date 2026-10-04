@@ -84,6 +84,13 @@ file access; it does not issue a file-open probe when operational dispatch fails
 Source preflight and malformed-duration failures were checked with the actual
 CLI and leave `render-error.txt`. No permission or daemon changes were made.
 
+Clean-checkout packaging caught one dependency gap: the generic `build` ignore
+rule had excluded the `phase/build` specimen's four gallery files. Those existing
+hash-pinned files are now tracked, with a full 587-specimen closure regression.
+Native command monitoring is also restricted to absolute private task scripts;
+inline doctor AppleScript no longer writes `dialog.swift` into the caller's
+working directory. The stray diagnostic file was removed.
+
 An isolated checkout keeps unrelated in-progress skill and DentalXChange edits
 out of the engineering qualification. Those working-tree changes are preserved.
 No new Python conversion scripts were introduced.

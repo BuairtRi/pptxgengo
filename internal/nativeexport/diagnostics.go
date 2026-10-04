@@ -22,7 +22,7 @@ var dialogScript []byte
 
 // A read-only optional probe never requests Accessibility or Screen Recording access.
 func nativeCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
-	if name == "/usr/bin/osascript" && len(args) >= 5 && (len(args) == 5 || args[len(args)-1] != "close") {
+	if name == "/usr/bin/osascript" && monitorAppleScript(args) {
 		path := filepath.Join(filepath.Dir(args[0]), "dialog.swift")
 		if err := os.WriteFile(path, dialogScript, 0600); err == nil {
 			return monitoredCommand(ctx, func(child context.Context) ([]byte, error) {
@@ -33,6 +33,12 @@ func nativeCommand(ctx context.Context, name string, args ...string) ([]byte, er
 		}
 	}
 	return command(ctx, name, args...)
+}
+
+func monitorAppleScript(args []string) bool {
+	// Only private task scripts have an absolute file path. Inline doctor
+	// commands start with -e and must not write probe files into the caller's cwd.
+	return len(args) >= 5 && filepath.IsAbs(args[0]) && filepath.Ext(args[0]) == ".applescript" && (len(args) == 5 || args[len(args)-1] != "close")
 }
 
 type dialogObservation struct{ Status, Dialog, Detail string }
