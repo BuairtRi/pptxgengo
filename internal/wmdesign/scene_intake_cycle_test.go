@@ -213,7 +213,7 @@ func TestIntakeCycleStrictGeometryCopyAndKeys(t *testing.T) {
 }
 func TestIntakeCycleNativeEditableXML(t *testing.T) {
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "cycle", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "cycle", Kind: "scene", Scene: &SceneSpec{Node: json.RawMessage(cycleSimple)}}}}}}
-	data, _, e := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v3"), "", doc, CandidateEngine)
+	data, _, e := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
 	if e != nil {
 		t.Fatal(e)
 	}

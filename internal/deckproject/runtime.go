@@ -95,10 +95,24 @@ func executableHash() (string, error) {
 	return digest(b), nil
 }
 func treeHashes(root string) (map[string]string, error) {
+	return filteredTreeHashes(root, nil)
+}
+
+func filteredTreeHashes(root string, excluded func(string) bool) (map[string]string, error) {
 	m := map[string]string{}
 	e := filepath.WalkDir(root, func(path string, d fs.DirEntry, e error) error {
 		if e != nil {
 			return e
+		}
+		rel, e := filepath.Rel(root, path)
+		if e != nil {
+			return e
+		}
+		if excluded != nil && excluded(filepath.ToSlash(rel)) {
+			if d.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
 		}
 		if d.Type()&os.ModeSymlink != 0 {
 			return fmt.Errorf("symlink forbidden in pinned tree: %s", path)
@@ -113,14 +127,34 @@ func treeHashes(root string) (map[string]string, error) {
 		if e != nil {
 			return e
 		}
-		rel, e := filepath.Rel(root, path)
-		if e != nil {
-			return e
-		}
 		m[filepath.ToSlash(rel)] = digest(b)
 		return nil
 	})
 	return m, e
+}
+
+// Discovery products and calibration are independently verified resources,
+// not changes to the immutable source bundle recorded in existing locks.
+func bundleAuxiliaryPath(rel string) bool {
+	return rel == "catalog" || strings.HasPrefix(rel, "catalog/") ||
+		rel == "library.sqlite" || rel == "typography" || strings.HasPrefix(rel, "typography/")
+}
+
+const calibrationLockKey = "typography-v2-candidate/calibration.json"
+
+func runtimeFilePath(bundle, relative string) (string, error) {
+	if relative == calibrationLockKey {
+		path, err := wmdesign.CandidateCalibrationPath(filepath.Join(bundle, "fonts"))
+		if err != nil {
+			return "", err
+		}
+		rel, err := filepath.Rel(filepath.Dir(bundle), path)
+		if err != nil {
+			return "", err
+		}
+		return SafePath(filepath.Dir(bundle), filepath.ToSlash(rel))
+	}
+	return SafePath(filepath.Dir(bundle), relative)
 }
 func makeLock(bundle, engine string) (Lock, error) {
 	l := Lock{Schema: "pptxgengo.deck-toolchain-lock.v1", Runtime: RuntimeVersion, Go: runtime.Version(), OS: runtime.GOOS, Architecture: runtime.GOARCH, Engine: engine}
@@ -137,14 +171,14 @@ func makeLock(bundle, engine string) (Lock, error) {
 	if e != nil {
 		return l, e
 	}
-	l.BundleFiles, e = treeHashes(bundle)
+	l.BundleFiles, e = filteredTreeHashes(bundle, bundleAuxiliaryPath)
 	if e != nil {
 		return l, e
 	}
 	l.RuntimeFiles = map[string]string{}
 	if engine == wmdesign.CandidateEngine {
-		relative := "typography-v2-candidate/calibration.json"
-		path, e := SafePath(filepath.Dir(bundle), relative)
+		relative := calibrationLockKey
+		path, e := runtimeFilePath(bundle, relative)
 		if e != nil {
 			return l, e
 		}

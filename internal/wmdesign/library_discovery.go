@@ -543,6 +543,22 @@ type LibrarySearchEngine struct {
 	Compatibility string `json:"compatibility"`
 }
 
+func libraryScenarioQueryCoverage(def LibraryTemplate, query string) int {
+	available := map[string]bool{}
+	for _, token := range discoveryTokens(strings.Join([]string{def.Key, def.Name, def.Family, def.Purpose, strings.Join(def.Uses, " ")}, " ")) {
+		available[token] = true
+	}
+	seen := map[string]bool{}
+	matched := 0
+	for _, token := range discoveryTokens(query) {
+		if !seen[token] && available[token] {
+			matched++
+		}
+		seen[token] = true
+	}
+	return matched
+}
+
 // SearchLibrary ranks scenario and structure independently. Hints do not exclude
 // a usable template just because its original labels describe another scenario.
 func SearchLibrary(catalog []LibraryTemplate, options LibrarySearchOptions) (LibrarySearchResult, error) {
@@ -558,6 +574,7 @@ func SearchLibrary(catalog []LibraryTemplate, options LibrarySearchOptions) (Lib
 	if limit == 0 {
 		limit = 10
 	}
+	queryCoverage := map[string]int{}
 	for _, def := range catalog {
 		if def.Status == "deprecated" && !options.IncludeDeprecated {
 			continue
@@ -622,6 +639,7 @@ func SearchLibrary(catalog []LibraryTemplate, options LibrarySearchOptions) (Lib
 		}
 		seen := map[string]bool{}
 		textScore := 0
+		matchedTokens := 0
 		for _, token := range discoveryTokens(options.Query) {
 			if seen[token] {
 				continue
@@ -634,6 +652,7 @@ func SearchLibrary(catalog []LibraryTemplate, options LibrarySearchOptions) (Lib
 				weight, field = 3, "purpose/uses"
 			}
 			if weight > 0 {
+				matchedTokens++
 				hit.ScenarioScore += weight
 				bonus := min(weight, 12-textScore)
 				hit.Score += bonus
@@ -643,11 +662,25 @@ func SearchLibrary(catalog []LibraryTemplate, options LibrarySearchOptions) (Lib
 				hit.UnmatchedHints = append(hit.UnmatchedHints, "text:"+token)
 			}
 		}
+		queryCoverage[def.Key] = matchedTokens
+		if len(seen) > 1 && matchedTokens == len(seen) {
+			// Purpose annotations can express the complete scenario even when
+			// one incidental key/name token has a higher individual weight.
+			// Keep the existing 12-point text budget so structural hints retain
+			// their independent influence on the ranking.
+			bonus := min(6, 12-textScore)
+			hit.Score += bonus
+			hit.ScenarioScore += bonus
+			hit.Reasons = append(hit.Reasons, "scenario matches all query tokens in key/name/family/purpose/uses")
+		}
 		result.Matches = append(result.Matches, hit)
 	}
 	sort.Slice(result.Matches, func(i, j int) bool {
 		if result.Matches[i].Score != result.Matches[j].Score {
 			return result.Matches[i].Score > result.Matches[j].Score
+		}
+		if queryCoverage[result.Matches[i].Template.Key] != queryCoverage[result.Matches[j].Template.Key] {
+			return queryCoverage[result.Matches[i].Template.Key] > queryCoverage[result.Matches[j].Template.Key]
 		}
 		if result.Matches[i].ScenarioScore != result.Matches[j].ScenarioScore {
 			return result.Matches[i].ScenarioScore > result.Matches[j].ScenarioScore

@@ -71,9 +71,11 @@ def features(template):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=pathlib.Path, default=ROOT.parent / "wm-design-system")
-    parser.add_argument("--baseline", type=pathlib.Path, default=ROOT / "library/wm-design-system/v1/source")
-    parser.add_argument("--out", type=pathlib.Path, default=ROOT / "planning/wm-design-contracts/v2/source-update-2026-10-02.json")
+    parser.add_argument("--baseline", type=pathlib.Path, default=ROOT / "library/wm-design-system/v5/source")
+    parser.add_argument("--out", type=pathlib.Path, required=True, help="New inventory JSON path")
     args = parser.parse_args()
+    if args.out.exists():
+        parser.error("output must be a new file")
     old, new = templates(args.baseline), templates(args.source)
     notes_path = args.source / "templates/change-notes.json"
     notes = read(notes_path) if notes_path.exists() else {}

@@ -73,8 +73,8 @@ func projectCommandJSON(t *testing.T, args ...string) json.RawMessage {
 
 func TestPublishedProjectBundleMetadata(t *testing.T) {
 	root := t.TempDir()
-	if got, err := publishedProjectBundle(root); err != nil || got != "v3" {
-		t.Fatalf("historical default: %q %v", got, err)
+	if got, err := publishedProjectBundle(root); err != nil || got != "v5" {
+		t.Fatalf("latest default: %q %v", got, err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
@@ -110,7 +110,7 @@ func TestProjectPublishedV5PreservesLockedRevisions(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Setenv("PPTXGENGO_RELEASE_ROOT", stage)
-	for _, revision := range []string{"v1", "v2", "v3", "v4", "v5"} {
+	for _, revision := range []string{"v5"} {
 		t.Run(revision, func(t *testing.T) {
 			root := projectDefaultFixture(t)
 			projectCommandJSON(t, "init", "--project", root, "--bundle", revision)
@@ -128,7 +128,7 @@ func TestProjectPublishedV5PreservesLockedRevisions(t *testing.T) {
 			if revision != "v5" && runProject([]string{"check", "--project", root, "--bundle", "v5"}) == nil {
 				t.Fatal("explicit mismatched bundle accepted")
 			}
-			if revision == "v4" {
+			if revision == "v5" {
 				archive := filepath.Join(t.TempDir(), "offline.zip")
 				projectCommandJSON(t, "export", "--project", root, "--mode", "offline", "--out", archive)
 				z, err := zip.OpenReader(archive)

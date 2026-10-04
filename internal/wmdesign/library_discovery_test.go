@@ -10,7 +10,7 @@ import (
 
 func discoveryPinnedCatalog(t *testing.T) []LibraryTemplate {
 	t.Helper()
-	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v2"), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,6 +60,16 @@ func TestLibraryDiscoverySceneNodesExcludeCellData(t *testing.T) {
 
 func TestLibraryDiscoveryBeforeAfterGroupsAreCompleteRows(t *testing.T) {
 	def := discoveryPinnedTemplate(t, discoveryPinnedCatalog(t), "transformation/before-after")
+	// The current template uses separate scene blocks. Keep the beforeafter
+	// component's row-versus-cell regression as an explicit synthetic fixture.
+	def.RawSlide = json.RawMessage(`{"type":"slide","body":[{"type":"beforeafter","x":0,"y":0,"w":500,"h":200,"rows":[["A","B","C"],["D","E","F"],["G","H","I"],["J","K","L"]]}]}`)
+	obj, err := libraryObject(def.RawSlide)
+	if err != nil {
+		t.Fatal(err)
+	}
+	def.Slots, def.Arrays = nil, nil
+	libraryContentWalk(&def, obj["body"].([]any)[0], "/body/0", "node01", "", libraryProjectionContext{})
+	def.Discovery = libraryDiscovery(def, obj)
 	rows := 0
 	for _, group := range def.Discovery.Groups {
 		if strings.HasPrefix(group.SourcePointer, "/body/0/rows/") {
@@ -76,11 +86,11 @@ func TestLibraryDiscoveryBeforeAfterGroupsAreCompleteRows(t *testing.T) {
 		t.Fatalf("want exactly one complete-row group, got %d", rows)
 	}
 	three, err := SearchLibrary([]LibraryTemplate{def}, LibrarySearchOptions{Items: 3, ItemRole: "relationship"})
-	if err != nil || three.Matches[0].CountMatch != nil {
+	if err != nil || len(three.Matches) == 0 || three.Matches[0].CountMatch != nil {
 		t.Fatalf("three fields per row matched three relationships: %+v, %v", three, err)
 	}
 	four, err := SearchLibrary([]LibraryTemplate{def}, LibrarySearchOptions{Items: 4, ItemRole: "relationship"})
-	if err != nil || four.Matches[0].CountMatch == nil || four.Matches[0].CountMatch.Group.ExactCount != 4 {
+	if err != nil || len(four.Matches) == 0 || four.Matches[0].CountMatch == nil || four.Matches[0].CountMatch.Group.ExactCount != 4 {
 		t.Fatalf("four complete relationships did not match: %+v, %v", four, err)
 	}
 }
@@ -95,6 +105,9 @@ func TestLibraryDiscoveryPrimaryCardsOutrankNestedSupport(t *testing.T) {
 	result, err := SearchLibrary(specimens, LibrarySearchOptions{Items: 3, ItemRole: "point", ContentRoles: []string{"point"}, Limit: 100})
 	if err != nil {
 		t.Fatal(err)
+	}
+	if len(result.Matches) == 0 {
+		t.Fatal("no candidates for primary three-card arrangement")
 	}
 	if result.Matches[0].Template.Key != "cards/3" || result.Matches[0].CountMatch == nil || result.Matches[0].CountMatch.Group.Scope != "primary" {
 		t.Fatalf("primary three-card arrangement was not first: %+v", result.Matches[0])
@@ -132,7 +145,7 @@ func TestLibraryDiscoveryPairedComparisonsDoNotDependOnLabels(t *testing.T) {
 			}
 			def.Discovery = libraryDiscovery(def, obj)
 			result, err := SearchLibrary([]LibraryTemplate{def}, LibrarySearchOptions{Structures: []string{"comparison"}})
-			if err != nil || result.Matches[0].Score != 16 {
+			if err != nil || len(result.Matches) == 0 || result.Matches[0].Score != 16 {
 				t.Fatalf("renamed paired arrangement lost structural match: %+v, %v", result, err)
 			}
 			// A connector alone cannot establish the paired relationship.
@@ -193,12 +206,18 @@ func TestLibraryDiscoveryWeeklyStatusRanksDirectScenarioAboveIncidentalCopy(t *t
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Matches) == 0 || !strings.HasPrefix(result.Matches[0].Template.Key, "status/") {
+	if len(result.Matches) == 0 {
+		t.Fatal("weekly status returned no candidates")
+	}
+	// v5 authors a weekly trend and site status table in adoption/dashboard.
+	// Generic status labels on a static capability map are a partial match.
+	first := result.Matches[0].Template
+	if first.Key != "adoption/dashboard" || !strings.Contains(first.Purpose, "weekly trend") || !strings.Contains(first.Purpose, "status table") {
 		t.Fatalf("weekly status did not prefer a direct status arrangement: %+v", result.Matches[0])
 	}
 	firstScore := result.Matches[0].Score
 	for _, hit := range result.Matches {
-		if hit.Template.Key == "confidential/notice" || hit.Template.Key == "runbook/go-no-go" {
+		if hit.Template.Key == "confidential/notice" || hit.Template.Key == "runbook/go-no-go" || hit.Template.Key == "capability-map/domain-columns" {
 			if hit.Score >= firstScore {
 				t.Fatalf("incidental status mention in %s outranks direct scenario: %d >= %d", hit.Template.Key, hit.Score, firstScore)
 			}
@@ -218,5 +237,31 @@ func TestLibraryDiscoveryWeeklyStatusRanksDirectScenarioAboveIncidentalCopy(t *t
 	}
 	if !found {
 		t.Fatal("scenario wording gated a valid primary three-point arrangement")
+	}
+}
+
+func TestLibraryDiscoveryCompleteScenarioCoverageKeepsTextBudget(t *testing.T) {
+	complete := LibraryTemplate{TemplateDefinition: TemplateDefinition{Key: "opaque/complete"}, Purpose: "Weekly status dashboard"}
+	partial := LibraryTemplate{TemplateDefinition: TemplateDefinition{Key: "weekly/status"}}
+	for _, query := range []string{"weekly status dashboard", "weekly weekly status dashboard"} {
+		result, err := SearchLibrary([]LibraryTemplate{partial, complete}, LibrarySearchOptions{Query: query})
+		if err != nil || len(result.Matches) != 2 {
+			t.Fatalf("search failed: %v, %+v", err, result)
+		}
+		if result.Matches[0].Template.Key != complete.Key || result.Matches[0].Score != 12 || result.Matches[1].Score != 12 {
+			t.Fatalf("full coverage did not break capped-score tie: %+v", result.Matches)
+		}
+		if result.Matches[0].ScenarioScore >= result.Matches[1].ScenarioScore {
+			t.Fatal("fixture no longer checks coverage before uncapped identity weights")
+		}
+	}
+	result, err := SearchLibrary([]LibraryTemplate{complete}, LibrarySearchOptions{Query: "weekly"})
+	if err != nil || len(result.Matches) != 1 || result.Matches[0].Score != 3 {
+		t.Fatalf("single-token purpose match received a completeness bonus: %v %+v", err, result)
+	}
+	partial.Discovery.Structures = []string{"matrix"}
+	result, err = SearchLibrary([]LibraryTemplate{complete, partial}, LibrarySearchOptions{Query: "weekly status dashboard", Structures: []string{"matrix"}})
+	if err != nil || len(result.Matches) != 2 || result.Matches[0].Template.Key != partial.Key || result.Matches[0].Score != 28 {
+		t.Fatalf("scenario bonus overwhelmed independent structural hints: %v %+v", err, result)
 	}
 }

@@ -1,3 +1,9 @@
+# October 4 — simplified final locations
+
+Final PowerPoints, PDFs, editable YAML, required assets and offline packages are in [samples/final](../../../../../samples/final/README.md). Only original sample decks remain beside that folder. Temporary sample trees, alternative outputs and review artifacts have been deleted. Only `library/wm-design-system/v5` remains; its `catalog/` contains all587 native template previews and `library.sqlite` supports discovery. Final deck and YAML bytes and original input decks are unchanged. Earlier paths and version references below are historical.
+
+---
+
 # October 4 cleanup — current location
 
 Final decks and PDF references are now in [samples](../../../../../samples/README.md). All temporary PowerPoint windows are closed. Working builds/state, inspections, pilots, fragments, staging folders and previous temporary archives were permanently deleted at the user's request. Seven editable source projects, final packages, native qualification records and template discovery screenshots remain. Final and original PowerPoint hashes are unchanged. The paths and archive availability described below are historical.

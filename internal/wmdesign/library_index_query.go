@@ -76,6 +76,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 	if e != nil {
 		return result, e
 	}
+	queryCoverage := map[string]int{}
 	for _, entity := range entities {
 		def := LibraryTemplate{TemplateDefinition: TemplateDefinition{Key: entity.Key}, Name: entity.Name, Purpose: entity.Purpose, Family: entity.Family, Status: entity.Lifecycle, Discovery: entity.Discovery}
 		if entity.Template != nil {
@@ -90,6 +91,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 			continue
 		}
 		hit := part.Matches[0]
+		queryCoverage[entity.ID] = libraryScenarioQueryCoverage(def, options.Shape.Query)
 		discovery := entity.Discovery
 		discovery.Zones = nil
 		summary := LibraryEntitySummary{ID: entity.ID, Namespace: entity.Namespace, Kind: entity.Kind, Key: entity.Key, Name: entity.Name, Purpose: entity.Purpose, Lifecycle: entity.Lifecycle, Revision: entity.Revision, SourceRevision: entity.SourceRevision, SourceSHA256: entity.SourceSHA256, Discovery: discovery, Capacity: entity.Capacity, SupportedAdaptations: entity.SupportedAdaptations, PreviewCount: len(entity.Artifacts)}
@@ -99,6 +101,9 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 		a, b := result.Matches[i], result.Matches[j]
 		if a.Score != b.Score {
 			return a.Score > b.Score
+		}
+		if queryCoverage[a.Entity.ID] != queryCoverage[b.Entity.ID] {
+			return queryCoverage[a.Entity.ID] > queryCoverage[b.Entity.ID]
 		}
 		if a.ScenarioScore != b.ScenarioScore {
 			return a.ScenarioScore > b.ScenarioScore

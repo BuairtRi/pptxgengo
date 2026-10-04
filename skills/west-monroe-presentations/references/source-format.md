@@ -56,7 +56,7 @@ The compiler expands YAML into the native foundation document and Go layout engi
 
 ```sh
 pptxgengo design project fork --project ./client-deck --template editorial-photo --as editorial-detail --slides page-detail --reason 'Give the detail page more text space'
-pptxgengo design project detach --project ./client-deck --bundle v3 --slide page-detail --as detached-detail --reason 'Adjust this source layout locally'
+pptxgengo design project detach --project ./client-deck --bundle v5 --slide page-detail --as detached-detail --reason 'Adjust this source layout locally'
 ```
 
 `fork` clones a local definition and keeps its frozen ancestor snapshot; selected

@@ -3,7 +3,7 @@
 
 Input is the Go library-source-reference directory and the corresponding bound
 library-reference directory. No sample content is substituted for caller content.
-Historical v2 paired evidence is retained in its own gallery, never relabeled v3.
+Write a new output directory; the accepted production catalog is not overwritten.
 """
 import argparse, copy, hashlib, html, json, shutil
 from pathlib import Path
@@ -24,11 +24,12 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--source',type=Path,required=True)
     ap.add_argument('--bound',type=Path,required=True)
-    ap.add_argument('--out',type=Path,default=ROOT/'release/catalog')
-    ap.add_argument('--bundle',type=Path,default=ROOT/'library/wm-design-system/v3')
+    ap.add_argument('--out',type=Path,required=True,help='New gallery output directory')
+    ap.add_argument('--bundle',type=Path,default=ROOT/'library/wm-design-system/v5')
     ap.add_argument('--review',type=Path,help='Optional explicit per-template native review receipt')
     ap.add_argument('--version',help='Explicit candidate package version; defaults to release/VERSION')
     args=ap.parse_args()
+    require(not args.out.exists(),'gallery output directory must be new')
     version=args.version or (ROOT/'release/VERSION').read_text().strip()
     doc=read(args.source/'compiled-document.json'); report=read(args.source/'layout-report.json')
     catalog=read(args.source/'catalog.json'); bound=read(args.bound/'template-content.json')
@@ -68,7 +69,6 @@ def main():
     reviews=read(args.review) if args.review else {}
     require(set(reviews)<=set(contracts),'review has unknown template identities')
     prepared=[];designs=[]
-    old_index=args.out/'design-system/index.json'
     for page,s in enumerate(doc['slides'],1):
         binding=s['template_binding'];key=binding['template']; c=contracts[key]
         require(c['source_revision']==revision and binding['source_sha256']==c['source_sha256'],f'{key}: source identity mismatch')
@@ -98,24 +98,7 @@ def main():
             prepared.append((args.out/rel/'source-values.json',None,one(bound,bykey[key])))
         prepared.extend([(args.out/rel/'contract.json',None,c),(args.out/rel/'source.foundation.json',None,one(doc,s))])
         designs.append(item)
-    # Inputs validated before updating the current projection.
-    if old_index.exists() and read(old_index).get('source_revision')!=revision:
-        previous=read(old_index)['source_revision'].rsplit('.',1)[-1]
-        require(previous in ('v1','v2','v3','v4'),'unknown historical library revision')
-        historical=args.out/('design-system-'+previous)
-        if not historical.exists():
-            shutil.copytree(args.out/'design-system',historical)
-            def historic_links(value):
-                if isinstance(value,dict):return {k:historic_links(v) for k,v in value.items()}
-                if isinstance(value,list):return [historic_links(v) for v in value]
-                if isinstance(value,str) and value.startswith('design-system/'):
-                    return historical.name+'/'+value[len('design-system/'):]
-                return value
-            write(historical/'index.json',historic_links(read(historical/'index.json')))
-        page=args.out/'design-system.html'
-        historical_page=args.out/('design-system-'+previous+'.html')
-        if page.exists() and not historical_page.exists():
-            historical_page.write_text(page.read_text().replace('design-system/',historical.name+'/'))
+    # Inputs are fully validated before writing the new projection.
     for p,src,value in prepared:
         p.parent.mkdir(parents=True,exist_ok=True)
         if src: shutil.copy2(src,p)
@@ -131,7 +114,7 @@ def main():
     encoded=json.dumps(index,ensure_ascii=False).replace('<',chr(92)+'u003c').replace('>',chr(92)+'u003e').replace('&',chr(92)+'u0026')
     page='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WM design system · VERSION</title>
 <style>*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#070154;font:16px/1.5 system-ui}header{padding:24px;background:#070154;color:white}header a{color:white;margin-right:20px}main{max-width:1440px;margin:auto;padding:24px}input,select{font:inherit;padding:10px;margin:8px 8px 8px 0}input{min-width:300px}article{background:white;padding:24px;margin:20px 0;border:1px solid #ced7e6}article img{width:100%;max-width:960px;display:block}h2{margin-top:0}a{color:#0047ff;margin-right:16px}.meta{color:#52678f}.pending{padding:30px;background:#eef2f8}pre{white-space:pre-wrap;overflow-wrap:anywhere}.toolbar{position:sticky;top:0;background:#f5f7fb}</style>
-<header><h1>West Monroe design system</h1><p>COUNT designs · VERSION · pinned source REVISION</p><a href="index.html">Catalog</a><a href="templates.html">Legacy templates</a><a href="components.html">Components</a>HISTORY</header>
+<header><h1>West Monroe design system</h1><p>COUNT designs · VERSION · pinned source REVISION</p></header>
 <main><p>Search by scenario or the shape of your content. Templates, frames and components are persistent library definitions. Maintain a deck in a single <code>deck.yaml</code>; custom layouts live in that deck's local templates.</p>
 <p>Preview/review status is specific to the illustrated source specimen. Build actual-content alternatives with <code>pptxgengo design library-fit</code>; review new text and images before sharing.</p>
 <div class="toolbar"><input id="q" placeholder="Search designs, roles or structures"><select id="family"><option value="">All families</option></select><span id="count"></span></div><div id="designs"></div></main>
@@ -140,8 +123,7 @@ const data=JSON.parse(document.getElementById('data').textContent),q=document.ge
 function el(tag,text){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;}function link(label,path){const a=el('a',label);a.href=path;return a;}
 [...new Set(data.designs.map(d=>d.family))].sort().forEach(f=>{const o=el('option',f);o.value=f;family.append(o)});
 function paint(){const term=q.value.toLowerCase().trim();const shown=data.designs.filter(d=>(!family.value||d.family===family.value)&&(!term||JSON.stringify([d.template,d.name,d.family,d.discovery.content_roles,d.discovery.structures,d.discovery.visual_forms]).toLowerCase().includes(term)));list.replaceChildren();document.getElementById('count').textContent=shown.length+' designs';for(const d of shown){const a=el('article');a.append(el('h2',d.name));const m=el('p',d.template+' · '+d.native_review.replaceAll('_',' '));m.className='meta';a.append(m);if(d.source_preview){const im=document.createElement('img');im.src=d.source_preview;im.alt=d.name+' source specimen';im.loading='lazy';a.append(im)}else{const p=el('p','Native preview pending. Editable source and content contract are available.');p.className='pending';a.append(p)}const links=el('p');links.append(link('Content contract',d.contract),link('Editable composition',d.source_foundation));if(d.source_values)links.append(link('Example content',d.source_values));a.append(links,el('p',(d.discovery.content_roles||[]).join(' · ')),el('pre','pptxgengo design library-inspect --id '+d.template));if(d.replaced_by)a.append(el('p','Retained for compatibility; prefer '+d.replaced_by));list.append(a)}}q.addEventListener('input',paint);family.addEventListener('input',paint);paint();</script></html>'''
-    history=''.join('<a href="'+p.name+'">Historical '+html.escape(p.stem.removeprefix('design-system-'))+' specimens</a>' for p in sorted(args.out.glob('design-system-v*.html')))
-    for k,v in [('VERSION',html.escape(version)),('COUNT',str(len(designs))),('REVISION',html.escape(revision)),('HISTORY',history),('DATA',encoded)]:page=page.replace(k,v)
+    for k,v in [('VERSION',html.escape(version)),('COUNT',str(len(designs))),('REVISION',html.escape(revision)),('DATA',encoded)]:page=page.replace(k,v)
     (args.out/'design-system.html').write_text(page)
     root=args.out/'index.json';idx=read(root) if root.exists() else {'schema':'pptxgengo.release-catalog.v2'}
     idx['version']=version;idx['design_system']={k:index[k] for k in ['entries','active','deprecated','source_revision','source_commit','qualification']}

@@ -5,7 +5,7 @@
 Describe the scenario and the content shape separately. For example, “weekly status” is a scenario; “four peer points, one key message, optional image/icon zones” is a shape. Original labels such as problem, goal or recommendation are soft clues. They must not prevent a structurally suitable template from appearing.
 
 ```sh
-pptxgengo design library-index --bundle v3 --out ./library.sqlite
+pptxgengo design library-index --bundle v5 --out ./library.sqlite
 pptxgengo design library-find --index ./library.sqlite --query 'weekly status' --kinds template --limit 10
 pptxgengo design library-find --index ./library.sqlite --roles point,key-message --items 4 --item-role point --kinds template --limit 10
 pptxgengo design library-find --index ./library.sqlite --structures comparison --visual-forms table --kinds template --limit 10
@@ -32,7 +32,7 @@ Choose another template or a local composition when the source topology does not
 The implemented `library-fit` command accepts `pptxgengo.wmds-template-document.v1` JSON with explicit `supplied_content` candidate slides. Each candidate has a unique ID, template key and its own complete closed values. Map the same supported argument into each candidate; preserve all material evidence. Candidate-specific headings/grouping may change only when the meaning remains intact or an operator approves the tradeoff.
 
 ```sh
-pptxgengo design library-fit --bundle v3 --spec alternatives.json --out ./candidate-review
+pptxgengo design library-fit --bundle v5 --spec alternatives.json --out ./candidate-review
 ```
 
 The command writes the candidate input, independent decks/foundation/layout reports and `fit-report.json`. Inspect per-candidate status and `passed`/`failed`: completing the experiment is not a promise every candidate passed. No source specimen copy is substituted for missing values. Go layout success still leaves native and visual review pending.

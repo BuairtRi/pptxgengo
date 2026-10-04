@@ -15,7 +15,7 @@ func TestV5CatalogAndIndexShorthand(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Setenv("PPTXGENGO_RELEASE_ROOT", root)
-	for _, route := range []string{"catalog", "index"} {
+	for _, route := range []string{"catalog", "catalog-default", "index", "index-default"} {
 		t.Run(route, func(t *testing.T) {
 			output, err := os.CreateTemp(t.TempDir(), "output-*.json")
 			if err != nil {
@@ -25,11 +25,19 @@ func TestV5CatalogAndIndexShorthand(t *testing.T) {
 			previousArgs, previousStdout := os.Args, os.Stdout
 			os.Stdout = output
 			defer func() { os.Args, os.Stdout = previousArgs, previousStdout }()
-			if route == "catalog" {
-				os.Args = []string{"pptxdesign", "library-catalog", "--bundle", "v5", "--engine", wmdesign.CandidateEngine, "--include-deprecated"}
+			catalog := route == "catalog" || route == "catalog-default"
+			if catalog {
+				os.Args = []string{"pptxdesign", "library-catalog", "--include-deprecated"}
+				if route == "catalog" {
+					os.Args = append(os.Args, "--bundle", "v5", "--engine", wmdesign.CandidateEngine)
+				}
 				err = run()
 			} else {
-				err = runLibraryIndex("library-index", []string{"--bundle", "v5", "--out", filepath.Join(t.TempDir(), "new.sqlite")})
+				args := []string{"--out", filepath.Join(t.TempDir(), "new.sqlite")}
+				if route == "index" {
+					args = append(args, "--bundle", "v5")
+				}
+				err = runLibraryIndex("library-index", args)
 			}
 			if err != nil {
 				t.Fatal(err)
@@ -37,7 +45,7 @@ func TestV5CatalogAndIndexShorthand(t *testing.T) {
 			if _, err := output.Seek(0, 0); err != nil {
 				t.Fatal(err)
 			}
-			if route == "catalog" {
+			if catalog {
 				var rows []wmdesign.LibraryTemplate
 				if err := json.NewDecoder(output).Decode(&rows); err != nil {
 					t.Fatal(err)
@@ -58,6 +66,40 @@ func TestV5CatalogAndIndexShorthand(t *testing.T) {
 				if report.SourceRevision != wmdesign.LibraryRevisionV5 || report.Counts["template"] != 587 {
 					t.Fatalf("v5 index returned revision/count %s/%d", report.SourceRevision, report.Counts["template"])
 				}
+			}
+		})
+	}
+}
+
+func TestLatestDiscoveryResourcesAreDefault(t *testing.T) {
+	root, err := filepath.Abs(filepath.Join("..", ".."))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("PPTXGENGO_RELEASE_ROOT", root)
+	for _, command := range []string{"library-find", "library-inspect", "library-preview"} {
+		t.Run(command, func(t *testing.T) {
+			output, err := os.CreateTemp(t.TempDir(), "output-*.json")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer output.Close()
+			previous := os.Stdout
+			os.Stdout = output
+			defer func() { os.Stdout = previous }()
+			args := []string{"--id", "quote/light"}
+			if command == "library-find" {
+				args = []string{"--query", "maturity", "--limit", "1"}
+			}
+			if err := runLibraryIndex(command, args); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := output.Seek(0, 0); err != nil {
+				t.Fatal(err)
+			}
+			var result json.RawMessage
+			if err := json.NewDecoder(output).Decode(&result); err != nil {
+				t.Fatal(err)
 			}
 		})
 	}

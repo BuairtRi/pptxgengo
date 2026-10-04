@@ -29,8 +29,8 @@ func run() error {
 		return runLibrarySearch(os.Args[2:])
 	}
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "library/wm-design-system/v1", "pinned foundation bundle path or v1/v2/v3/v4/v5")
-	engine := f.String("engine", wmdesign.Engine, "typography engine: wmds-go-foundation.v1 or wmds-go-foundation.v2 (candidate)")
+	bundle := f.String("bundle", "v5", "pinned foundation bundle path or v5 (default)")
+	engine := f.String("engine", wmdesign.CandidateEngine, "typography engine: wmds-go-foundation.v1 or wmds-go-foundation.v2 (candidate)")
 	source := f.String("source", "", "optional WMDS source override; must match pinned snapshot")
 	out := f.String("out", "", "new output directory")
 	spec := f.String("spec", "", "foundation document JSON")
@@ -45,7 +45,7 @@ func run() error {
 		return fmt.Errorf("unexpected positional arguments")
 	}
 	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
-		root := os.Getenv("PPTXGENGO_RELEASE_ROOT")
+		root := designReleaseRoot()
 		*bundle = filepath.Join(root, "library", "wm-design-system", *bundle)
 	}
 	if command == "asset-catalog" {

@@ -90,7 +90,7 @@ func TestSceneChartMissingValuesFrozenAdoptionFullSlide(t *testing.T) {
 	if len(entry.Slide) == 0 {
 		t.Fatal("frozen adoption fixture missing")
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, e := Load(bundle, "")
 	if e != nil {
 		t.Fatal(e)

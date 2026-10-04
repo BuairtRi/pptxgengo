@@ -32,6 +32,16 @@ score remains a discovery signal, never a fit guarantee.
 ## Screenshots and SQLite
 
 The accepted 587 gallery already has a native screenshot for every template.
+The retained catalog is `library/wm-design-system/v5/catalog`; its unified index
+is `library/wm-design-system/v5/library.sqlite`. Run from the repository root:
+
+```sh
+pptxdesign library-find --index library/wm-design-system/v5/library.sqlite \
+  --query 'phased delivery roadmap' --kinds template --summary
+pptxdesign library-inspect --index library/wm-design-system/v5/library.sqlite \
+  --id lifecycle/three-phases --summary
+```
+
 Build the index with its matching `--gallery` to link these images and preserve
 their SHA256 identities. The compact CLI search returns verified absolute
 screenshot paths; selection cards relate editable slots to source content zones.

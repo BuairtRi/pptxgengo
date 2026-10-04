@@ -83,7 +83,7 @@ func TestIntakeCurveStrictKeysAndScalars(t *testing.T) {
 }
 func TestIntakeCurveActualExtremaAndAllocation(t *testing.T) {
 	r := intakeTestRenderer(t)
-	raw := `{"type":"teamcurve","x":100,"y":80,"w":500,"h":240,"max":100,"phaseH":40,"series":[{"values":[0,100,100,0]}]}`
+	raw := `{"type":"teamcurve","x":100,"y":80,"w":500,"h":240,"max":100,"phaseH":40,"curve":"catmull","series":[{"values":[0,100,100,0]}]}`
 	p := intakeCurvePlan(t, r, raw, SceneContext{Surface: "light"})
 	shape := p.Items[0].Shape
 	// The middle plateau reaches -plotH/8, not its control polygon's -plotH/6.
@@ -95,7 +95,7 @@ func TestIntakeCurveActualExtremaAndAllocation(t *testing.T) {
 	}
 	allocation := Rect{100, 80, 500, 240}
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "curve", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "curve", Kind: "scene", Scene: &SceneSpec{Node: json.RawMessage(raw), Allocation: &allocation}}}}}}
-	_, _, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v2"), "", doc, CandidateEngine)
+	_, _, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
 	if err == nil || !strings.Contains(err.Error(), "component_exceeds_allocation") {
 		t.Fatalf("overshoot concealed from allocation: %v", err)
 	}
@@ -136,9 +136,9 @@ func TestIntakeCurveExtremaContainSampledGeometry(t *testing.T) {
 }
 
 func TestIntakeCurveNativePackageGeometry(t *testing.T) {
-	raw := json.RawMessage(`{"type":"teamcurve","x":100,"y":80,"w":500,"h":240,"max":100,"series":[{"name":"Capacity","values":[20,30,40],"style":"line","fill":"#070154"},{"name":"Team","values":[10,15,20]}]}`)
+	raw := json.RawMessage(`{"type":"teamcurve","x":100,"y":80,"w":500,"h":240,"max":100,"curve":"catmull","series":[{"name":"Capacity","values":[20,30,40],"style":"line","fill":"#070154"},{"name":"Team","values":[10,15,20]}]}`)
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "curve", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "curve", Kind: "scene", Scene: &SceneSpec{Node: raw}}}}}}
-	data, report, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v2"), "", doc, CandidateEngine)
+	data, report, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -179,7 +179,7 @@ func TestIntakeCurveNativePackageGeometry(t *testing.T) {
 }
 
 func TestIntakeCurveAllFrozenV3Nodes(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

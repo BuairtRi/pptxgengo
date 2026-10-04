@@ -13,7 +13,7 @@ import (
 
 func runLibrarySearch(args []string) error {
 	f := flag.NewFlagSet("library-search", flag.ContinueOnError)
-	bundle := f.String("bundle", "library/wm-design-system/v2", "pinned design library bundle path or v1/v2/v3/v4/v5")
+	bundle := f.String("bundle", "v5", "pinned design library bundle path or v5 (default)")
 	source := f.String("source", "", "optional source override; must match pinned snapshot")
 	engine := f.String("engine", wmdesign.CandidateEngine, "wrapper compatibility passthrough; search does not evaluate engine/bundle compatibility")
 	query := f.String("query", "", "scenario/purpose/label text; soft ranking signal")
@@ -37,7 +37,7 @@ func runLibrarySearch(args []string) error {
 		return fmt.Errorf("unsupported engine %q", *engine)
 	}
 	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
-		*bundle = filepath.Join(os.Getenv("PPTXGENGO_RELEASE_ROOT"), "library", "wm-design-system", *bundle)
+		*bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
 	}
 	catalog, err := wmdesign.LibraryCatalog(*bundle, *source)
 	if err != nil {

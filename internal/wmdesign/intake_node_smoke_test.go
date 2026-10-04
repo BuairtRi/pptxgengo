@@ -27,7 +27,7 @@ func TestIntakeManualNodeSmoke(t *testing.T) {
 		t.Fatal("snapshot required")
 	}
 	entries := intakeRepairEntries(t, filepath.Join(root, "source", "templates", "library"))
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	baseline := intakeRepairEntries(t, filepath.Join(bundle, "source", "templates", "library"))
 	base := intakeTestRenderer(t)
 	base.source.Revision = IntakeTeamCurveMonotoneRevision

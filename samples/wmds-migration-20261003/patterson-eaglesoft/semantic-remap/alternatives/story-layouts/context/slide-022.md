@@ -1,1 +1,0 @@
-Keep original durations/cells/gates and all task wording. Source is two editable tables; not a chart. Source224words exceeds shared8week plan budget. Offer alternative makes room for narrative but must not add a fee.

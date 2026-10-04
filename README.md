@@ -12,15 +12,16 @@ The full product remains under development.**
 The first target is detailed West Monroe proposal and
 document-style decks.
 
-Local release **0.1.0-local.4** includes 101 source-template contracts and separate
-searchable template/component galleries. Open them with `pptxgengo catalog
---templates --open` and `pptxgengo catalog --components --open`. Gallery entries
-state the supported controls and distinguish source editing from new composition.
+The current West Monroe design system is
+[`library/wm-design-system/v5`](library/wm-design-system/v5/), with 587 templates,
+native previews and a SQLite discovery index. It is the only retained design
+system version. The three final converted decks, editable YAML and offline
+packages are together in [`samples/final`](samples/final/README.md).
 
 - [Local CLI release and Codex installation](release/README.md)
 - [West Monroe authoring skill with progressive references](skills/west-monroe-presentations/SKILL.md)
 - [Current capabilities and verified baseline](CAPABILITIES.md)
-- [WMDS Go authoring: typography, grids, components and 167 slide designs](cmd/pptxdesign/README.md)
+- [WMDS Go authoring: typography, grids, components and slide designs](cmd/pptxdesign/README.md)
 - [Product architecture, experiments, and implementation sequence](PRODUCT_PLAN.md)
 - [Current remaining-work plan and library inventory/curation sequence](IMPLEMENTATION_PLAN.md)
 - [SQLite catalog, narrative model, composition, and design passes](DESIGN_WORKFLOW.md)

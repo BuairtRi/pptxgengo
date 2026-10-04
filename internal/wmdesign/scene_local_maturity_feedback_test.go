@@ -8,7 +8,7 @@ import (
 )
 
 func TestLocalMaturityCompleteAllocationAndLabelHeadroom(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v4")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	allocation := Rect{100, 190, 700, 240}
 	args := map[string]any{"stages": []any{
 		map[string]any{"label": "Manual", "text": "People perform each step."},

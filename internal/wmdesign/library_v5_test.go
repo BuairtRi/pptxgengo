@@ -38,7 +38,7 @@ func TestLibraryV5PinnedCatalogAndInheritance(t *testing.T) {
 	if len(catalog) != 587 {
 		t.Fatalf("catalog count %d", len(catalog))
 	}
-	old := intakeRepairEntries(t, filepath.Join(root, "v4", "source", "templates", "library"))
+	old := intakeRepairEntries(t, filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003-frozen", "source", "templates", "library"))
 	count, revised, added := 0, 0, 0
 	for _, def := range catalog {
 		if def.SourceRevision != LibraryRevisionV5 {
@@ -112,26 +112,47 @@ func TestLibraryV5UnusedRowMetadataIsNotEditableContent(t *testing.T) {
 }
 
 func TestLibraryV5InheritedBindingsPreserveV4Amendments(t *testing.T) {
-	root := filepath.Join("..", "..", "library", "wm-design-system")
-	catalogs := make([][]LibraryTemplate, 2)
-	for i, revision := range []string{"v4", "v5"} {
-		var err error
-		catalogs[i], err = LibraryCatalog(filepath.Join(root, revision), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Reconstruct the historical content projection from immutable intake
+	// evidence in memory. Only v5 is loaded as an installed executable bundle.
+	baseline, err := Load(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	baseline.Revision = LibraryRevisionV4
+	baseline.Templates = map[string]json.RawMessage{}
+	baseline.Files = nil
+	paths, err := filepath.Glob(filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003-frozen", "source", "templates", "library", "*.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, path := range paths {
+		raw, err := os.ReadFile(path)
 		if err != nil {
 			t.Fatal(err)
 		}
+		key := "templates/library/" + filepath.Base(path)
+		baseline.Templates[key] = raw
+		baseline.Files = append(baseline.Files, SourceFile{Path: key, SHA256: fmt.Sprintf("%x", sha256.Sum256(raw))})
+	}
+	previous, err := libraryCatalog(baseline)
+	if err != nil {
+		t.Fatal(err)
 	}
 	old := map[string]LibraryTemplate{}
-	for _, def := range catalogs[0] {
+	for _, def := range previous {
 		old[def.Key] = def
 	}
-	for _, def := range catalogs[1] {
+	for _, def := range catalog {
 		if !v5RetainedV4Compositions[def.Key] {
 			continue
 		}
 		prior := old[def.Key]
-		if def.ContentContract != prior.ContentContract {
-			t.Fatalf("content API changed: %s", def.Key)
+		if def.ContentContract != prior.ContentContract || !reflect.DeepEqual(def.Slots, prior.Slots) || !reflect.DeepEqual(def.Arrays, prior.Arrays) || !reflect.DeepEqual(def.ValueSchema, prior.ValueSchema) {
+			t.Fatalf("inherited content API changed: %s", def.Key)
 		}
 		if def.ContentContract != LibraryBindingsContract {
 			continue // Retained cards keep their independently checked typed API.

@@ -26,9 +26,9 @@ dependency hashing. Content drafts for review should be generated from current `
 `init` pins an **existing authored project**, not a blank-file wizard:
 
 ```sh
-pptxgengo design project init --project ./client-deck --bundle v3
-pptxgengo design project check --project ./client-deck --bundle v3
-pptxgengo design project build --project ./client-deck --bundle v3
+pptxgengo design project init --project ./client-deck --bundle v5
+pptxgengo design project check --project ./client-deck --bundle v5
+pptxgengo design project build --project ./client-deck --bundle v5
 pptxgengo design project status --project ./client-deck
 pptxgengo design project resume --project ./client-deck
 pptxgengo design project approve --project ./client-deck --stage outline --actor 'operator-name'
@@ -45,7 +45,7 @@ On resume: read project memory, run status, inspect invalidations and baseline d
 ```sh
 pptxgengo design project export --project ./client-deck --mode client --out ./client-delivery.zip
 pptxgengo design project export --project ./client-deck --mode maintainer --out ./maintenance.zip
-pptxgengo design project export --project ./client-deck --mode offline --bundle v3 --out ./offline.zip
+pptxgengo design project export --project ./client-deck --mode offline --bundle v5 --out ./offline.zip
 ```
 
 - `client`: current generated PowerPoint and export receipt; excludes project memory and internal sources. PDF is not yet a recorded build artifact and cannot silently be added.

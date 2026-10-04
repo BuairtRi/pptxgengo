@@ -11,11 +11,34 @@ import (
 func indexFixture(t *testing.T) (string, LibraryIndexReport) {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "catalog.sqlite")
-	report, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v3")})
+	report, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5")})
 	if err != nil {
 		t.Fatal(err)
 	}
 	return path, report
+}
+
+func TestUnifiedLibraryWeeklyStatusKeepsCompleteScenarioOrdering(t *testing.T) {
+	path, _ := indexFixture(t)
+	index, err := OpenLibraryIndex(path, LibraryIndexOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer index.Close()
+	for _, query := range []string{"weekly status", "weekly weekly status"} {
+		result, err := index.Find(LibraryIndexFindOptions{Kinds: []string{"template"}, Shape: LibrarySearchOptions{Query: query, Limit: 100}})
+		if err != nil || len(result.Matches) == 0 {
+			t.Fatalf("weekly status returned no candidates: %v %+v", err, result)
+		}
+		if result.Matches[0].Entity.Key != "adoption/dashboard" || result.Matches[0].Score != 12 {
+			t.Fatalf("SQLite search lost complete weekly/status purpose match: %+v", result.Matches[0])
+		}
+		for _, hit := range result.Matches[1:] {
+			if hit.Entity.Key == "capability-map/domain-columns" && hit.Score >= result.Matches[0].Score {
+				t.Fatalf("partial static status match outranks direct weekly scenario: %+v", hit)
+			}
+		}
+	}
 }
 
 func TestUnifiedLibraryNativeProjectionAndDiscovery(t *testing.T) {
@@ -114,7 +137,7 @@ func TestUnifiedLibraryLegacyNamespaceAndInputPin(t *testing.T) {
 	}
 	db.Close()
 	path := filepath.Join(root, "unified.sqlite")
-	report, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v3"), LegacyIndex: legacy})
+	report, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5"), LegacyIndex: legacy})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -155,7 +178,7 @@ func TestUnifiedLibraryLegacyNamespaceAndInputPin(t *testing.T) {
 }
 
 func TestUnifiedLibraryActualContentAlternatives(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	values := BoundCardsContent{Eyebrow: "Delivery", Title: "Keep review evidence and next actions together", Cards: []BoundCardContent{{Key: "source", Title: "Trace sources", Body: "Link every claim to its source."}, {Key: "review", Title: "Review clearly", Body: "Give reviewers the audience and visible draft."}, {Key: "retain", Title: "Retain context and next actions", Body: "Keep decisions with the source deck; name the next decision and accountable owner."}}}
 	input := BoundDocument{Schema: BoundDocumentSchema, Year: 2026, Slides: []BoundSlide{{ID: "option-a", Template: "cards/3", ContentKind: "supplied_content", Values: indexJSON(values)}, {ID: "option-b", Template: "cards/4", ContentKind: "supplied_content", Values: indexJSON(BoundCardsContent{Eyebrow: values.Eyebrow, Title: values.Title, Cards: []BoundCardContent{values.Cards[0], values.Cards[1], {Key: "retain", Title: "Retain context", Body: "Keep decisions with the source deck."}, {Key: "next", Title: "Define the next action", Body: "Name the next decision and accountable owner."}}})}, {ID: "invalid-option", Template: "cards/3", ContentKind: "supplied_content", Values: indexJSON(BoundCardsContent{Title: values.Title, Cards: values.Cards[:2]})}}}
 	out := filepath.Join(t.TempDir(), "alternatives")
@@ -198,7 +221,7 @@ func TestUnifiedLibraryActualContentAlternatives(t *testing.T) {
 }
 
 func TestUnifiedLibraryGalleryPinsAndPreviewDrift(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	catalog, err := LibraryCatalog(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -305,7 +328,7 @@ func TestUnifiedLibraryLegacyResourceRelocation(t *testing.T) {
 	}
 	db.Close()
 	path := filepath.Join(root, "unified.sqlite")
-	if _, err = BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v3"), LegacyIndex: legacy}); err != nil {
+	if _, err = BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5"), LegacyIndex: legacy}); err != nil {
 		t.Fatal(err)
 	}
 	relocated := t.TempDir()

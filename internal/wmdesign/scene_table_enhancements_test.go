@@ -209,7 +209,7 @@ func TestTableLegacyNumericMarksPreserved(t *testing.T) {
 func TestTableEnhancementNativeXML(t *testing.T) {
 	raw := json.RawMessage(`{"type":"table","x":117,"y":126,"w":480,"rowH":72,"cols":[{"k":"name","label":"Name","w":240},{"k":"value","label":"Value","w":240,"type":"heat","showValue":true}],"rows":[{"name":{"text":"Platform","sub":"System of record"},"value":4}]}`)
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "heat", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "table", Kind: "scene", Scene: &SceneSpec{Node: raw}}}}}}
-	data, _, e := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v2"), "", doc, CandidateEngine)
+	data, _, e := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -301,7 +301,7 @@ func TestTableHeatDenseLinearPaintAssembly(t *testing.T) {
 	}
 }
 func BenchmarkTableHeatDense(b *testing.B) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v2")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	s, e := Load(bundle, "")
 	if e != nil {
 		b.Fatal(e)

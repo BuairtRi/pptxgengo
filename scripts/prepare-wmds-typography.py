@@ -29,7 +29,7 @@ for name in names:
 (root/'runs').mkdir(exist_ok=False)
 artifacts = {name: sha(root/name) for name in ['typography-probes.pptx', 'probes.json', 'capture.sh']+names[1:]}
 if manifest['engine'] == 'wmds-go-foundation.v2':
-    calibration = scripts.parent/'library/wm-design-system/typography-v2-candidate/calibration.json'
+    calibration = scripts.parent/'library/wm-design-system/v5/typography/calibration.json'
     with (root/'calibration.json').open('xb') as output:
         output.write(calibration.read_bytes())
     artifacts['calibration.json'] = sha(root/'calibration.json')

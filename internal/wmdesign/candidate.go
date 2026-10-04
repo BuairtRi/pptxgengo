@@ -40,6 +40,20 @@ type CandidateCalibration struct {
 func anchorKey(sha string, size, leading float64) string {
 	return fmt.Sprintf("%s/%g/%g", sha, size, leading)
 }
+
+// CandidateCalibrationPath resolves the current bundled calibration while
+// retaining the physical layout of previously exported offline runtimes.
+// A present but unreadable or changed current file must never fall back.
+func CandidateCalibrationPath(fontRoot string) (string, error) {
+	path := filepath.Join(fontRoot, "..", "typography", "calibration.json")
+	if _, err := os.Stat(path); err == nil {
+		return path, nil
+	} else if !os.IsNotExist(err) {
+		return "", err
+	}
+	return filepath.Join(fontRoot, "..", "..", "typography-v2-candidate", "calibration.json"), nil
+}
+
 func NewTypographyEngine(root, engine string) (*Typography, error) {
 	if engine != Engine && engine != CandidateEngine {
 		return nil, fmt.Errorf("text.unsupported_engine: %s", engine)
@@ -51,7 +65,10 @@ func NewTypographyEngine(root, engine string) (*Typography, error) {
 	if engine == Engine {
 		return t, nil
 	}
-	path := filepath.Join(root, "..", "..", "typography-v2-candidate", "calibration.json")
+	path, e := CandidateCalibrationPath(root)
+	if e != nil {
+		return nil, e
+	}
 	data, e := os.ReadFile(path)
 	if e != nil {
 		return nil, e

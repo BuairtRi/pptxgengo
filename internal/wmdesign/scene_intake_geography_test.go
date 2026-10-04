@@ -102,7 +102,7 @@ func TestIntakeGeographyStrictValidation(t *testing.T) {
 }
 
 func TestIntakeGeographyMatchesFrozenRenderer(t *testing.T) {
-	data, e := os.ReadFile(filepath.Join("..", "..", "library", "wm-design-system", "v3", "source", "explorations", "components.src.html"))
+	data, e := os.ReadFile(filepath.Join("..", "..", "library", "wm-design-system", "v5", "source", "explorations", "components.src.html"))
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -131,12 +131,12 @@ func TestIntakeGeographyMatchesFrozenRenderer(t *testing.T) {
 		t.Fatal(e)
 	}
 	if !reflect.DeepEqual(frozen.Geo, geo) || !reflect.DeepEqual(frozen.Lakes, lakes) {
-		t.Fatal("compiled geography does not match frozen v3 source renderer")
+		t.Fatal("compiled geography does not match the pinned v5 source renderer")
 	}
 }
 
 func TestIntakeGeographyV3LocationRefinementsFitSplit(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

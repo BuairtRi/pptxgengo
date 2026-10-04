@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read-only comparison of generated bound template artifacts to frozen sources."""
 import argparse, hashlib, json, pathlib
-p=argparse.ArgumentParser();p.add_argument('directory',type=pathlib.Path);p.add_argument('--bundle',type=pathlib.Path,default=pathlib.Path('library/wm-design-system/v1'));p.add_argument('--out',type=pathlib.Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('directory',type=pathlib.Path);p.add_argument('--bundle',type=pathlib.Path,default=pathlib.Path('library/wm-design-system/v5'));p.add_argument('--out',type=pathlib.Path,required=True);a=p.parse_args()
 if a.out.exists():raise SystemExit('Output must be new')
 read=lambda f:json.loads(f.read_text());sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
 input_doc=read(a.directory/'template-content.json');compiled=read(a.directory/'compiled-document.json');bindings=read(a.directory/'binding-report.json');layout=read(a.directory/'layout-report.json')

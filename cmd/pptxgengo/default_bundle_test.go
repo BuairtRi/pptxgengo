@@ -9,8 +9,8 @@ import (
 
 func TestPublishedBundleDefaultsAndClosedMetadata(t *testing.T) {
 	root := t.TempDir()
-	if got, err := publishedBundle(root); err != nil || got != "v3" {
-		t.Fatalf("historical default: %q %v", got, err)
+	if got, err := publishedBundle(root); err != nil || got != "v5" {
+		t.Fatalf("latest default: %q %v", got, err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
@@ -20,7 +20,7 @@ func TestPublishedBundleDefaultsAndClosedMetadata(t *testing.T) {
 			t.Fatal(err)
 		}
 		got, err := publishedBundle(root)
-		if value == "v1" || value == "v2" || value == "v3" || value == "v4" || value == "v5" {
+		if value == "v5" {
 			if err != nil || got != value {
 				t.Errorf("metadata %q: %q %v", value, got, err)
 			}
@@ -67,5 +67,31 @@ func TestDesignArgsUseStagedV5ButRespectProjectPins(t *testing.T) {
 		if err != nil || !reflect.DeepEqual(got, append(input, "--engine", "wmds-go-foundation.v2")) {
 			t.Fatalf("explicit bundle changed: %v %v", got, err)
 		}
+	}
+}
+
+func TestDiscoveryDefaultsUseOnlyLatestLibraryResources(t *testing.T) {
+	root := t.TempDir()
+	for _, command := range []string{"library-find", "library-inspect", "library-preview"} {
+		got, err := designArgs(root, []string{command})
+		if err != nil {
+			t.Fatal(err)
+		}
+		values := map[string]string{}
+		for i := 1; i+1 < len(got); i += 2 {
+			values[got[i]] = got[i+1]
+		}
+		bundle := filepath.Join(root, "library", "wm-design-system", "v5")
+		if values["--bundle"] != bundle || values["--index"] != filepath.Join(bundle, "library.sqlite") || values["--gallery"] != filepath.Join(bundle, "catalog") {
+			t.Fatalf("latest discovery paths: %v", got)
+		}
+		if hasFlag(got, "--legacy-index") || hasFlag(got, "--legacy-root") {
+			t.Fatalf("legacy resources injected: %v", got)
+		}
+	}
+	input := []string{"library-inspect", "--index", "custom.sqlite", "--gallery", "custom-gallery", "--bundle", "custom-bundle"}
+	got, err := designArgs(root, input)
+	if err != nil || !reflect.DeepEqual(got, input) {
+		t.Fatalf("explicit discovery paths changed: %v %v", got, err)
 	}
 }

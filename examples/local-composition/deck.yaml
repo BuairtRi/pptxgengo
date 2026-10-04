@@ -1,0 +1,233 @@
+schema: pptxgengo.deck-document.v1
+id: local-composition
+title: Local diagram composition
+year: 2026
+toolchain:
+  lockfile: toolchain.lock.json
+context:
+  project: context/project.md
+local_templates:
+  three-lens-pilot:
+    name: Three decision lenses
+    description: Reusable local three-circle Venn with authored labels and intersection.
+    frame: {scope: shared, id: wmds/frame/none-compact}
+    frame_options: {rail: none, footer: compact, surface: light, title_lines: 1, source_lines: 1}
+    grid: {scope: shared, id: wmds/grid/12-columns}
+    zones:
+      title:
+        role: slide-title
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 65}
+      eyebrow:
+        role: eyebrow
+        required: true
+        schema: {type: string, maxLength: 30}
+      source:
+        role: source
+        required: true
+        schema: {type: string, maxLength: 110}
+      sets:
+        role: set-labels
+        required: true
+        schema:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            type: object
+            additionalProperties: false
+            required: [label]
+            properties:
+              label: {type: string, minLength: 1, maxLength: 15}
+      regions:
+        role: intersection-labels
+        required: true
+        schema:
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            type: object
+            additionalProperties: false
+            required: [in, label]
+            properties:
+              in:
+                type: array
+                minItems: 3
+                maxItems: 3
+                items: {type: integer, minimum: 0, maximum: 2}
+              label: {type: string, minLength: 1, maxLength: 15}
+    nodes:
+      - id: decision-lenses
+        kind: component
+        placement:
+          zone: body
+          rect: {x_pt: 123, y_pt: 6, width_pt: 600, height_pt: 294}
+        definition: {scope: shared, id: wmds/component/venn}
+        arguments:
+          sets: {binding: sets}
+          regions: {binding: regions}
+          labelStyle: mono
+        keys:
+          sets: [people, process, data]
+          regions: [shared-pilot]
+  four-stage-capability:
+    name: Four-stage capability curve
+    description: Reusable local maturity curve with authored stages, active stage and current-position flag.
+    frame: {scope: shared, id: wmds/frame/none-compact}
+    frame_options: {rail: none, footer: compact, surface: light, title_lines: 1, source_lines: 1}
+    grid: {scope: shared, id: wmds/grid/12-columns}
+    zones:
+      title:
+        role: slide-title
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 65}
+      eyebrow:
+        role: eyebrow
+        required: true
+        schema: {type: string, maxLength: 30}
+      source:
+        role: source
+        required: true
+        schema: {type: string, maxLength: 110}
+      stages:
+        role: maturity-stages
+        required: true
+        schema:
+          type: array
+          minItems: 4
+          maxItems: 4
+          items:
+            type: object
+            additionalProperties: false
+            required: [label, text, n]
+            properties:
+              label: {type: string, minLength: 1, maxLength: 16}
+              text: {type: string, minLength: 1, maxLength: 42}
+              n: {type: integer, minimum: 1, maximum: 4}
+      active:
+        role: active-stage
+        required: true
+        schema: {type: integer, minimum: 0, maximum: 3}
+      axis:
+        role: axis-label
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 24}
+      here:
+        role: current-position
+        required: true
+        schema:
+          type: object
+          additionalProperties: false
+          required: [label]
+          properties:
+            label: {type: string, minLength: 1, maxLength: 18}
+    nodes:
+      - id: capability-curve
+        kind: component
+        placement:
+          zone: body
+          rect: {x_pt: 18, y_pt: 6, width_pt: 810, height_pt: 294}
+        definition: {scope: shared, id: wmds/component/maturity}
+        arguments:
+          stages: {binding: stages}
+          active: {binding: active}
+          axisLabel: {binding: axis}
+          here: {binding: here}
+          at: [0.08, 0.31, 0.58, 0.84]
+          labelW: 162
+        keys:
+          stages: [manual, assisted, repeatable, integrated]
+  three-gate-road:
+    name: Three-gate delivery road
+    description: Reusable local road with authored dates, milestone copy, numbers and placements.
+    frame: {scope: shared, id: wmds/frame/none-compact}
+    frame_options: {rail: none, footer: compact, surface: light, title_lines: 1, source_lines: 1}
+    grid: {scope: shared, id: wmds/grid/12-columns}
+    zones:
+      title:
+        role: slide-title
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 65}
+      eyebrow:
+        role: eyebrow
+        required: true
+        schema: {type: string, maxLength: 30}
+      source:
+        role: source
+        required: true
+        schema: {type: string, maxLength: 110}
+      milestones:
+        role: roadmap-milestones
+        required: true
+        schema:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            type: object
+            additionalProperties: false
+            required: [label, date, text, n, at, side, active]
+            properties:
+              label: {type: string, minLength: 1, maxLength: 12}
+              date: {type: string, minLength: 1, maxLength: 12}
+              text: {type: string, minLength: 1, maxLength: 35}
+              n: {type: integer, minimum: 1, maximum: 3}
+              at: {type: number, minimum: 0.1, maximum: 0.9}
+              side: {type: string, enum: [above, below]}
+              active: {type: boolean}
+    nodes:
+      - id: delivery-road
+        kind: component
+        placement:
+          zone: body
+          rect: {x_pt: 18, y_pt: 6, width_pt: 810, height_pt: 294}
+        definition: {scope: shared, id: wmds/component/road}
+        arguments:
+          milestones: {binding: milestones}
+          direction: right
+          amp: 0.1
+          waves: 1.5
+          labelW: 162
+        keys:
+          milestones: [agree, trial, review]
+slides:
+  - id: align-three-lenses
+    content_kind: synthetic_example
+    template: {scope: local, id: three-lens-pilot}
+    values:
+      title: Choose a pilot that connects three decision lenses
+      eyebrow: Synthetic decision example
+      source: Synthetic example; no client evidence or outcomes are represented.
+      sets:
+        - {label: People}
+        - {label: Process}
+        - {label: Data}
+      regions:
+        - {in: [0, 1, 2], label: Shared pilot}
+  - id: assess-capability
+    content_kind: synthetic_example
+    template: {scope: local, id: four-stage-capability}
+    values:
+      title: Build coordination on repeatable team practice
+      eyebrow: Synthetic capability example
+      source: Synthetic stages and current position; not an assessment of a client.
+      stages:
+        - {n: 1, label: Manual, text: People complete each task.}
+        - {n: 2, label: Assisted, text: AI supports bounded work.}
+        - {n: 3, label: Repeatable, text: Teams reuse shared practice.}
+        - {n: 4, label: Integrated, text: Owners coordinate each handoff.}
+      active: 2
+      axis: Increasing coordination
+      here: {label: You are here}
+  - id: sequence-three-gates
+    content_kind: synthetic_example
+    template: {scope: local, id: three-gate-road}
+    values:
+      title: Use three gates to review a bounded pilot
+      eyebrow: Synthetic delivery example
+      source: Illustrative schedule and review gates; no delivery commitment or benefit claim.
+      milestones:
+        - {n: 1, at: 0.15, side: above, active: true, date: Week 1, label: Agree, text: Name scope and owners.}
+        - {n: 2, at: 0.5, side: below, active: false, date: Week 3, label: Trial, text: Observe one workflow.}
+        - {n: 3, at: 0.85, side: below, active: false, date: Week 5, label: Review, text: Review the evidence.}

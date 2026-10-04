@@ -1,10 +1,10 @@
 # Modern West Monroe design-system authoring
 
 Use the installed packaged route `pptxgengo design`. It defaults to the frozen
-v3 design library and the Go typography engine `wmds-go-foundation.v2`. It uses
+v5 design library and the Go typography engine `wmds-go-foundation.v2`. It uses
 the installed release's library, fonts and registered assets. No repository
 checkout, mutable source path or separate AppleScript is required for a normal
-build. Earlier design contracts are available with explicit `--bundle v1` or `--bundle v2`.
+build. The retained design library is v5.
 This route does not alter the legacy `template`, `compose`, `adapt`, `scene`,
 `component` or `lib` workflows.
 
@@ -89,16 +89,7 @@ content contract and building its illustrated composition are separate actions;
 a thumbnail's explicit example diagram is present in the foundation download.
 A content binding alone does not synthesize that illustration from prose.
 
-For the earlier bundle, select it explicitly and use values or a foundation
-compatible with its earlier contracts:
-
-```sh
-pptxgengo design library-catalog --bundle v1
-pptxgengo design template --bundle v1 --spec v1-values.json --out /tmp/wm-v1-new
-```
-
-Do not pass a v2 revision-specific contract to v1. Reusing an output directory is
-rejected; choose a new directory for each build.
+Reusing an output directory is rejected; choose a new directory for each build.
 
 ## Typography and final review
 

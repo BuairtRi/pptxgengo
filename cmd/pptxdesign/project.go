@@ -31,7 +31,7 @@ func runProject(args []string) error {
 	cmd := args[0]
 	f := flag.NewFlagSet("project "+cmd, flag.ContinueOnError)
 	path := f.String("project", ".", "project directory or deck.yaml")
-	bundle := f.String("bundle", "", "bundle path or v1/v2/v3/v4/v5 (defaults to project lock; new projects use published bundle)")
+	bundle := f.String("bundle", "", "bundle path or v5 (defaults to project lock; new projects use published bundle)")
 	engine := f.String("engine", "", "engine (defaults to existing lock; init uses candidate v2)")
 	out := f.String("out", "", "new export ZIP path")
 	stage := f.String("stage", "", "approval stage")
@@ -93,7 +93,7 @@ func runProject(args []string) error {
 	if !used["bundle"] {
 		if lockErr == nil {
 			*bundle = strings.TrimPrefix(lock.BundleRevision, "wmds-library.")
-			if !validPublishedBundle(*bundle) || lock.BundleRevision != "wmds-library."+*bundle {
+			if !validLockedBundle(*bundle) || lock.BundleRevision != "wmds-library."+*bundle {
 				return fmt.Errorf("unsupported locked bundle revision %q; supply --bundle explicitly", lock.BundleRevision)
 			}
 			// Offline exports carry the exact locked bundle under this stable
@@ -103,7 +103,7 @@ func runProject(args []string) error {
 				*bundle = pinned
 			}
 		} else {
-			*bundle, e = publishedProjectBundle(os.Getenv("PPTXGENGO_RELEASE_ROOT"))
+			*bundle, e = publishedProjectBundle(designReleaseRoot())
 			if e != nil {
 				return e
 			}
@@ -112,6 +112,9 @@ func runProject(args []string) error {
 		return fmt.Errorf("--bundle must not be empty")
 	}
 	b := deckproject.BundlePath(*bundle)
+	if validLockedBundle(*bundle) {
+		b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+	}
 	if *engine == "" {
 		if lockErr != nil {
 			*engine = wmdesign.CandidateEngine
@@ -161,6 +164,10 @@ func runProject(args []string) error {
 }
 
 func validPublishedBundle(value string) bool {
+	return value == "v5"
+}
+
+func validLockedBundle(value string) bool {
 	return value == "v1" || value == "v2" || value == "v3" || value == "v4" || value == "v5"
 }
 
@@ -168,7 +175,7 @@ func publishedProjectBundle(root string) (string, error) {
 	path := filepath.Join(root, "release", "default-bundle.txt")
 	b, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
-		return "v3", nil // Older installed releases predate explicit metadata.
+		return "v5", nil
 	}
 	if err != nil {
 		return "", err

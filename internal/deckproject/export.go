@@ -146,12 +146,18 @@ func Export(p *Project, opts ExportOptions) (ExportReceipt, error) {
 				if e != nil {
 					return e
 				}
-				if d.IsDir() {
-					return nil
-				}
 				rel, e := filepath.Rel(opts.Bundle, path)
 				if e != nil {
 					return e
+				}
+				if bundleAuxiliaryPath(filepath.ToSlash(rel)) {
+					if d.IsDir() {
+						return filepath.SkipDir
+					}
+					return nil
+				}
+				if d.IsDir() {
+					return nil
 				}
 				safe, e := SafePath(opts.Bundle, filepath.ToSlash(rel))
 				if e != nil {
@@ -163,7 +169,7 @@ func Export(p *Project, opts ExportOptions) (ExportReceipt, error) {
 				return r, e
 			}
 			for rel, want := range lock.RuntimeFiles {
-				path, e := SafePath(filepath.Dir(opts.Bundle), rel)
+				path, e := runtimeFilePath(opts.Bundle, rel)
 				if e != nil {
 					return r, e
 				}

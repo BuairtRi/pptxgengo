@@ -15,7 +15,7 @@ const slimFrameRendererSHA = "3284f866ee67e37d8960a252fbc579ac10f332db1212f7806c
 
 func slimFrameSource(t *testing.T) *Source {
 	t.Helper()
-	s, e := Load(filepath.Join("..", "..", "library", "wm-design-system", "v3"), "")
+	s, e := Load(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -92,23 +92,23 @@ func TestSlimFrameGeometryAndFourLineTitles(t *testing.T) {
 		}
 	}
 }
-func TestSlimFrameFrozenV3Unchanged(t *testing.T) {
-	s, e := Load(filepath.Join("..", "..", "library", "wm-design-system", "v3"), "")
+func TestSlimFrameCurrentBundleAndCompactGeometry(t *testing.T) {
+	s, e := Load(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
 	if e != nil {
 		t.Fatal(e)
 	}
 	for _, q := range []FrameRequest{{Footer: "slim"}, {Footer: "compact", TitleLines: 3}, {Footer: "compact", TitleLines: 4}, {Footer: "compact", Split: "tall-right", TitleLines: 4}} {
-		if _, e = s.ResolveFrame(q); e == nil {
-			t.Fatalf("unpublished frame accepted %+v", q)
+		if _, e = s.ResolveFrame(q); e != nil {
+			t.Fatalf("published current frame rejected %+v: %v", q, e)
 		}
 	}
 	f, e := s.ResolveFrame(FrameRequest{Footer: "compact", SourceLines: 1, TitleLines: 2})
 	if e != nil || f.TitleRule != 144 || f.Body.Y != 162 || f.Body.Y+f.Body.H != 450 || f.Source.Y != 459 || f.FooterRow.Y != 486 || f.FooterRow.H != 18 {
-		t.Fatalf("v3 frame changed %+v %v", f, e)
+		t.Fatalf("inherited compact frame changed %+v %v", f, e)
 	}
 	doc, e := splitFrameReference(s, 2026)
-	if e != nil || len(doc.Slides) != 12 {
-		t.Fatalf("v3 reference changed %d %v", len(doc.Slides), e)
+	if e != nil || len(doc.Slides) != 29 {
+		t.Fatalf("current frame reference changed %d %v", len(doc.Slides), e)
 	}
 }
 func TestSlimFrameSourceGateAndReference(t *testing.T) {

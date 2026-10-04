@@ -138,7 +138,7 @@ func TestIntakeGaugeStrictFiniteAndResourceLimits(t *testing.T) {
 }
 func TestIntakeGaugeNativeEditableXML(t *testing.T) {
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "gauge", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "gauge", Kind: "scene", Scene: &SceneSpec{Node: json.RawMessage(frozenGaugeNode)}}}}}}
-	data, report, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v3"), "", doc, CandidateEngine)
+	data, report, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)
 	}

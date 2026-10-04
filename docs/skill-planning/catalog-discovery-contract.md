@@ -23,7 +23,7 @@ These commands require a release containing this implementation. An older
 installed CLI or skill may lack `library-search` and the modern `design` route.
 Check the installed release's paths and help before using it. Direct repository
 binary equivalents are `pptxdesign library-catalog` and `pptxdesign
-library-search`; provide `--bundle library/wm-design-system/v3` explicitly when
+library-search`; provide `--bundle library/wm-design-system/v5` explicitly when
 using the repository catalog command.
 
 `library-search` also accepts `--structures`, `--include-deprecated`,
@@ -246,11 +246,11 @@ actual content fit; explicit `library-fit` experiments do.
 Available commands added after Wave 1:
 
 ```sh
-pptxgengo design library-index --bundle v3 --out ./library.sqlite
+pptxgengo design library-index --bundle library/wm-design-system/v5 --out ./library.sqlite
 pptxgengo design library-find --index ./library.sqlite --query 'weekly status' --kinds template
 pptxgengo design library-inspect --index ./library.sqlite --id cards/3
 pptxgengo design library-preview --index ./library.sqlite --id cards/3
-pptxgengo design library-fit --bundle v3 --spec alternatives.json --out ./candidate-review
+pptxgengo design library-fit --bundle library/wm-design-system/v5 --spec alternatives.json --out ./candidate-review
 ```
 
 The native Go `modernc.org/sqlite` driver builds schema

@@ -1,4 +1,9 @@
-# Presentation production implementation plan
+# Historical presentation production implementation plan
+
+This record describes earlier implementation stages. For current v5 paths and
+commands, use [semantic discovery](../semantic-template-discovery.md) and the
+[release instructions](../../release/README.md). Older library revisions and
+temporary review trees named below have been retired.
 
 **Owner:** primary integration agent and the operator  
 **Created:** October 3, 2026  

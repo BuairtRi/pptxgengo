@@ -10,7 +10,7 @@ import (
 )
 
 func TestSharedFrameLayoutsKeepSlideTypography(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	doc, err := LibrarySourceReference(bundle, "", "", 2026)
 	if err != nil {
 		t.Fatal(err)

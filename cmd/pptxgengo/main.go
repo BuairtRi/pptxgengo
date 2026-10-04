@@ -20,7 +20,7 @@ var tools = map[string]string{
 
 func usage() {
 	fmt.Fprintln(os.Stderr, "usage: pptxgengo <template|compose|scene|component|lib|anchor|diff|adapt|design> <command> [flags]")
-	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--components|--design-system] [--print|--open]")
+	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--design-system] [--print|--open]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
 }
@@ -54,13 +54,13 @@ func publishedBundle(root string) (string, error) {
 	path := filepath.Join(root, "release", "default-bundle.txt")
 	b, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
-		return "v3", nil
+		return "v5", nil
 	}
 	if err != nil {
 		return "", err
 	}
 	value := strings.TrimSpace(string(b))
-	if value != "v1" && value != "v2" && value != "v3" && value != "v4" && value != "v5" {
+	if value != "v5" {
 		return "", fmt.Errorf("invalid published bundle in %s: %q", path, value)
 	}
 	return value, nil
@@ -81,15 +81,9 @@ func designArgs(root string, input []string) ([]string, error) {
 	}
 	indexRead := command == "library-find" || command == "library-inspect" || command == "library-preview"
 	if indexRead && !hasFlag(args, "--index") {
-		args = append(args, "--index", filepath.Join(root, "catalog", "library.sqlite"))
+		args = append(args, "--index", filepath.Join(root, "library", "wm-design-system", "v5", "library.sqlite"))
 		if !hasFlag(args, "--gallery") {
-			args = append(args, "--gallery", filepath.Join(root, "catalog"))
-		}
-		if !hasFlag(args, "--legacy-index") {
-			args = append(args, "--legacy-index", filepath.Join(root, "library", "catalog-library.sqlite"))
-		}
-		if !hasFlag(args, "--legacy-root") {
-			args = append(args, "--legacy-root", root)
+			args = append(args, "--gallery", filepath.Join(root, "library", "wm-design-system", "v5", "catalog"))
 		}
 	}
 	engineAllowed := command != "library-index" && command != "library-inspect" && command != "library-preview" && command != "project"
@@ -97,6 +91,39 @@ func designArgs(root string, input []string) ([]string, error) {
 		args = append(args, "--engine", "wmds-go-foundation.v2")
 	}
 	return args, nil
+}
+
+func runCatalog(root string, args []string) error {
+	open := false
+	seenPage, seenAction := false, false
+	for _, arg := range args {
+		switch arg {
+		case "--templates", "--design-system":
+			if seenPage {
+				return fmt.Errorf("choose one catalog gallery")
+			}
+			seenPage = true
+		case "--components":
+			return fmt.Errorf("component discovery is available through: pptxgengo design library-find --kinds component")
+		case "--open", "--print":
+			if seenAction {
+				return fmt.Errorf("choose --open or --print")
+			}
+			seenAction = true
+			open = arg == "--open"
+		default:
+			return fmt.Errorf("usage: pptxgengo catalog [--templates|--design-system] [--print|--open]")
+		}
+	}
+	path := filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "design-system.html")
+	if _, err := os.Stat(path); err != nil {
+		return fmt.Errorf("catalog unavailable: %w", err)
+	}
+	if !open {
+		fmt.Println(path)
+		return nil
+	}
+	return exec.Command("open", path).Run()
 }
 
 func run() error {
@@ -118,44 +145,7 @@ func run() error {
 		return err
 	}
 	if name == "catalog" {
-		page := "index.html"
-		open := false
-		seenPage := false
-		seenAction := false
-		for _, arg := range os.Args[2:] {
-			switch arg {
-			case "--templates", "--components", "--design-system":
-				if seenPage {
-					return fmt.Errorf("choose one catalog gallery")
-				}
-				seenPage = true
-				if arg == "--templates" {
-					page = "templates.html"
-				} else if arg == "--components" {
-					page = "components.html"
-				} else {
-					page = "design-system.html"
-				}
-			case "--open", "--print":
-				if seenAction {
-					return fmt.Errorf("choose --open or --print")
-				}
-				seenAction = true
-				open = arg == "--open"
-			default:
-				return fmt.Errorf("usage: pptxgengo catalog [--templates|--components|--design-system] [--print|--open]")
-			}
-		}
-		path := filepath.Join(root, "catalog", page)
-		if _, err := os.Stat(path); err != nil {
-			return fmt.Errorf("catalog unavailable: %w", err)
-		}
-		if !open {
-			fmt.Println(path)
-			return nil
-		}
-		cmd := exec.Command("open", path)
-		return cmd.Run()
+		return runCatalog(root, os.Args[2:])
 	}
 	if name == "paths" {
 		if len(os.Args) != 2 {
@@ -169,16 +159,11 @@ func run() error {
 			"root":                  root,
 			"library":               filepath.Join(root, "library"),
 			"scripts":               filepath.Join(root, "scripts"),
-			"catalog":               filepath.Join(root, "catalog", "index.html"),
-			"catalog_templates":     filepath.Join(root, "catalog", "templates.html"),
-			"catalog_components":    filepath.Join(root, "catalog", "components.html"),
-			"catalog_design_system": filepath.Join(root, "catalog", "design-system.html"),
-			"design_system_v2":      filepath.Join(root, "library", "wm-design-system", "v2"),
-			"design_system_v3":      filepath.Join(root, "library", "wm-design-system", "v3"),
-			"design_system_v4":      filepath.Join(root, "library", "wm-design-system", "v4"),
+			"catalog":               filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "design-system.html"),
+			"catalog_design_system": filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "design-system.html"),
 			"design_system_v5":      filepath.Join(root, "library", "wm-design-system", "v5"),
 			"design_system_default": filepath.Join(root, "library", "wm-design-system", bundle),
-			"design_index":          filepath.Join(root, "catalog", "library.sqlite"),
+			"design_index":          filepath.Join(root, "library", "wm-design-system", "v5", "library.sqlite"),
 			"project_example":       filepath.Join(root, "examples", "deck-project"),
 			"skill":                 filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
 		}

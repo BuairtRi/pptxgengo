@@ -103,7 +103,7 @@ func TestIntakeRepairsFrozenTwentyRejections(t *testing.T) {
 		t.Fatalf("historical rejection fixture count changed: %d", len(rejected))
 	}
 	sort.Strings(rejected)
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	for _, key := range rejected {
 		t.Run(key, func(t *testing.T) {
 			entry, ok := entries[key]
@@ -205,7 +205,7 @@ func TestIntakeRepairsFinalFrozenTwentyTwo(t *testing.T) {
 func TestIntakeRepairsFinalFrozenLifecycleCycles(t *testing.T) {
 	snapshot := filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003-frozen", "source")
 	entries := intakeRepairEntries(t, filepath.Join(snapshot, "templates", "library"))
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -285,7 +285,7 @@ func testIntakeRepairsModernSnapshot(t *testing.T, observation string) {
 	if err = json.Unmarshal(history, &results); err != nil {
 		t.Fatal(err)
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

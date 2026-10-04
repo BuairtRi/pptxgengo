@@ -26,7 +26,7 @@ func TestIntakeManualSourceSmoke(t *testing.T) {
 	if selected := os.Getenv("WMDS_INTAKE_SNAPSHOT"); selected != "" {
 		snapshot = filepath.Join(selected, "source", "templates", "library")
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -35,7 +35,14 @@ func TestIntakeManualSourceSmoke(t *testing.T) {
 	retained := 0
 	baseline := map[string]libraryEntry{}
 	if os.Getenv("WMDS_INTAKE_RETAIN_V3") == "1" {
-		baseline = intakeRepairEntries(t, filepath.Join(bundle, "source", "templates", "library"))
+		// Preserve the historical diagnostic flag using qualified lineage
+		// evidence, rather than treating every current v5 source as v3 input.
+		entries := intakeRepairEntries(t, filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003-frozen", "source", "templates", "library"))
+		for key, entry := range entries {
+			if v4RetainedV3Compositions[key] {
+				baseline[key] = entry
+			}
+		}
 	}
 	if round12 {
 		source.Revision = IntakeTeamCurveMonotoneRevision
@@ -201,6 +208,6 @@ func TestIntakeManualSourceSmoke(t *testing.T) {
 		t.Fatal(err)
 	}
 	write("layout-report.json", report)
-	write("receipt.json", map[string]any{"attempted": len(results), "compiled": len(doc.Slides), "rejected": len(results) - len(doc.Slides), "pptx_sha256": fmt.Sprintf("%x", sha256.Sum256(data)), "bytes": len(data), "source_snapshot": snapshot, "native_review": "pending", "status": "unreleased_capability_prototype", "round12_renderer": round12, "all_templates": all && len(selected) == 0, "selected_key_count": len(selected), "incoming_repairs": os.Getenv("WMDS_INTAKE_REPAIRS") == "1", "unchanged_v3_specimens_retaining_qualified_amendments": retained, "assets_and_fonts": "frozen v3; current source definitions and optional Round12 frame/renderer semantics are an internal diagnostic only"})
+	write("receipt.json", map[string]any{"attempted": len(results), "compiled": len(doc.Slides), "rejected": len(results) - len(doc.Slides), "pptx_sha256": fmt.Sprintf("%x", sha256.Sum256(data)), "bytes": len(data), "source_snapshot": snapshot, "native_review": "pending", "status": "unreleased_capability_prototype", "round12_renderer": round12, "all_templates": all && len(selected) == 0, "selected_key_count": len(selected), "incoming_repairs": os.Getenv("WMDS_INTAKE_REPAIRS") == "1", "unchanged_v3_specimens_retaining_qualified_amendments": retained, "assets_and_fonts": "pinned v5; historical source overlays and optional Round12 frame/renderer semantics are an internal diagnostic only"})
 	t.Logf("Attempted%d compiled%d rejected%d, output%s", len(results), len(doc.Slides), len(results)-len(doc.Slides), out)
 }

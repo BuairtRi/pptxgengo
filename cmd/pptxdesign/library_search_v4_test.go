@@ -9,12 +9,12 @@ import (
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
 )
 
-func TestLibrarySearchV4Shorthand(t *testing.T) {
-	testLibrarySearchPinnedShorthand(t, "v4", wmdesign.LibraryRevisionV4)
-}
-
 func TestLibrarySearchV5Shorthand(t *testing.T) {
 	testLibrarySearchPinnedShorthand(t, "v5", wmdesign.LibraryRevisionV5)
+}
+
+func TestLibrarySearchLatestDefault(t *testing.T) {
+	testLibrarySearchPinnedShorthand(t, "", wmdesign.LibraryRevisionV5)
 }
 
 func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) {
@@ -32,7 +32,11 @@ func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) 
 	previous := os.Stdout
 	os.Stdout = output
 	defer func() { os.Stdout = previous }()
-	if err := runLibrarySearch([]string{"--bundle", shorthand, "--query", "maturity", "--limit", "1"}); err != nil {
+	args := []string{"--query", "maturity", "--limit", "1"}
+	if shorthand != "" {
+		args = append(args, "--bundle", shorthand)
+	}
+	if err := runLibrarySearch(args); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := output.Seek(0, 0); err != nil {

@@ -16,11 +16,15 @@ import (
 
 func intakeTestRenderer(t *testing.T) *renderer {
 	t.Helper()
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v2")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, e := Load(bundle, "")
 	if e != nil {
 		t.Fatal(e)
 	}
+	// Synthetic intake planner fixtures retain the baseline revision they were
+	// written against. Assets and typography come from the sole current bundle;
+	// current-revision integration tests explicitly replace source below.
+	source.Revision = LibraryRevisionV2
 	typography, e := NewTypographyEngine(filepath.Join(bundle, "fonts"), CandidateEngine)
 	if e != nil {
 		t.Fatal(e)
@@ -168,7 +172,7 @@ func TestIntakeArchitecturePlaneUsesDiamondEnvelope(t *testing.T) {
 }
 
 func TestIntakeArchitectureAndGeographyAllFrozenV3Nodes(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v3")
+	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, e := Load(bundle, "")
 	if e != nil {
 		t.Fatal(e)
@@ -231,11 +235,18 @@ func TestIntakeArchitectureAndGeographyAllFrozenV3Nodes(t *testing.T) {
 }
 
 func TestIntakeContainedImageRotationUsesActualPicture(t *testing.T) {
- r:=intakeTestRenderer(t)
- var b bytes.Buffer
- if err:=png.Encode(&b,image.NewNRGBA(image.Rect(0,0,200,50)));err!=nil {t.Fatal(err)}
- r.projectAssets=map[string]AssetData{"project:photo":{Data:b.Bytes(),SHA256:fmt.Sprintf("%x",sha256.Sum256(b.Bytes())),MIME:"image/png"}}
- raw:=json.RawMessage(`{"type":"imageframe","x":100,"y":100,"w":100,"h":100,"photo":"project:photo","fit":"contain","rotate":45}`)
- p,_,err:=r.planMediaScene("photo",raw,SceneContext{Surface:"light"});if err!=nil {t.Fatal(err)}
- if math.Abs(p.Bounds.W-88.3883476483)>1e-5 || !inside(p.Bounds,Rect{100,100,100,100}) {t.Fatalf("contain bounds: %+v",p.Bounds)}
+	r := intakeTestRenderer(t)
+	var b bytes.Buffer
+	if err := png.Encode(&b, image.NewNRGBA(image.Rect(0, 0, 200, 50))); err != nil {
+		t.Fatal(err)
+	}
+	r.projectAssets = map[string]AssetData{"project:photo": {Data: b.Bytes(), SHA256: fmt.Sprintf("%x", sha256.Sum256(b.Bytes())), MIME: "image/png"}}
+	raw := json.RawMessage(`{"type":"imageframe","x":100,"y":100,"w":100,"h":100,"photo":"project:photo","fit":"contain","rotate":45}`)
+	p, _, err := r.planMediaScene("photo", raw, SceneContext{Surface: "light"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if math.Abs(p.Bounds.W-88.3883476483) > 1e-5 || !inside(p.Bounds, Rect{100, 100, 100, 100}) {
+		t.Fatalf("contain bounds: %+v", p.Bounds)
+	}
 }

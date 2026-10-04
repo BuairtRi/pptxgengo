@@ -5,13 +5,10 @@ broader Wave 1 design intent alongside the bounded Wave 2 implementation.
 `design project` now loads/builds `pptxgengo.deck-document.v1` YAML; existing
 JSON template/foundation routes remain available. The authoritative implemented
 bounds are in [the runtime README](../../internal/deckproject/README.md), with a
-[runnable starter](../../examples/deck-project/README.md). The old planning YAML
-below remains illustrative and has no runnable lock/assets. Final native and
-release installation gates are separate and pending.
+[runnable starter](../../examples/deck-project/README.md). Native acceptance is
+specific to each generated deck; package staging and installation are separate.
 
-Related artifacts: [document schema](../../schemas/deck-document-v1.schema.json),
-[illustrative source](examples/deck.yaml), [operating model](11-integrated-presentation-skill-operating-model.md),
-and [review package](12-collaboration-and-review-package.md).
+Related artifact: [document schema](../../schemas/deck-document-v1.schema.json).
 
 ## 1. Authority and ownership
 
@@ -345,9 +342,9 @@ validation, shared/local resolution, original/derived asset validation, stable
 object mapping, exact runtime/bundle/font/asset locks, immutable scene/native
 builds, hash-bound scoped approvals and invalidation, resumption, local fork,
 bounded shared detach, and maintainer/client/offline/reviewer ZIP exports.
-Existing JSON APIs remain available. The default source bundle is v3
-(`wmds-library.v3`, all 248 committed definitions at
-`e91e0d7771000b7386f1ea52f51252f0f0a134fd`), while the calibrated Go engine remains
+Existing JSON APIs remain available. The current source bundle is v5
+(`wmds-library.v5`, 587 templates at
+`d83bd58a9f9de68ebd8d6b3c9b0272c16ed516cf`); the calibrated Go engine remains
 `wmds-go-foundation.v2`.
 
 The loader rejects duplicate keys, nonstring mapping keys, unknown fields,
@@ -385,7 +382,7 @@ pinned compiler's original OS/architecture and does not install PowerPoint or
 system fonts. Technical fit/build success leaves native appearance, visual review
 and arbitrary-content qualification separate.
 
-The [original planning YAML](examples/deck.yaml) remains a historical illustration
+The original planning YAML remains a historical illustration
 with unresolved example provenance/lock/assets. Use the executable starter for
 current commands and supported fields. Focused runtime/candidate smoke evidence
 is synthetic; client-content workflow acceptance remains separate.

@@ -13,7 +13,7 @@ import (
 
 func runLibraryIndex(command string, args []string) error {
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "", "pinned bundle path or v1/v2/v3/v4/v5; new indices default to v3")
+	bundle := f.String("bundle", "", "pinned bundle path or v5; new indices default to v5")
 	source := f.String("source", "", "matching source override")
 	legacy := f.String("legacy-index", "", "optional legacy catalog-library.sqlite projection")
 	legacyRoot := f.String("legacy-root", "", "original/relocated release root for legacy contract resource paths")
@@ -57,12 +57,12 @@ func runLibraryIndex(command string, args []string) error {
 		return fmt.Errorf("unexpected positional arguments")
 	}
 	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
-		*bundle = filepath.Join(os.Getenv("PPTXGENGO_RELEASE_ROOT"), "library", "wm-design-system", *bundle)
+		*bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
 	}
 	options := wmdesign.LibraryIndexOptions{Bundle: *bundle, Source: *source, LegacyIndex: *legacy, LegacyRoot: *legacyRoot, Gallery: *gallery}
 	if command == "library-index" {
 		if options.Bundle == "" {
-			options.Bundle = "library/wm-design-system/v3"
+			options.Bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", "v5")
 		}
 		if *out == "" {
 			return fmt.Errorf("library-index requires --out NEW-SQLITE-FILE")
@@ -75,7 +75,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	if command == "library-fit" {
 		if options.Bundle == "" {
-			options.Bundle = "library/wm-design-system/v3"
+			options.Bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", "v5")
 		}
 		if *spec == "" || *out == "" {
 			return fmt.Errorf("library-fit requires --spec FILE --out NEW-DIR")
@@ -95,7 +95,13 @@ func runLibraryIndex(command string, args []string) error {
 		return json.NewEncoder(os.Stdout).Encode(report)
 	}
 	if *indexPath == "" {
-		return fmt.Errorf("%s requires --index FILE", command)
+		if options.Bundle == "" {
+			options.Bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", "v5")
+		}
+		*indexPath = filepath.Join(options.Bundle, "library.sqlite")
+		if options.Gallery == "" {
+			options.Gallery = filepath.Join(options.Bundle, "catalog")
+		}
 	}
 	index, e := wmdesign.OpenLibraryIndex(*indexPath, options)
 	if e != nil {
