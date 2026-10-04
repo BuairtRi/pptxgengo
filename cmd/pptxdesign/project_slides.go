@@ -51,6 +51,9 @@ func runProjectSlide(args []string) error {
 	before := f.String("before", "", "position before this stable slide ID")
 	after := f.String("after", "", "position after this stable slide ID")
 	reanchor := f.Bool("reanchor", false, "move: leave an anchored section in place and report its replacement anchor")
+	as := f.String("as", "", "add: assign this new stable ID without editing the supplied file")
+	intoSection := f.String("into-section", "", "add/move: join this section; defaults to its first position and reanchors it")
+	checkFit := f.Bool("check-fit", false, "add: check Go layout fit before committing")
 	bundle := f.String("bundle", "", "add: bundle path/revision, defaults to lock")
 	engine := f.String("engine", "", "add: engine, defaults to lock")
 	if err := f.Parse(args[1:]); err != nil {
@@ -68,7 +71,7 @@ func runProjectSlide(args []string) error {
 		if action == "add" && name != "reanchor" {
 			return
 		}
-		if action == "move" && (name == "before" || name == "after" || name == "reanchor") {
+		if action == "move" && (name == "before" || name == "after" || name == "reanchor" || name == "into-section") {
 			return
 		}
 		invalid = name
@@ -80,7 +83,7 @@ func runProjectSlide(args []string) error {
 	if err != nil {
 		return err
 	}
-	o := deckproject.SlideOperation{Action: action, ID: *id, Before: *before, After: *after, Reanchor: *reanchor}
+	o := deckproject.SlideOperation{Action: action, ID: *id, Before: *before, After: *after, Reanchor: *reanchor, As: *as, IntoSection: *intoSection, CheckFit: *checkFit}
 	if action == "add" {
 		if *file == "" {
 			return fmt.Errorf("slide add requires --file")

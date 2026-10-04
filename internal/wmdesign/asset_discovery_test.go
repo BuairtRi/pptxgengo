@@ -110,8 +110,12 @@ func TestAssetSelectionsPhotoQueryUsesCuratedRelevantTagsAndNoFallback(t *testin
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(noMatch) != 0 {
-		t.Fatalf("unmatched query returned fallback assets: %+v", noMatch)
+	if len(noMatch) != 1 || noMatch[0].ID != key {
+		t.Fatalf("OR query should retain relevant partial match and rank it: %+v", noMatch)
+	}
+	noRelevant, err := AssetSelections("underwater", "photo", 0)
+	if err != nil || len(noRelevant) != 0 {
+		t.Fatalf("query with no matching terms returned fallback assets: %v %+v", err, noRelevant)
 	}
 }
 
@@ -121,6 +125,32 @@ func TestAssetSelectionsValidatesKindAndLimit(t *testing.T) {
 	}
 	if _, err := AssetSelections("", "icon", -1); err == nil {
 		t.Fatal("accepted negative limit")
+	}
+}
+
+func TestCuratedPhotoRegistryCoverageAndMetadata(t *testing.T) {
+	iconConcepts, iconInstances, photos := map[string]bool{}, 0, 0
+	for _, asset := range PrimitiveAssetCatalog() {
+		if strings.HasPrefix(asset.Key, "icon/") {
+			iconInstances++
+			parts := strings.Split(asset.Key, "/")
+			iconConcepts["icon/"+parts[1]] = true
+		}
+		if strings.HasPrefix(asset.Key, "photo-") {
+			photos++
+		}
+	}
+	if len(iconConcepts) != 222 || iconInstances != 666 {
+		t.Fatalf("icon registry counts changed: %d concepts, %d color instances", len(iconConcepts), iconInstances)
+	}
+	if photos != 22 {
+		t.Fatalf("photo registry has %d keys; want 22", photos)
+	}
+	for _, key := range []string{"photo-business-team-report-review", "photo-financial-adviser", "photo-financial-analyst", "photo-healthcare-leadership", "photo-software-developer-pair", "photo-software-engineering-team"} {
+		meta := assetMetadataFor(key, "")
+		if meta.kind != "photo" || meta.people != "yes" || meta.orientation != "landscape" || meta.description == "" || len(meta.tags) < 5 {
+			t.Errorf("photo %s is missing curated searchable metadata: %+v", key, meta)
+		}
 	}
 }
 

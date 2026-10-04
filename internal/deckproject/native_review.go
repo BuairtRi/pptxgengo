@@ -1,8 +1,10 @@
 package deckproject
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -18,6 +20,69 @@ type VisualDecision struct {
 	Reviewer string `json:"reviewer"`
 	Note     string `json:"note,omitempty"`
 }
+
+// ParseVisualDecisions rejects misspelled decision fields and trailing input.
+func ParseVisualDecisions(raw []byte) (map[string]VisualDecision, error) {
+	if err := uniqueDecisionJSONKeys(json.NewDecoder(bytes.NewReader(raw))); err != nil {
+		return nil, fmt.Errorf("invalid visual decisions: %w", err)
+	}
+	decisions := map[string]VisualDecision{}
+	d := json.NewDecoder(bytes.NewReader(raw))
+	d.DisallowUnknownFields()
+	if err := d.Decode(&decisions); err != nil {
+		return nil, fmt.Errorf("invalid visual decisions: %w", err)
+	}
+	if decisions == nil {
+		return nil, fmt.Errorf("visual decisions must be a JSON object")
+	}
+	var extra any
+	if err := d.Decode(&extra); err != io.EOF {
+		return nil, fmt.Errorf("visual decisions require exactly one JSON document")
+	}
+	return decisions, nil
+}
+
+func uniqueDecisionJSONKeys(d *json.Decoder) error {
+	token, err := d.Token()
+	if err != nil {
+		return err
+	}
+	delimiter, nested := token.(json.Delim)
+	if !nested {
+		return nil
+	}
+	if delimiter == '{' {
+		seen := map[string]bool{}
+		for d.More() {
+			name, err := d.Token()
+			if err != nil {
+				return err
+			}
+			key, ok := name.(string)
+			if !ok {
+				return fmt.Errorf("expected JSON object key")
+			}
+			if seen[key] {
+				return fmt.Errorf("duplicate JSON field %q", key)
+			}
+			seen[key] = true
+			if err = uniqueDecisionJSONKeys(d); err != nil {
+				return err
+			}
+		}
+	} else if delimiter == '[' {
+		for d.More() {
+			if err = uniqueDecisionJSONKeys(d); err != nil {
+				return err
+			}
+		}
+	} else {
+		return fmt.Errorf("unexpected JSON delimiter")
+	}
+	_, err = d.Token()
+	return err
+}
+
 type NativeAttachment struct {
 	Schema               string                    `json:"schema"`
 	ID                   string                    `json:"id"`
@@ -73,8 +138,8 @@ func AttachNativeRender(p *Project, root string, decisions map[string]VisualDeci
 	if err != nil {
 		return a, err
 	}
-	var receipt nativeexport.Receipt
-	if err = json.Unmarshal(raw, &receipt); err != nil {
+	receipt, err := nativeexport.VerifyReceipt(raw)
+	if err != nil {
 		return a, err
 	}
 	if !strings.HasPrefix(receipt.Renderer, "Microsoft PowerPoint (local native PDF)") {

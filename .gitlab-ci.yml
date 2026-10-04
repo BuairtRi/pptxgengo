@@ -1,0 +1,46 @@
+stages: [test]
+
+variables:
+  GOTOOLCHAIN: local
+
+developer:
+  stage: test
+  image: golang:1.27.1
+  timeout: 10 minutes
+  interruptible: true
+  parallel:
+    matrix:
+      - TEST_TARGET: [test, test-race]
+  variables:
+    GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
+    GOCACHE: $CI_PROJECT_DIR/.cache/go-build
+    WMDS_BRANDING_ROOT: $CI_PROJECT_DIR/.cache/empty-branding
+    PPTXGENGO_NATIVE_LIVE_OUT: ''
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux
+    paths: [.cache/go-mod, .cache/go-build]
+  before_script:
+    - mkdir -p "$WMDS_BRANDING_ROOT"
+  script:
+    - make "$TEST_TARGET"
+
+exhaustive:
+  stage: test
+  tags: [pptxgengo-integration]
+  timeout: 20 minutes
+  interruptible: true
+  parallel:
+    matrix:
+      - TEST_TARGET: [test-integration, test-race-full]
+  variables:
+    PPTXGENGO_NATIVE_LIVE_OUT: ''
+  rules:
+    - if: '$PPTXGENGO_FULL_TESTS == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$PPTXGENGO_FULL_TESTS == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "web"'
+      when: manual
+      allow_failure: false
+    - when: never
+  script:
+    - make "$TEST_TARGET"

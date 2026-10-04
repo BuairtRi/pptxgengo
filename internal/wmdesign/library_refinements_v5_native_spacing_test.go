@@ -10,6 +10,9 @@ import (
 // These assertions inspect primitives inside each composition. Outer frame
 // bounds alone cannot detect a rule crossing a preceding wrapped paragraph.
 func TestV5NativeOfferSectionsHavePrimitiveClearance(t *testing.T) {
+	if testing.Short() {
+		t.Skip("frozen composition render requires registered private branding assets; run make test-integration")
+	}
 	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, err := Load(bundle, "")
 	if err != nil {

@@ -31,7 +31,7 @@ func runProject(args []string) error {
 	if args[0] == "attach-render" {
 		return runProjectAttachRender(args[1:])
 	}
-	if args[0] == "view" || (args[0] == "review" && hasProjectFlag(args[1:], "--stage")) {
+	if args[0] == "view" || (args[0] == "review" && (hasProjectFlag(args[1:], "--stage") || hasProjectFlag(args[1:], "--audience"))) {
 		return runProjectReviewStage(args[1:])
 	}
 	if args[0] == "section" {

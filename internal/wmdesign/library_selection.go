@@ -131,6 +131,8 @@ func (index *LibraryIndex) entityAuthoringMetadata(entity LibraryEntity) (Librar
 
 type LibraryFindSummaryHit struct {
 	ID              string                `json:"id"`
+	GroupID         string                `json:"group_id,omitempty"`
+	VariantIDs      []string              `json:"variant_ids,omitempty"`
 	Key             string                `json:"key"`
 	Name            string                `json:"name"`
 	Purpose         string                `json:"purpose"`
@@ -162,7 +164,7 @@ func (index *LibraryIndex) FindSummary(options LibraryIndexFindOptions) (Library
 		if err != nil {
 			return out, err
 		}
-		out.Matches = append(out.Matches, LibraryFindSummaryHit{ID: card.ID, Key: card.Key, Name: card.Name, Purpose: card.Purpose, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, Structures: card.Discovery.Structures, Groups: card.Discovery.Groups, ScreenshotPaths: card.ScreenshotPaths, FitStatus: hit.FitStatus})
+		out.Matches = append(out.Matches, LibraryFindSummaryHit{ID: card.ID, GroupID: hit.GroupID, VariantIDs: hit.VariantIDs, Key: hit.Entity.Key, Name: card.Name, Purpose: card.Purpose, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, Structures: card.Discovery.Structures, Groups: card.Discovery.Groups, ScreenshotPaths: card.ScreenshotPaths, FitStatus: hit.FitStatus})
 	}
 	return out, nil
 }

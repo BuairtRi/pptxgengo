@@ -72,6 +72,9 @@ func TestIntakeCapabilityBindingsAndDiscovery(t *testing.T) {
 }
 
 func TestIntakeLocalDiagramsAndStraightArrow(t *testing.T) {
+	if testing.Short() {
+		t.Skip("renderer integration requires registered private branding assets; run make test-integration")
+	}
 	r := intakeTestRenderer(t)
 	for kind, args := range map[string]map[string]any{
 		"venn":     {"sets": []any{map[string]any{"label": "A"}, map[string]any{"label": "B"}}},

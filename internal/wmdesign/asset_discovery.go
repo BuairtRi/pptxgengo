@@ -49,47 +49,53 @@ type assetMetadata struct {
 }
 
 var curatedAssetMetadata = map[string]assetMetadata{
-	"photo-abstract-blocks":        {name: "Abstract digital blocks", description: "Abstract blue digital blocks with a layered geometric pattern; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "data", "blocks", "blue"}, setting: []string{"abstract"}},
-	"photo-abstract-cubes":         {name: "Abstract blue cubes", description: "Abstract blue cubic architecture with repeating geometric forms; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "cubes", "architecture", "blue"}, setting: []string{"abstract"}},
-	"photo-abstract-grid":          {name: "Abstract illuminated data grid", description: "Abstract blue illuminated grid suggesting connected data systems; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "data", "grid", "network", "blue"}, setting: []string{"abstract"}},
-	"photo-abstract-led":           {name: "Abstract blue LED data pattern", description: "Close view of a blue LED display pattern; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "data", "screen", "blue"}, setting: []string{"abstract"}},
-	"photo-clinical-leaders":       {name: "Healthcare leaders reviewing a tablet", description: "Two healthcare professionals review a tablet together in a bright clinical setting.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "leaders", "leadership", "tablet", "review", "collaboration", "collaborating", "meeting"}, industry: []string{"healthcare"}, setting: []string{"clinical", "bright interior"}},
-	"photo-clinical-team":          {name: "Clinical team reviewing care data", description: "Two clinical professionals review care information on a tablet together.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "care", "data", "tablet", "review", "collaboration", "collaborating", "team"}, industry: []string{"healthcare"}, setting: []string{"clinical interior"}},
-	"photo-clinician-data":         {name: "Clinician reviewing patient data", description: "A clinician reviews patient data at dual monitors in a clinical workspace.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "clinician", "patient", "data", "analytics", "computer", "monitor", "screen", "review"}, industry: []string{"healthcare"}, setting: []string{"clinical workspace"}},
-	"photo-corridor":               {name: "Clinical staff collaborating in a corridor", description: "Clinical staff talk together in a bright hospital corridor.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "staff", "team", "collaboration", "collaborating", "conversation", "hospital", "corridor"}, industry: []string{"healthcare"}, setting: []string{"hospital corridor"}},
-	"photo-executive":              {name: "Executive team reviewing documents", description: "An executive group reviews documents around a conference table, seen through glass.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "executive", "leadership", "team", "documents", "review", "meeting", "conference", "collaboration", "collaborating", "office"}, industry: []string{"organization people change"}, setting: []string{"glass conference room", "office"}},
-	"photo-headshot":               {name: "Executive portrait", description: "Registered executive headshot portrait.", kind: "photo", people: "yes", orientation: "portrait", tags: []string{"people", "portrait", "headshot", "executive", "leadership"}, industry: []string{"organization people change"}, setting: []string{"portrait"}},
-	"photo-headshot-face":          {name: "Executive portrait crop", description: "Registered face crop of the executive headshot portrait.", kind: "photo", people: "yes", orientation: "portrait", tags: []string{"people", "portrait", "headshot", "face", "executive", "leadership"}, industry: []string{"organization people change"}, setting: []string{"portrait"}},
-	"photo-stethoscope":            {name: "Stethoscope with copy space", description: "Stethoscope on a light surface with open copy space; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"healthcare", "medical", "medicine", "stethoscope", "care", "copy space"}, industry: []string{"healthcare"}, setting: []string{"clinical still life"}},
-	"photo-team-meeting":           {name: "Team meeting in a glass conference room", description: "A group meets around a conference table in a glass office room.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "team", "meeting", "conference", "office", "collaboration", "collaborating", "discussion", "colleagues"}, industry: []string{"organization people change"}, setting: []string{"glass conference room", "office"}},
-	"photo-technician":             {name: "Industrial technician reviewing equipment data", description: "An industrial technician in safety equipment checks data on a laptop beside machinery.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "industrial", "technician", "manufacturing", "operations", "equipment", "data", "laptop", "safety", "review"}, industry: []string{"consumer industrial products"}, setting: []string{"industrial facility"}},
-	"photo-warehouse":              {name: "Warehouse operations manager with tablet", description: "A warehouse operations worker in safety equipment checks a tablet among inventory racks.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "warehouse", "operations", "inventory", "logistics", "tablet", "supply chain", "safety"}, industry: []string{"consumer industrial products"}, setting: []string{"warehouse"}},
-	"photo-working-session":        {name: "Colleagues in a focused working session", description: "Colleagues collaborate around a table in a working session; the image shows a small group in discussion with devices on the table.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "colleagues", "team", "collaboration", "collaborating", "working session", "workshop", "meeting", "discussion", "office", "devices"}, industry: []string{"organization people change"}, setting: []string{"office working session"}},
-	"logo-pos":                     {name: "West Monroe horizontal positive logo", description: "West Monroe horizontal logo in positive color treatment.", kind: "logo", tags: []string{"brand", "identity", "horizontal", "positive", "color"}},
-	"logo-rev":                     {name: "West Monroe horizontal reverse logo", description: "West Monroe horizontal white reverse logo for dark surfaces.", kind: "logo", tags: []string{"brand", "identity", "horizontal", "reverse", "white", "dark surface"}},
-	"tagline-rev":                  {name: "West Monroe reversed tagline", description: "West Monroe reversed tagline lockup for dark surfaces.", kind: "logo", tags: []string{"brand", "identity", "tagline", "reverse", "white", "dark surface"}},
-	"arrow-straight":               {name: "Straight arrow", description: "Hand-drawn arrow graphic pointing left.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "left"}},
-	"arrow-connecting":             {name: "Connecting arrow", description: "Hand-drawn connecting arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "connection", "direction", "movement"}},
-	"arrow-dashed":                 {name: "Dashed arrow", description: "Hand-drawn dashed arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "dashed"}},
-	"arrow-double":                 {name: "Double arrow", description: "Hand-drawn double-headed arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "two way"}},
-	"arrow-right-angle":            {name: "Right-angle arrow", description: "Hand-drawn right-angle arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "right angle"}},
-	"circle":                       {name: "Hand-drawn circle", description: "Hand-drawn circle accent graphic.", kind: "graphic", people: "no", tags: []string{"circle", "outline", "emphasis", "accent"}},
-	"spark":                        {name: "Hand-drawn spark", description: "Hand-drawn spark accent graphic.", kind: "graphic", people: "no", tags: []string{"spark", "emphasis", "accent", "star"}},
-	"underscore":                   {name: "Hand-drawn underscore", description: "Hand-drawn underscore accent graphic.", kind: "graphic", people: "no", tags: []string{"underscore", "underline", "emphasis", "accent"}},
-	"icon/alert":                   {name: "Alert", description: "Icon representing an alert or warning.", kind: "icon", tags: []string{"warning", "risk", "issue", "attention", "notification"}},
-	"icon/collaboration-high-five": {name: "Collaboration high-five", description: "Icon representing teamwork and collaboration.", kind: "icon", tags: []string{"collaboration", "collaborating", "teamwork", "people", "partnership", "celebration"}},
-	"icon/handshake":               {name: "Handshake", description: "Icon representing an agreement or partnership.", kind: "icon", tags: []string{"partnership", "agreement", "trust", "collaboration", "collaborating", "people"}},
-	"icon/hazard-warning":          {name: "Hazard warning", description: "Icon representing a hazard, warning or safety risk.", kind: "icon", tags: []string{"hazard", "warning", "safety", "risk", "alert", "uncertainty"}},
-	"icon/people-group":            {name: "People group", description: "Icon representing a group of people or workforce.", kind: "icon", tags: []string{"people", "group", "team", "workforce", "colleagues"}},
-	"icon/people-network":          {name: "People network", description: "Icon representing a connected people network.", kind: "icon", tags: []string{"people", "network", "connections", "collaboration", "collaborating", "team"}},
-	"icon/people-network-2":        {name: "People network", description: "Icon representing a connected people network.", kind: "icon", tags: []string{"people", "network", "connections", "collaboration", "collaborating", "team"}},
-	"icon/risk-alert-arrow":        {name: "Risk alert", description: "Icon representing risk or an emerging alert.", kind: "icon", tags: []string{"risk", "warning", "alert", "issue", "trend"}},
-	"icon/security-shield-gear":    {name: "Security shield with gear", description: "Icon representing security and protection of systems.", kind: "icon", tags: []string{"security", "protection", "risk", "technology", "systems"}},
-	"icon/security-shield-lock":    {name: "Security shield with lock", description: "Icon representing security, privacy and protection.", kind: "icon", tags: []string{"security", "protection", "privacy", "risk", "lock"}},
-	"icon/team-huddle":             {name: "Team huddle", description: "Icon representing a team gathered for discussion.", kind: "icon", tags: []string{"team", "people", "group", "collaboration", "collaborating", "workshop", "huddle", "meeting"}},
-	"icon/team-meeting":            {name: "Team meeting", description: "Icon representing a team meeting or group discussion.", kind: "icon", tags: []string{"team", "people", "meeting", "collaboration", "collaborating", "workshop", "discussion"}},
-	"icon/teamwork":                {name: "Teamwork", description: "Icon representing people working together.", kind: "icon", tags: []string{"team", "people", "collaboration", "collaborating", "cooperation", "workshop"}},
-	"icon/umbrella":                {name: "Umbrella", description: "Icon representing protection or coverage.", kind: "icon", tags: []string{"protection", "risk", "insurance", "coverage", "weather"}},
+	"photo-abstract-blocks":             {name: "Abstract digital blocks", description: "Abstract blue digital blocks with a layered geometric pattern; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "data", "blocks", "blue"}, setting: []string{"abstract"}},
+	"photo-abstract-cubes":              {name: "Abstract blue cubes", description: "Abstract blue cubic architecture with repeating geometric forms; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "cubes", "architecture", "blue"}, setting: []string{"abstract"}},
+	"photo-abstract-grid":               {name: "Abstract illuminated data grid", description: "Abstract blue illuminated grid suggesting connected data systems; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "data", "grid", "network", "blue"}, setting: []string{"abstract"}},
+	"photo-abstract-led":                {name: "Abstract blue LED data pattern", description: "Close view of a blue LED display pattern; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"abstract", "technology", "digital", "data", "screen", "blue"}, setting: []string{"abstract"}},
+	"photo-business-team-report-review": {name: "Business team reviewing performance reports", description: "Several colleagues discuss printed performance charts and reports around a meeting table.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "business team", "performance reports", "charts", "analytics", "strategy", "finance transformation", "collaboration", "decision making", "workshop"}, industry: []string{"financial services"}, setting: []string{"office meeting room"}},
+	"photo-clinical-leaders":            {name: "Healthcare leaders reviewing a tablet", description: "Two healthcare professionals review a tablet together in a bright clinical setting.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "leaders", "leadership", "tablet", "review", "collaboration", "collaborating", "meeting"}, industry: []string{"healthcare"}, setting: []string{"clinical", "bright interior"}},
+	"photo-clinical-team":               {name: "Clinical team reviewing care data", description: "Two clinical professionals review care information on a tablet together.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "care", "data", "tablet", "review", "collaboration", "collaborating", "team"}, industry: []string{"healthcare"}, setting: []string{"clinical interior"}},
+	"photo-clinician-data":              {name: "Clinician reviewing patient data", description: "A clinician reviews patient data at dual monitors in a clinical workspace.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "clinician", "patient", "data", "analytics", "computer", "monitor", "screen", "review"}, industry: []string{"healthcare"}, setting: []string{"clinical workspace"}},
+	"photo-corridor":                    {name: "Clinical staff collaborating in a corridor", description: "Clinical staff talk together in a bright hospital corridor.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinical", "staff", "team", "collaboration", "collaborating", "conversation", "hospital", "corridor"}, industry: []string{"healthcare"}, setting: []string{"hospital corridor"}},
+	"photo-executive":                   {name: "Executive team reviewing documents", description: "An executive group reviews documents around a conference table, seen through glass.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "executive", "leadership", "team", "documents", "review", "meeting", "conference", "collaboration", "collaborating", "office"}, industry: []string{"organization people change"}, setting: []string{"glass conference room", "office"}},
+	"photo-financial-adviser":           {name: "Financial adviser meeting with clients", description: "A financial adviser meets with two clients across a desk in a bright office.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "financial adviser", "financial planning", "wealth management", "client consultation", "relationship banking", "personalized service", "advice", "trust", "documents"}, industry: []string{"financial services"}, setting: []string{"bright office", "client meeting"}},
+	"photo-financial-analyst":           {name: "Financial analyst reviewing dashboards", description: "A financial professional reviews data visualizations across dual monitors while taking notes.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "financial analyst", "dashboard", "dual monitors", "portfolio", "banking", "investment analysis", "financial data", "risk review", "data visualization", "business intelligence"}, industry: []string{"financial services"}, setting: []string{"office workspace"}},
+	"photo-headshot":                    {name: "Executive portrait", description: "Registered executive headshot portrait.", kind: "photo", people: "yes", orientation: "portrait", tags: []string{"people", "portrait", "headshot", "executive", "leadership"}, industry: []string{"organization people change"}, setting: []string{"portrait"}},
+	"photo-headshot-face":               {name: "Executive portrait crop", description: "Registered face crop of the executive headshot portrait.", kind: "photo", people: "yes", orientation: "portrait", tags: []string{"people", "portrait", "headshot", "face", "executive", "leadership"}, industry: []string{"organization people change"}, setting: []string{"portrait"}},
+	"photo-healthcare-leadership":       {name: "Healthcare leaders reviewing a tablet", description: "Two clinicians confer with a suited colleague reviewing information on a tablet in a bright healthcare facility.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "healthcare", "clinicians", "tablet", "clinical operations", "digital health", "healthcare transformation", "leadership", "care delivery", "technology adoption", "cross functional team"}, industry: []string{"healthcare"}, setting: []string{"healthcare facility"}},
+	"photo-stethoscope":                 {name: "Stethoscope with copy space", description: "Stethoscope on a light surface with open copy space; no people.", kind: "photo", people: "no", orientation: "landscape", tags: []string{"healthcare", "medical", "medicine", "stethoscope", "care", "copy space"}, industry: []string{"healthcare"}, setting: []string{"clinical still life"}},
+	"photo-software-developer-pair":     {name: "Software developers collaborating at multiple monitors", description: "Two software developers collaborate at a desk with multiple monitors, a laptop, and code notes.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "software developers", "programming", "pair programming", "code review", "software engineering", "digital product", "technology team", "agile", "developer collaboration", "digital delivery", "product development"}, setting: []string{"office technology workspace"}},
+	"photo-software-engineering-team":   {name: "Software engineering team working on code", description: "Three software professionals work across laptops and code-filled desktop monitors in a modern office.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "software engineering", "developers", "code", "programming", "software delivery", "product development", "technology talent", "agile team", "digital products", "coding", "application development"}, setting: []string{"modern office technology workspace"}},
+	"photo-team-meeting":                {name: "Team meeting in a glass conference room", description: "A group meets around a conference table in a glass office room.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "team", "meeting", "conference", "office", "collaboration", "collaborating", "discussion", "colleagues"}, industry: []string{"organization people change"}, setting: []string{"glass conference room", "office"}},
+	"photo-technician":                  {name: "Industrial technician reviewing equipment data", description: "An industrial technician in safety equipment checks data on a laptop beside machinery.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "industrial", "technician", "manufacturing", "operations", "equipment", "data", "laptop", "safety", "review"}, industry: []string{"consumer industrial products"}, setting: []string{"industrial facility"}},
+	"photo-warehouse":                   {name: "Warehouse operations manager with tablet", description: "A warehouse operations worker in safety equipment checks a tablet among inventory racks.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "warehouse", "operations", "inventory", "logistics", "tablet", "supply chain", "safety"}, industry: []string{"consumer industrial products"}, setting: []string{"warehouse"}},
+	"photo-working-session":             {name: "Colleagues in a focused working session", description: "Colleagues collaborate around a table in a working session; the image shows a small group in discussion with devices on the table.", kind: "photo", people: "yes", orientation: "landscape", tags: []string{"people", "colleagues", "team", "collaboration", "collaborating", "working session", "workshop", "meeting", "discussion", "office", "devices"}, industry: []string{"organization people change"}, setting: []string{"office working session"}},
+	"logo-pos":                          {name: "West Monroe horizontal positive logo", description: "West Monroe horizontal logo in positive color treatment.", kind: "logo", tags: []string{"brand", "identity", "horizontal", "positive", "color"}},
+	"logo-rev":                          {name: "West Monroe horizontal reverse logo", description: "West Monroe horizontal white reverse logo for dark surfaces.", kind: "logo", tags: []string{"brand", "identity", "horizontal", "reverse", "white", "dark surface"}},
+	"tagline-rev":                       {name: "West Monroe reversed tagline", description: "West Monroe reversed tagline lockup for dark surfaces.", kind: "logo", tags: []string{"brand", "identity", "tagline", "reverse", "white", "dark surface"}},
+	"arrow-straight":                    {name: "Straight arrow", description: "Hand-drawn arrow graphic pointing left.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "left"}},
+	"arrow-connecting":                  {name: "Connecting arrow", description: "Hand-drawn connecting arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "connection", "direction", "movement"}},
+	"arrow-dashed":                      {name: "Dashed arrow", description: "Hand-drawn dashed arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "dashed"}},
+	"arrow-double":                      {name: "Double arrow", description: "Hand-drawn double-headed arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "two way"}},
+	"arrow-right-angle":                 {name: "Right-angle arrow", description: "Hand-drawn right-angle arrow graphic.", kind: "graphic", people: "no", tags: []string{"arrow", "direction", "movement", "right angle"}},
+	"circle":                            {name: "Hand-drawn circle", description: "Hand-drawn circle accent graphic.", kind: "graphic", people: "no", tags: []string{"circle", "outline", "emphasis", "accent"}},
+	"spark":                             {name: "Hand-drawn spark", description: "Hand-drawn spark accent graphic.", kind: "graphic", people: "no", tags: []string{"spark", "emphasis", "accent", "star"}},
+	"underscore":                        {name: "Hand-drawn underscore", description: "Hand-drawn underscore accent graphic.", kind: "graphic", people: "no", tags: []string{"underscore", "underline", "emphasis", "accent"}},
+	"icon/alert":                        {name: "Alert", description: "Icon representing an alert or warning.", kind: "icon", tags: []string{"warning", "risk", "issue", "attention", "notification"}},
+	"icon/collaboration-high-five":      {name: "Collaboration high-five", description: "Icon representing teamwork and collaboration.", kind: "icon", tags: []string{"collaboration", "collaborating", "teamwork", "people", "partnership", "celebration"}},
+	"icon/handshake":                    {name: "Handshake", description: "Icon representing an agreement or partnership.", kind: "icon", tags: []string{"partnership", "agreement", "trust", "collaboration", "collaborating", "people"}},
+	"icon/hazard-warning":               {name: "Hazard warning", description: "Icon representing a hazard, warning or safety risk.", kind: "icon", tags: []string{"hazard", "warning", "safety", "risk", "alert", "uncertainty"}},
+	"icon/people-group":                 {name: "People group", description: "Icon representing a group of people or workforce.", kind: "icon", tags: []string{"people", "group", "team", "workforce", "colleagues"}},
+	"icon/people-network":               {name: "People network", description: "Icon representing a connected people network.", kind: "icon", tags: []string{"people", "network", "connections", "collaboration", "collaborating", "team"}},
+	"icon/people-network-2":             {name: "People network", description: "Icon representing a connected people network.", kind: "icon", tags: []string{"people", "network", "connections", "collaboration", "collaborating", "team"}},
+	"icon/risk-alert-arrow":             {name: "Risk alert", description: "Icon representing risk or an emerging alert.", kind: "icon", tags: []string{"risk", "warning", "alert", "issue", "trend"}},
+	"icon/security-shield-gear":         {name: "Security shield with gear", description: "Icon representing security and protection of systems.", kind: "icon", tags: []string{"security", "protection", "risk", "technology", "systems"}},
+	"icon/security-shield-lock":         {name: "Security shield with lock", description: "Icon representing security, privacy and protection.", kind: "icon", tags: []string{"security", "protection", "privacy", "risk", "lock"}},
+	"icon/team-huddle":                  {name: "Team huddle", description: "Icon representing a team gathered for discussion.", kind: "icon", tags: []string{"team", "people", "group", "collaboration", "collaborating", "workshop", "huddle", "meeting"}},
+	"icon/team-meeting":                 {name: "Team meeting", description: "Icon representing a team meeting or group discussion.", kind: "icon", tags: []string{"team", "people", "meeting", "collaboration", "collaborating", "workshop", "discussion"}},
+	"icon/teamwork":                     {name: "Teamwork", description: "Icon representing people working together.", kind: "icon", tags: []string{"team", "people", "collaboration", "collaborating", "cooperation", "workshop"}},
+	"icon/umbrella":                     {name: "Umbrella", description: "Icon representing protection or coverage.", kind: "icon", tags: []string{"protection", "risk", "insurance", "coverage", "weather"}},
 }
 
 // PrimitiveAssetData reads one registered original and verifies its SHA256.
@@ -131,12 +137,14 @@ func AssetSelections(query, kind string, limit int) ([]AssetSelection, error) {
 	}
 	queryTokens := queryWords(query)
 	groups := map[string]*AssetSelection{}
+	scores := map[string]int{}
 	for _, ref := range PrimitiveAssetCatalog() {
 		meta := assetMetadataFor(ref.Key, ref.Path)
 		if kind != "all" && meta.kind != kind {
 			continue
 		}
-		if !assetQueryMatches(queryTokens, meta, ref.Key, ref.Path) {
+		score := assetQueryScore(queryTokens, meta, ref.Key, ref.Path)
+		if len(queryTokens) > 0 && score == 0 {
 			continue
 		}
 		id := ref.Key
@@ -157,12 +165,18 @@ func AssetSelections(query, kind string, limit int) ([]AssetSelection, error) {
 			groups[id] = selection
 		}
 		selection.Variants = append(selection.Variants, AssetVariant{ID: ref.Key, Color: color, RecommendedSurfaces: surfaceGuidance(color), Path: ref.Path, SHA256: ref.SHA256})
+		scores[id] = max(scores[id], score)
 	}
 	ids := make([]string, 0, len(groups))
 	for id := range groups {
 		ids = append(ids, id)
 	}
-	sort.Strings(ids)
+	sort.Slice(ids, func(i, j int) bool {
+		if scores[ids[i]] != scores[ids[j]] {
+			return scores[ids[i]] > scores[ids[j]]
+		}
+		return ids[i] < ids[j]
+	})
 	out := make([]AssetSelection, 0, len(ids))
 	for _, id := range ids {
 		selection := *groups[id]
@@ -251,7 +265,8 @@ func assetMetadataFor(key, path string) assetMetadata {
 	name := strings.ReplaceAll(strings.TrimPrefix(base, "icon/"), "-", " ")
 	if strings.HasPrefix(key, "icon/") {
 		name = titleWords(name)
-		return assetMetadata{name: name, description: "Icon representing " + strings.ToLower(name) + ".", kind: "icon", people: "no", tags: cleanAssetTags(append([]string{"icon"}, strings.Fields(strings.ToLower(name))...))}
+		tags := append([]string{"icon"}, strings.Fields(strings.ToLower(name))...)
+		return assetMetadata{name: name, description: "Icon representing " + strings.ToLower(name) + ".", kind: "icon", people: "no", tags: cleanAssetTags(tags)}
 	}
 	kind := "graphic"
 	if strings.HasPrefix(key, "logo-") || strings.Contains(path, "/logos/") {
@@ -301,25 +316,54 @@ func queryWords(query string) []string {
 	return cleanAssetTags(terms)
 }
 
-func assetQueryMatches(terms []string, meta assetMetadata, key, path string) bool {
+func assetQueryScore(terms []string, meta assetMetadata, key, path string) int {
 	if len(terms) == 0 {
-		return true
+		return 0
 	}
 	corpus := strings.ToLower(strings.Join(append(append(append(append([]string{key, path, meta.name, meta.description}, meta.tags...), meta.industry...), meta.setting...), meta.kind), " "))
 	words := queryWords(corpus)
+	score := 0
 	for _, term := range terms {
 		matched := false
-		for _, word := range words {
-			if assetWordMatches(term, word) {
-				matched = true
+		for _, candidate := range assetQueryExpansions(term) {
+			for _, word := range words {
+				if assetWordMatches(candidate, word) {
+					matched = true
+					break
+				}
+			}
+			if matched {
 				break
 			}
 		}
-		if !matched {
-			return false
+		if matched {
+			score += 10
+			for _, word := range words {
+				if word == term {
+					score += 5
+					break
+				}
+			}
 		}
 	}
-	return true
+	return score
+}
+
+var assetSynonymMap = map[string][]string{
+	"people": {"person", "team", "workforce", "colleagues", "staff"}, "person": {"people", "team", "workforce"},
+	"collaboration": {"collaborating", "teamwork", "cooperation", "partnership", "meeting", "workshop"}, "collaborating": {"collaboration", "teamwork", "cooperation", "partnership"},
+	"risk": {"warning", "hazard", "alert", "safety", "security", "protection"}, "warning": {"risk", "hazard", "alert", "safety"},
+	"security": {"protection", "privacy", "risk"}, "protection": {"security", "coverage", "safety"},
+	"finance": {"money", "payment", "banking", "cost"}, "healthcare": {"clinical", "medical", "care", "patient"},
+	"technology": {"digital", "data", "automation", "systems"}, "growth": {"increase", "improvement", "progress"},
+	"industry": {"industrial", "manufacturing", "operations"}, "industrial": {"industry", "manufacturing", "operations"},
+	"strategy": {"roadmap", "direction", "planning"}, "planning": {"strategy", "roadmap", "priorities"},
+	"alert": {"risk", "warning", "issue"}, "team": {"people", "colleagues", "workforce", "collaboration"},
+}
+
+func assetQueryExpansions(term string) []string {
+	values := append([]string{term}, assetSynonymMap[term]...)
+	return values
 }
 
 func assetWordMatches(query, candidate string) bool {
@@ -337,7 +381,10 @@ func assetWordMatches(query, candidate string) bool {
 		}
 		return word
 	}
-	return stem(query) == stem(candidate)
+	if stem(query) == stem(candidate) {
+		return true
+	}
+	return len(query) >= 4 && strings.HasPrefix(candidate, query) || len(candidate) >= 4 && strings.HasPrefix(query, candidate)
 }
 
 // originalImageDimensions is retained for future thumbnail consumers that need

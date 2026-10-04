@@ -152,6 +152,14 @@ func Detach(p *Project, slideID, newID, bundle, engine, reason string) (Mutation
 		t.FrameChrome = &FrameChrome{Emphasis: ch.Emphasis, Whiteboard: ch.Whiteboard, CustomWhiteboard: ch.CustomWhiteboard}
 	}
 	values := map[string]any{}
+	metadata, e := wmdesign.LibraryAuthoringMetadata(*def)
+	if e != nil {
+		return Mutation{}, e
+	}
+	semantic := map[string]wmdesign.LibraryAuthoringSlot{}
+	for _, slot := range metadata.Slots {
+		semantic[slot.Name] = slot
+	}
 	addZone := func(id, role string, v any) {
 		schema := map[string]any{"type": "string"}
 		switch v.(type) {
@@ -165,6 +173,18 @@ func Detach(p *Project, slideID, newID, bundle, engine, reason string) (Mutation
 			schema["type"] = "array"
 		}
 		t.Zones[id] = Zone{Role: role, Required: true, Schema: schema}
+		z := t.Zones[id]
+		z.AuthoringAlias = "/" + id
+		if id == "title" {
+			z.AuthoringAlias = "/headline"
+		}
+		if id == "eyebrow" {
+			z.AuthoringAlias = "/section_label"
+		}
+		if id == "source" {
+			z.AuthoringAlias = "/source_note"
+		}
+		t.Zones[id] = z
 		values[id] = v
 	}
 	if !compiled.Frame.NoHeader {
@@ -207,10 +227,18 @@ func Detach(p *Project, slideID, newID, bundle, engine, reason string) (Mutation
 				if e != nil {
 					return Mutation{}, e
 				}
-				id := "value-" + digest([]byte(slot.Name))[:12]
+				info := semantic[slot.Name]
+				id := stockFieldName(info.Alias)
+				if len(id) > 90 {
+					id = id[:90]
+				}
+				if _, exists := t.Zones[id]; exists {
+					id += "_" + digest([]byte(slot.Name))[:8]
+				}
 				addZone(id, "content", v)
 				z := t.Zones[id]
-				z.Description = slot.Name
+				z.Description = info.Description
+				z.AuthoringAlias = info.Alias
 				t.Zones[id] = z
 				if e = setPointer(args, relative, map[string]any{"binding": id}); e != nil {
 					return Mutation{}, e
@@ -294,7 +322,7 @@ func definitionSnapshot(p *Project, data []byte) (string, error) {
 	return path, nil
 }
 func applyTemplate(p *Project, id string, t LocalTemplate, values map[string]any, slides []string, operation, hash string) (Mutation, error) {
-	if p.hasExternalSources() || p.hasContentAliases() {
+	if operation == "detach" || p.hasExternalSources() || p.hasContentAliases() {
 		return applySourceTemplate(p, id, t, values, slides, operation, hash)
 	}
 	m := Mutation{Operation: operation, TemplateID: id, SlideIDs: slides, BeforeSHA256: digest(p.Raw), DefinitionSHA256: hash}

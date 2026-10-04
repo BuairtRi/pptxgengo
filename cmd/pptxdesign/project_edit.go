@@ -17,6 +17,7 @@ func runProjectEdit(args []string) error {
 	patch := f.String("patch", "", "YAML or JSON mapping keyed by stable slide ID; fields: template, values, content, bindings, brief (project-relative page brief file path)")
 	bundle := f.String("bundle", "", "bundle path/revision; defaults to project lock")
 	engine := f.String("engine", "", "engine; defaults to project lock")
+	checkFit := f.Bool("check-fit", false, "measure changed slides with the Go renderer before committing; native review remains required")
 	if err := f.Parse(args); err != nil {
 		return err
 	}
@@ -56,7 +57,7 @@ func runProjectEdit(args []string) error {
 	if validLockedBundle(*bundle) {
 		b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
 	}
-	result, err := deckproject.EditSlides(p, edits, b, *engine)
+	result, err := deckproject.EditSlidesWithOptions(p, edits, b, *engine, deckproject.EditOptions{CheckFit: *checkFit})
 	if err != nil {
 		if strings.Contains(err.Error(), "binding.unsupported_field") {
 			return fmt.Errorf("%w; replace complete values/content/bindings for the new template (remove stale values.keys, or supply values: {} with complete content/bindings), or use project swap to review a mapping proposal", err)

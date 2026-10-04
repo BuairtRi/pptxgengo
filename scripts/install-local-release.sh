@@ -102,6 +102,7 @@ for path in ('skills/west-monroe-presentations', 'schemas', 'examples/deck-proje
 for path in ('release/README.md', 'release/VERSION', 'library/README.md', 'cmd/pptxdesign/README.md',
              'internal/deckproject/README.md', 'docs/semantic-template-discovery.md',
              'docs/engineering-cli.md', 'docs/engineering-waves.md', 'docs/engineering-new-templates.md',
+             'docs/engineering-followups.md', 'docs/testing.md', 'docs/local-agent-macos-recovery.md',
              'docs/skill-planning/deck-source-contract.md', 'docs/skill-planning/catalog-discovery-contract.md',
              'scripts/build-wmds-production-gallery.py', 'scripts/export-powerpoint.applescript',
              'scripts/render-pdf.swift', 'scripts/render-contact-sheet.swift'):

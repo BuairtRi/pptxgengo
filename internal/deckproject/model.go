@@ -43,11 +43,12 @@ type Slide struct {
 	EvidenceRefs []string       `json:"evidence_refs,omitempty"`
 }
 type Zone struct {
-	Role         string         `json:"role"`
-	Required     bool           `json:"required"`
-	Schema       map[string]any `json:"schema"`
-	Description  string         `json:"description,omitempty"`
-	CapacityNote string         `json:"capacity_note,omitempty"`
+	Role           string         `json:"role"`
+	Required       bool           `json:"required"`
+	Schema         map[string]any `json:"schema"`
+	Description    string         `json:"description,omitempty"`
+	CapacityNote   string         `json:"capacity_note,omitempty"`
+	AuthoringAlias string         `json:"authoring_alias,omitempty"`
 }
 type Provenance struct {
 	Operation          string    `json:"operation"`

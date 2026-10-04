@@ -83,6 +83,9 @@ func intakeRepairCopy(v any, field string, counts map[string]int) {
 // The twenty rejection fixtures are immutable observations, not current live
 // drafts. Source path/hash provenance remains in their original observation.
 func TestIntakeRepairsFrozenTwentyRejections(t *testing.T) {
+	if testing.Short() {
+		t.Skip("exhaustive frozen slide builds require registered private branding assets; run make test-integration")
+	}
 	snapshot := filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003")
 	entries := intakeRepairEntries(t, filepath.Join(snapshot, "source", "templates", "library"))
 	data, err := os.ReadFile(filepath.Join(snapshot, "smoke-results.json"))
@@ -195,10 +198,16 @@ func TestIntakeRepairsAtomicAndFailClosed(t *testing.T) {
 }
 
 func TestIntakeRepairsRound12IncomingTwentyTwo(t *testing.T) {
+	if testing.Short() {
+		t.Skip("exhaustive frozen slide builds require registered private branding assets; run make test-integration")
+	}
 	testIntakeRepairsModernSnapshot(t, "intake-20261003-round12")
 }
 
 func TestIntakeRepairsFinalFrozenTwentyTwo(t *testing.T) {
+	if testing.Short() {
+		t.Skip("exhaustive frozen slide builds require registered private branding assets; run make test-integration")
+	}
 	testIntakeRepairsModernSnapshot(t, "intake-20261003-frozen")
 }
 

@@ -347,6 +347,9 @@ func TestForkPreservesAncestry(t *testing.T) {
 	}
 }
 func TestDetachSourceScenePreservesAuthoredCopy(t *testing.T) {
+	if testing.Short() {
+		t.Skip("detach integration builds a slide with registered private photography; run make test-integration")
+	}
 	p := example(t)
 	catalog, e := wmdesign.LibraryCatalog(bundle(t), "")
 	if e != nil {

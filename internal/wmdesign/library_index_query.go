@@ -10,9 +10,10 @@ import (
 )
 
 type LibraryIndexFindOptions struct {
-	Shape     LibrarySearchOptions `json:"shape"`
-	Kinds     []string             `json:"kinds,omitempty"`
-	Namespace string               `json:"namespace,omitempty"`
+	Shape       LibrarySearchOptions `json:"shape"`
+	Kinds       []string             `json:"kinds,omitempty"`
+	Namespace   string               `json:"namespace,omitempty"`
+	IncludeWeak bool                 `json:"include_weak,omitempty"`
 }
 
 type LibraryEntitySummary struct {
@@ -34,6 +35,8 @@ type LibraryEntitySummary struct {
 
 type LibraryIndexHit struct {
 	Entity         LibraryEntitySummary `json:"entity"`
+	GroupID        string               `json:"group_id,omitempty"`
+	VariantIDs     []string             `json:"variant_ids,omitempty"`
 	Score          int                  `json:"score"`
 	ScenarioScore  int                  `json:"scenario_score"`
 	Reasons        []string             `json:"reasons"`
@@ -91,6 +94,9 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 			continue
 		}
 		hit := part.Matches[0]
+		if strings.TrimSpace(options.Shape.Query) != "" && hit.Score == 0 && !options.IncludeWeak {
+			continue
+		}
 		queryCoverage[entity.ID] = libraryScenarioQueryCoverage(def, options.Shape.Query)
 		discovery := entity.Discovery
 		discovery.Zones = nil
@@ -113,6 +119,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 		}
 		return a.Entity.ID < b.Entity.ID
 	})
+	result.Matches = groupIndexedIconVariants(result.Matches)
 	limit := options.Shape.Limit
 	if limit == 0 {
 		limit = 10
@@ -121,6 +128,35 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 		result.Matches = result.Matches[:limit]
 	}
 	return result, nil
+}
+
+// groupIndexedIconVariants collapses indexed color instances into one ranked
+// concept row while keeping each registered instance ID explicit.
+func groupIndexedIconVariants(matches []LibraryIndexHit) []LibraryIndexHit {
+	grouped := make([]LibraryIndexHit, 0, len(matches))
+	positions := map[string]int{}
+	for _, hit := range matches {
+		parts := strings.Split(hit.Entity.Key, "/")
+		if hit.Entity.Kind != "asset" || len(parts) != 3 || parts[0] != "icon" {
+			grouped = append(grouped, hit)
+			continue
+		}
+		groupID := "wmds/asset/icon/" + parts[1]
+		position, ok := positions[groupID]
+		if !ok {
+			hit.VariantIDs = []string{hit.Entity.ID}
+			hit.GroupID = groupID
+			hit.Entity.Key = "icon/" + parts[1]
+			positions[groupID] = len(grouped)
+			grouped = append(grouped, hit)
+			continue
+		}
+		grouped[position].VariantIDs = append(grouped[position].VariantIDs, hit.Entity.ID)
+	}
+	for i := range grouped {
+		sort.Strings(grouped[i].VariantIDs)
+	}
+	return grouped
 }
 
 type LibraryPreviewResult struct {

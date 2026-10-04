@@ -45,6 +45,8 @@ type Artifact struct {
 	Height int    `json:"height,omitempty"`
 }
 type Receipt struct {
+	TaskID                  string        `json:"task_id"`
+	Provenance              *Provenance   `json:"provenance,omitempty"`
 	Renderer                string        `json:"renderer"`
 	Source                  Artifact      `json:"source"`
 	ReviewCopySHA256        string        `json:"review_copy_sha256"`
@@ -80,9 +82,19 @@ func command(ctx context.Context, name string, args ...string) ([]byte, error) {
 // Render uses the calling executable's private render-native-worker route,
 // which must dispatch to RenderWorker. The deadline bounds preparation and all
 // helper descendants; exact-task cleanup receives a separate five-second budget.
-func Render(ctx context.Context, opts Options) (*Receipt, error) {
-	if opts.Timeout <= 0 || runtime.GOOS != "darwin" || opts.PPTX == "" || opts.Out == "" || (!opts.PDF && !opts.PNG) {
-		return render(ctx, opts, nativeCommand, runtime.GOOS)
+func Render(ctx context.Context, opts Options) (_ *Receipt, err error) {
+	defer func() {
+		if err != nil && opts.Out != "" {
+			recordCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			_, recordErr := workerProcess(recordCtx, workerRequest{Failure: &renderFailure{Out: opts.Out, Message: err.Error(), TaskID: opts.taskID}})
+			cancel()
+			if recordErr != nil {
+				err = fmt.Errorf("%w; render-error.txt could not be recorded: %v", err, recordErr)
+			}
+		}
+	}()
+	if err = validateRenderOptions(opts, runtime.GOOS); err != nil {
+		return nil, err
 	}
 	ctx, cancel := context.WithTimeout(ctx, opts.Timeout)
 	defer cancel()
@@ -90,6 +102,7 @@ func Render(ctx context.Context, opts Options) (*Receipt, error) {
 	if err != nil {
 		return nil, err
 	}
+	opts.taskID = taskID
 	data, err := workerProcess(ctx, workerRequest{Render: &opts, TaskID: taskID})
 	if err != nil {
 		// The parent knows the task directory before the worker creates it.
@@ -109,14 +122,15 @@ func Render(ctx context.Context, opts Options) (*Receipt, error) {
 	return &receipt, nil
 }
 func render(ctx context.Context, opts Options, run runner, platform string) (_ *Receipt, err error) {
-	if platform != "darwin" {
-		return nil, fmt.Errorf("native rendering requires macOS with Microsoft PowerPoint and the Swift/PDFKit tools installed")
-	}
-	if opts.PPTX == "" || opts.Out == "" || (!opts.PDF && !opts.PNG) {
-		return nil, fmt.Errorf("--pptx, --out, and at least one of --pdf or --png are required")
-	}
-	if opts.Timeout <= 0 {
-		return nil, fmt.Errorf("timeout must be positive")
+	defer func() {
+		if err != nil && opts.Out != "" {
+			if recordErr := writeRenderFailure(renderFailure{Out: opts.Out, Message: err.Error(), TaskID: opts.taskID}); recordErr != nil {
+				err = fmt.Errorf("%w; render-error.txt could not be recorded: %v", err, recordErr)
+			}
+		}
+	}()
+	if err = validateRenderOptions(opts, platform); err != nil {
+		return nil, err
 	}
 	ctx, cancel := context.WithTimeout(ctx, opts.Timeout)
 	defer cancel()
@@ -142,12 +156,6 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	if err = os.Mkdir(out, 0755); err != nil {
 		return nil, fmt.Errorf("output directory must be new: %w", err)
 	}
-	// Keep a failure explanation, never a success receipt for an incomplete export.
-	defer func() {
-		if err != nil {
-			_ = os.WriteFile(filepath.Join(out, "render-error.txt"), []byte(err.Error()+"\n"), 0644)
-		}
-	}()
 	staging, qualification, err := stagingDirectory(opts.StagingRoot)
 	if err != nil {
 		return nil, err
@@ -222,7 +230,7 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 		return nil, fmt.Errorf("PowerPoint exported %d pages; expected %d (source %d slides, %d hidden)", result.Pages, expected, total, len(hidden))
 	}
 	selected, _ := ParseSlides(opts.Slides, total)
-	receipt := &Receipt{Renderer: "Microsoft PowerPoint (local native PDF); macOS PDFKit PNG", Source: Artifact{Path: source, SHA256: hash(original)}, ReviewCopySHA256: hash(review), IncludeHidden: opts.IncludeHidden, HiddenSlidesMadeVisible: []string{}, Slides: total, Pages: result.Pages, PageMappings: mappings, SelectedSlides: selected, Staging: qualification + "; qualified by this successful export", StagingPath: staging}
+	receipt := &Receipt{TaskID: filepath.Base(work), Renderer: "Microsoft PowerPoint (local native PDF); macOS PDFKit PNG", Source: Artifact{Path: source, SHA256: hash(original)}, ReviewCopySHA256: hash(review), IncludeHidden: opts.IncludeHidden, HiddenSlidesMadeVisible: []string{}, Slides: total, Pages: result.Pages, PageMappings: mappings, SelectedSlides: selected, Staging: qualification + "; qualified by this successful export", StagingPath: staging}
 	if opts.IncludeHidden {
 		receipt.HiddenSlidesMadeVisible = hidden
 	}
@@ -287,14 +295,48 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	if err = ctx.Err(); err != nil {
 		return nil, fmt.Errorf("native render expired; no successful receipt issued: %w", err)
 	}
+	if err = signReceipt(receipt); err != nil {
+		return nil, err
+	}
 	data, err := json.MarshalIndent(receipt, "", "  ")
 	if err != nil {
 		return nil, err
 	}
-	if err = os.WriteFile(filepath.Join(out, "render-manifest.json"), append(data, '\n'), 0644); err != nil {
+	f, err := os.CreateTemp(out, ".render-manifest-")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(f.Name())
+	if err = f.Chmod(0644); err == nil {
+		_, err = f.Write(append(data, '\n'))
+	}
+	closeErr := f.Close()
+	if err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		return nil, err
+	}
+	if err = ctx.Err(); err != nil {
+		return nil, err
+	}
+	if err = os.Rename(f.Name(), filepath.Join(out, "render-manifest.json")); err != nil {
 		return nil, err
 	}
 	return receipt, nil
+}
+
+func validateRenderOptions(opts Options, platform string) error {
+	if platform != "darwin" {
+		return fmt.Errorf("native rendering requires macOS with Microsoft PowerPoint and the Swift/PDFKit tools installed")
+	}
+	if opts.PPTX == "" || opts.Out == "" || (!opts.PDF && !opts.PNG) {
+		return fmt.Errorf("--pptx, --out, and at least one of --pdf or --png are required")
+	}
+	if opts.Timeout <= 0 {
+		return fmt.Errorf("timeout must be positive")
+	}
+	return nil
 }
 func hash(data []byte) string { h := sha256.Sum256(data); return hex.EncodeToString(h[:]) }
 

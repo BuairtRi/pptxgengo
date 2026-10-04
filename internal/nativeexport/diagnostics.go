@@ -1,14 +1,18 @@
 package nativeexport
 
 import (
+	"bufio"
 	"context"
 	_ "embed"
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/buairtri/pptxgengo/pptx"
 )
 
 const powerPointApp = "/Applications/Microsoft PowerPoint.app"
@@ -18,21 +22,72 @@ var dialogScript []byte
 
 // A read-only optional probe never requests Accessibility or Screen Recording access.
 func nativeCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
-	if name == "/usr/bin/osascript" && len(args) == 5 {
+	if name == "/usr/bin/osascript" && len(args) >= 5 && (len(args) == 5 || args[len(args)-1] != "close") {
 		path := filepath.Join(filepath.Dir(args[0]), "dialog.swift")
 		if err := os.WriteFile(path, dialogScript, 0600); err == nil {
-			probeCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
-			data, probeErr := command(probeCtx, "/usr/bin/swift", path)
-			cancel()
-			if probeErr == nil {
-				var result struct{ Status, Dialog, Detail string }
-				if json.Unmarshal(data, &result) == nil && result.Status == "blocked" {
-					return nil, fmt.Errorf("file_access_denied: PowerPoint is showing %s: %s; click Select/Grant for the displayed folder, then rerun", result.Dialog, result.Detail)
-				}
-			}
+			return monitoredCommand(ctx, func(child context.Context) ([]byte, error) {
+				return command(child, name, args...)
+			}, func(child context.Context, observations chan<- dialogObservation) {
+				observeDialogs(child, path, observations)
+			})
 		}
 	}
 	return command(ctx, name, args...)
+}
+
+type dialogObservation struct{ Status, Dialog, Detail string }
+
+func observeDialogs(ctx context.Context, path string, observations chan<- dialogObservation) {
+	cmd := exec.CommandContext(ctx, "/usr/bin/swift", path, "--watch")
+	cmd.WaitDelay = 2 * time.Second
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return
+	}
+	if err = cmd.Start(); err != nil {
+		return
+	}
+	scanner := bufio.NewScanner(stdout)
+	for scanner.Scan() {
+		var result dialogObservation
+		if json.Unmarshal(scanner.Bytes(), &result) == nil {
+			select {
+			case observations <- result:
+			case <-ctx.Done():
+			}
+		}
+	}
+	_ = cmd.Wait()
+}
+
+// The visibility monitor runs throughout the open/export event, rather than
+// checking once before a new file-access prompt could appear. It never requests
+// Accessibility/Screen Recording access. Unknown visibility is not a denial.
+func monitoredCommand(ctx context.Context, export func(context.Context) ([]byte, error), observe func(context.Context, chan<- dialogObservation)) ([]byte, error) {
+	child, cancel := context.WithCancel(ctx)
+	defer cancel()
+	type result struct {
+		data []byte
+		err  error
+	}
+	completed := make(chan result, 1)
+	observations := make(chan dialogObservation, 1)
+	monitorDone := make(chan struct{})
+	go func() { data, err := export(child); completed <- result{data, err} }()
+	go func() { defer close(monitorDone); observe(child, observations) }()
+	defer func() { cancel(); <-monitorDone }()
+	for {
+		select {
+		case result := <-completed:
+			return result.data, result.err
+		case observation := <-observations:
+			if observation.Status == "blocked" {
+				cancel()
+				<-completed
+				return nil, fmt.Errorf("file_access_denied: PowerPoint is showing %s: %s; click Select/Grant for the displayed staging folder, then rerun render-doctor or render", observation.Dialog, observation.Detail)
+			}
+		}
+	}
 }
 
 // canonicalPath resolves even an output path whose last components do not exist.
@@ -103,6 +158,7 @@ type Diagnostic struct {
 type DoctorOptions struct {
 	StagingRoot string
 	Timeout     time.Duration
+	taskID      string
 }
 
 // Doctor reports observed permission failures separately from checks it cannot prove.
@@ -112,13 +168,23 @@ func Doctor(ctx context.Context, opts DoctorOptions) []Diagnostic {
 	}
 	ctx, cancel := context.WithTimeout(ctx, opts.Timeout)
 	defer cancel()
-	data, err := workerProcess(ctx, workerRequest{Doctor: &opts})
+	taskID, err := newTaskID()
+	if err != nil {
+		return []Diagnostic{{Check: "doctor-worker", Status: "fail", Detail: err.Error()}}
+	}
+	data, err := workerProcess(ctx, workerRequest{Doctor: &opts, TaskID: taskID})
+	cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 5*time.Second)
+	_, cleanupErr := workerProcess(cleanupCtx, workerRequest{Cleanup: &cleanupTask{StagingRoot: opts.StagingRoot, TaskID: taskID}})
+	cleanupCancel()
 	if err != nil {
 		return []Diagnostic{{Check: "doctor-worker", Status: "fail", Detail: err.Error(), Fix: "Inspect PowerPoint and macOS for a pending prompt; try a qualified --staging-dir from the signed-in desktop session."}}
 	}
 	var checks []Diagnostic
 	if err = json.Unmarshal(data, &checks); err != nil {
 		return []Diagnostic{{Check: "doctor-worker", Status: "fail", Detail: "Invalid native diagnostic metadata: " + err.Error()}}
+	}
+	if cleanupErr != nil {
+		checks = append(checks, Diagnostic{"doctor-cleanup", "unknown", cleanupErr.Error(), "Inspect only the reported doctor task copy in PowerPoint; close it without saving, then rerun render-doctor."})
 	}
 	return checks
 }
@@ -164,7 +230,7 @@ func doctor(ctx context.Context, opts DoctorOptions, run runner, platform string
 			name := f.Name()
 			f.Close()
 			os.Remove(name)
-			checks = append(checks, Diagnostic{"staging-writable", "pass", root, ""}, Diagnostic{"powerpoint-file-access", "unknown", kind, "Run a small native render to qualify this folder; if PowerPoint asks for access, grant access and rerun."})
+			checks = append(checks, Diagnostic{"staging-writable", "pass", root, ""})
 		}
 	}
 	probeCtx, probeCancel := context.WithTimeout(ctx, 5*time.Second)
@@ -180,6 +246,11 @@ func doctor(ctx context.Context, opts DoctorOptions, run runner, platform string
 		checks = append(checks, Diagnostic{"powerpoint-dispatch", "fail", "PowerPoint did not answer an operational Apple event: " + err.Error(), fix}, Diagnostic{"automation", status, "Operational delivery failed; permission is unconfirmed unless explicitly denied.", fix})
 	} else {
 		checks = append(checks, Diagnostic{"powerpoint-dispatch", "pass", "PowerPoint answered; open presentations: " + strings.TrimSpace(string(data)), ""}, Diagnostic{"automation", "pass", "PowerPoint answered an operational Apple event from this caller.", ""})
+	}
+	if err != nil || root == "" {
+		checks = append(checks, Diagnostic{"powerpoint-file-access", "unknown", "No file-access probe was sent because staging or operational Apple-event delivery is unconfirmed. " + kind, "Resolve the failed staging/dispatch check, then rerun render-doctor. If PowerPoint displays Grant File Access, click Select/Grant for the staging folder: " + root})
+	} else {
+		checks = append(checks, doctorFileAccess(ctx, root, opts.taskID, run))
 	}
 	data, err = run(ctx, "/usr/bin/swift", "-e", `import AppKit; import PDFKit; print("Swift, AppKit and PDFKit available"); print("GUI_APP_COUNT:\(NSWorkspace.shared.runningApplications.count)")`)
 	if err != nil {
@@ -198,6 +269,59 @@ func doctor(ctx context.Context, opts DoctorOptions, run runner, platform string
 		}
 	}
 	return checks
+}
+
+func doctorFileAccess(ctx context.Context, root, taskID string, run runner) Diagnostic {
+	fix := "In PowerPoint, click Select/Grant if Grant File Access appears for " + root + "; select the displayed folder and rerun render-doctor. The CLI never grants permissions automatically."
+	if taskID == "" {
+		taskID, _ = newTaskID()
+	}
+	if !validTaskID.MatchString(taskID) {
+		return Diagnostic{"powerpoint-file-access", "unknown", "Invalid doctor task identity", fix}
+	}
+	work := filepath.Join(root, taskID)
+	if err := os.Mkdir(work, 0700); err != nil {
+		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
+	}
+	path := filepath.Join(work, taskID+".pptx")
+	script := filepath.Join(work, "probe.applescript")
+	presentation := pptx.New()
+	if err := presentation.AddSlide().AddText([]pptx.TextProps{{Text: "PowerPoint staging file-access diagnostic"}}, nil); err != nil {
+		_ = os.RemoveAll(work)
+		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
+	}
+	data, err := presentation.Write()
+	if err == nil {
+		err = os.WriteFile(path, data, 0600)
+	}
+	if err == nil {
+		err = os.WriteFile(script, exportScript, 0600)
+	}
+	if err != nil {
+		_ = os.RemoveAll(work)
+		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
+	}
+	probeCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	_, err = run(probeCtx, "/usr/bin/osascript", script, path, filepath.Join(work, "unused.pdf"), taskID+".pptx", "12", "probe")
+	cancel()
+	if err == nil {
+		_ = os.RemoveAll(work)
+		return Diagnostic{"powerpoint-file-access", "pass", "PowerPoint opened and closed the exact diagnostic task copy in " + root + "; no PDF or render receipt was issued.", ""}
+	}
+	closeCtx, closeCancel := context.WithTimeout(context.Background(), 3*time.Second)
+	_, closeErr := run(closeCtx, "/usr/bin/osascript", script, path, filepath.Join(work, "unused.pdf"), taskID+".pptx", "3", "close")
+	closeCancel()
+	detail := exportFailure(err, path).Error()
+	if closeErr == nil {
+		_ = os.RemoveAll(work)
+	} else {
+		detail += "; exact-task close unconfirmed; retained diagnostic copy: " + path
+	}
+	status := "unknown"
+	if strings.Contains(strings.ToLower(err.Error()), "file_access_denied") {
+		status = "fail"
+	}
+	return Diagnostic{"powerpoint-file-access", status, detail, fix}
 }
 
 func exportFailure(err error, taskPath string) error {

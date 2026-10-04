@@ -33,12 +33,18 @@ packages are together in [`samples/final`](samples/final/README.md).
 - [Source corpus and inventory policy](planning/README.md)
 - [UHG reconstruction results, native placement experiments, and QA evidence](planning/RECONSTRUCTION_CHECKPOINT.md)
 - [Go port conventions](PORTING.md)
+- [Testing lanes and integration dependencies](docs/testing.md)
+- [Engineering follow-up status and qualification](docs/engineering-followups.md)
 - [Historical code review and resolution log](REVIEW.md)
 
 ```sh
 go build ./...
-go test -race -cover ./...
+make test
+make test-race
 ```
+
+`make test` runs the bounded short suite. The full integration and exhaustive
+race lanes are documented in [docs/testing.md](docs/testing.md).
 
 ### Native reconstruction experiment
 

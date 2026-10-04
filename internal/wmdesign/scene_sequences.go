@@ -16,6 +16,9 @@ type sequenceStep struct {
 	Title string `json:"title"`
 	Text  string `json:"text"`
 }
+
+const verticalSequenceStepPitch = 66.0
+
 type sequencePhase struct {
 	Key          string            `json:"key"`
 	N            string            `json:"n"`
@@ -210,7 +213,7 @@ func (r *renderer) planSequenceScene(id string, raw json.RawMessage, ctx SceneCo
 		a, b := [2]float64{n.X + 6, n.Y + 9}, [2]float64{n.X + float64(len(n.Steps)-1)*cw + 6, n.Y + 9}
 		if vertical {
 			a = [2]float64{n.X + 9, n.Y + 12}
-			b = [2]float64{n.X + 9, n.Y + 12 + float64(len(n.Steps)-1)*66}
+			b = [2]float64{n.X + 9, n.Y + 12 + float64(len(n.Steps)-1)*verticalSequenceStepPitch}
 		}
 		if len(n.Steps) > 1 {
 			if e = r.diagramLine(p, id+".base", a, b, line, 2, "solid"); e != nil {
@@ -220,7 +223,7 @@ func (r *renderer) planSequenceScene(id string, raw json.RawMessage, ctx SceneCo
 		if cur > 0 {
 			z := [2]float64{n.X + float64(cur)*cw + 6, n.Y + 9}
 			if vertical {
-				z = [2]float64{n.X + 9, n.Y + 12 + float64(cur)*66}
+				z = [2]float64{n.X + 9, n.Y + 12 + float64(cur)*verticalSequenceStepPitch}
 			}
 			if e = r.diagramLine(p, id+".done", a, z, strong, 2, "solid"); e != nil {
 				return nil, true, e
@@ -246,9 +249,9 @@ func (r *renderer) planSequenceScene(id string, raw json.RawMessage, ctx SceneCo
 			x, y, w := n.X+float64(i)*cw, n.Y+30, cw-18
 			cap := ctx.Zone.Y + ctx.Zone.H - y
 			if vertical {
-				cx, cy = n.X+9, n.Y+12+float64(i)*66
+				cx, cy = n.X+9, n.Y+12+float64(i)*verticalSequenceStepPitch
 				x, y, w = n.X+36, cy-9, n.W-36
-				cap = 66
+				cap = verticalSequenceStepPitch
 			}
 			if e = r.diagramShape(p, pre+".marker", Rect{cx - size/2, cy - size/2, size, size}, pptx.ShapeTypeRect, fill, outline, 1, "solid", nil); e != nil {
 				return nil, true, e

@@ -25,7 +25,7 @@ func MarshalSlideSource(authored map[string]any) ([]byte, error) {
 // StockScaffoldSlide creates editable example content while preserving a genuine
 // shared template reference. Example content is explicitly marked synthetic.
 func StockScaffoldSlide(bundle, key, id string, year int) (map[string]any, error) {
-	if strings.TrimSpace(id) == "" || strings.TrimSpace(key) == "" {
+	if !stableID.MatchString(id) || strings.TrimSpace(key) == "" {
 		return nil, fmt.Errorf("stock scaffold requires a slide ID and template key")
 	}
 	catalog, err := wmdesign.LibraryCatalog(bundle, "")

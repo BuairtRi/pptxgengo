@@ -34,11 +34,19 @@ type EditReceipt struct {
 	Validation   string   `json:"validation"`
 }
 
+type EditOptions struct {
+	CheckFit  bool
+	Operation string
+}
+
 // DecodeSlideEdits accepts readable YAML or JSON with the same strict key,
 // scalar, alias and single-document rules as the maintained deck source.
 func DecodeSlideEdits(raw []byte, sourcePath string) (map[string]SlideEdit, error) {
 	if len(raw) > 16<<20 {
 		return nil, fmt.Errorf("slide patch exceeds 16 MiB")
+	}
+	if err := flowMapCommaDiagnostic(raw, sourcePath); err != nil {
+		return nil, err
 	}
 	p := &Project{SourcePath: sourcePath, Positions: map[string]Position{}}
 	decoder := yaml.NewDecoder(bytes.NewReader(raw))
@@ -69,10 +77,20 @@ func DecodeSlideEdits(raw []byte, sourcePath string) (map[string]SlideEdit, erro
 // EditSlides validates the complete resulting project before atomically
 // replacing deck.yaml. It retains untouched YAML nodes and exact predecessors.
 func EditSlides(p *Project, edits map[string]SlideEdit, bundle, engine string) (EditReceipt, error) {
+	return EditSlidesWithOptions(p, edits, bundle, engine, EditOptions{})
+}
+
+func EditSlidesWithOptions(p *Project, edits map[string]SlideEdit, bundle, engine string, options EditOptions) (EditReceipt, error) {
+	if options.Operation != "" && options.Operation != "swap" {
+		return EditReceipt{}, fmt.Errorf("unsupported edit operation %q", options.Operation)
+	}
 	if p.hasExternalSources() || p.hasContentAliases() || extendedSlideEdits(edits) {
-		return editSourceSlides(p, edits, bundle, engine)
+		return editSourceSlidesWithOptions(p, edits, bundle, engine, options)
 	}
 	r := EditReceipt{Operation: "edit-slides", SlideIDs: []string{}, BeforeSHA256: digest(p.Raw), Validation: "source_and_binding_checked_native_review_pending"}
+	if options.Operation != "" {
+		r.Operation = options.Operation
+	}
 	if len(edits) == 0 {
 		return r, fmt.Errorf("slide patch must contain at least one stable slide ID")
 	}
@@ -150,6 +168,12 @@ func EditSlides(p *Project, edits map[string]SlideEdit, bundle, engine string) (
 	if _, err = Compile(candidate, bundle, engine); err != nil {
 		return r, err
 	}
+	if options.CheckFit {
+		if err = CheckSlideFit(candidate, r.SlideIDs, bundle, engine); err != nil {
+			return r, err
+		}
+		r.Validation = "source_binding_and_go_fit_checked_native_review_pending"
+	}
 	guard, err := SafePath(p.Root, ".deck-source-mutation.lock")
 	if err != nil {
 		return r, err
@@ -180,7 +204,7 @@ func EditSlides(p *Project, edits map[string]SlideEdit, bundle, engine string) (
 	} else {
 		return r, e
 	}
-	r.Decision = "decisions/edit-slides-" + time.Now().UTC().Format("20060102T150405") + "-" + nonce() + ".json"
+	r.Decision = "decisions/" + r.Operation + "-" + time.Now().UTC().Format("20060102T150405") + "-" + nonce() + ".json"
 	decision, err := SafePath(p.Root, r.Decision)
 	if err != nil {
 		return r, err

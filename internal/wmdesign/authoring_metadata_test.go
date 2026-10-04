@@ -7,6 +7,9 @@ import (
 )
 
 func TestAuthoringMetadataAll587PinnedTemplates(t *testing.T) {
+	if testing.Short() {
+		t.Skip("exhaustive metadata and alias sweep for all 587 templates; run make test-integration")
+	}
 	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	catalog, e := LibraryCatalog(bundle, "")
 	if e != nil {
@@ -184,4 +187,44 @@ func TestNamedHighUseRecipesRetainReviewGaps(t *testing.T) {
 		t.Fatal("missing drawn person field")
 	}
 	t.Fatal("missing source template")
+}
+
+func TestHighUseStatementStatusAndInterviewTopology(t *testing.T) {
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := map[string]map[string]string{
+		"key-message/statement":   {"/body/1/text": "/headline", "/body/0/text": "/eyebrow", "/body/2/text": "/supporting_statement"},
+		"status/classic":          {"/body/6/rows/0/own": "/status/risks/item_01/owner", "/body/6/rows/0/li": "/status/risks/item_01/likelihood", "/body/6/rows/0/mit": "/status/risks/item_01/mitigation", "/body/6/rows/0/st": "/status/risks/item_01/state"},
+		"interviews-detail/dense": {"/body/1/text": "/interview/stakeholder_name", "/body/5/text": "/interview/date_and_duration", "/body/11/title": "/topics/item_01/title", "/body/20/items/0": "/pain_and_opportunities/items/item_01"},
+	}
+	for _, def := range catalog {
+		fields, ok := want[def.Key]
+		if !ok {
+			continue
+		}
+		metadata, err := LibraryAuthoringMetadata(def)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if metadata.SemanticStatus != "engineering_recipe_requires_review" {
+			t.Fatal("recipe claimed review", def.Key)
+		}
+		for _, slot := range metadata.Slots {
+			if alias, exists := fields[slot.SourcePointer]; exists {
+				if slot.Alias != alias || slot.ReviewStatus != "explicit_source_recipe_unreviewed" {
+					t.Fatalf("%s %s: %+v", def.Key, alias, slot)
+				}
+				delete(fields, slot.SourcePointer)
+			}
+		}
+		if len(fields) != 0 {
+			t.Fatal("expected slots missing", def.Key, fields)
+		}
+		delete(want, def.Key)
+	}
+	if len(want) != 0 {
+		t.Fatal("expected templates missing")
+	}
 }

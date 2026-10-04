@@ -182,6 +182,9 @@ func TestSectionsStrictSource(t *testing.T) {
 	}
 }
 func TestDividerClosedContractAndRemoval(t *testing.T) {
+	if testing.Short() {
+		t.Skip("divider rendering requires registered private photography; run make test-integration")
+	}
 	p := example(t)
 	v5, e := filepath.Abs("../../library/wm-design-system/v5")
 	if e != nil {

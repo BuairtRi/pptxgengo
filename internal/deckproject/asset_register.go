@@ -27,7 +27,7 @@ type AssetRegistrationReceipt struct {
 // RegisterAsset retains the exact approved/client original in the project. It
 // does not authorize that image for publication or alter the global registry.
 func RegisterAsset(p *Project, o AssetRegistration) (AssetRegistrationReceipt, error) {
-	r := AssetRegistrationReceipt{Operation: "register-asset", ID: o.ID, BeforeSHA256: p.SourceHash(), Policy: "Original bytes retained. Focus is composition metadata; explicit slide fit/crop determines output."}
+	r := AssetRegistrationReceipt{Operation: "register-asset", ID: o.ID, BeforeSHA256: p.SourceHash(), Policy: "Original bytes retained. Delivery builds may derive JPEG media; layout-report.json records media_optimization hashes, dimensions and reasons. Focus is composition metadata; explicit slide fit/crop determines output."}
 	if !stableID.MatchString(o.ID) || o.Description == "" {
 		return r, fmt.Errorf("asset registration requires stable ID and description")
 	}

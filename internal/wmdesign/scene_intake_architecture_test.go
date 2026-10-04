@@ -135,6 +135,9 @@ func TestIntakeArchitectureHatchClipping(t *testing.T) {
 }
 
 func TestIntakeArchitectureDeviceNativeGroup(t *testing.T) {
+	if testing.Short() {
+		t.Skip("renderer integration requires registered private branding assets; run make test-integration")
+	}
 	r := intakeTestRenderer(t)
 	p := intakeArchitecturePlan(t, r, map[string]any{"type": "device", "x": 75, "y": 162, "w": 108, "icon": "monitor", "label": "Web app", "sub": "Browser access"})
 	if len(p.Groups) != 2 || p.Groups[len(p.Groups)-1].Contract != IntakeArchitectureContract {
@@ -172,6 +175,9 @@ func TestIntakeArchitecturePlaneUsesDiamondEnvelope(t *testing.T) {
 }
 
 func TestIntakeArchitectureAndGeographyAllFrozenV3Nodes(t *testing.T) {
+	if testing.Short() {
+		t.Skip("exhaustive frozen slide builds require registered private branding assets; run make test-integration")
+	}
 	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, e := Load(bundle, "")
 	if e != nil {

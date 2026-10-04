@@ -162,6 +162,13 @@ func TestRenderHermetic(t *testing.T) {
 	if _, e = os.Stat(filepath.Join(out, "render-manifest.json")); e != nil {
 		t.Fatal(e)
 	}
+	issued, e := os.ReadFile(filepath.Join(out, "render-manifest.json"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = VerifyReceipt(issued); e != nil {
+		t.Fatal("successful export did not issue verifiable provenance", e)
+	}
 	if _, e = render(context.Background(), Options{PPTX: source, Out: out, PDF: true, Timeout: time.Minute}, fake, "darwin"); e == nil {
 		t.Fatal("overwrote existing output")
 	}

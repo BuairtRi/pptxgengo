@@ -32,6 +32,7 @@ func runLibraryIndex(command string, args []string) error {
 	itemRole := f.String("item-role", "", "associate item count with a content role")
 	limit := f.Int("limit", 10, "maximum search results, 1..100")
 	deprecated := f.Bool("include-deprecated", false, "include deprecated results")
+	includeWeak := f.Bool("include-weak", false, "include zero-score results when a text query is present")
 	summary := f.Bool("summary", false, "compact discovery output with verified screenshot paths; inspect includes zone-to-binding map")
 	engine := f.String("engine", wmdesign.CandidateEngine, "build engine for fit; discovery records this passthrough without evaluating compatibility")
 	spec := f.String("spec", "", "supplied-content candidate BoundDocument JSON for library-fit")
@@ -40,7 +41,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	allowed := map[string]map[string]bool{
 		"library-index":   {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "out": true},
-		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "query": true, "kinds": true, "asset-kind": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "engine": true, "summary": true},
+		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "query": true, "kinds": true, "asset-kind": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "include-weak": true, "engine": true, "summary": true},
 		"library-inspect": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true, "summary": true},
 		"library-preview": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true},
 		"library-fit":     {"bundle": true, "source": true, "engine": true, "spec": true, "out": true},
@@ -148,7 +149,7 @@ func runLibraryIndex(command string, args []string) error {
 		if *limit < 1 || *limit > 100 {
 			return fmt.Errorf("--limit must be 1..100")
 		}
-		options := wmdesign.LibraryIndexFindOptions{Shape: wmdesign.LibrarySearchOptions{EngineHint: *engine, Query: *query, ContentRoles: split(*roles), Structures: split(*structures), VisualForms: split(*forms), Items: *items, ItemRole: *itemRole, Limit: *limit, IncludeDeprecated: *deprecated}, Kinds: split(*kinds), Namespace: *namespace}
+		options := wmdesign.LibraryIndexFindOptions{Shape: wmdesign.LibrarySearchOptions{EngineHint: *engine, Query: *query, ContentRoles: split(*roles), Structures: split(*structures), VisualForms: split(*forms), Items: *items, ItemRole: *itemRole, Limit: *limit, IncludeDeprecated: *deprecated}, Kinds: split(*kinds), Namespace: *namespace, IncludeWeak: *includeWeak}
 		if *summary {
 			result, e := index.FindSummary(options)
 			if e != nil {

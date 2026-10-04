@@ -2,6 +2,55 @@
 
 These examples use the installed `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
 
+## Wrapper defaults and project pins
+
+The installed wrapper reads `release/default-bundle.txt` for the default
+published library (currently `v5`). Bundle-backed `pptxgengo design` commands
+receive that bundle path and the Go engine `wmds-go-foundation.v2` unless you
+pass explicit flags. Project commands use the project lock: `project init`
+creates a new lock against the published default and candidate engine; later
+project operations use the locked bundle and engine. Native render, doctor,
+source-inventory, asset-gallery, and project commands do not receive a wrapper
+bundle or engine injection.
+
+For `library-find`, `library-inspect`, and `library-preview`, the wrapper also
+supplies the v5 SQLite index and catalog path when `--index` is omitted. If you
+pass a custom index, pass its matching `--gallery` explicitly when verified
+preview paths are needed.
+
+`library-find` ranks all matching indexed kinds unless you pass `--kinds`.
+Unrelated zero-score results are omitted when text is queried; `--include-weak`
+shows them for broad inventory work. Icon color instances are represented as a
+single concept hit with each registered ID retained in `variant_ids`. For a
+focused template search, set `--kinds template`; asset summaries use
+`--kinds asset --summary --asset-kind icon|photo|graphic|logo` and rank
+curated terms and filename-derived tags with partial matches.
+
+The photo registry includes six additional images from the supplied local
+`~/Documents/branding/West Monroe Photos` collection. Their descriptive
+sidecars supply the subject labels and the checked-in registry pins the local
+relative path and current file hash. The bundled brand-assets inventory lists
+opaque stock filenames but has no mapping to these renamed files, and the
+sidecars do not retain original asset IDs, URLs, or licensing records. Registry
+membership is not a license or approval assertion; confirm those records before
+external publication.
+
+To intentionally re-pin an existing project, preserve the old lock before
+initializing the new one. The default lock path is shown here; if `toolchain`
+declares a different `lockfile` path in `deck.yaml`, move that file instead.
+Review the diff and run `project check` before building:
+
+```bash
+mv ./my-project/toolchain.lock.json ./my-project/toolchain.lock.json.pre-repin
+pptxgengo design project init --project ./my-project --bundle v5 \
+  --engine wmds-go-foundation.v2
+pptxgengo design project check --project ./my-project
+pptxgengo design project build --project ./my-project
+```
+
+`project init` writes a lock only when the configured lock path is absent. It
+does not migrate or replace a prior lock automatically.
+
 ## Inventory an existing PowerPoint deck
 
 Create JSON and Markdown inventories with source slide order, titles, hidden state, text, table cells, chart types and series, picture alt text and package paths, and speaker notes:
@@ -74,6 +123,14 @@ pptxgengo design library-authoring
 
 Alias coverage and capacity estimates are source-derived metadata. Some slots are still generic or ambiguous and have not had semantic review; native drawing support and visual qualification also differ by template. Treat the report as authoring guidance, inspect the exact candidate and test the populated slide before presenting it as a fit.
 
+Measured estimates now cover the typed `cards/3` and `cards/4` titles and bodies,
+plain fixed native table cells, and supported stepper fields. Card bodies reserve
+a two-line title. These estimates reuse the renderer's geometry and pinned fonts;
+they do not establish native fit. Rich table cells and many component internals
+still report unavailable capacity. Engineering recipes clarify the main statement
+in `key-message/statement`, status columns, and dense interview fields; these are
+source-derived aliases, not a completed human semantic review of the library.
+
 ## Compare content-first template candidates
 
 Write one semantic page description in YAML or JSON and ask the matcher for candidates:
@@ -100,6 +157,34 @@ known structural roles and relationships; unsupported complex schemas are
 reported as gaps. A report with zero complete candidates exits with an error
 and retains the report for inspection. It does not create synthetic alternatives
 to reach the requested count.
+
+Incomplete mappings use `needs_copy`, list missing slots and unused source
+fields, and expose a ranked `draft_slide` separately from a ready `authored_slide`.
+Ready slide output requires a complete mapping and a successful Go layout build.
+Missing copy is never silently filled from the specimen. Different item counts
+can carry the first N items into a known group; additional items remain explicit.
+
+Bounded adapters support `lifecycle/three-phases` with each item's `objective`
+and nested `activities: [{lead: ..., text: ...}]`, and
+`vendors/scorecard-generic` with this rectangular comparison shape:
+
+```yaml
+relationship: comparison
+comparison:
+  criterion_label: Criterion
+  weight_label: Weight
+  criteria:
+    - {label: Delivery confidence, weight: "30%"}
+  options:
+    - {name: Option A, values: ["High"]}
+    - {name: Option B, values: ["Medium"]}
+  legend: High / Medium / Low
+```
+
+The example illustrates the schema; the chosen stock slide's fixed row and column
+counts may require more copy. Sequence `owner`, `duration` and `state` fields map
+only where the template declares corresponding editable roles. Unsupported
+relationships or topology remain reported gaps; inspect candidates before use.
 
 For a shorter deterministic example that exercises a known three-card template:
 
@@ -170,6 +255,24 @@ in the project and are listed in the receipt. When a composition log is present,
 update its authored entries after adding/removing a slide or changing a template;
 the next check rejects missing, obsolete or mismatched entries.
 
+Removing a slide that starts a section moves that section anchor to the next
+slide in its current range, or removes the section if it becomes empty. The
+receipt records the section change. Section declarations can also be managed
+directly:
+
+```bash
+pptxgengo design project section list --project ./my-project
+pptxgengo design project section add --project ./my-project \
+  --id findings --title Findings --before recommendation
+pptxgengo design project section rename --project ./my-project \
+  --id findings --title Evidence and implications
+pptxgengo design project section remove --project ./my-project --id findings
+```
+
+Removing a section drops its boundary. Its slides join the preceding section;
+when removing the first section, the next section is reanchored to the deck's
+first slide. The section receipt records the new anchors.
+
 Render a quick subset after an edit, or check native-render prerequisites before the full pass:
 
 ```bash
@@ -180,30 +283,20 @@ pptxgengo design render --pptx ./my-project/builds/BUILD-ID/deck.pptx \
 
 Rendering uses local Microsoft PowerPoint and PDFKit. The render command leaves the source PPTX unchanged; inspect the resulting pages and contact sheet after export.
 
-### Agent dispatch recovery on this Mac
+Render detects PowerPoint's Grant File Access dialog and reports it as a file
+access failure. Failed runs attempt to leave `render-error.txt`, including
+preflight failures and timeouts; an inaccessible output directory is reported
+explicitly. `render-doctor` probes file access by opening and closing a private
+generated deck after the operational automation check succeeds. It may show the
+one-time grant dialog for the operator to clear. Unknown visibility or a broken
+GUI caller is reported as unknown; it does not establish permission denial.
 
-The current agent's native events fail with −10827/−600. Read-only probes show
-that its inherited task bootstrap port is a dead Mach port. Its background
-daemon started September 30 and runs Codex 0.159.3; the desktop app bundles
-0.160.0. A desktop restart previously left that background daemon running.
-The version mismatch is an observation, not proof of the cause.
+### Local agent-session recovery
 
-After all agent tasks are checkpointed, use a normal macOS Terminal to update
-the daemon from the app's bundled CLI and restart it. These commands are
-supported by the installed CLI's help and interrupt agent sessions:
-
-```bash
-"/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex" app-server daemon update --from-cli
-"/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex" app-server daemon restart
-```
-
-Reopen ChatGPT/Codex, resume the thread and run `render-doctor` in the fresh
-agent session. Require a successful operational presentation count and a usable
-bootstrap port before a one-slide export. Recovery has **not yet been tested**.
-An explicit Automation denial (−1743) is a separate permission check; the present
-dispatch errors do not establish such a denial. The inspected official OpenAI
-documentation does not provide a specific fix for this dead-port failure; this
-procedure follows the local probes and installed CLI help.
+Machine-specific Codex daemon and dead-port observations are kept in
+[local-agent-macos-recovery.md](local-agent-macos-recovery.md). Those notes are
+for the inspected local installation and do not describe PowerPoint or
+`pptxgengo` recovery steps generally.
 
 Attach the native output to the build whose exact PPTX was rendered:
 
@@ -218,6 +311,15 @@ hashes. Rendering alone records `rendered`; it does not mark a slide reviewed or
 accepted. After inspecting the pages, pass a JSON decisions file to
 `attach-render --decisions decisions.json`:
 
+Receipts must carry the local Ed25519 issuance signature written by a successful
+`render`. Unsigned older or hand-written receipts are rejected; rerender with the
+current CLI. Verification uses the locally provisioned issuer key, stored under
+the user's configuration directory in `pptxgengo/native-trust`. This establishes
+local CLI issuance and integrity, not OS attestation: code running as the same
+user can access that key. Cross-machine verification requires the original
+trusted key; this release has no trust-transfer command. Source/build/artifact
+hash checks still apply. Unknown fields in the decisions JSON are rejected.
+
 ```json
 {
   "recommendation": {
@@ -229,8 +331,48 @@ accepted. After inspecting the pages, pass a JSON decisions file to
 ```
 
 Decision statuses are `reviewed`, `accepted`, or `issues_found`. Changed source,
-build or artifacts invalidate the attachment's coverage. Hidden or unrendered
-slides remain explicitly uncovered.
+build or artifacts invalidate the attachment's coverage. Editing a context file
+or composition log changes project inputs and marks all prior native review
+coverage stale. Rebuild, render the current deck and attach its fresh receipt
+before recording new review decisions. Hidden or unrendered slides remain
+explicitly uncovered.
+
+## Safe slide and section edits
+
+Slide operations use stable IDs. `slide add --file` leaves the supplied YAML
+untouched; `--as NEW-ID` assigns the project identity, and `--into-section ID`
+places the slide at that section's first position and reanchors it. `--check-fit`
+builds the candidate with the project's locked Go engine before committing it.
+It reports engine fit checks, not native PowerPoint visual review. A retained
+slide file must be re-added byte-for-byte if removed; editing an existing source
+file requires the project edit workflow.
+
+```bash
+pptxgengo design project slide add --project ./my-project \
+  --file ./new-slide.yaml --as recommendation --into-section findings --check-fit
+pptxgengo design project slide move --project ./my-project \
+  --id recommendation --into-section findings
+```
+
+Section removal reanchors slides at the removed section's former position to a
+neighboring section when possible. If the removed section becomes empty it is
+removed. Inspect the operation receipt and run `project check` after structural
+changes.
+
+## Media delivery policy
+
+Project builds use the existing delivery policy when `document.media_optimization`
+is absent: deduplicate media, compress the package, and safely resize JPEGs to
+220 pixels per inch at quality 90 when savings reach 10 percent. Vectors and
+lossless graphics remain byte-identical. Unsafe JPEG placements, EXIF orientation
+or color profiles, low savings, and already adequate resolution can preserve the
+original bytes. `layout-report.json` records source/output hashes, byte counts,
+dimensions, and skip or resize reasons per package part. Original registered
+assets remain in `assets/originals`.
+
+An explicit `media_optimization` policy must provide all six settings:
+`deduplicate`, `resize_jpeg`, `compression`, `pixels_per_inch`, `jpeg_quality`,
+and `min_savings_percent`. Set `resize_jpeg: false` to preserve JPEG payloads.
 
 ## Keep composition and evidence references checkable
 
@@ -258,7 +400,7 @@ claims:
     source: Discovery interview, 2026-09-18
 ```
 
-Markdown claims use explicit `## claim-id` headings or `{#claim-id}` anchors. Plain prose does not establish an evidence ID. `pptxgengo design project check --project ./my-project` verifies the project structure, composition entries, and linked claim references.
+Markdown claims use explicit `## claim-id` headings or `{#claim-id}` anchors. Plain prose does not establish an evidence ID. If `context.claims` is absent, evidence references are unchecked; add a registry path to enable claim validation. `pptxgengo design project check --project ./my-project` verifies the project structure, composition entries, and linked claim references.
 
 ## Review a fresh project packet
 
@@ -270,9 +412,27 @@ pptxgengo design project review \
   --project ./my-project --stage outline --out "$work/review"
 ```
 
-The packet includes the project's composition rationale and any linked claims. Review stages are `outline`, `content`, and `deck`.
+The staged HTML packet includes the project's composition rationale and any linked claims. Review stages are `outline`, `content`, and `deck`. These packets are requested with `--stage`; `project review --out PATH` without it keeps the earlier ZIP export behavior. `project view --out NEW-DIR` is the deck-stage shortcut.
+
+To create a presentation for external audience review, add `--audience`:
+
+```bash
+pptxgengo design project review --project ./my-project \
+  --stage content --audience --out "$work/audience-review"
+```
+
+Audience packets include visible-slide content and omit hidden slides, internal
+notes, composition rationale, briefs, decisions and prior review verdicts. The
+deck stage requires current native PNGs or a PDF containing visible pages. The
+outline stage needs no rendered deck. Content stage measures the current authored
+copy with the Go renderer; it does not require a native attachment. Deck stage
+requires a current build and verified native output for every visible slide.
+Visible text includes shape text and native table cells. Native chart text is
+explicitly marked as requiring rendered-page review; workbook data is not exposed
+as visible copy because chart options can hide series names and values.
 
 The `deck` stage requires a current build. Its HTML page includes attached native
 thumbnails and review status when available; otherwise it reports the missing
 native evidence. Copies of the deck, PDF, PNGs and evidence are retained in the
-packet with their hashes. `project view --out NEW-DIR` is the deck-stage shortcut.
+packet with their hashes. Audience mode uses only visible-page native output and
+does not include internal notes or verdicts.

@@ -30,7 +30,7 @@ func runProjectAttachRender(args []string) error {
 		if e != nil {
 			return e
 		}
-		if e = json.Unmarshal(raw, &decisions); e != nil {
+		if decisions, e = deckproject.ParseVisualDecisions(raw); e != nil {
 			return e
 		}
 	}

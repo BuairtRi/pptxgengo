@@ -1,10 +1,19 @@
 # Current West Monroe presentation release
 
-The current source package is **0.1.0-local.12/v5**. It adds content-first template
+The current source package is **0.1.0-local.13/v5**. It adds content-first template
 matching, source-pinned authoring aliases and advisory capacity, grouped asset
 discovery and a browsable asset gallery, slide operations and safe swap proposals,
 native rendering diagnostics/subsets/contact sheets, immutable native review
 attachments, staged HTML reviewer packets, and compact source inventories.
+
+The local.13 follow-up adds audience-only review packets, ranked incomplete
+matcher drafts and bounded lifecycle/comparison adapters, more flexible swaps,
+earlier fit checks, readable detach, preserved author comments, section-aware
+insertion, signed local render receipts, improved asset search and six additional
+photos, and renderer-derived card/table/stepper capacity. Catalog caching and
+separate test lanes shorten the normal development loop. See the
+[follow-up disposition](../docs/engineering-followups.md) and
+[testing guide](../docs/testing.md) for qualification and remaining limits.
 
 See the [engineering command reference](../docs/engineering-cli.md) and
 [qualification record](../docs/engineering-waves.md). Metadata inference is

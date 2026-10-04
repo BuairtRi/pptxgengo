@@ -27,6 +27,14 @@ func TestMain(m *testing.M) {
 				fmt.Fprintln(os.Stderr, err)
 				os.Exit(1)
 			}
+			if ready := os.Getenv("PPTXGENGO_TEST_WORKER_READY"); ready != "" {
+				if err := os.WriteFile(ready, []byte("helper started\n"), 0600); err != nil {
+					_ = child.Process.Kill()
+					_ = child.Wait()
+					fmt.Fprintln(os.Stderr, err)
+					os.Exit(1)
+				}
+			}
 			_ = child.Wait()
 			os.Exit(0)
 		}
@@ -36,7 +44,19 @@ func TestMain(m *testing.M) {
 		}
 		os.Exit(0)
 	}
-	os.Exit(m.Run())
+	// Hermetic successful render tests must never create a real operator's key.
+	home, err := os.MkdirTemp("", "pptxgengo-native-test-home-")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	if os.Getenv("PPTXGENGO_NATIVE_LIVE_OUT") == "" {
+		_ = os.Setenv("HOME", home)
+		_ = os.Setenv("XDG_CONFIG_HOME", filepath.Join(home, "config"))
+	}
+	code := m.Run()
+	_ = os.RemoveAll(home)
+	os.Exit(code)
 }
 
 func TestParseSlideSelection(t *testing.T) {
@@ -209,6 +229,9 @@ func TestWorkerDeadlineDoesNotPublishReceipt(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(out, "render-manifest.json")); !os.IsNotExist(err) {
 		t.Fatal("deadline issued success receipt")
 	}
+	if data, err := os.ReadFile(filepath.Join(out, "render-error.txt")); err != nil || !strings.Contains(string(data), "deadline") {
+		t.Fatal("deadline did not record render-error.txt", string(data), err)
+	}
 }
 
 func TestWorkerDeadlineStopsHelperDescendants(t *testing.T) {
@@ -216,11 +239,40 @@ func TestWorkerDeadlineStopsHelperDescendants(t *testing.T) {
 		t.Skip("process group termination is native macOS behavior")
 	}
 	t.Setenv("PPTXGENGO_TEST_BLOCK_WORKER", "1")
-	ctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
+	ready := filepath.Join(t.TempDir(), "worker-ready")
+	t.Setenv("PPTXGENGO_TEST_WORKER_READY", ready)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+	result := make(chan error, 1)
+	go func() {
+		_, err := workerProcess(ctx, workerRequest{Doctor: &DoctorOptions{}})
+		result <- err
+	}()
+	// Start cancellation only after the worker has started the pipe-owning
+	// descendant. A short initial deadline could pass before child startup on
+	// a cold or busy race runner and never exercise process-group termination.
+	readyDeadline := time.NewTimer(3 * time.Second)
+	defer readyDeadline.Stop()
+	poll := time.NewTicker(10 * time.Millisecond)
+	defer poll.Stop()
+	for {
+		if _, err := os.Stat(ready); err == nil {
+			break
+		} else if !os.IsNotExist(err) {
+			t.Fatal(err)
+		}
+		select {
+		case err := <-result:
+			t.Fatalf("worker exited before helper readiness: %v", err)
+		case <-readyDeadline.C:
+			t.Fatal("worker did not confirm helper readiness within 3s")
+		case <-poll.C:
+		}
+	}
 	started := time.Now()
-	_, err := workerProcess(ctx, workerRequest{Doctor: &DoctorOptions{}})
-	if err == nil || !strings.Contains(err.Error(), "deadline") {
+	cancel()
+	err := <-result
+	if err == nil || !errors.Is(err, context.Canceled) {
 		t.Fatal(err)
 	}
 	// A surviving helper would hold the output pipe open until WaitDelay (2s).

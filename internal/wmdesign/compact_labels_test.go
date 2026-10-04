@@ -6,6 +6,9 @@ import (
 )
 
 func TestCompactArchitectureLabels(t *testing.T) {
+	if testing.Short() {
+		t.Skip("renderer integration requires registered private branding assets; run make test-integration")
+	}
 	r := intakeTestRenderer(t)
 	r.source.Revision = IntakeRepairRevision
 	cases := []struct {

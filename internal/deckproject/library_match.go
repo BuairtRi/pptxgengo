@@ -15,20 +15,44 @@ import (
 // PageSpec is content before a template is selected. Each nonempty leaf needs
 // a visible destination; IDs supply array identities and never become copy.
 type PageSpec struct {
-	Title        string     `json:"title" yaml:"title"`
-	Eyebrow      string     `json:"eyebrow,omitempty" yaml:"eyebrow,omitempty"`
-	Source       string     `json:"source,omitempty" yaml:"source,omitempty"`
-	Relationship string     `json:"relationship,omitempty" yaml:"relationship,omitempty"`
-	Items        []PageItem `json:"items,omitempty" yaml:"items,omitempty"`
-	Callout      *PageItem  `json:"callout,omitempty" yaml:"callout,omitempty"`
+	Title        string          `json:"title" yaml:"title"`
+	Eyebrow      string          `json:"eyebrow,omitempty" yaml:"eyebrow,omitempty"`
+	Source       string          `json:"source,omitempty" yaml:"source,omitempty"`
+	Relationship string          `json:"relationship,omitempty" yaml:"relationship,omitempty"`
+	Items        []PageItem      `json:"items,omitempty" yaml:"items,omitempty"`
+	Callout      *PageItem       `json:"callout,omitempty" yaml:"callout,omitempty"`
+	Comparison   *PageComparison `json:"comparison,omitempty" yaml:"comparison,omitempty"`
 }
 type PageItem struct {
-	ID     string `json:"id,omitempty" yaml:"id,omitempty"`
-	Lead   string `json:"lead,omitempty" yaml:"lead,omitempty"`
-	Text   string `json:"text,omitempty" yaml:"text,omitempty"`
-	Value  string `json:"value,omitempty" yaml:"value,omitempty"`
-	Label  string `json:"label,omitempty" yaml:"label,omitempty"`
-	Source string `json:"source,omitempty" yaml:"source,omitempty"`
+	ID         string     `json:"id,omitempty" yaml:"id,omitempty"`
+	Lead       string     `json:"lead,omitempty" yaml:"lead,omitempty"`
+	Text       string     `json:"text,omitempty" yaml:"text,omitempty"`
+	Value      string     `json:"value,omitempty" yaml:"value,omitempty"`
+	Label      string     `json:"label,omitempty" yaml:"label,omitempty"`
+	Source     string     `json:"source,omitempty" yaml:"source,omitempty"`
+	Owner      string     `json:"owner,omitempty" yaml:"owner,omitempty"`
+	Duration   string     `json:"duration,omitempty" yaml:"duration,omitempty"`
+	State      string     `json:"state,omitempty" yaml:"state,omitempty"`
+	Objective  string     `json:"objective,omitempty" yaml:"objective,omitempty"`
+	Activities []PageItem `json:"activities,omitempty" yaml:"activities,omitempty"`
+}
+
+// Comparison is a rectangular options-by-criteria matrix. All headers and
+// scores are caller copy; no labels or calculated totals are invented.
+type PageComparison struct {
+	CriterionLabel string          `json:"criterion_label" yaml:"criterion_label"`
+	WeightLabel    string          `json:"weight_label,omitempty" yaml:"weight_label,omitempty"`
+	Criteria       []PageCriterion `json:"criteria" yaml:"criteria"`
+	Options        []PageOption    `json:"options" yaml:"options"`
+	Legend         string          `json:"legend,omitempty" yaml:"legend,omitempty"`
+}
+type PageCriterion struct {
+	Label  string `json:"label" yaml:"label"`
+	Weight string `json:"weight,omitempty" yaml:"weight,omitempty"`
+}
+type PageOption struct {
+	Name   string   `json:"name" yaml:"name"`
+	Values []string `json:"values" yaml:"values"`
 }
 type ContentDisposition struct {
 	SourcePointer string `json:"source_pointer"`
@@ -43,6 +67,9 @@ type MatchCandidate struct {
 	Error                    string                    `json:"error,omitempty"`
 	MappingComplete          bool                      `json:"mapping_complete"`
 	AuthoredSlide            map[string]any            `json:"authored_slide,omitempty"`
+	DraftSlide               map[string]any            `json:"draft_slide,omitempty"`
+	DraftSlideFile           string                    `json:"draft_slide_file,omitempty"`
+	NearMissRank             int                       `json:"near_miss_rank,omitempty"`
 	BoundSlide               *wmdesign.BoundSlide      `json:"bound_slide,omitempty"`
 	MissingSlots             []string                  `json:"missing_slots"`
 	UnresolvedFields         []string                  `json:"unresolved_fields"`
@@ -72,6 +99,7 @@ type LibraryMatchReport struct {
 	SourceRevision string           `json:"source_revision"`
 	Candidates     []MatchCandidate `json:"candidates"`
 	Passed         int              `json:"passed"`
+	NeedsCopy      int              `json:"needs_copy"`
 	Failed         int              `json:"failed"`
 	Requested      int              `json:"requested_candidates"`
 	LibraryGap     string           `json:"library_gap,omitempty"`
@@ -87,6 +115,9 @@ func LoadPageSpec(path string) (PageSpec, error) {
 	var page PageSpec
 	if len(data) > 16<<20 {
 		return page, fmt.Errorf("page spec exceeds 16MiB")
+	}
+	if err := flowMapCommaDiagnostic(data, path); err != nil {
+		return page, err
 	}
 	parser := &Project{SourcePath: path, Positions: map[string]Position{}, positionFiles: map[string]string{}}
 	value, e := parser.parseSource(data, filepath.Base(path), "")
@@ -118,8 +149,31 @@ func validatePageSpec(page PageSpec) error {
 			}
 			seen[item.ID] = true
 		}
-		if item.Lead == "" && item.Text == "" && item.Value == "" && item.Label == "" {
+		if item.Lead == "" && item.Text == "" && item.Value == "" && item.Label == "" && item.Objective == "" && item.Owner == "" && item.Duration == "" && item.State == "" && len(item.Activities) == 0 {
 			return fmt.Errorf("library.match_empty_item: %d", i)
+		}
+		for j, activity := range item.Activities {
+			if len(activity.Activities) > 0 {
+				return fmt.Errorf("library.match_nested_activity_depth: items/%d/activities/%d", i, j)
+			}
+		}
+	}
+	if page.Callout != nil && len(page.Callout.Activities) > 0 {
+		return fmt.Errorf("library.match_callout_activities_unsupported")
+	}
+	if matrix := page.Comparison; matrix != nil {
+		if page.Relationship != "comparison" || len(page.Items) != 0 || len(matrix.Criteria) == 0 || len(matrix.Options) == 0 || matrix.CriterionLabel == "" {
+			return fmt.Errorf("library.match_comparison_requires_relationship_headers_and_rectangular_matrix")
+		}
+		for _, option := range matrix.Options {
+			if option.Name == "" || len(option.Values) != len(matrix.Criteria) {
+				return fmt.Errorf("library.match_comparison_option_values_must_match_criteria")
+			}
+		}
+		for _, criterion := range matrix.Criteria {
+			if criterion.Label == "" {
+				return fmt.Errorf("library.match_comparison_criterion_label_required")
+			}
 		}
 	}
 	return nil
@@ -134,18 +188,41 @@ func pageLeaves(page PageSpec) map[string]string {
 	put("/title", page.Title)
 	put("/eyebrow", page.Eyebrow)
 	put("/source", page.Source)
-	item := func(prefix string, value PageItem) {
+	var item func(string, PageItem)
+	item = func(prefix string, value PageItem) {
 		put(prefix+"/lead", value.Lead)
 		put(prefix+"/text", value.Text)
 		put(prefix+"/value", value.Value)
 		put(prefix+"/label", value.Label)
 		put(prefix+"/source", value.Source)
+		put(prefix+"/owner", value.Owner)
+		put(prefix+"/duration", value.Duration)
+		put(prefix+"/state", value.State)
+		put(prefix+"/objective", value.Objective)
+		for i, activity := range value.Activities {
+			item(fmt.Sprintf("%s/activities/%d", prefix, i), activity)
+		}
 	}
 	for i, v := range page.Items {
 		item(fmt.Sprintf("/items/%d", i), v)
 	}
 	if page.Callout != nil {
 		item("/callout", *page.Callout)
+	}
+	if matrix := page.Comparison; matrix != nil {
+		put("/comparison/criterion_label", matrix.CriterionLabel)
+		put("/comparison/weight_label", matrix.WeightLabel)
+		put("/comparison/legend", matrix.Legend)
+		for i, criterion := range matrix.Criteria {
+			put(fmt.Sprintf("/comparison/criteria/%d/label", i), criterion.Label)
+			put(fmt.Sprintf("/comparison/criteria/%d/weight", i), criterion.Weight)
+		}
+		for i, option := range matrix.Options {
+			put(fmt.Sprintf("/comparison/options/%d/name", i), option.Name)
+			for j, value := range option.Values {
+				put(fmt.Sprintf("/comparison/options/%d/values/%d", i, j), value)
+			}
+		}
 	}
 	return out
 }
@@ -161,6 +238,8 @@ func rolePageField(role string) string {
 		return "label"
 	case "source":
 		return "source"
+	case "owner", "duration", "state", "objective":
+		return role
 	}
 	return ""
 }
@@ -212,13 +291,18 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 	values := map[string]any{}
 	typed := def.ContentContract == wmdesign.TemplateBindingsContract
 	var selectedGroup string
-	if matchRelationship(page, metadata) {
+	relationshipSupported := matchRelationship(page, metadata)
+	if relationshipSupported {
 		best := -1
 		for _, g := range metadata.Groups {
-			if g.Cardinality != len(page.Items) || len(page.Items) == 0 {
+			if len(page.Items) == 0 {
 				continue
 			}
-			score := 0
+			difference := g.Cardinality - len(page.Items)
+			if difference < 0 {
+				difference = -difference
+			}
+			score := 100000 - difference*1000
 			for _, s := range metadata.Slots {
 				if s.Group == g.Alias && rolePageField(s.Role) != "" {
 					score++
@@ -245,15 +329,17 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 	}
 	usedSlots := map[string]bool{}
 	for _, s := range metadata.Slots {
-		path := ""
-		switch s.Role {
-		case "headline":
-			path = "/title"
-		case "eyebrow":
-			path = "/eyebrow"
-		case "source":
-			if s.Group == "" {
-				path = "/source"
+		path := recipePagePath(page, metadata, s)
+		if path == "" {
+			switch s.Role {
+			case "headline":
+				path = "/title"
+			case "eyebrow":
+				path = "/eyebrow"
+			case "source":
+				if s.Group == "" {
+					path = "/source"
+				}
 			}
 		}
 		if path == "" && s.Group == selectedGroup && selectedGroup != "" && s.GroupIndex >= 0 && s.GroupIndex < len(page.Items) {
@@ -282,9 +368,14 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 			slots[s.Name] = ""
 			continue
 		}
-		if !typed && s.Kind == "string" && s.AllowEmpty {
-			slots[s.Name] = ""
+		if s.Kind == "string" && (s.AllowEmpty || s.Classification == "decorative") {
+			if !typed {
+				slots[s.Name] = ""
+			}
 			continue
+		}
+		if !typed && s.Kind == "string" {
+			slots[s.Name] = ""
 		}
 		c.MissingSlots = append(c.MissingSlots, s.Alias)
 	}
@@ -293,7 +384,11 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 		values["eyebrow"] = page.Eyebrow
 		if def.ValueSchema != nil && def.ValueSchema.GoType == "BoundCardRowsContent" && selectedGroup == "/cards" {
 			cards := []any{}
-			for i, item := range page.Items {
+			for i := 0; i < def.ValueSchema.ExactCounts["cards"]; i++ {
+				item := PageItem{}
+				if i < len(page.Items) {
+					item = page.Items[i]
+				}
 				key := item.ID
 				if key == "" {
 					key = fmt.Sprintf("item-%03d", i+1)
@@ -335,6 +430,13 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 		c.Disposition = append(c.Disposition, disposition)
 	}
 	if len(c.MissingSlots) > 0 || len(c.UnresolvedFields) > 0 || c.Error != "" {
+		if relationshipSupported && len(consumed) > 0 {
+			c.Status = "needs_copy"
+			slide := Slide{ID: id, Template: Reference{Scope: "shared", ID: def.Key, Revision: fmt.Sprint(def.Revision)}, ContentKind: "supplied_content", Values: values}
+			if draft, draftError := StockEditableSlide(slide, def); draftError == nil {
+				c.DraftSlide = draft
+			}
+		}
 		return c, nil
 	}
 	c.MappingComplete = true
@@ -343,13 +445,11 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 		return c, e
 	}
 	bound := wmdesign.BoundSlide{ID: id, Template: def.Key, ContentKind: "supplied_content", Values: raw}
-	c.BoundSlide = &bound
 	slide := Slide{ID: id, Template: Reference{Scope: "shared", ID: def.Key, Revision: fmt.Sprint(def.Revision)}, ContentKind: "supplied_content", Values: values}
 	authored, e := StockEditableSlide(slide, def)
 	if e != nil {
 		return c, e
 	}
-	c.AuthoredSlide = authored
 	typography, e := wmdesign.NewTypographyEngine(filepath.Join(bundle, "fonts"), engine)
 	if e != nil {
 		return c, e
@@ -402,6 +502,8 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 		return c, nil
 	}
 	c.Status = "go_layout_succeeded_native_review_pending"
+	c.BoundSlide = &bound
+	c.AuthoredSlide = authored
 	c.deckBytes = deck
 	c.layout = &layout
 	return c, nil
@@ -536,8 +638,31 @@ func MatchPage(page PageSpec, options LibraryMatchOptions) (LibraryMatchReport, 
 			}
 		} else {
 			report.Failed++
+			if candidate.Status == "needs_copy" {
+				report.NeedsCopy++
+			}
 		}
 		report.Candidates = append(report.Candidates, candidate)
+	}
+	rankMatchCandidates(report.Candidates)
+	if out != "" {
+		drafts := 0
+		for i := range report.Candidates {
+			candidate := &report.Candidates[i]
+			if candidate.DraftSlide == nil || drafts >= options.Limit {
+				continue
+			}
+			data, e := MarshalStockSlideSource(candidate.DraftSlide, wmdesign.LibraryAuthoring{})
+			if e != nil {
+				return report, e
+			}
+			candidate.DraftSlideFile = filepath.Join(out, candidate.SlideID+".needs-copy.yaml")
+			data = append([]byte("# Draft needs supplied copy; inspect missing_slots and unresolved_fields in match-report.json.\n# This slide has not passed Go build, fit, native rendering, or visual review.\n"), data...)
+			if e = os.WriteFile(candidate.DraftSlideFile, data, 0644); e != nil {
+				return report, e
+			}
+			drafts++
+		}
 	}
 	if len(options.Templates) == 0 && report.Passed < options.Limit {
 		report.LibraryGap = fmt.Sprintf("Only %d complete candidates for %d requested after evaluating %d eligible templates. Remaining layouts require different fields, cardinality, relationship support or Go layout fit; inspect their explicit gaps.", report.Passed, options.Limit, len(report.Candidates))

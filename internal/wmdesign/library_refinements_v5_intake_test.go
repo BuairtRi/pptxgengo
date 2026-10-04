@@ -11,6 +11,9 @@ import (
 )
 
 func TestV5DeltaSourceQualification(t *testing.T) {
+	if testing.Short() {
+		t.Skip("source qualification builds require registered private branding assets; run make test-integration")
+	}
 	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
 	source, err := Load(bundle, "")
 	if err != nil {

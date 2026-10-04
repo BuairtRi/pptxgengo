@@ -7,7 +7,9 @@ on run argv
  set pdfFile to POSIX file (item 2 of argv)
  set secondsAllowed to (item 4 of argv) as integer
  set closeOnly to false
+ set probeOnly to false
  if (count of argv) > 4 then set closeOnly to (item 5 of argv is "close")
+ if (count of argv) > 4 then set probeOnly to (item 5 of argv is "probe")
  set expectedIdentity to my fileIdentity(sourceFile)
  if expectedIdentity is "" then error "file_access_denied: cannot stat task copy" number 66
  with timeout of secondsAllowed seconds
@@ -42,7 +44,7 @@ on run argv
    end repeat
    if matchCount is not 1 then error "open_identity_timeout: no presentation identified the exact task-copy file within 10 seconds" number 67
    set taskPresentation to presentation matchedIndex
-   if closeOnly then
+   if closeOnly or probeOnly then
     if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before cleanup" number 68
     close taskPresentation saving no
     return

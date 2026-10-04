@@ -87,6 +87,9 @@ func TestPinnedBundleExcludesOnlyAuxiliaryResources(t *testing.T) {
 // source relocation and all independent resource pins without rewriting locks,
 // invoking a different compiler as if qualified, or touching delivery outputs.
 func TestFinalRelocatedProjectsCompileAndPreserveResourcePins(t *testing.T) {
+	if testing.Short() {
+		t.Skip("three final relocated project builds; run make test-integration")
+	}
 	for name, count := range map[string]int{"software-modernization": 83, "patterson-eaglesoft": 39, "dentalxchange": 75} {
 		t.Run(name, func(t *testing.T) {
 			src := filepath.Join("..", "..", "samples", "final", name)

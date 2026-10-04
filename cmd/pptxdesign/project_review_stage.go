@@ -26,6 +26,7 @@ func runProjectReviewStage(args []string) error {
 	out := f.String("out", "", "new reviewer packet directory containing index.html")
 	bundle := f.String("bundle", "", "bundle path/revision, defaults to lock")
 	engine := f.String("engine", "", "engine, defaults to lock")
+	audience := f.Bool("audience", false, "independent audience packet: visible copy/pages and audience context; omit internal material and prior verdicts")
 	if err := f.Parse(args); err != nil {
 		return err
 	}
@@ -40,7 +41,7 @@ func runProjectReviewStage(args []string) error {
 	if err != nil {
 		return err
 	}
-	result, err := deckproject.ProjectReview(p, deckproject.ProjectReviewOptions{Stage: *stage, Out: *out, Bundle: b, Engine: e})
+	result, err := deckproject.ProjectReview(p, deckproject.ProjectReviewOptions{Stage: *stage, Out: *out, Bundle: b, Engine: e, Audience: *audience})
 	if err != nil {
 		return err
 	}

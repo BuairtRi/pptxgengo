@@ -122,6 +122,25 @@ func commitSourceChanges(p *Project, changes map[string][]byte, validate func(*P
 		return nil, fmt.Errorf("another source mutation is active: %w", err)
 	}
 	defer os.Remove(guard)
+	// A retained source can become referenced again without being overwritten.
+	// Verify its validated bytes under the guard too, closing the same drift
+	// window that is checked for the previous authored tree below.
+	for relative, expected := range candidate.SourceFiles {
+		if _, previous := p.SourceFiles[relative]; previous {
+			continue
+		}
+		if _, written := changes[relative]; written {
+			continue
+		}
+		path, err := SafePath(p.Root, relative)
+		if err != nil {
+			return nil, err
+		}
+		actual, err := os.ReadFile(path)
+		if err != nil || !bytes.Equal(actual, expected) {
+			return nil, fmt.Errorf("retained source changed during mutation: %s", relative)
+		}
+	}
 	for relative, expected := range p.SourceFiles {
 		path, err := SafePath(p.Root, relative)
 		if err != nil {

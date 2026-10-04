@@ -1,0 +1,65 @@
+name: Go tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: go-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  developer:
+    name: Developer checks (${{ matrix.target }})
+    runs-on: macos-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [test, test-race]
+    env:
+      # Headless checks must succeed without a developer's private artwork.
+      WMDS_BRANDING_ROOT: ${{ runner.temp }}/pptxgengo-empty-branding
+      PPTXGENGO_NATIVE_LIVE_OUT: ''
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - run: mkdir -p "$WMDS_BRANDING_ROOT"
+      - run: make ${{ matrix.target }}
+
+  exhaustive:
+    name: Exhaustive checks (${{ matrix.target }})
+    # The full fixtures need pinned private artwork. Enable this only after
+    # registering the dedicated runner described in docs/testing.md.
+    if: >-
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') &&
+      vars.PPTXGENGO_FULL_TESTS == 'true' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: [self-hosted, macOS, pptxgengo-integration]
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [test-integration, test-race-full]
+    env:
+      PPTXGENGO_NATIVE_LIVE_OUT: ''
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - run: make ${{ matrix.target }}

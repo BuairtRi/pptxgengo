@@ -163,7 +163,20 @@ func LibraryAuthoringMetadata(def LibraryTemplate) (LibraryAuthoring, error) {
 	}
 	return libraryAuthoringMetadata(def, obj, nil)
 }
-func libraryAuthoringMetadata(def LibraryTemplate, obj map[string]any, source *Source) (LibraryAuthoring, error) {
+func libraryAuthoringMetadata(def LibraryTemplate, obj map[string]any, source *Source, sharedFonts ...authoringFontLoader) (LibraryAuthoring, error) {
+	fonts := authoringFonts(source)
+	if len(sharedFonts) > 0 {
+		fonts = sharedFonts[0]
+	}
+	var capacityErr error
+	checkedFonts := func() (*Typography, error) {
+		t, err := fonts()
+		if err != nil {
+			capacityErr = err
+		}
+		return t, err
+	}
+	componentCapacities := fixedSceneAuthoringCapacities(def, obj, source, checkedFonts)
 	out := LibraryAuthoring{Schema: LibraryAuthoringSchema, SourceRevision: def.SourceRevision, SourceSHA256: def.SourceSHA256, ReviewStatus: "inferred_from_pinned_source", SemanticStatus: "structural_inference_requires_review", Relationship: "unknown", Groups: []LibraryAuthoringGroup{}, Slots: []LibraryAuthoringSlot{}, Policy: []string{"Aliases are stable source structure projections, independent of supplied copy.", "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.", "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."}}
 	for _, r := range def.Discovery.Relationships {
 		out.Relationship = r.Kind
@@ -290,10 +303,16 @@ func libraryAuthoringMetadata(def LibraryTemplate, obj map[string]any, source *S
 		aliases[s.Alias] = true
 		s.Description = fmt.Sprintf("%s (%s) at %s", strings.ReplaceAll(s.Role, "_", " "), slot.Kind, s.Alias)
 		s.Capacity = authoringCapacity(def, obj, node, s, source)
+		if capacity, ok := componentCapacities[s.SourcePointer]; ok {
+			s.Capacity = capacity
+		}
 		out.Slots = append(out.Slots, s)
 	}
 	if def.ValueSchema != nil {
-		authoringTypedSlots(&out, def, source, obj)
+		authoringTypedSlots(&out, def, source, obj, checkedFonts)
+	}
+	if capacityErr != nil {
+		return out, fmt.Errorf("authoring capacity pinned font/calibration load: %w", capacityErr)
 	}
 	for _, group := range out.Groups {
 		groups[group.Alias] = group
@@ -365,7 +384,8 @@ func authoringTableField(field string, node map[string]any) string {
 	return field
 }
 
-func authoringTypedSlots(out *LibraryAuthoring, def LibraryTemplate, source *Source, obj map[string]any) {
+func authoringTypedSlots(out *LibraryAuthoring, def LibraryTemplate, source *Source, obj map[string]any, fonts authoringFontLoader) {
+	cardCapacities := typedCardAuthoringCapacities(def, source, fonts)
 	keys := make([]string, 0, len(def.ValueSchema.Fields))
 	for key := range def.ValueSchema.Fields {
 		keys = append(keys, key)
@@ -378,6 +398,9 @@ func authoringTypedSlots(out *LibraryAuthoring, def LibraryTemplate, source *Sou
 				for _, field := range []string{"title", "body"} {
 					s := LibraryAuthoringSlot{Name: fmt.Sprintf("cards.%d.%s", i, field), Alias: fmt.Sprintf("/cards/%d/%s", i, field), SourcePointer: fmt.Sprintf("/cards/%d/%s", i, field), Kind: "string", Role: authoringRole(field, nil), Group: "/cards", GroupIndex: i, Cardinality: count, Classification: "content", ClassificationBasis: "typed_values_contract", ReviewStatus: out.ReviewStatus, Description: fmt.Sprintf("Card %d %s", i+1, field)}
 					s.Capacity = unknownSlotCapacity("typed_component_capacity_not_available")
+					if capacity, ok := cardCapacities[s.Alias]; ok {
+						s.Capacity = capacity
+					}
 					out.Slots = append(out.Slots, s)
 				}
 			}

@@ -5,17 +5,98 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 )
+
+var libraryIndexSeed struct {
+	once   sync.Once
+	data   []byte
+	report LibraryIndexReport
+	err    error
+}
 
 func indexFixture(t *testing.T) (string, LibraryIndexReport) {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "catalog.sqlite")
-	report, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5")})
+	libraryIndexSeed.once.Do(func() {
+		seedPath := filepath.Join(t.TempDir(), "seed.sqlite")
+		libraryIndexSeed.report, libraryIndexSeed.err = BuildLibraryIndex(seedPath, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5")})
+		if libraryIndexSeed.err == nil {
+			libraryIndexSeed.data, libraryIndexSeed.err = os.ReadFile(seedPath)
+		}
+	})
+	if libraryIndexSeed.err != nil {
+		t.Fatal(libraryIndexSeed.err)
+	}
+	if err := os.WriteFile(path, libraryIndexSeed.data, 0600); err != nil {
+		t.Fatal(err)
+	}
+	report := libraryIndexSeed.report
+	report.Path = path
+	report.Counts = cloneIntMap(libraryIndexSeed.report.Counts)
+	report.Pins = append([]LibraryIndexPin(nil), libraryIndexSeed.report.Pins...)
+	report.Warnings = append([]string(nil), libraryIndexSeed.report.Warnings...)
+	reportBytes, err := json.Marshal(report)
 	if err != nil {
 		t.Fatal(err)
 	}
+	db, err := indexDB(path, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, updateErr := db.Exec("UPDATE meta SET value=? WHERE key='report'", string(reportBytes))
+	closeErr := db.Close()
+	if updateErr != nil {
+		t.Fatal(updateErr)
+	}
+	if closeErr != nil {
+		t.Fatal(closeErr)
+	}
 	return path, report
+}
+
+func cloneIntMap(input map[string]int) map[string]int {
+	result := make(map[string]int, len(input))
+	for key, value := range input {
+		result[key] = value
+	}
+	return result
+}
+
+func TestLibraryIndexFixtureCopiesAreIndependent(t *testing.T) {
+	firstPath, firstReport := indexFixture(t)
+	secondPath, secondReport := indexFixture(t)
+	if firstReport.Path != firstPath || secondReport.Path != secondPath {
+		t.Fatalf("fixture report points at the shared seed: %q %q", firstReport.Path, secondReport.Path)
+	}
+	firstReport.Counts["template"] = -1
+	firstReport.Pins[0].SHA256 = "changed"
+	firstReport.Warnings[0] = "changed"
+	if secondReport.Counts["template"] <= 0 || secondReport.Pins[0].SHA256 == "changed" || secondReport.Warnings[0] == "changed" {
+		t.Fatal("fixture report containers were shared")
+	}
+	db, err := indexDB(firstPath, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = db.Exec("UPDATE entities SET name='changed' WHERE id='wmds/template/cards/3'"); err != nil {
+		db.Close()
+		t.Fatal(err)
+	}
+	db.Close()
+	index, err := OpenLibraryIndex(secondPath, LibraryIndexOptions{})
+	if err != nil {
+		t.Fatalf("mutating one fixture affected the next copy: %v", err)
+	}
+	defer index.Close()
+	if index.Report.Path != secondPath {
+		t.Fatalf("opened fixture report path %q; want %q", index.Report.Path, secondPath)
+	}
+	entity, err := index.Inspect("cards/3")
+	if err != nil || entity.Name == "changed" {
+		t.Fatalf("second fixture inherited database mutation: %v %+v", err, entity)
+	}
 }
 
 func TestUnifiedLibraryWeeklyStatusKeepsCompleteScenarioOrdering(t *testing.T) {
@@ -119,6 +200,36 @@ func TestUnifiedLibraryProjectionTamperingRejected(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestUnifiedLibraryFindDropsWeakHitsAndGroupsIconInstances(t *testing.T) {
+	path, _ := indexFixture(t)
+	index, err := OpenLibraryIndex(path, LibraryIndexOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer index.Close()
+	weak, err := index.Find(LibraryIndexFindOptions{Kinds: []string{"template"}, Shape: LibrarySearchOptions{Query: "qzxvunknown", Limit: 100}})
+	if err != nil || len(weak.Matches) != 0 {
+		t.Fatalf("zero-score unrelated rows were returned: %v %+v", err, weak.Matches)
+	}
+	all, err := index.Find(LibraryIndexFindOptions{Kinds: []string{"template"}, Shape: LibrarySearchOptions{Query: "qzxvunknown", Limit: 100}, IncludeWeak: true})
+	if err != nil || len(all.Matches) == 0 {
+		t.Fatalf("explicit weak results were not included: %v", err)
+	}
+	icons, err := index.Find(LibraryIndexFindOptions{Kinds: []string{"asset"}, Shape: LibrarySearchOptions{Query: "risk alert", Limit: 100}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, hit := range icons.Matches {
+		if hit.GroupID == "wmds/asset/icon/risk-alert-arrow" {
+			if len(hit.VariantIDs) != 3 || hit.Entity.Key != "icon/risk-alert-arrow" {
+				t.Fatalf("icon variants were not grouped under their concept: %+v", hit)
+			}
+			return
+		}
+	}
+	t.Fatalf("expected grouped risk-alert-arrow icon result: %+v", icons.Matches)
 }
 
 func TestUnifiedLibraryLegacyNamespaceAndInputPin(t *testing.T) {

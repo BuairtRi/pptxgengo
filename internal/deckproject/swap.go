@@ -92,21 +92,59 @@ func ProposeSwap(p *Project, id, key, bundle string) (SwapProposal, error) {
 	}
 	sort.Strings(keys)
 	used := map[string]bool{}
+	sameTemplate := oldDef.Key == newDef.Key
 	for _, path := range keys {
 		destination, known := nextSlots[path]
 		value, present := oldLeaves[path]
 		source, sourceKnown := oldSlots[path]
-		compatible := present && known && sourceKnown && source.Role == destination.Role && source.Kind == destination.Kind
-		if compatible && destination.Group != "" {
-			compatible = source.Group == destination.Group && source.GroupIndex == destination.GroupIndex && source.Cardinality == destination.Cardinality && !strings.HasPrefix(destination.Group, "/paragraphs") && !strings.HasPrefix(destination.Group, "/panels")
+		sourcePath := path
+		basis := "same_role_group_index"
+		compatible := present && ((sameTemplate && reflect.TypeOf(value) == reflect.TypeOf(nextLeaves[path])) || (known && sourceKnown && source.Role == destination.Role && source.Kind == destination.Kind))
+		if compatible && !sameTemplate && destination.Group != "" {
+			compatible = source.Group == destination.Group && source.GroupIndex == destination.GroupIndex && !strings.HasPrefix(destination.Group, "/paragraphs") && !strings.HasPrefix(destination.Group, "/panels")
+		}
+		if sameTemplate {
+			basis = "same_template_exact_field"
+		}
+		// Headline/statement recipes name a unique title-bearing field. A role
+		// bridge is safe only when there is one available source and destination;
+		// generic paragraphs are never promoted to headlines by their copy.
+		if !compatible && known && destination.Role == "headline" {
+			var matches []string
+			for candidate, slot := range oldSlots {
+				if slot.Role == "headline" && slot.Kind == destination.Kind && !used[candidate] {
+					if _, exists := oldLeaves[candidate]; exists {
+						matches = append(matches, candidate)
+					}
+				}
+			}
+			destinations := 0
+			for candidate, slot := range nextSlots {
+				if slot.Role == "headline" {
+					if _, exists := nextLeaves[candidate]; exists {
+						destinations++
+					}
+				}
+			}
+			if len(matches) == 1 && destinations == 1 {
+				sourcePath = matches[0]
+				value = oldLeaves[sourcePath]
+				compatible = true
+				basis = "unique_headline_role"
+			}
 		}
 		if compatible {
 			if err := replaceContentLeaf(nextContent, path, value); err != nil {
 				return r, err
 			}
-			used[path] = true
-			r.Mapped = append(r.Mapped, SwapField{path, path, value, "same_role_group_index_cardinality"})
+			used[sourcePath] = true
+			r.Mapped = append(r.Mapped, SwapField{sourcePath, path, value, basis})
 		} else {
+			if known && destination.Role == "structural_key" {
+				// New items retain the scaffold's generated identity. It is not
+				// visible business copy and does not satisfy a missing text slot.
+				continue
+			}
 			blank := ""
 			if _, ok := nextLeaves[path].(string); !ok {
 				return r, fmt.Errorf("automatic swap cannot initialize non-text field %s; use a supplied replacement", path)
@@ -152,9 +190,13 @@ func ProposeSwap(p *Project, id, key, bundle string) (SwapProposal, error) {
 			if nextKeys, ok := values["keys"].(map[string]any); ok {
 				for _, destination := range newDef.Arrays {
 					for _, source := range oldDef.Arrays {
-						if source.Name == destination.Name && source.Count == destination.Count && source.SourcePointer == destination.SourcePointer {
-							if value, exists := oldKeys[source.Name]; exists {
-								nextKeys[destination.Name] = value
+						if source.Name == destination.Name && source.SourcePointer == destination.SourcePointer {
+							oldItems, oldOK := oldKeys[source.Name].([]any)
+							nextItems, nextOK := nextKeys[destination.Name].([]any)
+							if oldOK && nextOK {
+								for i := 0; i < len(oldItems) && i < len(nextItems); i++ {
+									nextItems[i] = oldItems[i]
+								}
 							}
 						}
 					}
@@ -208,7 +250,7 @@ func ApplySwap(p *Project, proposal SwapProposal, allowUnmapped bool, bundle, en
 	if !exists || edit.Template == nil || *edit.Template != proposal.To {
 		return EditReceipt{}, fmt.Errorf("swap patch identity mismatch")
 	}
-	return EditSlides(p, proposal.Patch, bundle, engine)
+	return EditSlidesWithOptions(p, proposal.Patch, bundle, engine, EditOptions{Operation: "swap"})
 }
 
 func flattenAuthored(value any, path string, out map[string]any) {

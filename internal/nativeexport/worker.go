@@ -21,10 +21,57 @@ type workerRequest struct {
 	Render  *Options       `json:"render,omitempty"`
 	Doctor  *DoctorOptions `json:"doctor,omitempty"`
 	Cleanup *cleanupTask   `json:"cleanup,omitempty"`
+	Failure *renderFailure `json:"failure,omitempty"`
 	TaskID  string         `json:"task_id,omitempty"`
 }
 
 type cleanupTask struct{ StagingRoot, TaskID string }
+type renderFailure struct{ Out, Message, TaskID string }
+
+// RecordRenderError is also used for CLI flag/preflight failures before Render
+// can start. The existing private worker bounds filesystem access to three seconds.
+func RecordRenderError(ctx context.Context, out string, err error) error {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+	_, recordErr := workerProcess(ctx, workerRequest{Failure: &renderFailure{Out: out, Message: err.Error()}})
+	return recordErr
+}
+
+func writeRenderFailure(failure renderFailure) error {
+	if failure.Out == "" {
+		return fmt.Errorf("--out is required to record render-error.txt")
+	}
+	out, err := canonicalPath(failure.Out)
+	if err != nil {
+		return err
+	}
+	// Preserve any already-published successful render, including its evidence.
+	manifest := filepath.Join(out, "render-manifest.json")
+	if _, err = os.Stat(manifest); err == nil {
+		data, readErr := os.ReadFile(manifest)
+		receipt, verifyErr := VerifyReceipt(data)
+		if readErr != nil || verifyErr != nil || !validTaskID.MatchString(failure.TaskID) || receipt.TaskID != failure.TaskID {
+			return fmt.Errorf("output already contains a receipt from another or unconfirmed task; choose a new --out directory")
+		}
+		// The parent observed failure even if the worker published just before
+		// cancellation. Remove only this exact task's authenticated receipt.
+		if err = os.Remove(manifest); err != nil {
+			return err
+		}
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+	if err = os.MkdirAll(out, 0755); err != nil {
+		return err
+	}
+	path := filepath.Join(out, "render-error.txt")
+	if info, e := os.Lstat(path); e == nil && !info.Mode().IsRegular() {
+		return fmt.Errorf("render-error.txt is not a regular file")
+	} else if e != nil && !os.IsNotExist(e) {
+		return e
+	}
+	return os.WriteFile(path, []byte(failure.Message+"\n"), 0644)
+}
 
 var validTaskID = regexp.MustCompile(`^\.native-work-[0-9a-f]{32}$`)
 
@@ -55,8 +102,17 @@ func RenderWorker(ctx context.Context, input io.Reader, output io.Writer) error 
 	if request.Cleanup != nil {
 		operations++
 	}
+	if request.Failure != nil {
+		operations++
+	}
 	if operations != 1 {
 		return fmt.Errorf("native worker requires exactly one operation")
+	}
+	if request.Failure != nil {
+		if err := writeRenderFailure(*request.Failure); err != nil {
+			return err
+		}
+		return json.NewEncoder(output).Encode(map[string]bool{"recorded": true})
 	}
 	if request.Cleanup != nil {
 		if err := cleanupExactTask(ctx, *request.Cleanup); err != nil {
@@ -65,7 +121,8 @@ func RenderWorker(ctx context.Context, input io.Reader, output io.Writer) error 
 		return json.NewEncoder(output).Encode(map[string]bool{"cleaned": true})
 	}
 	if request.Doctor != nil {
-		return json.NewEncoder(output).Encode(doctor(ctx, *request.Doctor, command, runtime.GOOS))
+		request.Doctor.taskID = request.TaskID
+		return json.NewEncoder(output).Encode(doctor(ctx, *request.Doctor, nativeCommand, runtime.GOOS))
 	}
 	if !validTaskID.MatchString(request.TaskID) {
 		return fmt.Errorf("invalid native worker task identity")

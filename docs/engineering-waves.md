@@ -133,3 +133,11 @@ matching, mutation and review functionality lives in Go.
   makes this repeated work substantially more expensive.
 
 See [the command guide](engineering-cli.md) for supported operations and examples.
+
+## Local.13 follow-up
+
+The local.12 timings and friction list above are historical. The catalog decoding
+bottleneck, insertion identity, swap mapping, audience packets and other scoped
+survey findings are addressed in the [follow-up qualification](engineering-followups.md).
+That record contains the current results and remaining bounded gaps. The full
+race lane is separate from the normal developer cycle; see [testing](testing.md).

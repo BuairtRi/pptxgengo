@@ -1,7 +1,6 @@
 package deckproject
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -31,7 +30,8 @@ func validateNativeAttachment(directory string, a NativeAttachment) (nativeexpor
 	if digest(raw) != a.RenderManifestSHA256 {
 		return manifest, fmt.Errorf("native attachment render manifest drift")
 	}
-	if err = json.Unmarshal(raw, &manifest); err != nil {
+	manifest, err = nativeexport.VerifyReceipt(raw)
+	if err != nil {
 		return manifest, err
 	}
 	if !strings.HasPrefix(manifest.Renderer, "Microsoft PowerPoint (local native PDF)") || manifest.Source.SHA256 != a.PPTXSHA256 || manifest.Pages < 1 || manifest.Slides < manifest.Pages || len(a.SlideIDs) != manifest.Pages {

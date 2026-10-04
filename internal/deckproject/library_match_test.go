@@ -169,3 +169,83 @@ func TestMatcherRejectsUncertainAllTextParallelInference(t *testing.T) {
 		t.Fatal("uncertain all-text topology treated as parallel")
 	}
 }
+
+func TestLibraryMatchNeedsCopyDraftContainsOnlySuppliedContent(t *testing.T) {
+	page := matchPage()
+	page.Items = page.Items[:2]
+	page.Source = "Source with no destination"
+	out := filepath.Join(t.TempDir(), "drafts")
+	report, err := MatchPage(page, LibraryMatchOptions{Bundle: bundle(t), Templates: []string{"cards/3", "cards/4"}, Out: out})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if report.Passed != 0 || report.NeedsCopy != 2 || report.Candidates[0].Template != "cards/3" {
+		t.Fatalf("near misses not ranked: %+v", report)
+	}
+	for _, candidate := range report.Candidates {
+		if candidate.Status != "needs_copy" || candidate.MappingComplete || candidate.AuthoredSlide != nil || candidate.BoundSlide != nil || candidate.DraftSlide == nil || candidate.DraftSlideFile == "" || candidate.Deck != "" {
+			t.Fatal("draft claimed ready", candidate)
+		}
+		if len(candidate.UnresolvedFields) != 1 || candidate.UnresolvedFields[0] != "/source" {
+			t.Fatal("unmapped source lost", candidate.Disposition)
+		}
+		data, err := os.ReadFile(candidate.DraftSlideFile)
+		if err != nil || !strings.Contains(string(data), "Draft needs supplied copy") || strings.Contains(string(data), "Validate the decision") {
+			t.Fatal("draft missing or borrowed source copy", err)
+		}
+		for _, d := range candidate.Disposition {
+			if d.SourcePointer == "/items/0/text" && d.Status != "mapped_visible" {
+				t.Fatal("partial supplied items were not carried")
+			}
+		}
+	}
+}
+
+func TestLibraryMatchNestedPhasesAndExplicitComparison(t *testing.T) {
+	page := PageSpec{Title: "A clear phased delivery plan", Eyebrow: "Approach", Relationship: "sequence"}
+	for i := 0; i < 3; i++ {
+		phase := PageItem{Lead: "Phase", Objective: "An objective."}
+		for j := 0; j < 4; j++ {
+			phase.Activities = append(phase.Activities, PageItem{Lead: "Activity", Text: "Perform the work."})
+		}
+		page.Items = append(page.Items, phase)
+	}
+	candidate, err := MapPageToTemplate(page, matchDef(t, "lifecycle/three-phases"), bundle(t), wmdesign.CandidateEngine, "phases", 2026)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !candidate.MappingComplete || candidate.Status != "go_layout_succeeded_native_review_pending" {
+		t.Fatalf("phase activities did not map: %+v", candidate)
+	}
+	page.Items[0].Owner = "Finance"
+	candidate, err = MapPageToTemplate(page, matchDef(t, "lifecycle/three-phases"), bundle(t), wmdesign.CandidateEngine, "phases", 2026)
+	if err != nil || candidate.Status != "needs_copy" || len(candidate.UnresolvedFields) != 1 || candidate.UnresolvedFields[0] != "/items/0/owner" {
+		t.Fatal("unsupported owner vanished", err, candidate.UnresolvedFields)
+	}
+	page = PageSpec{Title: "Compare options against agreed criteria", Eyebrow: "Options", Relationship: "comparison", Comparison: &PageComparison{CriterionLabel: "Criterion", WeightLabel: "Weight", Legend: "Scores reflect the supplied assessment."}}
+	for i := 0; i < 7; i++ {
+		page.Comparison.Criteria = append(page.Comparison.Criteria, PageCriterion{Label: "Criterion", Weight: "10%"})
+	}
+	for i := 0; i < 4; i++ {
+		page.Comparison.Options = append(page.Comparison.Options, PageOption{Name: "Option", Values: []string{"1", "2", "3", "4", "3", "2", "1"}})
+	}
+	candidate, err = MapPageToTemplate(page, matchDef(t, "vendors/scorecard-generic"), bundle(t), wmdesign.CandidateEngine, "comparison", 2026)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !candidate.MappingComplete || candidate.Status != "go_layout_succeeded_native_review_pending" {
+		t.Fatalf("explicit comparison did not map: %+v", candidate)
+	}
+}
+
+func TestLibraryMatchFitFailureDoesNotExposeReadySlide(t *testing.T) {
+	page := matchPage()
+	page.Items[0].Text = strings.Repeat("This copy cannot fit inside the fixed card row. ", 150)
+	candidate, err := MapPageToTemplate(page, matchDef(t, "cards/3"), bundle(t), wmdesign.CandidateEngine, "overflow", 2026)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !candidate.MappingComplete || candidate.Status == "go_layout_succeeded_native_review_pending" || candidate.AuthoredSlide != nil || candidate.BoundSlide != nil || candidate.Deck != "" {
+		t.Fatal("layout failure exposed ready-use slide", candidate.Status, candidate.Error)
+	}
+}

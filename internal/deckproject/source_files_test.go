@@ -481,6 +481,9 @@ func TestExternalNotesEmptyConflictAndSourceInvalidation(t *testing.T) {
 }
 
 func TestSplitSectionDividerAndDetachPreserveSourceFiles(t *testing.T) {
+	if testing.Short() {
+		t.Skip("stock detachment and divider rendering require registered private photography; run make test-integration")
+	}
 	p, _ := splitExample(t, false)
 	pin(t, p)
 	shared := p.Document.Slides[0]

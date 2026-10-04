@@ -14,6 +14,14 @@ func authoringFamilyRecipes(out *LibraryAuthoring, def LibraryTemplate, obj map[
 	}
 	recipe := ""
 	switch {
+	case def.Key == "key-message/statement":
+		recipe = "key-message-statement-source-topology.v1"
+	case def.Key == "vendors/scorecard-generic":
+		recipe = "vendors-scorecard-generic-source-topology.v1"
+	case def.Key == "status/classic":
+		recipe = "status-classic-source-topology.v1"
+	case def.Key == "interviews-detail/dense":
+		recipe = "interview-detail-dense-source-topology.v1"
 	case strings.HasPrefix(def.Key, "interviews-readout/"):
 		recipe = "interview-readout-columns.v1"
 	case def.Family == "heatmaps":
@@ -37,6 +45,139 @@ func authoringFamilyRecipes(out *LibraryAuthoring, def LibraryTemplate, obj map[
 		kind := authoringKind(node)
 		tail := parts[2:]
 		switch recipe {
+		case "status-classic-source-topology.v1":
+			if kind == "table" {
+				group := "/status/overall"
+				if index == 1 {
+					group = "/status/areas"
+				}
+				if index == 6 {
+					group = "/status/risks"
+				}
+				if len(tail) >= 3 && tail[0] == "rows" {
+					field := authoringTableField(tail[2], node)
+					if field == "status" || field == "overall_status" {
+						field = "state"
+					}
+					s.Role = field
+					s.Group, s.GroupIndex = group, mustOrdinal(tail[1])
+					rows, _ := node["rows"].([]any)
+					s.Cardinality = len(rows)
+					s.Alias = fmt.Sprintf("%s/item_%02d/%s", group, s.GroupIndex+1, field)
+				} else {
+					s.Alias = group + "/" + authoringAliasTail(tail)
+				}
+			} else if kind == "bullets" || kind == "grouplabel" {
+				section := map[int]string{2: "completed", 3: "completed", 4: "planned", 5: "planned", 7: "decisions", 8: "decisions"}[index]
+				if section == "" {
+					continue
+				}
+				s.Alias = "/status/" + section + "/" + authoringAliasTail(tail)
+			} else {
+				continue
+			}
+		case "interview-detail-dense-source-topology.v1":
+			x, _ := discoveryNumber(node["x"])
+			y, _ := discoveryNumber(node["y"])
+			if kind == "text" && y < 198 {
+				field := ""
+				switch {
+				case x == 57 && y == 126:
+					field = "stakeholder_label"
+				case x == 57 && y == 144:
+					field = "stakeholder_name"
+				case x == 57 && y == 168:
+					field = "stakeholder_role"
+				case x == 273 && y == 126:
+					field = "department_date_label"
+				case x == 273 && y == 144:
+					field = "department"
+				case x == 273 && y == 168:
+					field = "date_and_duration"
+				case x == 489 && y == 126:
+					field = "format_label"
+				case x == 489 && y == 144:
+					field = "format_and_location"
+				case x == 705 && y == 126:
+					field = "interviewers_label"
+				case x == 705 && y == 144:
+					field = "interviewers"
+				}
+				if field == "" {
+					continue
+				}
+				s.Alias, s.Role = "/interview/"+field, field
+				s.Group, s.GroupIndex, s.Cardinality = "", -1, 0
+			} else if (kind == "textblock" && y == 210) || (kind == "bullets" && y == 264) {
+				column := int((x - 57) / 288)
+				if column < 0 || column > 2 {
+					continue
+				}
+				s.Alias = fmt.Sprintf("/topics/item_%02d/%s", column+1, authoringAliasTail(tail))
+				s.Group, s.GroupIndex, s.Cardinality = "/topics", column, 3
+			} else if kind == "pullquote" {
+				s.Alias = "/interview_quote/" + authoringAliasTail(tail)
+			} else if (kind == "textblock" || kind == "bullets") && x == 417 && y >= 336 {
+				s.Alias = "/pain_and_opportunities/" + authoringAliasTail(tail)
+			} else if (kind == "textblock" || kind == "bullets") && x == 633 && y >= 336 {
+				s.Alias = "/follow_ups_and_questions/" + authoringAliasTail(tail)
+			} else {
+				continue
+			}
+		case "vendors-scorecard-generic-source-topology.v1":
+			if kind == "text" && index == 1 {
+				s.Alias, s.Role = "/comparison/legend", "source"
+				s.Group, s.GroupIndex, s.Cardinality = "", -1, 0
+			} else if kind == "table" && index == 0 && len(tail) == 3 {
+				columns, _ := node["cols"].([]any)
+				if tail[0] == "cols" && tail[2] == "label" {
+					col := mustOrdinal(tail[1])
+					switch col {
+					case 0:
+						s.Alias = "/comparison/criterion_label"
+					case 1:
+						s.Alias = "/comparison/weight_label"
+					default:
+						s.Alias = fmt.Sprintf("/comparison/options/item_%02d/name", col-1)
+					}
+				} else if tail[0] == "rows" {
+					row := mustOrdinal(tail[1])
+					switch tail[2] {
+					case "c":
+						s.Alias = fmt.Sprintf("/comparison/criteria/item_%02d/label", row+1)
+					case "w":
+						s.Alias = fmt.Sprintf("/comparison/criteria/item_%02d/weight", row+1)
+					default:
+						for col, raw := range columns {
+							column, _ := raw.(map[string]any)
+							if col >= 2 && column["k"] == tail[2] {
+								s.Alias = fmt.Sprintf("/comparison/options/item_%02d/values/item_%02d", col-1, row+1)
+							}
+						}
+					}
+				} else {
+					continue
+				}
+				s.Role = "comparison-field"
+				s.Group, s.GroupIndex, s.Cardinality = "", -1, 0
+			} else {
+				continue
+			}
+		case "key-message-statement-source-topology.v1":
+			if kind != "text" {
+				continue
+			}
+			switch node["style"] {
+			case "display":
+				s.Alias, s.Role = "/headline", "headline"
+			case "eyebrow":
+				s.Alias, s.Role = "/eyebrow", "eyebrow"
+			case "lead":
+				s.Alias, s.Role = "/supporting_statement", "body"
+			default:
+				continue
+			}
+			s.Group, s.GroupIndex, s.Cardinality = "", -1, 0
 		case "interview-readout-columns.v1":
 			if kind != "table" {
 				continue
@@ -185,7 +326,7 @@ func authoringFamilyRecipes(out *LibraryAuthoring, def LibraryTemplate, obj map[
 	}
 	out.Recipe = recipe
 	out.SemanticStatus = "engineering_recipe_requires_review"
-	if recipe == "buy-build-source-topology.v1" {
+	if recipe == "buy-build-source-topology.v1" || recipe == "vendors-scorecard-generic-source-topology.v1" {
 		out.Relationship = "comparison"
 	}
 	if recipe == "offer-classic-source-topology.v1" || recipe == "roadmap-component-fields.v1" {

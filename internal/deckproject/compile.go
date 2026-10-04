@@ -31,7 +31,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 	if e != nil {
 		return c, e
 	}
-	catalog, e := wmdesign.LibraryCatalog(bundle, "")
+	catalog, e := wmdesign.LibraryCatalogFromSource(source)
 	if e != nil {
 		return c, e
 	}

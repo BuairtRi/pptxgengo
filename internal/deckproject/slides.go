@@ -1,6 +1,7 @@
 package deckproject
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,8 +14,10 @@ import (
 
 type SlideOperation struct {
 	Action, ID, Before, After string
+	As, IntoSection           string
 	Source                    []byte
 	Reanchor                  bool
+	CheckFit                  bool
 	Bundle, Engine            string
 }
 
@@ -34,7 +37,33 @@ type SlideOperationReceipt struct {
 // OperateSlide changes ordering or visibility without rewriting unselected slide
 // files. Removed sources remain recoverable and are explicitly listed in receipts.
 func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
+	if o.As != "" && o.Action == "add" {
+		o.ID = o.As
+	}
 	r := SlideOperationReceipt{Operation: "slide-" + o.Action, SlideID: o.ID, BeforeSHA256: p.SourceHash(), SectionChanges: []string{}}
+	if o.As != "" && o.Action != "add" {
+		return r, fmt.Errorf("--as requires slide add")
+	}
+	if o.CheckFit && o.Action != "add" {
+		return r, fmt.Errorf("--check-fit requires slide add")
+	}
+	if o.IntoSection != "" {
+		if o.Action != "add" && o.Action != "move" {
+			return r, fmt.Errorf("--into-section requires add or move")
+		}
+		found := false
+		for _, section := range p.Document.Sections {
+			if section.ID == o.IntoSection {
+				found = true
+				if o.Before == "" && o.After == "" {
+					o.Before = section.BeforeSlideID
+				}
+			}
+		}
+		if !found {
+			return r, fmt.Errorf("unknown section ID %q", o.IntoSection)
+		}
+	}
 	if o.Action == "add" || o.Action == "remove" {
 		log, err := compositionPath(p)
 		if err != nil {
@@ -174,21 +203,44 @@ func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
 			return r, e
 		}
 		object, ok := parsed.(map[string]any)
-		if !ok || object["id"] != o.ID {
+		if !ok || (o.As == "" && object["id"] != o.ID) {
 			return r, fmt.Errorf("slide file must contain id: %s", o.ID)
+		}
+		sourceID, ok := object["id"].(string)
+		if !ok || !stableID.MatchString(sourceID) {
+			return r, fmt.Errorf("slide file requires a valid stable id")
 		}
 		doc, e := sourceYAML(o.Source)
 		if e != nil {
 			return r, e
 		}
 		node := doc.Content[0]
+		if o.As != "" {
+			replaceMappingField(node, "id", &yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: o.ID})
+			o.Source, e = encodeSourceYAML(doc)
+			if e != nil {
+				return r, e
+			}
+		}
 		position, e := slidePosition(order, o.Before, o.After)
 		if e != nil {
 			return r, e
 		}
 		if p.hasExternalSources() {
 			relative := "slides/" + o.ID + ".yaml"
-			changes[relative] = o.Source
+			path, e := SafePath(p.Root, relative)
+			if e != nil {
+				return r, e
+			}
+			if existing, e := os.ReadFile(path); e == nil {
+				if !bytes.Equal(existing, o.Source) {
+					return r, fmt.Errorf("retained slide source differs: %s; use a new --as ID or supply the retained file", relative)
+				}
+			} else if os.IsNotExist(e) {
+				changes[relative] = o.Source
+			} else {
+				return r, e
+			}
 			node = &yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: relative}
 		}
 		sequence.Content = insertSlideNode(sequence.Content, position, node)
@@ -200,6 +252,29 @@ func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
 		positions := map[string]int{}
 		for i, id := range order {
 			positions[id] = i
+		}
+		if o.IntoSection != "" {
+			found := false
+			for i := range sections {
+				if sections[i].ID != o.IntoSection {
+					continue
+				}
+				found = true
+				start, end := positions[sections[i].BeforeSlideID], len(order)
+				if i+1 < len(sections) {
+					end = positions[sections[i+1].BeforeSlideID]
+				}
+				position := positions[o.ID]
+				if position == start-1 {
+					sections[i].BeforeSlideID = o.ID
+					r.SectionChanges = append(r.SectionChanges, "Reanchored "+sections[i].ID+" to "+o.ID+" to join its section")
+				} else if position < start || position >= end {
+					return r, fmt.Errorf("requested position lies outside section %s", o.IntoSection)
+				}
+			}
+			if !found {
+				return r, fmt.Errorf("target section %s became empty; preserve an anchor or add a new section", o.IntoSection)
+			}
 		}
 		if len(sections) > 0 {
 			sort.SliceStable(sections, func(i, j int) bool {
@@ -250,6 +325,11 @@ func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
 			}
 			if _, e := Compile(candidate, o.Bundle, o.Engine); e != nil {
 				return e
+			}
+			if o.CheckFit {
+				if e := CheckSlideFit(candidate, []string{o.ID}, o.Bundle, o.Engine); e != nil {
+					return e
+				}
 			}
 		}
 		r.AfterSHA256 = candidate.SourceHash()

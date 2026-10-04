@@ -10,6 +10,9 @@ import (
 )
 
 func TestStockEditableEntireBindableCatalogRoundTrips(t *testing.T) {
+	if testing.Short() {
+		t.Skip("exhaustive 586-template editable round trip; run make test-integration")
+	}
 	catalog, err := wmdesign.LibraryCatalog(bundle(t), "")
 	if err != nil {
 		t.Fatal(err)

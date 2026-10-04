@@ -165,6 +165,12 @@ type Source struct {
 	Components json.RawMessage            `json:"components"`
 	Templates  map[string]json.RawMessage `json:"templates"`
 	styles     map[string]Style
+	// These attest only to this in-memory snapshot. Load still validates every
+	// file on every call; they never allow a path/mtime cache to bypass drift.
+	loadedCatalogKey [32]byte
+	loadedRoot       string
+	loadedFontRoot   string
+	loadedFontFiles  []SourceFile
 }
 
 // Load accepts only explicitly pinned source revisions. Hash mismatches are source
@@ -202,6 +208,24 @@ func Load(bundle, override string) (*Source, error) {
 		return nil, err
 	}
 	s := &Source{Root: root, Revision: pin.Revision, Commit: inv.Commit, Files: inv.Sources, Templates: map[string]json.RawMessage{}, styles: map[string]Style{}}
+	// Font-derived authoring plans use the verified bundle fonts even when an
+	// independently verified source override lives outside that bundle.
+	s.loadedFontRoot, err = filepath.Abs(filepath.Join(bundle, "fonts"))
+	if err != nil {
+		return nil, err
+	}
+	var bundleManifest struct {
+		Files []SourceFile `json:"files"`
+	}
+	if err = json.Unmarshal(bundleData, &bundleManifest); err != nil {
+		return nil, err
+	}
+	for _, file := range bundleManifest.Files {
+		if strings.HasPrefix(file.Path, "fonts/") {
+			file.Path = strings.TrimPrefix(file.Path, "fonts/")
+			s.loadedFontFiles = append(s.loadedFontFiles, file)
+		}
+	}
 	if len(inv.Sources) == 0 {
 		return nil, fmt.Errorf("source.invalid_inventory: empty snapshot")
 	}
@@ -260,6 +284,11 @@ func Load(bundle, override string) (*Source, error) {
 	if len(s.styles) != 14 {
 		return nil, fmt.Errorf("source.conflict: expected 14 styles")
 	}
+	s.loadedCatalogKey, err = libraryCatalogFingerprint(s)
+	if err != nil {
+		return nil, err
+	}
+	s.loadedRoot = s.Root
 	return s, nil
 }
 func (s *Source) Style(id string) (Style, error) {

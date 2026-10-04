@@ -27,6 +27,9 @@ func cardFitCopy(v any, counts map[string]int) {
 }
 
 func TestIntakeCardFitAllFrozenFailures(t *testing.T) {
+	if testing.Short() {
+		t.Skip("exhaustive frozen slide builds require registered private branding assets; run make test-integration")
+	}
 	root := filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003-frozen")
 	entries := intakeRepairEntries(t, filepath.Join(root, "source", "templates", "library"))
 	b, err := os.ReadFile(filepath.Join(root, "node-results.json"))

@@ -214,7 +214,7 @@ func (p *Project) validate() error {
 	if _, e := SafePath(p.Root, d.Toolchain.Lockfile); e != nil {
 		return p.fail("/toolchain/lockfile", "%v", e)
 	}
-	allowed := map[string]bool{"project": true, "audience": true, "outline": true, "sources": true, "claims": true, "composition_log": true, "decisions": true, "state": true}
+	allowed := map[string]bool{"project": true, "audience": true, "outline": true, "sources": true, "claims": true, "composition_log": true, "decisions": true, "win_strategy": true, "state": true}
 	for k, path := range d.Context {
 		if filepath.Clean(path) == "state.json" && k != "state" {
 			return p.fail("/context/"+escape(k), "generated state.json is not an authored dependency; use context.state")

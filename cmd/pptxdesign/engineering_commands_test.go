@@ -23,6 +23,9 @@ func TestEngineeringCommandsValidateFlags(t *testing.T) {
 }
 
 func TestAssetGalleryVerifiedOriginals(t *testing.T) {
+	if testing.Short() {
+		t.Skip("gallery integration reads private registered brand artwork; run make test-integration with WMDS_BRANDING_ROOT")
+	}
 	root := filepath.Join(t.TempDir(), "gallery")
 	if err := runAssetGallery([]string{"--out", root, "--kind", "icon", "--query", "risk", "--limit", "2"}); err != nil {
 		t.Fatal(err)

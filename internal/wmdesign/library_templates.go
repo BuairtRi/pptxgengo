@@ -141,6 +141,22 @@ func legacyTemplate(key string) bool {
 }
 
 func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
+	if s == nil {
+		return nil, fmt.Errorf("source.catalog_snapshot_required")
+	}
+	if s.loadedCatalogKey == ([32]byte{}) || s.Root != s.loadedRoot {
+		// Arbitrary Source callers still execute the complete derivation. A warm
+		// cache must not conceal dependency errors at an unattested source root.
+		return buildLibraryCatalog(s)
+	}
+	if err := verifyCatalogFonts(s); err != nil {
+		return nil, err
+	}
+	return sharedLibraryCatalogCache.catalog(s)
+}
+
+func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
+	fonts := authoringFonts(s)
 	paths := make([]string, 0, len(s.Templates))
 	for path := range s.Templates {
 		if strings.HasPrefix(path, "templates/library/") && !strings.HasPrefix(path[strings.LastIndex(path, "/")+1:], "_") {
@@ -261,7 +277,7 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 				def.Policy = []string{"This template retains its typed v2 values API; the library slots/keys projection is not accepted.", "All declared typed content is required; geometry/base styles remain frozen.", "Binding availability does not establish successful rendering, native review or a qualified envelope."}
 			}
 			def.Discovery = libraryDiscovery(def, obj)
-			authoring, err := libraryAuthoringMetadata(def, obj, s)
+			authoring, err := libraryAuthoringMetadata(def, obj, s, fonts)
 			if err != nil {
 				return nil, err
 			}
@@ -312,7 +328,28 @@ func LibraryCatalog(bundle, override string) ([]LibraryTemplate, error) {
 	if err != nil {
 		return nil, err
 	}
-	return libraryCatalog(s)
+	return LibraryCatalogFromSource(s)
+}
+
+// LibraryCatalogFromSource reuses the decoded Load-validated snapshot. A
+// fabricated or modified Source is rejected; external font/calibration bytes
+// are checked again because authoring plans depend on them. Returned definitions
+// are independent mutable copies, never the cache's retained definitions.
+func LibraryCatalogFromSource(s *Source) ([]LibraryTemplate, error) {
+	if s == nil || s.loadedCatalogKey == ([32]byte{}) || s.Root != s.loadedRoot {
+		return nil, fmt.Errorf("source.loaded_snapshot_required")
+	}
+	key, err := libraryCatalogFingerprint(s)
+	if err != nil {
+		return nil, err
+	}
+	if key != s.loadedCatalogKey {
+		return nil, fmt.Errorf("source.loaded_snapshot_changed")
+	}
+	if err := verifyCatalogFonts(s); err != nil {
+		return nil, err
+	}
+	return sharedLibraryCatalogCache.catalogKey(s, key)
 }
 
 func libraryObject(raw []byte) (map[string]any, error) {

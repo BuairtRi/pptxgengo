@@ -35,7 +35,14 @@ func extendedSlideEdits(edits map[string]SlideEdit) bool {
 }
 
 func editSourceSlides(p *Project, edits map[string]SlideEdit, bundle, engine string) (EditReceipt, error) {
+	return editSourceSlidesWithOptions(p, edits, bundle, engine, EditOptions{})
+}
+
+func editSourceSlidesWithOptions(p *Project, edits map[string]SlideEdit, bundle, engine string, options EditOptions) (EditReceipt, error) {
 	r := EditReceipt{Operation: "edit-slides", SlideIDs: []string{}, BeforeSHA256: p.SourceHash(), Validation: "source_and_binding_checked_native_review_pending"}
+	if options.Operation != "" {
+		r.Operation = options.Operation
+	}
 	if len(edits) == 0 {
 		return r, fmt.Errorf("slide patch must contain at least one stable slide ID")
 	}
@@ -77,9 +84,15 @@ func editSourceSlides(p *Project, edits map[string]SlideEdit, bundle, engine str
 			if err != nil {
 				return r, err
 			}
+			if field.name == "content" {
+				retainContentComments(mappingNode(node, field.name), replacement)
+			}
 			replaceMappingField(node, field.name, replacement)
 		}
 		orderAuthoredSlide(node)
+		if err := refreshStockComments(node, bundle); err != nil {
+			return r, err
+		}
 		relative := p.SlideFiles[slide.ID]
 		if relative == "" {
 			relative = filepath.Base(p.SourcePath)
@@ -100,7 +113,7 @@ func editSourceSlides(p *Project, edits map[string]SlideEdit, bundle, engine str
 		}
 		changes[relative] = raw
 	}
-	r.Decision = "decisions/edit-slides-" + time.Now().UTC().Format("20060102T150405") + "-" + nonce() + ".json"
+	r.Decision = "decisions/" + r.Operation + "-" + time.Now().UTC().Format("20060102T150405") + "-" + nonce() + ".json"
 	decision, err := SafePath(p.Root, r.Decision)
 	if err != nil {
 		return r, err
@@ -108,6 +121,12 @@ func editSourceSlides(p *Project, edits map[string]SlideEdit, bundle, engine str
 	_, err = commitSourceChanges(p, changes, func(candidate *Project) error {
 		if _, err := Compile(candidate, bundle, engine); err != nil {
 			return err
+		}
+		if options.CheckFit {
+			if err := CheckSlideFit(candidate, r.SlideIDs, bundle, engine); err != nil {
+				return err
+			}
+			r.Validation = "source_binding_and_go_fit_checked_native_review_pending"
 		}
 		r.AfterSHA256 = candidate.SourceHash()
 		return writeJSON(decision, r)
