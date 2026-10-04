@@ -16,9 +16,27 @@ import (
 
 func run() error {
 	if len(os.Args) < 2 {
-		return fmt.Errorf("usage: pptxdesign <inspect|asset-catalog|templates|template|template-reference|library-catalog|library-search|library-index|library-find|library-inspect|library-preview|library-fit|project|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
+		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-catalog|library-search|templates|template|build|inspect|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
 	}
 	command := os.Args[1]
+	if command == "render-native-worker" {
+		return runRenderWorker(os.Args[2:])
+	}
+	if command == "asset-gallery" {
+		return runAssetGallery(os.Args[2:])
+	}
+	if command == "source-inventory" {
+		return runSourceInventory(os.Args[2:])
+	}
+	if command == "library-authoring" {
+		return runLibraryAuthoring(os.Args[2:])
+	}
+	if command == "library-match" {
+		return runLibraryMatch(os.Args[2:])
+	}
+	if command == "render-doctor" {
+		return runRenderDoctor(os.Args[2:])
+	}
 	if command == "render" {
 		return runRender(os.Args[2:])
 	}

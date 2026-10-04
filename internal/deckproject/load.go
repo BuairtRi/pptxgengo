@@ -214,7 +214,7 @@ func (p *Project) validate() error {
 	if _, e := SafePath(p.Root, d.Toolchain.Lockfile); e != nil {
 		return p.fail("/toolchain/lockfile", "%v", e)
 	}
-	allowed := map[string]bool{"project": true, "audience": true, "outline": true, "sources": true, "claims": true, "decisions": true, "state": true}
+	allowed := map[string]bool{"project": true, "audience": true, "outline": true, "sources": true, "claims": true, "composition_log": true, "decisions": true, "state": true}
 	for k, path := range d.Context {
 		if filepath.Clean(path) == "state.json" && k != "state" {
 			return p.fail("/context/"+escape(k), "generated state.json is not an authored dependency; use context.state")
@@ -231,6 +231,20 @@ func (p *Project) validate() error {
 	}
 	for id, a := range d.Assets {
 		path := "/assets/" + escape(id)
+		if a.Focus != nil {
+			assets, _ := p.tree["assets"].(map[string]any)
+			asset, _ := assets[id].(map[string]any)
+			focus, _ := asset["focus"].(map[string]any)
+			if _, ok := focus["x"]; !ok {
+				return p.fail(path+"/focus", "focus requires explicit x and y")
+			}
+			if _, ok := focus["y"]; !ok {
+				return p.fail(path+"/focus", "focus requires explicit x and y")
+			}
+		}
+		if a.Focus != nil && (a.Focus.X < 0 || a.Focus.X > 1 || a.Focus.Y < 0 || a.Focus.Y > 1) {
+			return p.fail(path+"/focus", "focus x/y must be in [0,1]")
+		}
 		if !stableID.MatchString(id) || (a.Path == "") == (a.RegistryID == "") {
 			return p.fail(path, "asset requires valid ID and exactly one path or registry_id")
 		}

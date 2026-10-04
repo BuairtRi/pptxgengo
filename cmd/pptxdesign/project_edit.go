@@ -58,6 +58,9 @@ func runProjectEdit(args []string) error {
 	}
 	result, err := deckproject.EditSlides(p, edits, b, *engine)
 	if err != nil {
+		if strings.Contains(err.Error(), "binding.unsupported_field") {
+			return fmt.Errorf("%w; replace complete values/content/bindings for the new template (remove stale values.keys, or supply values: {} with complete content/bindings), or use project swap to review a mapping proposal", err)
+		}
 		return err
 	}
 	out := json.NewEncoder(os.Stdout)

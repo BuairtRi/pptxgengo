@@ -150,7 +150,7 @@ func EditSlides(p *Project, edits map[string]SlideEdit, bundle, engine string) (
 	if _, err = Compile(candidate, bundle, engine); err != nil {
 		return r, err
 	}
-	guard, err := SafePath(p.Root, ".deck-edit.lock")
+	guard, err := SafePath(p.Root, ".deck-source-mutation.lock")
 	if err != nil {
 		return r, err
 	}

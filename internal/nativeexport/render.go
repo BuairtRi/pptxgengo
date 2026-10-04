@@ -33,7 +33,10 @@ var pdfScript []byte
 type Options struct {
 	PPTX, Out               string
 	PDF, PNG, IncludeHidden bool
+	Slides, StagingRoot     string
+	ContactSheet            bool
 	Timeout                 time.Duration
+	taskID                  string
 }
 type Artifact struct {
 	Path   string `json:"path"`
@@ -42,15 +45,21 @@ type Artifact struct {
 	Height int    `json:"height,omitempty"`
 }
 type Receipt struct {
-	Renderer                string     `json:"renderer"`
-	Source                  Artifact   `json:"source"`
-	ReviewCopySHA256        string     `json:"review_copy_sha256"`
-	IncludeHidden           bool       `json:"include_hidden"`
-	HiddenSlidesMadeVisible []string   `json:"hidden_slides_made_visible"`
-	Slides                  int        `json:"source_slides"`
-	Pages                   int        `json:"exported_pages"`
-	PDF                     *Artifact  `json:"pdf,omitempty"`
-	PNGs                    []Artifact `json:"pngs,omitempty"`
+	Renderer                string        `json:"renderer"`
+	Source                  Artifact      `json:"source"`
+	ReviewCopySHA256        string        `json:"review_copy_sha256"`
+	IncludeHidden           bool          `json:"include_hidden"`
+	HiddenSlidesMadeVisible []string      `json:"hidden_slides_made_visible"`
+	Slides                  int           `json:"source_slides"`
+	Pages                   int           `json:"exported_pages"`
+	PDF                     *Artifact     `json:"pdf,omitempty"`
+	PNGs                    []Artifact    `json:"pngs,omitempty"`
+	PageMappings            []PageMapping `json:"page_mappings"`
+	SelectedSlides          []int         `json:"selected_slides"`
+	OmittedHiddenSlides     []int         `json:"omitted_hidden_slides"`
+	Staging                 string        `json:"staging_qualification"`
+	StagingPath             string        `json:"staging_path"`
+	ContactSheet            *Artifact     `json:"contact_sheet,omitempty"`
 }
 
 type runner func(context.Context, string, ...string) ([]byte, error)
@@ -68,8 +77,36 @@ func command(ctx context.Context, name string, args ...string) ([]byte, error) {
 	return output, nil
 }
 
+// Render uses the calling executable's private render-native-worker route,
+// which must dispatch to RenderWorker. The deadline bounds preparation and all
+// helper descendants; exact-task cleanup receives a separate five-second budget.
 func Render(ctx context.Context, opts Options) (*Receipt, error) {
-	return render(ctx, opts, command, runtime.GOOS)
+	if opts.Timeout <= 0 || runtime.GOOS != "darwin" || opts.PPTX == "" || opts.Out == "" || (!opts.PDF && !opts.PNG) {
+		return render(ctx, opts, nativeCommand, runtime.GOOS)
+	}
+	ctx, cancel := context.WithTimeout(ctx, opts.Timeout)
+	defer cancel()
+	taskID, err := newTaskID()
+	if err != nil {
+		return nil, err
+	}
+	data, err := workerProcess(ctx, workerRequest{Render: &opts, TaskID: taskID})
+	if err != nil {
+		// The parent knows the task directory before the worker creates it.
+		// Cleanup gets a separate short budget and can only target that task.
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 5*time.Second)
+		_, cleanupErr := workerProcess(cleanupCtx, workerRequest{Cleanup: &cleanupTask{StagingRoot: opts.StagingRoot, TaskID: taskID}})
+		cleanupCancel()
+		if cleanupErr != nil {
+			return nil, fmt.Errorf("%w; exact-task cleanup is unconfirmed: %v", err, cleanupErr)
+		}
+		return nil, err
+	}
+	var receipt Receipt
+	if err = json.Unmarshal(data, &receipt); err != nil {
+		return nil, fmt.Errorf("invalid native worker receipt: %w", err)
+	}
+	return &receipt, nil
 }
 func render(ctx context.Context, opts Options, run runner, platform string) (_ *Receipt, err error) {
 	if platform != "darwin" {
@@ -81,11 +118,13 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	if opts.Timeout <= 0 {
 		return nil, fmt.Errorf("timeout must be positive")
 	}
-	source, err := filepath.Abs(opts.PPTX)
+	ctx, cancel := context.WithTimeout(ctx, opts.Timeout)
+	defer cancel()
+	source, err := canonicalPath(opts.PPTX)
 	if err != nil {
 		return nil, err
 	}
-	out, err := filepath.Abs(opts.Out)
+	out, err := canonicalPath(opts.Out)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +132,7 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	if err != nil {
 		return nil, err
 	}
-	review, total, hidden, err := reviewCopy(original, opts.IncludeHidden)
+	review, total, hidden, mappings, err := selectedReview(original, opts.Slides, opts.IncludeHidden)
 	if err != nil {
 		return nil, err
 	}
@@ -109,11 +148,30 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 			_ = os.WriteFile(filepath.Join(out, "render-error.txt"), []byte(err.Error()+"\n"), 0644)
 		}
 	}()
-	work, err := os.MkdirTemp(out, ".native-work-")
+	staging, qualification, err := stagingDirectory(opts.StagingRoot)
 	if err != nil {
 		return nil, err
 	}
-	defer os.RemoveAll(work)
+	var work string
+	if opts.taskID != "" {
+		work = filepath.Join(staging, opts.taskID)
+		err = os.Mkdir(work, 0700)
+	} else {
+		work, err = os.MkdirTemp(staging, ".native-work-")
+	}
+	if err != nil {
+		return nil, err
+	}
+	cleanupConfirmed := true // no PowerPoint command has been sent yet
+	defer func() {
+		if cleanupConfirmed {
+			_ = os.RemoveAll(work)
+		}
+	}()
+	work, err = canonicalPath(work)
+	if err != nil {
+		return nil, err
+	}
 	taskName := filepath.Base(work) + ".pptx"
 	taskPath := filepath.Join(work, taskName)
 	scriptPath := filepath.Join(work, "export.applescript")
@@ -123,17 +181,21 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 			return nil, err
 		}
 	}
-	ctx, cancel := context.WithTimeout(ctx, opts.Timeout)
-	defer cancel()
-	pdfPath := filepath.Join(out, "deck.pdf")
+	pdfPath := filepath.Join(work, "deck.pdf")
 	seconds := max(1, int(opts.Timeout.Seconds()))
+	cleanupConfirmed = false
 	if _, err = run(ctx, "/usr/bin/osascript", scriptPath, taskPath, pdfPath, taskName, fmt.Sprint(seconds)); err != nil {
 		// Resolve the exact task-copy path again; never close by display name.
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-		_, _ = run(cleanupCtx, "/usr/bin/osascript", scriptPath, taskPath, pdfPath, taskName, "3", "close")
+		_, closeErr := run(cleanupCtx, "/usr/bin/osascript", scriptPath, taskPath, pdfPath, taskName, "3", "close")
 		cancel()
-		return nil, fmt.Errorf("PowerPoint PDF export failed (run from a logged-in macOS GUI session; allow terminal automation of PowerPoint): %w", err)
+		cleanupConfirmed = closeErr == nil
+		if closeErr != nil {
+			return nil, fmt.Errorf("%w; exact-task close is unconfirmed; task copy retained at %s: %v", exportFailure(err, taskPath), taskPath, closeErr)
+		}
+		return nil, exportFailure(err, taskPath)
 	}
+	cleanupConfirmed = true // the export script closes the exact task copy
 	pdfBytes, err := os.ReadFile(pdfPath)
 	if err != nil {
 		return nil, fmt.Errorf("PowerPoint returned without a PDF: %w", err)
@@ -142,10 +204,10 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 		return nil, fmt.Errorf("PowerPoint output is not a PDF")
 	}
 	mode := "inspect"
-	if opts.PNG {
+	if opts.PNG || opts.ContactSheet {
 		mode = "png"
 	}
-	metadata, err := run(ctx, "/usr/bin/swift", swiftPath, pdfPath, filepath.Join(out, "native-pages"), mode)
+	metadata, err := run(ctx, "/usr/bin/swift", swiftPath, pdfPath, filepath.Join(work, "native-pages"), mode)
 	if err != nil {
 		return nil, err
 	}
@@ -155,28 +217,42 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	if err = json.Unmarshal(metadata, &result); err != nil {
 		return nil, fmt.Errorf("PDFKit returned invalid metadata: %w", err)
 	}
-	expected := total
-	if !opts.IncludeHidden {
-		expected -= len(hidden)
-	}
+	expected := len(mappings)
 	if result.Pages != expected {
 		return nil, fmt.Errorf("PowerPoint exported %d pages; expected %d (source %d slides, %d hidden)", result.Pages, expected, total, len(hidden))
 	}
-	receipt := &Receipt{Renderer: "Microsoft PowerPoint (local native PDF); macOS PDFKit PNG", Source: Artifact{Path: source, SHA256: hash(original)}, ReviewCopySHA256: hash(review), IncludeHidden: opts.IncludeHidden, HiddenSlidesMadeVisible: []string{}, Slides: total, Pages: result.Pages}
+	selected, _ := ParseSlides(opts.Slides, total)
+	receipt := &Receipt{Renderer: "Microsoft PowerPoint (local native PDF); macOS PDFKit PNG", Source: Artifact{Path: source, SHA256: hash(original)}, ReviewCopySHA256: hash(review), IncludeHidden: opts.IncludeHidden, HiddenSlidesMadeVisible: []string{}, Slides: total, Pages: result.Pages, PageMappings: mappings, SelectedSlides: selected, Staging: qualification + "; qualified by this successful export", StagingPath: staging}
 	if opts.IncludeHidden {
 		receipt.HiddenSlidesMadeVisible = hidden
 	}
+	receipt.OmittedHiddenSlides = []int{}
+	if !opts.IncludeHidden {
+		exported := map[int]bool{}
+		for _, mapping := range mappings {
+			exported[mapping.SourceSlide] = true
+		}
+		for _, number := range selected {
+			if !exported[number] {
+				receipt.OmittedHiddenSlides = append(receipt.OmittedHiddenSlides, number)
+			}
+		}
+	}
 	if opts.PDF {
 		receipt.PDF = &Artifact{Path: "deck.pdf", SHA256: hash(pdfBytes)}
-	} else {
-		if err = os.Remove(pdfPath); err != nil {
+		if err = os.WriteFile(filepath.Join(out, "deck.pdf"), pdfBytes, 0644); err != nil {
 			return nil, err
 		}
 	}
-	if opts.PNG {
+	if opts.PNG || opts.ContactSheet {
+		if opts.PNG {
+			if err = os.Mkdir(filepath.Join(out, "native-pages"), 0755); err != nil {
+				return nil, err
+			}
+		}
 		for page := 1; page <= result.Pages; page++ {
-			relative := fmt.Sprintf("native-pages/slide-%03d.png", page)
-			data, e := os.ReadFile(filepath.Join(out, filepath.FromSlash(relative)))
+			relative := fmt.Sprintf("native-pages/slide-%03d.png", mappings[page-1].SourceSlide)
+			data, e := os.ReadFile(filepath.Join(work, "native-pages", fmt.Sprintf("slide-%03d.png", page)))
 			if e != nil {
 				return nil, e
 			}
@@ -184,7 +260,20 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 			if e != nil || format != "png" {
 				return nil, fmt.Errorf("invalid PNG page %d: %v", page, e)
 			}
-			receipt.PNGs = append(receipt.PNGs, Artifact{Path: relative, SHA256: hash(data), Width: config.Width, Height: config.Height})
+			if opts.PNG {
+				if err = os.WriteFile(filepath.Join(out, filepath.FromSlash(relative)), data, 0644); err != nil {
+					return nil, err
+				}
+				receipt.PageMappings[page-1].PNG = relative
+				receipt.PNGs = append(receipt.PNGs, Artifact{Path: relative, SHA256: hash(data), Width: config.Width, Height: config.Height})
+			}
+		}
+		if opts.ContactSheet {
+			artifact, e := createContactSheet(work, out, mappings)
+			if e != nil {
+				return nil, e
+			}
+			receipt.ContactSheet = artifact
 		}
 	}
 	// Detect even concurrent external source edits; the command never opens it.
@@ -194,6 +283,9 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	}
 	if !bytes.Equal(original, after) {
 		return nil, fmt.Errorf("source changed during rendering; no successful receipt issued")
+	}
+	if err = ctx.Err(); err != nil {
+		return nil, fmt.Errorf("native render expired; no successful receipt issued: %w", err)
 	}
 	data, err := json.MarshalIndent(receipt, "", "  ")
 	if err != nil {

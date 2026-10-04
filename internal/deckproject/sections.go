@@ -354,7 +354,7 @@ func mutateSections(p *Project, change SectionChange, sections []wmdesign.Sectio
 		}
 	}
 	change.Sections = ListSections(candidate)
-	lockPath, e := SafePath(p.Root, ".deck-section-mutation.lock")
+	lockPath, e := SafePath(p.Root, ".deck-source-mutation.lock")
 	if e != nil {
 		return change, e
 	}

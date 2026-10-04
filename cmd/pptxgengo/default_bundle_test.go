@@ -95,3 +95,18 @@ func TestDiscoveryDefaultsUseOnlyLatestLibraryResources(t *testing.T) {
 		t.Fatalf("explicit discovery paths changed: %v %v", got, err)
 	}
 }
+
+func TestNativeAndEngineeringCommandsPassThroughWithoutDefaults(t *testing.T) {
+	commands := [][]string{
+		{"render-doctor", "--input", "source.pptx", "--out", "doctor"},
+		{"asset-gallery", "--out", "gallery", "--kind", "photo"},
+		{"source-inventory", "--in", "source.pptx", "--out", "inventory"},
+		{"render-native-worker", "--worker", "--request", "request.json"},
+	}
+	for _, input := range commands {
+		got, err := designArgs("/missing-release", input)
+		if err != nil || !reflect.DeepEqual(got, input) {
+			t.Errorf("%s received wrapper defaults: %v (%v)", input[0], got, err)
+		}
+	}
+}

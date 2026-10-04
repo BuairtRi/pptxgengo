@@ -1,7 +1,15 @@
 # Current West Monroe presentation release
 
-The current source package is **0.1.0-local.11/v5**. It adds editable slide files,
-separate Markdown notes, stock content scaffolds and native PDF/PNG export.
+The current source package is **0.1.0-local.12/v5**. It adds content-first template
+matching, source-pinned authoring aliases and advisory capacity, grouped asset
+discovery and a browsable asset gallery, slide operations and safe swap proposals,
+native rendering diagnostics/subsets/contact sheets, immutable native review
+attachments, staged HTML reviewer packets, and compact source inventories.
+
+See the [engineering command reference](../docs/engineering-cli.md) and
+[qualification record](../docs/engineering-waves.md). Metadata inference is
+distinct from semantic review. Native export still requires an eligible macOS
+GUI caller; this agent session returns Apple Event errors −10827/−600.
 
 The retained source library is **v5**: 587 templates (586 active), pinned to
 `d83bd58a9f9de68ebd8d6b3c9b0272c16ed516cf`. Every source specimen has an accepted
@@ -55,6 +63,9 @@ Staging does not change command or skill links. Running without `--stage-only`
 installs `release/VERSION` and switches those links. Existing release directories
 are never overwritten; publishing another version requires a new version value.
 Repository cleanup does not update an already installed release.
+
+Use `scripts/install-local-release.sh --cli-only` to update the globally installed
+CLI while preserving the operator's existing presentation skill installation.
 
 Required: Go 1.27.1+, Python 3 and registered branding files (set
 `WMDS_BRANDING_ROOT` if they are outside `~/Documents/branding`). Native review

@@ -58,3 +58,35 @@ func TestCatalogComponentsGiveActionableDiscovery(t *testing.T) {
 		t.Fatalf("catalog usage advertises unavailable gallery: %v", err)
 	}
 }
+
+func TestCatalogAssetsPrintUsesInstalledAssetGallery(t *testing.T) {
+	root := t.TempDir()
+	gallery := filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "assets", "index.html")
+	if err := os.MkdirAll(filepath.Dir(gallery), 0700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(gallery, []byte("asset gallery fixture"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	output, err := os.CreateTemp(t.TempDir(), "stdout")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer output.Close()
+	previous := os.Stdout
+	os.Stdout = output
+	defer func() { os.Stdout = previous }()
+	if err := runCatalog(root, []string{"--assets", "--print"}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := output.Seek(0, 0); err != nil {
+		t.Fatal(err)
+	}
+	data, err := io.ReadAll(output)
+	if err != nil || strings.TrimSpace(string(data)) != gallery {
+		t.Fatalf("asset catalog path %q; want %q: %v", data, gallery, err)
+	}
+	if err := runCatalog(root, []string{"--assets", "--templates"}); err == nil || !strings.Contains(err.Error(), "choose one catalog gallery") {
+		t.Fatalf("conflicting asset selector accepted: %v", err)
+	}
+}

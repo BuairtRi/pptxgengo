@@ -139,7 +139,7 @@ func TestRenderHermetic(t *testing.T) {
 		t.Fatal(name)
 		return nil, nil
 	}
-	receipt, e := render(context.Background(), Options{PPTX: source, Out: out, PDF: true, PNG: true, IncludeHidden: true, Timeout: time.Minute}, fake, "darwin")
+	receipt, e := render(context.Background(), Options{PPTX: source, Out: out, PDF: true, PNG: true, IncludeHidden: true, Timeout: time.Minute, StagingRoot: filepath.Join(dir, "stage")}, fake, "darwin")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -185,7 +185,7 @@ func TestRenderFailures(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			out := filepath.Join(t.TempDir(), "out")
-			_, e := render(context.Background(), Options{PPTX: source, Out: out, PDF: true, Timeout: time.Millisecond}, test.run, test.platform)
+			_, e := render(context.Background(), Options{PPTX: source, Out: out, PDF: true, Timeout: time.Millisecond, StagingRoot: filepath.Join(t.TempDir(), "stage")}, test.run, test.platform)
 			if e == nil || !strings.Contains(e.Error(), test.want) {
 				t.Fatal(e)
 			}
@@ -226,7 +226,7 @@ func TestNativeCleanupUsesExactTaskPath(t *testing.T) {
 		}
 		return nil, nil
 	}
-	_, err := render(context.Background(), Options{PPTX: source, Out: filepath.Join(t.TempDir(), "out"), PDF: true, Timeout: time.Minute}, fake, "darwin")
+	_, err := render(context.Background(), Options{PPTX: source, Out: filepath.Join(t.TempDir(), "out"), PDF: true, Timeout: time.Minute, StagingRoot: filepath.Join(t.TempDir(), "stage")}, fake, "darwin")
 	if err == nil || calls != 2 {
 		t.Fatalf("expected failed export and exact-path cleanup: %v, %d calls", err, calls)
 	}
@@ -237,7 +237,7 @@ func TestNativeCleanupUsesExactTaskPath(t *testing.T) {
 	// Both export and best-effort cleanup share the path guard. PowerPoint's
 	// display-name extension and active-document state cannot select a deck.
 	script := string(exportScript)
-	for _, required := range []string{"my normalizePath(sourceFile)", "my normalizePath(full name of candidate) is expectedPath", "if matchCount is not 1 then error", "if closeOnly and matchCount is 0 then return"} {
+	for _, required := range []string{"my fileIdentity(sourceFile)", "my fileIdentity(full name of candidate) is expectedIdentity", "if matchCount is not 1 then error", "if closeOnly and matchCount is 0 then return", "NSFileSystemFileNumber", "NSFileSystemNumber", "stringByResolvingSymlinksInPath", "repeat with attempt from 1 to 40", "with timeout of 12 seconds"} {
 		if !strings.Contains(script, required) {
 			t.Fatalf("missing identity guard %q", required)
 		}

@@ -85,13 +85,13 @@ func TestStockEditableSlideKeepsSharedIdentityAndSuppliedCopy(t *testing.T) {
 	if content["headline"] != "Who we interviewed" || authored["notes"] != slide.Notes {
 		t.Fatal("headline or notes changed")
 	}
-	table := content["table_1"].(map[string]any)
+	table := content["tables"].(map[string]any)["item_01"].(map[string]any)
 	row := table["rows"].(map[string]any)["item_01"].(map[string]any)
-	if row["name"] != "Sam" || row["role"] != "Director" {
+	if row["person"] != "Sam" || row["role"] != "Director" {
 		t.Fatalf("interview fields were not exposed as supplied readable values: %#v", row)
 	}
 	bindings := authored["bindings"].(map[string]any)
-	if bindings["/table_1/rows/item_01/name"] != "/slots/node01.rows.item01.n" || len(bindings) != len(def.Slots) {
+	if bindings["/tables/item_01/rows/item_01/person"] != "/slots/node01.rows.item01.n" || len(bindings) != len(def.Slots) {
 		t.Fatal("bindings do not cover exact original stock slots")
 	}
 	if _, exists := authored["local_templates"]; exists {

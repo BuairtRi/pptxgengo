@@ -80,7 +80,17 @@ func collectLibraryEntities(source *Source, options LibraryIndexOptions) ([]Libr
 		entities = append(entities, entity)
 	}
 	for _, asset := range PrimitiveAssetCatalog() {
-		entity := LibraryEntity{ID: "wmds/asset/" + asset.Key, Namespace: "wmds", Kind: "asset", Key: asset.Key, Name: asset.Key, Purpose: "Registered original brand asset: " + asset.Path, Lifecycle: "active", SourceRevision: source.Revision, SourceFile: asset.Path, SourceSHA256: asset.SHA256, Definition: indexJSON(asset), SupportedAdaptations: []string{"Use the registered asset ID in supported media/icon/artwork fields; crop metadata describes a registered variant. Original bytes are verified when used."}}
+		meta := assetMetadataFor(asset.Key, asset.Path)
+		definition := struct {
+			PrimitiveAssetReference
+			Kind        string   `json:"kind"`
+			Tags        []string `json:"tags"`
+			People      string   `json:"people"`
+			Industry    []string `json:"industry,omitempty"`
+			Setting     []string `json:"setting,omitempty"`
+			Orientation string   `json:"orientation,omitempty"`
+		}{asset, meta.kind, meta.tags, meta.people, meta.industry, meta.setting, meta.orientation}
+		entity := LibraryEntity{ID: "wmds/asset/" + asset.Key, Namespace: "wmds", Kind: "asset", Key: asset.Key, Name: meta.name, Purpose: meta.description, Family: meta.kind, Lifecycle: "active", SourceRevision: source.Revision, SourceFile: asset.Path, SourceSHA256: asset.SHA256, Definition: indexJSON(definition), Capacity: indexJSON(map[string]any{"basis": "curated_asset_metadata", "tags": meta.tags, "people": meta.people, "industry": meta.industry, "setting": meta.setting, "orientation": meta.orientation}), SupportedAdaptations: []string{"Use the registered asset ID in supported media/icon/artwork fields; crop metadata describes a registered variant. Original bytes are verified when used."}}
 		entity.Discovery = LibraryDiscovery{Schema: LibraryDiscoverySchema, Basis: "pinned_native_asset_registry", ContentRoles: []string{"image"}, VisualForms: []string{"image"}, Capability: LibraryCapability{ContentAdapter: "registered_asset", BuildForQuery: "not_executed", SpecimenReview: "not_loaded_by_discovery", ContentEnvelope: "not_applicable", CapacityBasis: "registered_original_not_layout_capacity"}}
 		entities = append(entities, entity)
 	}

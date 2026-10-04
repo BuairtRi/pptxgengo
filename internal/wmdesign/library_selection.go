@@ -1,14 +1,23 @@
 package wmdesign
 
-import "strings"
+import (
+	"encoding/json"
+	"path/filepath"
+	"strings"
+)
 
 // Selection cards expose the visual and semantic contract without source
 // specimen copy. Bindings identify the editable values belonging to each zone.
 type LibrarySelectionSlot struct {
-	Name          string `json:"name"`
-	Kind          string `json:"kind"`
-	SourcePointer string `json:"source_pointer"`
-	AllowEmpty    bool   `json:"allow_empty"`
+	Name           string              `json:"name"`
+	Kind           string              `json:"kind"`
+	SourcePointer  string              `json:"source_pointer"`
+	AllowEmpty     bool                `json:"allow_empty"`
+	Alias          string              `json:"alias,omitempty"`
+	Role           string              `json:"role,omitempty"`
+	Description    string              `json:"description,omitempty"`
+	Classification string              `json:"classification,omitempty"`
+	Capacity       LibrarySlotCapacity `json:"capacity"`
 }
 
 type LibrarySelectionZone struct {
@@ -32,6 +41,7 @@ type LibrarySelectionCard struct {
 	ValueSchema     *LibraryValueSchema    `json:"typed_values,omitempty"`
 	Preparation     string                 `json:"preparation,omitempty"`
 	Policy          []string               `json:"policy"`
+	Authoring       *LibraryAuthoring      `json:"authoring,omitempty"`
 }
 
 func (index *LibraryIndex) SelectionCard(id string) (LibrarySelectionCard, error) {
@@ -51,9 +61,19 @@ func (index *LibraryIndex) SelectionCard(id string) (LibrarySelectionCard, error
 		}
 	}
 	if entity.Template != nil {
+		metadata, err := index.entityAuthoringMetadata(entity)
+		if err != nil {
+			return card, err
+		}
+		card.Authoring = &metadata
+		byName := map[string]LibraryAuthoringSlot{}
+		for _, slot := range metadata.Slots {
+			byName[slot.Name] = slot
+		}
 		card.Arrays, card.ValueSchema = entity.Template.Arrays, entity.Template.ValueSchema
 		for _, slot := range entity.Template.Slots {
-			card.Slots = append(card.Slots, LibrarySelectionSlot{slot.Name, slot.Kind, slot.SourcePointer, slot.AllowEmpty})
+			info := byName[slot.Name]
+			card.Slots = append(card.Slots, LibrarySelectionSlot{Name: slot.Name, Kind: slot.Kind, SourcePointer: slot.SourcePointer, AllowEmpty: slot.AllowEmpty, Alias: info.Alias, Role: info.Role, Description: info.Description, Classification: info.Classification, Capacity: info.Capacity})
 		}
 	}
 	for _, zone := range entity.Discovery.Zones {
@@ -66,6 +86,47 @@ func (index *LibraryIndex) SelectionCard(id string) (LibrarySelectionCard, error
 		card.Zones = append(card.Zones, mapped)
 	}
 	return card, nil
+}
+
+// Older indexes retain the pinned source slide even before authoring metadata
+// was added. Hydrate from that source rather than declaring its slots unknown.
+func (index *LibraryIndex) entityAuthoringMetadata(entity LibraryEntity) (LibraryAuthoring, error) {
+	def := *entity.Template
+	if def.Authoring == nil {
+		var stored struct {
+			SourceSlide json.RawMessage `json:"source_slide"`
+		}
+		if err := json.Unmarshal(entity.Definition, &stored); err != nil {
+			return LibraryAuthoring{}, err
+		}
+		def.RawSlide = stored.SourceSlide
+		obj, err := libraryObject(def.RawSlide)
+		if err != nil {
+			return LibraryAuthoring{}, err
+		}
+		source, err := Load(index.Options.Bundle, index.Options.Source)
+		if err != nil {
+			return LibraryAuthoring{}, err
+		}
+		metadata, err := libraryAuthoringMetadata(def, obj, source)
+		if err != nil {
+			return LibraryAuthoring{}, err
+		}
+		def.Authoring = &metadata
+	}
+	metadata := *def.Authoring
+	metadata.Slots = append([]LibraryAuthoringSlot(nil), metadata.Slots...)
+	typography, err := NewTypography(filepath.Join(index.Options.Bundle, "fonts"))
+	if err != nil {
+		return metadata, err
+	}
+	for i := range metadata.Slots {
+		metadata.Slots[i].Capacity, err = EstimateLibrarySlotCapacity(typography, metadata.Slots[i].Capacity)
+		if err != nil {
+			return metadata, err
+		}
+	}
+	return metadata, nil
 }
 
 type LibraryFindSummaryHit struct {

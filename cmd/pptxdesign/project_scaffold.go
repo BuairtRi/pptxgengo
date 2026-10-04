@@ -37,11 +37,7 @@ func runProjectScaffold(args []string) error {
 		if validLockedBundle(*bundle) {
 			b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
 		}
-		result, err := deckproject.StockScaffoldSlide(b, *key, *id, *year)
-		if err != nil {
-			return err
-		}
-		data, err := deckproject.MarshalSlideSource(result)
+		data, err := deckproject.StockScaffoldSlideSource(b, *key, *id, *year)
 		if err != nil {
 			return err
 		}

@@ -17,12 +17,20 @@ type Reference struct {
 	Revision string `json:"revision,omitempty"`
 }
 type Asset struct {
-	RegistryID        string `json:"registry_id,omitempty"`
-	Path              string `json:"path,omitempty"`
-	SHA256            string `json:"sha256,omitempty"`
-	Description       string `json:"description,omitempty"`
-	DerivedFrom       string `json:"derived_from,omitempty"`
-	DerivationReceipt string `json:"derivation_receipt,omitempty"`
+	RegistryID        string      `json:"registry_id,omitempty"`
+	Path              string      `json:"path,omitempty"`
+	SHA256            string      `json:"sha256,omitempty"`
+	Description       string      `json:"description,omitempty"`
+	DerivedFrom       string      `json:"derived_from,omitempty"`
+	DerivationReceipt string      `json:"derivation_receipt,omitempty"`
+	Focus             *AssetFocus `json:"focus,omitempty"`
+}
+
+// Focus is normalized source-image metadata for composition decisions. Rendering
+// still follows the slide's explicit fit/crop contract.
+type AssetFocus struct {
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
 }
 type Slide struct {
 	ID           string         `json:"id"`

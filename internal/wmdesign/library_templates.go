@@ -109,6 +109,7 @@ type LibraryTemplate struct {
 	AdvisoryBudget      json.RawMessage     `json:"source_advisory_budget,omitempty"`
 	AdvisorySlots       json.RawMessage     `json:"source_advisory_slots,omitempty"`
 	Discovery           LibraryDiscovery    `json:"discovery"`
+	Authoring           *LibraryAuthoring   `json:"authoring,omitempty"`
 	ContentContract     string              `json:"content_contract"`
 	ValueSchema         *LibraryValueSchema `json:"value_schema,omitempty"`
 	Slots               []LibrarySlot       `json:"slots,omitempty"`
@@ -260,6 +261,11 @@ func libraryCatalog(s *Source) ([]LibraryTemplate, error) {
 				def.Policy = []string{"This template retains its typed v2 values API; the library slots/keys projection is not accepted.", "All declared typed content is required; geometry/base styles remain frozen.", "Binding availability does not establish successful rendering, native review or a qualified envelope."}
 			}
 			def.Discovery = libraryDiscovery(def, obj)
+			authoring, err := libraryAuthoringMetadata(def, obj, s)
+			if err != nil {
+				return nil, err
+			}
+			def.Authoring = &authoring
 			out = append(out, def)
 		}
 	}

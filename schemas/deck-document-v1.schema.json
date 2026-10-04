@@ -99,6 +99,9 @@
         "claims": {
           "$ref": "#/$defs/relativePath"
         },
+        "composition_log": {
+          "$ref": "#/$defs/relativePath"
+        },
         "decisions": {
           "$ref": "#/$defs/relativePath"
         },
@@ -123,8 +126,12 @@
       },
       "additionalProperties": {
         "anyOf": [
-          {"$ref": "#/$defs/localTemplate"},
-          {"$ref": "#/$defs/relativePath"}
+          {
+            "$ref": "#/$defs/localTemplate"
+          },
+          {
+            "$ref": "#/$defs/relativePath"
+          }
         ]
       }
     },
@@ -133,8 +140,12 @@
       "minItems": 1,
       "items": {
         "anyOf": [
-          {"$ref": "#/$defs/slide"},
-          {"$ref": "#/$defs/relativePath"}
+          {
+            "$ref": "#/$defs/slide"
+          },
+          {
+            "$ref": "#/$defs/relativePath"
+          }
         ]
       }
     },
@@ -275,6 +286,27 @@
         }
       ]
     },
+    "assetFocus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "$comment": "Normalized original-image focus for composition decisions; explicit slide fit/crop remains authoritative."
+    },
     "asset": {
       "oneOf": [
         {
@@ -286,6 +318,9 @@
           "properties": {
             "registry_id": {
               "$ref": "#/$defs/definitionId"
+            },
+            "focus": {
+              "$ref": "#/$defs/assetFocus"
             },
             "sha256": {
               "$ref": "#/$defs/sha256"
@@ -310,6 +345,9 @@
             },
             "description": {
               "type": "string"
+            },
+            "focus": {
+              "$ref": "#/$defs/assetFocus"
             },
             "derived_from": {
               "$ref": "#/$defs/stableId"
@@ -358,7 +396,9 @@
         },
         "content": {
           "type": "object",
-          "additionalProperties": {"$ref": "#/$defs/jsonValue"}
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
         },
         "bindings": {
           "type": "object",
@@ -366,7 +406,10 @@
           "propertyNames": {
             "pattern": "^(?:[A-Za-z0-9][A-Za-z0-9._-]{0,119}|/.*)$"
           },
-          "additionalProperties": {"type": "string", "pattern": "^/"}
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^/"
+          }
         },
         "brief": {
           "$ref": "#/$defs/relativePath"
@@ -385,13 +428,43 @@
           "type": "string",
           "maxLength": 1048576
         },
-        "notes_file": {"$ref": "#/$defs/relativePath"}
+        "notes_file": {
+          "$ref": "#/$defs/relativePath"
+        }
       },
       "allOf": [
-        {"anyOf": [{"required": ["values"]}, {"required": ["content", "bindings"]}]},
-        {"not": {"required": ["notes", "notes_file"]}}
+        {
+          "anyOf": [
+            {
+              "required": [
+                "values"
+              ]
+            },
+            {
+              "required": [
+                "content",
+                "bindings"
+              ]
+            }
+          ]
+        },
+        {
+          "not": {
+            "required": [
+              "notes",
+              "notes_file"
+            ]
+          }
+        }
       ],
-      "dependentRequired": {"content": ["bindings"], "bindings": ["content"]},
+      "dependentRequired": {
+        "content": [
+          "bindings"
+        ],
+        "bindings": [
+          "content"
+        ]
+      },
       "$comment": "Values must satisfy the resolved template content schema. Required slots never default to illustrative source copy. Slide IDs must be unique across this deck."
     },
     "zone": {

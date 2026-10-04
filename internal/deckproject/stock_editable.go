@@ -72,11 +72,13 @@ func StockEditableSlide(slide Slide, def wmdesign.LibraryTemplate) (map[string]a
 		return nil, fmt.Errorf("stock slide %s requires supplied values", slide.ID)
 	}
 	content, bindings := map[string]any{}, map[string]any{}
-	var source map[string]any
-	if len(def.RawSlide) > 0 {
-		if err := json.Unmarshal(def.RawSlide, &source); err != nil {
-			return nil, err
-		}
+	metadata, err := wmdesign.LibraryAuthoringMetadata(def)
+	if err != nil {
+		return nil, err
+	}
+	semantic := map[string]wmdesign.LibraryAuthoringSlot{}
+	for _, slot := range metadata.Slots {
+		semantic[slot.Name] = slot
 	}
 	if raw, exists := values["slots"]; exists && len(def.Slots) > 0 {
 		slots, ok := raw.(map[string]any)
@@ -90,7 +92,14 @@ func StockEditableSlide(slide Slide, def wmdesign.LibraryTemplate) (map[string]a
 			if !present {
 				continue
 			}
-			parts := stockContentPath(slot, source, def, slots)
+			info, exists := semantic[slot.Name]
+			if !exists {
+				return nil, fmt.Errorf("stock content metadata missing: %s", slot.Name)
+			}
+			if info.Classification == "decorative" && value == "" {
+				continue
+			}
+			parts := strings.Split(strings.TrimPrefix(info.Alias, "/"), "/")
 			pointer := "/" + strings.Join(parts, "/")
 			if _, duplicate := bindings[pointer]; duplicate {
 				parts = []string{"additional_content", stockFieldName(slot.Name)}
@@ -103,13 +112,16 @@ func StockEditableSlide(slide Slide, def wmdesign.LibraryTemplate) (map[string]a
 				return nil, fmt.Errorf("stock content %s: %w", slot.Name, err)
 			}
 			bindings[pointer] = "/slots/" + escape(slot.Name)
+			delete(slots, slot.Name)
 		}
 		for name := range slots {
 			if !known[name] {
 				return nil, fmt.Errorf("stock slide %s has undeclared slot %s", slide.ID, name)
 			}
 		}
-		delete(values, "slots")
+		if len(slots) == 0 {
+			delete(values, "slots")
+		}
 	} else {
 		// Typed templates already have human-readable arrays and field names.
 		// Keep technical stable keys and navigation beside the bindings.

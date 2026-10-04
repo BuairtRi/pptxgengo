@@ -23,6 +23,7 @@ func runLibraryIndex(command string, args []string) error {
 	id := f.String("id", "", "exact entity ID or unique modern canonical key")
 	query := f.String("query", "", "soft scenario query")
 	kinds := f.String("kinds", "", "explicit comma-separated entity-kind filter")
+	assetKind := f.String("asset-kind", "all", "asset summary filter: all, icon, photo, graphic, logo")
 	namespace := f.String("namespace", "", "explicit wmds or legacy namespace filter")
 	roles := f.String("roles", "", "comma-separated soft content-role hints")
 	structures := f.String("structures", "", "comma-separated soft structural hints")
@@ -39,7 +40,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	allowed := map[string]map[string]bool{
 		"library-index":   {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "out": true},
-		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "query": true, "kinds": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "engine": true, "summary": true},
+		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "query": true, "kinds": true, "asset-kind": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "engine": true, "summary": true},
 		"library-inspect": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true, "summary": true},
 		"library-preview": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true},
 		"library-fit":     {"bundle": true, "source": true, "engine": true, "spec": true, "out": true},
@@ -55,6 +56,31 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	if f.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
+	}
+	if command == "library-find" && *summary && *kinds == "asset" {
+		if *limit < 1 || *limit > 100 {
+			return fmt.Errorf("--limit must be 1..100")
+		}
+		if *namespace != "" && *namespace != "wmds" {
+			return fmt.Errorf("asset summaries require namespace wmds")
+		}
+		if *roles != "" || *structures != "" || *forms != "" || *items != 0 || *itemRole != "" {
+			return fmt.Errorf("asset summaries use --query and --asset-kind; template structure filters are unsupported")
+		}
+		result, err := wmdesign.AssetSelections(*query, *assetKind, *limit)
+		if err != nil {
+			return err
+		}
+		return json.NewEncoder(os.Stdout).Encode(map[string]any{"schema": "pptxgengo.asset-selection.v1", "matches": result, "policy": []string{"Uses the installed asset registry and verified registered originals; template SQLite, bundle and gallery filters do not select an asset snapshot.", "Icon color variants are grouped; preview MIME identifies original SVG or raster format."}})
+	}
+	var assetFilter bool
+	f.Visit(func(value *flag.Flag) {
+		if value.Name == "asset-kind" {
+			assetFilter = true
+		}
+	})
+	if assetFilter {
+		return fmt.Errorf("--asset-kind requires library-find --kinds asset --summary")
 	}
 	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
 		*bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)

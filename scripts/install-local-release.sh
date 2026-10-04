@@ -7,12 +7,14 @@ bundle_revision=v5
 catalog_input="$repo_root/library/wm-design-system/v5/catalog"
 verification_input=""
 stage_only=false
+install_skill=true
 stage_destination=""
 release_parent="${HOME}/.local/share/pptxgengo/releases"
 launcher="${HOME}/.local/bin/pptxgengo"
 skill_link="${HOME}/.codex/skills/west-monroe-presentations"
-usage() { echo "usage: scripts/install-local-release.sh [--stage-only NEW_DIRECTORY] [--bundle v5] [--catalog DIRECTORY] [--version VERSION] [--verification RECEIPT]" >&2; }
+usage() { echo "usage: scripts/install-local-release.sh [--cli-only] [--stage-only NEW_DIRECTORY] [--bundle v5] [--catalog DIRECTORY] [--version VERSION] [--verification RECEIPT]" >&2; }
 while [[ $# -gt 0 ]]; do
+  if [[ "$1" == --cli-only ]]; then install_skill=false; shift; continue; fi
   if [[ $# -lt 2 ]]; then usage; exit 1; fi
   case "$1" in
     --stage-only) stage_only=true; stage_destination="$2" ;;
@@ -37,7 +39,7 @@ if [[ "$stage_only" == true ]]; then
 fi
 if [[ -e "$release_dir" || -L "$release_dir" ]]; then echo "release already exists: $release_dir" >&2; exit 1; fi
 if [[ "$stage_only" == false && -e "$launcher" && ! -L "$launcher" ]]; then echo "launcher exists and is not a symlink: $launcher" >&2; exit 1; fi
-if [[ "$stage_only" == false && -e "$skill_link" && ! -L "$skill_link" ]]; then echo "skill path exists and is not a symlink: $skill_link" >&2; exit 1; fi
+if [[ "$stage_only" == false && "$install_skill" == true && -e "$skill_link" && ! -L "$skill_link" ]]; then echo "skill path exists and is not a symlink: $skill_link" >&2; exit 1; fi
 
 # Gallery labels identify the original export; source pins identify the library.
 python3 - "$repo_root/library/wm-design-system/v5" "$catalog_input" "$verification_input" <<'PY'
@@ -99,6 +101,7 @@ for path in ('skills/west-monroe-presentations', 'schemas', 'examples/deck-proje
     shutil.copytree(src / path, dst / path)
 for path in ('release/README.md', 'release/VERSION', 'library/README.md', 'cmd/pptxdesign/README.md',
              'internal/deckproject/README.md', 'docs/semantic-template-discovery.md',
+             'docs/engineering-cli.md', 'docs/engineering-waves.md', 'docs/engineering-new-templates.md',
              'docs/skill-planning/deck-source-contract.md', 'docs/skill-planning/catalog-discovery-contract.md',
              'scripts/build-wmds-production-gallery.py', 'scripts/export-powerpoint.applescript',
              'scripts/render-pdf.swift', 'scripts/render-contact-sheet.swift'):
@@ -129,6 +132,7 @@ for asset in assets:
 (dst / 'branding/registry.json').write_text(json.dumps(assets, indent=2) + '\n')
 PY
 "$stage/bin/pptxdesign" library-index --bundle "$stage/library/wm-design-system/v5" --gallery "$stage/library/wm-design-system/v5/catalog" --out "$stage/library/wm-design-system/v5/library.sqlite" >/dev/null
+WMDS_BRANDING_ROOT="$stage/branding" "$stage/bin/pptxdesign" asset-gallery --out "$stage/library/wm-design-system/v5/catalog/assets" >/dev/null
 python3 - "$stage" "$version" "$release_dir" <<'PY'
 import hashlib, json, sqlite3, subprocess, sys
 from pathlib import Path
@@ -161,9 +165,12 @@ PY
 mv "$stage" "$release_dir"
 trap - EXIT
 if [[ "$stage_only" == true ]]; then echo "staged $version at $release_dir"; exit 0; fi
-mkdir -p "$(dirname "$launcher")" "$(dirname "$skill_link")"
+mkdir -p "$(dirname "$launcher")"
 ln -s "$release_dir/bin/pptxgengo" "${launcher}.tmp.$$"
 mv -f "${launcher}.tmp.$$" "$launcher"
-ln -s "$release_dir/skills/west-monroe-presentations" "${skill_link}.tmp.$$"
-mv -fh "${skill_link}.tmp.$$" "$skill_link"
+if [[ "$install_skill" == true ]]; then
+  mkdir -p "$(dirname "$skill_link")"
+  ln -s "$release_dir/skills/west-monroe-presentations" "${skill_link}.tmp.$$"
+  mv -fh "${skill_link}.tmp.$$" "$skill_link"
+fi
 echo "installed $version at $release_dir"

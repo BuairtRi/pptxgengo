@@ -224,6 +224,9 @@ func ReadLock(p *Project) (Lock, []byte, error) {
 	return l, b, nil
 }
 func Check(p *Project, bundle, engine string) (Compilation, error) {
+	if e := ValidateEditorial(p); e != nil {
+		return Compilation{}, e
+	}
 	l, _, e := ReadLock(p)
 	if e != nil {
 		return Compilation{}, e
@@ -314,6 +317,21 @@ func nonce() string {
 }
 func dependencies(p *Project) (map[string]string, error) {
 	m := map[string]string{"deck:id": digest([]byte(p.Document.ID)), "deck:order": ""}
+	composition, err := compositionPath(p)
+	if err != nil {
+		return nil, err
+	}
+	if composition != "" && p.Document.Context["composition_log"] == "" {
+		path, e := SafePath(p.Root, composition)
+		if e != nil {
+			return nil, e
+		}
+		data, e := os.ReadFile(path)
+		if e != nil {
+			return nil, e
+		}
+		m["context:composition_log"] = digest(data)
+	}
 	m["deck:copy"] = digest(canonical(map[string]any{"title": p.Document.Title, "year": p.Document.Year}))
 	if len(p.Document.Sections) > 0 {
 		m["deck:sections"] = digest(canonical(p.Document.Sections))

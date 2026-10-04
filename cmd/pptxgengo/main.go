@@ -13,14 +13,23 @@ import (
 var version = "dev"
 
 var tools = map[string]string{
-	"template": "pptxtemplate", "compose": "pptxcompose", "scene": "pptxscene",
-	"component": "pptxcomponent", "lib": "pptxlib", "anchor": "pptxanchor",
-	"diff": "pptxdiff", "adapt": "pptxadapt", "design": "pptxdesign",
+	"design": "pptxdesign",
+}
+
+var retiredRoutes = map[string]string{
+	"template":  "`pptxgengo design template` for foundation templates or `pptxgengo design project` for maintained decks",
+	"compose":   "`pptxgengo design build` for foundation documents or `pptxgengo design project build` for maintained decks",
+	"scene":     "`pptxgengo design build` for foundation documents",
+	"component": "`pptxgengo design library-find --kinds component` to discover components",
+	"lib":       "`pptxgengo design library-find` to search the design library",
+	"anchor":    "no supported replacement command; use `pptxgengo design project` for deck authoring",
+	"diff":      "no supported replacement command",
+	"adapt":     "no supported replacement command",
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: pptxgengo <template|compose|scene|component|lib|anchor|diff|adapt|design> <command> [flags]")
-	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--design-system] [--print|--open]")
+	fmt.Fprintln(os.Stderr, "usage: pptxgengo <design> <command> [flags]")
+	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--design-system|--assets] [--print|--open]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
 }
@@ -72,7 +81,7 @@ func designArgs(root string, input []string) ([]string, error) {
 		return args, nil
 	}
 	command := args[0]
-	if command == "render" {
+	if command == "render" || command == "render-doctor" || command == "render-native-worker" || command == "source-inventory" || command == "asset-gallery" {
 		return args, nil
 	}
 	if command != "project" && !hasFlag(args, "--bundle") {
@@ -89,7 +98,7 @@ func designArgs(root string, input []string) ([]string, error) {
 			args = append(args, "--gallery", filepath.Join(root, "library", "wm-design-system", "v5", "catalog"))
 		}
 	}
-	engineAllowed := command != "library-index" && command != "library-inspect" && command != "library-preview" && command != "project"
+	engineAllowed := command != "library-index" && command != "library-inspect" && command != "library-preview" && command != "project" && command != "library-authoring"
 	if engineAllowed && !hasFlag(args, "--engine") {
 		args = append(args, "--engine", "wmds-go-foundation.v2")
 	}
@@ -98,14 +107,16 @@ func designArgs(root string, input []string) ([]string, error) {
 
 func runCatalog(root string, args []string) error {
 	open := false
+	assets := false
 	seenPage, seenAction := false, false
 	for _, arg := range args {
 		switch arg {
-		case "--templates", "--design-system":
+		case "--templates", "--design-system", "--assets":
 			if seenPage {
 				return fmt.Errorf("choose one catalog gallery")
 			}
 			seenPage = true
+			assets = arg == "--assets"
 		case "--components":
 			return fmt.Errorf("component discovery is available through: pptxgengo design library-find --kinds component")
 		case "--open", "--print":
@@ -115,10 +126,13 @@ func runCatalog(root string, args []string) error {
 			seenAction = true
 			open = arg == "--open"
 		default:
-			return fmt.Errorf("usage: pptxgengo catalog [--templates|--design-system] [--print|--open]")
+			return fmt.Errorf("usage: pptxgengo catalog [--templates|--design-system|--assets] [--print|--open]")
 		}
 	}
 	path := filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "design-system.html")
+	if assets {
+		path = filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "assets", "index.html")
+	}
 	if _, err := os.Stat(path); err != nil {
 		return fmt.Errorf("catalog unavailable: %w", err)
 	}
@@ -135,6 +149,9 @@ func run() error {
 		return fmt.Errorf("missing command")
 	}
 	name := os.Args[1]
+	if next, retired := retiredRoutes[name]; retired {
+		return fmt.Errorf("pptxgengo %s was removed; %s", name, next)
+	}
 	if name == "--version" || name == "version" {
 		fmt.Println(version)
 		return nil

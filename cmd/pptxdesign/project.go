@@ -14,7 +14,25 @@ import (
 // runProject is isolated from the legacy scene/semantic JSON build commands.
 func runProject(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxdesign project <init|check|build|status|resume|approve|export|review|section|split|scaffold|edit|fork|detach|measure> --project PATH [--bundle v5|PATH]")
+		return fmt.Errorf("usage: pptxdesign project <init|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure> --project PATH [--bundle v5|PATH]")
+	}
+	if args[0] == "asset" {
+		return runProjectAsset(args[1:])
+	}
+	if args[0] == "slide" {
+		return runProjectSlide(args[1:])
+	}
+	if args[0] == "titles" {
+		return runProjectTitles(args[1:])
+	}
+	if args[0] == "swap" {
+		return runProjectSwap(args[1:])
+	}
+	if args[0] == "attach-render" {
+		return runProjectAttachRender(args[1:])
+	}
+	if args[0] == "view" || (args[0] == "review" && hasProjectFlag(args[1:], "--stage")) {
+		return runProjectReviewStage(args[1:])
 	}
 	if args[0] == "section" {
 		return runProjectSection(args[1:])
@@ -136,7 +154,16 @@ func runProject(args []string) error {
 	case "build":
 		result, e = deckproject.Build(p, deckproject.BuildOptions{Bundle: b, Engine: *engine})
 	case "status":
-		result, e = deckproject.Status(p)
+		var state deckproject.State
+		state, e = deckproject.Status(p)
+		if e == nil {
+			var coverage []deckproject.NativeCoverage
+			coverage, e = deckproject.NativeReviewCoverage(p)
+			result = struct {
+				deckproject.State
+				NativeReview []deckproject.NativeCoverage `json:"native_review"`
+			}{state, coverage}
+		}
 	case "resume":
 		result, e = deckproject.Resume(p)
 	case "approve":

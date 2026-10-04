@@ -4,10 +4,16 @@
 frames and artwork, and writes editable PowerPoint objects. Normal generation
 runs in Go. PowerPoint rendering is the native review step.
 
+The [engineering command reference](../../docs/engineering-cli.md) covers
+content-first matching, aliases/capacity, asset discovery/registration, slide
+mutations/swaps, staged review packets and source inventories.
+
 ### Local native rendering (macOS)
 
 ```sh
 pptxgengo design render --pptx /path/deck.pptx --out /path/new-review --pdf --png
+pptxgengo design render-doctor
+pptxgengo design render --pptx /path/deck.pptx --out /path/new-selected-review --png --slides 3,5-7 --contact-sheet
 # Include hidden slides in the inspection copy:
 pptxgengo design render --pptx /path/deck.pptx --out /path/new-all-slides --pdf --png --include-hidden --timeout 10m
 ```
