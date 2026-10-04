@@ -65,9 +65,16 @@ the installed v5 library.
 - The calibration test's stale DentalXChange count was corrected from 57 to the
   committed project's 75. An unrelated in-progress edit to DentalXChange slide
   41 is excluded from qualification and left intact in the main workspace.
-- Race suite: all packages except `deckproject` passed the first full run;
-  `deckproject` exceeded Go's default ten-minute timeout. Final package rerun
-  uses a 30-minute timeout; final result pending.
+- Race checks: all packages except `deckproject` passed the first full run;
+  `deckproject` exceeded both the default ten-minute timeout and the later
+  30-minute timeout. Neither timed-out run passed. No data race was reported
+  before either timeout; that is not proof of race freedom. Remaining tests
+  were split into independent groups, all passing: operations/sections 411.753s,
+  source splitting 238.455s, stock round trips/zone roles 99.398s, and swaps
+  191.433s. Mutation guard, image registration and editorial checks also pass
+  in a focused race run (11.070s). Latest CLI race run passes (282.309s), and
+  subsequent selector and asset regressions pass. A single uninterrupted full
+  project-package race pass has not been obtained.
 - Disposable packaged-CLI workflow from outside the checkout: init/split,
   content matching, add/move/remove/hide/show, same-template swap, original image
   registration, check/build/titles, source inventory and deck review pass.
@@ -94,7 +101,14 @@ the installed v5 library.
 - Native export and appearance are **not qualified in this agent session**.
   HTML packet structure/integrity tests pass; interactive HTML visual review was
   unavailable because the browser security policy rejected local-file access.
-- Global CLI installation and isolated-workspace cleanup: pending final checks.
+- Global CLI **0.1.0-local.12** is installed at
+  `~/.local/share/pptxgengo/releases/0.1.0-local.12`; the launcher is
+  `~/.local/bin/pptxgengo`. Its binaries were built from clean committed code
+  `91434192b728d2e8924e06aaccbdda8d49279784`. Outside-repository verification
+  passes init/build/titles, hyphenated-ID measurement, asset search and catalog
+  lookup. CLI-only installation preserves the existing presentation skill link.
+  The disposable qualification checkout, candidate packages, decks and test
+  artifacts are removed after these results are recorded.
 
 No new Python conversion helpers were created. The existing release assembler
 retains its packaging Python; implemented authoring, image thumbnails, inventory,
@@ -112,5 +126,10 @@ matching, mutation and review functionality lives in Go.
 - Complex semantic schemas and component capacity need further implementation
   and review. Explicit gaps make these visible instead of selecting a simple
   layout with lost content.
+- Profiling the instrumented project suite shows repeated full-library decoding
+  inside small project operations. Investigate lazy contract loading or immutable
+  caches keyed by verified source hashes; retain resource-pin and drift checks.
+  The ordinary full suite completes in under three minutes. Race instrumentation
+  makes this repeated work substantially more expensive.
 
 See [the command guide](engineering-cli.md) for supported operations and examples.
