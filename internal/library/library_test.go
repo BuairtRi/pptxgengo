@@ -2,7 +2,6 @@ package library
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -92,102 +91,75 @@ func TestNarrativeQuoteMustMatchHashedSource(t *testing.T) {
 		t.Fatalf("false quote accepted: %v", err)
 	}
 }
-func TestExistingCatalogInventoryFind(t *testing.T) {
-	root, pin := existingCatalogFixture(t)
+func TestInventoryFindUsesPinnedCatalogAndPreferenceOverlay(t *testing.T) {
+	// The retired production inventory is not a dependency of the latest-only
+	// checkout. This small, explicitly synthetic inventory exercises the same
+	// pin, projection, preference and retrieval behavior without a prior release.
+	root := t.TempDir()
+	catalog := filepath.Join(root, "catalog.sqlite")
+	if _, err := sqlite(catalog, "CREATE TABLE items(id TEXT PRIMARY KEY,kind TEXT,source_id TEXT,category TEXT,title TEXT,body TEXT,json TEXT); INSERT INTO items VALUES('synthetic-governance','component','synthetic-fixture','controls','Governance controls','Record decision ownership and evidence','{}'),('synthetic-planning','component','synthetic-fixture','planning','Planning sequence','Prepare a synthetic next step','{}');", false); err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(catalog)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pin := Artifact{Path: "catalog.sqlite", SHA256: hashBytes(data)}
+	manifest, err := json.Marshal(map[string]any{"artifacts": map[string]Artifact{"sqlite": pin}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	put(t, filepath.Join(root, "library/catalog-manifest.json"), manifest)
+	shortlist := []byte(`{"references":[]}`)
+	put(t, filepath.Join(root, "library/reference-shortlist.json"), shortlist)
+	preferences, err := json.Marshal(map[string]any{"shortlist_sha256": hashBytes(shortlist), "choices": []prefChoice{{ComponentID: "synthetic-governance", Preference: "avoid"}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	put(t, filepath.Join(root, "library/reference-preferences.json"), preferences)
 	s, err := NewStore(root)
 	if err != nil {
 		t.Fatal(err)
 	}
+	s.CatalogPath = catalog
 	index := filepath.Join(t.TempDir(), "index.sqlite")
 	report, err := s.BuildIndex(index)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if report.InventoryCount < 17000 {
-		t.Fatalf("catalog projection too small: %+v", report)
+	if report.InventoryCount != 2 || report.ContractCount != 0 {
+		t.Fatalf("synthetic inventory projection changed: %+v", report)
 	}
 	if report.CatalogSHA256 != pin.SHA256 {
 		t.Fatalf("inventory source pin changed: %+v", report)
 	}
-	t.Logf("frozen inventory indexed: %d occurrences, %d contracts, %d aliases", report.InventoryCount, report.ContractCount, report.AliasCount)
-	hits, err := s.Find(index, FindOptions{Query: "governance", Inventory: true, Limit: 5})
+	hits, err := s.Find(index, FindOptions{Query: "governance", Inventory: true, IncludeAvoid: true, Limit: 5})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(hits) == 0 || hits[0].State != "inventory" {
+	if len(hits) != 1 || hits[0].ID != "synthetic-governance" || hits[0].State != "inventory" {
 		t.Fatalf("inventory smoke failed: %+v", hits)
 	}
+	if hits, err := s.Find(index, FindOptions{Query: "governance", Inventory: true}); err != nil || len(hits) != 0 {
+		t.Fatalf("avoid overlay did not guide default retrieval: %+v %v", hits, err)
+	}
+	if hits, err := s.Find(index, FindOptions{Query: "governance", IncludeAvoid: true}); err != nil || len(hits) != 0 {
+		t.Fatalf("inventory occurrence promoted into qualified contract search: %+v %v", hits, err)
+	}
 	// Preferences guide retrieval but do not promote source occurrences.
-	b, err := sqlite(index, "SELECT preference FROM inventory WHERE id='component:slice-modern-option-card:instance-001';", true)
+	b, err := sqlite(index, "SELECT preference FROM inventory WHERE id='synthetic-governance';", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !strings.Contains(string(b), "avoid") {
 		t.Fatalf("preference overlay missing: %s", b)
 	}
-}
-
-// The large legacy inventory is intentionally absent from a cleaned checkout.
-// Use the real installed release only when its manifest and SQLite bytes match
-// the repository's frozen source pin. Never substitute a generated inventory.
-func existingCatalogFixture(t *testing.T) (string, Artifact) {
-	t.Helper()
-	repo, err := filepath.Abs("../..")
-	if err != nil {
+	if err := os.WriteFile(catalog, append(data, []byte("drift")...), 0600); err != nil {
 		t.Fatal(err)
 	}
-	readPin := func(root string) (Artifact, error) {
-		b, err := os.ReadFile(filepath.Join(root, "library/catalog-manifest.json"))
-		if err != nil {
-			return Artifact{}, err
-		}
-		var manifest struct {
-			Artifacts map[string]Artifact `json:"artifacts"`
-		}
-		if err := json.Unmarshal(b, &manifest); err != nil {
-			return Artifact{}, err
-		}
-		pin := manifest.Artifacts["sqlite"]
-		if pin.Path == "" || !hex64.MatchString(pin.SHA256) {
-			return Artifact{}, fmt.Errorf("manifest lacks a pinned SQLite inventory")
-		}
-		return pin, nil
+	if _, err := s.BuildIndex(filepath.Join(t.TempDir(), "drift.sqlite")); err == nil || !strings.Contains(err.Error(), "SHA-256") {
+		t.Fatalf("catalog pin drift accepted: %v", err)
 	}
-	pin, err := readPin(repo)
-	if err != nil {
-		t.Fatal(err)
-	}
-	roots := []string{repo, os.Getenv("PPTXGENGO_PRIOR_RELEASE_ROOT"), os.Getenv("PPTXGENGO_RELEASE_ROOT")}
-	version, err := os.ReadFile(filepath.Join(repo, "release/VERSION"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if home, err := os.UserHomeDir(); err == nil {
-		roots = append(roots, filepath.Join(home, ".local/share/pptxgengo/releases", strings.TrimSpace(string(version))))
-	}
-	var failures []string
-	for _, root := range roots {
-		if root == "" {
-			continue
-		}
-		candidatePin, err := readPin(root)
-		if err != nil || candidatePin.Path != pin.Path || candidatePin.SHA256 != pin.SHA256 {
-			failures = append(failures, root+": manifest does not match frozen inventory pin")
-			continue
-		}
-		s, err := NewStore(root)
-		if err == nil {
-			err = s.VerifyArtifact(pin)
-		}
-		if err != nil {
-			failures = append(failures, root+": "+err.Error())
-			continue
-		}
-		t.Logf("using frozen inventory %s from %s", pin.SHA256, root)
-		return root, pin
-	}
-	t.Fatalf("frozen legacy inventory unavailable; set PPTXGENGO_PRIOR_RELEASE_ROOT to a matching complete release: %s", strings.Join(failures, "; "))
-	return "", Artifact{}
 }
 
 func TestIndexedContractInstantiateBoundedArray(t *testing.T) {

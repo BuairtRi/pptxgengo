@@ -1,0 +1,117 @@
+"id": "dxc-engineering-risks-dependencies"
+"template":
+  "scope": "shared"
+  "id": "assumptions/detailed-impact"
+"content_kind": "supplied_content"
+"hidden": false
+"brief": "context/dxc-engineering-risks-dependencies.md"
+notes_file: notes/dxc-engineering-risks-dependencies.md
+content:
+  headline: 'Eight dependencies: five need week-2 decisions'
+  section_label: Risks / dependencies · Most require decisions
+  table_1:
+    columns:
+      item_01:
+        label: Risk / dependency
+      item_02:
+        label: Owner / due
+      item_03:
+        label: Mitigation
+      item_04:
+        label: If it slips
+    rows:
+      item_01:
+        a: Claude access + PHI rule
+        c: Decide W2; start with full-time pilot users
+        i: AI moves stall for contractors
+        o: Eng / Sec W2
+      item_02:
+        a: Security / QA tools in AWS
+        c: Start review W1 on existing Claude subscription
+        i: Test generator / PR bot stay manual
+        o: Sec / Ops W3
+      item_03:
+        a: Environment templating capacity
+        c: Template pre-live first; stagger releases
+        i: Hardening cannot support two releases
+        o: DevOps / Arch W2
+      item_04:
+        a: QA / Core leadership load
+        c: WM QE executes; name a QA lead
+        i: Actions slip; leads burn out
+        o: Eng leaders W2
+      item_05:
+        a: Branch strategy unsettled
+        c: Options paper; decide at W2 gate
+        i: Hardening window blocked
+        o: Core / QA / Rel W2
+      item_06:
+        a: CAB switched-off code rule
+        c: Written rule in release gate
+        i: Release friction continues
+        o: Release / CAB W3
+      item_07:
+        a: Baseline data quality
+        c: Calendar + build IDs; add Jira cause codes
+        i: Metrics are not trusted
+        o: Eng leaders W3
+      item_08:
+        a: Rules Engine platform undecided
+        c: Keep spec platform-neutral; decide W2
+        i: Spec-first pilot delayed
+        o: Prod / Eng W2
+"values":
+  keys:
+    node01.cols:
+      - node01-cols-1
+      - node01-cols-2
+      - node01-cols-3
+      - node01-cols-4
+    node01.rows:
+      - node01-rows-1
+      - node01-rows-2
+      - node01-rows-3
+      - node01-rows-4
+      - node01-rows-5
+      - node01-rows-6
+      - node01-rows-7
+      - node01-rows-8
+bindings:
+  /headline: /slots/title
+  /section_label: /slots/eyebrow
+  /table_1/columns/item_01/label: /slots/node01.cols.item01.label
+  /table_1/columns/item_02/label: /slots/node01.cols.item02.label
+  /table_1/columns/item_03/label: /slots/node01.cols.item03.label
+  /table_1/columns/item_04/label: /slots/node01.cols.item04.label
+  /table_1/rows/item_01/a: /slots/node01.rows.item01.a
+  /table_1/rows/item_01/c: /slots/node01.rows.item01.c
+  /table_1/rows/item_01/i: /slots/node01.rows.item01.i
+  /table_1/rows/item_01/o: /slots/node01.rows.item01.o
+  /table_1/rows/item_02/a: /slots/node01.rows.item02.a
+  /table_1/rows/item_02/c: /slots/node01.rows.item02.c
+  /table_1/rows/item_02/i: /slots/node01.rows.item02.i
+  /table_1/rows/item_02/o: /slots/node01.rows.item02.o
+  /table_1/rows/item_03/a: /slots/node01.rows.item03.a
+  /table_1/rows/item_03/c: /slots/node01.rows.item03.c
+  /table_1/rows/item_03/i: /slots/node01.rows.item03.i
+  /table_1/rows/item_03/o: /slots/node01.rows.item03.o
+  /table_1/rows/item_04/a: /slots/node01.rows.item04.a
+  /table_1/rows/item_04/c: /slots/node01.rows.item04.c
+  /table_1/rows/item_04/i: /slots/node01.rows.item04.i
+  /table_1/rows/item_04/o: /slots/node01.rows.item04.o
+  /table_1/rows/item_05/a: /slots/node01.rows.item05.a
+  /table_1/rows/item_05/c: /slots/node01.rows.item05.c
+  /table_1/rows/item_05/i: /slots/node01.rows.item05.i
+  /table_1/rows/item_05/o: /slots/node01.rows.item05.o
+  /table_1/rows/item_06/a: /slots/node01.rows.item06.a
+  /table_1/rows/item_06/c: /slots/node01.rows.item06.c
+  /table_1/rows/item_06/i: /slots/node01.rows.item06.i
+  /table_1/rows/item_06/o: /slots/node01.rows.item06.o
+  /table_1/rows/item_07/a: /slots/node01.rows.item07.a
+  /table_1/rows/item_07/c: /slots/node01.rows.item07.c
+  /table_1/rows/item_07/i: /slots/node01.rows.item07.i
+  /table_1/rows/item_07/o: /slots/node01.rows.item07.o
+  /table_1/rows/item_08/a: /slots/node01.rows.item08.a
+  /table_1/rows/item_08/c: /slots/node01.rows.item08.c
+  /table_1/rows/item_08/i: /slots/node01.rows.item08.i
+  /table_1/rows/item_08/o: /slots/node01.rows.item08.o

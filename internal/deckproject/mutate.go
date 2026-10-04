@@ -294,6 +294,9 @@ func definitionSnapshot(p *Project, data []byte) (string, error) {
 	return path, nil
 }
 func applyTemplate(p *Project, id string, t LocalTemplate, values map[string]any, slides []string, operation, hash string) (Mutation, error) {
+	if p.hasExternalSources() || p.hasContentAliases() {
+		return applySourceTemplate(p, id, t, values, slides, operation, hash)
+	}
 	m := Mutation{Operation: operation, TemplateID: id, SlideIDs: slides, BeforeSHA256: digest(p.Raw), DefinitionSHA256: hash}
 	selected := map[string]bool{}
 	for _, s := range slides {

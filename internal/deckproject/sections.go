@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -242,6 +243,7 @@ func mappingNode(n *yaml.Node, key string) *yaml.Node {
 	return nil
 }
 func mutateSections(p *Project, change SectionChange, sections []wmdesign.SectionSpec, divider *Slide, position int, bundle, engine string) (SectionChange, error) {
+	additional := map[string][]byte{}
 	var doc yaml.Node
 	if e := yaml.Unmarshal(p.Raw, &doc); e != nil {
 		return change, e
@@ -287,6 +289,15 @@ func mutateSections(p *Project, change SectionChange, sections []wmdesign.Sectio
 		if e != nil {
 			return change, e
 		}
+		if p.hasExternalSources() {
+			relative := "slides/" + divider.ID + ".yaml"
+			raw, err := encodeSourceYAML(&yaml.Node{Kind: yaml.DocumentNode, Content: []*yaml.Node{node}})
+			if err != nil {
+				return change, err
+			}
+			additional[relative] = raw
+			node = &yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: relative}
+		}
 		slides.Content = append(slides.Content, nil)
 		copy(slides.Content[position+1:], slides.Content[position:])
 		slides.Content[position] = node
@@ -301,6 +312,10 @@ func mutateSections(p *Project, change SectionChange, sections []wmdesign.Sectio
 		return change, e
 	}
 	raw := output.Bytes()
+	if p.hasExternalSources() || p.hasContentAliases() {
+		additional[filepath.Base(p.SourcePath)] = raw
+		return commitSourceSections(p, change, additional, divider != nil, bundle, engine)
+	}
 	change.BeforeSHA256 = digest(p.Raw)
 	change.AfterSHA256 = digest(raw)
 	temp, e := SafePath(p.Root, ".deck-section-"+nonce()+".yaml")

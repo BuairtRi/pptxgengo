@@ -4,6 +4,33 @@
 frames and artwork, and writes editable PowerPoint objects. Normal generation
 runs in Go. PowerPoint rendering is the native review step.
 
+### Local native rendering (macOS)
+
+```sh
+pptxgengo design render --pptx /path/deck.pptx --out /path/new-review --pdf --png
+# Include hidden slides in the inspection copy:
+pptxgengo design render --pptx /path/deck.pptx --out /path/new-all-slides --pdf --png --include-hidden --timeout 10m
+```
+
+This command uses installed Microsoft PowerPoint's native PDF save API and
+macOS PDFKit for PNGs. It opens a uniquely named temporary copy, closes that
+copy without saving, and never opens or writes the original. Existing output
+directories are rejected. Hidden slides retain their original state; the
+optional flag makes them visible only in the temporary copy. PNGs fit within
+1920 × 1080 while preserving the PDF aspect ratio. `render-manifest.json`
+records source/output hashes and the exported page count. PNG-only output still
+uses a native PDF internally, then removes that PDF.
+
+Run in a logged-in macOS GUI session with Microsoft PowerPoint installed at
+`/Applications/Microsoft PowerPoint.app`, Swift tools available, and automation
+permission for the invoking terminal. A remote or isolated agent shell can lack
+access to the GUI session (Apple Event errors −10827/−600); such an export fails
+explicitly and does not publish a successful manifest. There is no cloud or
+LibreOffice fallback. The command's timeout terminates its subprocess; it does
+not terminate PowerPoint or write other open presentations. If an app dialog
+blocks export, dismiss it and inspect `render-error.txt` before retrying in a
+new output directory.
+
 The library contains **587 templates (586 active)** at source commit
 `d83bd58a9f9de68ebd8d6b3c9b0272c16ed516cf`. The accepted gallery qualifies each
 illustrated source specimen. New text, diagrams and images require a separate
@@ -55,7 +82,31 @@ remain maintained inputs. Builds and receipts are immutable derived artifacts.
 The toolchain lock pins the executable, engine, library, fonts and asset hashes.
 Save PowerPoint edits separately; baseline changes block regeneration.
 
+## Start with a shared stock slide
+
+```sh
+pptxgengo design project scaffold --stock --template cards/3 \
+  --id three-actions --out slides/076-three-actions.yaml
+```
+
+The stock scaffold keeps the actual shared layout and emits editable YAML with
+readable `content`. Its initial copy is explicitly marked `synthetic_example`.
+Replace that copy, set `content_kind: supplied_content`, and add the file to the
+ordered `slides` list in `deck.yaml`. Required fields and exact item counts still
+come from the selected library contract. Shared stock slides need no local
+template definition or adaptation reason.
+
+For a declared stock image field, use the project's asset ID as its content
+value, for example `photo: client-logo` when `assets.client-logo.path` names the
+image file in `deck.yaml`. Compilation resolves that ID only in source-declared
+media slots; ordinary copy is unchanged. Existing library registry keys remain
+valid. Use `project:client-logo` to explicitly select a project asset if its ID
+collides with a library registry key. The scaffold's image field name depends on
+the selected template.
+
 ## Derive and edit a composition
+
+Create a local derivative when the actual layout needs a deliberate change:
 
 ```sh
 /tmp/pptxdesign project scaffold --bundle library/wm-design-system/v5 \
@@ -70,11 +121,29 @@ labelled synthetic values. Replace those values with real content. It does not
 provide visual acceptance. Typed legacy bindings and unsupported topology fail
 explicitly rather than borrowing source copy.
 
-An edit patch is keyed by stable slide ID. Each entry may replace `values`,
+An edit patch is keyed by stable slide ID. Each entry may replace `values`, `content`, `bindings`,
 `template: {scope, id}`, or a `brief` project-relative Markdown path. The command
 checks the source and bindings before atomic replacement, saves its predecessor,
 and preserves notes, hidden state and section membership. Measurement findings
 are advisory; chart/table internals and rotated text need visual inspection.
+
+### Split a deck into editable slide files
+
+```sh
+pptxdesign project split --project /path/to/project --bundle v5
+```
+
+`deck.yaml` becomes the ordered index. Individual slide files contain human copy;
+speaker notes move to `notes/*.md`; rare local layouts move to `templates/*.yaml`.
+Stock slides keep their shared template and use readable `content` with explicit
+`bindings` to the original contract. All references are project-relative.
+
+The converter checks that expanded canonical content is unchanged, retains the
+existing lock and a recoverable source predecessor, and refuses conflicting
+destination files. `check`, `build`, `edit`, `fork`, `detach`, sections and exports
+accept both inline and multi-file sources. Slide edits preserve unselected file
+bytes and comments on untouched nodes. `content` patches replace the complete
+content map; they do not merge arrays or fill missing copy from examples.
 
 The [local composition example](../../examples/local-composition/README.md)
 demonstrates Venn, maturity and road components. See the

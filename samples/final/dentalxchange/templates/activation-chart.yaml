@@ -1,0 +1,339 @@
+name: Native release history chart
+description: Editable composition derived from the actual shared source scene
+provenance:
+  operation: scaffold
+  parent:
+    scope: shared
+    id: chart/column-rail
+    revision: '1'
+  source_file: templates/library/evidence.json
+  source_file_sha256: b629a77c53c4400c6bc3430af120202f06e541560b68913bd30bcf22284a80ce
+  definition_sha256: 9a1cab7b8f2468dc6c7f69885a08d4c39bc87601d1981d5e6c66ab9f70939689
+  reason: Native stacked column chart with originalcasecategories,all12values and6observedzeroXLSXcells. Actualdarkrail with50%/5of11/2factcallouts; full2024–25 unlabeledpatch caveat and dates retained. No chart screenshot.
+frame:
+  scope: shared
+  id: wmds/frame/none-compact
+frame_options:
+  rail: none
+  footer: compact
+  title_lines: 1
+  no_header: true
+grid:
+  scope: shared
+  id: wmds/grid/12-columns
+zones:
+  title:
+    role: content
+    required: true
+    schema:
+      type: string
+  eyebrow:
+    role: content
+    required: true
+    schema:
+      type: string
+  fact0.title:
+    role: content
+    required: true
+    schema:
+      type: string
+  fact0.body:
+    role: content
+    required: true
+    schema:
+      type: string
+  fact1.title:
+    role: content
+    required: true
+    schema:
+      type: string
+  fact1.body:
+    role: content
+    required: true
+    schema:
+      type: string
+  fact2.title:
+    role: content
+    required: true
+    schema:
+      type: string
+  fact2.body:
+    role: content
+    required: true
+    schema:
+      type: string
+  source-and-caveat:
+    role: content
+    required: true
+    schema:
+      type: string
+  chart-categories:
+    role: content
+    required: true
+    schema:
+      type: array
+      items:
+        type: string
+  chart-series:
+    role: content
+    required: true
+    schema:
+      type: array
+      items:
+        type: object
+        required:
+          - name
+          - values
+        additionalProperties: false
+        properties:
+          name:
+            type: string
+          values:
+            type: array
+            items:
+              type: number
+nodes:
+  - id: release-health
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 0
+        y_pt: 90
+        width_pt: 558
+        height_pt: 294
+    definition:
+      scope: shared
+      id: wmds/component/chart
+    arguments:
+      kind: column
+      mode: stacked
+      categories:
+        binding: chart-categories
+      series:
+        binding: chart-series
+      colors:
+        - brand.grounded
+        - series.1
+        - series.2
+        - series.3
+      preserveCategories: true
+      preserveWorkbookZeros: true
+    keys:
+      categories:
+        - year-0
+        - year-1
+        - year-2
+      series:
+        - release-0
+        - release-1
+        - release-2
+        - release-3
+  - id: fact0
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 576
+        y_pt: 90
+        width_pt: 270
+        height_pt: 90
+    definition:
+      scope: shared
+      id: wmds/component/card
+    arguments:
+      surface: subtle
+  - id: fact1
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 576
+        y_pt: 186
+        width_pt: 270
+        height_pt: 90
+    definition:
+      scope: shared
+      id: wmds/component/card
+    arguments:
+      surface: subtle
+  - id: fact2
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 576
+        y_pt: 282
+        width_pt: 270
+        height_pt: 90
+    definition:
+      scope: shared
+      id: wmds/component/card
+    arguments:
+      surface: subtle
+  - id: source-and-caveat
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 0
+        y_pt: 384
+        width_pt: 846
+        height_pt: 48
+    definition:
+      scope: shared
+      id: wmds/component/block
+    arguments:
+      surface: subtle
+      style: source
+      align: left
+      text:
+        binding: source-and-caveat
+    keys: {}
+  - id: fact-number-0
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 588
+        y_pt: 99
+        width_pt: 246
+        height_pt: 24
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: fact0.title
+      style: subhead
+      ink: emphasis
+  - id: fact-copy-0
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 588
+        y_pt: 132
+        width_pt: 246
+        height_pt: 42
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: fact0.body
+      style: source
+      ink: primary
+  - id: fact-number-1
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 588
+        y_pt: 195
+        width_pt: 246
+        height_pt: 24
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: fact1.title
+      style: subhead
+      ink: emphasis
+  - id: fact-copy-1
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 588
+        y_pt: 228
+        width_pt: 246
+        height_pt: 42
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: fact1.body
+      style: source
+      ink: primary
+  - id: fact-number-2
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 588
+        y_pt: 291
+        width_pt: 246
+        height_pt: 24
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: fact2.title
+      style: subhead
+      ink: emphasis
+  - id: fact-copy-2
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 588
+        y_pt: 324
+        width_pt: 246
+        height_pt: 42
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: fact2.body
+      style: source
+      ink: primary
+  - id: authored-header
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 0
+        y_pt: 18
+        width_pt: 738
+        height_pt: 72
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: title
+      style: title
+      ink: primary
+  - id: authored-eyebrow
+    kind: component
+    placement:
+      zone: body
+      rect:
+        x_pt: 0
+        y_pt: 0
+        width_pt: 738
+        height_pt: 18
+    definition:
+      scope: shared
+      id: wmds/component/text
+    arguments:
+      text:
+        binding: eyebrow
+      style: eyebrow
+      ink: emphasis
+  - id: client-brand
+    kind: image
+    placement:
+      zone: body
+      rect:
+        x_pt: 756
+        y_pt: 0
+        width_pt: 90
+        height_pt: 36
+    asset: source-image31
+    fit: contain

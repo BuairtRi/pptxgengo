@@ -72,6 +72,9 @@ func designArgs(root string, input []string) ([]string, error) {
 		return args, nil
 	}
 	command := args[0]
+	if command == "render" {
+		return args, nil
+	}
 	if command != "project" && !hasFlag(args, "--bundle") {
 		bundle, err := publishedBundle(root)
 		if err != nil {

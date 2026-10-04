@@ -1,0 +1,144 @@
+"id": "dxc-qa-seven-layers"
+"template":
+  "scope": "shared"
+  "id": "method/accelerator-steps"
+"content_kind": "supplied_content"
+"hidden": false
+"brief": "context/dxc-qa-seven-layers.md"
+notes_file: notes/dxc-qa-seven-layers.md
+content:
+  headline: 'Robust QA: scale existing tools in seven layers'
+  section_label: Move 3 · Scale QA’s existing framework
+  card_1:
+    body:
+      item_01:
+        label: Context
+      item_02:
+        p: 'Keep the Playwright framework and Claude tools QA already built. Productionize the agents, PR bot and Jira story-to-test generator.'
+      item_03:
+        label: Current capacity and limits
+      item_04:
+        bullets:
+          item_01: One leader for ~15 testers; two full-time staff
+          item_02: 'Core: 200+ automated tests, but mostly manual'
+          item_03: Defined critical paths ~10–15%; no performance tests
+          item_04: UAT / QA has only 3–4 days today
+      item_05:
+        label: What the next phase adds
+      item_06:
+        bullets:
+          item_01: Name or hire a QA lead for Core
+          item_02: Sanctioned Claude practice for contractors too
+          item_03: Two full-time QE engineers for one sprint
+          item_04: 'DXC hosting, pipeline integration and release evidence'
+    label: BUILD ON FIVE MONTHS OF QA WORK
+    title: Layer by layer; reviewed by people
+  table_2:
+    columns:
+      item_01:
+        label: '#'
+      item_02:
+        label: QA layer
+      item_03:
+        label: Owner / change
+    rows:
+      item_01:
+        d: 'QA lead + PM: criteria / tests before build'
+        n: "01"
+        s: Refinement
+      item_02:
+        d: 'Core + Claude: reviewed tests on changed code'
+        n: "02"
+        s: Unit
+      item_03:
+        d: 'QA: daily agents and PR-reviewed test backlog'
+        n: "03"
+        s: API / UI
+      item_04:
+        d: 'QA + Product: automate defined paths by release'
+        n: "04"
+        s: Critical paths
+      item_05:
+        d: 'QA + DevOps: highest-volume baseline'
+        n: "05"
+        s: Performance
+      item_06:
+        d: 'Product: realistic pre-live, hardening window'
+        n: "06"
+        s: UAT
+      item_07:
+        d: 'Release + DevOps: smoke checks + evidence'
+        n: "07"
+        s: Prod checks
+"values":
+  keys:
+    node01.body:
+      - node01-body-1
+      - node01-body-2
+      - node01-body-3
+      - node01-body-4
+      - node01-body-5
+      - node01-body-6
+    node01.body.item04.bullets:
+      - node01-body-item04-bullets-1
+      - node01-body-item04-bullets-2
+      - node01-body-item04-bullets-3
+      - node01-body-item04-bullets-4
+    node01.body.item06.bullets:
+      - node01-body-item06-bullets-1
+      - node01-body-item06-bullets-2
+      - node01-body-item06-bullets-3
+      - node01-body-item06-bullets-4
+    node02.cols:
+      - node02-cols-1
+      - node02-cols-2
+      - node02-cols-3
+    node02.rows:
+      - node02-rows-1
+      - node02-rows-2
+      - node02-rows-3
+      - node02-rows-4
+      - node02-rows-5
+      - node02-rows-6
+      - node02-rows-7
+bindings:
+  /card_1/body/item_01/label: /slots/node01.body.item01.label
+  /card_1/body/item_02/p: /slots/node01.body.item02.p
+  /card_1/body/item_03/label: /slots/node01.body.item03.label
+  /card_1/body/item_04/bullets/item_01: /slots/node01.body.item04.bullets.item01
+  /card_1/body/item_04/bullets/item_02: /slots/node01.body.item04.bullets.item02
+  /card_1/body/item_04/bullets/item_03: /slots/node01.body.item04.bullets.item03
+  /card_1/body/item_04/bullets/item_04: /slots/node01.body.item04.bullets.item04
+  /card_1/body/item_05/label: /slots/node01.body.item05.label
+  /card_1/body/item_06/bullets/item_01: /slots/node01.body.item06.bullets.item01
+  /card_1/body/item_06/bullets/item_02: /slots/node01.body.item06.bullets.item02
+  /card_1/body/item_06/bullets/item_03: /slots/node01.body.item06.bullets.item03
+  /card_1/body/item_06/bullets/item_04: /slots/node01.body.item06.bullets.item04
+  /card_1/label: /slots/node01.label
+  /card_1/title: /slots/node01.title
+  /headline: /slots/title
+  /section_label: /slots/eyebrow
+  /table_2/columns/item_01/label: /slots/node02.cols.item01.label
+  /table_2/columns/item_02/label: /slots/node02.cols.item02.label
+  /table_2/columns/item_03/label: /slots/node02.cols.item03.label
+  /table_2/rows/item_01/d: /slots/node02.rows.item01.d
+  /table_2/rows/item_01/n: /slots/node02.rows.item01.n
+  /table_2/rows/item_01/s: /slots/node02.rows.item01.s
+  /table_2/rows/item_02/d: /slots/node02.rows.item02.d
+  /table_2/rows/item_02/n: /slots/node02.rows.item02.n
+  /table_2/rows/item_02/s: /slots/node02.rows.item02.s
+  /table_2/rows/item_03/d: /slots/node02.rows.item03.d
+  /table_2/rows/item_03/n: /slots/node02.rows.item03.n
+  /table_2/rows/item_03/s: /slots/node02.rows.item03.s
+  /table_2/rows/item_04/d: /slots/node02.rows.item04.d
+  /table_2/rows/item_04/n: /slots/node02.rows.item04.n
+  /table_2/rows/item_04/s: /slots/node02.rows.item04.s
+  /table_2/rows/item_05/d: /slots/node02.rows.item05.d
+  /table_2/rows/item_05/n: /slots/node02.rows.item05.n
+  /table_2/rows/item_05/s: /slots/node02.rows.item05.s
+  /table_2/rows/item_06/d: /slots/node02.rows.item06.d
+  /table_2/rows/item_06/n: /slots/node02.rows.item06.n
+  /table_2/rows/item_06/s: /slots/node02.rows.item06.s
+  /table_2/rows/item_07/d: /slots/node02.rows.item07.d
+  /table_2/rows/item_07/n: /slots/node02.rows.item07.n
+  /table_2/rows/item_07/s: /slots/node02.rows.item07.s

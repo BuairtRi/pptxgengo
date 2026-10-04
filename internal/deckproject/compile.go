@@ -164,7 +164,11 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 			if slide.Template.Revision != "" && slide.Template.Revision != strconv.Itoa(d.Revision) {
 				return c, p.fail(ptr+"/template/revision", "revision mismatch: expected %d", d.Revision)
 			}
-			values := canonical(slide.Values)
+			resolved, e := sharedAssetValues(slide.Values, d, assetKeys, registry)
+			if e != nil {
+				return c, p.fail(ptr+"/values", "%v", e)
+			}
+			values := canonical(resolved)
 			doc, _, e := wmdesign.BindTemplates(bundle, "", wmdesign.BoundDocument{Schema: wmdesign.BoundDocumentSchema, Year: p.Document.Year, Slides: []wmdesign.BoundSlide{{ID: slide.ID, Template: slide.Template.ID, ContentKind: slide.ContentKind, Values: values}}})
 			if e != nil {
 				return c, p.fail(ptr+"/values", "%v", e)

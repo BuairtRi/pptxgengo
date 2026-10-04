@@ -18,9 +18,11 @@ import (
 // SlideEdit replaces complete values rather than merging arrays or guessing
 // semantic correspondence between unrelated template bindings.
 type SlideEdit struct {
-	Template *Reference     `json:"template,omitempty"`
-	Values   map[string]any `json:"values,omitempty"`
-	Brief    *string        `json:"brief,omitempty"`
+	Template *Reference        `json:"template,omitempty"`
+	Values   map[string]any    `json:"values,omitempty"`
+	Content  map[string]any    `json:"content,omitempty"`
+	Bindings map[string]string `json:"bindings,omitempty"`
+	Brief    *string           `json:"brief,omitempty"`
 }
 
 type EditReceipt struct {
@@ -67,6 +69,9 @@ func DecodeSlideEdits(raw []byte, sourcePath string) (map[string]SlideEdit, erro
 // EditSlides validates the complete resulting project before atomically
 // replacing deck.yaml. It retains untouched YAML nodes and exact predecessors.
 func EditSlides(p *Project, edits map[string]SlideEdit, bundle, engine string) (EditReceipt, error) {
+	if p.hasExternalSources() || p.hasContentAliases() || extendedSlideEdits(edits) {
+		return editSourceSlides(p, edits, bundle, engine)
+	}
 	r := EditReceipt{Operation: "edit-slides", SlideIDs: []string{}, BeforeSHA256: digest(p.Raw), Validation: "source_and_binding_checked_native_review_pending"}
 	if len(edits) == 0 {
 		return r, fmt.Errorf("slide patch must contain at least one stable slide ID")

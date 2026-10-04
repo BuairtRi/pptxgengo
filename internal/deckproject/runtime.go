@@ -331,10 +331,34 @@ func dependencies(p *Project) (map[string]string, error) {
 			m["slide:"+s.ID+":selection"] = digest(canonical(map[string]any{"template": s.Template, "hidden": true}))
 		}
 		m["slide:"+s.ID+":evidence"] = digest(canonical(s.EvidenceRefs))
+		for field, relative := range map[string]string{"source": p.SlideFiles[s.ID], "notes-file": p.NotesFiles[s.ID]} {
+			if relative != "" {
+				path, e := SafePath(p.Root, relative)
+				if e != nil {
+					return nil, e
+				}
+				raw, e := os.ReadFile(path)
+				if e != nil {
+					return nil, e
+				}
+				m["slide:"+s.ID+":"+field] = digest(raw)
+			}
+		}
 	}
 	m["deck:order"] = digest(canonical(order))
 	for k, t := range p.Document.LocalTemplates {
 		m["template:"+k] = digest(canonical(t))
+		if relative := p.TemplateFiles[k]; relative != "" {
+			path, e := SafePath(p.Root, relative)
+			if e != nil {
+				return nil, e
+			}
+			raw, e := os.ReadFile(path)
+			if e != nil {
+				return nil, e
+			}
+			m["template:"+k+":source"] = digest(raw)
+		}
 		if t.Provenance != nil && t.Provenance.DefinitionSnapshot != "" {
 			path, e := SafePath(p.Root, t.Provenance.DefinitionSnapshot)
 			if e != nil {
@@ -662,7 +686,12 @@ func Build(p *Project, opts BuildOptions) (Receipt, error) {
 		return r, e
 	}
 	outputs := map[string][]byte{"deck.pptx": pptxBytes, "deck.yaml": p.Raw, "source.canonical.json": p.Canonical, "scene.json": canonical(c.Document), "layout-report.json": canonical(report), "object-map.json": canonical(objects), "toolchain.lock.json": lockBytes}
-	r = Receipt{Schema: "pptxgengo.deck-build-receipt.v1", BuildID: id, ProjectID: p.Document.ID, Created: time.Now().UTC().Format(time.RFC3339), SourceSHA256: digest(p.Raw), SemanticSHA256: digest(p.Canonical), LockSHA256: digest(lockBytes), Baseline: s.CurrentBuild, AssetHashes: c.AssetHashes, Outputs: map[string]string{}, Fit: "compiler_checks_passed_arbitrary_content_unqualified", Native: "not_reviewed", Visual: "not_reviewed", Reproducibility: "fixed build timestamp 2000-01-01T00:00:00Z; identity seed is canonical authored source SHA256; receipt time is independent"}
+	for relative, raw := range p.SourceFiles {
+		if p.hasExternalSources() {
+			outputs["authored/"+relative] = raw
+		}
+	}
+	r = Receipt{Schema: "pptxgengo.deck-build-receipt.v1", BuildID: id, ProjectID: p.Document.ID, Created: time.Now().UTC().Format(time.RFC3339), SourceSHA256: p.SourceHash(), SemanticSHA256: digest(p.Canonical), LockSHA256: digest(lockBytes), Baseline: s.CurrentBuild, AssetHashes: c.AssetHashes, Outputs: map[string]string{}, Fit: "compiler_checks_passed_arbitrary_content_unqualified", Native: "not_reviewed", Visual: "not_reviewed", Reproducibility: "fixed build timestamp 2000-01-01T00:00:00Z; identity seed is canonical authored source SHA256; receipt time is independent"}
 	keys := []string{}
 	for k := range outputs {
 		keys = append(keys, k)
@@ -684,7 +713,7 @@ func Build(p *Project, opts BuildOptions) (Receipt, error) {
 	if e != nil {
 		return r, e
 	}
-	if !bytesEqual(current.Raw, p.Raw) {
+	if current.SourceHash() != p.SourceHash() {
 		return r, fmt.Errorf("source changed during build; retry")
 	}
 	currentLock, e := os.ReadFile(filepath.Join(p.Root, p.Document.Toolchain.Lockfile))
@@ -698,7 +727,7 @@ func Build(p *Project, opts BuildOptions) (Receipt, error) {
 	s.CurrentBuild = id
 	s.Baseline = id
 	s.ReceiptSHA256 = digest(receiptBytes)
-	s.SourceSHA256 = digest(p.Raw)
+	s.SourceSHA256 = p.SourceHash()
 	s.SemanticSHA256 = digest(p.Canonical)
 	s.Stage = "build"
 	s.NextAction = "Review actual deck fit and native rendering; approval is separate from compiler success"

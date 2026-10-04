@@ -68,7 +68,7 @@ func runProjectSection(args []string) error {
 			}
 			if !used["bundle"] {
 				*bundle = strings.TrimPrefix(lock.BundleRevision, "wmds-library.")
-				if !validPublishedBundle(*bundle) || lock.BundleRevision != "wmds-library."+*bundle {
+				if !validLockedBundle(*bundle) || lock.BundleRevision != "wmds-library."+*bundle {
 					return fmt.Errorf("unsupported locked bundle revision %q", lock.BundleRevision)
 				}
 				pinned := filepath.Join(p.Root, "runtime", "library", "wm-design-system", "pinned")
@@ -94,7 +94,11 @@ func runProjectSection(args []string) error {
 				return err
 			}
 		}
-		result, e = deckproject.AddSection(p, deckproject.SectionAddOptions{ID: *id, Title: *title, BeforeSlideID: *before, Divider: *divider, DividerSlideID: *dividerID, DividerPhoto: *photo, DividerValues: values, Bundle: deckproject.BundlePath(*bundle), Engine: *engine})
+		b := deckproject.BundlePath(*bundle)
+		if validLockedBundle(*bundle) {
+			b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+		}
+		result, e = deckproject.AddSection(p, deckproject.SectionAddOptions{ID: *id, Title: *title, BeforeSlideID: *before, Divider: *divider, DividerSlideID: *dividerID, DividerPhoto: *photo, DividerValues: values, Bundle: b, Engine: *engine})
 	}
 	if e != nil {
 		return e

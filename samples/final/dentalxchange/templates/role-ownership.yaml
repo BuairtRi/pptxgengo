@@ -1,0 +1,192 @@
+"name": "Artifact ownership"
+"description": "Editable composition derived from the actual shared source scene"
+"provenance":
+  "operation": "scaffold"
+  "parent":
+    "scope": "shared"
+    "id": "runbook/roles-raci"
+    "revision": "1"
+  "source_file": "templates/library/runbooks.json"
+  "source_file_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808"
+  "definition_sha256": "7cbca8cd4d46996638057a32f8e2f03e2d56426fcb98425a90954b966f819d6c"
+  "reason": "Native WMDS letter-chip ownership grid9role rows×6artifact columns. Retain exactL/C/A36 andL/C/I/A54 definitions/cells; multiple approvals intentional. Do not substituteRACIlettermeanings or fabricate sole accountability. Keep review annotation54 separately."
+"frame":
+  "scope": "shared"
+  "id": "wmds/frame/none-compact"
+"frame_options":
+  "rail": "none"
+  "footer": "compact"
+  "title_lines": 1
+  "no_header": true
+"grid":
+  "scope": "shared"
+  "id": "wmds/grid/12-columns"
+"zones":
+  "title":
+    "role": "content"
+    "required": true
+    "schema":
+      "type": "string"
+  "eyebrow":
+    "role": "content"
+    "required": true
+    "schema":
+      "type": "string"
+  "ownership.rows":
+    "role": "content"
+    "required": true
+    "schema":
+      "type": "array"
+  "legend":
+    "role": "content"
+    "required": true
+    "schema":
+      "type": "string"
+  "readiness":
+    "role": "content"
+    "required": true
+    "schema":
+      "type": "string"
+"nodes":
+  - "id": "ownership"
+    "kind": "component"
+    "placement":
+      "zone": "body"
+      "rect":
+        "x_pt": 0
+        "y_pt": 126
+        "width_pt": 846
+        "height_pt": 258
+    "definition":
+      "scope": "shared"
+      "id": "wmds/component/table"
+    "arguments":
+      "header": "dark"
+      "dense": true
+      "rowHeader": true
+      "rowH": 25
+      "cols":
+        - "k": "c0"
+          "label": "Role / stakeholder"
+          "w": 234
+        - "k": "c1"
+          "label": "Opportunity"
+          "w": 102
+        - "k": "c2"
+          "label": "Product"
+          "w": 102
+        - "k": "c3"
+          "label": "Feature"
+          "w": 102
+        - "k": "c4"
+          "label": "Technical plan"
+          "w": 102
+        - "k": "c5"
+          "label": "QA / UAT"
+          "w": 102
+        - "k": "c6"
+          "label": "Release / GTM"
+          "w": 102
+      "rows":
+        "binding": "ownership.rows"
+    "keys":
+      "cols":
+        - "item-0"
+        - "item-1"
+        - "item-2"
+        - "item-3"
+        - "item-4"
+        - "item-5"
+        - "item-6"
+      "rows":
+        - "item-0"
+        - "item-1"
+        - "item-2"
+        - "item-3"
+        - "item-4"
+        - "item-5"
+        - "item-6"
+        - "item-7"
+        - "item-8"
+  - "id": "legend"
+    "kind": "component"
+    "placement":
+      "zone": "body"
+      "rect":
+        "x_pt": 0
+        "y_pt": 90
+        "width_pt": 846
+        "height_pt": 24
+    "definition":
+      "scope": "shared"
+      "id": "wmds/component/text"
+    "arguments":
+      "text":
+        "binding": "legend"
+      "style": "small"
+      "ink": "emphasis"
+    "keys": {}
+  - "id": "readiness"
+    "kind": "component"
+    "placement":
+      "zone": "body"
+      "rect":
+        "x_pt": 0
+        "y_pt": 390
+        "width_pt": 846
+        "height_pt": 42
+    "definition":
+      "scope": "shared"
+      "id": "wmds/component/block"
+    "arguments":
+      "surface": "subtle"
+      "style": "small"
+      "align": "left"
+      "text":
+        "binding": "readiness"
+    "keys": {}
+  - "id": "authored-header"
+    "kind": "component"
+    "placement":
+      "zone": "body"
+      "rect":
+        "x_pt": 0
+        "y_pt": 18
+        "width_pt": 738
+        "height_pt": 72
+    "definition":
+      "scope": "shared"
+      "id": "wmds/component/text"
+    "arguments":
+      "text":
+        "binding": "title"
+      "style": "title"
+      "ink": "primary"
+  - "id": "authored-eyebrow"
+    "kind": "component"
+    "placement":
+      "zone": "body"
+      "rect":
+        "x_pt": 0
+        "y_pt": 0
+        "width_pt": 738
+        "height_pt": 18
+    "definition":
+      "scope": "shared"
+      "id": "wmds/component/text"
+    "arguments":
+      "text":
+        "binding": "eyebrow"
+      "style": "eyebrow"
+      "ink": "emphasis"
+  - "id": "client-brand"
+    "kind": "image"
+    "placement":
+      "zone": "body"
+      "rect":
+        "x_pt": 756
+        "y_pt": 0
+        "width_pt": 90
+        "height_pt": 36
+    "asset": "source-image31"
+    "fit": "contain"

@@ -14,10 +14,13 @@ import (
 // runProject is isolated from the legacy scene/semantic JSON build commands.
 func runProject(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxdesign project <init|check|build|status|resume|approve|export|review|section> --project PATH [--bundle v1|v2|v3|v4|v5|PATH]")
+		return fmt.Errorf("usage: pptxdesign project <init|check|build|status|resume|approve|export|review|section|split|scaffold|edit|fork|detach|measure> --project PATH [--bundle v5|PATH]")
 	}
 	if args[0] == "section" {
 		return runProjectSection(args[1:])
+	}
+	if args[0] == "split" {
+		return runProjectSplit(args[1:])
 	}
 	if args[0] == "edit" {
 		return runProjectEdit(args[1:])

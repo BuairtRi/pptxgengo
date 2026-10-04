@@ -1,0 +1,144 @@
+"id": "dxc-core-current-seven-weak-points"
+"template":
+  "scope": "shared"
+  "id": "method/accelerator-steps"
+"content_kind": "supplied_content"
+"hidden": false
+"brief": "context/dxc-core-current-seven-weak-points.md"
+notes_file: notes/dxc-core-current-seven-weak-points.md
+content:
+  headline: 'Core SDLC today: seven weak points'
+  section_label: Move 1 · Core SDLC today
+  card_1:
+    body:
+      item_01:
+        label: Context
+      item_02:
+        p: 'Core already runs Java and Scrum. Today the delivery number is story points; lead time, failure rate and waiting time are not measured.'
+      item_03:
+        label: What is already working
+      item_04:
+        bullets:
+          item_01: Two-week sprints; ~65 points; lead assigns by skill
+          item_02: Copilot in IntelliJ; Claude for some staff
+          item_03: QA automation grew 21 → 200+ in five months
+          item_04: Senior Core PR review and production smoke checks
+      item_05:
+        label: Where control is thin
+      item_06:
+        bullets:
+          item_01: QA and design absent from refinement
+          item_02: Support and patches draw on the same people
+          item_03: Pre-live is not prod-like; branches merge on release day
+          item_04: Most QA is manual; defined path coverage ~10–15%
+    label: CURRENT CORE FLOW
+    title: A working flow with weak points
+  table_2:
+    columns:
+      item_01:
+        label: '#'
+      item_02:
+        label: Current stage
+      item_03:
+        label: Observed weakness
+    rows:
+      item_01:
+        d: PMs + engineers vote; QA/design absent
+        n: "01"
+        s: Refine
+      item_02:
+        d: Two-week sprint; support uses same capacity
+        n: "02"
+        s: Plan
+      item_03:
+        d: Docs after coding; offshore lacks live data
+        n: "03"
+        s: Build
+      item_04:
+        d: Senior bottleneck; QA PR bot on demand
+        n: "04"
+        s: Review
+      item_05:
+        d: 200+ automated; mostly manual; no load test
+        n: "05"
+        s: QA
+      item_06:
+        d: "4-day window;\nUAT / QA 3–4 days"
+        n: "06"
+        s: Release
+      item_07:
+        d: 15 unplanned events; causes not trended
+        n: "07"
+        s: Patch
+"values":
+  keys:
+    node01.body:
+      - node01-body-1
+      - node01-body-2
+      - node01-body-3
+      - node01-body-4
+      - node01-body-5
+      - node01-body-6
+    node01.body.item04.bullets:
+      - node01-body-item04-bullets-1
+      - node01-body-item04-bullets-2
+      - node01-body-item04-bullets-3
+      - node01-body-item04-bullets-4
+    node01.body.item06.bullets:
+      - node01-body-item06-bullets-1
+      - node01-body-item06-bullets-2
+      - node01-body-item06-bullets-3
+      - node01-body-item06-bullets-4
+    node02.cols:
+      - node02-cols-1
+      - node02-cols-2
+      - node02-cols-3
+    node02.rows:
+      - node02-rows-1
+      - node02-rows-2
+      - node02-rows-3
+      - node02-rows-4
+      - node02-rows-5
+      - node02-rows-6
+      - node02-rows-7
+bindings:
+  /card_1/body/item_01/label: /slots/node01.body.item01.label
+  /card_1/body/item_02/p: /slots/node01.body.item02.p
+  /card_1/body/item_03/label: /slots/node01.body.item03.label
+  /card_1/body/item_04/bullets/item_01: /slots/node01.body.item04.bullets.item01
+  /card_1/body/item_04/bullets/item_02: /slots/node01.body.item04.bullets.item02
+  /card_1/body/item_04/bullets/item_03: /slots/node01.body.item04.bullets.item03
+  /card_1/body/item_04/bullets/item_04: /slots/node01.body.item04.bullets.item04
+  /card_1/body/item_05/label: /slots/node01.body.item05.label
+  /card_1/body/item_06/bullets/item_01: /slots/node01.body.item06.bullets.item01
+  /card_1/body/item_06/bullets/item_02: /slots/node01.body.item06.bullets.item02
+  /card_1/body/item_06/bullets/item_03: /slots/node01.body.item06.bullets.item03
+  /card_1/body/item_06/bullets/item_04: /slots/node01.body.item06.bullets.item04
+  /card_1/label: /slots/node01.label
+  /card_1/title: /slots/node01.title
+  /headline: /slots/title
+  /section_label: /slots/eyebrow
+  /table_2/columns/item_01/label: /slots/node02.cols.item01.label
+  /table_2/columns/item_02/label: /slots/node02.cols.item02.label
+  /table_2/columns/item_03/label: /slots/node02.cols.item03.label
+  /table_2/rows/item_01/d: /slots/node02.rows.item01.d
+  /table_2/rows/item_01/n: /slots/node02.rows.item01.n
+  /table_2/rows/item_01/s: /slots/node02.rows.item01.s
+  /table_2/rows/item_02/d: /slots/node02.rows.item02.d
+  /table_2/rows/item_02/n: /slots/node02.rows.item02.n
+  /table_2/rows/item_02/s: /slots/node02.rows.item02.s
+  /table_2/rows/item_03/d: /slots/node02.rows.item03.d
+  /table_2/rows/item_03/n: /slots/node02.rows.item03.n
+  /table_2/rows/item_03/s: /slots/node02.rows.item03.s
+  /table_2/rows/item_04/d: /slots/node02.rows.item04.d
+  /table_2/rows/item_04/n: /slots/node02.rows.item04.n
+  /table_2/rows/item_04/s: /slots/node02.rows.item04.s
+  /table_2/rows/item_05/d: /slots/node02.rows.item05.d
+  /table_2/rows/item_05/n: /slots/node02.rows.item05.n
+  /table_2/rows/item_05/s: /slots/node02.rows.item05.s
+  /table_2/rows/item_06/d: /slots/node02.rows.item06.d
+  /table_2/rows/item_06/n: /slots/node02.rows.item06.n
+  /table_2/rows/item_06/s: /slots/node02.rows.item06.s
+  /table_2/rows/item_07/d: /slots/node02.rows.item07.d
+  /table_2/rows/item_07/n: /slots/node02.rows.item07.n
+  /table_2/rows/item_07/s: /slots/node02.rows.item07.s

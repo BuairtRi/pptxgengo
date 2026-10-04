@@ -1,0 +1,59 @@
+id: dxc-045
+template:
+  scope: local
+  id: activation-chart
+content_kind: supplied_content
+hidden: true
+brief: context/dxc-045.md
+notes_file: notes/dxc-045.md
+content:
+  headline: Release health baseline, 2024–2026
+  section_label: DELIVERABLE 01
+  source_note: |-
+    Half of 2026 changes were unplanned: defects, rollbacks, and credential or certificate fixes. Each merits a root-cause review (E1).
+    Source: DXC Production Release Calendar, Jan 2024 – Sep 2026; Core applications only; 2024–25 did not label patches.
+  fact0_body: '15 of 30 off cadence: 11 patches, 2 off-version, 2 rollbacks.'
+  fact0_title: 50%
+  fact1_body: 'Patches: credentials/certificates; two expired Salesforce passwords blocked client workflows.'
+  fact1_title: 5 of 11
+  fact2_body: DEA (Jan), DCQ (Aug); also a held DCQ item after failed January checkout.
+  fact2_title: "2"
+  release_history:
+    categories:
+      - "2024"
+      - "2025"
+      - 2026 (to Sep 1)
+    series:
+      - name: Standard release
+        values:
+          - !!float 17
+          - !!float 23
+          - !!float 15
+      - name: Patch
+        values:
+          - !!float 0
+          - !!float 0
+          - !!float 11
+      - name: Off-version release
+        values:
+          - !!float 0
+          - !!float 0
+          - !!float 2
+      - name: Rollback
+        values:
+          - !!float 0
+          - !!float 0
+          - !!float 2
+values: {}
+bindings:
+  /fact0_body: /fact0.body
+  /fact0_title: /fact0.title
+  /fact1_body: /fact1.body
+  /fact1_title: /fact1.title
+  /fact2_body: /fact2.body
+  /fact2_title: /fact2.title
+  /headline: /title
+  /release_history/categories: /chart-categories
+  /release_history/series: /chart-series
+  /section_label: /eyebrow
+  /source_note: /source-and-caveat

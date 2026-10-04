@@ -1,0 +1,157 @@
+"id": "dxc-003"
+"template":
+  "scope": "shared"
+  "id": "runbook/step-table"
+"content_kind": "supplied_content"
+"hidden": false
+"brief": "context/dxc-003.md"
+notes_file: notes/dxc-003.md
+content:
+  headline: Artifacts open at a stage and close with a decision
+  section_label: IMPLEMENTATION TEMPLATES · sequential and parallel work
+  table_1:
+    columns:
+      item_01:
+        label: Ref
+      item_02:
+        label: Working artifact
+      item_03:
+        label: Reviewer
+      item_04:
+        label: PDLC stage
+      item_05:
+        label: Named decision
+      item_06:
+        label: Concord gate
+    rows:
+      item_01:
+        a: Opportunity Brief
+        b: Concept/Strategy · G0
+        n: "01"
+        o: Senior leader
+        v: 'Is the problem worth defining?'
+        w: Identify
+      item_02:
+        a: Product Brief
+        b: Design/Viability · G1/G2
+        n: "02"
+        o: Senior leader
+        v: Approve direction and measures
+        w: Define
+      item_03:
+        a: Feature Brief
+        b: Design/Viability → Build
+        n: "03"
+        o: Product / Eng / QA or Design
+        v: 'Ready to build?'
+        w: Define→Build
+      item_04:
+        a: Technical Plan
+        b: Build · G4
+        n: "04"
+        o: Engineering + reviewers
+        v: 'Ready to execute?'
+        w: Build
+      item_05:
+        a: Test / QA / UAT Plan
+        b: Parallel · Beta / Pilot
+        n: "05"
+        o: QA; Product accepts UAT
+        v: Test evidence supports readiness
+        w: Define→Release
+      item_06:
+        a: Initial Release / GTM
+        b: Parallel · G5 launch / G6 review
+        n: "06"
+        o: Named decision-maker
+        v: 'Go, Revise, Hold or Stop'
+        w: Define→Optimize
+      item_07:
+        a: AI assistance today
+        b: Release Agent is paused
+        n: AI
+        o: Human review required
+        v: Recon agents; QA uses Claude
+        w: Build / Release
+      item_08:
+        a: Working rules
+        b: Link systems; own/date unknowns
+        n: RULE
+        o: Product + Engineering
+        v: 'Approve, Revise, Hold or Stop'
+        w: All six stages
+"values":
+  keys:
+    node01.cols:
+      - dxc-3-node01-cols-1
+      - dxc-3-node01-cols-2
+      - dxc-3-node01-cols-3
+      - dxc-3-node01-cols-4
+      - dxc-3-node01-cols-5
+      - dxc-3-node01-cols-6
+    node01.rows:
+      - dxc-3-node01-rows-1
+      - dxc-3-node01-rows-2
+      - dxc-3-node01-rows-3
+      - dxc-3-node01-rows-4
+      - dxc-3-node01-rows-5
+      - dxc-3-node01-rows-6
+      - dxc-3-node01-rows-7
+      - dxc-3-node01-rows-8
+bindings:
+  /headline: /slots/title
+  /section_label: /slots/eyebrow
+  /table_1/columns/item_01/label: /slots/node01.cols.item01.label
+  /table_1/columns/item_02/label: /slots/node01.cols.item02.label
+  /table_1/columns/item_03/label: /slots/node01.cols.item03.label
+  /table_1/columns/item_04/label: /slots/node01.cols.item04.label
+  /table_1/columns/item_05/label: /slots/node01.cols.item05.label
+  /table_1/columns/item_06/label: /slots/node01.cols.item06.label
+  /table_1/rows/item_01/a: /slots/node01.rows.item01.a
+  /table_1/rows/item_01/b: /slots/node01.rows.item01.b
+  /table_1/rows/item_01/n: /slots/node01.rows.item01.n
+  /table_1/rows/item_01/o: /slots/node01.rows.item01.o
+  /table_1/rows/item_01/v: /slots/node01.rows.item01.v
+  /table_1/rows/item_01/w: /slots/node01.rows.item01.w
+  /table_1/rows/item_02/a: /slots/node01.rows.item02.a
+  /table_1/rows/item_02/b: /slots/node01.rows.item02.b
+  /table_1/rows/item_02/n: /slots/node01.rows.item02.n
+  /table_1/rows/item_02/o: /slots/node01.rows.item02.o
+  /table_1/rows/item_02/v: /slots/node01.rows.item02.v
+  /table_1/rows/item_02/w: /slots/node01.rows.item02.w
+  /table_1/rows/item_03/a: /slots/node01.rows.item03.a
+  /table_1/rows/item_03/b: /slots/node01.rows.item03.b
+  /table_1/rows/item_03/n: /slots/node01.rows.item03.n
+  /table_1/rows/item_03/o: /slots/node01.rows.item03.o
+  /table_1/rows/item_03/v: /slots/node01.rows.item03.v
+  /table_1/rows/item_03/w: /slots/node01.rows.item03.w
+  /table_1/rows/item_04/a: /slots/node01.rows.item04.a
+  /table_1/rows/item_04/b: /slots/node01.rows.item04.b
+  /table_1/rows/item_04/n: /slots/node01.rows.item04.n
+  /table_1/rows/item_04/o: /slots/node01.rows.item04.o
+  /table_1/rows/item_04/v: /slots/node01.rows.item04.v
+  /table_1/rows/item_04/w: /slots/node01.rows.item04.w
+  /table_1/rows/item_05/a: /slots/node01.rows.item05.a
+  /table_1/rows/item_05/b: /slots/node01.rows.item05.b
+  /table_1/rows/item_05/n: /slots/node01.rows.item05.n
+  /table_1/rows/item_05/o: /slots/node01.rows.item05.o
+  /table_1/rows/item_05/v: /slots/node01.rows.item05.v
+  /table_1/rows/item_05/w: /slots/node01.rows.item05.w
+  /table_1/rows/item_06/a: /slots/node01.rows.item06.a
+  /table_1/rows/item_06/b: /slots/node01.rows.item06.b
+  /table_1/rows/item_06/n: /slots/node01.rows.item06.n
+  /table_1/rows/item_06/o: /slots/node01.rows.item06.o
+  /table_1/rows/item_06/v: /slots/node01.rows.item06.v
+  /table_1/rows/item_06/w: /slots/node01.rows.item06.w
+  /table_1/rows/item_07/a: /slots/node01.rows.item07.a
+  /table_1/rows/item_07/b: /slots/node01.rows.item07.b
+  /table_1/rows/item_07/n: /slots/node01.rows.item07.n
+  /table_1/rows/item_07/o: /slots/node01.rows.item07.o
+  /table_1/rows/item_07/v: /slots/node01.rows.item07.v
+  /table_1/rows/item_07/w: /slots/node01.rows.item07.w
+  /table_1/rows/item_08/a: /slots/node01.rows.item08.a
+  /table_1/rows/item_08/b: /slots/node01.rows.item08.b
+  /table_1/rows/item_08/n: /slots/node01.rows.item08.n
+  /table_1/rows/item_08/o: /slots/node01.rows.item08.o
+  /table_1/rows/item_08/v: /slots/node01.rows.item08.v
+  /table_1/rows/item_08/w: /slots/node01.rows.item08.w

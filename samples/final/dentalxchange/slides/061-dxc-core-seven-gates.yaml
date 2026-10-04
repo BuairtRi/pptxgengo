@@ -1,0 +1,144 @@
+"id": "dxc-core-seven-gates"
+"template":
+  "scope": "shared"
+  "id": "method/accelerator-steps"
+"content_kind": "supplied_content"
+"hidden": false
+"brief": "context/dxc-core-seven-gates.md"
+notes_file: notes/dxc-core-seven-gates.md
+content:
+  headline: Stabilize the Core flow with seven gates
+  section_label: Move 1 · Stabilize Core SDLC
+  card_1:
+    body:
+      item_01:
+        label: Context
+      item_02:
+        p: Keep Java and Scrum. Same-build promotion is the pipeline touch; settle branching and template environments for two releases in flight.
+      item_03:
+        label: Claude assists; people approve
+      item_04:
+        bullets:
+          item_01: Draft acceptance criteria and tests
+          item_02: 'Size slices; pair on code, unit tests and docs'
+          item_03: Pre-review PRs; draft reviewed backlog tests
+          item_04: Draft release notes and root-cause summaries
+      item_05:
+        label: DXC ownership
+      item_06:
+        bullets:
+          item_01: 'Refine: PMs + QA; Plan: scrum master'
+          item_02: 'Build: Core engineers; Review: Core lead'
+          item_03: 'QA: QA lead; Release: Release + DevOps'
+          item_04: 'Patch: Release; keep senior review for high risk'
+    label: EXISTING CORE FLOW
+    title: Gates on the flow Core already runs
+  table_2:
+    columns:
+      item_01:
+        label: '#'
+      item_02:
+        label: Core stage
+      item_03:
+        label: Added gate
+    rows:
+      item_01:
+        d: 'Ready: tests and technical notes before sprint'
+        n: "01"
+        s: Refine
+      item_02:
+        d: Reserve a run lane for support and patches
+        n: "02"
+        s: Plan
+      item_03:
+        d: 'Code, unit tests and docs before PR'
+        n: "03"
+        s: Build
+      item_04:
+        d: PR bot in pipeline + rotating second reviewer
+        n: "04"
+        s: Review
+      item_05:
+        d: Critical paths automated; release evidence
+        n: "05"
+        s: QA
+      item_06:
+        d: 9–10-day hardening; promote tested build
+        n: "06"
+        s: Release
+      item_07:
+        d: RCA within sprint; credential/cert alerts
+        n: "07"
+        s: Patch
+"values":
+  keys:
+    node01.body:
+      - node01-body-1
+      - node01-body-2
+      - node01-body-3
+      - node01-body-4
+      - node01-body-5
+      - node01-body-6
+    node01.body.item04.bullets:
+      - node01-body-item04-bullets-1
+      - node01-body-item04-bullets-2
+      - node01-body-item04-bullets-3
+      - node01-body-item04-bullets-4
+    node01.body.item06.bullets:
+      - node01-body-item06-bullets-1
+      - node01-body-item06-bullets-2
+      - node01-body-item06-bullets-3
+      - node01-body-item06-bullets-4
+    node02.cols:
+      - node02-cols-1
+      - node02-cols-2
+      - node02-cols-3
+    node02.rows:
+      - node02-rows-1
+      - node02-rows-2
+      - node02-rows-3
+      - node02-rows-4
+      - node02-rows-5
+      - node02-rows-6
+      - node02-rows-7
+bindings:
+  /card_1/body/item_01/label: /slots/node01.body.item01.label
+  /card_1/body/item_02/p: /slots/node01.body.item02.p
+  /card_1/body/item_03/label: /slots/node01.body.item03.label
+  /card_1/body/item_04/bullets/item_01: /slots/node01.body.item04.bullets.item01
+  /card_1/body/item_04/bullets/item_02: /slots/node01.body.item04.bullets.item02
+  /card_1/body/item_04/bullets/item_03: /slots/node01.body.item04.bullets.item03
+  /card_1/body/item_04/bullets/item_04: /slots/node01.body.item04.bullets.item04
+  /card_1/body/item_05/label: /slots/node01.body.item05.label
+  /card_1/body/item_06/bullets/item_01: /slots/node01.body.item06.bullets.item01
+  /card_1/body/item_06/bullets/item_02: /slots/node01.body.item06.bullets.item02
+  /card_1/body/item_06/bullets/item_03: /slots/node01.body.item06.bullets.item03
+  /card_1/body/item_06/bullets/item_04: /slots/node01.body.item06.bullets.item04
+  /card_1/label: /slots/node01.label
+  /card_1/title: /slots/node01.title
+  /headline: /slots/title
+  /section_label: /slots/eyebrow
+  /table_2/columns/item_01/label: /slots/node02.cols.item01.label
+  /table_2/columns/item_02/label: /slots/node02.cols.item02.label
+  /table_2/columns/item_03/label: /slots/node02.cols.item03.label
+  /table_2/rows/item_01/d: /slots/node02.rows.item01.d
+  /table_2/rows/item_01/n: /slots/node02.rows.item01.n
+  /table_2/rows/item_01/s: /slots/node02.rows.item01.s
+  /table_2/rows/item_02/d: /slots/node02.rows.item02.d
+  /table_2/rows/item_02/n: /slots/node02.rows.item02.n
+  /table_2/rows/item_02/s: /slots/node02.rows.item02.s
+  /table_2/rows/item_03/d: /slots/node02.rows.item03.d
+  /table_2/rows/item_03/n: /slots/node02.rows.item03.n
+  /table_2/rows/item_03/s: /slots/node02.rows.item03.s
+  /table_2/rows/item_04/d: /slots/node02.rows.item04.d
+  /table_2/rows/item_04/n: /slots/node02.rows.item04.n
+  /table_2/rows/item_04/s: /slots/node02.rows.item04.s
+  /table_2/rows/item_05/d: /slots/node02.rows.item05.d
+  /table_2/rows/item_05/n: /slots/node02.rows.item05.n
+  /table_2/rows/item_05/s: /slots/node02.rows.item05.s
+  /table_2/rows/item_06/d: /slots/node02.rows.item06.d
+  /table_2/rows/item_06/n: /slots/node02.rows.item06.n
+  /table_2/rows/item_06/s: /slots/node02.rows.item06.s
+  /table_2/rows/item_07/d: /slots/node02.rows.item07.d
+  /table_2/rows/item_07/n: /slots/node02.rows.item07.n
+  /table_2/rows/item_07/s: /slots/node02.rows.item07.s

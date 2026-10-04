@@ -6,13 +6,89 @@ native WMDS engine. Existing foundation/closed semantic JSON commands stay separ
 
 ## Source and compilation
 
-`Load(path)` reads exactly one YAML document. It preserves hard/trailing breaks,
+`Load(path)` reads the main YAML and its explicit slide/template/notes references.
+Each YAML file contains exactly one document. It preserves hard/trailing breaks,
 checks duplicate/unknown/case-sensitive fields and variant-specific node fields,
 and reports exact YAML line/column plus JSON pointer for typed source errors.
 Aliases, merges, custom tags, nonfinite numbers and implicit date values fail.
-Maximum source size is 16 MiB and nesting is bounded to 100 levels.
+Each YAML source is at most 16 MiB; Markdown notes are at most 1 MiB; the combined
+authored source limit is 64 MiB. Nesting is bounded to 100 levels.
+
+### Editable multi-file projects
+
+Inline documents remain supported. `project split` converts a project in place
+into a short index, ordered slide files, optional template files, and Markdown
+notes. With `--bundle v5`, shared stock slides gain human-readable content names.
+The expanded canonical source and PowerPoint identity stay unchanged; the
+existing toolchain lock is preserved. Conversion refuses occupied destinations
+and retains the original source tree under `decisions/sources/`.
+Legacy JSON-compatible flow collections become indented block YAML in the main,
+slide and template files; scalar quoting, copy, comments and note bytes remain
+preserved. Repeating the conversion is byte-idempotent.
+
+```yaml
+# deck.yaml
+schema: pptxgengo.deck-document.v1
+id: example-deck
+title: Client discussion
+year: 2026
+toolchain: {lockfile: toolchain.lock.json}
+slides:
+  - slides/001-interviews.yaml
+  - slides/002-recommendations.yaml
+# Include local definitions only when needed:
+local_templates:
+  recommendation-layout: templates/recommendation-layout.yaml
+```
+
+Each slide file is a slide object. All referenced paths are relative to the
+project root, including assets and briefs inside a slide or template file.
+References do not recursively include other YAML. Unsafe paths, symlinks,
+duplicate slide/template references and unknown fields fail with the source
+file, line, column and document pointer.
+
+```yaml
+# slides/001-interviews.yaml
+id: interviews
+template: {scope: shared, id: interviews-readout/full}
+content_kind: supplied_content
+notes_file: notes/interviews.md
+content:
+  headline: Who we interviewed
+  interviews:
+    - name: Sam
+      role: Director
+bindings:
+  headline: /slots/title
+  /interviews/0/name: /slots/node01.rows.item01.n
+  /interviews/0/role: /slots/node01.rows.item01.r
+```
+
+The binding names in this illustrative excerpt must match the actual selected
+template's closed contract. Stock scaffolding supplies that complete map.
+`content` contains authored copy; `bindings` maps its aliases or nested JSON
+pointers to JSON pointers inside the original `values`. Unmapped technical
+arrays/navigation can stay in `values`. Every content leaf must be consumed,
+source/target pointers cannot overlap, and targets cannot collide with explicit
+values. Required slots and array counts are still checked by the shared contract.
+`notes_file` and inline `notes` are mutually exclusive; Markdown bytes become
+speaker notes exactly, without parsing or trimming.
+
+Slide edits, forks and section operations retain external files. Editing a slide
+writes its own YAML; unselected slide files remain byte-identical. Comments on
+untouched YAML nodes are retained. A mutation validates the candidate source
+before replacing files, checks all predecessors under one guard, and saves a
+recoverable preimage tree. Multi-file replacement uses individual atomic renames
+with rollback on an I/O error; readers should reload after the operation completes.
+External source bytes participate in build receipts, approval invalidation and
+portable exports. Generated builds include an `authored/` source snapshot.
 
 `Compile(project, bundle, engine)` binds shared templates using caller values only.
+Shared source-declared image fields accept declared project asset IDs as well as
+library registry keys. Only media `photo`/`src` slots are resolved, including
+card media, bio and badge fields; business strings and authored values are
+unchanged. Registry keys retain their meaning if a project ID collides; an
+explicit `project:<asset-id>` selects the project asset.
 It resolves local template zone schemas/bindings, frame/grid placement and scoped
 `project:<asset-id>` payloads into `wmdesign.Document`. Its result is derived IR,
 never an alternative editable source. `Check` verifies the exact executable/Go/

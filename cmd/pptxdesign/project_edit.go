@@ -14,7 +14,7 @@ import (
 func runProjectEdit(args []string) error {
 	f := flag.NewFlagSet("project edit", flag.ContinueOnError)
 	path := f.String("project", ".", "project directory or deck.yaml")
-	patch := f.String("patch", "", "YAML or JSON mapping keyed by stable slide ID; fields: template, values, brief (project-relative page brief file path)")
+	patch := f.String("patch", "", "YAML or JSON mapping keyed by stable slide ID; fields: template, values, content, bindings, brief (project-relative page brief file path)")
 	bundle := f.String("bundle", "", "bundle path/revision; defaults to project lock")
 	engine := f.String("engine", "", "engine; defaults to project lock")
 	if err := f.Parse(args); err != nil {
@@ -33,7 +33,7 @@ func runProjectEdit(args []string) error {
 	}
 	if *bundle == "" {
 		*bundle = strings.TrimPrefix(lock.BundleRevision, "wmds-library.")
-		if !validPublishedBundle(*bundle) {
+		if !validLockedBundle(*bundle) {
 			return fmt.Errorf("unsupported locked bundle revision %q", lock.BundleRevision)
 		}
 		pinned := filepath.Join(p.Root, "runtime", "library", "wm-design-system", "pinned")
@@ -52,7 +52,11 @@ func runProjectEdit(args []string) error {
 	if err != nil {
 		return err
 	}
-	result, err := deckproject.EditSlides(p, edits, deckproject.BundlePath(*bundle), *engine)
+	b := deckproject.BundlePath(*bundle)
+	if validLockedBundle(*bundle) {
+		b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+	}
+	result, err := deckproject.EditSlides(p, edits, b, *engine)
 	if err != nil {
 		return err
 	}

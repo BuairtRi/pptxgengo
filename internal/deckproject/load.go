@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
 	"gopkg.in/yaml.v3"
-	"io"
 	"math"
 	"os"
 	"path/filepath"
@@ -22,10 +21,27 @@ var shaPattern = regexp.MustCompile(`^[a-f0-9]{64}$`)
 
 func escape(s string) string { return strings.ReplaceAll(strings.ReplaceAll(s, "~", "~0"), "/", "~1") }
 func (p *Project) fail(path, format string, args ...any) error {
-	pos := p.Positions[path]
-	return fmt.Errorf("%s:%d:%d (%s): %s", p.SourcePath, pos.Line, pos.Column, path, fmt.Sprintf(format, args...))
+	location := path
+	pos, found := p.Positions[location]
+	for !found && location != "" {
+		if slash := strings.LastIndex(location, "/"); slash >= 0 {
+			location = location[:slash]
+		} else {
+			location = ""
+		}
+		pos, found = p.Positions[location]
+	}
+	file := p.SourcePath
+	if source := p.positionFiles[location]; source != "" {
+		file = filepath.Join(p.Root, filepath.FromSlash(source))
+	}
+	return fmt.Errorf("%s:%d:%d (%s): %s", file, pos.Line, pos.Column, path, fmt.Sprintf(format, args...))
 }
 func Load(path string) (*Project, error) {
+	return loadProject(path, nil)
+}
+
+func loadProject(path string, overrides map[string][]byte) (*Project, error) {
 	a, e := filepath.Abs(path)
 	if e != nil {
 		return nil, e
@@ -42,33 +58,22 @@ func Load(path string) (*Project, error) {
 		return nil, e
 	}
 	a = safe
-	raw, e := os.ReadFile(a)
+	p := &Project{Root: filepath.Dir(a), SourcePath: a, Positions: map[string]Position{}, SourceFiles: map[string][]byte{}, SlideFiles: map[string]string{}, TemplateFiles: map[string]string{}, NotesFiles: map[string]string{}, positionFiles: map[string]string{}, sourceOverrides: overrides}
+	raw, e := p.readSource(filepath.Base(a), 16<<20)
 	if e != nil {
 		return nil, e
 	}
-	if len(raw) > 16<<20 {
-		return nil, fmt.Errorf("deck.yaml exceeds 16 MiB")
-	}
-	p := &Project{Root: filepath.Dir(a), SourcePath: a, Raw: raw, Positions: map[string]Position{}}
-	d := yaml.NewDecoder(bytes.NewReader(raw))
-	var node yaml.Node
-	if e = d.Decode(&node); e != nil {
-		return nil, e
-	}
-	var extra yaml.Node
-	if e = d.Decode(&extra); e != io.EOF {
-		return nil, fmt.Errorf("%s: exactly one YAML document required", a)
-	}
-	if len(node.Content) != 1 {
-		return nil, fmt.Errorf("empty YAML document")
-	}
-	v, e := p.yamlValue(node.Content[0], "", 0)
+	p.Raw = raw
+	v, e := p.parseSource(raw, filepath.Base(a), "")
 	if e != nil {
 		return nil, e
 	}
 	tree, ok := v.(map[string]any)
 	if !ok {
 		return nil, p.fail("", "root must be a mapping")
+	}
+	if e = p.expandSourceReferences(tree); e != nil {
+		return nil, e
 	}
 	p.tree = tree
 	p.Canonical = canonical(tree)
@@ -101,6 +106,9 @@ func Load(path string) (*Project, error) {
 }
 func (p *Project) yamlValue(n *yaml.Node, path string, depth int) (any, error) {
 	p.Positions[path] = Position{n.Line, n.Column}
+	if p.activeSource != "" {
+		p.positionFiles[path] = p.activeSource
+	}
 	if depth > 100 {
 		return nil, p.fail(path, "nesting exceeds 100")
 	}

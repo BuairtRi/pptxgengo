@@ -1,4 +1,4 @@
-// Package deckproject compiles a single human-edited deck.yaml into immutable,
+// Package deckproject compiles human-edited deck sources into immutable,
 // source-pinned WMDS build artifacts. It does not reverse-compile edited PPTX.
 package deckproject
 
@@ -121,6 +121,13 @@ type Project struct {
 	Canonical        []byte
 	Document         Document
 	Positions        map[string]Position
+	SourceFiles      map[string][]byte
+	SlideFiles       map[string]string
+	TemplateFiles    map[string]string
+	NotesFiles       map[string]string
+	positionFiles    map[string]string
+	activeSource     string
+	sourceOverrides  map[string][]byte
 	tree             map[string]any
 }
 

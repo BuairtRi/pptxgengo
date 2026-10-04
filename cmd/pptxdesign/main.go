@@ -19,6 +19,9 @@ func run() error {
 		return fmt.Errorf("usage: pptxdesign <inspect|asset-catalog|templates|template|template-reference|library-catalog|library-search|library-index|library-find|library-inspect|library-preview|library-fit|project|library-reference|library-source-reference|library-sweep|library-bound-sweep|reference|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|build|typography-probes> --bundle PATH [--source PATH] [--out NEW-DIR] [--spec FILE]")
 	}
 	command := os.Args[1]
+	if command == "render" {
+		return runRender(os.Args[2:])
+	}
 	if command == "project" {
 		return runProject(os.Args[2:])
 	}
