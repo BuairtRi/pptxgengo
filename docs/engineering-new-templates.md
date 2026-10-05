@@ -27,10 +27,13 @@ additions and revised dense heat map. Upstream is **602**, at
   `application_dispatch_failed (-10827)`. No native preview or acceptance is
   claimed. Resolve desktop dispatch, export and inspect all 16 changed layouts,
   then qualify inherited previews and promote the new gallery/index together.
-- Final isolated qualification: regular repository tests **29.39s**, focused
+- Final clean-checkout qualification: regular repository tests **33.23s**, focused
   intake race **93.31s**, full 602-source/601-bound builds **77.98s**. The exhaustive
   build is skipped by the everyday `-short` lane. CLI release local.14 supports
-  the explicit candidate bundle; the default installed library stays v5/587.
+  the explicit candidate bundle; it is built and installed globally from clean
+  runtime commit `b7badc98` (`vcs.modified=false`). The default installed library
+  stays v5/587; all 587 previews and 1,760 artifact links were verified during
+  installation. The other agent's presentation skill link was preserved.
 - Semantic metadata remains inferred. Generic item matching still cannot express
   complete matrices and linked detail locators. Reference badges reserve their
   width on every wrapped body line; anchored adornments remain fixed after edits.
