@@ -29,11 +29,16 @@ additions and revised dense heat map. Upstream is **602**, at
   then qualify inherited previews and promote the new gallery/index together.
 - Final clean-checkout qualification: regular repository tests **33.23s**, focused
   intake race **93.31s**, full 602-source/601-bound builds **77.98s**. The exhaustive
-  build is skipped by the everyday `-short` lane. CLI release local.14 supports
+  build is skipped by the everyday `-short` lane. CLI release local.15 supports
   the explicit candidate bundle; it is built and installed globally from clean
-  runtime commit `b7badc98` (`vcs.modified=false`). The default installed library
+  runtime commit `962c03a3` (`vcs.modified=false`). The default installed library
   stays v5/587; all 587 previews and 1,760 artifact links were verified during
   installation. The other agent's presentation skill link was preserved.
+- The local.15 follow-up fixes repeated/stale capacity comments and gives doctor
+  and render the same stable PPTX/PDF staging folder. Its final fast suite passed
+  in **31.20s**. Installed doctor and review-deck render still fail operational
+  dispatch `-10827` before opening a file; the folder fix is regression-tested,
+  with actual native read/write and visual acceptance still unqualified.
 - Semantic metadata remains inferred. Generic item matching still cannot express
   complete matrices and linked detail locators. Reference badges reserve their
   width on every wrapped body line; anchored adornments remain fixed after edits.

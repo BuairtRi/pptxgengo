@@ -134,7 +134,7 @@ own files. Regression tests cover folder parity, failed PDF writes, collisions,
 symlinks, missing metadata, retained tasks and legacy nested cleanup.
 
 Independent peer review found no remaining known code defects. The clean-checkout
-fast suite passes; comment regressions pass under the race detector (15.157s),
+fast suite passes in 31.20 seconds; comment regressions pass under the race detector (15.157s),
 the full native package passes normally (3.833s) and under race (7.591s), and the
 AppleScript compiles. Live doctor and render attempts still fail with this
 caller's operational Apple-event `-10827` before opening the task copy. No Grant
@@ -142,3 +142,13 @@ dialog was observed. The computer-use tool rejected control of Warp for safety
 reasons, so that desktop-terminal fallback was not used. Native PDF reservation
 overwrite and actual visual export remain unqualified; no new native acceptance
 is recorded. Task scratch artifacts are removed; open original decks are preserved.
+
+Global **0.1.0-local.15** is installed from clean runtime commit
+`962c03a335099578d1742046012639c70fd069c0` (`vcs.modified=false`). The installer
+verified all 587 previews, 1,760 gallery links and 3,864 package files. The installed
+CLI kept three identical cards/4 edits at 59 lines with identical SHA-256 hashes;
+cards/4 to cards/3 changed the body estimate from ~104 to ~148, and three repeated
+same-template swaps remained byte-identical at 51 lines. Installed doctor and
+review-deck render still report operational dispatch `-10827`; the failed render
+wrote `render-error.txt` and issued no success manifest. The presentation-skill
+link is unchanged.
