@@ -14,7 +14,7 @@ import (
 
 func runRenderDoctor(args []string) error {
 	flags := flag.NewFlagSet("render-doctor", flag.ContinueOnError)
-	staging := flags.String("staging-dir", "", "staging folder to inspect (or PPTXGENGO_NATIVE_STAGING)")
+	staging := flags.String("staging-dir", "", "stable folder to probe with native PPTX open/PDF write (use same value for render; or PPTXGENGO_NATIVE_STAGING)")
 	timeout := flags.Duration("timeout", 20*time.Second, "total diagnostic time budget")
 	jsonOutput := flags.Bool("json", false, "emit structured checks")
 	if err := flags.Parse(args); err != nil {

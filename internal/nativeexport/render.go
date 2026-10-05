@@ -160,42 +160,47 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	if err != nil {
 		return nil, err
 	}
-	var work string
-	if opts.taskID != "" {
-		work = filepath.Join(staging, opts.taskID)
-		err = os.Mkdir(work, 0700)
-	} else {
-		work, err = os.MkdirTemp(staging, ".native-work-")
+	if opts.taskID == "" {
+		opts.taskID, err = newTaskID()
+		if err != nil {
+			return nil, err
+		}
 	}
+	work := filepath.Join(staging, opts.taskID)
+	err = os.Mkdir(work, 0700)
 	if err != nil {
 		return nil, err
 	}
 	cleanupConfirmed := true // no PowerPoint command has been sent yet
 	defer func() {
 		if cleanupConfirmed {
-			_ = os.RemoveAll(work)
+			_ = removeTaskFiles(staging, opts.taskID)
 		}
 	}()
 	work, err = canonicalPath(work)
 	if err != nil {
 		return nil, err
 	}
-	taskName := filepath.Base(work) + ".pptx"
-	taskPath := filepath.Join(work, taskName)
+	taskPath, pdfPath, err := acquireTaskFiles(staging, opts.taskID, review)
+	if err != nil {
+		return nil, err
+	}
 	scriptPath := filepath.Join(work, "export.applescript")
 	swiftPath := filepath.Join(work, "pdf.swift")
-	for path, data := range map[string][]byte{taskPath: review, scriptPath: exportScript, swiftPath: pdfScript} {
+	for path, data := range map[string][]byte{scriptPath: exportScript, swiftPath: pdfScript} {
 		if err = os.WriteFile(path, data, 0600); err != nil {
 			return nil, err
 		}
 	}
-	pdfPath := filepath.Join(work, "deck.pdf")
 	seconds := max(1, int(opts.Timeout.Seconds()))
+	if err = validateTaskExport(staging, opts.taskID); err != nil {
+		return nil, err
+	}
 	cleanupConfirmed = false
-	if _, err = run(ctx, "/usr/bin/osascript", scriptPath, taskPath, pdfPath, taskName, fmt.Sprint(seconds)); err != nil {
+	if _, err = run(ctx, "/usr/bin/osascript", taskExportArguments(scriptPath, taskPath, pdfPath, opts.taskID, seconds)...); err != nil {
 		// Resolve the exact task-copy path again; never close by display name.
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-		_, closeErr := run(cleanupCtx, "/usr/bin/osascript", scriptPath, taskPath, pdfPath, taskName, "3", "close")
+		_, closeErr := run(cleanupCtx, "/usr/bin/osascript", taskCloseArguments(scriptPath, taskPath, pdfPath, opts.taskID, 3, true)...)
 		cancel()
 		cleanupConfirmed = closeErr == nil
 		if closeErr != nil {
@@ -207,6 +212,9 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	pdfBytes, err := os.ReadFile(pdfPath)
 	if err != nil {
 		return nil, fmt.Errorf("PowerPoint returned without a PDF: %w", err)
+	}
+	if len(pdfBytes) == 0 {
+		return nil, fmt.Errorf("PowerPoint returned without a PDF: owned output reservation is still empty")
 	}
 	if !bytes.HasPrefix(pdfBytes, []byte("%PDF-")) {
 		return nil, fmt.Errorf("PowerPoint output is not a PDF")

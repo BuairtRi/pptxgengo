@@ -38,7 +38,7 @@ func nativeCommand(ctx context.Context, name string, args ...string) ([]byte, er
 func monitorAppleScript(args []string) bool {
 	// Only private task scripts have an absolute file path. Inline doctor
 	// commands start with -e and must not write probe files into the caller's cwd.
-	return len(args) >= 5 && filepath.IsAbs(args[0]) && filepath.Ext(args[0]) == ".applescript" && (len(args) == 5 || args[len(args)-1] != "close")
+	return len(args) >= 5 && filepath.IsAbs(args[0]) && filepath.Ext(args[0]) == ".applescript" && (len(args) == 5 || args[5] != "close")
 }
 
 type dialogObservation struct{ Status, Dialog, Detail string }
@@ -289,37 +289,46 @@ func doctorFileAccess(ctx context.Context, root, taskID string, run runner) Diag
 	if err := os.Mkdir(work, 0700); err != nil {
 		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
 	}
-	path := filepath.Join(work, taskID+".pptx")
+	path, pdfPath := taskPresentationPaths(root, taskID)
 	script := filepath.Join(work, "probe.applescript")
 	presentation := pptx.New()
 	if err := presentation.AddSlide().AddText([]pptx.TextProps{{Text: "PowerPoint staging file-access diagnostic"}}, nil); err != nil {
-		_ = os.RemoveAll(work)
+		_ = removeTaskFiles(root, taskID)
 		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
 	}
 	data, err := presentation.Write()
 	if err == nil {
-		err = os.WriteFile(path, data, 0600)
+		path, pdfPath, err = acquireTaskFiles(root, taskID, data)
 	}
 	if err == nil {
 		err = os.WriteFile(script, exportScript, 0600)
 	}
 	if err != nil {
-		_ = os.RemoveAll(work)
+		_ = removeTaskFiles(root, taskID)
 		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
 	}
 	probeCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
-	_, err = run(probeCtx, "/usr/bin/osascript", script, path, filepath.Join(work, "unused.pdf"), taskID+".pptx", "12", "probe")
+	if err = validateTaskExport(root, taskID); err != nil {
+		cancel()
+		_ = removeTaskFiles(root, taskID)
+		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
+	}
+	_, err = run(probeCtx, "/usr/bin/osascript", taskExportArguments(script, path, pdfPath, taskID, 12)...)
 	cancel()
 	if err == nil {
-		_ = os.RemoveAll(work)
-		return Diagnostic{"powerpoint-file-access", "pass", "PowerPoint opened and closed the exact diagnostic task copy in " + root + "; no PDF or render receipt was issued.", ""}
+		pdf, readErr := os.ReadFile(pdfPath)
+		_ = removeTaskFiles(root, taskID)
+		if readErr != nil || !strings.HasPrefix(string(pdf), "%PDF-") {
+			return Diagnostic{"powerpoint-file-access", "unknown", fmt.Sprintf("PowerPoint command returned, but a native PDF write in %s was not confirmed: %v", root, readErr), fix}
+		}
+		return Diagnostic{"powerpoint-file-access", "pass", "PowerPoint opened the exact diagnostic copy, wrote its PDF, and closed it in the same stable staging folder used by render: " + root + ". This confirms this probe only; future prompts or a different --staging-dir require a new check. No render receipt was issued.", ""}
 	}
 	closeCtx, closeCancel := context.WithTimeout(context.Background(), 3*time.Second)
-	_, closeErr := run(closeCtx, "/usr/bin/osascript", script, path, filepath.Join(work, "unused.pdf"), taskID+".pptx", "3", "close")
+	_, closeErr := run(closeCtx, "/usr/bin/osascript", taskCloseArguments(script, path, pdfPath, taskID, 3, true)...)
 	closeCancel()
 	detail := exportFailure(err, path).Error()
 	if closeErr == nil {
-		_ = os.RemoveAll(work)
+		_ = removeTaskFiles(root, taskID)
 	} else {
 		detail += "; exact-task close unconfirmed; retained diagnostic copy: " + path
 	}
@@ -332,17 +341,18 @@ func doctorFileAccess(ctx context.Context, root, taskID string, run runner) Diag
 
 func exportFailure(err error, taskPath string) error {
 	message := strings.ToLower(err.Error())
+	stagingRoot := filepath.Dir(taskPath)
 	switch {
 	case strings.Contains(message, "-10827"):
 		return fmt.Errorf("PowerPoint PDF export failed: application_dispatch_failed (-10827): this caller could not send an operational command to PowerPoint; file-access and Automation permission are unconfirmed. Open PowerPoint from the signed-in macOS desktop and rerun render-doctor from that same user session: %w", err)
 	case strings.Contains(message, "-1743") || strings.Contains(message, "not authorized") || strings.Contains(message, "automation denied"):
 		return fmt.Errorf("PowerPoint PDF export failed: automation_denied: allow the calling terminal or agent host in System Settings > Privacy & Security > Automation > Microsoft PowerPoint: %w", err)
 	case strings.Contains(message, "file_access_denied") || strings.Contains(message, "permission denied"):
-		return fmt.Errorf("PowerPoint PDF export failed: file_access_denied for %s; grant PowerPoint access to the staging folder, then rerun: %w", taskPath, err)
+		return fmt.Errorf("PowerPoint PDF export failed: file_access_denied for %s; select/grant PowerPoint access to the stable staging folder %s, then rerun render-doctor with that same --staging-dir: %w", taskPath, stagingRoot, err)
 	case strings.Contains(message, "identity_ambiguous"):
 		return fmt.Errorf("PowerPoint PDF export failed: multiple presentations identify the exact task copy; close duplicate task copies and rerun: %w", err)
 	case strings.Contains(message, "open_identity_timeout") || strings.Contains(message, "-1712") || strings.Contains(message, "deadline exceeded"):
-		return fmt.Errorf("PowerPoint PDF export failed: PowerPoint did not answer or identify the task copy within the bounded wait; a blocking dialog or file-access prompt is possible but unconfirmed. Inspect PowerPoint, grant access to %s if requested, then rerun: %w", taskPath, err)
+		return fmt.Errorf("PowerPoint PDF export failed: PowerPoint did not answer or identify the task copy within the bounded wait; a blocking dialog or file-access prompt is possible but unconfirmed. Inspect PowerPoint, grant access to the stable staging folder %s if requested, then rerun: %w", stagingRoot, err)
 	default:
 		return fmt.Errorf("PowerPoint PDF export failed: %w", err)
 	}

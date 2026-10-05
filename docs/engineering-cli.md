@@ -286,9 +286,15 @@ Rendering uses local Microsoft PowerPoint and PDFKit. The render command leaves 
 Render detects PowerPoint's Grant File Access dialog and reports it as a file
 access failure. Failed runs attempt to leave `render-error.txt`, including
 preflight failures and timeouts; an inaccessible output directory is reported
-explicitly. `render-doctor` probes file access by opening and closing a private
-generated deck after the operational automation check succeeds. It may show the
-one-time grant dialog for the operator to clear. Unknown visibility or a broken
+explicitly. `render-doctor` probes file access by opening a generated deck,
+exporting a one-slide PDF, and closing that exact deck after the operational
+automation check succeeds. Doctor and render place their uniquely named PPTX/PDF
+files directly in the same stable staging folder. Scripts and rasterization
+files remain in private task subfolders. Use the same `--staging-dir` (or
+`PPTXGENGO_NATIVE_STAGING`) for both commands; the default is the user cache.
+The probe may show a grant dialog for the operator to clear for that folder.
+A pass records the observed read/write operation, not a guarantee of future
+access. Unknown visibility or a broken
 GUI caller is reported as unknown; it does not establish permission denial.
 
 ### Local agent-session recovery

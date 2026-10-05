@@ -23,6 +23,14 @@ func MarshalStockSlideSource(authored map[string]any, metadata wmdesign.LibraryA
 }
 
 func annotateStockSlide(node *yaml.Node, metadata wmdesign.LibraryAuthoring) {
+	// YAML may associate a preceding generated comment with a mapping key or
+	// its parent after a read/write cycle. Remove old generated blocks from all
+	// comment positions before adding the current metadata exactly once.
+	descriptions := make(map[string]bool, len(metadata.Slots))
+	for _, slot := range metadata.Slots {
+		descriptions[slot.Description] = true
+	}
+	stripGeneratedStockComments(node, descriptions)
 	for _, slot := range metadata.Slots {
 		if slot.Classification == "decorative" {
 			continue
@@ -62,7 +70,7 @@ func annotateStockSlide(node *yaml.Node, metadata wmdesign.LibraryAuthoring) {
 				capacity = fmt.Sprintf("approximate capacity: ~%d characters, %d line(s) at %.0f pt type; Latin prose estimate, not a maximum", c.ApproxCharacters, c.LineBudget, c.Style.Size)
 			}
 		}
-		human := stockHumanComments(leaf.HeadComment, slot.Description)
+		human := strings.Trim(leaf.HeadComment, "\n")
 		generated := "Stock slot: " + slot.Description + "\n" + capacity + "\nMetadata: " + slot.ReviewStatus + "; native fit not evaluated."
 		if human != "" {
 			generated = human + "\n" + generated
@@ -71,21 +79,30 @@ func annotateStockSlide(node *yaml.Node, metadata wmdesign.LibraryAuthoring) {
 	}
 }
 
-// Remove the marked generated block, and the earlier three-line form where
-// the description can be identified. Other author comments retain their text.
-func stockHumanComments(comment, description string) string {
+func stockCommentLine(line string) string {
+	line = strings.TrimSpace(line)
+	if strings.HasPrefix(line, "#") {
+		line = strings.TrimSpace(strings.TrimPrefix(line, "#"))
+	}
+	return line
+}
+
+// Strip generated capacity/metadata blocks wherever the YAML parser attached
+// them. Other author comments retain their original text and location.
+func stockHumanComments(comment string, descriptions map[string]bool) string {
 	lines := strings.Split(comment, "\n")
 	drop := map[int]bool{}
 	for i := 0; i+1 < len(lines); i++ {
-		capacity := strings.HasPrefix(lines[i], "approximate capacity:") || strings.HasPrefix(lines[i], "capacity unavailable (")
-		metadata := strings.HasPrefix(lines[i+1], "Metadata: ") && strings.HasSuffix(lines[i+1], "; native fit not evaluated.")
+		current, next := stockCommentLine(lines[i]), stockCommentLine(lines[i+1])
+		capacity := strings.HasPrefix(current, "approximate capacity:") || strings.HasPrefix(current, "capacity unavailable (")
+		metadata := strings.HasPrefix(next, "Metadata: ") && strings.HasSuffix(next, "; native fit not evaluated.")
 		if !capacity || !metadata {
 			continue
 		}
 		drop[i], drop[i+1] = true, true
 		if i > 0 {
-			previous := lines[i-1]
-			if strings.HasPrefix(previous, "Stock slot: ") || previous == description || strings.Contains(previous, "; pinned source field /") || strings.Contains(previous, " at /") || strings.HasPrefix(previous, "Phase ") {
+			previous := stockCommentLine(lines[i-1])
+			if strings.HasPrefix(previous, "Stock slot: ") || descriptions[previous] || strings.Contains(previous, "; pinned source field /") || strings.Contains(previous, " at /") || strings.HasPrefix(previous, "Phase ") {
 				drop[i-1] = true
 			}
 		}
@@ -97,6 +114,18 @@ func stockHumanComments(comment, description string) string {
 		}
 	}
 	return strings.Trim(strings.Join(kept, "\n"), "\n")
+}
+
+func stripGeneratedStockComments(node *yaml.Node, descriptions map[string]bool) {
+	if node == nil {
+		return
+	}
+	node.HeadComment = stockHumanComments(node.HeadComment, descriptions)
+	node.LineComment = stockHumanComments(node.LineComment, descriptions)
+	node.FootComment = stockHumanComments(node.FootComment, descriptions)
+	for _, child := range node.Content {
+		stripGeneratedStockComments(child, descriptions)
+	}
 }
 
 // Content replacement retains comments attached to matching authored paths.

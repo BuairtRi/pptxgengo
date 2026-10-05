@@ -218,12 +218,12 @@ func TestNativeCleanupUsesExactTaskPath(t *testing.T) {
 		}
 		if calls == 1 {
 			exportArgs = append([]string(nil), args...)
-			if len(args) != 5 || args[1] == source {
+			if len(args) != 7 || args[5] != "export" || args[1] == source {
 				t.Fatalf("invalid export arguments %v", args)
 			}
 			return nil, errors.New("automation denied")
 		}
-		if calls != 2 || len(args) != 6 || args[5] != "close" || args[4] != "3" {
+		if calls != 2 || len(args) != 7 || args[5] != "close" || args[4] != "3" || args[6] != exportArgs[6] {
 			t.Fatalf("invalid cleanup arguments %v", args)
 		}
 		for i := 0; i < 4; i++ {

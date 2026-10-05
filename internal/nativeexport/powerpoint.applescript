@@ -11,6 +11,11 @@ on run argv
  if (count of argv) > 4 then set closeOnly to (item 5 of argv is "close")
  if (count of argv) > 4 then set probeOnly to (item 5 of argv is "probe")
  set expectedIdentity to my fileIdentity(sourceFile)
+ if (count of argv) > 5 then
+  set retainedIdentity to my fileIdentity(POSIX file (item 6 of argv))
+  if retainedIdentity is "" or retainedIdentity is not expectedIdentity then error "identity_changed: staged task inode differs from retained task identity" number 68
+  set expectedIdentity to retainedIdentity
+ end if
  if expectedIdentity is "" then error "file_access_denied: cannot stat task copy" number 66
  with timeout of secondsAllowed seconds
   tell application "/Applications/Microsoft PowerPoint.app"

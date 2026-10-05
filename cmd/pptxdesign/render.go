@@ -22,7 +22,7 @@ func runRender(args []string) (err error) {
 	hidden := flags.Bool("include-hidden", false, "make hidden slides visible in the temporary review copy")
 	slides := flags.String("slides", "", "one-based source slide numbers or ranges, e.g. 3,5-7")
 	contact := flags.Bool("contact-sheet", false, "create a PNG contact sheet labeled with source slide numbers")
-	staging := flags.String("staging-dir", "", "PowerPoint-accessible staging folder (or PPTXGENGO_NATIVE_STAGING; default user cache)")
+	staging := flags.String("staging-dir", "", "stable PowerPoint PPTX/PDF folder (same as render-doctor; or PPTXGENGO_NATIVE_STAGING; default user cache)")
 	timeout := flags.Duration("timeout", 5*time.Minute, "total native export and rasterization timeout")
 	renderStarted := false
 	defer func() {

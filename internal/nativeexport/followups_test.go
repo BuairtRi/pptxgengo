@@ -160,7 +160,7 @@ func TestUnknownDialogVisibilityRemainsUnknown(t *testing.T) {
 }
 
 func TestDoctorOperationalFileAccessProbe(t *testing.T) {
-	for _, name := range []string{"pass", "grant", "unknown"} {
+	for _, name := range []string{"pass", "grant", "unknown", "no-pdf", "invalid-pdf"} {
 		t.Run(name, func(t *testing.T) {
 			root := t.TempDir()
 			calls := 0
@@ -169,11 +169,11 @@ func TestDoctorOperationalFileAccessProbe(t *testing.T) {
 				if _, e := os.Stat(args[1]); e != nil {
 					t.Fatal("probe did not create exact task copy", e)
 				}
-				if args[len(args)-1] == "close" {
+				if args[5] == "close" {
 					return nil, nil
 				}
-				if args[len(args)-1] != "probe" {
-					t.Fatal("doctor attempted production export", args)
+				if args[5] != "export" || len(args) != 7 || filepath.Dir(args[1]) != root || filepath.Dir(args[2]) != root {
+					t.Fatal("doctor did not use the actual stable-folder export contract", args)
 				}
 				if name == "grant" {
 					return nil, errors.New("file_access_denied: Grant File Access")
@@ -181,14 +181,21 @@ func TestDoctorOperationalFileAccessProbe(t *testing.T) {
 				if name == "unknown" {
 					return nil, context.DeadlineExceeded
 				}
-				return nil, nil
+				if name == "no-pdf" {
+					return nil, nil
+				}
+				content := []byte("%PDF-1.7\ndiagnostic")
+				if name == "invalid-pdf" {
+					content = []byte("not a PDF")
+				}
+				return nil, os.WriteFile(args[2], content, 0600)
 			}
 			check := doctorFileAccess(context.Background(), root, "", run)
 			want := "pass"
 			if name == "grant" {
 				want = "fail"
 			}
-			if name == "unknown" {
+			if name == "unknown" || name == "no-pdf" || name == "invalid-pdf" {
 				want = "unknown"
 			}
 			if check.Status != want || (name != "pass" && !strings.Contains(check.Fix, "Select/Grant")) {

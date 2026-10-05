@@ -136,6 +136,10 @@ func RenderWorker(ctx context.Context, input io.Reader, output io.Writer) error 
 }
 
 func cleanupExactTask(ctx context.Context, task cleanupTask) error {
+	return cleanupExactTaskWithRunner(ctx, task, command)
+}
+
+func cleanupExactTaskWithRunner(ctx context.Context, task cleanupTask, run runner) error {
 	if !validTaskID.MatchString(task.TaskID) {
 		return fmt.Errorf("invalid cleanup task identity")
 	}
@@ -148,8 +152,14 @@ func cleanupExactTask(ctx context.Context, task cleanupTask) error {
 		return err
 	}
 	work := filepath.Join(root, task.TaskID)
+	taskPath, pdfPath := taskPresentationPaths(root, task.TaskID)
 	info, err := os.Lstat(work)
 	if os.IsNotExist(err) {
+		for _, path := range []string{taskPath, pdfPath} {
+			if _, fileErr := os.Lstat(path); !os.IsNotExist(fileErr) {
+				return fmt.Errorf("exact-task staging metadata missing; unconfirmed task file retained at %s", path)
+			}
+		}
 		return nil
 	}
 	if err != nil {
@@ -158,20 +168,41 @@ func cleanupExactTask(ctx context.Context, task cleanupTask) error {
 	if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
 		return fmt.Errorf("cleanup task path is not a task directory")
 	}
-	taskPath := filepath.Join(work, task.TaskID+".pptx")
-	if _, err = os.Stat(taskPath); err == nil {
+	owned, ownershipErr := stableTaskOwned(root, task.TaskID)
+	if ownershipErr != nil {
+		return ownershipErr
+	}
+	if owned {
+		taskPath, err = exactTaskPresentation(root, task.TaskID)
+		if err != nil {
+			return fmt.Errorf("could not confirm exact-task identity; retained task metadata: %w", err)
+		}
+	} else {
+		// Older versions placed the PPTX inside the private work directory.
+		taskPath = filepath.Join(work, task.TaskID+".pptx")
+	}
+	if info, statErr := os.Lstat(taskPath); statErr == nil {
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("cleanup task presentation is not a regular file")
+		}
 		scriptPath := filepath.Join(work, "cleanup.applescript")
 		if err = os.WriteFile(scriptPath, exportScript, 0600); err != nil {
 			return err
 		}
-		_, err = command(ctx, "/usr/bin/osascript", scriptPath, taskPath, filepath.Join(work, "deck.pdf"), task.TaskID+".pptx", "3", "close")
+		_, err = run(ctx, "/usr/bin/osascript", taskCloseArguments(scriptPath, taskPath, pdfPath, task.TaskID, 3, owned)...)
 		if err != nil {
 			return fmt.Errorf("could not confirm exact-task PowerPoint close; task copy retained at %s: %w", taskPath, err)
 		}
-	} else if !os.IsNotExist(err) {
-		return err
+	} else if !os.IsNotExist(statErr) {
+		return statErr
+	} else if !owned {
+		for _, path := range []string{filepath.Join(root, task.TaskID+".pptx"), pdfPath} {
+			if _, fileErr := os.Lstat(path); !os.IsNotExist(fileErr) {
+				return fmt.Errorf("stable staging file lacks task ownership; retained at %s", path)
+			}
+		}
 	}
-	return os.RemoveAll(work)
+	return removeTaskFiles(root, task.TaskID)
 }
 
 func workerProcess(ctx context.Context, request workerRequest) ([]byte, error) {
