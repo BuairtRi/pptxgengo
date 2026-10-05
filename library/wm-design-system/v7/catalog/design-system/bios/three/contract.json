@@ -1,0 +1,1015 @@
+{
+  "key": "bios/three",
+  "source_file": "templates/library/team.json",
+  "source_sha256": "a138b809a4d3e069e84c9252179b8f633751a48609c34d9ac82492ac219bc8ae",
+  "source_revision": "wmds-library.v7",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "card"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    }
+  ],
+  "family": "team",
+  "tier": "core",
+  "name": "Team bios · three cards",
+  "purpose": "Introduce three people at once with mini bio cards: photo or initials, role, credentials and two proof points.",
+  "uses": [
+    "card.bio"
+  ],
+  "source_advisory_budget": {
+    "words": 80,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "name",
+      "maxChars": 24
+    },
+    {
+      "slot": "title line",
+      "maxChars": 24
+    },
+    {
+      "slot": "role",
+      "maxChars": 24
+    },
+    {
+      "slot": "tag",
+      "maxChars": 16
+    },
+    {
+      "slot": "point",
+      "maxChars": 36
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "image",
+      "key-message",
+      "person"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "image"
+    ],
+    "component_types": [
+      "card"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "person",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/0/bio/points",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/bio/points",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/2/bio/points",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "card",
+        "role": "person",
+        "source_bounds": {
+          "h": 252,
+          "w": 270,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "person",
+        "source_bounds": {
+          "h": 252,
+          "w": 270,
+          "x": 345,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "person",
+        "source_bounds": {
+          "h": 252,
+          "w": 270,
+          "x": 633,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v7",
+    "source_sha256": "a138b809a4d3e069e84c9252179b8f633751a48609c34d9ac82492ac219bc8ae",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "parallel",
+    "groups": [
+      {
+        "alias": "/cards",
+        "role": "point",
+        "cardinality": 3,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.initials",
+        "alias": "/cards/item_01/bio/initials",
+        "source_pointer": "/body/0/bio/initials",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "initials",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "initials (string) at /cards/item_01/bio/initials",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.name",
+        "alias": "/cards/item_01/bio/name",
+        "source_pointer": "/body/0/bio/name",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_01/bio/name",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.points.item01",
+        "alias": "/cards/item_01/bio/points/item_01",
+        "source_pointer": "/body/0/bio/points/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "0 (string) at /cards/item_01/bio/points/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.points.item02",
+        "alias": "/cards/item_01/bio/points/item_02",
+        "source_pointer": "/body/0/bio/points/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "1 (string) at /cards/item_01/bio/points/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.role",
+        "alias": "/cards/item_01/bio/role",
+        "source_pointer": "/body/0/bio/role",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "role",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "role (string) at /cards/item_01/bio/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.tags.item01",
+        "alias": "/cards/item_01/bio/tags/item_01",
+        "source_pointer": "/body/0/bio/tags/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "0 (string) at /cards/item_01/bio/tags/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.tags.item02",
+        "alias": "/cards/item_01/bio/tags/item_02",
+        "source_pointer": "/body/0/bio/tags/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "1 (string) at /cards/item_01/bio/tags/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.bio.title",
+        "alias": "/cards/item_01/bio/title",
+        "source_pointer": "/body/0/bio/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "lead (string) at /cards/item_01/bio/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.name",
+        "alias": "/cards/item_02/bio/name",
+        "source_pointer": "/body/1/bio/name",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_02/bio/name",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.photo",
+        "alias": "/cards/item_02/bio/photo",
+        "source_pointer": "/body/1/bio/photo",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "asset",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "asset (string) at /cards/item_02/bio/photo",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.points.item01",
+        "alias": "/cards/item_02/bio/points/item_01",
+        "source_pointer": "/body/1/bio/points/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "0 (string) at /cards/item_02/bio/points/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.points.item02",
+        "alias": "/cards/item_02/bio/points/item_02",
+        "source_pointer": "/body/1/bio/points/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "1 (string) at /cards/item_02/bio/points/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.role",
+        "alias": "/cards/item_02/bio/role",
+        "source_pointer": "/body/1/bio/role",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "role",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "role (string) at /cards/item_02/bio/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.tags.item01",
+        "alias": "/cards/item_02/bio/tags/item_01",
+        "source_pointer": "/body/1/bio/tags/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "0 (string) at /cards/item_02/bio/tags/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.tags.item02",
+        "alias": "/cards/item_02/bio/tags/item_02",
+        "source_pointer": "/body/1/bio/tags/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "1 (string) at /cards/item_02/bio/tags/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.bio.title",
+        "alias": "/cards/item_02/bio/title",
+        "source_pointer": "/body/1/bio/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "lead (string) at /cards/item_02/bio/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.initials",
+        "alias": "/cards/item_03/bio/initials",
+        "source_pointer": "/body/2/bio/initials",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "initials",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "initials (string) at /cards/item_03/bio/initials",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.name",
+        "alias": "/cards/item_03/bio/name",
+        "source_pointer": "/body/2/bio/name",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_03/bio/name",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.points.item01",
+        "alias": "/cards/item_03/bio/points/item_01",
+        "source_pointer": "/body/2/bio/points/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "0 (string) at /cards/item_03/bio/points/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.points.item02",
+        "alias": "/cards/item_03/bio/points/item_02",
+        "source_pointer": "/body/2/bio/points/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "1 (string) at /cards/item_03/bio/points/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.role",
+        "alias": "/cards/item_03/bio/role",
+        "source_pointer": "/body/2/bio/role",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "role",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "role (string) at /cards/item_03/bio/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.tags.item01",
+        "alias": "/cards/item_03/bio/tags/item_01",
+        "source_pointer": "/body/2/bio/tags/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "0 (string) at /cards/item_03/bio/tags/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.tags.item02",
+        "alias": "/cards/item_03/bio/tags/item_02",
+        "source_pointer": "/body/2/bio/tags/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "1 (string) at /cards/item_03/bio/tags/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.bio.title",
+        "alias": "/cards/item_03/bio/title",
+        "source_pointer": "/body/2/bio/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "lead (string) at /cards/item_03/bio/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Team"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "The people who will run your close program"
+    },
+    {
+      "name": "node01.bio.initials",
+      "source_pointer": "/body/0/bio/initials",
+      "kind": "string",
+      "synthetic_source_example": "JE"
+    },
+    {
+      "name": "node01.bio.name",
+      "source_pointer": "/body/0/bio/name",
+      "kind": "string",
+      "synthetic_source_example": "Jordan Ellis"
+    },
+    {
+      "name": "node01.bio.points.item01",
+      "source_pointer": "/body/0/bio/points/0",
+      "kind": "string",
+      "synthetic_source_example": "30+ close transformations"
+    },
+    {
+      "name": "node01.bio.points.item02",
+      "source_pointer": "/body/0/bio/points/1",
+      "kind": "string",
+      "synthetic_source_example": "Led a 14-entity finance redesign"
+    },
+    {
+      "name": "node01.bio.role",
+      "source_pointer": "/body/0/bio/role",
+      "kind": "string",
+      "synthetic_source_example": "Engagement lead"
+    },
+    {
+      "name": "node01.bio.tags.item01",
+      "source_pointer": "/body/0/bio/tags/0",
+      "kind": "string",
+      "synthetic_source_example": "CPA"
+    },
+    {
+      "name": "node01.bio.tags.item02",
+      "source_pointer": "/body/0/bio/tags/1",
+      "kind": "string",
+      "synthetic_source_example": "Health care"
+    },
+    {
+      "name": "node01.bio.title",
+      "source_pointer": "/body/0/bio/title",
+      "kind": "string",
+      "synthetic_source_example": "Managing Director"
+    },
+    {
+      "name": "node02.bio.name",
+      "source_pointer": "/body/1/bio/name",
+      "kind": "string",
+      "synthetic_source_example": "Sam Ortiz"
+    },
+    {
+      "name": "node02.bio.photo",
+      "source_pointer": "/body/1/bio/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-headshot-face"
+    },
+    {
+      "name": "node02.bio.points.item01",
+      "source_pointer": "/body/1/bio/points/0",
+      "kind": "string",
+      "synthetic_source_example": "Built rules engines for 3 clients"
+    },
+    {
+      "name": "node02.bio.points.item02",
+      "source_pointer": "/body/1/bio/points/1",
+      "kind": "string",
+      "synthetic_source_example": "Former assistant controller"
+    },
+    {
+      "name": "node02.bio.role",
+      "source_pointer": "/body/1/bio/role",
+      "kind": "string",
+      "synthetic_source_example": "Process lead"
+    },
+    {
+      "name": "node02.bio.tags.item01",
+      "source_pointer": "/body/1/bio/tags/0",
+      "kind": "string",
+      "synthetic_source_example": "Lean"
+    },
+    {
+      "name": "node02.bio.tags.item02",
+      "source_pointer": "/body/1/bio/tags/1",
+      "kind": "string",
+      "synthetic_source_example": "SAP"
+    },
+    {
+      "name": "node02.bio.title",
+      "source_pointer": "/body/1/bio/title",
+      "kind": "string",
+      "synthetic_source_example": "Senior Manager"
+    },
+    {
+      "name": "node03.bio.initials",
+      "source_pointer": "/body/2/bio/initials",
+      "kind": "string",
+      "synthetic_source_example": "PK"
+    },
+    {
+      "name": "node03.bio.name",
+      "source_pointer": "/body/2/bio/name",
+      "kind": "string",
+      "synthetic_source_example": "Priya Kapoor"
+    },
+    {
+      "name": "node03.bio.points.item01",
+      "source_pointer": "/body/2/bio/points/0",
+      "kind": "string",
+      "synthetic_source_example": "Designed 2 finance data hubs"
+    },
+    {
+      "name": "node03.bio.points.item02",
+      "source_pointer": "/body/2/bio/points/1",
+      "kind": "string",
+      "synthetic_source_example": "Leads data quality practice"
+    },
+    {
+      "name": "node03.bio.role",
+      "source_pointer": "/body/2/bio/role",
+      "kind": "string",
+      "synthetic_source_example": "Data architect"
+    },
+    {
+      "name": "node03.bio.tags.item01",
+      "source_pointer": "/body/2/bio/tags/0",
+      "kind": "string",
+      "synthetic_source_example": "Azure"
+    },
+    {
+      "name": "node03.bio.tags.item02",
+      "source_pointer": "/body/2/bio/tags/1",
+      "kind": "string",
+      "synthetic_source_example": "Data mesh"
+    },
+    {
+      "name": "node03.bio.title",
+      "source_pointer": "/body/2/bio/title",
+      "kind": "string",
+      "synthetic_source_example": "Manager"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.bio.points",
+      "source_pointer": "/body/0/bio/points",
+      "count": 2
+    },
+    {
+      "name": "node01.bio.tags",
+      "source_pointer": "/body/0/bio/tags",
+      "count": 2
+    },
+    {
+      "name": "node02.bio.points",
+      "source_pointer": "/body/1/bio/points",
+      "count": 2
+    },
+    {
+      "name": "node02.bio.tags",
+      "source_pointer": "/body/1/bio/tags",
+      "count": 2
+    },
+    {
+      "name": "node03.bio.points",
+      "source_pointer": "/body/2/bio/points",
+      "count": 2
+    },
+    {
+      "name": "node03.bio.tags",
+      "source_pointer": "/body/2/bio/tags",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

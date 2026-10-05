@@ -10,7 +10,7 @@ func TestAuthoringMetadataAll587PinnedTemplates(t *testing.T) {
 	if testing.Short() {
 		t.Skip("exhaustive metadata and alias sweep for all 587 templates; run make test-integration")
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	catalog, e := LibraryCatalog(bundle, "")
 	if e != nil {
 		t.Fatal(e)
@@ -43,7 +43,7 @@ func TestAuthoringMetadataAll587PinnedTemplates(t *testing.T) {
 	}
 }
 func TestLifecycleAuthoringRecipe(t *testing.T) {
-	catalog, e := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, e := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -81,7 +81,7 @@ func TestLifecycleAuthoringRecipe(t *testing.T) {
 	t.Fatal("missing lifecycle source")
 }
 func TestSlotCapacityShapedEstimateAndOverrun(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, e := Load(bundle, "")
 	if e != nil {
 		t.Fatal(e)
@@ -124,12 +124,35 @@ func TestSlotCapacityShapedEstimateAndOverrun(t *testing.T) {
 }
 
 func TestSelectionHydratesPreAuthoringProjection(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
-	index, e := OpenLibraryIndex(filepath.Join(bundle, "library.sqlite"), LibraryIndexOptions{Bundle: bundle})
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
+	path, report := indexFixture(t)
+	// Model an older projection explicitly; a maintained production index
+	// already contains authoring metadata and would bypass this fallback.
+	fixture, e := indexDB(path, false)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer fixture.Close()
+	if _, e = fixture.Exec("UPDATE entities SET json=json_remove(json, '$.template.authoring') WHERE key=?", "lifecycle/three-phases"); e != nil {
+		t.Fatal(e)
+	}
+	entities, e := (&LibraryIndex{db: fixture}).entities("", nil)
+	if e != nil {
+		t.Fatal(e)
+	}
+	report.ProjectionSHA256 = projectionHash(entities)
+	if _, e = fixture.Exec("UPDATE meta SET value=? WHERE key='report'", string(indexJSON(report))); e != nil {
+		t.Fatal(e)
+	}
+	index, e := OpenLibraryIndex(path, LibraryIndexOptions{Bundle: bundle})
 	if e != nil {
 		t.Fatal(e)
 	}
 	defer index.Close()
+	entity, e := index.Inspect("lifecycle/three-phases")
+	if e != nil || entity.Template == nil || entity.Template.Authoring != nil {
+		t.Fatalf("pre-authoring fixture not established: %v", e)
+	}
 	card, e := index.SelectionCard("lifecycle/three-phases")
 	if e != nil {
 		t.Fatal(e)
@@ -156,7 +179,7 @@ func TestPrimitiveSemanticRolesPrecedeGenericTextRole(t *testing.T) {
 	}
 }
 func TestNamedHighUseRecipesRetainReviewGaps(t *testing.T) {
-	catalog, e := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, e := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -190,7 +213,7 @@ func TestNamedHighUseRecipesRetainReviewGaps(t *testing.T) {
 }
 
 func TestHighUseStatementStatusAndInterviewTopology(t *testing.T) {
-	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}

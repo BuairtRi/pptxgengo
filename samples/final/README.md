@@ -16,5 +16,5 @@ offline rebuild produces the same PowerPoint. See its [editing guide](dentalxcha
 and [designer gaps](dentalxchange/TEMPLATE-MAPPING.md). Software and Patterson are unchanged.
 
 Original input decks remain in the parent `samples` folder. Template discovery
-and all 587 native template previews live in
-[`library/wm-design-system/v5`](../../library/wm-design-system/v5/).
+and all 616 native template previews live in
+[`library/wm-design-system/v7`](../../library/wm-design-system/v7/).

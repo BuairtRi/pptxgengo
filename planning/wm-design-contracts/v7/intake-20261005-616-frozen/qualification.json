@@ -1,0 +1,126 @@
+{
+  "schema": "pptxgengo.wmds-intake-qualification.v1",
+  "source_revision": "wmds-library.v7",
+  "source_commit": "c788cefeb5bb409118ac217adb53216d8156eec3",
+  "template_count": 616,
+  "workshops": 14,
+  "retained": 602,
+  "source_generation": "14/14 passed",
+  "bound_generation": "14/14 passed",
+  "round_trip": "authored copy, semantic values, geometry and keys preserved apart from binding provenance",
+  "tests": {
+    "command": "go test ./internal/wmdesign -run TestLibraryV7 -count=1",
+    "result": "passed in 15.599s after native amendments",
+    "earlier_v6_regressions": "passed before native amendments",
+    "final_repository": {
+      "command": "make test",
+      "status": "pass",
+      "wall_seconds": 120.61
+    },
+    "full_catalog": {
+      "command": "go test ./internal/wmdesign -run ^TestLibraryV7AllTemplateBuilds$ -count=1 -timeout=150s",
+      "status": "pass",
+      "seconds": 89.106,
+      "source_slides": 616,
+      "active_bound_slides": 615,
+      "skipped_by_short": true
+    },
+    "sqlite": {
+      "status": "pass",
+      "templates": 616,
+      "asset_variants": 703,
+      "workshop_search": "workshop agenda facilitation session",
+      "temporary_index_retained": false,
+      "registered_shared_source_pin_regressions_seconds": 16.954,
+      "registered_shared_source_pin_race_seconds": 80.035
+    },
+    "final_cli_build": {
+      "status": "pass",
+      "local_design_binary": "pptxdesign",
+      "sha256": "95df6b332ea5a978f4f29ee8d95b5d6cec66fc822c203f8b777130406499b6ec",
+      "wrapper_and_design_search_smoke": "pass with explicit v7 bundle and temporary candidate SQLite index",
+      "vcs_metadata_embedded": false,
+      "globally_installed": false
+    }
+  },
+  "candidate_amendments": {
+    "workshop-overview/classic": "schedule rowHeight 21→22",
+    "workshop-overview/dense-leave-with": "agenda header/rule/schedule moved 18pt earlier; rowHeight 18→22",
+    "workshop-readout/full": "Due column 60→78; Status column 132→114",
+    "workshop-readout/split-learnings": "Next steps header/rule/table moved36pt earlier; Due60→78, Status120→102; source frame1→2 lines; Open questions and What we covered groups moved18pt earlier for native clearance",
+    "workshop-series/phase-groups": "Status width90→108 to match reduced group-rail table width and avoid native word splits",
+    "workshop-series/table": "Outputs width174→156; Status90→108 to avoid native word splits"
+  },
+  "native_review": {
+    "initial_export": "Microsoft PowerPoint File > Export PDF, Best for printing; rasterized1920px",
+    "initial_accepted_slides": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      12
+    ],
+    "initial_defects": {
+      "10": "Open questions last bullet crowds Next steps header",
+      "13": "Complete and Scheduled native status labels split at last character",
+      "14": "Complete and Scheduled native status labels split at last character"
+    },
+    "repaired_slides": [
+      10,
+      13,
+      14
+    ],
+    "repair_native_review": "accepted 14/14; repaired pages 10, 13 and 14 rereviewed; all other final PNGs byte-identical to accepted initial export",
+    "status": "accepted_gui",
+    "accepted_templates": 14,
+    "pptx_sha256": "d0ed2a8144eb17af6adde45461075f49f82308565ed034263d26833971df5382",
+    "manifest": "native-review/review-manifest.json",
+    "manifest_sha256": "6700c9f6a544a57c14e9c3f23cce0497a0e5c11585e8640a369e5ddd8ac683f4",
+    "manifest_signed": false,
+    "automated_final_cli_export": "not qualified; fresh automated exports under restricted caller fail application dispatch -10827"
+  },
+  "production_default": "v5 / 587 unchanged; candidate gallery/index not promoted",
+  "artifacts": {
+    "deck": "native-review.pptx",
+    "native_pdf": "native-review/deck.pdf",
+    "native_pngs": "native-review/native-pages",
+    "review_manifest": "native-review/review-manifest.json",
+    "review_notes": "native-review.md"
+  },
+  "date": "2026-10-05",
+  "status": "go_qualified_native_visual_accepted_gui_automated_export_blocked",
+  "initial_generation_failures": [
+    {
+      "template": "workshop-overview/classic",
+      "error": "slide source-002/node07: scene.row_text_overflow: node07.source-007.text",
+      "status": "repaired"
+    },
+    {
+      "template": "workshop-overview/dense-leave-with",
+      "error": "slide source-003/node06: scene.text_vertical_overflow: node06.source-001.key needs 21.000pt, capacity 18.000pt",
+      "status": "repaired"
+    },
+    {
+      "template": "workshop-readout/full",
+      "error": "slide source-008/node13: scene.table_cell_overflow: node13.row.item-001.d needs36.000pt capacity24.000pt",
+      "status": "repaired"
+    },
+    {
+      "template": "workshop-readout/split-learnings",
+      "error": "slide source-010/node18: scene.table_cell_overflow: node18.row.item-001.d needs36.000pt capacity24.000pt",
+      "status": "repaired"
+    },
+    {
+      "template": "workshop-series/phase-groups",
+      "error": "slide source-013/node01: scene.table_width_sum: node01",
+      "status": "repaired"
+    }
+  ],
+  "global_cli": "local.15 unchanged; current workspace permissions do not permit global installation or .git writes"
+}

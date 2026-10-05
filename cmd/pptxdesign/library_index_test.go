@@ -22,7 +22,7 @@ func TestLibraryFitRejectsAmbiguousDocumentsBeforeOutput(t *testing.T) {
 		if err := os.WriteFile(spec, []byte(raw), 0644); err != nil {
 			t.Fatal(err)
 		}
-		if err := runLibraryIndex("library-fit", []string{"--spec", spec, "--out", out, "--bundle", filepath.Join("..", "..", "library", "wm-design-system", "v5")}); err == nil {
+		if err := runLibraryIndex("library-fit", []string{"--spec", spec, "--out", out, "--bundle", filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")}); err == nil {
 			t.Fatal("ambiguous content document accepted")
 		}
 		if _, err := os.Stat(out); !os.IsNotExist(err) {

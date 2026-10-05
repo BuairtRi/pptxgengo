@@ -13,7 +13,7 @@ func TestV5NativeOfferSectionsHavePrimitiveClearance(t *testing.T) {
 	if testing.Short() {
 		t.Skip("frozen composition render requires registered private branding assets; run make test-integration")
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

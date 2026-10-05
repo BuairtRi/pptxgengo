@@ -1,11 +1,11 @@
 # Engineering command reference
 
-These examples use the installed `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
+These examples target the `0.1.0-local.16/v7` package and use its `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
 
 ## Wrapper defaults and project pins
 
 The installed wrapper reads `release/default-bundle.txt` for the default
-published library (currently `v5`). Bundle-backed `pptxgengo design` commands
+published library (`v7` in local.16). Bundle-backed `pptxgengo design` commands
 receive that bundle path and the Go engine `wmds-go-foundation.v2` unless you
 pass explicit flags. Project commands use the project lock: `project init`
 creates a new lock against the published default and candidate engine; later
@@ -14,7 +14,7 @@ source-inventory, asset-gallery, and project commands do not receive a wrapper
 bundle or engine injection.
 
 For `library-find`, `library-inspect`, and `library-preview`, the wrapper also
-supplies the v5 SQLite index and catalog path when `--index` is omitted. If you
+supplies the v7 SQLite index and catalog path when `--index` is omitted. If you
 pass a custom index, pass its matching `--gallery` explicitly when verified
 preview paths are needed.
 
@@ -42,7 +42,7 @@ Review the diff and run `project check` before building:
 
 ```bash
 mv ./my-project/toolchain.lock.json ./my-project/toolchain.lock.json.pre-repin
-pptxgengo design project init --project ./my-project --bundle v5 \
+pptxgengo design project init --project ./my-project --bundle v7 \
   --engine wmds-go-foundation.v2
 pptxgengo design project check --project ./my-project
 pptxgengo design project build --project ./my-project

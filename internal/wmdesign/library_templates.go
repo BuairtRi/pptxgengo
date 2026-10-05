@@ -302,6 +302,9 @@ func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
 	if s.Revision == LibraryRevisionV6 {
 		expected = 602
 	}
+	if s.Revision == LibraryRevisionV7 {
+		expected = 616
+	}
 	if len(out) != expected {
 		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
 	}
@@ -458,7 +461,7 @@ func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind strin
 			for _, k := range []string{"text", "sub"} {
 				found = libraryScalarSlot(def, obj[k], libraryPointerChild(pointer, k), name+"."+k, "string") || found
 			}
-			if def.SourceRevision == LibraryRevisionV6 {
+			if isV6OrLaterLibrary(def.SourceRevision) {
 				found = libraryScalarSlot(def, obj["ref"], libraryPointerChild(pointer, "ref"), name+".ref", "string") || found
 				found = libraryScalarSlot(def, obj["refActive"], libraryPointerChild(pointer, "refActive"), name+".refActive", "boolean") || found
 			}
@@ -468,7 +471,7 @@ func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind strin
 	case "status", "tag", "raci":
 		return libraryScalarSlot(def, v, pointer, name, "string")
 	case "priority":
-		if def.SourceRevision != LibraryRevisionV6 {
+		if !isV6OrLaterLibrary(def.SourceRevision) {
 			return false
 		}
 		if obj, ok := v.(map[string]any); ok {
@@ -648,7 +651,7 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 				found = libraryTableRowsWalk(def, x, childPointer, childName) || found
 				continue
 			}
-			if ctx.NodeType == "table" && k == "rowGroups" && def.SourceRevision == LibraryRevisionV6 {
+			if ctx.NodeType == "table" && k == "rowGroups" && isV6OrLaterLibrary(def.SourceRevision) {
 				// Inclusive source row ranges and fill define the authored topology.
 				// Only labels are copy; group identity has its own stable key array.
 				if groups, ok := x[k].([]any); ok && len(groups) > 0 {

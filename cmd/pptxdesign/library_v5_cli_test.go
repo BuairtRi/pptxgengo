@@ -26,6 +26,10 @@ func TestV5CatalogAndIndexShorthand(t *testing.T) {
 			os.Stdout = output
 			defer func() { os.Args, os.Stdout = previousArgs, previousStdout }()
 			catalog := route == "catalog" || route == "catalog-default"
+			wantCount, wantRevision := 587, wmdesign.LibraryRevisionV5
+			if route == "catalog-default" || route == "index-default" {
+				wantCount, wantRevision = 616, wmdesign.LibraryRevisionV7
+			}
 			if catalog {
 				os.Args = []string{"pptxdesign", "library-catalog", "--include-deprecated"}
 				if route == "catalog" {
@@ -50,12 +54,12 @@ func TestV5CatalogAndIndexShorthand(t *testing.T) {
 				if err := json.NewDecoder(output).Decode(&rows); err != nil {
 					t.Fatal(err)
 				}
-				if len(rows) != 587 {
-					t.Fatalf("v5 catalog returned %d definitions; want 587", len(rows))
+				if len(rows) != wantCount {
+					t.Fatalf("catalog returned %d definitions; want %d", len(rows), wantCount)
 				}
 				for _, row := range rows {
-					if row.SourceRevision != wmdesign.LibraryRevisionV5 {
-						t.Fatalf("v5 catalog mixed source revisions: %s: %s", row.Key, row.SourceRevision)
+					if row.SourceRevision != wantRevision {
+						t.Fatalf("catalog mixed source revisions: %s: %s", row.Key, row.SourceRevision)
 					}
 				}
 			} else {
@@ -63,8 +67,8 @@ func TestV5CatalogAndIndexShorthand(t *testing.T) {
 				if err := json.NewDecoder(output).Decode(&report); err != nil {
 					t.Fatal(err)
 				}
-				if report.SourceRevision != wmdesign.LibraryRevisionV5 || report.Counts["template"] != 587 {
-					t.Fatalf("v5 index returned revision/count %s/%d", report.SourceRevision, report.Counts["template"])
+				if report.SourceRevision != wantRevision || report.Counts["template"] != wantCount {
+					t.Fatalf("index returned revision/count %s/%d", report.SourceRevision, report.Counts["template"])
 				}
 			}
 		})

@@ -10,7 +10,7 @@ import (
 )
 
 func TestLibraryV5RetainedQualifiedCompositionLineage(t *testing.T) {
-	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestLibraryV5RetainedQualifiedCompositionLineage(t *testing.T) {
 }
 
 func TestLibraryV5RequiredNullableObservations(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	catalog, err := LibraryCatalog(bundle, "")
 	if err != nil {
 		t.Fatal(err)

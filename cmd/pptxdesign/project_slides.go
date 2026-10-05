@@ -31,7 +31,7 @@ func projectRuntime(p *deckproject.Project, bundle, engine string) (string, stri
 	}
 	b := deckproject.BundlePath(bundle)
 	if validLockedBundle(bundle) {
-		b = filepath.Join(designReleaseRoot(), "library/wm-design-system", bundle)
+		b = designBundlePath(bundle)
 	}
 	return b, engine, nil
 }

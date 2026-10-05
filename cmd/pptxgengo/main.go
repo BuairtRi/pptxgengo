@@ -12,6 +12,8 @@ import (
 
 var version = "dev"
 
+const currentBundle = "v7"
+
 var tools = map[string]string{
 	"design": "pptxdesign",
 }
@@ -63,13 +65,13 @@ func publishedBundle(root string) (string, error) {
 	path := filepath.Join(root, "release", "default-bundle.txt")
 	b, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
-		return "v5", nil
+		return currentBundle, nil
 	}
 	if err != nil {
 		return "", err
 	}
 	value := strings.TrimSpace(string(b))
-	if value != "v5" {
+	if value != currentBundle {
 		return "", fmt.Errorf("invalid published bundle in %s: %q", path, value)
 	}
 	return value, nil
@@ -93,9 +95,17 @@ func designArgs(root string, input []string) ([]string, error) {
 	}
 	indexRead := command == "library-find" || command == "library-inspect" || command == "library-preview"
 	if indexRead && !hasFlag(args, "--index") {
-		args = append(args, "--index", filepath.Join(root, "library", "wm-design-system", "v5", "library.sqlite"))
+		bundlePath := ""
+		for i, arg := range args {
+			if arg == "--bundle" && i+1 < len(args) {
+				bundlePath = args[i+1]
+			} else if strings.HasPrefix(arg, "--bundle=") {
+				bundlePath = strings.TrimPrefix(arg, "--bundle=")
+			}
+		}
+		args = append(args, "--index", filepath.Join(bundlePath, "library.sqlite"))
 		if !hasFlag(args, "--gallery") {
-			args = append(args, "--gallery", filepath.Join(root, "library", "wm-design-system", "v5", "catalog"))
+			args = append(args, "--gallery", filepath.Join(bundlePath, "catalog"))
 		}
 	}
 	engineAllowed := command != "library-index" && command != "library-inspect" && command != "library-preview" && command != "project" && command != "library-authoring"
@@ -129,9 +139,13 @@ func runCatalog(root string, args []string) error {
 			return fmt.Errorf("usage: pptxgengo catalog [--templates|--design-system|--assets] [--print|--open]")
 		}
 	}
-	path := filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "design-system.html")
+	bundle, err := publishedBundle(root)
+	if err != nil {
+		return err
+	}
+	path := filepath.Join(root, "library", "wm-design-system", bundle, "catalog", "design-system.html")
 	if assets {
-		path = filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "assets", "index.html")
+		path = filepath.Join(root, "library", "wm-design-system", bundle, "catalog", "assets", "index.html")
 	}
 	if _, err := os.Stat(path); err != nil {
 		return fmt.Errorf("catalog unavailable: %w", err)
@@ -176,16 +190,16 @@ func run() error {
 			return err
 		}
 		paths := map[string]string{
-			"root":                  root,
-			"library":               filepath.Join(root, "library"),
-			"scripts":               filepath.Join(root, "scripts"),
-			"catalog":               filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "design-system.html"),
-			"catalog_design_system": filepath.Join(root, "library", "wm-design-system", "v5", "catalog", "design-system.html"),
-			"design_system_v5":      filepath.Join(root, "library", "wm-design-system", "v5"),
-			"design_system_default": filepath.Join(root, "library", "wm-design-system", bundle),
-			"design_index":          filepath.Join(root, "library", "wm-design-system", "v5", "library.sqlite"),
-			"project_example":       filepath.Join(root, "examples", "deck-project"),
-			"skill":                 filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
+			"root":                    root,
+			"library":                 filepath.Join(root, "library"),
+			"scripts":                 filepath.Join(root, "scripts"),
+			"catalog":                 filepath.Join(root, "library", "wm-design-system", bundle, "catalog", "design-system.html"),
+			"catalog_design_system":   filepath.Join(root, "library", "wm-design-system", bundle, "catalog", "design-system.html"),
+			"design_system_" + bundle: filepath.Join(root, "library", "wm-design-system", bundle),
+			"design_system_default":   filepath.Join(root, "library", "wm-design-system", bundle),
+			"design_index":            filepath.Join(root, "library", "wm-design-system", bundle, "library.sqlite"),
+			"project_example":         filepath.Join(root, "examples", "deck-project"),
+			"skill":                   filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
 		}
 		return json.NewEncoder(os.Stdout).Encode(paths)
 	}

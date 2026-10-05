@@ -10,7 +10,7 @@ import (
 
 func discoveryPinnedCatalog(t *testing.T) []LibraryTemplate {
 	t.Helper()
-	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}

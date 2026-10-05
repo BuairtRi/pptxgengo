@@ -22,7 +22,7 @@ func sceneTableHasReference(raw json.RawMessage) bool {
 // Badges are editable text plus a native rectangle, never a rasterized label.
 // Their fixed authored coordinates are covered by the table adornment warning.
 func (r *renderer) sceneTableReferenceCell(p *scenePlan, id string, raw json.RawMessage, st Style, b Rect, surface string, ctx SceneContext) (pptx.TableCell, TextRecord, error) {
-	if r.source.Revision != LibraryRevisionV6 {
+	if !isV6OrLaterLibrary(r.source.Revision) {
 		return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_reference_requires_v6")
 	}
 	var n struct {
@@ -55,7 +55,10 @@ func (r *renderer) sceneTableReferenceCell(p *scenePlan, id string, raw json.Raw
 	if len(badge.Lines) != 1 {
 		return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_reference_badge_wrap")
 	}
-	badgeW := badge.Lines[0].Advance + 6
+	// An exact shaped advance wraps in native PowerPoint even when the Go
+	// measurement is one line. Reserve the existing inline native allowance
+	// inside the badge, preserving its authored padding, font and copy.
+	badgeW := sequenceInlineWidth(badge.Lines[0].Advance, badgeStyle) + 6
 	if badgeW+6 >= b.W-24 {
 		return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_reference_width")
 	}
@@ -130,7 +133,7 @@ func (r *renderer) sceneTableReferenceCell(p *scenePlan, id string, raw json.Raw
 }
 
 func (r *renderer) sceneTablePriorityCell(p *scenePlan, id string, raw json.RawMessage, st Style, b Rect, surface string, ctx SceneContext) (pptx.TableCell, TextRecord, error) {
-	if r.source.Revision != LibraryRevisionV6 {
+	if !isV6OrLaterLibrary(r.source.Revision) {
 		return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_priority_requires_v6")
 	}
 	chip, err := sceneTablePriority(raw)
@@ -149,7 +152,9 @@ func (r *renderer) sceneTablePriorityCell(p *scenePlan, id string, raw json.RawM
 	if len(label.Lines) != 1 {
 		return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_priority_wrap")
 	}
-	width, err := chip.WidthForLabel(label.Lines[0].Advance)
+	// Padding must surround a native-safe text allocation rather than the raw
+	// advance; labels such as LATER otherwise break onto a second native line.
+	width, err := chip.WidthForLabel(sequenceInlineWidth(label.Lines[0].Advance, chipStyle))
 	if err != nil {
 		return pptx.TableCell{}, TextRecord{}, err
 	}

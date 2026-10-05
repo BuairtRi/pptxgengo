@@ -13,8 +13,8 @@ import (
 )
 
 func TestLibraryV5PinnedCatalogAndInheritance(t *testing.T) {
-	root := filepath.Join("..", "..", "library", "wm-design-system")
-	bundle := filepath.Join(root, "v5")
+	root := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen")
+	bundle := filepath.Join(root, "bundle")
 	s, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -74,7 +74,7 @@ func TestLibraryV5PinnedCatalogAndInheritance(t *testing.T) {
 }
 
 func TestLibraryV5UnusedRowMetadataIsNotEditableContent(t *testing.T) {
-	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -112,13 +112,13 @@ func TestLibraryV5UnusedRowMetadataIsNotEditableContent(t *testing.T) {
 }
 
 func TestLibraryV5InheritedBindingsPreserveV4Amendments(t *testing.T) {
-	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}
 	// Reconstruct the historical content projection from immutable intake
 	// evidence in memory. Only v5 is loaded as an installed executable bundle.
-	baseline, err := Load(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	baseline, err := Load(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -184,7 +184,7 @@ func TestLibraryV5InheritedBindingsPreserveV4Amendments(t *testing.T) {
 }
 
 func TestLibraryV5NullableLineBindings(t *testing.T) {
-	catalog, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	catalog, err := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}

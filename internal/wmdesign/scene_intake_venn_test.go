@@ -283,7 +283,7 @@ func TestIntakeVennStableKeysAndActualBleed(t *testing.T) {
 func TestIntakeVennNativePackage(t *testing.T) {
 	raw := json.RawMessage(frozenIntakeVennNodes[4].raw)
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "venn", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "venn", Kind: "scene", Scene: &SceneSpec{Node: raw}}}}}}
-	data, report, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
+	data, report, err := BuildWithEngine(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)
 	}

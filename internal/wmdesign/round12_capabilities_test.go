@@ -89,7 +89,7 @@ func TestRound13LineSamples(t *testing.T) {
 }
 
 func TestRound12SlimChromeAndTint(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	s, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -126,7 +126,7 @@ func TestRound12SlimChromeAndTint(t *testing.T) {
 }
 
 func TestRound12TintLayoutIdentityAndDirectValidation(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	s, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

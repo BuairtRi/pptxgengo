@@ -12,7 +12,7 @@ import (
 
 func runLibraryAuthoring(args []string) error {
 	f := flag.NewFlagSet("library-authoring", flag.ContinueOnError)
-	bundle := f.String("bundle", "v5", "pinned library bundle")
+	bundle := f.String("bundle", "v7", "pinned library bundle")
 	key := f.String("template", "", "exact template key; omit for coverage report")
 	if err := f.Parse(args); err != nil {
 		return err
@@ -21,7 +21,7 @@ func runLibraryAuthoring(args []string) error {
 		return fmt.Errorf("unexpected positional arguments")
 	}
 	if validLockedBundle(*bundle) {
-		*bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+		*bundle = designBundlePath(*bundle)
 	}
 	catalog, err := wmdesign.LibraryCatalog(*bundle, "")
 	if err != nil {

@@ -96,7 +96,7 @@ func runProjectSection(args []string) error {
 		}
 		b := deckproject.BundlePath(*bundle)
 		if validLockedBundle(*bundle) {
-			b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+			b = designBundlePath(*bundle)
 		}
 		result, e = deckproject.AddSection(p, deckproject.SectionAddOptions{ID: *id, Title: *title, BeforeSlideID: *before, Divider: *divider, DividerSlideID: *dividerID, DividerPhoto: *photo, DividerValues: values, Bundle: b, Engine: *engine})
 	}

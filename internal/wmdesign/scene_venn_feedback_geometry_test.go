@@ -114,7 +114,7 @@ func TestVennFeedbackLocalAllocationAndNaturalLensWrap(t *testing.T) {
 func TestVennFeedbackFrozenTemplateFramesAndNativeBadges(t *testing.T) {
 	root := filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003-frozen", "source")
 	entries := intakeRepairEntries(t, filepath.Join(root, "templates", "library"))
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -213,7 +213,7 @@ func TestVennFeedbackNativeBadgeCentering(t *testing.T) {
 
 func TestFourCircleNativeFeedbackKeepsDistinctSemanticRegions(t *testing.T) {
 	for _, version := range []string{"v5"} {
-		bundle := filepath.Join("..", "..", "library", "wm-design-system", version)
+		bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", version, "intake-20261003-587-frozen", "bundle")
 		source, err := Load(bundle, "")
 		if err != nil {
 			t.Fatal(err)

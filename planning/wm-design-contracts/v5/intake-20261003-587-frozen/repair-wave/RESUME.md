@@ -1,3 +1,17 @@
+# October 5 — repository publication
+
+The repository default, gallery and SQLite index are now **v7 / 616**. The only production library is `library/wm-design-system/v7`; historical source fixtures remain under planning. Publication verifies 30 new/changed native specimens and 586 unchanged inherited specimens, including paired renderer comparisons. Photography indexing now covers all 521 originals and their sidecars in the West Monroe Photos folder. Global CLI is now local.16/v7, installed with `--cli-only` to preserve the presentation skill link. The release commit excludes the other agent's presentation skill and DentalXChange slide edits. See [current engineering status](../../../../../docs/engineering-new-templates.md). Earlier version and path statements below are historical.
+
+---
+
+# October 5 — native acceptance and workshop intake
+
+The source now contains **616 templates**. The 14 new workshops and 16 changed heat-map specimens pass native PowerPoint visual review after repair. Final Go regression tests pass in 120.61s; the full 616-source/615-active-bound build passes in 89.106s. See [current engineering status](../../../../../docs/engineering-new-templates.md), [workshop candidate](../../../v7/intake-20261005-616-frozen/README.md), and [heat-map candidate](../../../v6/intake-20261004-602-frozen/README.md).
+
+Production remains v5/587 and global CLI local.15. Candidate gallery/index publication is unfinished. This turn is uncommitted and not globally installed because current workspace permissions exclude `.git` and the installation directory. Fresh automated native checks fail dispatch `-10827` under the restricted caller; final visual acceptance uses local PowerPoint PDF export, not a new signed CLI receipt. Earlier delivery records below are historical.
+
+---
+
 # October 4 — simplified final locations
 
 Final PowerPoints, PDFs, editable YAML, required assets and offline packages are in [samples/final](../../../../../samples/final/README.md). Only original sample decks remain beside that folder. Temporary sample trees, alternative outputs and review artifacts have been deleted. Only `library/wm-design-system/v5` remains; its `catalog/` contains all587 native template previews and `library.sqlite` supports discovery. Final deck and YAML bytes and original input decks are unchanged. Earlier paths and version references below are historical.

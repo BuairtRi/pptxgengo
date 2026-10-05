@@ -13,7 +13,7 @@ import (
 
 func runLibraryIndex(command string, args []string) error {
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "", "pinned bundle path or v5; new indices default to v5")
+	bundle := f.String("bundle", "", "pinned bundle path or v7; new indices default to v7")
 	source := f.String("source", "", "matching source override")
 	legacy := f.String("legacy-index", "", "optional legacy catalog-library.sqlite projection")
 	legacyRoot := f.String("legacy-root", "", "original/relocated release root for legacy contract resource paths")
@@ -72,7 +72,7 @@ func runLibraryIndex(command string, args []string) error {
 		if err != nil {
 			return err
 		}
-		return json.NewEncoder(os.Stdout).Encode(map[string]any{"schema": "pptxgengo.asset-selection.v1", "matches": result, "policy": []string{"Uses the installed asset registry and verified registered originals; template SQLite, bundle and gallery filters do not select an asset snapshot.", "Icon color variants are grouped; preview MIME identifies original SVG or raster format."}})
+		return json.NewEncoder(os.Stdout).Encode(map[string]any{"schema": "pptxgengo.asset-selection.v1", "matches": wmdesign.CompactAssetSelections(result), "policy": []string{"Uses the installed asset registry; photo metadata and dimensions come from its pinned sidecar snapshot. Photo search does not rehash originals; preview, rendering and packaging verify the selected original. Template SQLite, bundle and gallery filters do not select an asset snapshot.", "Icon color variants are grouped; preview MIME identifies original SVG or raster format."}})
 	}
 	var assetFilter bool
 	f.Visit(func(value *flag.Flag) {
@@ -83,13 +83,13 @@ func runLibraryIndex(command string, args []string) error {
 	if assetFilter {
 		return fmt.Errorf("--asset-kind requires library-find --kinds asset --summary")
 	}
-	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
-		*bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+	if validLockedBundle(*bundle) {
+		*bundle = designBundlePath(*bundle)
 	}
 	options := wmdesign.LibraryIndexOptions{Bundle: *bundle, Source: *source, LegacyIndex: *legacy, LegacyRoot: *legacyRoot, Gallery: *gallery}
 	if command == "library-index" {
 		if options.Bundle == "" {
-			options.Bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", "v5")
+			options.Bundle = designBundlePath("v7")
 		}
 		if *out == "" {
 			return fmt.Errorf("library-index requires --out NEW-SQLITE-FILE")
@@ -102,7 +102,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	if command == "library-fit" {
 		if options.Bundle == "" {
-			options.Bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", "v5")
+			options.Bundle = designBundlePath("v7")
 		}
 		if *spec == "" || *out == "" {
 			return fmt.Errorf("library-fit requires --spec FILE --out NEW-DIR")
@@ -123,7 +123,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	if *indexPath == "" {
 		if options.Bundle == "" {
-			options.Bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", "v5")
+			options.Bundle = designBundlePath("v7")
 		}
 		*indexPath = filepath.Join(options.Bundle, "library.sqlite")
 		if options.Gallery == "" {

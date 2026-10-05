@@ -62,7 +62,7 @@ func TestLibraryV6PinnedIntakeAndV5Inheritance(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	previous, err := LibraryCatalog(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	previous, err := LibraryCatalog(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -14,8 +14,8 @@ import (
 )
 
 // AssetVariant retains the canonical registry key for each color treatment.
-// ThumbnailPath points at the original registered image bytes, not a derived
-// or unverified preview file.
+// ThumbnailState distinguishes a registered original, a fresh byte check,
+// and a derived gallery preview.
 type AssetVariant struct {
 	ID                  string   `json:"id"`
 	Color               string   `json:"color,omitempty"`
@@ -31,21 +31,25 @@ type AssetVariant struct {
 // AssetSelection represents one searchable asset. Icon color variants are
 // grouped under one stable concept ID while their registered IDs remain intact.
 type AssetSelection struct {
-	ID          string         `json:"id"`
-	Kind        string         `json:"kind"`
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Tags        []string       `json:"tags"`
-	People      string         `json:"people"`
-	Industry    []string       `json:"industry,omitempty"`
-	Setting     []string       `json:"setting,omitempty"`
-	Orientation string         `json:"orientation,omitempty"`
-	Variants    []AssetVariant `json:"variants"`
+	ID             string              `json:"id"`
+	Kind           string              `json:"kind"`
+	Name           string              `json:"name"`
+	Description    string              `json:"description"`
+	Tags           []string            `json:"tags"`
+	People         string              `json:"people"`
+	Industry       []string            `json:"industry,omitempty"`
+	Setting        []string            `json:"setting,omitempty"`
+	Orientation    string              `json:"orientation,omitempty"`
+	Variants       []AssetVariant      `json:"variants"`
+	SourceMetadata *PhotoMetadata      `json:"source_metadata,omitempty"`
+	OriginalFacts  *PhotoOriginalFacts `json:"original_facts,omitempty"`
 }
 
 type assetMetadata struct {
 	name, description, kind, people, orientation string
 	tags, industry, setting                      []string
+	photoMetadata                                *PhotoMetadata
+	searchText                                   string
 }
 
 var curatedAssetMetadata = map[string]assetMetadata{
@@ -125,7 +129,9 @@ func PrimitiveAssetData(key string) ([]byte, PrimitiveAssetReference, string, er
 }
 
 // AssetSelections returns curated asset metadata in stable key order. Every
-// result includes only registered assets whose original bytes pass hash checks.
+// collection photo result uses its pinned sidecar/header snapshot without reading the
+// original. Explicit preview, rendering and gallery generation verify chosen
+// originals; the returned ThumbnailState records the distinction.
 // An empty query lists assets of the requested kind; limit <= 0 means no cap.
 func AssetSelections(query, kind string, limit int) ([]AssetSelection, error) {
 	kind = normalizeAssetKind(kind)
@@ -161,7 +167,7 @@ func AssetSelections(query, kind string, limit int) ([]AssetSelection, error) {
 		}
 		selection := groups[id]
 		if selection == nil {
-			selection = &AssetSelection{ID: id, Kind: meta.kind, Name: meta.name, Description: meta.description, Tags: append([]string(nil), meta.tags...), People: meta.people, Industry: append([]string(nil), meta.industry...), Setting: append([]string(nil), meta.setting...), Orientation: meta.orientation, Variants: []AssetVariant{}}
+			selection = &AssetSelection{ID: id, Kind: meta.kind, Name: meta.name, Description: meta.description, Tags: append([]string(nil), meta.tags...), People: meta.people, Industry: append([]string(nil), meta.industry...), Setting: append([]string(nil), meta.setting...), Orientation: meta.orientation, Variants: []AssetVariant{}, SourceMetadata: meta.photoMetadata, OriginalFacts: registeredPhotoOriginalFacts(ref.Key, ref.Path)}
 			groups[id] = selection
 		}
 		selection.Variants = append(selection.Variants, AssetVariant{ID: ref.Key, Color: color, RecommendedSurfaces: surfaceGuidance(color), Path: ref.Path, SHA256: ref.SHA256})
@@ -185,6 +191,18 @@ func AssetSelections(query, kind string, limit int) ([]AssetSelection, error) {
 		}
 		for i := range selection.Variants {
 			variant := &selection.Variants[i]
+			if photo, ok := registeredPhoto(variant.ID, variant.Path); ok {
+				path, err := primitiveAssetOriginalPath(photo.Path)
+				if err != nil {
+					return nil, err
+				}
+				variant.ThumbnailPath = path
+				variant.ThumbnailSHA256 = photo.SHA256
+				variant.ThumbnailMIME = photo.MIME
+				variant.ThumbnailState = "registered_original_not_verified_in_query"
+				selection.Orientation = photoOrientation(photo.Width, photo.Height)
+				continue
+			}
 			data, ref, path, err := PrimitiveAssetData(variant.ID)
 			if err != nil {
 				return nil, err
@@ -257,7 +275,7 @@ func assetMetadataFor(key, path string) assetMetadata {
 		if curated.people == "" {
 			curated.people = "no"
 		}
-		return curated
+		return enrichPhotoAssetMetadata(key, path, curated, true)
 	}
 	if strings.HasPrefix(key, "highlight-") {
 		return assetMetadata{name: titleWords(strings.ReplaceAll(key, "-", " ")) + " brush", description: "Registered West Monroe highlight brush graphic for emphasizing content.", kind: "graphic", people: "no", tags: []string{"highlight", "brush", "emphasis", "accent", "marker"}}
@@ -276,7 +294,7 @@ func assetMetadataFor(key, path string) assetMetadata {
 		kind = "photo"
 	}
 	name = titleWords(strings.ReplaceAll(base, "-", " "))
-	return assetMetadata{name: name, description: "Registered West Monroe " + kind + ": " + name + ".", kind: kind, people: "unknown", tags: cleanAssetTags(append([]string{kind}, queryWords(base)...))}
+	return enrichPhotoAssetMetadata(key, path, assetMetadata{name: name, description: "Registered West Monroe " + kind + ": " + name + ".", kind: kind, people: "unknown", tags: cleanAssetTags(append([]string{kind}, queryWords(base)...))}, false)
 }
 
 func titleWords(value string) string {
@@ -320,7 +338,7 @@ func assetQueryScore(terms []string, meta assetMetadata, key, path string) int {
 	if len(terms) == 0 {
 		return 0
 	}
-	corpus := strings.ToLower(strings.Join(append(append(append(append([]string{key, path, meta.name, meta.description}, meta.tags...), meta.industry...), meta.setting...), meta.kind), " "))
+	corpus := strings.ToLower(strings.Join(append(append(append(append([]string{key, path, meta.name, meta.description, meta.searchText}, meta.tags...), meta.industry...), meta.setting...), meta.kind), " "))
 	words := queryWords(corpus)
 	score := 0
 	for _, term := range terms {
@@ -404,4 +422,19 @@ func originalImageDimensions(data []byte, path string) (string, error) {
 		return "portrait", nil
 	}
 	return "square", nil
+}
+
+// CompactAssetSelections keeps semantic selection details and provenance while
+// leaving verbatim source Markdown to full inspection. Inputs are unchanged.
+func CompactAssetSelections(items []AssetSelection) []AssetSelection {
+	out := catalogCopySlice(items)
+	for i := range out {
+		if out[i].SourceMetadata != nil {
+			meta := clonePhotoMetadata(*out[i].SourceMetadata)
+			meta.Text = ""
+			meta.Fields = nil
+			out[i].SourceMetadata = meta
+		}
+	}
+	return out
 }

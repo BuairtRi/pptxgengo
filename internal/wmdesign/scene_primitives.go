@@ -144,7 +144,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 	if !ok {
 		return nil, false, nil
 	}
-	if head.Type == "text" && r.source.Revision == LibraryRevisionV6 {
+	if head.Type == "text" && isV6OrLaterLibrary(r.source.Revision) {
 		// The pinned V6 browser rich() function compares named mark strings
 		// strictly. Both Boolean values therefore render with no named mark;
 		// true does not mean bold. Normalize only this decoder's private copy.

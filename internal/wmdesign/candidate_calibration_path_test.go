@@ -8,7 +8,7 @@ import (
 )
 
 func TestCandidateCalibrationCurrentPathDoesNotMaskDrift(t *testing.T) {
-	calibration, err := os.ReadFile(filepath.Join("..", "..", "library", "wm-design-system", "v5", "typography", "calibration.json"))
+	calibration, err := os.ReadFile(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle", "typography", "calibration.json"))
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 func TestV5NativeDonutRefinementIndependentPreservation(t *testing.T) {
-	entries := intakeRepairEntries(t, filepath.Join("..", "..", "library", "wm-design-system", "v5", "source", "templates", "library"))
+	entries := intakeRepairEntries(t, filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle", "source", "templates", "library"))
 	const key = "value-types/hard-soft-right"
 	original := intakeRepairSlide(t, entries[key])
 	doc := intakeRepairSlide(t, entries[key])

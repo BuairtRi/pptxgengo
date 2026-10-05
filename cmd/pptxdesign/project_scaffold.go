@@ -14,7 +14,7 @@ import (
 
 func runProjectScaffold(args []string) error {
 	f := flag.NewFlagSet("project scaffold", flag.ContinueOnError)
-	bundle := f.String("bundle", "", "shared bundle path or v1/v2/v3/v4/v5")
+	bundle := f.String("bundle", "", "shared bundle path or v1/v2/v3/v4/v5/v6/v7")
 	key := f.String("template", "", "actual shared template key")
 	engine := f.String("engine", wmdesign.CandidateEngine, "build engine for source scene measurement")
 	reason := f.String("reason", "", "reason for adapting the shared topology")
@@ -31,11 +31,11 @@ func runProjectScaffold(args []string) error {
 			return fmt.Errorf("project scaffold --stock requires --template --id; adaptation flags are not applicable")
 		}
 		if *bundle == "" {
-			*bundle = "v5"
+			*bundle = "v7"
 		}
 		b := deckproject.BundlePath(*bundle)
 		if validLockedBundle(*bundle) {
-			b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+			b = designBundlePath(*bundle)
 		}
 		data, err := deckproject.StockScaffoldSlideSource(b, *key, *id, *year)
 		if err != nil {

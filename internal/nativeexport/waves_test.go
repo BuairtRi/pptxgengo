@@ -229,8 +229,52 @@ func TestWorkerDeadlineDoesNotPublishReceipt(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(out, "render-manifest.json")); !os.IsNotExist(err) {
 		t.Fatal("deadline issued success receipt")
 	}
-	if data, err := os.ReadFile(filepath.Join(out, "render-error.txt")); err != nil || !strings.Contains(string(data), "deadline") {
-		t.Fatal("deadline did not record render-error.txt", string(data), err)
+	data, readErr := os.ReadFile(filepath.Join(out, "render-error.txt"))
+	if readErr != nil {
+		// Failure recording has its own bounded worker. Under startup or
+		// filesystem contention it can expire as well; the returned error
+		// must disclose that failure instead of claiming a recorded artifact.
+		if !os.IsNotExist(readErr) || !strings.Contains(err.Error(), "render-error.txt could not be recorded:") {
+			t.Fatal("deadline diagnostic neither recorded nor reported unavailable", string(data), readErr, err)
+		}
+	} else if !strings.Contains(string(data), "deadline") {
+		t.Fatal("deadline diagnostic omitted deadline", string(data), err)
+	}
+}
+
+func TestWorkerDeadlineReportsDiagnosticRecordingFailure(t *testing.T) {
+	if runtime.GOOS != "darwin" {
+		t.Skip("native worker deadline is macOS-only")
+	}
+	root := t.TempDir()
+	source := filepath.Join(root, "source.pptx")
+	if err := os.WriteFile(source, fixture(t), 0600); err != nil {
+		t.Fatal(err)
+	}
+	out := filepath.Join(root, "out")
+	if err := os.Mkdir(out, 0700); err != nil {
+		t.Fatal(err)
+	}
+	outside := filepath.Join(root, "preserve.txt")
+	const marker = "existing unrelated content"
+	if err := os.WriteFile(outside, []byte(marker), 0600); err != nil {
+		t.Fatal(err)
+	}
+	// A nonregular diagnostic target deterministically prevents recording,
+	// independent of whether auxiliary-worker startup meets its budget.
+	if err := os.Symlink(outside, filepath.Join(out, "render-error.txt")); err != nil {
+		t.Fatal(err)
+	}
+	receipt, err := Render(context.Background(), Options{PPTX: source, Out: out, PDF: true, Timeout: time.Nanosecond, StagingRoot: filepath.Join(root, "stage")})
+	if receipt != nil || err == nil || !strings.Contains(err.Error(), "deadline") || !strings.Contains(err.Error(), "render-error.txt could not be recorded:") {
+		t.Fatal(receipt, err)
+	}
+	if _, err := os.Stat(filepath.Join(out, "render-manifest.json")); !os.IsNotExist(err) {
+		t.Fatal("failed diagnostic recording published success receipt", err)
+	}
+	data, err := os.ReadFile(outside)
+	if err != nil || string(data) != marker {
+		t.Fatal("diagnostic worker modified unrelated target", string(data), err)
 	}
 }
 

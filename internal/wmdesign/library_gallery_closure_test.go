@@ -10,7 +10,7 @@ import (
 )
 
 func TestFrozenGalleryNativePreviewClosure(t *testing.T) {
-	root := filepath.Join("..", "..", "library", "wm-design-system", "v5", "catalog")
+	root := filepath.Join("..", "..", "library", "wm-design-system", "v7", "catalog")
 	raw, err := os.ReadFile(filepath.Join(root, "design-system", "index.json"))
 	if err != nil {
 		t.Fatal(err)
@@ -29,7 +29,7 @@ func TestFrozenGalleryNativePreviewClosure(t *testing.T) {
 	if err = json.Unmarshal(raw, &index); err != nil {
 		t.Fatal(err)
 	}
-	if index.Entries != 587 || len(index.Designs) != index.Entries {
+	if index.Entries != 616 || len(index.Designs) != index.Entries {
 		t.Fatalf("incomplete frozen gallery: %d/%d", index.Entries, len(index.Designs))
 	}
 	for _, design := range index.Designs {

@@ -208,13 +208,13 @@ func authoringFamilyRecipes(out *LibraryAuthoring, def LibraryTemplate, obj map[
 				s.Alias = prefix + "/rows/" + fmt.Sprintf("item_%02d", mustOrdinal(tail[1])+1) + "/" + authoringTableField(tail[2], node)
 				if len(tail) > 3 {
 					suffix := strings.Join(tail[3:], "/")
-					if def.SourceRevision == LibraryRevisionV6 {
+					if isV6OrLaterLibrary(def.SourceRevision) {
 						suffix = authoringAliasTail(tail[3:])
 					}
 					s.Alias += "/" + suffix
 				}
 				s.Role = "heatmap-cell"
-				if def.SourceRevision == LibraryRevisionV6 {
+				if isV6OrLaterLibrary(def.SourceRevision) {
 					if len(tail) > 3 && tail[3] == "ref" {
 						s.Role = "reference_id"
 					}
@@ -245,7 +245,7 @@ func authoringFamilyRecipes(out *LibraryAuthoring, def LibraryTemplate, obj map[
 				s.Cardinality = len(rows)
 			} else if kind == "table" {
 				s.Alias = prefix + "/" + authoringAliasTail(tail)
-				if def.SourceRevision == LibraryRevisionV6 && len(tail) >= 3 && tail[0] == "rowGroups" {
+				if isV6OrLaterLibrary(def.SourceRevision) && len(tail) >= 3 && tail[0] == "rowGroups" {
 					s.Alias = prefix + "/row_groups/" + authoringAliasTail(tail[1:])
 					s.Group = prefix + "/row_groups"
 					s.GroupIndex = mustOrdinal(tail[1])

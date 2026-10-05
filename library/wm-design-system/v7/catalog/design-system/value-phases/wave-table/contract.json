@@ -1,0 +1,1555 @@
+{
+  "key": "value-phases/wave-table",
+  "source_file": "templates/library/value.json",
+  "source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+  "source_revision": "wmds-library.v7",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    }
+  ],
+  "family": "value",
+  "tier": "core",
+  "name": "Value by wave · table with funding status",
+  "purpose": "A wave-level table of scope, investment, value, net and cumulative net, with the funding status of each wave.",
+  "uses": [
+    "table.standard",
+    "tag",
+    "metric"
+  ],
+  "source_advisory_budget": {
+    "words": 132,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "wave",
+      "maxChars": 20
+    },
+    {
+      "slot": "scope",
+      "maxChars": 56
+    },
+    {
+      "slot": "amount",
+      "maxChars": 8
+    },
+    {
+      "slot": "status",
+      "maxChars": 20
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 57,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 345,
+          "y": 396
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 270,
+          "x": 633,
+          "y": 396
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v7",
+    "source_sha256": "a7cb4d64dd4f14a22a70a18fa88be3b997c922034260116da265ba9430ea6b9e",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "table",
+    "groups": [
+      {
+        "alias": "/paragraphs",
+        "role": "point",
+        "cardinality": 3,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/tables/item_01/cols",
+        "role": "column",
+        "cardinality": 7,
+        "source_pointer": "/body/0/cols",
+        "basis": "semantic_closed_binding_array"
+      },
+      {
+        "alias": "/tables/item_01/rows",
+        "role": "tabular-data",
+        "cardinality": 4,
+        "source_pointer": "/body/0/rows",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "source.text",
+        "alias": "/source_note",
+        "source_pointer": "/source/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "source",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "source (string) at /source_note",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "source",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0",
+            "use": "Source lines and footnotes",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item01.label",
+        "alias": "/tables/item_01/columns/item_01/label",
+        "source_pointer": "/body/0/cols/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "label (string) at /tables/item_01/columns/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item02.label",
+        "alias": "/tables/item_01/columns/item_02/label",
+        "source_pointer": "/body/0/cols/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "label (string) at /tables/item_01/columns/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item03.label",
+        "alias": "/tables/item_01/columns/item_03/label",
+        "source_pointer": "/body/0/cols/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "label (string) at /tables/item_01/columns/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item04.label",
+        "alias": "/tables/item_01/columns/item_04/label",
+        "source_pointer": "/body/0/cols/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "label (string) at /tables/item_01/columns/item_04/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.label",
+        "alias": "/tables/item_01/columns/item_05/label",
+        "source_pointer": "/body/0/cols/4/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "label (string) at /tables/item_01/columns/item_05/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item06.label",
+        "alias": "/tables/item_01/columns/item_06/label",
+        "source_pointer": "/body/0/cols/5/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "label (string) at /tables/item_01/columns/item_06/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item07.label",
+        "alias": "/tables/item_01/columns/item_07/label",
+        "source_pointer": "/body/0/cols/6/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "label (string) at /tables/item_01/columns/item_07/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.c",
+        "alias": "/tables/item_01/rows/item_01/cumulative",
+        "source_pointer": "/body/0/rows/0/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_01/cumulative",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.i",
+        "alias": "/tables/item_01/rows/item_01/investment",
+        "source_pointer": "/body/0/rows/0/i",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "i",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "i (string) at /tables/item_01/rows/item_01/investment",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.n",
+        "alias": "/tables/item_01/rows/item_01/net",
+        "source_pointer": "/body/0/rows/0/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "value (string) at /tables/item_01/rows/item_01/net",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.s",
+        "alias": "/tables/item_01/rows/item_01/what_it_delivers",
+        "source_pointer": "/body/0/rows/0/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "s",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "s (string) at /tables/item_01/rows/item_01/what_it_delivers",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.st",
+        "alias": "/tables/item_01/rows/item_01/funding",
+        "source_pointer": "/body/0/rows/0/st",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "st",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "st (string) at /tables/item_01/rows/item_01/funding",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.v",
+        "alias": "/tables/item_01/rows/item_01/value",
+        "source_pointer": "/body/0/rows/0/v",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "v",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "v (string) at /tables/item_01/rows/item_01/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w.text",
+        "alias": "/tables/item_01/rows/item_01/wave/text",
+        "source_pointer": "/body/0/rows/0/w/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "body (string) at /tables/item_01/rows/item_01/wave/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w.sub",
+        "alias": "/tables/item_01/rows/item_01/wave/sub",
+        "source_pointer": "/body/0/rows/0/w/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "body (string) at /tables/item_01/rows/item_01/wave/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.c",
+        "alias": "/tables/item_01/rows/item_02/cumulative",
+        "source_pointer": "/body/0/rows/1/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_02/cumulative",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.i",
+        "alias": "/tables/item_01/rows/item_02/investment",
+        "source_pointer": "/body/0/rows/1/i",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "i",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "i (string) at /tables/item_01/rows/item_02/investment",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.n",
+        "alias": "/tables/item_01/rows/item_02/net",
+        "source_pointer": "/body/0/rows/1/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "value (string) at /tables/item_01/rows/item_02/net",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.s",
+        "alias": "/tables/item_01/rows/item_02/what_it_delivers",
+        "source_pointer": "/body/0/rows/1/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "s",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "s (string) at /tables/item_01/rows/item_02/what_it_delivers",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.st",
+        "alias": "/tables/item_01/rows/item_02/funding",
+        "source_pointer": "/body/0/rows/1/st",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "st",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "st (string) at /tables/item_01/rows/item_02/funding",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.v",
+        "alias": "/tables/item_01/rows/item_02/value",
+        "source_pointer": "/body/0/rows/1/v",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "v",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "v (string) at /tables/item_01/rows/item_02/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w.text",
+        "alias": "/tables/item_01/rows/item_02/wave/text",
+        "source_pointer": "/body/0/rows/1/w/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "body (string) at /tables/item_01/rows/item_02/wave/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w.sub",
+        "alias": "/tables/item_01/rows/item_02/wave/sub",
+        "source_pointer": "/body/0/rows/1/w/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "body (string) at /tables/item_01/rows/item_02/wave/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.c",
+        "alias": "/tables/item_01/rows/item_03/cumulative",
+        "source_pointer": "/body/0/rows/2/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_03/cumulative",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.i",
+        "alias": "/tables/item_01/rows/item_03/investment",
+        "source_pointer": "/body/0/rows/2/i",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "i",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "i (string) at /tables/item_01/rows/item_03/investment",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.n",
+        "alias": "/tables/item_01/rows/item_03/net",
+        "source_pointer": "/body/0/rows/2/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "value (string) at /tables/item_01/rows/item_03/net",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.s",
+        "alias": "/tables/item_01/rows/item_03/what_it_delivers",
+        "source_pointer": "/body/0/rows/2/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "s",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "s (string) at /tables/item_01/rows/item_03/what_it_delivers",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.st",
+        "alias": "/tables/item_01/rows/item_03/funding",
+        "source_pointer": "/body/0/rows/2/st",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "st",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "st (string) at /tables/item_01/rows/item_03/funding",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.v",
+        "alias": "/tables/item_01/rows/item_03/value",
+        "source_pointer": "/body/0/rows/2/v",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "v",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "v (string) at /tables/item_01/rows/item_03/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w.text",
+        "alias": "/tables/item_01/rows/item_03/wave/text",
+        "source_pointer": "/body/0/rows/2/w/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "body (string) at /tables/item_01/rows/item_03/wave/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w.sub",
+        "alias": "/tables/item_01/rows/item_03/wave/sub",
+        "source_pointer": "/body/0/rows/2/w/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "body (string) at /tables/item_01/rows/item_03/wave/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.c",
+        "alias": "/tables/item_01/rows/item_04/cumulative",
+        "source_pointer": "/body/0/rows/3/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_04/cumulative",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.i",
+        "alias": "/tables/item_01/rows/item_04/investment",
+        "source_pointer": "/body/0/rows/3/i",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "i",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "i (string) at /tables/item_01/rows/item_04/investment",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.n",
+        "alias": "/tables/item_01/rows/item_04/net",
+        "source_pointer": "/body/0/rows/3/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "value (string) at /tables/item_01/rows/item_04/net",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.s",
+        "alias": "/tables/item_01/rows/item_04/what_it_delivers",
+        "source_pointer": "/body/0/rows/3/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "s",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "s (string) at /tables/item_01/rows/item_04/what_it_delivers",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.v",
+        "alias": "/tables/item_01/rows/item_04/value",
+        "source_pointer": "/body/0/rows/3/v",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "v",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "v (string) at /tables/item_01/rows/item_04/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w",
+        "alias": "/tables/item_01/rows/item_04/wave",
+        "source_pointer": "/body/0/rows/3/w",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "w",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "w (string) at /tables/item_01/rows/item_04/wave",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.text",
+        "alias": "/paragraphs/item_01/text",
+        "source_pointer": "/body/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "body (string) at /paragraphs/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 270,
+          "height_pt": 54,
+          "line_budget": 3,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.text",
+        "alias": "/paragraphs/item_02/text",
+        "source_pointer": "/body/2/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "body (string) at /paragraphs/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 270,
+          "height_pt": 54,
+          "line_budget": 3,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.text",
+        "alias": "/paragraphs/item_03/text",
+        "source_pointer": "/body/3/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /paragraphs/item_03/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 270,
+          "height_pt": 54,
+          "line_budget": 3,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Investment and value"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Waves two and three pay for themselves"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample figures for layout only; replace with current program data before use."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Wave"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "What it delivers"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Investment"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Value"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Net"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Cumulative"
+    },
+    {
+      "name": "node01.cols.item07.label",
+      "source_pointer": "/body/0/cols/6/label",
+      "kind": "string",
+      "synthetic_source_example": "Funding"
+    },
+    {
+      "name": "node01.rows.item01.c",
+      "source_pointer": "/body/0/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "-$1.8M"
+    },
+    {
+      "name": "node01.rows.item01.i",
+      "source_pointer": "/body/0/rows/0/i",
+      "kind": "string",
+      "synthetic_source_example": "$2.4M"
+    },
+    {
+      "name": "node01.rows.item01.n",
+      "source_pointer": "/body/0/rows/0/n",
+      "kind": "string",
+      "synthetic_source_example": "-$1.8M"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "Data platform; close automation in three entities"
+    },
+    {
+      "name": "node01.rows.item01.st",
+      "source_pointer": "/body/0/rows/0/st",
+      "kind": "string",
+      "synthetic_source_example": "Budget"
+    },
+    {
+      "name": "node01.rows.item01.v",
+      "source_pointer": "/body/0/rows/0/v",
+      "kind": "string",
+      "synthetic_source_example": "$0.6M"
+    },
+    {
+      "name": "node01.rows.item01.w.text",
+      "source_pointer": "/body/0/rows/0/w/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1"
+    },
+    {
+      "name": "node01.rows.item01.w.sub",
+      "source_pointer": "/body/0/rows/0/w/sub",
+      "kind": "string",
+      "synthetic_source_example": "Months 1 to 12"
+    },
+    {
+      "name": "node01.rows.item02.c",
+      "source_pointer": "/body/0/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "-$1.3M"
+    },
+    {
+      "name": "node01.rows.item02.i",
+      "source_pointer": "/body/0/rows/1/i",
+      "kind": "string",
+      "synthetic_source_example": "$1.3M"
+    },
+    {
+      "name": "node01.rows.item02.n",
+      "source_pointer": "/body/0/rows/1/n",
+      "kind": "string",
+      "synthetic_source_example": "$0.5M"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle and procure-to-pay in all entities"
+    },
+    {
+      "name": "node01.rows.item02.st",
+      "source_pointer": "/body/0/rows/1/st",
+      "kind": "string",
+      "synthetic_source_example": "Self-funding"
+    },
+    {
+      "name": "node01.rows.item02.v",
+      "source_pointer": "/body/0/rows/1/v",
+      "kind": "string",
+      "synthetic_source_example": "$1.8M"
+    },
+    {
+      "name": "node01.rows.item02.w.text",
+      "source_pointer": "/body/0/rows/1/w/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 2"
+    },
+    {
+      "name": "node01.rows.item02.w.sub",
+      "source_pointer": "/body/0/rows/1/w/sub",
+      "kind": "string",
+      "synthetic_source_example": "Months 13 to 24"
+    },
+    {
+      "name": "node01.rows.item03.c",
+      "source_pointer": "/body/0/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "$0.8M"
+    },
+    {
+      "name": "node01.rows.item03.i",
+      "source_pointer": "/body/0/rows/2/i",
+      "kind": "string",
+      "synthetic_source_example": "$0.5M"
+    },
+    {
+      "name": "node01.rows.item03.n",
+      "source_pointer": "/body/0/rows/2/n",
+      "kind": "string",
+      "synthetic_source_example": "$2.1M"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "Controls, analytics and run handover"
+    },
+    {
+      "name": "node01.rows.item03.st",
+      "source_pointer": "/body/0/rows/2/st",
+      "kind": "string",
+      "synthetic_source_example": "Self-funding"
+    },
+    {
+      "name": "node01.rows.item03.v",
+      "source_pointer": "/body/0/rows/2/v",
+      "kind": "string",
+      "synthetic_source_example": "$2.6M"
+    },
+    {
+      "name": "node01.rows.item03.w.text",
+      "source_pointer": "/body/0/rows/2/w/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 3"
+    },
+    {
+      "name": "node01.rows.item03.w.sub",
+      "source_pointer": "/body/0/rows/2/w/sub",
+      "kind": "string",
+      "synthetic_source_example": "Months 25 to 36"
+    },
+    {
+      "name": "node01.rows.item04.c",
+      "source_pointer": "/body/0/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "$6.0M"
+    },
+    {
+      "name": "node01.rows.item04.i",
+      "source_pointer": "/body/0/rows/3/i",
+      "kind": "string",
+      "synthetic_source_example": "–"
+    },
+    {
+      "name": "node01.rows.item04.n",
+      "source_pointer": "/body/0/rows/3/n",
+      "kind": "string",
+      "synthetic_source_example": "$5.2M"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "Run state; no new investment"
+    },
+    {
+      "name": "node01.rows.item04.v",
+      "source_pointer": "/body/0/rows/3/v",
+      "kind": "string",
+      "synthetic_source_example": "$5.2M"
+    },
+    {
+      "name": "node01.rows.item04.w",
+      "source_pointer": "/body/0/rows/3/w",
+      "kind": "string",
+      "synthetic_source_example": "Years 4 and 5"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 1 is funded from the program budget: $2.4M committed up front."
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Wave 2 spend is covered by its own value and by wave 1 run-rate."
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Cumulative net turns positive in wave 3, at month 31."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 7
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

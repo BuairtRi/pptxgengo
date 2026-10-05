@@ -1,16 +1,17 @@
 {
   "schema": "pptxgengo.wmds-intake-qualification.v1",
-  "date": "2026-10-04",
+  "date": "2026-10-05",
   "source_revision": "wmds-library.v6",
   "source_commit": "c355c881d543dceccb82dbe12d7129bca9b1fcac",
-  "status": "go_qualified_native_review_blocked",
+  "status": "go_qualified_native_visual_accepted_gui_automated_export_blocked",
   "production_library": {
     "revision": "wmds-library.v5",
     "templates": 587
   },
   "code": {
     "baseline_commit": "7959220f",
-    "wmdesign_go_tree_sha256": "1ff53eb1ec309907da35900115aef8f1f2bae836efb57f4ce57d120241ef2899"
+    "wmdesign_go_tree_sha256": "1ff53eb1ec309907da35900115aef8f1f2bae836efb57f4ce57d120241ef2899",
+    "qualification_stage": "recorded Go qualification before final native width repairs; focused repair checks below"
   },
   "checks": [
     {
@@ -61,92 +62,155 @@
       "seconds": 1.749,
       "shared_unchanged_source_files": 31,
       "changed_source_files": 7
+    },
+    {
+      "name": "native_reference_priority_width_and_v5_isolation",
+      "status": "pass",
+      "seconds": 27.107,
+      "command": "go test ./internal/wmdesign -run '^TestTableV6Reference|^TestTableV6Priority|^TestTableV5GeometryUnchanged' -count=1 -timeout=120s"
+    },
+    {
+      "name": "native_reference_priority_width_v7_inheritance_and_v5_isolation_race",
+      "status": "pass",
+      "seconds": 15.074,
+      "command": "go test -race ./internal/wmdesign -run '^TestTableV6Reference|^TestTableV6Priority|^TestTableV7InheritsReference|^TestTableV5GeometryUnchanged' -count=1 -timeout=120s"
+    },
+    {
+      "name": "native_heat_header_width_and_legacy_isolation",
+      "status": "pass",
+      "seconds": 13.56,
+      "command": "go test ./internal/wmdesign -run ^TestV6HeatHeaderNativeWidthAndLegacyIsolation$"
+    },
+    {
+      "name": "repaired_native_review_source_specimen_build",
+      "status": "pass",
+      "source_slides": 16,
+      "pptx_sha256": "9b5ab2e0a675ba734f8e77279d521a77145c8eae73b6927d62201de7cf652376"
+    },
+    {
+      "name": "final_repository_tests_after_heat_and_workshop_native_repairs",
+      "command": "make test",
+      "status": "pass",
+      "wall_seconds": 120.61
     }
   ],
   "native_review": {
-    "status": "blocked",
-    "export_attempted": true,
-    "error_code": -10827,
-    "error": "application_dispatch_failed; operational PowerPoint dispatch unavailable to this caller",
-    "powerpoint_verified": false,
-    "visually_reviewed": false,
-    "accepted_changed_templates": 0,
+    "status": "accepted_gui",
+    "powerpoint_verified": true,
+    "verification_mechanism": "local PowerPoint GUI Export PDF Best for printing",
+    "visually_reviewed": true,
+    "accepted_changed_templates": 16,
     "required_changed_templates": 16,
     "pages": [
       {
         "page": 1,
-        "template": "capability-heat/dense"
+        "template": "capability-heat/dense",
+        "status": "accepted"
       },
       {
         "page": 2,
-        "template": "capability-heat/grouped"
+        "template": "capability-heat/grouped",
+        "status": "accepted"
       },
       {
         "page": 3,
-        "template": "capability-heat/grouped-split"
+        "template": "capability-heat/grouped-split",
+        "status": "accepted"
       },
       {
         "page": 4,
-        "template": "heat-notes/full"
+        "template": "heat-notes/full",
+        "status": "accepted"
       },
       {
         "page": 5,
-        "template": "heat-notes/full-continued"
+        "template": "heat-notes/full-continued",
+        "status": "accepted"
       },
       {
         "page": 6,
-        "template": "heat-notes/grouped"
+        "template": "heat-notes/grouped",
+        "status": "accepted"
       },
       {
         "page": 7,
-        "template": "heat-notes/now-next-later"
+        "template": "heat-notes/now-next-later",
+        "status": "accepted"
       },
       {
         "page": 8,
-        "template": "heat-notes/split"
+        "template": "heat-notes/split",
+        "status": "accepted"
       },
       {
         "page": 9,
-        "template": "heat-notes/split-last"
+        "template": "heat-notes/split-last",
+        "status": "accepted"
       },
       {
         "page": 10,
-        "template": "heat-notes/summary"
+        "template": "heat-notes/summary",
+        "status": "accepted"
       },
       {
         "page": 11,
-        "template": "heat-ref/cards-split"
+        "template": "heat-ref/cards-split",
+        "status": "accepted"
       },
       {
         "page": 12,
-        "template": "heat-ref/detail-continued"
+        "template": "heat-ref/detail-continued",
+        "status": "accepted"
       },
       {
         "page": 13,
-        "template": "heat-ref/detail-corner"
+        "template": "heat-ref/detail-corner",
+        "status": "accepted"
       },
       {
         "page": 14,
-        "template": "heat-ref/locator-split"
+        "template": "heat-ref/locator-split",
+        "status": "accepted"
       },
       {
         "page": 15,
-        "template": "heat-ref/overview"
+        "template": "heat-ref/overview",
+        "status": "accepted"
       },
       {
         "page": 16,
-        "template": "heat-ref/overview-grouped"
+        "template": "heat-ref/overview-grouped",
+        "status": "accepted"
       }
     ],
     "pptx": "native-review.pptx",
-    "pptx_sha256": "e0b88262dc689692fc60921c06f94b0116eda12eb9f801bb109d3396b44d7065"
+    "pptx_sha256": "9b5ab2e0a675ba734f8e77279d521a77145c8eae73b6927d62201de7cf652376",
+    "manifest": "native-review/review-manifest.json",
+    "manifest_sha256": "c50131fcf6be0efd6c722b4b1bc711290ca1b6c20617689ebffee28ec540a7cb",
+    "manifest_signed": false,
+    "review_notes": "native-review.md",
+    "automated_final_export": {
+      "status": "blocked",
+      "error_code": -10827,
+      "scope": "fresh repaired-deck export under restricted caller"
+    },
+    "initial_cli_export": {
+      "status": "pass_before_native_width_repairs",
+      "source_sha256": "e0b88262dc689692fc60921c06f94b0116eda12eb9f801bb109d3396b44d7065",
+      "exported_pages": 16,
+      "manifest": "native-review/initial-cli-render-manifest.json",
+      "manifest_sha256": "092b697304a29352c998d4732821e697a27037b30dfab532d0ca48cdaab0a149",
+      "final_visual_acceptance": false
+    },
+    "doctor_pass_claimed": false
   },
   "limitations": [
     "Generic item matching cannot express complete matrices and linked detail locators.",
-    "Semantic metadata is inferred; no human review is claimed.",
+    "Semantic metadata is inferred; no human semantic metadata review is claimed.",
     "Wrapped reference labels conservatively reserve badge width on every body line.",
     "Native adornments retain fixed coordinates after text edits.",
-    "Native screenshots, gallery/index promotion and global 602-template default remain pending."
+    "Gallery/index promotion and global 602-template default remain pending; production remains v5.",
+    "Final native visual acceptance uses local GUI PDF export; fresh automated final-deck export remains blocked by -10827."
   ],
   "installed_cli": {
     "version": "0.1.0-local.15",

@@ -1,0 +1,173 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-378",
+      "frame": {
+        "rail": "none",
+        "footer": "tall",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 1,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Commercials",
+      "title": "A fixed fee of $720K, paid as milestones are accepted",
+      "source": "Source: West Monroe estimate. Fees exclude expenses.",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 558,
+              "header": "dark",
+              "preset": "fees",
+              "cols": [
+                {
+                  "k": "m",
+                  "label": "Milestone",
+                  "w": 198
+                },
+                {
+                  "k": "t",
+                  "label": "Timing",
+                  "w": 90
+                },
+                {
+                  "k": "p",
+                  "label": "% of fee",
+                  "w": 90,
+                  "type": "num"
+                },
+                {
+                  "k": "a",
+                  "label": "Amount",
+                  "w": 90,
+                  "type": "num"
+                },
+                {
+                  "k": "c",
+                  "label": "Cumulative",
+                  "w": 90,
+                  "type": "num"
+                }
+              ],
+              "rows": [
+                {
+                  "m": "Mobilization complete",
+                  "t": "Week 1",
+                  "p": "10%",
+                  "a": "$72K",
+                  "c": "$72K"
+                },
+                {
+                  "m": "Diagnostic readout",
+                  "t": "Week 4",
+                  "p": "30%",
+                  "a": "$216K",
+                  "c": "$288K"
+                },
+                {
+                  "m": "Design sign-off",
+                  "t": "Week 7",
+                  "p": "40%",
+                  "a": "$288K",
+                  "c": "$576K"
+                },
+                {
+                  "m": "Final readout accepted",
+                  "t": "Week 8",
+                  "p": "20%",
+                  "a": "$144K",
+                  "c": "$720K"
+                },
+                {
+                  "m": "Total fixed fee",
+                  "p": "100%",
+                  "a": "$720K",
+                  "total": true
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "feesummary",
+              "x": 633,
+              "y": 126,
+              "w": 270,
+              "model": "Fixed fee",
+              "total": "$720K",
+              "totalLabel": "total fixed fee",
+              "lines": [
+                [
+                  "Diagnose · weeks 1–4",
+                  "$288K"
+                ],
+                [
+                  "Design and roadmap · weeks 5–8",
+                  "$432K"
+                ]
+              ],
+              "terms": [
+                "Invoiced on milestone acceptance",
+                "Expenses capped at 8% of fees"
+              ]
+            },
+            "source_pointer": "/body/1"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-378",
+        "template": "pricing/fixed-fee",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/commercials.json",
+        "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+        "source_revision": "wmds-library.v7",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "feesummary"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

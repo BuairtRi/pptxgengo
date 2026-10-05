@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/buairtri/pptxgengo/internal/deckproject"
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
@@ -54,7 +53,7 @@ func runProjectTitles(args []string) error {
 	}
 	bundlePath := deckproject.BundlePath(*bundle)
 	if validLockedBundle(*bundle) {
-		bundlePath = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+		bundlePath = designBundlePath(*bundle)
 	}
 	compiled, err := deckproject.Compile(p, bundlePath, engine)
 	if err != nil {

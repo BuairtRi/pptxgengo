@@ -24,11 +24,16 @@ const LibraryRevisionV3 = "wmds-library.v3"
 const LibraryRevisionV4 = "wmds-library.v4"
 const LibraryRevisionV5 = "wmds-library.v5"
 const LibraryRevisionV6 = "wmds-library.v6"
+const LibraryRevisionV7 = "wmds-library.v7"
+
+func isV6OrLaterLibrary(revision string) bool {
+	return revision == LibraryRevisionV6 || revision == LibraryRevisionV7
+}
 
 // V6 carries the accepted V5 rendering semantics for unchanged compositions.
 // New heat-map fields are separately gated to the pinned V6 source.
 func isV5OrLaterLibrary(revision string) bool {
-	return revision == LibraryRevisionV5 || revision == LibraryRevisionV6
+	return revision == LibraryRevisionV5 || isV6OrLaterLibrary(revision)
 }
 
 // Expanded revisions share the incoming diagram, fit and data semantics. Named
@@ -46,6 +51,7 @@ type sourcePin struct {
 }
 
 var sourcePins = map[string]sourcePin{
+	"ce5bd8ad00261da22418f9ec9e93a79d6938f368aef3df3f3a6aa46d3833dc93": {"4f057cfbfd94feb4007f82ca6dfbbba1a0d410e89ec4f37f1b3e74343489abd2", LibraryRevisionV7},
 	bundleSHA256: {inventorySHA256, LibraryRevisionV1},
 	"c0926ec4e65d36b3a9fd53e74ae0a3204d03acd5d0ba9fe4919849700c8f3690": {"8e70c96c07b5346906c983f0893e686cd433fd73fae4c31642a71984f395dce3", LibraryRevisionV2},
 	"38819ed1eb6f48288935e30afe5894a471dda068488d067364585a1aa79706fa": {"56968b1e859945f7cea178fce43e5f1bacc66280cbe515c532c99b37924774cf", LibraryRevisionV3},

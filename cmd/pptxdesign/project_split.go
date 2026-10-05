@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/buairtri/pptxgengo/internal/deckproject"
 )
@@ -28,7 +27,7 @@ func runProjectSplit(args []string) error {
 	if *bundle != "" {
 		options.Bundle = deckproject.BundlePath(*bundle)
 		if validLockedBundle(*bundle) {
-			options.Bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+			options.Bundle = designBundlePath(*bundle)
 		}
 		options.StockEditor = deckproject.StockEditableSlide
 	}

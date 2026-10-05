@@ -9,18 +9,18 @@ import (
 
 func TestPublishedBundleDefaultsAndClosedMetadata(t *testing.T) {
 	root := t.TempDir()
-	if got, err := publishedBundle(root); err != nil || got != "v5" {
+	if got, err := publishedBundle(root); err != nil || got != "v7" {
 		t.Fatalf("latest default: %q %v", got, err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "../v5", "v5 v3", ""} {
+	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "../v7", "v7 v3", ""} {
 		if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte(value+"\n"), 0600); err != nil {
 			t.Fatal(err)
 		}
 		got, err := publishedBundle(root)
-		if value == "v5" {
+		if value == "v7" {
 			if err != nil || got != value {
 				t.Errorf("metadata %q: %q %v", value, got, err)
 			}
@@ -30,12 +30,12 @@ func TestPublishedBundleDefaultsAndClosedMetadata(t *testing.T) {
 	}
 }
 
-func TestDesignArgsUseStagedV5ButRespectProjectPins(t *testing.T) {
+func TestDesignArgsUseStagedV7ButRespectProjectPins(t *testing.T) {
 	root := t.TempDir()
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte("v5\n"), 0600); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte("v7\n"), 0600); err != nil {
 		t.Fatal(err)
 	}
 	for _, command := range []string{"library-catalog", "library-search", "library-index", "library-find", "library-inspect", "library-preview", "library-fit", "build"} {
@@ -43,7 +43,7 @@ func TestDesignArgsUseStagedV5ButRespectProjectPins(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		want := filepath.Join(root, "library", "wm-design-system", "v5")
+		want := filepath.Join(root, "library", "wm-design-system", "v7")
 		found := false
 		for i := range args {
 			if args[i] == "--bundle" && i+1 < len(args) && args[i+1] == want {
@@ -81,7 +81,7 @@ func TestDiscoveryDefaultsUseOnlyLatestLibraryResources(t *testing.T) {
 		for i := 1; i+1 < len(got); i += 2 {
 			values[got[i]] = got[i+1]
 		}
-		bundle := filepath.Join(root, "library", "wm-design-system", "v5")
+		bundle := filepath.Join(root, "library", "wm-design-system", "v7")
 		if values["--bundle"] != bundle || values["--index"] != filepath.Join(bundle, "library.sqlite") || values["--gallery"] != filepath.Join(bundle, "catalog") {
 			t.Fatalf("latest discovery paths: %v", got)
 		}
@@ -93,6 +93,27 @@ func TestDiscoveryDefaultsUseOnlyLatestLibraryResources(t *testing.T) {
 	got, err := designArgs(root, input)
 	if err != nil || !reflect.DeepEqual(got, input) {
 		t.Fatalf("explicit discovery paths changed: %v %v", got, err)
+	}
+}
+
+func TestDiscoveryDefaultsFollowExplicitLegacyBundle(t *testing.T) {
+	root := t.TempDir()
+	legacy := filepath.Join(root, "library", "wm-design-system", "v5")
+	for _, flag := range [][]string{{"--bundle", legacy}, {"--bundle=" + legacy}} {
+		for _, command := range []string{"library-find", "library-inspect", "library-preview"} {
+			input := append([]string{command}, flag...)
+			got, err := designArgs(root, input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := append(append([]string{}, input...), "--index", filepath.Join(legacy, "library.sqlite"), "--gallery", filepath.Join(legacy, "catalog"))
+			if command == "library-find" {
+				want = append(want, "--engine", "wmds-go-foundation.v2")
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatalf("explicit legacy bundle mixed discovery roots: got %v; want %v", got, want)
+			}
+		}
 	}
 }
 

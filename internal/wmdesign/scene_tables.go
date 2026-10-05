@@ -110,7 +110,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	if rowH <= 0 {
 		return nil, fmt.Errorf("scene.table_invalid_row_height")
 	}
-	if r.source.Revision != LibraryRevisionV6 {
+	if !isV6OrLaterLibrary(r.source.Revision) {
 		if n.HeatMin != nil || n.GroupW != nil || n.RowGroups != nil {
 			return nil, fmt.Errorf("scene.table_new_options_require_v6")
 		}
@@ -276,7 +276,11 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 		} else if i == hi {
 			role = "emphasis"
 		}
-		cell, tr, err := r.sceneNativeCell(id+".header."+c.Key, c.Label, st, Rect{xs[i], y, c.Width, headH}, on, role, sceneTableAlign(c.Type), 12, 12, ctx)
+		st, left, right, err := r.v6HeatHeaderFit(c, st, heatMinimum)
+		if err != nil {
+			return nil, err
+		}
+		cell, tr, err := r.sceneNativeCell(id+".header."+c.Key, c.Label, st, Rect{xs[i], y, c.Width, headH}, on, role, sceneTableAlign(c.Type), left, right, ctx)
 		if err != nil {
 			return nil, err
 		}

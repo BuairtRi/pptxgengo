@@ -59,7 +59,7 @@ func TestLibraryMatchGapExitAndReport(t *testing.T) {
 	previous := os.Stdout
 	os.Stdout = sink
 	defer func() { os.Stdout = previous }()
-	bundle, err := filepath.Abs("../../library/wm-design-system/v5")
+	bundle, err := filepath.Abs("../../planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle")
 	if err != nil {
 		t.Fatal(err)
 	}

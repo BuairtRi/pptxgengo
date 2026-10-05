@@ -18,7 +18,7 @@ import (
 func runLibraryMatch(args []string) error {
 	flags := flag.NewFlagSet("library-match", flag.ContinueOnError)
 	pagePath := flags.String("page", "", "one semantic page YAML or JSON file")
-	bundle := flags.String("bundle", "v5", "shared bundle path or v5")
+	bundle := flags.String("bundle", "v7", "shared bundle path or v7")
 	engine := flags.String("engine", wmdesign.CandidateEngine, "Go build engine")
 	templates := flags.String("templates", "", "comma-separated exact candidate template keys")
 	limit := flags.Int("limit", 4, "maximum passing automatic candidates, 1..100")
@@ -33,7 +33,7 @@ func runLibraryMatch(args []string) error {
 		return fmt.Errorf("library-match requires --page FILE --out NEW-DIR")
 	}
 	if validLockedBundle(*bundle) {
-		*bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+		*bundle = designBundlePath(*bundle)
 	}
 	page, e := deckproject.LoadPageSpec(*pagePath)
 	if e != nil {

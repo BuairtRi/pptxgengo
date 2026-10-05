@@ -10,18 +10,18 @@ Build the executable once, then use that same executable for the project:
 ```sh
 go build -o /tmp/pptxdesign ./cmd/pptxdesign
 cp -R examples/deck-project /tmp/my-deck-project
-/tmp/pptxdesign project init --project /tmp/my-deck-project --bundle library/wm-design-system/v5
-/tmp/pptxdesign project check --project /tmp/my-deck-project --bundle library/wm-design-system/v5
-/tmp/pptxdesign project build --project /tmp/my-deck-project --bundle library/wm-design-system/v5
+/tmp/pptxdesign project init --project /tmp/my-deck-project --bundle library/wm-design-system/v7
+/tmp/pptxdesign project check --project /tmp/my-deck-project --bundle library/wm-design-system/v7
+/tmp/pptxdesign project build --project /tmp/my-deck-project --bundle library/wm-design-system/v7
 /tmp/pptxdesign project status --project /tmp/my-deck-project
 /tmp/pptxdesign project approve --project /tmp/my-deck-project --stage content --actor maintainer
 /tmp/pptxdesign project review --project /tmp/my-deck-project --out /tmp/reviewer.zip
 /tmp/pptxdesign project export --project /tmp/my-deck-project --mode client --out /tmp/client.zip
 /tmp/pptxdesign project export --project /tmp/my-deck-project --mode maintainer --out /tmp/maintainer.zip
-/tmp/pptxdesign project export --project /tmp/my-deck-project --bundle library/wm-design-system/v5 --mode offline --out /tmp/offline.zip
+/tmp/pptxdesign project export --project /tmp/my-deck-project --bundle library/wm-design-system/v7 --mode offline --out /tmp/offline.zip
 ```
 
-Run from the repository root, or provide an absolute v5 `--bundle` path. `go run` may produce a different executable hash;
+Run from the repository root, or provide an absolute v7 `--bundle` path. `go run` may produce a different executable hash;
 the project deliberately pins the compiler executable, Go version, OS/architecture,
 engine and every bundle file, including fonts/calibration/source/assets. A changed
 compiler requires an explicit reviewed re-pin with the prior lock preserved.
@@ -48,7 +48,7 @@ slide text into geometry:
 ```
 
 Generic source-scene shared templates can be detached with `project detach --slide
-STABLE-ID --as NEW-LOCAL-ID --bundle library/wm-design-system/v5 --reason '...'`. The command retains actual
+STABLE-ID --as NEW-LOCAL-ID --bundle library/wm-design-system/v7 --reason '...'`. The command retains actual
 caller-provided content, native frame/nav/chrome geometry and frozen ancestry.
 Legacy typed card-row/metric IR, source-note/stamp chrome and geometry outside
 supported local zones return explicit errors and leave the YAML unchanged. Fork

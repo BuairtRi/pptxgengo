@@ -55,7 +55,7 @@ func runProjectEdit(args []string) error {
 	}
 	b := deckproject.BundlePath(*bundle)
 	if validLockedBundle(*bundle) {
-		b = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+		b = designBundlePath(*bundle)
 	}
 	result, err := deckproject.EditSlidesWithOptions(p, edits, b, *engine, deckproject.EditOptions{CheckFit: *checkFit})
 	if err != nil {

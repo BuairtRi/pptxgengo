@@ -39,7 +39,7 @@ func TestProjectCLIWorkflow(t *testing.T) {
 	}); e != nil {
 		t.Fatal(e)
 	}
-	bundle, e := filepath.Abs("../../library/wm-design-system/v5")
+	bundle, e := filepath.Abs("../../planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle")
 	if e != nil {
 		t.Fatal(e)
 	}

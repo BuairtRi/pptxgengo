@@ -186,7 +186,7 @@ func TestDividerClosedContractAndRemoval(t *testing.T) {
 		t.Skip("divider rendering requires registered private photography; run make test-integration")
 	}
 	p := example(t)
-	v5, e := filepath.Abs("../../library/wm-design-system/v5")
+	v5, e := filepath.Abs("../../planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle")
 	if e != nil {
 		t.Fatal(e)
 	}

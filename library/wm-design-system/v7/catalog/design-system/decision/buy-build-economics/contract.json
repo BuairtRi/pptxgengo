@@ -1,0 +1,1810 @@
+{
+  "key": "decision/buy-build-economics",
+  "source_file": "templates/library/argument.json",
+  "source_sha256": "a6cbe304790ef6def6566f82233f5cdc59cdd8fbfbdff6d4bf70fc19083df196",
+  "source_revision": "wmds-library.v7",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "card"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "text"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "text"
+    },
+    {
+      "id": "node08",
+      "source_pointer": "/body/7",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node09",
+      "source_pointer": "/body/8",
+      "expected_type": "text"
+    },
+    {
+      "id": "node10",
+      "source_pointer": "/body/9",
+      "expected_type": "bullets"
+    },
+    {
+      "id": "node11",
+      "source_pointer": "/body/10",
+      "expected_type": "card"
+    },
+    {
+      "id": "node12",
+      "source_pointer": "/body/11",
+      "expected_type": "text"
+    },
+    {
+      "id": "node13",
+      "source_pointer": "/body/12",
+      "expected_type": "text"
+    },
+    {
+      "id": "node14",
+      "source_pointer": "/body/13",
+      "expected_type": "text"
+    },
+    {
+      "id": "node15",
+      "source_pointer": "/body/14",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node16",
+      "source_pointer": "/body/15",
+      "expected_type": "text"
+    },
+    {
+      "id": "node17",
+      "source_pointer": "/body/16",
+      "expected_type": "text"
+    },
+    {
+      "id": "node18",
+      "source_pointer": "/body/17",
+      "expected_type": "text"
+    },
+    {
+      "id": "node19",
+      "source_pointer": "/body/18",
+      "expected_type": "rule"
+    },
+    {
+      "id": "node20",
+      "source_pointer": "/body/19",
+      "expected_type": "text"
+    },
+    {
+      "id": "node21",
+      "source_pointer": "/body/20",
+      "expected_type": "text"
+    },
+    {
+      "id": "node22",
+      "source_pointer": "/body/21",
+      "expected_type": "text"
+    },
+    {
+      "id": "node23",
+      "source_pointer": "/body/22",
+      "expected_type": "block"
+    }
+  ],
+  "family": "argument",
+  "tier": "working",
+  "name": "Decision · two options and the shifting economics",
+  "purpose": "Compare two options side by side with when each fits and its trade-offs, and set the changing economics in a wider third column, ending on a decision rule.",
+  "uses": [
+    "card.options",
+    "list.set",
+    "heading.group",
+    "shape.block"
+  ],
+  "source_advisory_budget": {
+    "words": 140,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "option label",
+      "maxChars": 12
+    },
+    {
+      "slot": "option statement",
+      "maxChars": 36
+    },
+    {
+      "slot": "criterion",
+      "maxChars": 30
+    },
+    {
+      "slot": "stage label",
+      "maxChars": 24
+    },
+    {
+      "slot": "stage line",
+      "maxChars": 50
+    },
+    {
+      "slot": "stage detail",
+      "maxChars": 36
+    },
+    {
+      "slot": "decision rule",
+      "maxChars": 110
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "block",
+      "bullets",
+      "card",
+      "rule",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 4,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      },
+      {
+        "source_pointer": "/body/3/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/5/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/7/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      },
+      {
+        "source_pointer": "/body/9/items",
+        "component_type": "bullets",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "supporting",
+        "scope_basis": "point_list_occupies_narrow_source_column_or_has_unknown_width"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 288,
+          "w": 234,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 288,
+          "w": 234,
+          "x": 309,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 75,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 75,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 75,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 75,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 327,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/7",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 327,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/8",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 327,
+          "y": 324
+        }
+      },
+      {
+        "source_pointer": "/body/9",
+        "component_type": "bullets",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 327,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/10",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 288,
+          "w": 342,
+          "x": 561,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/11",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 198
+        }
+      },
+      {
+        "source_pointer": "/body/12",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 214
+        }
+      },
+      {
+        "source_pointer": "/body/13",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 237
+        }
+      },
+      {
+        "source_pointer": "/body/14",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 261
+        }
+      },
+      {
+        "source_pointer": "/body/15",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/16",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 286
+        }
+      },
+      {
+        "source_pointer": "/body/17",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 309
+        }
+      },
+      {
+        "source_pointer": "/body/18",
+        "component_type": "rule",
+        "role": "content",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 333
+        }
+      },
+      {
+        "source_pointer": "/body/19",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/20",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 358
+        }
+      },
+      {
+        "source_pointer": "/body/21",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 306,
+          "x": 579,
+          "y": 381
+        }
+      },
+      {
+        "source_pointer": "/body/22",
+        "component_type": "block",
+        "role": "point",
+        "source_bounds": {
+          "h": 36,
+          "w": 846,
+          "x": 57,
+          "y": 432
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v7",
+    "source_sha256": "a6cbe304790ef6def6566f82233f5cdc59cdd8fbfbdff6d4bf70fc19083df196",
+    "review_status": "inferred_from_pinned_source",
+    "recipe": "buy-build-source-topology.v1",
+    "semantic_status": "engineering_recipe_requires_review",
+    "relationship": "comparison",
+    "groups": [
+      {
+        "alias": "/cards",
+        "role": "point",
+        "cardinality": 3,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/options",
+        "role": "point",
+        "cardinality": 2,
+        "source_pointer": "/body",
+        "basis": "explicit_source_recipe"
+      },
+      {
+        "alias": "/panels",
+        "role": "point",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/paragraphs",
+        "role": "point",
+        "cardinality": 13,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.label",
+        "alias": "/options/item_01/label",
+        "source_pointer": "/body/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 label; pinned source field /body/0/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.title",
+        "alias": "/options/item_01/title",
+        "source_pointer": "/body/0/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 title; pinned source field /body/0/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.label",
+        "alias": "/options/item_02/label",
+        "source_pointer": "/body/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 label; pinned source field /body/1/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.title",
+        "alias": "/options/item_02/title",
+        "source_pointer": "/body/1/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 title; pinned source field /body/1/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.text",
+        "alias": "/options/item_01/best_when_label",
+        "source_pointer": "/body/2/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 best_when_label; pinned source field /body/2/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 198,
+          "height_pt": 18,
+          "line_budget": 1,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 500,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.items.item01",
+        "alias": "/options/item_01/best_when/item_01",
+        "source_pointer": "/body/3/items/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 best_when item_01; pinned source field /body/3/items/0",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.items.item02",
+        "alias": "/options/item_01/best_when/item_02",
+        "source_pointer": "/body/3/items/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 best_when item_02; pinned source field /body/3/items/1",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.items.item03",
+        "alias": "/options/item_01/best_when/item_03",
+        "source_pointer": "/body/3/items/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 best_when item_03; pinned source field /body/3/items/2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node05.text",
+        "alias": "/options/item_01/tradeoffs_label",
+        "source_pointer": "/body/4/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 tradeoffs_label; pinned source field /body/4/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 198,
+          "height_pt": 18,
+          "line_budget": 1,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 500,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node06.items.item01",
+        "alias": "/options/item_01/tradeoffs/item_01",
+        "source_pointer": "/body/5/items/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 tradeoffs item_01; pinned source field /body/5/items/0",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node06.items.item02",
+        "alias": "/options/item_01/tradeoffs/item_02",
+        "source_pointer": "/body/5/items/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 tradeoffs item_02; pinned source field /body/5/items/1",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node06.items.item03",
+        "alias": "/options/item_01/tradeoffs/item_03",
+        "source_pointer": "/body/5/items/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/options",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "options item_01 tradeoffs item_03; pinned source field /body/5/items/2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node07.text",
+        "alias": "/options/item_02/best_when_label",
+        "source_pointer": "/body/6/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 best_when_label; pinned source field /body/6/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 198,
+          "height_pt": 18,
+          "line_budget": 1,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 500,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node08.items.item01",
+        "alias": "/options/item_02/best_when/item_01",
+        "source_pointer": "/body/7/items/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 best_when item_01; pinned source field /body/7/items/0",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node08.items.item02",
+        "alias": "/options/item_02/best_when/item_02",
+        "source_pointer": "/body/7/items/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 best_when item_02; pinned source field /body/7/items/1",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node08.items.item03",
+        "alias": "/options/item_02/best_when/item_03",
+        "source_pointer": "/body/7/items/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 best_when item_03; pinned source field /body/7/items/2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node09.text",
+        "alias": "/options/item_02/tradeoffs_label",
+        "source_pointer": "/body/8/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 tradeoffs_label; pinned source field /body/8/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 198,
+          "height_pt": 18,
+          "line_budget": 1,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 500,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node10.items.item01",
+        "alias": "/options/item_02/tradeoffs/item_01",
+        "source_pointer": "/body/9/items/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 tradeoffs item_01; pinned source field /body/9/items/0",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node10.items.item02",
+        "alias": "/options/item_02/tradeoffs/item_02",
+        "source_pointer": "/body/9/items/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 tradeoffs item_02; pinned source field /body/9/items/1",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node10.items.item03",
+        "alias": "/options/item_02/tradeoffs/item_03",
+        "source_pointer": "/body/9/items/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/options",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "options item_02 tradeoffs item_03; pinned source field /body/9/items/2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node11.label",
+        "alias": "/economics/item_11/label",
+        "source_pointer": "/body/10/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "economics item_11 label; pinned source field /body/10/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node11.title",
+        "alias": "/economics/item_11/title",
+        "source_pointer": "/body/10/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "economics item_11 title; pinned source field /body/10/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node12.text",
+        "alias": "/economics/item_12/text",
+        "source_pointer": "/body/11/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/paragraphs",
+        "group_index": 4,
+        "cardinality": 13,
+        "description": "economics item_12 text; pinned source field /body/11/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 16,
+          "line_budget": 1,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 500,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node13.text",
+        "alias": "/economics/item_13/text",
+        "source_pointer": "/body/12/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 5,
+        "cardinality": 13,
+        "description": "economics item_13 text; pinned source field /body/12/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 23,
+          "line_budget": 1,
+          "style": {
+            "id": "body",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 14,
+            "leading": 21,
+            "tracking": "0",
+            "use": "Default text; minimum for reading",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node14.text",
+        "alias": "/economics/item_14/text",
+        "source_pointer": "/body/13/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 6,
+        "cardinality": 13,
+        "description": "economics item_14 text; pinned source field /body/13/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 24,
+          "line_budget": 1,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node16.text",
+        "alias": "/economics/item_16/text",
+        "source_pointer": "/body/15/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/paragraphs",
+        "group_index": 7,
+        "cardinality": 13,
+        "description": "economics item_16 text; pinned source field /body/15/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 16,
+          "line_budget": 1,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 500,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node17.text",
+        "alias": "/economics/item_17/text",
+        "source_pointer": "/body/16/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 8,
+        "cardinality": 13,
+        "description": "economics item_17 text; pinned source field /body/16/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 23,
+          "line_budget": 1,
+          "style": {
+            "id": "body",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 14,
+            "leading": 21,
+            "tracking": "0",
+            "use": "Default text; minimum for reading",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node18.text",
+        "alias": "/economics/item_18/text",
+        "source_pointer": "/body/17/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 9,
+        "cardinality": 13,
+        "description": "economics item_18 text; pinned source field /body/17/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 24,
+          "line_budget": 1,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node20.text",
+        "alias": "/economics/item_20/text",
+        "source_pointer": "/body/19/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/paragraphs",
+        "group_index": 10,
+        "cardinality": 13,
+        "description": "economics item_20 text; pinned source field /body/19/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 16,
+          "line_budget": 1,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 500,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node21.text",
+        "alias": "/economics/item_21/text",
+        "source_pointer": "/body/20/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 11,
+        "cardinality": 13,
+        "description": "economics item_21 text; pinned source field /body/20/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 23,
+          "line_budget": 1,
+          "style": {
+            "id": "body",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 14,
+            "leading": 21,
+            "tracking": "0",
+            "use": "Default text; minimum for reading",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node22.text",
+        "alias": "/economics/item_22/text",
+        "source_pointer": "/body/21/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 12,
+        "cardinality": 13,
+        "description": "economics item_22 text; pinned source field /body/21/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 306,
+          "height_pt": 51,
+          "line_budget": 3,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node23.text",
+        "alias": "/panels/item_01/text",
+        "source_pointer": "/body/22/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/panels",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "body (string) at /panels/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 822,
+          "height_pt": 36,
+          "line_budget": 2,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Conservative fixed block inset; content dependent native padding is not modeled."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Buy versus build"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "AI shifts buy versus build toward strategic fit"
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Buy"
+    },
+    {
+      "name": "node01.title",
+      "source_pointer": "/body/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Accelerate standard capabilities"
+    },
+    {
+      "name": "node02.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Build"
+    },
+    {
+      "name": "node02.title",
+      "source_pointer": "/body/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Own differentiated capabilities"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Best when"
+    },
+    {
+      "name": "node04.items.item01",
+      "source_pointer": "/body/3/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Needs are common"
+    },
+    {
+      "name": "node04.items.item02",
+      "source_pointer": "/body/3/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Speed beats customization"
+    },
+    {
+      "name": "node04.items.item03",
+      "source_pointer": "/body/3/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Vendors carry the roadmap"
+    },
+    {
+      "name": "node05.text",
+      "source_pointer": "/body/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Trade-offs"
+    },
+    {
+      "name": "node06.items.item01",
+      "source_pointer": "/body/5/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Fit gaps force compromise"
+    },
+    {
+      "name": "node06.items.item02",
+      "source_pointer": "/body/5/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Roadmaps constrain change"
+    },
+    {
+      "name": "node06.items.item03",
+      "source_pointer": "/body/5/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Switching costs build up"
+    },
+    {
+      "name": "node07.text",
+      "source_pointer": "/body/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Best when"
+    },
+    {
+      "name": "node08.items.item01",
+      "source_pointer": "/body/7/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Workflows give an edge"
+    },
+    {
+      "name": "node08.items.item02",
+      "source_pointer": "/body/7/items/1",
+      "kind": "string",
+      "synthetic_source_example": "Data and roadmap control"
+    },
+    {
+      "name": "node08.items.item03",
+      "source_pointer": "/body/7/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Talent is already in place"
+    },
+    {
+      "name": "node09.text",
+      "source_pointer": "/body/8/text",
+      "kind": "string",
+      "synthetic_source_example": "Trade-offs"
+    },
+    {
+      "name": "node10.items.item01",
+      "source_pointer": "/body/9/items/0",
+      "kind": "string",
+      "synthetic_source_example": "Needs durable capability"
+    },
+    {
+      "name": "node10.items.item02",
+      "source_pointer": "/body/9/items/1",
+      "kind": "string",
+      "synthetic_source_example": "You own maintenance"
+    },
+    {
+      "name": "node10.items.item03",
+      "source_pointer": "/body/9/items/2",
+      "kind": "string",
+      "synthetic_source_example": "Hiring takes time"
+    },
+    {
+      "name": "node11.label",
+      "source_pointer": "/body/10/label",
+      "kind": "string",
+      "synthetic_source_example": "Modernization economics"
+    },
+    {
+      "name": "node11.title",
+      "source_pointer": "/body/10/title",
+      "kind": "string",
+      "synthetic_source_example": "AI lowers cost at every stage"
+    },
+    {
+      "name": "node12.text",
+      "source_pointer": "/body/11/text",
+      "kind": "string",
+      "synthetic_source_example": "Plan and understand"
+    },
+    {
+      "name": "node13.text",
+      "source_pointer": "/body/12/text",
+      "kind": "string",
+      "synthetic_source_example": "Faster discovery, mapping and requirements"
+    },
+    {
+      "name": "node14.text",
+      "source_pointer": "/body/13/text",
+      "kind": "string",
+      "synthetic_source_example": "Weeks of analysis become days."
+    },
+    {
+      "name": "node16.text",
+      "source_pointer": "/body/15/text",
+      "kind": "string",
+      "synthetic_source_example": "Implement and build"
+    },
+    {
+      "name": "node17.text",
+      "source_pointer": "/body/16/text",
+      "kind": "string",
+      "synthetic_source_example": "Accelerate coding, testing and migration"
+    },
+    {
+      "name": "node18.text",
+      "source_pointer": "/body/17/text",
+      "kind": "string",
+      "synthetic_source_example": "Agents draft, people review."
+    },
+    {
+      "name": "node20.text",
+      "source_pointer": "/body/19/text",
+      "kind": "string",
+      "synthetic_source_example": "Maintain legacy"
+    },
+    {
+      "name": "node21.text",
+      "source_pointer": "/body/20/text",
+      "kind": "string",
+      "synthetic_source_example": "Cut run cost and reliance on scarce skills"
+    },
+    {
+      "name": "node22.text",
+      "source_pointer": "/body/21/text",
+      "kind": "string",
+      "synthetic_source_example": "Fewer specialists on call."
+    },
+    {
+      "name": "node23.text",
+      "source_pointer": "/body/22/text",
+      "kind": "string",
+      "synthetic_source_example": "As AI lowers planning, build and run costs, choose by strategic fit, differentiation and ownership."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node04.items",
+      "source_pointer": "/body/3/items",
+      "count": 3
+    },
+    {
+      "name": "node06.items",
+      "source_pointer": "/body/5/items",
+      "count": 3
+    },
+    {
+      "name": "node08.items",
+      "source_pointer": "/body/7/items",
+      "count": 3
+    },
+    {
+      "name": "node10.items",
+      "source_pointer": "/body/9/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

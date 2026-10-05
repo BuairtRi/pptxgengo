@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
@@ -13,7 +12,7 @@ import (
 
 func runLibrarySearch(args []string) error {
 	f := flag.NewFlagSet("library-search", flag.ContinueOnError)
-	bundle := f.String("bundle", "v5", "pinned design library bundle path or v5 (default)")
+	bundle := f.String("bundle", "v7", "pinned design library bundle path or v7 (default)")
 	source := f.String("source", "", "optional source override; must match pinned snapshot")
 	engine := f.String("engine", wmdesign.CandidateEngine, "wrapper compatibility passthrough; search does not evaluate engine/bundle compatibility")
 	query := f.String("query", "", "scenario/purpose/label text; soft ranking signal")
@@ -36,8 +35,8 @@ func runLibrarySearch(args []string) error {
 	if *engine != wmdesign.Engine && *engine != wmdesign.CandidateEngine {
 		return fmt.Errorf("unsupported engine %q", *engine)
 	}
-	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
-		*bundle = filepath.Join(designReleaseRoot(), "library", "wm-design-system", *bundle)
+	if validLockedBundle(*bundle) {
+		*bundle = designBundlePath(*bundle)
 	}
 	catalog, err := wmdesign.LibraryCatalog(*bundle, *source)
 	if err != nil {

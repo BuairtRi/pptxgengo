@@ -102,7 +102,7 @@ func TestIntakeGeographyStrictValidation(t *testing.T) {
 }
 
 func TestIntakeGeographyMatchesFrozenRenderer(t *testing.T) {
-	data, e := os.ReadFile(filepath.Join("..", "..", "library", "wm-design-system", "v5", "source", "explorations", "components.src.html"))
+	data, e := os.ReadFile(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle", "source", "explorations", "components.src.html"))
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -136,7 +136,7 @@ func TestIntakeGeographyMatchesFrozenRenderer(t *testing.T) {
 }
 
 func TestIntakeGeographyV3LocationRefinementsFitSplit(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

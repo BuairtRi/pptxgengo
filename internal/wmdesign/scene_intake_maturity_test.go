@@ -152,7 +152,7 @@ func TestIntakeMaturitySingleAxisFalseAndHere(t *testing.T) {
 func TestIntakeMaturityNativeEditablePackage(t *testing.T) {
 	raw := json.RawMessage(`{"type":"maturity","x":100,"y":100,"w":600,"h":330,"stages":[{"label":"Start"},{"label":"Advance"},{"label":"Scale"}],"at":[0.1,0.4,0.7],"branch":{"from":1,"label":"Beyond","n":"2.5"}}`)
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "maturity", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "maturity", Kind: "scene", Scene: &SceneSpec{Node: raw}}}}}}
-	data, _, e := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
+	data, _, e := BuildWithEngine(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "", doc, CandidateEngine)
 	if e != nil {
 		t.Fatal(e)
 	}

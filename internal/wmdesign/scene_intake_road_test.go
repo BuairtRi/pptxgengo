@@ -159,7 +159,7 @@ func TestRound12RoadFrozenSixSourceNodes(t *testing.T) {
 func TestRound12RoadNativeEditablePackage(t *testing.T) {
 	raw := json.RawMessage(`{"type":"road","x":117,"y":126,"w":700,"h":280,"labelW":150,"milestones":[{"label":"Start","date":"Now","side":"above","text":"Prepare"},{"label":"Finish","side":"below","text":"Deliver","active":true}]}`)
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "road", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "road", Kind: "scene", Scene: &SceneSpec{Node: raw}}}}}}
-	data, report, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
+	data, report, err := BuildWithEngine(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)
 	}

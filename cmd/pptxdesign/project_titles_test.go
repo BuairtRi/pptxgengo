@@ -12,7 +12,7 @@ func TestProjectTitlesReportsCompiledOrderAndMetadata(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	bundle, err := filepath.Abs("../../library/wm-design-system/v5")
+	bundle, err := filepath.Abs("../../planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle")
 	if err != nil {
 		t.Fatal(err)
 	}

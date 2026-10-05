@@ -208,7 +208,7 @@ func TestRound12NativeEditablePackage(t *testing.T) {
 	raw := json.RawMessage(`{"type":"funnel","x":117,"y":126,"w":600,"h":240,"shapeW":300,"labelSide":true,"stages":[{"value":"50","label":"Eligible","text":"Ready to invite"},{"value":"20","label":"Booked","text":"Ready to visit"}]}`)
 	bracket := json.RawMessage(`{"type":"bracket","x":200,"y":420,"w":360,"label":"Range"}`)
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "round12", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "funnel", Kind: "scene", Scene: &SceneSpec{Node: raw}}, {ID: "range", Kind: "scene", Scene: &SceneSpec{Node: bracket}}}}}}
-	data, report, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
+	data, report, err := BuildWithEngine(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)
 	}

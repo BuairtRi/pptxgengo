@@ -14,7 +14,7 @@ func TestLibrarySearchV5Shorthand(t *testing.T) {
 }
 
 func TestLibrarySearchLatestDefault(t *testing.T) {
-	testLibrarySearchPinnedShorthand(t, "", wmdesign.LibraryRevisionV5)
+	testLibrarySearchPinnedShorthand(t, "", wmdesign.LibraryRevisionV7)
 }
 
 func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) {
@@ -49,4 +49,8 @@ func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) 
 	if len(result.Matches) != 1 || result.Matches[0].Template.SourceRevision != revision {
 		t.Fatalf("%s shorthand did not select %s catalog: %+v", shorthand, revision, result.Matches)
 	}
+}
+
+func TestLibrarySearchV7Shorthand(t *testing.T) {
+	testLibrarySearchPinnedShorthand(t, "v7", wmdesign.LibraryRevisionV7)
 }

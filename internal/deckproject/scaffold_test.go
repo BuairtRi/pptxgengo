@@ -11,7 +11,7 @@ import (
 )
 
 func TestScaffoldLoadsBuildsAndPinsActualParent(t *testing.T) {
-	bundlePath := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundlePath := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	for _, key := range []string{"lifecycle/three-phases", "plan/gantt", "intellio/swimlane"} {
 		t.Run(key, func(t *testing.T) {
 			if testing.Short() && key != "intellio/swimlane" {
@@ -53,7 +53,7 @@ func TestScaffoldLoadsBuildsAndPinsActualParent(t *testing.T) {
 }
 
 func TestScaffoldRequiresReasonAndLeavesTypedRecipesExplicit(t *testing.T) {
-	bundlePath := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundlePath := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	if _, err := ScaffoldTemplate(bundlePath, "lifecycle/three-phases", wmdesign.CandidateEngine, "", 2026); err == nil {
 		t.Fatal("missing reason accepted")
 	}

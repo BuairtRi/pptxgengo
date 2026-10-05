@@ -14,7 +14,7 @@ import (
 )
 
 func catalogCacheBundle() string {
-	return filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	return filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 }
 
 func catalogCacheSource(t testing.TB) *Source {

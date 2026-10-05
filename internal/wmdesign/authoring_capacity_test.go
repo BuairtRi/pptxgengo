@@ -9,7 +9,7 @@ import (
 )
 
 func TestTypedCardAuthoringCapacityMatchesRendererBounds(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -96,7 +96,7 @@ func TestTypedCardAuthoringCapacityMatchesRendererBounds(t *testing.T) {
 }
 
 func TestFixedTableAndVerticalStepperAuthoringCapacity(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

@@ -11,8 +11,6 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-
-	"github.com/buairtri/pptxgengo/pptx"
 )
 
 const powerPointApp = "/Applications/Microsoft PowerPoint.app"
@@ -291,12 +289,7 @@ func doctorFileAccess(ctx context.Context, root, taskID string, run runner) Diag
 	}
 	path, pdfPath := taskPresentationPaths(root, taskID)
 	script := filepath.Join(work, "probe.applescript")
-	presentation := pptx.New()
-	if err := presentation.AddSlide().AddText([]pptx.TextProps{{Text: "PowerPoint staging file-access diagnostic"}}, nil); err != nil {
-		_ = removeTaskFiles(root, taskID)
-		return Diagnostic{"powerpoint-file-access", "unknown", err.Error(), fix}
-	}
-	data, err := presentation.Write()
+	data, err := doctorPresentation()
 	if err == nil {
 		path, pdfPath, err = acquireTaskFiles(root, taskID, data)
 	}

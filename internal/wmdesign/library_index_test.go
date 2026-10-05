@@ -21,7 +21,7 @@ func indexFixture(t *testing.T) (string, LibraryIndexReport) {
 	path := filepath.Join(t.TempDir(), "catalog.sqlite")
 	libraryIndexSeed.once.Do(func() {
 		seedPath := filepath.Join(t.TempDir(), "seed.sqlite")
-		libraryIndexSeed.report, libraryIndexSeed.err = BuildLibraryIndex(seedPath, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5")})
+		libraryIndexSeed.report, libraryIndexSeed.err = BuildLibraryIndex(seedPath, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")})
 		if libraryIndexSeed.err == nil {
 			libraryIndexSeed.data, libraryIndexSeed.err = os.ReadFile(seedPath)
 		}
@@ -248,7 +248,7 @@ func TestUnifiedLibraryLegacyNamespaceAndInputPin(t *testing.T) {
 	}
 	db.Close()
 	path := filepath.Join(root, "unified.sqlite")
-	report, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5"), LegacyIndex: legacy})
+	report, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), LegacyIndex: legacy})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -289,7 +289,7 @@ func TestUnifiedLibraryLegacyNamespaceAndInputPin(t *testing.T) {
 }
 
 func TestUnifiedLibraryActualContentAlternatives(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	values := BoundCardsContent{Eyebrow: "Delivery", Title: "Keep review evidence and next actions together", Cards: []BoundCardContent{{Key: "source", Title: "Trace sources", Body: "Link every claim to its source."}, {Key: "review", Title: "Review clearly", Body: "Give reviewers the audience and visible draft."}, {Key: "retain", Title: "Retain context and next actions", Body: "Keep decisions with the source deck; name the next decision and accountable owner."}}}
 	input := BoundDocument{Schema: BoundDocumentSchema, Year: 2026, Slides: []BoundSlide{{ID: "option-a", Template: "cards/3", ContentKind: "supplied_content", Values: indexJSON(values)}, {ID: "option-b", Template: "cards/4", ContentKind: "supplied_content", Values: indexJSON(BoundCardsContent{Eyebrow: values.Eyebrow, Title: values.Title, Cards: []BoundCardContent{values.Cards[0], values.Cards[1], {Key: "retain", Title: "Retain context", Body: "Keep decisions with the source deck."}, {Key: "next", Title: "Define the next action", Body: "Name the next decision and accountable owner."}}})}, {ID: "invalid-option", Template: "cards/3", ContentKind: "supplied_content", Values: indexJSON(BoundCardsContent{Title: values.Title, Cards: values.Cards[:2]})}}}
 	out := filepath.Join(t.TempDir(), "alternatives")
@@ -332,7 +332,7 @@ func TestUnifiedLibraryActualContentAlternatives(t *testing.T) {
 }
 
 func TestUnifiedLibraryGalleryPinsAndPreviewDrift(t *testing.T) {
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	catalog, err := LibraryCatalog(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -439,7 +439,7 @@ func TestUnifiedLibraryLegacyResourceRelocation(t *testing.T) {
 	}
 	db.Close()
 	path := filepath.Join(root, "unified.sqlite")
-	if _, err = BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5"), LegacyIndex: legacy}); err != nil {
+	if _, err = BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), LegacyIndex: legacy}); err != nil {
 		t.Fatal(err)
 	}
 	relocated := t.TempDir()

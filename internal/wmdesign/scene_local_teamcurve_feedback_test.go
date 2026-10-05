@@ -18,7 +18,7 @@ func TestLocalTeamCurveOwnsCompleteStrokeEnvelope(t *testing.T) {
 	}
 	path := "/local_templates/original-profile/nodes/curve"
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "local-curve", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "profile", Kind: "scene", Scene: &SceneSpec{Node: raw, Path: path, Allocation: &allocation, Keys: map[string][]string{path + "/series": {"original"}}}}}}}}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	_, report, err := BuildWithEngine(bundle, "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)

@@ -73,13 +73,13 @@ func projectCommandJSON(t *testing.T, args ...string) json.RawMessage {
 
 func TestPublishedProjectBundleMetadata(t *testing.T) {
 	root := t.TempDir()
-	if got, err := publishedProjectBundle(root); err != nil || got != "v5" {
+	if got, err := publishedProjectBundle(root); err != nil || got != "v7" {
 		t.Fatalf("latest default: %q %v", got, err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "../v5", "v5 v3", ""} {
+	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "../v5", "v5 v3", ""} {
 		if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte(value+"\n"), 0600); err != nil {
 			t.Fatal(err)
 		}
@@ -94,7 +94,7 @@ func TestPublishedProjectBundleMetadata(t *testing.T) {
 	}
 }
 
-func TestProjectPublishedV5PreservesLockedRevisions(t *testing.T) {
+func TestProjectPublishedV7PreservesLockedRevisions(t *testing.T) {
 	stage := t.TempDir()
 	repoLibrary, err := filepath.Abs("../../library")
 	if err != nil {
@@ -103,14 +103,21 @@ func TestProjectPublishedV5PreservesLockedRevisions(t *testing.T) {
 	if err := os.Symlink(repoLibrary, filepath.Join(stage, "library")); err != nil {
 		t.Fatal(err)
 	}
+	repoPlanning, err := filepath.Abs("../../planning")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(repoPlanning, filepath.Join(stage, "planning")); err != nil {
+		t.Fatal(err)
+	}
 	if err := os.Mkdir(filepath.Join(stage, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(stage, "release/default-bundle.txt"), []byte("v5\n"), 0600); err != nil {
+	if err := os.WriteFile(filepath.Join(stage, "release/default-bundle.txt"), []byte("v7\n"), 0600); err != nil {
 		t.Fatal(err)
 	}
 	t.Setenv("PPTXGENGO_RELEASE_ROOT", stage)
-	for _, revision := range []string{"v5"} {
+	for _, revision := range []string{"v5", "v7"} {
 		t.Run(revision, func(t *testing.T) {
 			root := projectDefaultFixture(t)
 			projectCommandJSON(t, "init", "--project", root, "--bundle", revision)
@@ -168,7 +175,7 @@ func TestProjectPublishedV5PreservesLockedRevisions(t *testing.T) {
 		t.Fatal(err)
 	}
 	lock, _, err := deckproject.ReadLock(p)
-	if err != nil || lock.BundleRevision != "wmds-library.v5" {
+	if err != nil || lock.BundleRevision != "wmds-library.v7" {
 		t.Fatalf("new staged project pin: %+v %v", lock, err)
 	}
 }

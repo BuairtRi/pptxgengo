@@ -16,7 +16,7 @@ import (
 
 func intakeTestRenderer(t *testing.T) *renderer {
 	t.Helper()
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, e := Load(bundle, "")
 	if e != nil {
 		t.Fatal(e)
@@ -178,7 +178,7 @@ func TestIntakeArchitectureAndGeographyAllFrozenV3Nodes(t *testing.T) {
 	if testing.Short() {
 		t.Skip("exhaustive frozen slide builds require registered private branding assets; run make test-integration")
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, e := Load(bundle, "")
 	if e != nil {
 		t.Fatal(e)

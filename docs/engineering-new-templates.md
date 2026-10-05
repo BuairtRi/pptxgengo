@@ -1,50 +1,55 @@
-# Upstream heat-map intake
+# Upstream template intake
 
-## Current implementation status — 2026-10-04
+## Current implementation status — 2026-10-05
 
-The new capabilities are implemented in Go behind the pinned v6 candidate. The
-production library remains **587** pending actual PowerPoint review of the 15
-additions and revised dense heat map. Upstream is **602**, at
-`c355c881d543dceccb82dbe12d7129bca9b1fcac`.
+Upstream now contains **616 templates**, including **14 workshop additions** at
+`c788cefeb5bb409118ac217adb53216d8156eec3`. They are implemented in Go as the
+pinned v7 production library. The repository default and published gallery are
+**v7 / 616**. The global CLI is now **0.1.0-local.16 / v7**. Installation used
+`--cli-only`, preserving the presentation skill link. The release commit excludes
+the other agent's presentation skill and DentalXChange slide edits.
 
-- Frozen candidate, delta, and 16-slide native review deck:
-  [602-template intake](../planning/wm-design-contracts/v6/intake-20261004-602-frozen/README.md).
-- Implemented row groups, stable group identities, variable heights, shared 1–5
-  heat domains, priority chips, editable reference badges, source Boolean
-  emphasis compatibility, and friendly content aliases. Legacy `h` business
-  columns take precedence over the new row-height metadata field.
-- All 586 unchanged compositions retain their v5 content contracts and named
-  amendments. All 37 heat maps pass exact content round trips and individual
-  source/bound builds. Full 602-source/601-active-bound builds pass. Candidate
-  SQLite generation and discovery surface the new templates; the temporary
-  index is removed after qualification, with no second production gallery.
-- Seven explicit allocation amendments across five new templates move insight
-  bullets below three-line titles, reserve footer space for a callout and two
-  priority keys, and bring a continuation label inside the tall column. Copy,
-  font sizes, ratings and evidence remain intact. Atomicity and idempotence are
-  tested.
-- Native CLI export was attempted on the review deck and failed with
-  `application_dispatch_failed (-10827)`. No native preview or acceptance is
-  claimed. Resolve desktop dispatch, export and inspect all 16 changed layouts,
-  then qualify inherited previews and promote the new gallery/index together.
-- Final clean-checkout qualification: regular repository tests **33.23s**, focused
-  intake race **93.31s**, full 602-source/601-bound builds **77.98s**. The exhaustive
-  build is skipped by the everyday `-short` lane. CLI release local.15 supports
-  the explicit candidate bundle; it is built and installed globally from clean
-  runtime commit `962c03a3` (`vcs.modified=false`). The default installed library
-  stays v5/587; all 587 previews and 1,760 artifact links were verified during
-  installation. The other agent's presentation skill link was preserved.
-- The local.15 follow-up fixes repeated/stale capacity comments and gives doctor
-  and render the same stable PPTX/PDF staging folder. Its final fast suite passed
-  in **31.20s**. Installed doctor and review-deck render still fail operational
-  dispatch `-10827` before opening a file; the folder fix is regression-tested,
-  with actual native read/write and visual acceptance still unqualified.
-- Semantic metadata remains inferred. Generic item matching still cannot express
-  complete matrices and linked detail locators. Reference badges reserve their
-  width on every wrapped body line; anchored adornments remain fixed after edits.
-  New stock reference labels are single-line. Supplied copy requires fit review.
+- [Workshop candidate and final deck](../planning/wm-design-contracts/v7/intake-20261005-616-frozen/README.md):
+  **14/14 native visual acceptance**, exact stock source/bound content round trips,
+  inheritance of all 602 earlier definitions, and six named geometry amendments.
+  Five initial Go allocation failures and three native defects were repaired.
+  Final review covers schedule alignment, agenda clearance, readout tables,
+  source notes, grouped series rails and status labels.
+- [Heat-map candidate and final deck](../planning/wm-design-contracts/v6/intake-20261004-602-frozen/README.md):
+  **16/16 native visual acceptance** after repairing A1–A9 badge wrapping, LATER
+  chip wrapping and single-word heat column headers. The header repair uses
+  reduced inset padding and a bounded 9→8 pt reduction only when required by
+  the existing narrow score column. Legacy v5 geometry is unchanged.
+- Native acceptance used local PowerPoint PDF export and the existing Swift
+  rasterizer. An initial installed CLI export succeeded after reboot for all 16
+  heat-map specimens. Fresh automated final exports subsequently failed
+  operational Apple-event dispatch `-10827` under the restricted caller.
+  Final GUI acceptance does not establish a fresh doctor/automated render pass.
+- The doctor probe now has explicit geometry, background, Arial theme and text
+  sizing instead of relying on nil/default deck options. XML/package and focused
+  race checks pass; the revised probe still needs a successful live CLI check.
+- The production gallery contains all **616** specimens: **586 inherited** from
+  unchanged, hash-verified authored compositions and **30 accepted native**
+  specimens from the heat-map/workshop intake. Paired renderer comparisons pass
+  for all 586 inherited specimens. The Go publisher verifies native deck XML and
+  visible dependencies for the other 30. The single production SQLite index
+  includes 616 templates; photography coverage now includes all 521 originals in the requested branding
+  folder (up from 20), with 1,204 asset variants overall. Historical source pins remain
+  under planning, without another production gallery or SQLite index.
+- Final repository tests passed in **120.61s**. Full 616-source/615-active-bound
+  Go builds passed in **89.106s**, skipped by the everyday short test lane.
+  Focused race checks passed for native doctor, reference/priority widths and
+  shared source resolution. The exhaustive project race lane remains out of
+  band; no new full race pass is claimed.
+- The capacity-comment and shared staging fixes are retained in installed local.16.
+  The installed package now includes all 616 previews, 1,847 artifact links and
+  all 521 registered photos. Global version and photo discovery were checked
+  from outside the repository; all packaged file hashes were verified.
+- Semantic metadata remains inferred. Generic item matching cannot express
+  complete matrices and linked detail locators. Stock specimen acceptance does
+  not guarantee that replacement copy fits; edits still require fit review.
 
-The remaining sections preserve the initial intake analysis and estimates.
+The remaining sections preserve the initial heat-map intake analysis and estimates.
 
 ## Initial comparison
 

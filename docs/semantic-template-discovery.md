@@ -31,14 +31,14 @@ score remains a discovery signal, never a fit guarantee.
 
 ## Screenshots and SQLite
 
-The accepted 587 gallery already has a native screenshot for every template.
-The retained catalog is `library/wm-design-system/v5/catalog`; its unified index
-is `library/wm-design-system/v5/library.sqlite`. Run from the repository root:
+The accepted 616 gallery already has a native screenshot for every template.
+The retained catalog is `library/wm-design-system/v7/catalog`; its unified index
+is `library/wm-design-system/v7/library.sqlite`. Run from the repository root:
 
 ```sh
-pptxdesign library-find --index library/wm-design-system/v5/library.sqlite \
+pptxdesign library-find --index library/wm-design-system/v7/library.sqlite \
   --query 'phased delivery roadmap' --kinds template --summary
-pptxdesign library-inspect --index library/wm-design-system/v5/library.sqlite \
+pptxdesign library-inspect --index library/wm-design-system/v7/library.sqlite \
   --id lifecycle/three-phases --summary
 ```
 
@@ -78,3 +78,47 @@ review step. No per-deck Python conversion program is required.
 The presentation skill is maintained by another agent. This document records
 the implemented discovery/CLI interface and evidence for that agent to adopt;
 it does not replace or modify the skill.
+
+## Photography discovery
+
+The production asset index includes all **521** JPEG originals in
+`~/Documents/branding/West Monroe Photos/`: 115 Abstract, 337 Industry and
+69 Provocative. The 20 previously registered photo IDs are retained. There are
+1,204 registered asset variants overall, including 523 photo variants (two
+other photo variants are outside this folder).
+
+Photo descriptions come from the existing matching Markdown sidecars. Each
+record preserves the full sidecar text and SHA256, title, alt text, keywords,
+topics, people description, location, style and placement guidance. Dimensions
+and original hashes are measured during registration. This is metadata based
+search, not a new human visual review or a vector embedding search.
+
+```sh
+pptxgengo library-find --kinds asset --asset-kind photo --summary \
+  --query "healthcare clinicians" --limit 5
+pptxgengo library-inspect --id photo/library/0f49a52d4f5ee542bd47476e
+pptxgengo library-preview --id photo/library/0f49a52d4f5ee542bd47476e
+```
+
+Search uses pinned metadata without rehashing the entire 4 GB collection.
+Photo search results explicitly report
+`registered_original_not_verified_in_query`; preview and deck use verify the
+selected original. The visual asset gallery contains derived thumbnails from
+verified originals at `library/wm-design-system/v7/catalog/assets/index.html`.
+Inspect the photo before choosing a crop or deciding where slide copy can sit.
+
+The SQLite `entities` table stores each photo as `kind='asset'`, `family='photo'`.
+Its `source_file` is a relative branding path in the entity JSON; `definition`
+contains the registered asset facts and `source_metadata`. Both descriptions and
+keywords contribute to search. Asset and sidecar changes invalidate the maintained
+index fingerprint, requiring a new snapshot and index.
+
+For library maintenance, use the reusable Go command and rebuild the binary
+with the resulting snapshot; originals and sidecars are read only:
+
+```sh
+./pptxdesign photo-register --branding-root "$HOME/Documents/branding" \
+  --out /tmp/wm-photos-new.json
+# Replace internal/wmdesign/photo_registry.json with the reviewed snapshot,
+# rebuild, then regenerate the production SQLite index and asset gallery.
+```

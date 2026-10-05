@@ -3,8 +3,6 @@ package wmdesign
 import (
 	"encoding/json"
 	"fmt"
-	"os"
-	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -160,13 +158,14 @@ func groupIndexedIconVariants(matches []LibraryIndexHit) []LibraryIndexHit {
 }
 
 type LibraryPreviewResult struct {
-	Schema      string                `json:"schema"`
-	EntityID    string                `json:"entity_id"`
-	Artifacts   []LibraryArtifactLink `json:"artifacts"`
-	Paths       []string              `json:"paths"`
-	Preparation string                `json:"preparation,omitempty"`
-	Definition  json.RawMessage       `json:"definition,omitempty"`
-	Capability  LibraryCapability     `json:"capability"`
+	Schema             string                `json:"schema"`
+	EntityID           string                `json:"entity_id"`
+	Artifacts          []LibraryArtifactLink `json:"artifacts"`
+	Paths              []string              `json:"paths"`
+	Preparation        string                `json:"preparation,omitempty"`
+	Definition         json.RawMessage       `json:"definition,omitempty"`
+	Capability         LibraryCapability     `json:"capability"`
+	OriginalValidation string                `json:"original_validation,omitempty"`
 }
 
 func (index *LibraryIndex) Preview(id string) (LibraryPreviewResult, error) {
@@ -195,26 +194,14 @@ func (index *LibraryIndex) Preview(id string) (LibraryPreviewResult, error) {
 		if e = json.Unmarshal(entity.Definition, &asset); e != nil {
 			return result, e
 		}
-		root := os.Getenv("WMDS_BRANDING_ROOT")
-		if root == "" && os.Getenv("PPTXGENGO_RELEASE_ROOT") != "" {
-			root = filepath.Join(os.Getenv("PPTXGENGO_RELEASE_ROOT"), "branding")
-		}
-		if root == "" {
-			home, e := os.UserHomeDir()
-			if e != nil {
-				return result, e
-			}
-			root = filepath.Join(home, "Documents", "branding")
-		}
-		// Paths come from the pinned native registry, including approved sibling career assets.
-		path := filepath.Join(root, filepath.Clean(asset.Path))
-		h, e := indexFileDigest(path)
+		verified, path, e := PrimitiveAssetOriginal(asset.Key)
 		if e != nil {
 			return result, e
 		}
-		if h != asset.SHA256 {
+		if verified.Path != asset.Path || verified.SHA256 != asset.SHA256 {
 			return result, fmt.Errorf("index.asset_drift: %s", asset.Key)
 		}
+		result.OriginalValidation = "sha256_verified_selected_original"
 		result.Paths = append(result.Paths, path)
 		result.Artifacts = append(result.Artifacts, LibraryArtifactLink{Role: "registered_original", Path: asset.Path, SHA256: asset.SHA256})
 		result.Definition = entity.Definition

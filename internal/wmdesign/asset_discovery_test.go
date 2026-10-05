@@ -156,7 +156,7 @@ func TestCuratedPhotoRegistryCoverageAndMetadata(t *testing.T) {
 
 func TestAssetIndexProjectionIncludesCuratedDescriptionsAndTags(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "assets.sqlite")
-	_, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5")})
+	_, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")})
 	if err != nil {
 		t.Fatal(err)
 	}

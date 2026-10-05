@@ -14,7 +14,7 @@ func TestV5DeltaSourceQualification(t *testing.T) {
 	if testing.Short() {
 		t.Skip("source qualification builds require registered private branding assets; run make test-integration")
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)
@@ -60,7 +60,7 @@ func TestV5DeltaSourceQualification(t *testing.T) {
 }
 
 func TestV5DeltaRepairsAtomicIdempotentAndCopyPreserving(t *testing.T) {
-	entries := intakeRepairEntries(t, filepath.Join("..", "..", "library", "wm-design-system", "v5", "source", "templates", "library"))
+	entries := intakeRepairEntries(t, filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle", "source", "templates", "library"))
 	for key := range v5DeltaNodeCounts {
 		t.Run(key, func(t *testing.T) {
 			original := intakeRepairSlide(t, entries[key])

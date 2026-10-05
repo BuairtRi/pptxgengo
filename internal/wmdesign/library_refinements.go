@@ -8,6 +8,12 @@ import (
 // These named composition amendments preserve the pinned source and caller copy.
 // They are not content-driven shrinking or geometry supplied by a binding.
 func applyLibraryRefinements(key, revision string, doc *SlideSpec) error {
+	if revision == LibraryRevisionV7 {
+		if err := applyV7WorkshopRefinements(key, doc); err != nil {
+			return err
+		}
+		return applyLibraryRefinements(key, LibraryRevisionV6, doc)
+	}
 	if revision == LibraryRevisionV6 {
 		if isV6HeatmapDelta(key) {
 			return applyV6HeatmapRefinements(key, doc)

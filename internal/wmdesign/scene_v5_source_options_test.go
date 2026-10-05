@@ -43,7 +43,7 @@ func TestV5LabelOnlyTextblockPreservesSourceContent(t *testing.T) {
 
 func TestV5TenColumnCategoriesPreserveAllSourceValues(t *testing.T) {
 	r := intakeTestRenderer(t)
-	entries := intakeRepairEntries(t, filepath.Join("..", "..", "library", "wm-design-system", "v5", "source", "templates", "library"))
+	entries := intakeRepairEntries(t, filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle", "source", "templates", "library"))
 	var slide librarySlide
 	if err := json.Unmarshal(entries["interviews-coverage/overview"].Slide, &slide); err != nil {
 		t.Fatal(err)

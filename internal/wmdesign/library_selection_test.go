@@ -28,7 +28,7 @@ func TestScenarioCoverageBreaksSaturatedTies(t *testing.T) {
 
 func TestSelectionCardsAndSQLiteZoneViews(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "library.sqlite")
-	_, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "library", "wm-design-system", "v5")})
+	_, err := BuildLibraryIndex(path, LibraryIndexOptions{Bundle: filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")})
 	if err != nil {
 		t.Fatal(err)
 	}

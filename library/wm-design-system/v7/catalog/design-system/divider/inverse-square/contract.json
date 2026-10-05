@@ -1,0 +1,333 @@
+{
+  "key": "divider/inverse-square",
+  "source_file": "templates/library/covers.json",
+  "source_sha256": "f1b2d8f603007d51678c924e3c7e8cf0d118fe78e79ec88d27ac33ae3e615674",
+  "source_revision": "wmds-library.v7",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "text"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "square"
+    }
+  ],
+  "family": "covers",
+  "tier": "core",
+  "name": "Divider · inverse with photo square",
+  "purpose": "Opens a section on Grounded Blue like the light divider: oversized section number, display title, a photo square over the dot field.",
+  "uses": [
+    "header.display",
+    "grid.squares"
+  ],
+  "source_advisory_budget": {
+    "words": 12,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "number",
+      "maxChars": 2
+    },
+    {
+      "slot": "title",
+      "maxChars": 36
+    },
+    {
+      "slot": "photo",
+      "kind": "image"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "image",
+      "point"
+    ],
+    "structures": [],
+    "visual_forms": [
+      "image",
+      "text"
+    ],
+    "component_types": [
+      "square",
+      "text"
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 198,
+          "x": 57,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 486,
+          "x": 57,
+          "y": 252
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 486,
+          "x": 57,
+          "y": 270
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "square",
+        "role": "content",
+        "source_bounds": {
+          "x": 633,
+          "y": 162
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "surface": "inverse",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v7",
+    "source_sha256": "f1b2d8f603007d51678c924e3c7e8cf0d118fe78e79ec88d27ac33ae3e615674",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "unknown",
+    "groups": [
+      {
+        "alias": "/paragraphs",
+        "role": "point",
+        "cardinality": 3,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/squares",
+        "role": "content",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      }
+    ],
+    "slots": [
+      {
+        "name": "node01.text",
+        "alias": "/paragraphs/item_01/text",
+        "source_pointer": "/body/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "body (string) at /paragraphs/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 198,
+          "height_pt": 90,
+          "line_budget": 1,
+          "style": {
+            "id": "stat",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 48,
+            "leading": 48,
+            "tracking": "-0.02em",
+            "use": "Headline numbers",
+            "tracking_pt": -0.96
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.text",
+        "alias": "/paragraphs/item_02/text",
+        "source_pointer": "/body/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/paragraphs",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /paragraphs/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 486,
+          "height_pt": 18,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.text",
+        "alias": "/paragraphs/item_03/text",
+        "source_pointer": "/body/2/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /paragraphs/item_03/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 486,
+          "height_pt": 198,
+          "line_budget": 3,
+          "style": {
+            "id": "display",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 54,
+            "leading": 60,
+            "tracking": "-0.025em",
+            "use": "Covers, dividers",
+            "tracking_pt": -1.35
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.photo",
+        "alias": "/squares/item_01/photo",
+        "source_pointer": "/body/3/photo",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "asset",
+        "group": "/squares",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "asset (string) at /squares/item_01/photo",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "node01.text",
+      "source_pointer": "/body/0/text",
+      "kind": "string",
+      "synthetic_source_example": "04"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Section 04 · Business case"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "What it is [[worth]]"
+    },
+    {
+      "name": "node04.photo",
+      "source_pointer": "/body/3/photo",
+      "kind": "string",
+      "synthetic_source_example": "photo-abstract-grid"
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

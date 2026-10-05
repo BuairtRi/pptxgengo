@@ -24,9 +24,27 @@ func releaseRootForDesignExecutable(executable string) string {
 		return ""
 	}
 	root := filepath.Dir(filepath.Dir(resolved))
-	info, err := os.Stat(filepath.Join(root, "library", "wm-design-system", "v5", "bundle.json"))
+	info, err := os.Stat(filepath.Join(root, "library", "wm-design-system", "v7", "bundle.json"))
 	if err == nil && info.Mode().IsRegular() {
 		return root
 	}
 	return ""
+}
+
+// Historic source snapshots remain available in a repository checkout. A
+// packaged release ships only its current bundle; projects retain their own
+// locked snapshot for continued offline operation.
+func designBundlePath(revision string) string {
+	root := designReleaseRoot()
+	historical := map[string]string{
+		"v5": "intake-20261003-587-frozen",
+		"v6": "intake-20261004-602-frozen",
+	}
+	if intake, ok := historical[revision]; ok {
+		path := filepath.Join(root, "planning", "wm-design-contracts", revision, intake, "bundle")
+		if _, err := os.Stat(filepath.Join(path, "bundle.json")); err == nil {
+			return path
+		}
+	}
+	return filepath.Join(root, "library", "wm-design-system", revision)
 }

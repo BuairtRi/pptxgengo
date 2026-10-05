@@ -15,7 +15,7 @@ const slimFrameRendererSHA = "3284f866ee67e37d8960a252fbc579ac10f332db1212f7806c
 
 func slimFrameSource(t *testing.T) *Source {
 	t.Helper()
-	s, e := Load(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	s, e := Load(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -93,7 +93,7 @@ func TestSlimFrameGeometryAndFourLineTitles(t *testing.T) {
 	}
 }
 func TestSlimFrameCurrentBundleAndCompactGeometry(t *testing.T) {
-	s, e := Load(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "")
+	s, e := Load(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "")
 	if e != nil {
 		t.Fatal(e)
 	}

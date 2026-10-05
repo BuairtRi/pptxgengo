@@ -34,7 +34,7 @@ func (g *sceneTableRowGroup) UnmarshalJSON(raw []byte) error {
 }
 
 func sceneTableV6Fields(raw json.RawMessage, revision string) error {
-	if revision == LibraryRevisionV6 {
+	if isV6OrLaterLibrary(revision) {
 		return nil
 	}
 	var obj map[string]json.RawMessage
@@ -111,7 +111,7 @@ func sceneTableRowHeights(n sceneTableSource, fallback float64, revision string)
 	for i, row := range n.Rows {
 		heights[i] = fallback
 		if raw, ok := row["h"]; ok && !hColumn {
-			if revision != LibraryRevisionV6 {
+			if !isV6OrLaterLibrary(revision) {
 				return nil, fmt.Errorf("scene.table_row_height_requires_v6")
 			}
 			if string(raw) == "null" || json.Unmarshal(raw, &heights[i]) != nil || heights[i] <= 0 || math.IsNaN(heights[i]) || math.IsInf(heights[i], 0) {

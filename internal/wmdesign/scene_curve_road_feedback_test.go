@@ -76,7 +76,7 @@ func TestRoadFeedbackNativeMarkerCentering(t *testing.T) {
 			t.Fatalf("road marker count=%d", count)
 		}
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, Slides: []SlideSpec{{ID: "road", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "road", Kind: "scene", Scene: &SceneSpec{Node: json.RawMessage(raw)}}}}}}
 	data, _, err := BuildWithEngine(bundle, "", doc, CandidateEngine)
 	if err != nil {

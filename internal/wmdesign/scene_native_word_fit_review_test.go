@@ -169,7 +169,7 @@ func TestV5NativeChartFormatsAndObservationsRevisionIsolation(t *testing.T) {
 
 func TestV5QuadrantBadgeIsolationPreservesHeaderAndPoints(t *testing.T) {
 	r := intakeTestRenderer(t)
-	entries := intakeRepairEntries(t, filepath.Join("..", "..", "library", "wm-design-system", "v5", "source", "templates", "library"))
+	entries := intakeRepairEntries(t, filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle", "source", "templates", "library"))
 	slide := intakeRepairSlide(t, entries["stakeholders/quadrant"])
 	if err := applyLibraryRefinements("stakeholders/quadrant", LibraryRevisionV5, &slide); err != nil {
 		t.Fatal(err)
@@ -220,7 +220,7 @@ func TestV5QuadrantBadgeIsolationPreservesHeaderAndPoints(t *testing.T) {
 
 func TestV5NativeHoleSizeRejectsQuadrantEarlyReturn(t *testing.T) {
 	r := intakeTestRenderer(t)
-	entries := intakeRepairEntries(t, filepath.Join("..", "..", "library", "wm-design-system", "v5", "source", "templates", "library"))
+	entries := intakeRepairEntries(t, filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle", "source", "templates", "library"))
 	slide := intakeRepairSlide(t, entries["stakeholders/quadrant"])
 	if err := applyLibraryRefinements("stakeholders/quadrant", LibraryRevisionV5, &slide); err != nil {
 		t.Fatal(err)

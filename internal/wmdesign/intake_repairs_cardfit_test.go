@@ -51,7 +51,7 @@ func TestIntakeCardFitAllFrozenFailures(t *testing.T) {
 	if count != 43 || len(nodes) != 14 {
 		t.Fatalf("frozen diagnostic scope changed: %d failures / %d templates", count, len(nodes))
 	}
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

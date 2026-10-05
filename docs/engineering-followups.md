@@ -4,6 +4,24 @@ Scope: the 18 observations in `docs/skill-planning/engineering-followups.md`,
 following the local.12 survey. Import/reconciliation, a new preview renderer,
 wireframes and presentation-skill authoring remain outside this work.
 
+## October 5 publication and photography extension
+
+The repository default and single production gallery/index are now v7: **616
+templates** and **1,204 asset variants**. Photo registration covers **all 521**
+originals and matching metadata sidecars under West Monroe Photos, preserving the
+20 earlier IDs. Search uses pinned sidecar semantics and dimensions; selected
+originals are verified for preview, rendering and packaging. See
+[discovery and maintenance commands](semantic-template-discovery.md#photography-discovery).
+The Go `photo-register` command replaces manual registry additions. Originals and
+sidecars are unchanged; no fresh human visual review is claimed for those descriptions.
+
+Publication verifies 30 new/changed native specimens and 586 inherited renderer
+outputs. The global CLI is now **0.1.0-local.16 / v7**, installed with `--cli-only`
+to preserve the presentation skill link. Outside-checkout photo discovery and
+all installed package hashes were verified. The release commit excludes the
+other agent's presentation skill and DentalXChange slide edits.
+The earlier qualification tables below retain their original version/count scope.
+
 ## Implementation disposition
 
 | Ask | Implemented | Remaining limit |
@@ -152,3 +170,57 @@ same-template swaps remained byte-identical at 51 lines. Installed doctor and
 review-deck render still report operational dispatch `-10827`; the failed render
 wrote `render-error.txt` and issued no success manifest. The presentation-skill
 link is unchanged.
+
+## Restart, native review and workshop intake — 2026-10-05
+
+After reboot, the installed local.15 CLI exported all 16 heat-map review pages
+successfully, producing PDF, PNGs and a signed receipt. PowerPoint overwrote the
+CLI's reserved task PDF without a Replace prompt. That initial receipt applies
+to the pre-repair deck, not the final accepted deck.
+
+Native inspection exposed A1–A9 badges and LATER chips splitting despite passing
+Go measurement, plus narrow single-word heat headers wrapping. The v6/v7 width
+repair adds measured native allowance to reference/priority labels and reduces
+heat-header padding, with a bounded 9→8 pt reduction when the original score
+column cannot fit the full header. v5 geometry and frozen source bytes remain
+unchanged. All **16/16 repaired heat-map specimens** pass native visual review.
+
+The initial live doctor dispatched to PowerPoint but returned `-9074` for its
+minimal probe. The revised doctor supplies explicit slide/text geometry, Arial
+fonts, text sizing and a white background. Package/XML and focused race tests
+pass. Fresh automated doctor/render checks under the now restricted caller fail
+Apple-event dispatch `-10827`; no revised live doctor pass is claimed. No Grant
+File Access dialog was observed. Final visual checks used PowerPoint's local
+**Export PDF → Best for printing** and the existing Swift PDF rasterizer, with
+unsigned review manifests distinct from automated CLI receipts.
+
+The new pinned v7 adds **14 workshop templates**, bringing the source total to
+**616**. All 14 pass editable source/bound round trips and native visual review.
+Five initial allocation failures required geometry amendments. The first native
+pass found three defects (Open questions clearance and two status column wraps);
+all were repaired and independently rereviewed. All 602 earlier definitions and
+bindings are retained. Full Go builds pass for 616 source and 615 active bound
+slides in **89.106s**. The final everyday repository suite passes in **120.61s**;
+exhaustive catalog builds remain excluded from that short lane.
+
+SQLite creation and workshop search pass for 616 templates / 703 asset entries.
+Discovery previously rejected the candidate's legitimate inherited source links;
+a source-only resolver now verifies registered bundle/inventory pins, the source
+relative path and actual file hash. Generic resource path restrictions remain in
+place. Focused regressions pass normally (16.954s) and under race (80.035s).
+
+Final evidence is consolidated under the
+[602-template intake](../planning/wm-design-contracts/v6/intake-20261004-602-frozen/README.md)
+and [616-template workshop intake](../planning/wm-design-contracts/v7/intake-20261005-616-frozen/README.md).
+Working candidate decks and generated full catalog projections were deleted.
+Temporary review windows were closed; the user's two DentalXChange decks were
+preserved. No Python conversion helper was added.
+
+Production remains **v5 / 587** and global **local.15**. Candidate gallery/index
+promotion is pending. Current workspace permissions exclude `.git` writes and
+the global install directory, so this turn's changes are uncommitted and not
+installed globally. The earlier clean local.15 installation remains intact.
+The existing repository `./pptxdesign` was rebuilt from the final source; its
+explicit-v7 discovery smoke check passes. Both root-owned scratch trees were
+removed after final evidence hash checks and confirming the PowerPoint Window
+menu listed only the user's two DentalXChange decks.

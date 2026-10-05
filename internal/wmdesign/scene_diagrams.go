@@ -270,7 +270,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 	if !ok {
 		return nil, false, nil
 	}
-	if tag.Type == "block" && r.source.Revision != LibraryRevisionV6 {
+	if tag.Type == "block" && !isV6OrLaterLibrary(r.source.Revision) {
 		var rawFields map[string]json.RawMessage
 		if err := json.Unmarshal(raw, &rawFields); err != nil {
 			return nil, true, err

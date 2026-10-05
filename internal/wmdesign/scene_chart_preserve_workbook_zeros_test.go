@@ -20,7 +20,7 @@ func preservedZeroPackage(t *testing.T, kind string, option any, include bool) [
 		t.Fatal(err)
 	}
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, BuildIdentity: &BuildIdentity{Timestamp: "2000-01-01T00:00:00Z", Seed: "workbook-zero-regression"}, Slides: []SlideSpec{{ID: "source-chart", Frame: FrameRequest{NoHeader: true}, Nodes: []Node{{ID: "chart", Kind: "scene", Scene: &SceneSpec{Node: raw}}}}}}
-	pkg, _, err := BuildWithEngine(filepath.Join("..", "..", "library", "wm-design-system", "v5"), "", doc, CandidateEngine)
+	pkg, _, err := BuildWithEngine(filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle"), "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)
 	}

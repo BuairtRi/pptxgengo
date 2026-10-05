@@ -16,9 +16,15 @@ import (
 
 func run() error {
 	if len(os.Args) < 2 {
-		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-catalog|library-search|templates|template|build|inspect|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
+		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|photo-register|library-publish|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-catalog|library-search|templates|template|build|inspect|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
 	}
 	command := os.Args[1]
+	if command == "photo-register" {
+		return runPhotoRegistration(os.Args[2:])
+	}
+	if command == "library-publish" {
+		return runLibraryPublication(os.Args[2:])
+	}
 	if command == "render-native-worker" {
 		return runRenderWorker(os.Args[2:])
 	}
@@ -50,7 +56,7 @@ func run() error {
 		return runLibrarySearch(os.Args[2:])
 	}
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "v5", "pinned foundation bundle path or v5 (default)")
+	bundle := f.String("bundle", "v7", "pinned foundation bundle path or v7 (default)")
 	engine := f.String("engine", wmdesign.CandidateEngine, "typography engine: wmds-go-foundation.v1 or wmds-go-foundation.v2 (candidate)")
 	source := f.String("source", "", "optional WMDS source override; must match pinned snapshot")
 	out := f.String("out", "", "new output directory")
@@ -65,9 +71,8 @@ func run() error {
 	if f.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
 	}
-	if *bundle == "v1" || *bundle == "v2" || *bundle == "v3" || *bundle == "v4" || *bundle == "v5" {
-		root := designReleaseRoot()
-		*bundle = filepath.Join(root, "library", "wm-design-system", *bundle)
+	if validLockedBundle(*bundle) {
+		*bundle = designBundlePath(*bundle)
 	}
 	if command == "asset-catalog" {
 		if *out != "" || *spec != "" || *family != "" || *source != "" || *templateKeys != "" || *includeDeprecated {

@@ -49,7 +49,7 @@ func example(t *testing.T) *Project {
 }
 func bundle(t *testing.T) string {
 	t.Helper()
-	p, e := filepath.Abs("../../library/wm-design-system/v5")
+	p, e := filepath.Abs("../../planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -475,7 +475,7 @@ func TestForkRejectsUnrelatedSlide(t *testing.T) {
 }
 func TestOfflineRelocatedCalibration(t *testing.T) {
 	p := example(t)
-	path, e := filepath.Abs("../../library/wm-design-system/v5")
+	path, e := filepath.Abs("../../planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle")
 	if e != nil {
 		t.Fatal(e)
 	}

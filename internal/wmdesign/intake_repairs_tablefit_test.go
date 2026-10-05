@@ -64,7 +64,7 @@ func tableFitSemanticSlide(t *testing.T, slide SlideSpec) any {
 func TestIncomingTableFitFullSlides(t *testing.T) {
 	snapshot := filepath.Join("..", "..", "planning", "wm-design-contracts", "v4", "intake-20261003-frozen", "source")
 	entries := incomingTableFitFixtures(t)
-	bundle := filepath.Join("..", "..", "library", "wm-design-system", "v5")
+	bundle := filepath.Join("..", "..", "planning", "wm-design-contracts", "v5", "intake-20261003-587-frozen", "bundle")
 	source, err := Load(bundle, "")
 	if err != nil {
 		t.Fatal(err)

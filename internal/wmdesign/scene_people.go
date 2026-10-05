@@ -90,7 +90,7 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 	if !ok {
 		return nil, false, nil
 	}
-	if tag.Type == "legend" && r.source.Revision != LibraryRevisionV6 {
+	if tag.Type == "legend" && !isV6OrLaterLibrary(r.source.Revision) {
 		var rawLegend struct {
 			Items []map[string]json.RawMessage `json:"items"`
 		}

@@ -171,7 +171,7 @@ func BuildLibraryIndex(path string, options LibraryIndexOptions) (LibraryIndexRe
 	}
 	report.SourceRevision = s.Revision
 	report.ProjectionSHA256 = projectionHash(entities)
-	report.AssetRegistrySHA256 = indexDigest(indexJSON(PrimitiveAssetCatalog()))
+	report.AssetRegistrySHA256 = AssetRegistryFingerprint()
 	for _, file := range s.Files {
 		report.Pins = append(report.Pins, LibraryIndexPin{Scope: "source", Path: file.Path, SHA256: file.SHA256})
 	}
@@ -340,11 +340,12 @@ func OpenLibraryIndex(path string, overrides LibraryIndexOptions) (*LibraryIndex
 	if s.Revision != report.SourceRevision {
 		return fail(fmt.Errorf("index.stale_source_revision"))
 	}
+	sourceResolver := newIndexSourcePinResolver(s)
 	for _, pin := range report.Pins {
 		var path string
 		switch pin.Scope {
 		case "source":
-			path, e = indexRelative(s.Root, pin.Path)
+			path, e = sourceResolver.resolve(pin)
 		case "bundle":
 			path, e = indexRelative(options.Bundle, pin.Path)
 		case "legacy":
@@ -367,7 +368,7 @@ func OpenLibraryIndex(path string, overrides LibraryIndexOptions) (*LibraryIndex
 			return fail(fmt.Errorf("index.stale_input: %s/%s", pin.Scope, pin.Path))
 		}
 	}
-	if indexDigest(indexJSON(PrimitiveAssetCatalog())) != report.AssetRegistrySHA256 {
+	if AssetRegistryFingerprint() != report.AssetRegistrySHA256 {
 		return fail(fmt.Errorf("index.stale_asset_registry"))
 	}
 	index := &LibraryIndex{db: db, Report: report, Options: options}

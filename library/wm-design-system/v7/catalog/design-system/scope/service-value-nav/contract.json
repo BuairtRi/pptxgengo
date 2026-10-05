@@ -1,0 +1,1153 @@
+{
+  "key": "scope/service-value-nav",
+  "source_file": "templates/library/commercials.json",
+  "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+  "source_revision": "wmds-library.v7",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "commercials",
+  "tier": "working",
+  "name": "Scope · optional services, scope and value · nav rail",
+  "purpose": "Optional scope laid out by service: what is added, the value it unlocks and how it is priced, in one dense table a sponsor can strike items from.",
+  "uses": [
+    "table.standard",
+    "list.set"
+  ],
+  "source_advisory_budget": {
+    "words": 128,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 52
+    },
+    {
+      "slot": "service",
+      "maxChars": 30
+    },
+    {
+      "slot": "scope bullet",
+      "maxChars": 50
+    },
+    {
+      "slot": "value bullet",
+      "maxChars": 34
+    },
+    {
+      "slot": "pricing basis",
+      "maxChars": 28
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "navigation",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "nav",
+      "footer": "compact",
+      "navigation": true,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v7",
+    "source_sha256": "9bdeada4e08aa36c3a40815fdaf407ac1fd834ec8ccfd4c6a5e6e6aff21eda2f",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "table",
+    "groups": [
+      {
+        "alias": "/tables/item_01/cols",
+        "role": "column",
+        "cardinality": 4,
+        "source_pointer": "/body/0/cols",
+        "basis": "semantic_closed_binding_array"
+      },
+      {
+        "alias": "/tables/item_01/rows",
+        "role": "tabular-data",
+        "cardinality": 3,
+        "source_pointer": "/body/0/rows",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item01.label",
+        "alias": "/tables/item_01/columns/item_01/label",
+        "source_pointer": "/body/0/cols/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "label (string) at /tables/item_01/columns/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item02.label",
+        "alias": "/tables/item_01/columns/item_02/label",
+        "source_pointer": "/body/0/cols/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "label (string) at /tables/item_01/columns/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item03.label",
+        "alias": "/tables/item_01/columns/item_03/label",
+        "source_pointer": "/body/0/cols/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "label (string) at /tables/item_01/columns/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item04.label",
+        "alias": "/tables/item_01/columns/item_04/label",
+        "source_pointer": "/body/0/cols/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "label (string) at /tables/item_01/columns/item_04/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.a.item01",
+        "alias": "/tables/item_01/rows/item_01/additional_scope/item_01",
+        "source_pointer": "/body/0/rows/0/a/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "0 (string) at /tables/item_01/rows/item_01/additional_scope/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.a.item02",
+        "alias": "/tables/item_01/rows/item_01/additional_scope/item_02",
+        "source_pointer": "/body/0/rows/0/a/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "1 (string) at /tables/item_01/rows/item_01/additional_scope/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.a.item03",
+        "alias": "/tables/item_01/rows/item_01/additional_scope/item_03",
+        "source_pointer": "/body/0/rows/0/a/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "2 (string) at /tables/item_01/rows/item_01/additional_scope/item_03",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.a.item04",
+        "alias": "/tables/item_01/rows/item_01/additional_scope/item_04",
+        "source_pointer": "/body/0/rows/0/a/3",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "3",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "3 (string) at /tables/item_01/rows/item_01/additional_scope/item_04",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.p",
+        "alias": "/tables/item_01/rows/item_01/pricing_basis",
+        "source_pointer": "/body/0/rows/0/p",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "body (string) at /tables/item_01/rows/item_01/pricing_basis",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.s",
+        "alias": "/tables/item_01/rows/item_01/service",
+        "source_pointer": "/body/0/rows/0/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "s",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "s (string) at /tables/item_01/rows/item_01/service",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.v.item01",
+        "alias": "/tables/item_01/rows/item_01/unlocked_value/item_01",
+        "source_pointer": "/body/0/rows/0/v/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "0 (string) at /tables/item_01/rows/item_01/unlocked_value/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.v.item02",
+        "alias": "/tables/item_01/rows/item_01/unlocked_value/item_02",
+        "source_pointer": "/body/0/rows/0/v/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "1 (string) at /tables/item_01/rows/item_01/unlocked_value/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.v.item03",
+        "alias": "/tables/item_01/rows/item_01/unlocked_value/item_03",
+        "source_pointer": "/body/0/rows/0/v/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "2 (string) at /tables/item_01/rows/item_01/unlocked_value/item_03",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.a.item01",
+        "alias": "/tables/item_01/rows/item_02/additional_scope/item_01",
+        "source_pointer": "/body/0/rows/1/a/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "0 (string) at /tables/item_01/rows/item_02/additional_scope/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.a.item02",
+        "alias": "/tables/item_01/rows/item_02/additional_scope/item_02",
+        "source_pointer": "/body/0/rows/1/a/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "1 (string) at /tables/item_01/rows/item_02/additional_scope/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.a.item03",
+        "alias": "/tables/item_01/rows/item_02/additional_scope/item_03",
+        "source_pointer": "/body/0/rows/1/a/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "2 (string) at /tables/item_01/rows/item_02/additional_scope/item_03",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.a.item04",
+        "alias": "/tables/item_01/rows/item_02/additional_scope/item_04",
+        "source_pointer": "/body/0/rows/1/a/3",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "3",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "3 (string) at /tables/item_01/rows/item_02/additional_scope/item_04",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.p",
+        "alias": "/tables/item_01/rows/item_02/pricing_basis",
+        "source_pointer": "/body/0/rows/1/p",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "body (string) at /tables/item_01/rows/item_02/pricing_basis",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.s",
+        "alias": "/tables/item_01/rows/item_02/service",
+        "source_pointer": "/body/0/rows/1/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "s",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "s (string) at /tables/item_01/rows/item_02/service",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.v.item01",
+        "alias": "/tables/item_01/rows/item_02/unlocked_value/item_01",
+        "source_pointer": "/body/0/rows/1/v/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "0 (string) at /tables/item_01/rows/item_02/unlocked_value/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.v.item02",
+        "alias": "/tables/item_01/rows/item_02/unlocked_value/item_02",
+        "source_pointer": "/body/0/rows/1/v/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "1 (string) at /tables/item_01/rows/item_02/unlocked_value/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.v.item03",
+        "alias": "/tables/item_01/rows/item_02/unlocked_value/item_03",
+        "source_pointer": "/body/0/rows/1/v/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "2 (string) at /tables/item_01/rows/item_02/unlocked_value/item_03",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.a.item01",
+        "alias": "/tables/item_01/rows/item_03/additional_scope/item_01",
+        "source_pointer": "/body/0/rows/2/a/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "0 (string) at /tables/item_01/rows/item_03/additional_scope/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.a.item02",
+        "alias": "/tables/item_01/rows/item_03/additional_scope/item_02",
+        "source_pointer": "/body/0/rows/2/a/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "1 (string) at /tables/item_01/rows/item_03/additional_scope/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.a.item03",
+        "alias": "/tables/item_01/rows/item_03/additional_scope/item_03",
+        "source_pointer": "/body/0/rows/2/a/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "2 (string) at /tables/item_01/rows/item_03/additional_scope/item_03",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.p",
+        "alias": "/tables/item_01/rows/item_03/pricing_basis",
+        "source_pointer": "/body/0/rows/2/p",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /tables/item_01/rows/item_03/pricing_basis",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.s",
+        "alias": "/tables/item_01/rows/item_03/service",
+        "source_pointer": "/body/0/rows/2/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "s",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "s (string) at /tables/item_01/rows/item_03/service",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.v.item01",
+        "alias": "/tables/item_01/rows/item_03/unlocked_value/item_01",
+        "source_pointer": "/body/0/rows/2/v/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "0 (string) at /tables/item_01/rows/item_03/unlocked_value/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.v.item02",
+        "alias": "/tables/item_01/rows/item_03/unlocked_value/item_02",
+        "source_pointer": "/body/0/rows/2/v/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "1 (string) at /tables/item_01/rows/item_03/unlocked_value/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Our approach"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Optional scope can be added as demand grows"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Service"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Additional scope"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Unlocked value"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Pricing basis"
+    },
+    {
+      "name": "node01.rows.item01.a.item01",
+      "source_pointer": "/body/0/rows/0/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Assess and select three more adopter teams"
+    },
+    {
+      "name": "node01.rows.item01.a.item02",
+      "source_pointer": "/body/0/rows/0/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Workload-specific design and implementation"
+    },
+    {
+      "name": "node01.rows.item01.a.item03",
+      "source_pointer": "/body/0/rows/0/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Provisioning and operational validation"
+    },
+    {
+      "name": "node01.rows.item01.a.item04",
+      "source_pointer": "/body/0/rows/0/a/3",
+      "kind": "string",
+      "synthetic_source_example": "Workload hypercare and enhancements"
+    },
+    {
+      "name": "node01.rows.item01.p",
+      "source_pointer": "/body/0/rows/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Fixed fee per added team"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "Early-adopter expansion"
+    },
+    {
+      "name": "node01.rows.item01.v.item01",
+      "source_pointer": "/body/0/rows/0/v/0",
+      "kind": "string",
+      "synthetic_source_example": "Twice the workloads onboarded"
+    },
+    {
+      "name": "node01.rows.item01.v.item02",
+      "source_pointer": "/body/0/rows/0/v/1",
+      "kind": "string",
+      "synthetic_source_example": "Higher value per workload"
+    },
+    {
+      "name": "node01.rows.item01.v.item03",
+      "source_pointer": "/body/0/rows/0/v/2",
+      "kind": "string",
+      "synthetic_source_example": "Faster user adoption"
+    },
+    {
+      "name": "node01.rows.item02.a.item01",
+      "source_pointer": "/body/0/rows/1/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Lead end-to-end change for platform rollout"
+    },
+    {
+      "name": "node01.rows.item02.a.item02",
+      "source_pointer": "/body/0/rows/1/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Readiness assessment and champion program"
+    },
+    {
+      "name": "node01.rows.item02.a.item03",
+      "source_pointer": "/body/0/rows/1/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Reusable onboarding and adoption playbook"
+    },
+    {
+      "name": "node01.rows.item02.a.item04",
+      "source_pointer": "/body/0/rows/1/a/3",
+      "kind": "string",
+      "synthetic_source_example": "Program communications and socialization"
+    },
+    {
+      "name": "node01.rows.item02.p",
+      "source_pointer": "/body/0/rows/1/p",
+      "kind": "string",
+      "synthetic_source_example": "Fixed fee by phase"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "Change management ownership"
+    },
+    {
+      "name": "node01.rows.item02.v.item01",
+      "source_pointer": "/body/0/rows/1/v/0",
+      "kind": "string",
+      "synthetic_source_example": "Stickier adoption"
+    },
+    {
+      "name": "node01.rows.item02.v.item02",
+      "source_pointer": "/body/0/rows/1/v/1",
+      "kind": "string",
+      "synthetic_source_example": "Less ongoing user support"
+    },
+    {
+      "name": "node01.rows.item02.v.item03",
+      "source_pointer": "/body/0/rows/1/v/2",
+      "kind": "string",
+      "synthetic_source_example": "Faster onboarding of future teams"
+    },
+    {
+      "name": "node01.rows.item03.a.item01",
+      "source_pointer": "/body/0/rows/2/a/0",
+      "kind": "string",
+      "synthetic_source_example": "Continued cloud architecture and engineering"
+    },
+    {
+      "name": "node01.rows.item03.a.item02",
+      "source_pointer": "/body/0/rows/2/a/1",
+      "kind": "string",
+      "synthetic_source_example": "Post-deployment environment optimization"
+    },
+    {
+      "name": "node01.rows.item03.a.item03",
+      "source_pointer": "/body/0/rows/2/a/2",
+      "kind": "string",
+      "synthetic_source_example": "Ad hoc performance and scaling troubleshooting"
+    },
+    {
+      "name": "node01.rows.item03.p",
+      "source_pointer": "/body/0/rows/2/p",
+      "kind": "string",
+      "synthetic_source_example": "Team run-rate, monthly"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "Cloud engineering surge"
+    },
+    {
+      "name": "node01.rows.item03.v.item01",
+      "source_pointer": "/body/0/rows/2/v/0",
+      "kind": "string",
+      "synthetic_source_example": "More capacity for workload growth"
+    },
+    {
+      "name": "node01.rows.item03.v.item02",
+      "source_pointer": "/body/0/rows/2/v/1",
+      "kind": "string",
+      "synthetic_source_example": "Faster cost optimization after launch"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 4
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "count": 4
+    },
+    {
+      "name": "node01.rows.item01.v",
+      "source_pointer": "/body/0/rows/0/v",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "count": 4
+    },
+    {
+      "name": "node01.rows.item02.v",
+      "source_pointer": "/body/0/rows/1/v",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "count": 3
+    },
+    {
+      "name": "node01.rows.item03.v",
+      "source_pointer": "/body/0/rows/2/v",
+      "count": 2
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active",
+  "nav": {
+    "min_items": 2,
+    "max_items": 6,
+    "synthetic_source_example": {
+      "items": [
+        {
+          "key": "section-01",
+          "label": "Context"
+        },
+        {
+          "key": "section-02",
+          "label": "Approach"
+        },
+        {
+          "key": "section-03",
+          "label": "Team"
+        },
+        {
+          "key": "section-04",
+          "label": "Commercials"
+        },
+        {
+          "key": "section-05",
+          "label": "Next steps"
+        }
+      ],
+      "active": "section-04"
+    }
+  }
+}
