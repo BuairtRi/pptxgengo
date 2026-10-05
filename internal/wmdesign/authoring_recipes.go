@@ -9,7 +9,7 @@ import (
 // These recipes interpret frozen field/geometry topology, never supplied copy.
 // They are engineering mappings awaiting human semantic review.
 func authoringFamilyRecipes(out *LibraryAuthoring, def LibraryTemplate, obj map[string]any) {
-	if def.SourceRevision != LibraryRevisionV5 {
+	if !isV5OrLaterLibrary(def.SourceRevision) {
 		return
 	}
 	recipe := ""
@@ -207,15 +207,52 @@ func authoringFamilyRecipes(out *LibraryAuthoring, def LibraryTemplate, obj map[
 			if kind == "table" && len(tail) >= 3 && tail[0] == "rows" {
 				s.Alias = prefix + "/rows/" + fmt.Sprintf("item_%02d", mustOrdinal(tail[1])+1) + "/" + authoringTableField(tail[2], node)
 				if len(tail) > 3 {
-					s.Alias += "/" + strings.Join(tail[3:], "/")
+					suffix := strings.Join(tail[3:], "/")
+					if def.SourceRevision == LibraryRevisionV6 {
+						suffix = authoringAliasTail(tail[3:])
+					}
+					s.Alias += "/" + suffix
 				}
 				s.Role = "heatmap-cell"
+				if def.SourceRevision == LibraryRevisionV6 {
+					if len(tail) > 3 && tail[3] == "ref" {
+						s.Role = "reference_id"
+					}
+					if len(tail) > 3 && tail[3] == "refActive" {
+						s.Role = "reference_active"
+					}
+					if columns, ok := node["cols"].([]any); ok {
+						for _, raw := range columns {
+							column, _ := raw.(map[string]any)
+							if column["k"] != tail[2] {
+								continue
+							}
+							if column["type"] == "priority" {
+								s.Role = "priority_value"
+								if len(tail) > 3 && tail[3] == "label" {
+									s.Role = "priority_label"
+								}
+							}
+							if column["type"] == "bullets" {
+								s.Role = "evidence_body"
+							}
+						}
+					}
+				}
 				s.Group = prefix + "/rows"
 				s.GroupIndex = mustOrdinal(tail[1])
 				rows, _ := node["rows"].([]any)
 				s.Cardinality = len(rows)
 			} else if kind == "table" {
 				s.Alias = prefix + "/" + authoringAliasTail(tail)
+				if def.SourceRevision == LibraryRevisionV6 && len(tail) >= 3 && tail[0] == "rowGroups" {
+					s.Alias = prefix + "/row_groups/" + authoringAliasTail(tail[1:])
+					s.Group = prefix + "/row_groups"
+					s.GroupIndex = mustOrdinal(tail[1])
+					groups, _ := node["rowGroups"].([]any)
+					s.Cardinality = len(groups)
+					s.Role = "group_label"
+				}
 				if len(tail) >= 2 && tail[0] == "cols" {
 					s.Group = prefix + "/columns"
 					s.GroupIndex = mustOrdinal(tail[1])

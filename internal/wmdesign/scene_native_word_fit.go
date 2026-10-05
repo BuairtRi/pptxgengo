@@ -31,7 +31,7 @@ func v5NativeChartFormat(code string) string {
 // twelve-point padding would force a word to break inside itself. The trailing
 // reserve matches the existing native single-line textbox allocation policy.
 func (r *renderer) v5WordInsets(text string, st Style, width, left, right float64) (float64, float64, error) {
-	if r.source.Revision != LibraryRevisionV5 || left != 12 || right != 12 || width > 126 || strings.Contains(text, "[^") {
+	if !isV5OrLaterLibrary(r.source.Revision) || left != 12 || right != 12 || width > 126 || strings.Contains(text, "[^") {
 		return left, right, nil
 	}
 	need := 0.0

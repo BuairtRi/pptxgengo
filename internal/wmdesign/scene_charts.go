@@ -253,7 +253,7 @@ func sceneChartFormatCode(n sceneChartSource) (string, error) {
 }
 
 func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneContext) (*scenePlan, error) {
-	if n.HoleSize != nil && (r.source.Revision != LibraryRevisionV5 || n.Kind != "doughnut" || math.IsNaN(*n.HoleSize) || math.IsInf(*n.HoleSize, 0) || *n.HoleSize < 30 || *n.HoleSize > 80) {
+	if n.HoleSize != nil && (!isV5OrLaterLibrary(r.source.Revision) || n.Kind != "doughnut" || math.IsNaN(*n.HoleSize) || math.IsInf(*n.HoleSize, 0) || *n.HoleSize < 30 || *n.HoleSize > 80) {
 		return nil, fmt.Errorf("scene.chart_hole_size_requires_v5_doughnut_30_to_80")
 	}
 	b := Rect{n.X, n.Y, n.W, n.H}
@@ -352,7 +352,7 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 	}
 	o.PreserveWorkbookZeros = bool(n.PreserveWorkbookZeros)
 	o.DataLabelFormatCode, err = sceneChartFormatCode(n)
-	if r.source.Revision == LibraryRevisionV5 {
+	if isV5OrLaterLibrary(r.source.Revision) {
 		// PowerPoint's optional decimals can display integers as "1." or
 		// scaled currency as "$1.M". Preserve each format's precision with
 		// explicit decimal places, leaving source values and suffixes intact.
@@ -404,7 +404,7 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 		return nil, fmt.Errorf("scene.chart_category_or_series_count")
 	}
 	columnLimit := 8
-	if r.source.Revision == LibraryRevisionV5 {
+	if isV5OrLaterLibrary(r.source.Revision) {
 		columnLimit = 10
 	}
 	if n.Kind == "column" && len(n.Categories) > columnLimit {
@@ -991,7 +991,7 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 				tx = box.X + midX - 9 - tw
 			}
 			ty := ny + 18
-			if r.source.Revision == LibraryRevisionV5 && qp[1] == 0 {
+			if isV5OrLaterLibrary(r.source.Revision) && qp[1] == 0 {
 				ty = ny + math.Max(18, nameRecord.Rect.H+4)
 			}
 			if qp[1] == 1 {

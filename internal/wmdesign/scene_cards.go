@@ -389,7 +389,7 @@ func (r *renderer) sceneBodyFlow(p *scenePlan, id string, blocks []json.RawMessa
 		}
 		blockSize := size
 		if bl.Size != "" {
-			if r.source.Revision != LibraryRevisionV5 || len(bl.Bullets) == 0 || bl.Size != "small" && bl.Size != "body" {
+			if !isV5OrLaterLibrary(r.source.Revision) || len(bl.Bullets) == 0 || bl.Size != "small" && bl.Size != "body" {
 				return y, fmt.Errorf("scene.unsupported_body_block_size")
 			}
 			blockSize = bl.Size

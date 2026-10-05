@@ -1,0 +1,138 @@
+{
+  "schema": "pptxgengo.wmds-intake-qualification.v1",
+  "date": "2026-10-04",
+  "source_revision": "wmds-library.v6",
+  "source_commit": "c355c881d543dceccb82dbe12d7129bca9b1fcac",
+  "status": "go_qualified_native_review_blocked",
+  "production_library": {
+    "revision": "wmds-library.v5",
+    "templates": 587
+  },
+  "code": {
+    "baseline_commit": "7959220f",
+    "wmdesign_go_tree_sha256": "1ff53eb1ec309907da35900115aef8f1f2bae836efb57f4ce57d120241ef2899"
+  },
+  "checks": [
+    {
+      "name": "regular_repository_tests",
+      "command": "make test",
+      "status": "pass",
+      "seconds": 29.39
+    },
+    {
+      "name": "new_heatmap_and_inheritance_race",
+      "command": "go test -race -short ./internal/wmdesign -run TestLibraryV6|TestHeatMinimum|TestHeatReferenceBoolean|TestHeatV6|TestSceneTablePriority|TestTableV6|TestTableV5Geometry -count=1 -timeout=150s",
+      "status": "pass",
+      "seconds": 93.31
+    },
+    {
+      "name": "full_candidate_builds",
+      "command": "go test ./internal/wmdesign -run ^TestLibraryV6AllTemplateBuilds$ -count=1 -timeout=150s",
+      "status": "pass",
+      "seconds": 77.98,
+      "source_slides": 602,
+      "active_bound_slides": 601
+    },
+    {
+      "name": "source_and_bound_heatmap_content_roundtrip_and_individual_builds",
+      "status": "pass",
+      "templates": 37
+    },
+    {
+      "name": "unchanged_v5_contracts_and_named_amendments",
+      "status": "pass",
+      "templates": 586
+    },
+    {
+      "name": "candidate_sqlite_generation_and_search",
+      "status": "pass",
+      "templates": 602,
+      "index_retained": false
+    }
+  ],
+  "native_review": {
+    "status": "blocked",
+    "export_attempted": true,
+    "error_code": -10827,
+    "error": "application_dispatch_failed; operational PowerPoint dispatch unavailable to this caller",
+    "powerpoint_verified": false,
+    "visually_reviewed": false,
+    "accepted_changed_templates": 0,
+    "required_changed_templates": 16,
+    "pages": [
+      {
+        "page": 1,
+        "template": "capability-heat/dense"
+      },
+      {
+        "page": 2,
+        "template": "capability-heat/grouped"
+      },
+      {
+        "page": 3,
+        "template": "capability-heat/grouped-split"
+      },
+      {
+        "page": 4,
+        "template": "heat-notes/full"
+      },
+      {
+        "page": 5,
+        "template": "heat-notes/full-continued"
+      },
+      {
+        "page": 6,
+        "template": "heat-notes/grouped"
+      },
+      {
+        "page": 7,
+        "template": "heat-notes/now-next-later"
+      },
+      {
+        "page": 8,
+        "template": "heat-notes/split"
+      },
+      {
+        "page": 9,
+        "template": "heat-notes/split-last"
+      },
+      {
+        "page": 10,
+        "template": "heat-notes/summary"
+      },
+      {
+        "page": 11,
+        "template": "heat-ref/cards-split"
+      },
+      {
+        "page": 12,
+        "template": "heat-ref/detail-continued"
+      },
+      {
+        "page": 13,
+        "template": "heat-ref/detail-corner"
+      },
+      {
+        "page": 14,
+        "template": "heat-ref/locator-split"
+      },
+      {
+        "page": 15,
+        "template": "heat-ref/overview"
+      },
+      {
+        "page": 16,
+        "template": "heat-ref/overview-grouped"
+      }
+    ],
+    "pptx": "native-review.pptx",
+    "pptx_sha256": "e0b88262dc689692fc60921c06f94b0116eda12eb9f801bb109d3396b44d7065"
+  },
+  "limitations": [
+    "Generic item matching cannot express complete matrices and linked detail locators.",
+    "Semantic metadata is inferred; no human review is claimed.",
+    "Wrapped reference labels conservatively reserve badge width on every body line.",
+    "Native adornments retain fixed coordinates after text edits.",
+    "Native screenshots, gallery/index promotion and global 602-template default remain pending."
+  ]
+}

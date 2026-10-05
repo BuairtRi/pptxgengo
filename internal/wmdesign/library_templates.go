@@ -299,6 +299,9 @@ func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
 	if s.Revision == LibraryRevisionV5 {
 		expected = 587
 	}
+	if s.Revision == LibraryRevisionV6 {
+		expected = 602
+	}
 	if len(out) != expected {
 		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
 	}
@@ -455,10 +458,23 @@ func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind strin
 			for _, k := range []string{"text", "sub"} {
 				found = libraryScalarSlot(def, obj[k], libraryPointerChild(pointer, k), name+"."+k, "string") || found
 			}
+			if def.SourceRevision == LibraryRevisionV6 {
+				found = libraryScalarSlot(def, obj["ref"], libraryPointerChild(pointer, "ref"), name+".ref", "string") || found
+				found = libraryScalarSlot(def, obj["refActive"], libraryPointerChild(pointer, "refActive"), name+".refActive", "boolean") || found
+			}
 			return found
 		}
 		return libraryScalarSlot(def, v, pointer, name, "string")
 	case "status", "tag", "raci":
+		return libraryScalarSlot(def, v, pointer, name, "string")
+	case "priority":
+		if def.SourceRevision != LibraryRevisionV6 {
+			return false
+		}
+		if obj, ok := v.(map[string]any); ok {
+			found := libraryScalarSlot(def, obj["value"], libraryPointerChild(pointer, "value"), name+".value", "string")
+			return libraryScalarSlot(def, obj["label"], libraryPointerChild(pointer, "label"), name+".label", "string") || found
+		}
 		return libraryScalarSlot(def, v, pointer, name, "string")
 	case "rating", "dots", "harvey", "heat":
 		if obj, ok := v.(map[string]any); ok {
@@ -632,6 +648,21 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 				found = libraryTableRowsWalk(def, x, childPointer, childName) || found
 				continue
 			}
+			if ctx.NodeType == "table" && k == "rowGroups" && def.SourceRevision == LibraryRevisionV6 {
+				// Inclusive source row ranges and fill define the authored topology.
+				// Only labels are copy; group identity has its own stable key array.
+				if groups, ok := x[k].([]any); ok && len(groups) > 0 {
+					for i, value := range groups {
+						if group, ok := value.(map[string]any); ok {
+							p := childPointer + "/" + strconv.Itoa(i) + "/label"
+							n := childName + fmt.Sprintf(".item%02d.label", i+1)
+							found = libraryScalarSlot(def, group["label"], p, n, "string") || found
+						}
+					}
+					def.Arrays = append(def.Arrays, LibraryArray{Name: childName, SourcePointer: childPointer, Count: len(groups)})
+				}
+				continue
+			}
 			if ctx.NodeType == "swimlane" && k == "links" {
 				found = librarySwimlaneLinksWalk(def, x[k], childPointer, childName) || found
 				continue
@@ -680,7 +711,7 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 			if k == "status" && ctx.NodeType == "metric" {
 				projectedField = "metric_status_content"
 			}
-			if def.SourceRevision == LibraryRevisionV5 && k == "status" && ctx.NodeType == "legend" {
+			if isV5OrLaterLibrary(def.SourceRevision) && k == "status" && ctx.NodeType == "legend" {
 				projectedField = "legend_status_content"
 			}
 			if k == "state" && (ctx.NodeType == "stepper" || ctx.NodeType == "vstepper") && ctx.Parent == "steps" {

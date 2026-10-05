@@ -204,7 +204,7 @@ func (r *renderer) sceneTableHeatCell(p *scenePlan, id string, c sceneTableColum
 	if scale == "" {
 		scale = c.Scale
 	}
-	fill, ink, e := sceneHeat(*n.Value, c.Max, scale)
+	fill, ink, e := sceneHeatDomain(*n.Value, c.Min, c.Max, scale)
 	if e != nil {
 		return pptx.TableCell{}, TextRecord{}, e
 	}

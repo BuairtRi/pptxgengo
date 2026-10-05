@@ -254,6 +254,7 @@ type diagramSpec struct {
 	Arrow     string            `json:"arrow,omitempty"`
 	Heat      *float64          `json:"heat,omitempty"`
 	HeatMax   *float64          `json:"heatMax,omitempty"`
+	HeatMin   *float64          `json:"heatMin,omitempty"`
 	HeatScale string            `json:"heatScale,omitempty"`
 }
 
@@ -264,10 +265,19 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 	if e := json.Unmarshal(raw, &tag); e != nil {
 		return nil, false, e
 	}
-	fields := map[string]string{"block": "x y w h surface text style align heat heatMax heatScale", "frame": "id x y w h style label", "chevron": "x y w h first surface text style number sub", "textarrow": "x y w h dir surface text style", "connector": "points label labelPos style head elbow ink startDot dashed", "container": "id x y w h style label labelPos bullets", "cylinder": "x y w h surface text sub", "node": "x y w h surface icon text sub layout style", "layerrow": "x y w h surface n label text highlight", "matrix": "x y w labels labelW cols cellH gap rowGap style rows", "beforeafter": "x y w left right rows arrow"}
+	fields := map[string]string{"block": "x y w h surface text style align heat heatMin heatMax heatScale", "frame": "id x y w h style label", "chevron": "x y w h first surface text style number sub", "textarrow": "x y w h dir surface text style", "connector": "points label labelPos style head elbow ink startDot dashed", "container": "id x y w h style label labelPos bullets", "cylinder": "x y w h surface text sub", "node": "x y w h surface icon text sub layout style", "layerrow": "x y w h surface n label text highlight", "matrix": "x y w labels labelW cols cellH gap rowGap style rows", "beforeafter": "x y w left right rows arrow"}
 	allowed, ok := fields[tag.Type]
 	if !ok {
 		return nil, false, nil
+	}
+	if tag.Type == "block" && r.source.Revision != LibraryRevisionV6 {
+		var rawFields map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &rawFields); err != nil {
+			return nil, true, err
+		}
+		if _, present := rawFields["heatMin"]; present {
+			return nil, true, fmt.Errorf("scene.block_heat_min_requires_v6")
+		}
 	}
 	var n diagramSpec
 	if e := diagramDecode(raw, allowed, &n); e != nil {
@@ -297,15 +307,15 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 	case "block":
 		heatInk := ""
 		if n.Heat != nil {
-			fill, ink, e := sceneHeat(*n.Heat, n.HeatMax, n.HeatScale)
+			fill, ink, e := sceneHeatDomain(*n.Heat, n.HeatMin, n.HeatMax, n.HeatScale)
 			if e != nil {
 				return nil, true, e
 			}
 			heatInk = ink
 			err = r.diagramShape(p, id+".surface", b, pptx.ShapeTypeRect, fill, "", 0, "", nil)
-			p.Warnings = append(p.Warnings, SceneHeatContract+" source_sha256="+SceneHeatSourceSHA256+"; native specimen review pending")
+			p.Warnings = append(p.Warnings, sceneHeatWarning(n.HeatMin))
 		} else {
-			if n.HeatMax != nil || n.HeatScale != "" {
+			if n.HeatMin != nil || n.HeatMax != nil || n.HeatScale != "" {
 				return nil, true, fmt.Errorf("scene.block_heat_requires_value")
 			}
 			rect("surface", b, surface)
@@ -319,7 +329,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 			a = "center"
 		}
 		pad := 12.0
-		if r.source.Revision == LibraryRevisionV5 {
+		if isV5OrLaterLibrary(r.source.Revision) {
 			st, e := r.sceneStyle(token)
 			if e != nil {
 				return nil, true, e

@@ -1,6 +1,46 @@
 # Upstream heat-map intake
 
-Read-only comparison on 2026-10-04. Confirmed source: `/Users/rscott/Projects/wm-design-system`; current catalog count is 602. No bundle, source pin, index or frozen qualification was migrated.
+## Current implementation status — 2026-10-04
+
+The new capabilities are implemented in Go behind the pinned v6 candidate. The
+production library remains **587** pending actual PowerPoint review of the 15
+additions and revised dense heat map. Upstream is **602**, at
+`c355c881d543dceccb82dbe12d7129bca9b1fcac`.
+
+- Frozen candidate, delta, and 16-slide native review deck:
+  [602-template intake](../planning/wm-design-contracts/v6/intake-20261004-602-frozen/README.md).
+- Implemented row groups, stable group identities, variable heights, shared 1–5
+  heat domains, priority chips, editable reference badges, source Boolean
+  emphasis compatibility, and friendly content aliases. Legacy `h` business
+  columns take precedence over the new row-height metadata field.
+- All 586 unchanged compositions retain their v5 content contracts and named
+  amendments. All 37 heat maps pass exact content round trips and individual
+  source/bound builds. Full 602-source/601-active-bound builds pass. Candidate
+  SQLite generation and discovery surface the new templates; the temporary
+  index is removed after qualification, with no second production gallery.
+- Seven explicit allocation amendments across five new templates move insight
+  bullets below three-line titles, reserve footer space for a callout and two
+  priority keys, and bring a continuation label inside the tall column. Copy,
+  font sizes, ratings and evidence remain intact. Atomicity and idempotence are
+  tested.
+- Native CLI export was attempted on the review deck and failed with
+  `application_dispatch_failed (-10827)`. No native preview or acceptance is
+  claimed. Resolve desktop dispatch, export and inspect all 16 changed layouts,
+  then qualify inherited previews and promote the new gallery/index together.
+- Final isolated qualification: regular repository tests **29.39s**, focused
+  intake race **93.31s**, full 602-source/601-bound builds **77.98s**. The exhaustive
+  build is skipped by the everyday `-short` lane. CLI release local.14 supports
+  the explicit candidate bundle; the default installed library stays v5/587.
+- Semantic metadata remains inferred. Generic item matching still cannot express
+  complete matrices and linked detail locators. Reference badges reserve their
+  width on every wrapped body line; anchored adornments remain fixed after edits.
+  New stock reference labels are single-line. Supplied copy requires fit review.
+
+The remaining sections preserve the initial intake analysis and estimates.
+
+## Initial comparison
+
+Read-only comparison on 2026-10-04. Confirmed source: `/Users/rscott/Projects/wm-design-system`; catalog count 602. This observation preceded the candidate implementation above.
 
 - Current Go pin: `d83bd58a9f9de68ebd8d6b3c9b0272c16ed516cf`.
 - Observed upstream HEAD: `c355c881d543dceccb82dbe12d7129bca9b1fcac`.

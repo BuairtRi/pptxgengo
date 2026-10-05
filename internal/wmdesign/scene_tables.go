@@ -18,6 +18,8 @@ type sceneTableColumn struct {
 	Ink       string            `json:"ink,omitempty"`
 	Scale     string            `json:"scale,omitempty"`
 	Max       *float64          `json:"max,omitempty"`
+	Min       *float64          `json:"min,omitempty"`
+	Size      string            `json:"size,omitempty"`
 	ShowValue bool              `json:"showValue,omitempty"`
 	Labels    map[string]string `json:"labels,omitempty"`
 }
@@ -35,6 +37,9 @@ type sceneTableSource struct {
 	Continued string                       `json:"continued,omitempty"`
 	DeltaUnit string                       `json:"deltaUnit,omitempty"`
 	HeatMax   *float64                     `json:"heatMax,omitempty"`
+	HeatMin   *float64                     `json:"heatMin,omitempty"`
+	GroupW    *float64                     `json:"groupW,omitempty"`
+	RowGroups []sceneTableRowGroup         `json:"rowGroups,omitempty"`
 	Columns   []sceneTableColumn           `json:"cols"`
 	Rows      []map[string]json.RawMessage `json:"rows"`
 	Groups    []struct {
@@ -62,6 +67,9 @@ func (r *renderer) planTableScene(id string, raw json.RawMessage, ctx SceneConte
 	if err := sceneDecode(raw, &n); err != nil {
 		return nil, true, err
 	}
+	if err := sceneTableV6Fields(raw, r.source.Revision); err != nil {
+		return nil, true, err
+	}
 	p, err := r.sceneTable(id, n, ctx)
 	return p, true, err
 }
@@ -72,7 +80,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	}
 	// The v5 source includes "none", but its frozen renderer tests only for
 	// "dark" and still emits the light header row and rule in this case.
-	if n.Header == "none" && r.source.Revision == LibraryRevisionV5 {
+	if n.Header == "none" && isV5OrLaterLibrary(r.source.Revision) {
 		n.Header = "light"
 	}
 	if n.Header != "" && n.Header != "dark" && n.Header != "light" {
@@ -102,26 +110,52 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	if rowH <= 0 {
 		return nil, fmt.Errorf("scene.table_invalid_row_height")
 	}
+	if r.source.Revision != LibraryRevisionV6 {
+		if n.HeatMin != nil || n.GroupW != nil || n.RowGroups != nil {
+			return nil, fmt.Errorf("scene.table_new_options_require_v6")
+		}
+		for _, c := range n.Columns {
+			if c.Min != nil || c.Size != "" || c.Type == "priority" {
+				return nil, fmt.Errorf("scene.table_new_column_options_require_v6: %s", c.Key)
+			}
+		}
+	}
+	var err error
+	n, groupWidth, err := sceneTableRowGroupGeometry(n)
+	if err != nil {
+		return nil, err
+	}
+	rowHeights, err := sceneTableRowHeights(n, rowH, r.source.Revision)
+	if err != nil {
+		return nil, err
+	}
 	cols := map[string]int{}
+	heatMinimum := n.HeatMin
 	xs := make([]float64, len(n.Columns))
 	colW := make([]float64, len(n.Columns))
 	acc := n.X
 	hi := -1
-	supported := map[string]bool{"": true, "num": true, "delta": true, "status": true, "rating": true, "allocation": true, "harvey": true, "maturity": true, "gauge": true, "tag": true, "raci": true, "bullets": true, "icon": true, "check": true, "checkbox": true, "dots": true, "heat": true}
-	if n.HeatMax != nil {
-		if _, _, e := sceneHeat(0, n.HeatMax, ""); e != nil {
+	supported := map[string]bool{"": true, "num": true, "delta": true, "status": true, "rating": true, "allocation": true, "harvey": true, "maturity": true, "gauge": true, "tag": true, "raci": true, "bullets": true, "icon": true, "check": true, "checkbox": true, "dots": true, "heat": true, "priority": true}
+	if n.HeatMax != nil || n.HeatMin != nil {
+		if _, _, e := sceneHeatDomain(sceneHeatMinimum(n.HeatMin), n.HeatMin, n.HeatMax, ""); e != nil {
 			return nil, e
 		}
 	}
 	for i, c := range n.Columns {
+		if c.Min != nil {
+			heatMinimum = c.Min
+		}
 		if !validPartKey(c.Key) || c.Width <= 24 || math.IsNaN(c.Width) || math.IsInf(c.Width, 0) || cols[c.Key] != 0 || !supported[c.Type] {
 			return nil, fmt.Errorf("scene.table_invalid_column: %s", c.Key)
 		}
 		if err := sceneTableStatusLabels(c); err != nil {
 			return nil, err
 		}
-		if c.Scale != "" && c.Type != "heat" || c.ShowValue && c.Type != "heat" || c.Max != nil && c.Type != "heat" && c.Type != "rating" && c.Type != "dots" {
+		if c.Scale != "" && c.Type != "heat" || c.ShowValue && c.Type != "heat" || c.Min != nil && c.Type != "heat" || c.Max != nil && c.Type != "heat" && c.Type != "rating" && c.Type != "dots" || c.Size != "" && c.Type != "bullets" {
 			return nil, fmt.Errorf("scene.table_column_options_type: %s", c.Key)
+		}
+		if c.Size != "" && c.Size != "small" && c.Size != "body" {
+			return nil, fmt.Errorf("scene.table_column_size: %s", c.Key)
 		}
 		if c.Ink != "" && c.Type != "rating" && c.Type != "dots" && c.Type != "harvey" {
 			return nil, fmt.Errorf("scene.table_column_ink_type: %s", c.Key)
@@ -132,7 +166,14 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 			}
 		}
 		if c.Scale != "" || c.Type == "heat" {
-			if _, _, e := sceneHeat(0, c.Max, c.Scale); e != nil {
+			minimum, maximum := c.Min, c.Max
+			if minimum == nil {
+				minimum = n.HeatMin
+			}
+			if maximum == nil {
+				maximum = n.HeatMax
+			}
+			if _, _, e := sceneHeatDomain(sceneHeatMinimum(minimum), minimum, maximum, c.Scale); e != nil {
 				return nil, e
 			}
 		}
@@ -252,13 +293,15 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	tab.Rows = append(tab.Rows, headers)
 	tab.Options.RowH = append(tab.Options.RowH, headH/72)
 	y += headH
+	bodyY := y
 	for ri, values := range n.Rows {
+		thisRowH := rowHeights[ri]
 		key, err := sceneDataKey(ctx, "rows", ri)
 		if err != nil {
 			return nil, err
 		}
 		for k := range values {
-			if cols[k] == 0 && k != "group" && k != "total" && k != "ink" && k != "scale" {
+			if cols[k] == 0 && k != "group" && k != "total" && k != "ink" && k != "scale" && k != "h" {
 				return nil, fmt.Errorf("scene.table_unknown_row_field: %s", k)
 			}
 		}
@@ -296,7 +339,11 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 			}
 		}
 		if group != "" {
-			if total || len(values) != 1 {
+			allowed := 1
+			if _, ok := values["h"]; ok && cols["h"] == 0 {
+				allowed++
+			}
+			if total || len(values) != allowed {
 				return nil, fmt.Errorf("scene.table_group_row_content_union")
 			}
 			st, _ := r.sceneDataToken("label", 600)
@@ -304,7 +351,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 			if hi >= 0 {
 				on = "light"
 			}
-			cell, tr, err := r.sceneNativeCell(id+".row."+key+".group", group, st, Rect{n.X, y, n.W, rowH}, on, "emphasis", "left", 12, 12, ctx)
+			cell, tr, err := r.sceneNativeCell(id+".row."+key+".group", group, st, Rect{n.X, y, n.W, thisRowH}, on, "emphasis", "left", 12, 12, ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -324,6 +371,9 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 				if c.Type == "heat" && c.Max == nil {
 					c.Max = n.HeatMax
 				}
+				if c.Type == "heat" && c.Min == nil {
+					c.Min = n.HeatMin
+				}
 				iid := id + ".row." + key + "." + c.Key
 				on := surface
 				if ci == hi || total {
@@ -333,7 +383,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 				if bool(n.RowHeader) && ci == 0 || total {
 					st.Weight = 600
 				}
-				cb := Rect{xs[ci], y, c.Width, rowH}
+				cb := Rect{xs[ci], y, c.Width, thisRowH}
 				v := values[c.Key]
 				cell, tr, err := r.sceneTableValue(p, iid, c, v, st, cb, on, n.DeltaUnit, ctx, fmt.Sprintf("rows/%d/%s", ri, c.Key), underlays)
 				if err != nil {
@@ -348,8 +398,11 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 			}
 			tab.Rows = append(tab.Rows, row)
 		}
-		tab.Options.RowH = append(tab.Options.RowH, rowH/72)
-		y += rowH
+		tab.Options.RowH = append(tab.Options.RowH, thisRowH/72)
+		y += thisRowH
+	}
+	if err := r.sceneTableRowGroupLabels(p, id, n, groupWidth, bodyY, rowHeights, surface, ctx); err != nil {
+		return nil, err
 	}
 	if n.RunRate != nil {
 		st := base
@@ -397,7 +450,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 		// Gather cell underlays separately, then assemble the paint order once.
 		// This stays linear in cell count rather than copying an ever-growing tail.
 		p.Items = append(underlays.Items, p.Items...)
-		p.Warnings = append(p.Warnings, SceneHeatContract+" source_sha256="+SceneHeatSourceSHA256+"; native specimen review pending")
+		p.Warnings = append(p.Warnings, sceneHeatWarning(heatMinimum))
 	}
 	sceneDataGroup(p, id, "table.native.source", 0, p.Bounds)
 	p.Warnings = append(p.Warnings, "Native table typography and anchored cell adornments require native review; adornments retain their authored coordinates after cell text edits.")
@@ -408,7 +461,7 @@ func sceneTableAlign(kind string) string {
 	switch kind {
 	case "num", "delta":
 		return "right"
-	case "check", "checkbox", "harvey", "raci", "gauge", "heat":
+	case "check", "checkbox", "harvey", "raci", "gauge", "heat", "priority":
 		return "center"
 	}
 	return "left"
@@ -479,8 +532,13 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 	switch c.Type {
 	case "":
 		if err := str(); err != nil {
+			if sceneTableHasReference(raw) {
+				return r.sceneTableReferenceCell(p, id, raw, st, b, surface, ctx)
+			}
 			return r.sceneTablePlainCell(id, raw, st, b, surface, ctx)
 		}
+	case "priority":
+		return r.sceneTablePriorityCell(p, id, raw, st, b, surface, ctx)
 	case "rating", "harvey", "dots":
 		return r.sceneTableScoreCell(p, id, c, raw, st, b, surface, ctx, path)
 	case "heat":

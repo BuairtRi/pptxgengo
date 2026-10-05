@@ -23,11 +23,18 @@ const LibraryRevisionV2 = "wmds-library.v2"
 const LibraryRevisionV3 = "wmds-library.v3"
 const LibraryRevisionV4 = "wmds-library.v4"
 const LibraryRevisionV5 = "wmds-library.v5"
+const LibraryRevisionV6 = "wmds-library.v6"
+
+// V6 carries the accepted V5 rendering semantics for unchanged compositions.
+// New heat-map fields are separately gated to the pinned V6 source.
+func isV5OrLaterLibrary(revision string) bool {
+	return revision == LibraryRevisionV5 || revision == LibraryRevisionV6
+}
 
 // Expanded revisions share the incoming diagram, fit and data semantics. Named
 // composition amendments remain gated by each revision's frozen identity map.
 func isExpandedLibrary(revision string) bool {
-	return revision == LibraryRevisionV4 || revision == LibraryRevisionV5
+	return revision == LibraryRevisionV4 || isV5OrLaterLibrary(revision)
 }
 
 func isModernLibrary(revision string) bool {
@@ -44,6 +51,7 @@ var sourcePins = map[string]sourcePin{
 	"38819ed1eb6f48288935e30afe5894a471dda068488d067364585a1aa79706fa": {"56968b1e859945f7cea178fce43e5f1bacc66280cbe515c532c99b37924774cf", LibraryRevisionV3},
 	"1e70050967a80c2d232b6109ac8428f321062fc829ba0358a9a56b54726d14b3": {"f9bcc2b425fb04feb6be9d9d0b5e5838f3c70799ff873b2f01d78d9d0c90e804", LibraryRevisionV4},
 	"0bdb3c6c7b327ed98a62b0527826068db371cb5d9cb43a1c6f44a1d4a74bf7eb": {"c4c64f6fc07eba612ccb2af6d05e70402fb26d583e42f44bbaa1325e49a57090", LibraryRevisionV5},
+	"9b1c303958152e6adddbb84b1fcde1bdb73c1a6f43ac2906ecbbd9b446c28716": {"586a742ee2bdfb05ee955af613f4c36e2059ed3504abd69cf652966e9781132e", LibraryRevisionV6},
 }
 
 func checkBundle(root string) error {

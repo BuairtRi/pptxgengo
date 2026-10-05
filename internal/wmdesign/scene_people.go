@@ -22,6 +22,7 @@ type peopleLegendItem struct {
 	Ink       string   `json:"ink,omitempty"`
 	Heat      *float64 `json:"heat,omitempty"`
 	HeatMax   *float64 `json:"heatMax,omitempty"`
+	HeatMin   *float64 `json:"heatMin,omitempty"`
 	HeatScale string   `json:"heatScale,omitempty"`
 	Status    string   `json:"status,omitempty"`
 }
@@ -89,6 +90,19 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 	if !ok {
 		return nil, false, nil
 	}
+	if tag.Type == "legend" && r.source.Revision != LibraryRevisionV6 {
+		var rawLegend struct {
+			Items []map[string]json.RawMessage `json:"items"`
+		}
+		if err := json.Unmarshal(raw, &rawLegend); err != nil {
+			return nil, true, err
+		}
+		for _, item := range rawLegend.Items {
+			if _, present := item["heatMin"]; present {
+				return nil, true, fmt.Errorf("scene.legend_heat_min_requires_v6")
+			}
+		}
+	}
 	var n peopleSpec
 	if e := diagramDecode(raw, allow, &n); e != nil {
 		return nil, true, e
@@ -120,7 +134,7 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 			st.Size, st.Leading, st.TrackingPt = n.Size, st.Leading*scale, st.TrackingPt*scale
 		}
 		labelGap, itemGap := 9*scale, 18*scale
-		if r.source.Revision == LibraryRevisionV5 && n.Size == 0 && horiz {
+		if isV5OrLaterLibrary(r.source.Revision) && n.Size == 0 && horiz {
 			// Use the existing swatch gap for the native text reserve so a
 			// tight one-row source legend retains its packing footprint.
 			labelGap -= sequenceInlineWidth(1, st) - 1
@@ -153,7 +167,7 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 			if it.Status != "" {
 				var ok bool
 				status, ok = sceneStatuses[it.Status]
-				if r.source.Revision != LibraryRevisionV5 || !ok {
+				if !isV5OrLaterLibrary(r.source.Revision) || !ok {
 					return nil, true, fmt.Errorf("scene.legend_invalid_status")
 				}
 				if copy == "" {
@@ -176,7 +190,7 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 			if it.Swatch != "" && it.Swatch != "line" && it.Swatch != "dot" && it.Swatch != "marker" {
 				return nil, true, fmt.Errorf("scene.legend_swatch")
 			}
-			if it.Heat == nil && (it.HeatMax != nil || it.HeatScale != "") {
+			if it.Heat == nil && (it.HeatMin != nil || it.HeatMax != nil || it.HeatScale != "") {
 				return nil, true, fmt.Errorf("scene.legend_heat_requires_value")
 			}
 			sw *= scale
@@ -184,7 +198,7 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 			if e != nil {
 				return nil, true, e
 			}
-			if n.Size != 0 || r.source.Revision == LibraryRevisionV5 {
+			if n.Size != 0 || isV5OrLaterLibrary(r.source.Revision) {
 				width = sequenceInlineWidth(width, st)
 			}
 			total := sw + labelGap + width
@@ -223,14 +237,14 @@ func (r *renderer) planPeopleScene(id string, raw json.RawMessage, ctx SceneCont
 					return nil, true, e
 				}
 			} else if it.Heat != nil {
-				fill, _, e := sceneHeat(*it.Heat, it.HeatMax, it.HeatScale)
+				fill, _, e := sceneHeatDomain(*it.Heat, it.HeatMin, it.HeatMax, it.HeatScale)
 				if e != nil {
 					return nil, true, e
 				}
 				if e = r.diagramShape(p, pre+".swatch", Rect{x, cy - 5*scale, sw, 10 * scale}, pptx.ShapeTypeRect, fill, "", 0, "", nil); e != nil {
 					return nil, true, e
 				}
-				p.Warnings = append(p.Warnings, SceneHeatContract+" source_sha256="+SceneHeatSourceSHA256+"; native specimen review pending")
+				p.Warnings = append(p.Warnings, sceneHeatWarning(it.HeatMin))
 			} else if it.Swatch == "dot" {
 				if e = r.diagramShape(p, pre+".swatch", Rect{x, cy - 4*scale, sw, 8 * scale}, pptx.ShapeTypeEllipse, col, "", 0, "", nil); e != nil {
 					return nil, true, e

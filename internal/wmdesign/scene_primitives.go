@@ -144,6 +144,23 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 	if !ok {
 		return nil, false, nil
 	}
+	if head.Type == "text" && r.source.Revision == LibraryRevisionV6 {
+		// The pinned V6 browser rich() function compares named mark strings
+		// strictly. Both Boolean values therefore render with no named mark;
+		// true does not mean bold. Normalize only this decoder's private copy.
+		var fields map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &fields); err != nil {
+			return nil, true, err
+		}
+		if value := bytes.TrimSpace(fields["emphasis"]); bytes.Equal(value, []byte("true")) || bytes.Equal(value, []byte("false")) {
+			fields["emphasis"] = json.RawMessage(`""`)
+			var err error
+			raw, err = json.Marshal(fields)
+			if err != nil {
+				return nil, true, err
+			}
+		}
+	}
 	var n primitiveSource
 	if e := primitiveDecode(raw, &n, allowed); e != nil {
 		return nil, true, e
@@ -247,7 +264,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 			}
 		}
 	case "textblock":
-		if n.Body == "" && (r.source.Revision != LibraryRevisionV5 || n.Label == "" && n.Title == "") {
+		if n.Body == "" && (!isV5OrLaterLibrary(r.source.Revision) || n.Label == "" && n.Title == "") {
 			err = fmt.Errorf("scene.missing_textblock_body: %s", id)
 			break
 		}
