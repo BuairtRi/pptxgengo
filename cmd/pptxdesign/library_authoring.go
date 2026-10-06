@@ -12,7 +12,7 @@ import (
 
 func runLibraryAuthoring(args []string) error {
 	f := flag.NewFlagSet("library-authoring", flag.ContinueOnError)
-	bundle := f.String("bundle", "v9", "pinned library bundle")
+	bundle := f.String("bundle", "v10", "pinned library bundle")
 	key := f.String("template", "", "exact template key; omit for coverage report")
 	if err := f.Parse(args); err != nil {
 		return err

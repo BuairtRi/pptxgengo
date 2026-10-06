@@ -1,0 +1,461 @@
+{
+  "key": "cards/3",
+  "source_file": "templates/library/core.json",
+  "source_sha256": "3a3bccfcb82d3a9984779f06ea35937deb3cfa68871b54bfc1f62f59737acf69",
+  "source_revision": "wmds-library.v10",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "cardrow"
+    }
+  ],
+  "family": "core",
+  "tier": "core",
+  "name": "Cards · three columns",
+  "purpose": "Three parallel ideas as numbered cards with a Grounded Blue band.",
+  "uses": [
+    "header.slide",
+    "card row"
+  ],
+  "source_advisory_budget": {
+    "words": 70,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "cards",
+      "count": 3,
+      "titleMax": 20,
+      "bodyMax": 80
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "cardrow"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "values/cards",
+        "component_type": "cardrow",
+        "role": "point",
+        "exact_count": 3,
+        "basis": "typed_values_exact_count",
+        "scope": "primary"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "cardrow",
+        "role": "point",
+        "source_bounds": {
+          "h": 216,
+          "w": 270,
+          "x": 57,
+          "y": 144
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v10",
+    "source_sha256": "3a3bccfcb82d3a9984779f06ea35937deb3cfa68871b54bfc1f62f59737acf69",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "parallel",
+    "groups": [
+      {
+        "alias": "/cards",
+        "role": "point",
+        "cardinality": 3,
+        "source_pointer": "values/cards",
+        "basis": "typed_values_exact_count"
+      }
+    ],
+    "slots": [
+      {
+        "name": "cards.0.title",
+        "alias": "/cards/0/title",
+        "source_pointer": "/cards/0/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "Card 1 title",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_card_row_renderer_plan_with_two_line_title",
+          "width_pt": 203.49,
+          "height_pt": 48,
+          "line_budget": 2,
+          "approx_characters": 50,
+          "style": {
+            "id": "subhead",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 18,
+            "leading": 24,
+            "tracking": "-0.01em",
+            "use": "Card and column titles",
+            "tracking_pt": -0.18
+          },
+          "assumptions": [
+            "Actual card row renderer geometry, padding, numbered title and band placement; fixed pinned font size.",
+            "Body space reserves a full two-line title in every card; shorter titles can leave additional space.",
+            "Plain text only. Go shaping is advisory; wrap boundaries and final native PowerPoint fit still require build/native review.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "cards.0.body",
+        "alias": "/cards/0/body",
+        "source_pointer": "/cards/0/body",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "Card 1 body",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_card_row_renderer_plan_with_two_line_title",
+          "width_pt": 234,
+          "height_pt": 96,
+          "line_budget": 4,
+          "approx_characters": 148,
+          "style": {
+            "id": "body",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 14,
+            "leading": 21,
+            "tracking": "0",
+            "use": "Default text; minimum for reading",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Actual card row renderer geometry, padding, numbered title and band placement; fixed pinned font size.",
+            "Body space reserves a full two-line title in every card; shorter titles can leave additional space.",
+            "Plain text only. Go shaping is advisory; wrap boundaries and final native PowerPoint fit still require build/native review.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "cards.1.title",
+        "alias": "/cards/1/title",
+        "source_pointer": "/cards/1/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "Card 2 title",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_card_row_renderer_plan_with_two_line_title",
+          "width_pt": 203.49,
+          "height_pt": 48,
+          "line_budget": 2,
+          "approx_characters": 50,
+          "style": {
+            "id": "subhead",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 18,
+            "leading": 24,
+            "tracking": "-0.01em",
+            "use": "Card and column titles",
+            "tracking_pt": -0.18
+          },
+          "assumptions": [
+            "Actual card row renderer geometry, padding, numbered title and band placement; fixed pinned font size.",
+            "Body space reserves a full two-line title in every card; shorter titles can leave additional space.",
+            "Plain text only. Go shaping is advisory; wrap boundaries and final native PowerPoint fit still require build/native review.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "cards.1.body",
+        "alias": "/cards/1/body",
+        "source_pointer": "/cards/1/body",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "Card 2 body",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_card_row_renderer_plan_with_two_line_title",
+          "width_pt": 234,
+          "height_pt": 96,
+          "line_budget": 4,
+          "approx_characters": 148,
+          "style": {
+            "id": "body",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 14,
+            "leading": 21,
+            "tracking": "0",
+            "use": "Default text; minimum for reading",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Actual card row renderer geometry, padding, numbered title and band placement; fixed pinned font size.",
+            "Body space reserves a full two-line title in every card; shorter titles can leave additional space.",
+            "Plain text only. Go shaping is advisory; wrap boundaries and final native PowerPoint fit still require build/native review.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "cards.2.title",
+        "alias": "/cards/2/title",
+        "source_pointer": "/cards/2/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "Card 3 title",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_card_row_renderer_plan_with_two_line_title",
+          "width_pt": 203.49,
+          "height_pt": 48,
+          "line_budget": 2,
+          "approx_characters": 50,
+          "style": {
+            "id": "subhead",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 18,
+            "leading": 24,
+            "tracking": "-0.01em",
+            "use": "Card and column titles",
+            "tracking_pt": -0.18
+          },
+          "assumptions": [
+            "Actual card row renderer geometry, padding, numbered title and band placement; fixed pinned font size.",
+            "Body space reserves a full two-line title in every card; shorter titles can leave additional space.",
+            "Plain text only. Go shaping is advisory; wrap boundaries and final native PowerPoint fit still require build/native review.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "cards.2.body",
+        "alias": "/cards/2/body",
+        "source_pointer": "/cards/2/body",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "Card 3 body",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_card_row_renderer_plan_with_two_line_title",
+          "width_pt": 234,
+          "height_pt": 96,
+          "line_budget": 4,
+          "approx_characters": 148,
+          "style": {
+            "id": "body",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 14,
+            "leading": 21,
+            "tracking": "0",
+            "use": "Default text; minimum for reading",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Actual card row renderer geometry, padding, numbered title and band placement; fixed pinned font size.",
+            "Body space reserves a full two-line title in every card; shorter titles can leave additional space.",
+            "Plain text only. Go shaping is advisory; wrap boundaries and final native PowerPoint fit still require build/native review.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "title",
+        "classification": "content",
+        "classification_basis": "typed_values_contract",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-template-bindings.v2",
+  "value_schema": {
+    "kind": "typed_values",
+    "go_type": "BoundCardRowsContent",
+    "reference": "planning/wm-design-contracts/v1/template-execution.md",
+    "fields": {
+      "cards": "array of {key:string,title:string,body:string}; unique authored keys; array order controls card order",
+      "eyebrow": "string",
+      "title": "string"
+    },
+    "exact_counts": {
+      "cards": 3
+    }
+  },
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "This template retains its typed v2 values API; the library slots/keys projection is not accepted.",
+    "All declared typed content is required; geometry/base styles remain frozen.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

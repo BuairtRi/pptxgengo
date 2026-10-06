@@ -1,0 +1,154 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-489",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Data validation",
+      "title": "Five of eight reconciliations already [[tie]]",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "header": "dark",
+              "dense": true,
+              "rowH": 36,
+              "cols": [
+                {
+                  "k": "c",
+                  "label": "Reconciliation check",
+                  "w": 210
+                },
+                {
+                  "k": "o",
+                  "label": "Owner",
+                  "w": 114
+                },
+                {
+                  "k": "m",
+                  "label": "Method",
+                  "w": 228
+                },
+                {
+                  "k": "t",
+                  "label": "Threshold",
+                  "w": 162
+                },
+                {
+                  "k": "s",
+                  "label": "Result",
+                  "w": 132,
+                  "type": "status"
+                }
+              ],
+              "rows": [
+                {
+                  "c": "GL trial balance to legacy",
+                  "o": "Controller",
+                  "m": "Compare totals by entity and account",
+                  "t": "Zero variance",
+                  "s": "pass"
+                },
+                {
+                  "c": "Open payables invoices",
+                  "o": "AP lead",
+                  "m": "Count and sum by vendor",
+                  "t": "Under $1 per vendor",
+                  "s": "pass"
+                },
+                {
+                  "c": "Open receivables invoices",
+                  "o": "AR lead",
+                  "m": "Tie aging buckets to legacy",
+                  "t": "Under $1 per customer",
+                  "s": "progress"
+                },
+                {
+                  "c": "Bank balances",
+                  "o": "Treasury",
+                  "m": "Statement balance to ledger",
+                  "t": "Zero variance",
+                  "s": "pass"
+                },
+                {
+                  "c": "Vendor master records",
+                  "o": "Data lead",
+                  "m": "Record count plus 50-record sample",
+                  "t": "100% match",
+                  "s": "pass"
+                },
+                {
+                  "c": "Customer master records",
+                  "o": "Data lead",
+                  "m": "Record count plus 50-record sample",
+                  "t": "100% match",
+                  "s": "pass"
+                },
+                {
+                  "c": "Intercompany balances",
+                  "o": "Shared services",
+                  "m": "Pair offsets by entity",
+                  "t": "Nets to zero",
+                  "s": "progress"
+                },
+                {
+                  "c": "Journal history",
+                  "o": "Data lead",
+                  "m": "Row counts and totals by period",
+                  "t": "100% match",
+                  "s": "fail"
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-489",
+        "template": "runbook/validation-plan",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/runbooks.json",
+        "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+        "source_revision": "wmds-library.v10",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {
+        "emphasis": "underscore"
+      }
+    }
+  ]
+}

@@ -1,17 +1,17 @@
 # West Monroe presentation library
 
-The maintained design library is [wm-design-system/v9](wm-design-system/v9/README.md):
-631 templates, 630 active, with accepted native PowerPoint source previews.
+The maintained design library is [wm-design-system/v10](wm-design-system/v10/README.md):
+649 templates, 648 active, with accepted native PowerPoint source previews.
 Previous source revisions and temporary typography candidates are retired.
 
-- Browse `wm-design-system/v9/catalog/design-system.html`.
-- Query `wm-design-system/v9/library.sqlite`.
-- Author against `wm-design-system/v9` with the Go CLI.
+- Browse `wm-design-system/v10/catalog/design-system.html`.
+- Query `wm-design-system/v10/library.sqlite`.
+- Author against `wm-design-system/v10` with the Go CLI.
 
 ```sh
-pptxdesign library-find --index library/wm-design-system/v9/library.sqlite \
+pptxdesign library-find --index library/wm-design-system/v10/library.sqlite \
   --query 'phased delivery roadmap' --kinds template --summary
-pptxdesign library-inspect --index library/wm-design-system/v9/library.sqlite \
+pptxdesign library-inspect --index library/wm-design-system/v10/library.sqlite \
   --id lifecycle/three-phases --summary
 ```
 

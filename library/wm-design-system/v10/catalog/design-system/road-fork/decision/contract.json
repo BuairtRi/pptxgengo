@@ -1,0 +1,1197 @@
+{
+  "key": "road-fork/decision",
+  "source_file": "templates/library/roadmaps.json",
+  "source_sha256": "895753ec784db43c5946f07b672ef48876c3c773b760fef532cb01a5b37dcf07",
+  "source_revision": "wmds-library.v10",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "roadfork"
+    }
+  ],
+  "family": "roadmaps",
+  "tier": "core",
+  "name": "Branching roadmap, decision fork",
+  "purpose": "Two initial steps, then a clearly signalled fork where Northfield must choose between three roads; the options are dashed until chosen.",
+  "uses": [
+    "roadfork"
+  ],
+  "source_advisory_budget": {
+    "words": 96,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "trunk milestone",
+      "count": "1-2",
+      "maxChars": 22
+    },
+    {
+      "slot": "option",
+      "count": "2-3",
+      "maxChars": 22
+    },
+    {
+      "slot": "option milestone",
+      "count": "2 per option",
+      "maxChars": 20
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "relationship",
+      "sequence-item"
+    ],
+    "structures": [
+      "network",
+      "repeated-items",
+      "sequence",
+      "timeline"
+    ],
+    "visual_forms": [
+      "diagram"
+    ],
+    "component_types": [
+      "roadfork"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/branches/0/milestones",
+        "component_type": "roadfork",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/branches/1/milestones",
+        "component_type": "roadfork",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/branches/2/milestones",
+        "component_type": "roadfork",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/branches",
+        "component_type": "roadfork",
+        "role": "relationship",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/trunk",
+        "component_type": "roadfork",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "relationships": [
+      {
+        "kind": "decision",
+        "basis": "explicit_roadfork_mode",
+        "source_pointers": [
+          "/body/0/trunk",
+          "/body/0/fork",
+          "/body/0/branches"
+        ]
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "roadfork",
+        "role": "relationship",
+        "source_bounds": {
+          "h": 324,
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v10",
+    "source_sha256": "895753ec784db43c5946f07b672ef48876c3c773b760fef532cb01a5b37dcf07",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "sequence",
+    "groups": [
+      {
+        "alias": "/roadforks",
+        "role": "relationship",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/roadforks/item_01/branches",
+        "role": "relationship",
+        "cardinality": 3,
+        "source_pointer": "/body/0/branches",
+        "basis": "semantic_closed_binding_array"
+      },
+      {
+        "alias": "/roadforks/item_01/trunk",
+        "role": "sequence-item",
+        "cardinality": 2,
+        "source_pointer": "/body/0/trunk",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "source.text",
+        "alias": "/source_note",
+        "source_pointer": "/source/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "source",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "source (string) at /source_note",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "source",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0",
+            "use": "Source lines and footnotes",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item01.milestones.item01.date",
+        "alias": "/roadforks/item_01/branches/item_01/milestones/item_01/date",
+        "source_pointer": "/body/0/branches/0/milestones/0/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "date (string) at /roadforks/item_01/branches/item_01/milestones/item_01/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item01.milestones.item01.label",
+        "alias": "/roadforks/item_01/branches/item_01/milestones/item_01/label",
+        "source_pointer": "/body/0/branches/0/milestones/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "label (string) at /roadforks/item_01/branches/item_01/milestones/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item01.milestones.item01.text",
+        "alias": "/roadforks/item_01/branches/item_01/milestones/item_01/text",
+        "source_pointer": "/body/0/branches/0/milestones/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "body (string) at /roadforks/item_01/branches/item_01/milestones/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item01.milestones.item02.date",
+        "alias": "/roadforks/item_01/branches/item_01/milestones/item_02/date",
+        "source_pointer": "/body/0/branches/0/milestones/1/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "date (string) at /roadforks/item_01/branches/item_01/milestones/item_02/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item01.milestones.item02.label",
+        "alias": "/roadforks/item_01/branches/item_01/milestones/item_02/label",
+        "source_pointer": "/body/0/branches/0/milestones/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "label (string) at /roadforks/item_01/branches/item_01/milestones/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item01.milestones.item02.text",
+        "alias": "/roadforks/item_01/branches/item_01/milestones/item_02/text",
+        "source_pointer": "/body/0/branches/0/milestones/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "body (string) at /roadforks/item_01/branches/item_01/milestones/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item01.title",
+        "alias": "/roadforks/item_01/branches/item_01/title",
+        "source_pointer": "/body/0/branches/0/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "lead (string) at /roadforks/item_01/branches/item_01/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item02.milestones.item01.date",
+        "alias": "/roadforks/item_01/branches/item_02/milestones/item_01/date",
+        "source_pointer": "/body/0/branches/1/milestones/0/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "date (string) at /roadforks/item_01/branches/item_02/milestones/item_01/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item02.milestones.item01.label",
+        "alias": "/roadforks/item_01/branches/item_02/milestones/item_01/label",
+        "source_pointer": "/body/0/branches/1/milestones/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /roadforks/item_01/branches/item_02/milestones/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item02.milestones.item01.text",
+        "alias": "/roadforks/item_01/branches/item_02/milestones/item_01/text",
+        "source_pointer": "/body/0/branches/1/milestones/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "body (string) at /roadforks/item_01/branches/item_02/milestones/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item02.milestones.item02.date",
+        "alias": "/roadforks/item_01/branches/item_02/milestones/item_02/date",
+        "source_pointer": "/body/0/branches/1/milestones/1/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "date (string) at /roadforks/item_01/branches/item_02/milestones/item_02/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item02.milestones.item02.label",
+        "alias": "/roadforks/item_01/branches/item_02/milestones/item_02/label",
+        "source_pointer": "/body/0/branches/1/milestones/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /roadforks/item_01/branches/item_02/milestones/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item02.milestones.item02.text",
+        "alias": "/roadforks/item_01/branches/item_02/milestones/item_02/text",
+        "source_pointer": "/body/0/branches/1/milestones/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "body (string) at /roadforks/item_01/branches/item_02/milestones/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item02.title",
+        "alias": "/roadforks/item_01/branches/item_02/title",
+        "source_pointer": "/body/0/branches/1/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "lead (string) at /roadforks/item_01/branches/item_02/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item03.milestones.item01.date",
+        "alias": "/roadforks/item_01/branches/item_03/milestones/item_01/date",
+        "source_pointer": "/body/0/branches/2/milestones/0/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "date (string) at /roadforks/item_01/branches/item_03/milestones/item_01/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item03.milestones.item01.label",
+        "alias": "/roadforks/item_01/branches/item_03/milestones/item_01/label",
+        "source_pointer": "/body/0/branches/2/milestones/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "label (string) at /roadforks/item_01/branches/item_03/milestones/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item03.milestones.item01.text",
+        "alias": "/roadforks/item_01/branches/item_03/milestones/item_01/text",
+        "source_pointer": "/body/0/branches/2/milestones/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /roadforks/item_01/branches/item_03/milestones/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item03.milestones.item02.date",
+        "alias": "/roadforks/item_01/branches/item_03/milestones/item_02/date",
+        "source_pointer": "/body/0/branches/2/milestones/1/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "date (string) at /roadforks/item_01/branches/item_03/milestones/item_02/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item03.milestones.item02.label",
+        "alias": "/roadforks/item_01/branches/item_03/milestones/item_02/label",
+        "source_pointer": "/body/0/branches/2/milestones/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "label (string) at /roadforks/item_01/branches/item_03/milestones/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item03.milestones.item02.text",
+        "alias": "/roadforks/item_01/branches/item_03/milestones/item_02/text",
+        "source_pointer": "/body/0/branches/2/milestones/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /roadforks/item_01/branches/item_03/milestones/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.branches.item03.title",
+        "alias": "/roadforks/item_01/branches/item_03/title",
+        "source_pointer": "/body/0/branches/2/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/roadforks/item_01/branches",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "lead (string) at /roadforks/item_01/branches/item_03/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.fork.label",
+        "alias": "/roadforks/item_01/fork/label",
+        "source_pointer": "/body/0/fork/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /roadforks/item_01/fork/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.fork.text",
+        "alias": "/roadforks/item_01/fork/text",
+        "source_pointer": "/body/0/fork/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "body (string) at /roadforks/item_01/fork/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.trunk.item01.date",
+        "alias": "/roadforks/item_01/trunk/item_01/date",
+        "source_pointer": "/body/0/trunk/0/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/trunk",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "date (string) at /roadforks/item_01/trunk/item_01/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.trunk.item01.label",
+        "alias": "/roadforks/item_01/trunk/item_01/label",
+        "source_pointer": "/body/0/trunk/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/trunk",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "label (string) at /roadforks/item_01/trunk/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.trunk.item01.text",
+        "alias": "/roadforks/item_01/trunk/item_01/text",
+        "source_pointer": "/body/0/trunk/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/trunk",
+        "group_index": 0,
+        "cardinality": 2,
+        "description": "body (string) at /roadforks/item_01/trunk/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.trunk.item02.date",
+        "alias": "/roadforks/item_01/trunk/item_02/date",
+        "source_pointer": "/body/0/trunk/1/date",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "date",
+        "group": "/roadforks/item_01/trunk",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "date (string) at /roadforks/item_01/trunk/item_02/date",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.trunk.item02.label",
+        "alias": "/roadforks/item_01/trunk/item_02/label",
+        "source_pointer": "/body/0/trunk/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/roadforks/item_01/trunk",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "label (string) at /roadforks/item_01/trunk/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.trunk.item02.text",
+        "alias": "/roadforks/item_01/trunk/item_02/text",
+        "source_pointer": "/body/0/trunk/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/roadforks/item_01/trunk",
+        "group_index": 1,
+        "cardinality": 2,
+        "description": "body (string) at /roadforks/item_01/trunk/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Roadmap"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "You must choose: buy, build or partner"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Northfield Health System digital front door program."
+    },
+    {
+      "name": "node01.branches.item01.milestones.item01.date",
+      "source_pointer": "/body/0/branches/0/milestones/0/date",
+      "kind": "string",
+      "synthetic_source_example": "Q2 2027"
+    },
+    {
+      "name": "node01.branches.item01.milestones.item01.label",
+      "source_pointer": "/body/0/branches/0/milestones/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Select vendor"
+    },
+    {
+      "name": "node01.branches.item01.milestones.item01.text",
+      "source_pointer": "/body/0/branches/0/milestones/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Scored shortlist."
+    },
+    {
+      "name": "node01.branches.item01.milestones.item02.date",
+      "source_pointer": "/body/0/branches/0/milestones/1/date",
+      "kind": "string",
+      "synthetic_source_example": "Q4 2027"
+    },
+    {
+      "name": "node01.branches.item01.milestones.item02.label",
+      "source_pointer": "/body/0/branches/0/milestones/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Go live"
+    },
+    {
+      "name": "node01.branches.item01.milestones.item02.text",
+      "source_pointer": "/body/0/branches/0/milestones/1/text",
+      "kind": "string",
+      "synthetic_source_example": "All sites on one suite."
+    },
+    {
+      "name": "node01.branches.item01.title",
+      "source_pointer": "/body/0/branches/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Buy a platform"
+    },
+    {
+      "name": "node01.branches.item02.milestones.item01.date",
+      "source_pointer": "/body/0/branches/1/milestones/0/date",
+      "kind": "string",
+      "synthetic_source_example": "Q3 2027"
+    },
+    {
+      "name": "node01.branches.item02.milestones.item01.label",
+      "source_pointer": "/body/0/branches/1/milestones/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Extend portal"
+    },
+    {
+      "name": "node01.branches.item02.milestones.item01.text",
+      "source_pointer": "/body/0/branches/1/milestones/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Use the EHR's tools."
+    },
+    {
+      "name": "node01.branches.item02.milestones.item02.date",
+      "source_pointer": "/body/0/branches/1/milestones/1/date",
+      "kind": "string",
+      "synthetic_source_example": "Q2 2028"
+    },
+    {
+      "name": "node01.branches.item02.milestones.item02.label",
+      "source_pointer": "/body/0/branches/1/milestones/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Go live"
+    },
+    {
+      "name": "node01.branches.item02.milestones.item02.text",
+      "source_pointer": "/body/0/branches/1/milestones/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Phased by region."
+    },
+    {
+      "name": "node01.branches.item02.title",
+      "source_pointer": "/body/0/branches/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Build on our EHR"
+    },
+    {
+      "name": "node01.branches.item03.milestones.item01.date",
+      "source_pointer": "/body/0/branches/2/milestones/0/date",
+      "kind": "string",
+      "synthetic_source_example": "Q3 2027"
+    },
+    {
+      "name": "node01.branches.item03.milestones.item01.label",
+      "source_pointer": "/body/0/branches/2/milestones/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Sign partner"
+    },
+    {
+      "name": "node01.branches.item03.milestones.item01.text",
+      "source_pointer": "/body/0/branches/2/milestones/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Shared roadmap."
+    },
+    {
+      "name": "node01.branches.item03.milestones.item02.date",
+      "source_pointer": "/body/0/branches/2/milestones/1/date",
+      "kind": "string",
+      "synthetic_source_example": "Q1 2028"
+    },
+    {
+      "name": "node01.branches.item03.milestones.item02.label",
+      "source_pointer": "/body/0/branches/2/milestones/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Go live"
+    },
+    {
+      "name": "node01.branches.item03.milestones.item02.text",
+      "source_pointer": "/body/0/branches/2/milestones/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Joint release."
+    },
+    {
+      "name": "node01.branches.item03.title",
+      "source_pointer": "/body/0/branches/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Partner and co-build"
+    },
+    {
+      "name": "node01.fork.label",
+      "source_pointer": "/body/0/fork/label",
+      "kind": "string",
+      "synthetic_source_example": "Buy, build or partner?"
+    },
+    {
+      "name": "node01.fork.text",
+      "source_pointer": "/body/0/fork/text",
+      "kind": "string",
+      "synthetic_source_example": "Choose by Q2 2027"
+    },
+    {
+      "name": "node01.trunk.item01.date",
+      "source_pointer": "/body/0/trunk/0/date",
+      "kind": "string",
+      "synthetic_source_example": "Q4 2026"
+    },
+    {
+      "name": "node01.trunk.item01.label",
+      "source_pointer": "/body/0/trunk/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Data foundation"
+    },
+    {
+      "name": "node01.trunk.item01.text",
+      "source_pointer": "/body/0/trunk/0/text",
+      "kind": "string",
+      "synthetic_source_example": "One master patient index."
+    },
+    {
+      "name": "node01.trunk.item02.date",
+      "source_pointer": "/body/0/trunk/1/date",
+      "kind": "string",
+      "synthetic_source_example": "Q1 2027"
+    },
+    {
+      "name": "node01.trunk.item02.label",
+      "source_pointer": "/body/0/trunk/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Single sign-in"
+    },
+    {
+      "name": "node01.trunk.item02.text",
+      "source_pointer": "/body/0/trunk/1/text",
+      "kind": "string",
+      "synthetic_source_example": "One ID at every site."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.branches.item01.milestones",
+      "source_pointer": "/body/0/branches/0/milestones",
+      "count": 2
+    },
+    {
+      "name": "node01.branches.item02.milestones",
+      "source_pointer": "/body/0/branches/1/milestones",
+      "count": 2
+    },
+    {
+      "name": "node01.branches.item03.milestones",
+      "source_pointer": "/body/0/branches/2/milestones",
+      "count": 2
+    },
+    {
+      "name": "node01.branches",
+      "source_pointer": "/body/0/branches",
+      "count": 3
+    },
+    {
+      "name": "node01.trunk",
+      "source_pointer": "/body/0/trunk",
+      "count": 2
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-06",
+  "status": "active"
+}

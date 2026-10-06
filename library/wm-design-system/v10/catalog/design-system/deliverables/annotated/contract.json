@@ -1,0 +1,602 @@
+{
+  "key": "deliverables/annotated",
+  "source_file": "templates/library/proof.json",
+  "source_sha256": "e34e8d1846ae7aaf3bd52656d8ad37d34773db3bd3bd695c1e5e3f42c319593b",
+  "source_revision": "wmds-library.v10",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "thumbnail"
+    },
+    {
+      "id": "z1",
+      "source_pointer": "/body/1",
+      "expected_type": "frame"
+    },
+    {
+      "id": "z2",
+      "source_pointer": "/body/2",
+      "expected_type": "frame"
+    },
+    {
+      "id": "z3",
+      "source_pointer": "/body/3",
+      "expected_type": "frame"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "annotation"
+    },
+    {
+      "id": "node06",
+      "source_pointer": "/body/5",
+      "expected_type": "annotation"
+    },
+    {
+      "id": "node07",
+      "source_pointer": "/body/6",
+      "expected_type": "annotation"
+    }
+  ],
+  "family": "proof",
+  "tier": "working",
+  "name": "Sample deliverable · annotated page",
+  "purpose": "One deliverable page shown large, with hand-drawn arrows to call-outs that explain what each zone shows.",
+  "uses": [
+    "prim.thumbnail",
+    "annotation",
+    "shape.frame"
+  ],
+  "source_advisory_budget": {
+    "words": 71,
+    "marks": 3
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 32
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "call-out label",
+      "count": 3,
+      "maxChars": 20
+    },
+    {
+      "slot": "call-out text",
+      "count": 3,
+      "maxChars": 60
+    },
+    {
+      "slot": "source",
+      "maxChars": 100
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message"
+    ],
+    "structures": [],
+    "visual_forms": [],
+    "component_types": [
+      "annotation",
+      "frame",
+      "thumbnail"
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "thumbnail",
+        "role": "content",
+        "source_bounds": {
+          "h": 324,
+          "w": 414,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "frame",
+        "role": "content",
+        "source_bounds": {
+          "h": 54,
+          "w": 378,
+          "x": 75,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "frame",
+        "role": "content",
+        "source_bounds": {
+          "h": 72,
+          "w": 378,
+          "x": 75,
+          "y": 234
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "frame",
+        "role": "content",
+        "source_bounds": {
+          "h": 90,
+          "w": 378,
+          "x": 75,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "annotation",
+        "role": "content"
+      },
+      {
+        "source_pointer": "/body/5",
+        "component_type": "annotation",
+        "role": "content"
+      },
+      {
+        "source_pointer": "/body/6",
+        "component_type": "annotation",
+        "role": "content"
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v10",
+    "source_sha256": "e34e8d1846ae7aaf3bd52656d8ad37d34773db3bd3bd695c1e5e3f42c319593b",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "unknown",
+    "groups": [
+      {
+        "alias": "/annotations",
+        "role": "content",
+        "cardinality": 3,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/frames",
+        "role": "content",
+        "cardinality": 3,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "source.text",
+        "alias": "/source_note",
+        "source_pointer": "/source/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "source",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "source (string) at /source_note",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "source",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0",
+            "use": "Source lines and footnotes",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "z1.label",
+        "alias": "/frames/item_01/label",
+        "source_pointer": "/body/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/frames",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "label (string) at /frames/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "z2.label",
+        "alias": "/frames/item_02/label",
+        "source_pointer": "/body/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/frames",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /frames/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "z3.label",
+        "alias": "/frames/item_03/label",
+        "source_pointer": "/body/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/frames",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "label (string) at /frames/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node05.callout.label",
+        "alias": "/annotations/item_01/callout/label",
+        "source_pointer": "/body/4/callout/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/annotations",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "label (string) at /annotations/item_01/callout/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node05.callout.text",
+        "alias": "/annotations/item_01/callout/text",
+        "source_pointer": "/body/4/callout/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/annotations",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "body (string) at /annotations/item_01/callout/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node06.callout.label",
+        "alias": "/annotations/item_02/callout/label",
+        "source_pointer": "/body/5/callout/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/annotations",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /annotations/item_02/callout/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node06.callout.text",
+        "alias": "/annotations/item_02/callout/text",
+        "source_pointer": "/body/5/callout/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/annotations",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "body (string) at /annotations/item_02/callout/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node07.callout.label",
+        "alias": "/annotations/item_03/callout/label",
+        "source_pointer": "/body/6/callout/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/annotations",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "label (string) at /annotations/item_03/callout/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node07.callout.text",
+        "alias": "/annotations/item_03/callout/text",
+        "source_pointer": "/body/6/callout/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/annotations",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /annotations/item_03/callout/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Sample deliverable"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Each zone of the readiness scorecard has a job"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Illustrative page. Final outputs are tailored to Northfield's data and confirmed priorities."
+    },
+    {
+      "name": "z1.label",
+      "source_pointer": "/body/1/label",
+      "kind": "string",
+      "synthetic_source_example": "1"
+    },
+    {
+      "name": "z2.label",
+      "source_pointer": "/body/2/label",
+      "kind": "string",
+      "synthetic_source_example": "2"
+    },
+    {
+      "name": "z3.label",
+      "source_pointer": "/body/3/label",
+      "kind": "string",
+      "synthetic_source_example": "3"
+    },
+    {
+      "name": "node05.callout.label",
+      "source_pointer": "/body/4/callout/label",
+      "kind": "string",
+      "synthetic_source_example": "1 · Where we stand"
+    },
+    {
+      "name": "node05.callout.text",
+      "source_pointer": "/body/4/callout/text",
+      "kind": "string",
+      "synthetic_source_example": "The headline score and the one decision it supports."
+    },
+    {
+      "name": "node06.callout.label",
+      "source_pointer": "/body/5/callout/label",
+      "kind": "string",
+      "synthetic_source_example": "2 · Step by step"
+    },
+    {
+      "name": "node06.callout.text",
+      "source_pointer": "/body/5/callout/text",
+      "kind": "string",
+      "synthetic_source_example": "Each close step scored against the five-day target."
+    },
+    {
+      "name": "node07.callout.label",
+      "source_pointer": "/body/6/callout/label",
+      "kind": "string",
+      "synthetic_source_example": "3 · What happens next"
+    },
+    {
+      "name": "node07.callout.text",
+      "source_pointer": "/body/6/callout/text",
+      "kind": "string",
+      "synthetic_source_example": "Owners and dates for the three gaps to close first."
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-02",
+  "status": "active"
+}

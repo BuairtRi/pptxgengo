@@ -13,7 +13,7 @@ func TestDirectInstalledExecutableResolvesLatestBundle(t *testing.T) {
 		t.Fatal(err)
 	}
 	executable := filepath.Join(root, "bin", "pptxdesign")
-	bundle := filepath.Join(root, "library", "wm-design-system", "v9", "bundle.json")
+	bundle := filepath.Join(root, "library", "wm-design-system", "v10", "bundle.json")
 	for _, path := range []string{executable, bundle} {
 		if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
 			t.Fatal(err)

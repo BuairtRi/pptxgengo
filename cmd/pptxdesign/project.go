@@ -14,7 +14,7 @@ import (
 // runProject is isolated from the legacy scene/semantic JSON build commands.
 func runProject(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxdesign project <init|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure> --project PATH [--bundle v9|PATH]")
+		return fmt.Errorf("usage: pptxdesign project <init|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure> --project PATH [--bundle v10|PATH]")
 	}
 	if args[0] == "asset" {
 		return runProjectAsset(args[1:])
@@ -52,7 +52,7 @@ func runProject(args []string) error {
 	cmd := args[0]
 	f := flag.NewFlagSet("project "+cmd, flag.ContinueOnError)
 	path := f.String("project", ".", "project directory or deck.yaml")
-	bundle := f.String("bundle", "", "bundle path or v1/v2/v3/v4/v5/v6/v7/v8/v9 (defaults to project lock; new projects use published bundle)")
+	bundle := f.String("bundle", "", "bundle path or v1/v2/v3/v4/v5/v6/v7/v8/v9/v10 (defaults to project lock; new projects use published bundle)")
 	engine := f.String("engine", "", "engine (defaults to existing lock; init uses candidate v2)")
 	out := f.String("out", "", "new export ZIP path")
 	stage := f.String("stage", "", "approval stage")
@@ -194,18 +194,18 @@ func runProject(args []string) error {
 }
 
 func validPublishedBundle(value string) bool {
-	return value == "v9"
+	return value == "v10"
 }
 
 func validLockedBundle(value string) bool {
-	return value == "v1" || value == "v2" || value == "v3" || value == "v4" || value == "v5" || value == "v6" || value == "v7" || value == "v8" || value == "v9"
+	return value == "v1" || value == "v2" || value == "v3" || value == "v4" || value == "v5" || value == "v6" || value == "v7" || value == "v8" || value == "v9" || value == "v10"
 }
 
 func publishedProjectBundle(root string) (string, error) {
 	path := filepath.Join(root, "release", "default-bundle.txt")
 	b, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
-		return "v9", nil
+		return "v10", nil
 	}
 	if err != nil {
 		return "", err

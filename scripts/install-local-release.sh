@@ -5,6 +5,11 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 published_version="$(cat "$repo_root/release/VERSION")"
 version="$published_version"
 published_bundle="$(cat "$repo_root/release/default-bundle.txt")"
+documentation_input="$repo_root/wmds-docs/site"
+if [[ -f "$repo_root/release/default-docs.txt" ]]; then
+  documentation_relative="$(cat "$repo_root/release/default-docs.txt")"
+  documentation_input="$repo_root/$documentation_relative"
+fi
 bundle_revision="$published_bundle"
 catalog_input="$repo_root/library/wm-design-system/$published_bundle/catalog"
 verification_input=""
@@ -45,7 +50,7 @@ if [[ "$stage_only" == false && -e "$launcher" && ! -L "$launcher" ]]; then echo
 if [[ "$stage_only" == false && "$install_skill" == true && -e "$skill_link" && ! -L "$skill_link" ]]; then echo "skill path exists and is not a symlink: $skill_link" >&2; exit 1; fi
 
 # Gallery labels identify the original export; source pins identify the library.
-python3 - "$bundle_input" "$catalog_input" "$verification_input" "$bundle_revision" "$repo_root" <<'PY'
+python3 - "$bundle_input" "$catalog_input" "$verification_input" "$bundle_revision" "$repo_root" "$documentation_input" <<'PY'
 import json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(sys.argv[5]) / 'release'))
@@ -55,7 +60,10 @@ bundle = json.loads((bundle_root / 'bundle.json').read_text())
 index = json.loads((catalog / 'design-system/index.json').read_text())
 landing = json.loads((catalog / 'index.json').read_text())
 source = json.loads((bundle_root / 'source/templates/catalog.json').read_text())['templates']
-validate_design_docs(Path(sys.argv[5]) / 'wmds-docs/site', bundle_root)
+documentation = Path(sys.argv[6]).resolve()
+if not documentation.is_relative_to(Path(sys.argv[5]).resolve()):
+    raise SystemExit('release documentation must be inside the repository')
+validate_design_docs(documentation, bundle_root)
 count = bundle['template_count']
 source_status = {r['key']: r.get('status', 'active') for r in source}
 if bundle['source_revision'] != 'wmds-library.' + sys.argv[4] or count <= 0 or len(source) != count or len(source_status) != count:
@@ -101,7 +109,7 @@ for tool in pptxgengo pptxdesign wmdsdocs; do
     go build -buildvcs=false -trimpath -ldflags '-s -w' -o "$stage/bin/$tool" "./cmd/$tool"
   fi
 done
-python3 - "$repo_root" "$stage" "$version" "$catalog_input" "$verification_input" "$bundle_revision" <<'PY'
+python3 - "$repo_root" "$stage" "$version" "$catalog_input" "$verification_input" "$bundle_revision" "$documentation_input" <<'PY'
 import json, os, shutil, subprocess, sys
 from pathlib import Path
 src, dst = map(Path, sys.argv[1:3])
@@ -113,8 +121,10 @@ bundle = dst / bundle_relative
 shutil.copytree(src / bundle_relative, bundle, ignore=shutil.ignore_patterns('catalog', 'library.sqlite'))
 shutil.copytree(selected_catalog, bundle / 'catalog',
                 ignore=lambda path, names: ['assets'] if Path(path) == selected_catalog else [])
-for path in ('skills/west-monroe-presentations', 'schemas', 'examples/deck-project', 'examples/local-composition', 'wmds-docs'):
+for path in ('skills/west-monroe-presentations', 'schemas', 'examples/deck-project', 'examples/local-composition'):
     shutil.copytree(src / path, dst / path)
+shutil.copytree(Path(sys.argv[7]), dst / 'wmds-docs/site')
+shutil.copy2(src / 'wmds-docs/README.md', dst / 'wmds-docs/README.md')
 for path in ('release/README.md', 'release/VERSION', 'release/package_files.py', 'library/README.md', 'cmd/pptxdesign/README.md',
              'internal/deckproject/README.md', 'docs/semantic-template-discovery.md',
              'docs/engineering-cli.md', 'docs/engineering-waves.md', 'docs/engineering-new-templates.md',

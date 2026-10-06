@@ -311,6 +311,9 @@ func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
 	if s.Revision == LibraryRevisionV9 {
 		expected = 631
 	}
+	if s.Revision == LibraryRevisionV10 {
+		expected = 649
+	}
 	if len(out) != expected {
 		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
 	}
@@ -322,6 +325,9 @@ func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
 func v4UnversionedFamily(revision, path string, catalog templateSourceCatalog) bool {
 	if !isExpandedLibrary(revision) || catalog.Schema != "" || path != "templates/library/"+catalog.Family+".json" {
 		return false
+	}
+	if revision == LibraryRevisionV10 && catalog.Family == "roadmaps" {
+		return true
 	}
 	switch catalog.Family {
 	case "change", "diagrams", "heatmaps", "lifecycle", "maturity", "software", "status", "team-curves", "venn":
@@ -688,6 +694,19 @@ func libraryContentWalk(def *LibraryTemplate, v any, pointer, name, field string
 				continue
 			}
 			if ctx.NodeType == "road" && ctx.Parent == "milestones" && k == "at" {
+				continue
+			}
+			if ctx.NodeType == "roadfork" && ctx.Parent == "fork" && k == "at" {
+				continue
+			}
+			if ctx.NodeType == "roadfork" && (k == "chosen" || k == "n") {
+				if libraryScalarSlot(def, x[k], childPointer, childName, "number") {
+					found = true
+					continue
+				}
+			}
+			if ctx.NodeType == "roadfork" && k == "here" {
+				found = libraryScalarSlot(def, x[k], childPointer, childName, "boolean") || found
 				continue
 			}
 			if ctx.NodeType == "cycle" && ctx.Parent == "loops" && (k == "from" || k == "to") {

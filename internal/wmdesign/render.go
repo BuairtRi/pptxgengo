@@ -349,7 +349,7 @@ func (r *renderer) centerFooterText(text string, style Style, box, row Rect) Rec
 }
 func (r *renderer) nav(f ResolvedFrame) {
 	q := f.Request
-	if q.Rail != "nav" {
+	if r.err != nil || q.Rail != "nav" {
 		return
 	}
 	h := (f.NavBottom - 36 - float64(len(q.Nav)-1)*6) / float64(len(q.Nav))

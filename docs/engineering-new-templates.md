@@ -1,6 +1,26 @@
 # Upstream template intake
 
-## Current implementation status — 2026-10-05
+## Current implementation status — 2026-10-06
+
+The qualified production library is **v10 / 649 templates** (648 active), pinned
+to `c14fb286fb38e15800a6fd476a1ed67956f1165f`. The 18 additions comprise five
+pillar layouts, seven branching roadmaps and six narrative roadmaps. All 18 have
+accepted native PowerPoint previews and independent visual review. All 631
+retained specimens passed paired rendering inheritance checks. The complete
+649-source / 648-active-bound build sweeps passed. The workshop count remains 29.
+
+The intake adds an editable branching-roadmap renderer and content bindings,
+with six named allocation corrections. Four defects found during the first
+native review were repaired and reviewed in a second native export. No remaining
+visual issues were found in the final 18 specimens. See the
+[v10 evidence](../planning/wm-design-contracts/v10/intake-20261006-649-frozen/README.md)
+and [local.19 qualification](../release/qualification-local19.json).
+
+The next intake covers the designer's 215 slide-level density migrations and
+subsequent pillar visual revisions. These changes require new implementation
+and visual qualification; they are not claimed as part of the v10 release.
+
+## Earlier implementation status — 2026-10-05
 
 Upstream now contains **616 templates**, including **14 workshop additions** at
 `c788cefeb5bb409118ac217adb53216d8156eec3`. They are implemented in Go as the

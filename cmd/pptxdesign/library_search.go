@@ -12,7 +12,7 @@ import (
 
 func runLibrarySearch(args []string) error {
 	f := flag.NewFlagSet("library-search", flag.ContinueOnError)
-	bundle := f.String("bundle", "v9", "pinned design library bundle path or v9 (default)")
+	bundle := f.String("bundle", "v10", "pinned design library bundle path or v10 (default)")
 	source := f.String("source", "", "optional source override; must match pinned snapshot")
 	engine := f.String("engine", wmdesign.CandidateEngine, "wrapper compatibility passthrough; search does not evaluate engine/bundle compatibility")
 	query := f.String("query", "", "scenario/purpose/label text; soft ranking signal")

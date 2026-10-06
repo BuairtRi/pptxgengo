@@ -1,0 +1,287 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-428",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 1,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Roadmap",
+      "title": "Each track has its own outcome, owner and dependency",
+      "source": "Source: Northfield Health System digital front door program.",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "roadfork",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "h": 216,
+              "trunk": [
+                {
+                  "label": "Patient data foundation",
+                  "date": "Q4 2026",
+                  "text": "One master patient index."
+                }
+              ],
+              "fork": {
+                "label": "Foundation complete",
+                "text": "Tracks start together.",
+                "at": 0.3
+              },
+              "branches": [
+                {
+                  "title": "Patient access",
+                  "milestones": [
+                    {
+                      "label": "Self-scheduling",
+                      "date": "Q2 2027",
+                      "text": "Primary care first."
+                    },
+                    {
+                      "label": "Digital intake",
+                      "date": "Q3 2027",
+                      "text": "Forms before arrival."
+                    }
+                  ]
+                },
+                {
+                  "title": "Revenue cycle",
+                  "milestones": [
+                    {
+                      "label": "Price estimates",
+                      "date": "Q2 2027",
+                      "text": "Shown before booking."
+                    },
+                    {
+                      "label": "Online payment",
+                      "date": "Q4 2027",
+                      "text": "Pay at the visit."
+                    }
+                  ]
+                }
+              ],
+              "mode": "parallel",
+              "small": true
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "grouplabel",
+              "x": 57,
+              "y": 348,
+              "w": 414,
+              "text": "Track A · Patient access"
+            },
+            "source_pointer": "/body/1"
+          }
+        },
+        {
+          "id": "node03",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "rule",
+              "x": 57,
+              "y": 366,
+              "w": 414
+            },
+            "source_pointer": "/body/2"
+          }
+        },
+        {
+          "id": "node04",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "bullets",
+              "x": 57,
+              "y": 372,
+              "w": 414,
+              "size": "small",
+              "items": [
+                {
+                  "lead": "Outcomes.",
+                  "text": "70% of primary care visits booked online."
+                },
+                {
+                  "lead": "Owner.",
+                  "text": "Chief patient access officer, with the access squad."
+                },
+                {
+                  "lead": "Depends on.",
+                  "text": "Master patient index; single sign-in."
+                }
+              ]
+            },
+            "source_pointer": "/body/3"
+          }
+        },
+        {
+          "id": "node05",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "grouplabel",
+              "x": 489,
+              "y": 348,
+              "w": 414,
+              "text": "Track B · Revenue cycle"
+            },
+            "source_pointer": "/body/4"
+          }
+        },
+        {
+          "id": "node06",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "rule",
+              "x": 489,
+              "y": 366,
+              "w": 414
+            },
+            "source_pointer": "/body/5"
+          }
+        },
+        {
+          "id": "node07",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "bullets",
+              "x": 489,
+              "y": 372,
+              "w": 414,
+              "size": "small",
+              "items": [
+                {
+                  "lead": "Outcomes.",
+                  "text": "Estimates on 90% of scheduled visits."
+                },
+                {
+                  "lead": "Owner.",
+                  "text": "VP revenue cycle, with the billing squad."
+                },
+                {
+                  "lead": "Depends on.",
+                  "text": "Payer contract data loaded."
+                }
+              ]
+            },
+            "source_pointer": "/body/6"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-428",
+        "template": "road-fork/parallel-detail",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/roadmaps.json",
+        "source_sha256": "895753ec784db43c5946f07b672ef48876c3c773b760fef532cb01a5b37dcf07",
+        "source_revision": "wmds-library.v10",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "roadfork"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "grouplabel"
+          },
+          {
+            "id": "node03",
+            "source_pointer": "/body/2",
+            "expected_type": "rule"
+          },
+          {
+            "id": "node04",
+            "source_pointer": "/body/3",
+            "expected_type": "bullets"
+          },
+          {
+            "id": "node05",
+            "source_pointer": "/body/4",
+            "expected_type": "grouplabel"
+          },
+          {
+            "id": "node06",
+            "source_pointer": "/body/5",
+            "expected_type": "rule"
+          },
+          {
+            "id": "node07",
+            "source_pointer": "/body/6",
+            "expected_type": "bullets"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

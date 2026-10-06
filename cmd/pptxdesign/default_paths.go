@@ -24,9 +24,11 @@ func releaseRootForDesignExecutable(executable string) string {
 		return ""
 	}
 	root := filepath.Dir(filepath.Dir(resolved))
-	info, err := os.Stat(filepath.Join(root, "library", "wm-design-system", "v9", "bundle.json"))
-	if err == nil && info.Mode().IsRegular() {
-		return root
+	for _, revision := range []string{"v10", "v9"} {
+		info, err := os.Stat(filepath.Join(root, "library", "wm-design-system", revision, "bundle.json"))
+		if err == nil && info.Mode().IsRegular() {
+			return root
+		}
 	}
 	return ""
 }
@@ -41,6 +43,7 @@ func designBundlePath(revision string) string {
 		"v6": "intake-20261004-602-frozen",
 		"v7": "intake-20261005-616-frozen",
 		"v8": "intake-20261006-623-frozen",
+		"v9": "intake-20261006-631-frozen",
 	}
 	if intake, ok := historical[revision]; ok {
 		path := filepath.Join(root, "planning", "wm-design-contracts", revision, intake, "bundle")

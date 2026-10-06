@@ -111,7 +111,7 @@ func discoveryRole(kind string) string {
 		return "numeric-data"
 	case "step", "phase", "phases", "phasehead", "schedule", "timeaxis", "stepper", "vstepper", "chevron", "gate", "milestone", "timeline", "gantt", "swimlane":
 		return "sequence-item"
-	case "layerrow", "layer", "diagram", "node", "flow", "orgchart", "pyramid", "funnel", "cycle", "road", "bracket", "cylinder", "beforeafter", "device", "plane", "dotmap", "venn", "maturity":
+	case "layerrow", "layer", "diagram", "node", "flow", "orgchart", "pyramid", "funnel", "cycle", "road", "roadfork", "bracket", "cylinder", "beforeafter", "device", "plane", "dotmap", "venn", "maturity":
 		return "relationship"
 	case "quote", "pullquote":
 		return "quotation"
@@ -337,6 +337,16 @@ func libraryDiscovery(def LibraryTemplate, obj map[string]any) LibraryDiscovery 
 					structures["cycle"], structures["process"] = true, true
 				case "road":
 					structures["timeline"] = true
+				case "roadfork":
+					structures["timeline"], structures["sequence"], structures["network"] = true, true, true
+					roles["sequence-item"] = true
+					mode, _ := v["mode"].(string)
+					if mode == "" {
+						mode = "parallel"
+					}
+					if mode == "parallel" || mode == "decision" {
+						d.Relationships = append(d.Relationships, LibraryRelationship{Kind: mode, Basis: "explicit_roadfork_mode", SourcePointers: []string{pointer + "/trunk", pointer + "/fork", pointer + "/branches"}})
+					}
 				case "table":
 					if cols, ok := v["cols"].([]any); ok {
 						for _, raw := range cols {
@@ -437,7 +447,7 @@ func libraryDiscovery(def LibraryTemplate, obj map[string]any) LibraryDiscovery 
 		// units. Cell tuples, rich-text runs and body paragraph blocks do not
 		// create another item group merely because they contain editable text.
 		switch field {
-		case "items", "cards", "rows", "steps", "phases", "lanes", "layers", "levels", "milestones", "loops", "children", "bullets", "points", "people", "results", "secondary", "cols", "columns", "sets", "regions", "stages":
+		case "items", "cards", "rows", "steps", "phases", "lanes", "layers", "levels", "milestones", "trunk", "branches", "loops", "children", "bullets", "points", "people", "results", "secondary", "cols", "columns", "sets", "regions", "stages":
 		default:
 			continue
 		}
@@ -461,6 +471,9 @@ func libraryDiscovery(def LibraryTemplate, obj map[string]any) LibraryDiscovery 
 		}
 		if field == "cols" || field == "columns" {
 			role = "column"
+		}
+		if parentType == "roadfork" && (field == "trunk" || field == "milestones") {
+			role = "sequence-item"
 		}
 		if parentType == "card" && scope == "primary" {
 			// Lists inside a card are supporting details of that card.

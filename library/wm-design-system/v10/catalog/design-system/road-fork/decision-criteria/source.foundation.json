@@ -1,0 +1,190 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-425",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 1,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Roadmap",
+      "title": "The choice turns on time and fit, not cost",
+      "source": "Source: Northfield Health System digital front door program.",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "roadfork",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "h": 204,
+              "trunk": [
+                {
+                  "label": "Patient data foundation",
+                  "date": "Q4 2026",
+                  "text": "One master patient index."
+                }
+              ],
+              "fork": {
+                "label": "Buy or build?",
+                "text": "Choose by Q2 2027",
+                "at": 0.3
+              },
+              "branches": [
+                {
+                  "title": "Buy a platform",
+                  "milestones": [
+                    {
+                      "label": "Select vendor",
+                      "date": "Q2 2027",
+                      "text": "Scored shortlist."
+                    },
+                    {
+                      "label": "Go live",
+                      "date": "Q4 2027",
+                      "text": "All sites on one suite."
+                    }
+                  ]
+                },
+                {
+                  "title": "Build on our EHR",
+                  "milestones": [
+                    {
+                      "label": "Extend portal",
+                      "date": "Q3 2027",
+                      "text": "Use the EHR's tools."
+                    },
+                    {
+                      "label": "Go live",
+                      "date": "Q2 2028",
+                      "text": "Phased by region."
+                    }
+                  ]
+                }
+              ],
+              "mode": "decision",
+              "small": true
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 336,
+              "w": 846,
+              "header": "light",
+              "rowHeader": true,
+              "dense": true,
+              "rowH": 21,
+              "cols": [
+                {
+                  "k": "c",
+                  "label": "Criterion",
+                  "w": 246
+                },
+                {
+                  "k": "a",
+                  "label": "A  Buy a platform",
+                  "w": 300,
+                  "type": "status",
+                  "labels": {
+                    "on": "Strong",
+                    "risk": "Medium",
+                    "off": "Weak"
+                  }
+                },
+                {
+                  "k": "b",
+                  "label": "B  Build on our EHR",
+                  "w": 300,
+                  "type": "status",
+                  "labels": {
+                    "on": "Strong",
+                    "risk": "Medium",
+                    "off": "Weak"
+                  }
+                }
+              ],
+              "rows": [
+                {
+                  "c": "Cost to Northfield",
+                  "a": "risk",
+                  "b": "on"
+                },
+                {
+                  "c": "Time to every site",
+                  "a": "on",
+                  "b": "off"
+                },
+                {
+                  "c": "Delivery risk",
+                  "a": "on",
+                  "b": "risk"
+                },
+                {
+                  "c": "Fit with clinical workflow",
+                  "a": "risk",
+                  "b": "on"
+                }
+              ]
+            },
+            "source_pointer": "/body/1"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-425",
+        "template": "road-fork/decision-criteria",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/roadmaps.json",
+        "source_sha256": "895753ec784db43c5946f07b672ef48876c3c773b760fef532cb01a5b37dcf07",
+        "source_revision": "wmds-library.v10",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "roadfork"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "table"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}
