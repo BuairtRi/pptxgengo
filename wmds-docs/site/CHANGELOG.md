@@ -259,6 +259,12 @@ Quote marks scale with density with a 40 pt floor: pull quote mark = max(40, hea
 
 **PowerPoint:** Apply the same rules: quote mark sizes from heading/subhead density with the 40 pt floor; keep glyph-in-shape sizes fixed; text colour on Magenta fills = #070154 except title/heading/stat styles; chevron number colour = surface emphasis role (strong -> #070154).
 
+### density-limit
+
+New slide field densityLimit: the densest level a slide may be rendered at when content is fitted (comfortable, compact or dense; default dense, i.e. no limit). Set to comfortable on the agenda schedule (agenda/schedule*) and lead-question (key-message/lead-questions*) templates, whose small Magenta text passes contrast only at comfortable sizes.
+
+**PowerPoint:** When stepping density down to fit, never go past densityLimit; if the slide still overflows at that level, flag it for a split. densityLimit never changes the authored density.
+
 Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, rails, splits, summary, zones.
 
 ## Revised templates (37)
@@ -371,10 +377,10 @@ Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, ra
   - Changed: body: 3 → 5 nodes, slots, budget, purpose, uses
 ### covers
 
-- **`agenda/schedule`** (from openers) (rev 3, 2026-10-02)
-  - Added a working-session photo under the Outcome block and pulled the right column left (x 507) so the photo and outcome sit closer to the schedule, which narrows to 414 wide. Round 4: Photo now layered over an offset Grounded (inverse) block. Photo is 378x252 at (525,198); block is 378x252 at (507,216), so it shows 18pt left and below the photo. Block left edge aligns with the Outcome text (x 507), photo right edge with the margin (903), block bottom with the body bottom (468). Rev 3.
-  - PowerPoint: Schedule width 558 to 414. Outcome textblock moved x 705 to 507 and widened 198 to 396. New imageframe x 507, y 252, 396 x 216, photo-working-session. New 'photo' image slot. Round 4: Add a Grounded rectangle at x507 y216 w378 h252 behind the photo; resize and move the photo to x525 y198 w378 h252 (crop to fit).
-  - Changed: body: 2 → 4 nodes, slots, budget, purpose, uses
+- **`agenda/schedule`** (from openers) (rev 4, 2026-10-06)
+  - Added a working-session photo under the Outcome block and pulled the right column left (x 507) so the photo and outcome sit closer to the schedule, which narrows to 414 wide. Round 4: Photo now layered over an offset Grounded (inverse) block. Photo is 378x252 at (525,198); block is 378x252 at (507,216), so it shows 18pt left and below the photo. Block left edge aligns with the Outcome text (x 507), photo right edge with the margin (903), block bottom with the body bottom (468). Rev 3. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Schedule width 558 to 414. Outcome textblock moved x 705 to 507 and widened 198 to 396. New imageframe x 507, y 252, 396 x 216, photo-working-session. New 'photo' image slot. Round 4: Add a Grounded rectangle at x507 y216 w378 h252 behind the photo; resize and move the photo to x525 y198 w378 h252 (crop to fit). Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+  - Changed: slide.densityLimit, body: 2 → 4 nodes, slots, budget, purpose, uses
 - **`agenda/sessions`** (from openers) (rev 2, 2026-10-06)
   - Density migration (2026-10-06): removed 5 component-level small overrides; slide density compact. Every component now shares the slide's typography.
   - PowerPoint: Density migration: Set slide density "compact" (body 12/17, small 11/15, subhead 16/21, label 8/11, table cells 12/10 per tokens.density); title zone stays comfortable. Drop the per-component small sizes on: bullets at x 363 y 144 (“Finance: bring close calendar and pain…”) size=small; bullets at x 363 y 198 (“Finance: define rules, controls, accep…”) size=small; bullets at x 363 y 252 (“Finance: explain intent and open quest…”) size=small; bullets at x 363 y 306 (“Finance: review each increment against…”) size=small; bullets at x 363 y 360 (“Finance: name operating-model implicat…”) size=small. Those nodes now take the slide's body/small roles, so their text size is unchanged (12 pt) while the other text on the slide steps down to the same scale. Geometry unchanged.
@@ -860,21 +866,21 @@ Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, ra
 - **`key-message/icons-tint`** (rev 1, 2026-10-03)
   - Slide-15 version without a photo: split tall-right, tint {x 345, w 615}; 4-line heading title and paragraph on White at left; panel eyebrow, 2x2 of 54 pt icon points and a dark call-out on the tint.
   - PowerPoint: Tint panel; titleLines 4 in a narrow split column (rule 198).
-- **`key-message/lead-questions`** (rev 1, 2026-10-03)
-  - New lead slide: eyebrow, two-line title with one highlight, lead paragraph, Magenta-ink question label (subhead size, passes contrast), large heading-size question, and four 198x126 cards alternating subtle and inverse, each with an eyebrow label and a short question.
-  - PowerPoint: Add layout: highlight on one title word; lead text 18pt; Magenta (callout ink) subhead at y228; heading-size display question at y258 (w 774); four cards at x 57/273/489/705, y 342, 198x126, label + body-style title, surfaces subtle, inverse, subtle, inverse.
-- **`key-message/lead-questions-icons`** (rev 1, 2026-10-03)
-  - Lead-questions variant with a 30 pt icon (ai-brain, rocket, piggy-bank, shield) above the label in each of the four question cards; lead runs on one line (846 wide) and cards are 162 tall from y 306.
-  - PowerPoint: New layout: lead 846 wide, subhead y198, heading y228, four cards y306 h162, each with a stacked icon above label and question.
-- **`key-message/lead-questions-nav`** (rev 1, 2026-10-03)
-  - Nav-rail version of lead-questions, compact footer.
-  - PowerPoint: Nav rail; no content change.
-- **`key-message/lead-questions-split`** (rev 1, 2026-10-03)
-  - Split tall-right on tall footer: lead, key question and follow-up on the short left; four question cards (label, question, 14 pt paragraph) as a 2x2 in the tall column, y 36-450.
-  - PowerPoint: Split frame; cards 270x198.
-- **`key-message/lead-questions-two`** (rev 1, 2026-10-03)
-  - Two large question cards (414x198: label, question, 14 pt paragraph) under the lead and key question.
-  - PowerPoint: Two wide cards with paragraph text instead of four short ones.
+- **`key-message/lead-questions`** (rev 2, 2026-10-03)
+  - New lead slide: eyebrow, two-line title with one highlight, lead paragraph, Magenta-ink question label (subhead size, passes contrast), large heading-size question, and four 198x126 cards alternating subtle and inverse, each with an eyebrow label and a short question. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Add layout: highlight on one title word; lead text 18pt; Magenta (callout ink) subhead at y228; heading-size display question at y258 (w 774); four cards at x 57/273/489/705, y 342, 198x126, label + body-style title, surfaces subtle, inverse, subtle, inverse. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+- **`key-message/lead-questions-icons`** (rev 2, 2026-10-03)
+  - Lead-questions variant with a 30 pt icon (ai-brain, rocket, piggy-bank, shield) above the label in each of the four question cards; lead runs on one line (846 wide) and cards are 162 tall from y 306. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: New layout: lead 846 wide, subhead y198, heading y228, four cards y306 h162, each with a stacked icon above label and question. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+- **`key-message/lead-questions-nav`** (rev 2, 2026-10-03)
+  - Nav-rail version of lead-questions, compact footer. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Nav rail; no content change. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+- **`key-message/lead-questions-split`** (rev 2, 2026-10-03)
+  - Split tall-right on tall footer: lead, key question and follow-up on the short left; four question cards (label, question, 14 pt paragraph) as a 2x2 in the tall column, y 36-450. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Split frame; cards 270x198. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+- **`key-message/lead-questions-two`** (rev 2, 2026-10-03)
+  - Two large question cards (414x198: label, question, 14 pt paragraph) under the lead and key question. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Two wide cards with paragraph text instead of four short ones. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
 - **`key-message/photo-icons`** (rev 1, 2026-10-03)
   - Split tall-left-narrow with tint {x 327, w 633, subtle}: photo (57,144, 270x324) on White, Light Gray right side with a 4-line title (titleLines 4), lead-in, 2x2 icon points (36 pt library icons, body-style text) and a dark call-out band. Header dots moved to the white side above the photo.
   - PowerPoint: Needs tint panel support, titleLines 4 in a split wide column (rule 216), and an explicit whiteboard field; icon points are borderless cards (surface subtle on the tint).
@@ -940,18 +946,18 @@ Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, ra
   - PowerPoint: colhead with rule ink strong and emphasis; body text at y186.
 ### covers
 
-- **`agenda/schedule-nav`** (rev 2, 2026-10-02)
-  - Nav-rail variant of the schedule agenda (compact footer); rail marks Context. Round 4: Same layered photo and Grounded block as agenda/schedule. Rev 2.
-  - PowerPoint: Draw 5 vertical section tabs at x 21-39; content unchanged. Round 4: Same as agenda/schedule: Grounded rectangle x507 y216 w378 h252 behind photo x525 y198 w378 h252.
-- **`agenda/schedule-right`** (rev 1, 2026-10-03)
-  - Right-panel variant: schedule rows (558 wide, 54pt rows) in main; outcome as a heading on the inverse panel with a photo beneath.
-  - PowerPoint: Add layout with right panel x687-960, schedule at x57 w558, outcome eyebrow+heading and 198x162 photo at x705 on the panel.
-- **`agenda/schedule-split`** (rev 1, 2026-10-02)
-  - Schedule agenda with a full-height photo in a narrow left column (tall-left-narrow); title, 45pt schedule rows and outcome in the wide right column.
-  - PowerPoint: New layout: split tall-left-narrow; photo imageframe at x57 y36 270x432; title zone x345-903; schedule x345 y126 w558 keyW144 rowHeight45; outcome textblock x345 y378 w558.
-- **`agenda/schedule-tall`** (rev 1, 2026-10-03)
-  - Tall-footer variant of the schedule agenda: body ends at 450, photo and offset block shortened to 234 high.
-  - PowerPoint: Tall footer frame; photo block and offset Grounded block h 234 (y216 and 198).
+- **`agenda/schedule-nav`** (rev 3, 2026-10-02)
+  - Nav-rail variant of the schedule agenda (compact footer); rail marks Context. Round 4: Same layered photo and Grounded block as agenda/schedule. Rev 2. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Draw 5 vertical section tabs at x 21-39; content unchanged. Round 4: Same as agenda/schedule: Grounded rectangle x507 y216 w378 h252 behind photo x525 y198 w378 h252. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+- **`agenda/schedule-right`** (rev 2, 2026-10-03)
+  - Right-panel variant: schedule rows (558 wide, 54pt rows) in main; outcome as a heading on the inverse panel with a photo beneath. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Add layout with right panel x687-960, schedule at x57 w558, outcome eyebrow+heading and 198x162 photo at x705 on the panel. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+- **`agenda/schedule-split`** (rev 2, 2026-10-02)
+  - Schedule agenda with a full-height photo in a narrow left column (tall-left-narrow); title, 45pt schedule rows and outcome in the wide right column. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: New layout: split tall-left-narrow; photo imageframe at x57 y36 270x432; title zone x345-903; schedule x345 y126 w558 keyW144 rowHeight45; outcome textblock x345 y378 w558. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
+- **`agenda/schedule-tall`** (rev 2, 2026-10-03)
+  - Tall-footer variant of the schedule agenda: body ends at 450, photo and offset block shortened to 234 high. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.
+  - PowerPoint: Tall footer frame; photo block and offset Grounded block h 234 (y216 and 198). Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead.
 - **`divider/inverse-square`** (rev 1, 2026-10-03)
   - Inverse section divider mirroring divider/light: oversized number, display title, photo square over an inverse dot field.
   - PowerPoint: Grounded background, Dark Gray dot field (on inverse), magenta number and eyebrow, white display title with underscore emphasis.
@@ -979,9 +985,9 @@ Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, ra
 - **`divider/progress-underline`** (rev 1, 2026-10-03)
   - Inverse divider; section names as plain labels along the bottom with only a short Magenta rule under the active one (active label White, others muted). Underscore mark.
   - PowerPoint: Add: Grounded surface; labels at y414 on the 5-up columns; 3pt Magenta (callout) rule w36 at y441 under the active label; no pills or outlines.
-- **`guide/deck-overview`** (rev 1, 2026-10-03)
-  - Internal deck guide: narrative, five numbered sections with one-line scopes, four usage steps, internal-use note bar; stamp 'For internal use'. Light surface.
-  - PowerPoint: New layout: three text columns under the standard header (narrative, sections list, ol), subtle block note bar at y 414, stamp.
+- **`guide/deck-overview`** (rev 2, 2026-10-03)
+  - Internal deck guide: narrative, five numbered sections with one-line scopes, four usage steps, internal-use note bar; stamp 'For internal use'. Light surface. Contrast (2026-10-06): 5 Magenta text element(s) on White changed to Highlight Blue (emphasis, 6.28:1) so the slide passes at every density.
+  - PowerPoint: New layout: three text columns under the standard header (narrative, sections list, ol), subtle block note bar at y 414, stamp. Contrast: change ink callout (#F900D3) to emphasis (#0047FF) on those 5 element(s).
 - **`guide/deck-overview-inverse`** (rev 1, 2026-10-03)
   - Deck overview on Grounded Blue; note bar is a White block.
   - PowerPoint: Same as guide/deck-overview with inverse surface and inverse inks.
@@ -1837,9 +1843,9 @@ Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, ra
 - **`status/raid-log`** (rev 1, 2026-10-02)
   - Dense RAID log (risks, assumptions, issues, dependencies) as one full-width table with type tag, item, owner, due, next action and status; nav rail with compact footer.
   - PowerPoint: New template. rail nav (items [Update, Plan, RAID, Asks], active 2), footer compact, source line. One dark-header dense table, rowH 30, nine rows, tag and status cell types.
-- **`status/steering-update`** (rev 1, 2026-10-02)
-  - Executive one-pager on the nav rail with tall footer: overall status card, key messages, an inverse decisions-requested card, top three risks table and next milestones.
-  - PowerPoint: New template. rail nav with nav items [Update, Plan, Risks, Asks] active 0, footer tall (body bottom 450, no source line). Nodes: metric card with status, grouplabel + bullets, inverse card with bullets body, dense status table with group header, grouplabel + schedule list.
+- **`status/steering-update`** (rev 2, 2026-10-02)
+  - Executive one-pager on the nav rail with tall footer: overall status card, key messages, an inverse decisions-requested card, top three risks table and next milestones. Contrast (2026-10-06): 1 Magenta text element(s) on White changed to Highlight Blue (emphasis, 6.28:1) so the slide passes at every density.
+  - PowerPoint: New template. rail nav with nav items [Update, Plan, Risks, Asks] active 0, footer tall (body bottom 450, no source line). Nodes: metric card with status, grouplabel + bullets, inverse card with bullets body, dense status table with group header, grouplabel + schedule list. Contrast: change keyInk callout (#F900D3) to emphasis (#0047FF) on those 1 element(s).
 ### team
 
 - **`bio-full/portrait-nav`** (rev 1, 2026-10-02)
@@ -2036,9 +2042,9 @@ Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, ra
 - **`venn/four-points`** (rev 2, 2026-10-03)
   - Four circles on tall-left with six numbered points and a numbered legend in the short column. Round 11: Mono set labels; points as numbered markers with mono badges inside the circles. Density migration (2026-10-06): removed 1 component-level small override; slide density compact. Every component now shares the slide's typography.
   - PowerPoint: Same venn geometry as venn/two-text (see that entry). Round 11: Numbered dot plus mono badge per point. Density migration: Set slide density "compact" (body 12/17, small 11/15, subhead 16/21, label 8/11, table cells 12/10 per tokens.density); title zone stays comfortable. Drop the per-component small sizes on: strongnum at x 633 y 162 (“Data only.”) size=small. Those nodes now take the slide's body/small roles, so their text size is unchanged (12 pt) while the other text on the slide steps down to the same scale. Geometry unchanged.
-- **`venn/four-text`** (rev 1, 2026-10-03)
-  - Four circles with label and line in each and a centre region labelled VBC on tall-right, narrative in the short column. Round 11: Mono set labels; four pairwise overlaps labelled (Timely care, Affordable, Trust, Fair price); centre VBC named and echoed by a callout-ink line in the short column.
-  - PowerPoint: Same venn geometry as venn/two-text (see that entry). Round 11: Mono set labels; four overlap labels; callout-ink subhead in short column.
+- **`venn/four-text`** (rev 2, 2026-10-03)
+  - Four circles with label and line in each and a centre region labelled VBC on tall-right, narrative in the short column. Round 11: Mono set labels; four pairwise overlaps labelled (Timely care, Affordable, Trust, Fair price); centre VBC named and echoed by a callout-ink line in the short column. Contrast (2026-10-06): 1 Magenta text element(s) on White changed to Highlight Blue (emphasis, 6.28:1) so the slide passes at every density.
+  - PowerPoint: Same venn geometry as venn/two-text (see that entry). Round 11: Mono set labels; four overlap labels; callout-ink subhead in short column. Contrast: change ink callout (#F900D3) to emphasis (#0047FF) on those 1 element(s).
 - **`venn/three-bullets`** (rev 1, 2026-10-03)
   - Three circles with two bullets per set and a centre label on tall-right, narrative paragraph in the short column. Round 11: Mono set labels; pairwise overlaps labelled (Rules, ML, Flow) plus Automation centre.
   - PowerPoint: Same venn geometry as venn/two-text (see that entry). Round 11: Mono set labels; add three pairwise overlap labels.

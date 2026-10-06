@@ -180,6 +180,10 @@
     "density-quote-glyph-magenta": {
       "summary": "Quote marks scale with density with a 40 pt floor: pull quote mark = max(40, heading x 2.5) i.e. 60/52.5/45, line-height half the size; card quote mark = max(40, subhead x 48/18) i.e. 48/42.7/40, line-height 0.75 of the size. Glyphs in fixed shapes stay fixed (pins, Venn dots, maturity markers, decision '?', number tiles). Magenta surfaces: only title/heading/display/stat text is White; subhead, number, body and small text on Magenta is Grounded (fixes White-on-Magenta 3.52:1 at compact/dense, e.g. roadmap 'Now' headers, sequence/evidence-to-model 'Expert review'). Chevron step numbers use the step surface's emphasis role (Blue on light and subtle, Grounded on strong/Medium Gray, Grounded on Magenta, Magenta on dark) instead of fixed Blue (fixes 4.33:1 on Medium Gray in runbook/overview).",
       "pptx": "Apply the same rules: quote mark sizes from heading/subhead density with the 40 pt floor; keep glyph-in-shape sizes fixed; text colour on Magenta fills = #070154 except title/heading/stat styles; chevron number colour = surface emphasis role (strong -> #070154)."
+    },
+    "density-limit": {
+      "summary": "New slide field densityLimit: the densest level a slide may be rendered at when content is fitted (comfortable, compact or dense; default dense, i.e. no limit). Set to comfortable on the agenda schedule (agenda/schedule*) and lead-question (key-message/lead-questions*) templates, whose small Magenta text passes contrast only at comfortable sizes.",
+      "pptx": "When stepping density down to fit, never go past densityLimit; if the slide still overflows at that level, flag it for a split. densityLimit never changes the authored density."
     }
   },
   "summary": {
@@ -1777,45 +1781,45 @@
       "family": "core",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "New lead slide: eyebrow, two-line title with one highlight, lead paragraph, Magenta-ink question label (subhead size, passes contrast), large heading-size question, and four 198x126 cards alternating subtle and inverse, each with an eyebrow label and a short question.",
-      "pptx": "Add layout: highlight on one title word; lead text 18pt; Magenta (callout ink) subhead at y228; heading-size display question at y258 (w 774); four cards at x 57/273/489/705, y 342, 198x126, label + body-style title, surfaces subtle, inverse, subtle, inverse."
+      "rev": 2,
+      "summary": "New lead slide: eyebrow, two-line title with one highlight, lead paragraph, Magenta-ink question label (subhead size, passes contrast), large heading-size question, and four 198x126 cards alternating subtle and inverse, each with an eyebrow label and a short question. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Add layout: highlight on one title word; lead text 18pt; Magenta (callout ink) subhead at y228; heading-size display question at y258 (w 774); four cards at x 57/273/489/705, y 342, 198x126, label + body-style title, surfaces subtle, inverse, subtle, inverse. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "key-message/lead-questions-icons",
       "family": "core",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Lead-questions variant with a 30 pt icon (ai-brain, rocket, piggy-bank, shield) above the label in each of the four question cards; lead runs on one line (846 wide) and cards are 162 tall from y 306.",
-      "pptx": "New layout: lead 846 wide, subhead y198, heading y228, four cards y306 h162, each with a stacked icon above label and question."
+      "rev": 2,
+      "summary": "Lead-questions variant with a 30 pt icon (ai-brain, rocket, piggy-bank, shield) above the label in each of the four question cards; lead runs on one line (846 wide) and cards are 162 tall from y 306. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "New layout: lead 846 wide, subhead y198, heading y228, four cards y306 h162, each with a stacked icon above label and question. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "key-message/lead-questions-nav",
       "family": "core",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Nav-rail version of lead-questions, compact footer.",
-      "pptx": "Nav rail; no content change."
+      "rev": 2,
+      "summary": "Nav-rail version of lead-questions, compact footer. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Nav rail; no content change. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "key-message/lead-questions-split",
       "family": "core",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Split tall-right on tall footer: lead, key question and follow-up on the short left; four question cards (label, question, 14 pt paragraph) as a 2x2 in the tall column, y 36-450.",
-      "pptx": "Split frame; cards 270x198."
+      "rev": 2,
+      "summary": "Split tall-right on tall footer: lead, key question and follow-up on the short left; four question cards (label, question, 14 pt paragraph) as a 2x2 in the tall column, y 36-450. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Split frame; cards 270x198. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "key-message/lead-questions-two",
       "family": "core",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Two large question cards (414x198: label, question, 14 pt paragraph) under the lead and key question.",
-      "pptx": "Two wide cards with paragraph text instead of four short ones."
+      "rev": 2,
+      "summary": "Two large question cards (414x198: label, question, 14 pt paragraph) under the lead and key question. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Two wide cards with paragraph text instead of four short ones. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "key-message/photo-icons",
@@ -2057,9 +2061,10 @@
       "key": "agenda/schedule",
       "family": "covers",
       "change": "revised",
-      "date": "2026-10-02",
-      "rev": 3,
+      "date": "2026-10-06",
+      "rev": 4,
       "fields": [
+        "slide.densityLimit",
         "body: 2 → 4 nodes",
         "slots",
         "budget",
@@ -2067,44 +2072,44 @@
         "uses"
       ],
       "movedFrom": "openers",
-      "summary": "Added a working-session photo under the Outcome block and pulled the right column left (x 507) so the photo and outcome sit closer to the schedule, which narrows to 414 wide. Round 4: Photo now layered over an offset Grounded (inverse) block. Photo is 378x252 at (525,198); block is 378x252 at (507,216), so it shows 18pt left and below the photo. Block left edge aligns with the Outcome text (x 507), photo right edge with the margin (903), block bottom with the body bottom (468). Rev 3.",
-      "pptx": "Schedule width 558 to 414. Outcome textblock moved x 705 to 507 and widened 198 to 396. New imageframe x 507, y 252, 396 x 216, photo-working-session. New 'photo' image slot. Round 4: Add a Grounded rectangle at x507 y216 w378 h252 behind the photo; resize and move the photo to x525 y198 w378 h252 (crop to fit)."
+      "summary": "Added a working-session photo under the Outcome block and pulled the right column left (x 507) so the photo and outcome sit closer to the schedule, which narrows to 414 wide. Round 4: Photo now layered over an offset Grounded (inverse) block. Photo is 378x252 at (525,198); block is 378x252 at (507,216), so it shows 18pt left and below the photo. Block left edge aligns with the Outcome text (x 507), photo right edge with the margin (903), block bottom with the body bottom (468). Rev 3. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Schedule width 558 to 414. Outcome textblock moved x 705 to 507 and widened 198 to 396. New imageframe x 507, y 252, 396 x 216, photo-working-session. New 'photo' image slot. Round 4: Add a Grounded rectangle at x507 y216 w378 h252 behind the photo; resize and move the photo to x525 y198 w378 h252 (crop to fit). Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "agenda/schedule-nav",
       "family": "covers",
       "change": "added",
       "date": "2026-10-02",
-      "rev": 2,
-      "summary": "Nav-rail variant of the schedule agenda (compact footer); rail marks Context. Round 4: Same layered photo and Grounded block as agenda/schedule. Rev 2.",
-      "pptx": "Draw 5 vertical section tabs at x 21-39; content unchanged. Round 4: Same as agenda/schedule: Grounded rectangle x507 y216 w378 h252 behind photo x525 y198 w378 h252."
+      "rev": 3,
+      "summary": "Nav-rail variant of the schedule agenda (compact footer); rail marks Context. Round 4: Same layered photo and Grounded block as agenda/schedule. Rev 2. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Draw 5 vertical section tabs at x 21-39; content unchanged. Round 4: Same as agenda/schedule: Grounded rectangle x507 y216 w378 h252 behind photo x525 y198 w378 h252. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "agenda/schedule-right",
       "family": "covers",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Right-panel variant: schedule rows (558 wide, 54pt rows) in main; outcome as a heading on the inverse panel with a photo beneath.",
-      "pptx": "Add layout with right panel x687-960, schedule at x57 w558, outcome eyebrow+heading and 198x162 photo at x705 on the panel."
+      "rev": 2,
+      "summary": "Right-panel variant: schedule rows (558 wide, 54pt rows) in main; outcome as a heading on the inverse panel with a photo beneath. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Add layout with right panel x687-960, schedule at x57 w558, outcome eyebrow+heading and 198x162 photo at x705 on the panel. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "agenda/schedule-split",
       "family": "covers",
       "change": "added",
       "date": "2026-10-02",
-      "rev": 1,
-      "summary": "Schedule agenda with a full-height photo in a narrow left column (tall-left-narrow); title, 45pt schedule rows and outcome in the wide right column.",
-      "pptx": "New layout: split tall-left-narrow; photo imageframe at x57 y36 270x432; title zone x345-903; schedule x345 y126 w558 keyW144 rowHeight45; outcome textblock x345 y378 w558."
+      "rev": 2,
+      "summary": "Schedule agenda with a full-height photo in a narrow left column (tall-left-narrow); title, 45pt schedule rows and outcome in the wide right column. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "New layout: split tall-left-narrow; photo imageframe at x57 y36 270x432; title zone x345-903; schedule x345 y126 w558 keyW144 rowHeight45; outcome textblock x345 y378 w558. Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "agenda/schedule-tall",
       "family": "covers",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Tall-footer variant of the schedule agenda: body ends at 450, photo and offset block shortened to 234 high.",
-      "pptx": "Tall footer frame; photo block and offset Grounded block h 234 (y216 and 198)."
+      "rev": 2,
+      "summary": "Tall-footer variant of the schedule agenda: body ends at 450, photo and offset block shortened to 234 high. Density limit (2026-10-06): densityLimit comfortable. Its small Magenta text (3.52:1 on White) passes only at comfortable sizes, so it is never stepped down to compact or dense.",
+      "pptx": "Tall footer frame; photo block and offset Grounded block h 234 (y216 and 198). Never step this slide below comfortable when fitting content; if it overflows at comfortable, flag it for a split instead."
     },
     {
       "key": "agenda/sessions",
@@ -2264,9 +2269,9 @@
       "family": "covers",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Internal deck guide: narrative, five numbered sections with one-line scopes, four usage steps, internal-use note bar; stamp 'For internal use'. Light surface.",
-      "pptx": "New layout: three text columns under the standard header (narrative, sections list, ol), subtle block note bar at y 414, stamp."
+      "rev": 2,
+      "summary": "Internal deck guide: narrative, five numbered sections with one-line scopes, four usage steps, internal-use note bar; stamp 'For internal use'. Light surface. Contrast (2026-10-06): 5 Magenta text element(s) on White changed to Highlight Blue (emphasis, 6.28:1) so the slide passes at every density.",
+      "pptx": "New layout: three text columns under the standard header (narrative, sections list, ol), subtle block note bar at y 414, stamp. Contrast: change ink callout (#F900D3) to emphasis (#0047FF) on those 5 element(s)."
     },
     {
       "key": "guide/deck-overview-inverse",
@@ -4894,9 +4899,9 @@
       "family": "status",
       "change": "added",
       "date": "2026-10-02",
-      "rev": 1,
-      "summary": "Executive one-pager on the nav rail with tall footer: overall status card, key messages, an inverse decisions-requested card, top three risks table and next milestones.",
-      "pptx": "New template. rail nav with nav items [Update, Plan, Risks, Asks] active 0, footer tall (body bottom 450, no source line). Nodes: metric card with status, grouplabel + bullets, inverse card with bullets body, dense status table with group header, grouplabel + schedule list."
+      "rev": 2,
+      "summary": "Executive one-pager on the nav rail with tall footer: overall status card, key messages, an inverse decisions-requested card, top three risks table and next milestones. Contrast (2026-10-06): 1 Magenta text element(s) on White changed to Highlight Blue (emphasis, 6.28:1) so the slide passes at every density.",
+      "pptx": "New template. rail nav with nav items [Update, Plan, Risks, Asks] active 0, footer tall (body bottom 450, no source line). Nodes: metric card with status, grouplabel + bullets, inverse card with bullets body, dense status table with group header, grouplabel + schedule list. Contrast: change keyInk callout (#F900D3) to emphasis (#0047FF) on those 1 element(s)."
     },
     {
       "key": "bio-full/portrait-nav",
@@ -5474,9 +5479,9 @@
       "family": "venn",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Four circles with label and line in each and a centre region labelled VBC on tall-right, narrative in the short column. Round 11: Mono set labels; four pairwise overlaps labelled (Timely care, Affordable, Trust, Fair price); centre VBC named and echoed by a callout-ink line in the short column.",
-      "pptx": "Same venn geometry as venn/two-text (see that entry). Round 11: Mono set labels; four overlap labels; callout-ink subhead in short column."
+      "rev": 2,
+      "summary": "Four circles with label and line in each and a centre region labelled VBC on tall-right, narrative in the short column. Round 11: Mono set labels; four pairwise overlaps labelled (Timely care, Affordable, Trust, Fair price); centre VBC named and echoed by a callout-ink line in the short column. Contrast (2026-10-06): 1 Magenta text element(s) on White changed to Highlight Blue (emphasis, 6.28:1) so the slide passes at every density.",
+      "pptx": "Same venn geometry as venn/two-text (see that entry). Round 11: Mono set labels; four overlap labels; callout-ink subhead in short column. Contrast: change ink callout (#F900D3) to emphasis (#0047FF) on those 1 element(s)."
     },
     {
       "key": "venn/three-bullets",
