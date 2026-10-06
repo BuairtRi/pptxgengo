@@ -4,6 +4,11 @@ Use these controls with a V11 source lock. Existing projects retain their pinned
 source; earlier sources without density tokens reject the new options. Inspect
 the installed template and preview before adjusting density.
 
+Upgrade a YAML project with `pptxgengo design project migrate --project /path/to/deck`.
+Use `--dry-run` first to check compatibility and compiler fit. The command preserves
+the old lock and changes only the pin after successful validation. It reports
+custom-template incompatibilities; build and native-review the upgraded deck.
+
 ## Edit one slide
 
 Put these fields beside `template` and `content` in the slide YAML:

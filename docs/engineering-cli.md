@@ -35,21 +35,25 @@ sidecars do not retain original asset IDs, URLs, or licensing records. Registry
 membership is not a license or approval assertion; confirm those records before
 external publication.
 
-To intentionally re-pin an existing project, preserve the old lock before
-initializing the new one. The default lock path is shown here; if `toolchain`
-declares a different `lockfile` path in `deck.yaml`, move that file instead.
-Review the diff and run `project check` before building:
+To upgrade an existing YAML project to the current V11 source:
 
 ```bash
-mv ./my-project/toolchain.lock.json ./my-project/toolchain.lock.json.pre-repin
-pptxgengo design project init --project ./my-project --bundle v10 \
-  --engine wmds-go-foundation.v2
-pptxgengo design project check --project ./my-project
+pptxgengo design project migrate --project ./my-project --dry-run
+pptxgengo design project migrate --project ./my-project
 pptxgengo design project build --project ./my-project
 ```
 
-`project init` writes a lock only when the configured lock path is absent. It
-does not migrate or replace a prior lock automatically.
+`project migrate` validates template compatibility and compiler fit against the
+target before changing anything. Successful migration preserves the exact old
+lock beside the configured lock as `.pre-migrate-<hash>`, then atomically replaces
+the pin. Dry runs and failed validation leave the lock unchanged. It defaults to
+V11; use `--bundle` or `--engine` for an explicit target. Repeating an already
+current migration creates no extra backup. YAML copy, template definitions and
+existing PowerPoint files are not rewritten. Custom ancestry or revision
+incompatibilities are reported for repair. Build and native-review the updated
+deck; old visual acceptance does not qualify its new rendering.
+
+`project init` remains the command for a project without a lock.
 
 ## Inventory an existing PowerPoint deck
 

@@ -1,12 +1,17 @@
 # WMDS Go presentation authoring
 
-`pptxdesign` loads the current v7 source library, resolves pinned fonts, grids,
+`pptxdesign` loads the current V11 source library, resolves pinned fonts, grids,
 frames and artwork, and writes editable PowerPoint objects. Normal generation
 runs in Go. PowerPoint rendering is the native review step.
 
 The [engineering command reference](../../docs/engineering-cli.md) covers
 content-first matching, aliases/capacity, asset discovery/registration, slide
 mutations/swaps, staged review packets and source inventories.
+
+Upgrade an existing YAML project with `pptxgengo design project migrate --project
+/path/to/deck`. Add `--dry-run` to validate without changing its lock. The command
+checks compatibility and compiler fit first, backs up the old lock, and changes
+only the pin. Follow with `project build` and native visual review.
 
 ### Local native rendering (macOS)
 

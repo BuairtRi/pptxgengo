@@ -1,11 +1,15 @@
 # Current West Monroe presentation release
 
-The current source package is **0.1.0-local.20/v11**. Its production gallery and
+The current source package is **0.1.0-local.21/v11**. Its production gallery and
 SQLite discovery index cover all 649 source templates (648 active, one deprecated).
 The gallery includes 352 freshly reviewed PowerPoint specimens and 297 inherited
 previews verified by exact composition and visible dependency comparison.
 The package contains one production bundle, selected by
 `release/default-bundle.txt`.
+
+Local.21 adds `project migrate`: target compatibility and compiler fit checks,
+`--dry-run`, a preserved old lock and atomic re-pinning. The V11 gallery/source
+are unchanged from local.20. Rebuild and native-review each migrated deck.
 
 The asset index includes **1,204 variants** and all **521 original photos** in
 West Monroe Photos, with their existing descriptive sidecars. The visual asset
@@ -113,3 +117,5 @@ Required: Go 1.27.1+, Python 3 and registered branding files (set
 requires local PowerPoint. Generation itself runs in Go.
 
 The [local.20 qualification](qualification-local20.json) records density checks, source/bound sweeps, native review, documentation integrity, package verification and the global installation.
+
+[Local.21 migration qualification](qualification-local21.json) records the focused migration tests and installed command checks.

@@ -1,0 +1,77 @@
+{
+  "schema": "pptxgengo.local-release-qualification.v1",
+  "version": "0.1.0-local.21",
+  "date": "2026-10-06",
+  "change": "project migrate with prevalidation, dry run, preserved old lock and atomic re-pinning",
+  "source_revision": "wmds-library.v11",
+  "source_commit": "3c56d842ba3abb5f24eb33cf0082be7a7a67f116",
+  "inherited_gallery_qualification": "qualification-local20.json",
+  "source_and_gallery_unchanged": true,
+  "focused_tests": {
+    "deckproject_migration": {
+      "passed": true,
+      "seconds": 4.295
+    },
+    "cli_migration": {
+      "passed": true,
+      "seconds": 2.105
+    }
+  },
+  "test_scope": "V5 to V11; dry run; exact old lock and YAML preservation; repeat; busy/missing target/template/fit failures; CLI defaults and missing lock",
+  "installed_probe": {
+    "passed": true,
+    "dry_run": {
+      "schema": "pptxgengo.project-migration.v1",
+      "status": "ready_to_migrate",
+      "from": "wmds-library.v11",
+      "to": "wmds-library.v11",
+      "fit": "compiler_checks_passed_arbitrary_content_unqualified",
+      "native": "review_required",
+      "next_action": "Run project build, then native render and review before using the updated deck."
+    },
+    "migration": {
+      "schema": "pptxgengo.project-migration.v1",
+      "status": "migrated",
+      "from": "wmds-library.v11",
+      "to": "wmds-library.v11",
+      "backup": "toolchain.lock.json.pre-migrate-143c823ac5b4",
+      "fit": "compiler_checks_passed_arbitrary_content_unqualified",
+      "native": "review_required",
+      "next_action": "Run project build, then native render and review before using the updated deck."
+    },
+    "check": {
+      "deck_id": "editable-project",
+      "native_review": "not_performed",
+      "schema": "pptxgengo.deck-document.v1",
+      "slides": 2,
+      "status": "source_and_pins_checked"
+    },
+    "old_lock_preserved": true
+  },
+  "installed_binaries": [
+    {
+      "path": "bin/pptxgengo",
+      "sha256": "39100ea33c51cfd50714c302ff4a228223adbc0189842e09a875b896ea24d539",
+      "passed": true
+    },
+    {
+      "path": "bin/pptxdesign",
+      "sha256": "764f32c3168ff3d5566f400eb662920ac62d83f833cca37717e242cbee41df53",
+      "passed": true
+    },
+    {
+      "path": "bin/wmdsdocs",
+      "sha256": "c54866dd193acaaaaccd948651f6b19bf3d135b615d66f44a5f7cefa8b616afe",
+      "passed": true
+    }
+  ],
+  "installer": {
+    "passed": true,
+    "validated_templates": 649,
+    "validated_artifact_links": 1946,
+    "validated_package_files": 5151
+  },
+  "package_status": "globally_installed",
+  "existing_sample_decks_modified": false,
+  "limitation": "Does not rewrite custom compositions or content; incompatible templates fail with the old lock unchanged. Rebuild and native-review migrated decks."
+}
