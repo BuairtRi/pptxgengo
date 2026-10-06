@@ -60,6 +60,6 @@ Index each source as you read it: a stable ID, where it is, what it contains, wh
 
 When a new meeting or document arrives, add it as a source, identify the claims and page IDs it affects, and record changes to earlier decisions. A suggestion made in a discussion is not a confirmed client fact until someone confirms it.
 
-Internal win logic lives in `project.md`. `audience-context.md` describes the readers without steering a reviewer toward our conclusion.
+Internal win logic lives in `win-strategy.md`, linked as `context.win_strategy`; no review packet ever includes it. `audience-context.md` describes the readers without steering a reviewer toward our conclusion.
 
 It is fine to stop after framing, value work or win themes. Save the state and the next step without forcing an outline.

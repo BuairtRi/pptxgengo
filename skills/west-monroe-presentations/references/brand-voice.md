@@ -1,6 +1,6 @@
 # West Monroe brand voice
 
-Every page of a West Monroe deck is written in this voice. Ri's personal voice ([ri-slide-voice.md](ri-slide-voice.md)) applies on top of it by default. Read both before writing slide copy.
+Write every page in this voice, with [Ri's slide voice](ri-slide-voice.md) on top of it. Read both before writing slide copy.
 
 ## The idea behind the voice
 

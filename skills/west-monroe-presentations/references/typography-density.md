@@ -42,7 +42,11 @@ Sizes below are points; leading also follows the pinned source tokens.
 | Card title (`subhead`) | 18 | 16 | 14 |
 | Body | 14 | 12 | 11 |
 | Small/card copy | 12 | 11 | 10 |
+| Table cell body | 14 | 12 | 10 |
 | Small table cell | 12 | 10 | 8 |
+| Label | 9 | 8 | 8 |
+| Numbered-list numeral | 14 | 12 | 11 |
+| Long metric badge | 13 | 12 | 11 |
 
 The normal reading floor is 8 pt. Fixed circle and numeral-tile text retain
 their defined sizes; source/legal typography retains its own rules. The
@@ -51,11 +55,28 @@ designer defines two smaller utility exceptions: Gantt period sublabels at
 table row heights and title/body boundaries retain their authored geometry.
 Density is a typography control; choose another layout when geometry needs to change.
 
+List wrapping, spacing and role metrics follow the selected tier; fixed card,
+table and frame allocations do not grow. A two-line title must still fit the
+selected frame's title contract. `header_density: compact` can reduce its type,
+but does not move the body boundary or raise a one-line title allowance.
+Numbered tabs, item labels, Gantt titles and heat-map reference labels use their
+designer roles. Fixed road/fork pins, Venn point dots and numeral tiles keep their
+defined sizes. Decorative quote marks follow the source's role formula and
+minimum size rather than arbitrary per-card overrides.
+
 Ten agenda/schedule and lead-question templates allow Comfortable only.
+These are `agenda/schedule`, `agenda/schedule-right`, `agenda/schedule-tall`,
+`agenda/schedule-nav`, `agenda/schedule-split`, `key-message/lead-questions`,
+`key-message/lead-questions-icons`, `key-message/lead-questions-split`,
+`key-message/lead-questions-two` and `key-message/lead-questions-nav`.
 Their source-owned `densityLimit` cannot be relaxed in project YAML.
 `density.prohibited_tier` rejects an explicit unsupported tier;
 `density.limit_exhausted` means automatic fitting reached the template limit.
 Shorten the copy, split the slide or select another stock template.
+
+Do not author `densityLimit` as a public slide setting or try to relax compiled
+`source_density_limit` metadata. The CLI resolves stock ceilings from the pinned
+source. They limit body density; header density remains independent.
 
 ## Build and inspect
 

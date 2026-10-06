@@ -1,11 +1,11 @@
 # Engineering command reference
 
-These examples target the `0.1.0-local.19/v10` package and use its `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
+These examples target the current `0.1.0-local.21/v11` package and use its `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
 
 ## Wrapper defaults and project pins
 
 The installed wrapper reads `release/default-bundle.txt` for the default
-published library (`v10` in local.19). Bundle-backed `pptxgengo design` commands
+published library (`v11` in local.21). Bundle-backed `pptxgengo design` commands
 receive that bundle path and the Go engine `wmds-go-foundation.v2` unless you
 pass explicit flags. Project commands use the project lock: `project init`
 creates a new lock against the published default and candidate engine; later
@@ -14,7 +14,7 @@ source-inventory, asset-gallery, and project commands do not receive a wrapper
 bundle or engine injection.
 
 For `library-find`, `library-inspect`, and `library-preview`, the wrapper also
-supplies the v10 SQLite index and catalog path when `--index` is omitted. If you
+supplies the V11 SQLite index and catalog path when `--index` is omitted. If you
 pass a custom index, pass its matching `--gallery` explicitly when verified
 preview paths are needed.
 
@@ -26,8 +26,9 @@ focused template search, set `--kinds template`; asset summaries use
 `--kinds asset --summary --asset-kind icon|photo|graphic|logo` and rank
 curated terms and filename-derived tags with partial matches.
 
-The photo registry includes six additional images from the supplied local
-`~/Documents/branding/West Monroe Photos` collection. Their descriptive
+The photo registry covers all 521 originals in the local
+`~/Documents/branding/West Monroe Photos` collection, within 523 photo catalog
+records and 1,204 total asset variants. Their descriptive
 sidecars supply the subject labels and the checked-in registry pins the local
 relative path and current file hash. The bundled brand-assets inventory lists
 opaque stock filenames but has no mapping to these renamed files, and the

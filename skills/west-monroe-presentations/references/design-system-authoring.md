@@ -1,16 +1,8 @@
-# Modern West Monroe design-system authoring
+# Design-system one-slide routes
 
-Use the installed packaged route `pptxgengo design`. It defaults to the frozen
-v5 design library and the Go typography engine `wmds-go-foundation.v2`. It uses
-the installed release's library, fonts and registered assets. No repository
-checkout, mutable source path or separate AppleScript is required for a normal
-build. The retained design library is v5.
-This route does not alter the legacy `template`, `compose`, `adapt`, `scene`,
-`component` or `lib` workflows.
+For a full deck, use the [project workflow](project-and-resume.md) and [template selection](template-selection.md). Use the direct routes below for single-slide work.
 
-For source-managed decks, use the [project workflow](project-and-resume.md) and
-[unified discovery/alternatives](template-selection.md). The direct JSON routes
-below remain available for bounded one-slide work.
+`pptxgengo design` uses the installed release's V11 design library, the Go typography engine `wmds-go-foundation.v2`, bundled fonts and registered assets. It needs no repository checkout. Resolve the bundle and gallery from `design_system_default` in `pptxgengo paths`.
 
 ## Find a design and inspect its contract
 
@@ -22,91 +14,65 @@ pptxgengo design library-catalog --template-keys architecture/layers-nav
 pptxgengo design asset-catalog
 ```
 
-The current library size and lifecycle counts come from `design library-catalog`.
-The gallery
-hides the deprecated design by default and identifies its replacement. Choose a
-family/layout that supports the intended argument and content density. Compare
-its source and changed-content specimens, then download the chosen content or
-illustrated slide. The catalog exposes exact named slots, kinds, array
-cardinalities, source identity and revision metadata. The two sample slides were
-reviewed in PowerPoint; their acceptance does not prove that any replacement copy
-will fit.
+- The catalog lists each design's named slots, kinds, array counts, source identity and revision.
+- The gallery hides deprecated designs and names their replacements.
+- Choose a design that suits the argument and content density. Look at its preview before copying its files.
+- A reviewed specimen does not show that your copy will fit. Build and render it.
 
-## Fill a template from one-slide content
+## Fill a template
 
-Download `source-values.json` or `alternate-values.json` from a gallery entry.
-The file is a `pptxgengo.wmds-template-document.v1` document containing one bound
-slide. Change its explicit content and retain its template key. Keep
-`content_kind:synthetic_example` for illustrative copy; set
-`content_kind:supplied_content` when using the user's supported content. Use a new
-output directory:
+Copy `source-values.json` from a template's gallery folder (`catalog/design-system/<template-key>/` under `design_system_default`) (a one-slide `pptxgengo.wmds-template-document.v1` document). Edit the content, keep the template key, and build to a new directory:
 
 ```sh
-pptxgengo design template --spec alternate-values.json --out /tmp/wm-slide-new
+pptxgengo design template --spec source-values.json --out /tmp/wm-slide-new
 ```
 
-This route fills the named content contract. Supply every required slot and all
-fixed-array keys; absent content is not taken from the source example. Keep value
-kinds correct: strings/rich text, numbers and booleans remain distinct. Arrays
-have exact source item counts and order; stable caller keys preserve native
-identities. Table-group column indices, diagram relationships, placement, base
-styles, frame geometry and fixed artwork are structural. Content values do not
-implicitly move or resize these features.
+- Set `content_kind: supplied_content` for real content; keep `synthetic_example` for illustrative copy.
+- Supply every required slot and every fixed-array key. Missing content is not filled from the example.
+- Keep value kinds exact: strings or rich text, numbers and booleans.
+- Arrays have exact item counts and order. Stable keys preserve native identities.
+- Content values never move or resize structure: table columns, diagram relationships, placement, base styles, frame geometry and artwork are fixed. Geometry, colors and font sizes are not content slots.
+- Use `density`, `header_density` and `auto_density` on the slide object for
+  supported typography changes, outside its `values`. See [typography density](typography-density.md).
+- `cards/3` and `cards/4` take typed values: `eyebrow`, `title` and `cards` under `values`, with exactly three or four cards. Each card needs a unique `key`, `title` and `body`; array order sets card order.
+- Navigation variants need 2–6 keyed labels and an `active` key.
+- Photo and icon fields take registered asset IDs from `design asset-catalog`.
+- Quadrant coordinates, table metrics and checkbox booleans follow their catalog kinds and bounds.
+- Names, quotes and metrics in gallery example files are synthetic. Never present them as client facts.
 
-Two retained card-row designs, `cards/3` and `cards/4`, use typed values instead
-of the generic `slots`/`keys` projection. Their downloaded content supplies
-`eyebrow`, `title` and `cards` directly under `values`. Keep exactly three or four
-cards respectively; each card requires a unique authored `key`, `title` and
-`body`, and array order controls the card order. The gallery shows these field
-descriptions and exact counts. Preserve the downloaded typed structure.
+## Build an illustrated composition
 
-Navigation variants additionally require 2–6 keyed labels and an active key
-naming one item. Select registered photo/icon assets when a contract exposes
-those fields. Use `design asset-catalog` to inspect available IDs. Qualitative
-quadrant coordinates, table metrics and checkbox booleans follow their catalog
-kinds and renderer bounds. Geometry, colors and font sizes are not general
-content slots.
-
-Keep synthetic claims, metrics and sample identities marked as illustrative until
-replaced by supported content. Source-authored client names, quotations and
-metrics may be synthetic specimen copy; do not present them as client facts.
-
-## Keep an illustrated composition editable
-
-Download `source.foundation.json` or `alternate.foundation.json` to retain the
-exact native composition behind a preview. These are one-slide
-`pptxgengo.wmds-foundation.v1` documents. They include explicit editable scene
-nodes, illustrated thumbnails/scorecards and any documented composition
-amendments, rather than a flattened screenshot.
+When the composition itself is the starting point, copy `source.foundation.json` from the same gallery folder (a one-slide `pptxgengo.wmds-foundation.v1` document with editable scene nodes) and build it:
 
 ```sh
-pptxgengo design build --spec alternate.foundation.json --out /tmp/wm-composition-new
+pptxgengo design build --spec source.foundation.json --out /tmp/wm-composition-new
 ```
 
-Use this route when the composition itself is the starting point. Change only
-supported scene properties and preserve source provenance. Filling a template's
-content contract and building its illustrated composition are separate actions;
-a thumbnail's explicit example diagram is present in the foundation download.
-A content binding alone does not synthesize that illustration from prose.
+Change only supported scene properties and keep source provenance. Filling a content contract does not generate a template's illustration from prose; the illustration lives in `source.foundation.json`.
 
-Reusing an output directory is rejected; choose a new directory for each build.
+Every build needs a new output directory.
 
 ## Typography and final review
 
-Normal generation and layout run in Go from bundled font files. Output uses the
-normal **IBM Plex Sans** and **IBM Plex Mono** family names, including applicable
-faces; it does not require measurement aliases. No live PowerPoint character
-capture is required for each deck. Native captures support engine calibration and
-reference qualification; they are not a permanent normal-build dependency.
+- Layout runs in Go from bundled font files and outputs normal **IBM Plex Sans** and **IBM Plex Mono** names. No PowerPoint capture is needed per deck.
+- A successful build does not guarantee native font selection or that the copy fits. Open the deck in PowerPoint at presentation size, and review a native PDF export before sharing when visual fidelity matters.
+- Review automatic density changes and use supported whole-slide presets when
+  they preserve reading quality. If overflow remains, edit the argument, choose
+  a roomier template or split the slide. Do not shrink individual elements,
+  truncate material copy or hide measured failures.
+- Designs do not support variable row counts, automatic continuation or unrestricted layout beyond their contracts. Say so in delivery notes when it matters.
 
-The Go engine measures wrapping and fixed content capacity. A
-successful build is useful evidence, but it does not guarantee native font
-selection or arbitrary replacement-copy fit. Open and inspect the final deck in
-PowerPoint at presentation size, and review a native local-printing PDF export
-before sharing when visual fidelity matters. Resolve overflow by editing the
-argument, selecting a roomier template or splitting the slide. Do not silently
-shrink fonts, truncate copy or hide measured failures.
+## Recent source capabilities
 
-The release's paired specimens qualify those reviewed samples. They do not add
-variable row counts, automatic continuation, unrestricted layout or a general
-content envelope for every design. Preserve that distinction in delivery notes.
+The gallery includes the workshop layouts and new pillar, branching-roadmap and
+narrative-roadmap variants. Branching diagrams use editable native `roadfork`
+shapes; use their stock content contracts rather than reconstructing their pins
+or routes. Normal `road` diagrams remain available independently.
+
+The two six-pillar Magenta variants use `numTile: "callout"`: a fixed 27 × 27 pt
+Magenta square with a 14 pt IBM Plex Mono Semibold Grounded numeral and a 9 pt
+gap to the title. The tile and numeral remain fixed across density tiers;
+`numInk` is ignored when the tile is set. If deriving a scene card, retain its
+inline numeral and title, with no title band, and preserve its allocation.
+Inspect the current stock source and docs board for component arguments and
+color rules; don't copy historical Magenta/White small-text treatments.

@@ -1,91 +1,126 @@
-# Human-editable source format
+# deck.yaml source format
 
-One ordered `deck.yaml` is authoritative. YAML comments are permitted; duplicate keys, YAML merge keys, anchors, aliases, unknown runtime fields and undeclared values are rejected. Build reports point to source locations. Edit the source, run `project check`, then build an immutable new version.
+`deck.yaml` and the files it references are the deck's source. Edit the source, run `project check`, then build. Errors report the file, line, column and field. To change slides, follow [editing slides](editing-slides.md).
 
-## Shared template slide
+YAML comments are allowed. Duplicate keys, anchors, aliases, merge keys, custom tags, implicit dates and unknown fields are rejected. Each file holds one YAML document.
+
+## The index
 
 ```yaml
 schema: pptxgengo.deck-document.v1
-id: controls-deck
-title: Review controls
+id: client-deck
+title: Phase 2 proposal
 year: 2026
 toolchain:
   lockfile: toolchain.lock.json
+context:
+  project: project.md
+  audience: audience-context.md
+  outline: outline.md
+  sources: sources
+  claims: claims.md
+assets:
+  client-logo:
+    path: assets/originals/client-logo.png
+    description: Client logo supplied by the operator
+local_templates:
+  phases-four: templates/phases-four.yaml
 slides:
-  - id: three-controls
-    content_kind: supplied_content
-    template: {scope: shared, id: cards/3}
-    values:
-      eyebrow: Delivery controls
-      title: Three controls make review repeatable
-      cards:
-        - key: evidence
-          title: Trace evidence
-          body: Link each claim to the material supporting it.
-        - key: review
-          title: Review visibly
-          body: Give reviewers the actual content and audience context.
-        - key: maintain
-          title: Keep the source
-          body: Record the decisions in the maintained deck project.
+  - slides/001-cover.yaml
+  - slides/002-situation.yaml
+sections:
+  - {id: opening, title: Opening, before_slide_id: cover}
+  - {id: approach, title: Approach, before_slide_id: approach-divider}
 ```
 
-These statements are illustrative workflow copy. For client claims, provide indexed evidence and qualifications. `content_kind` distinguishes `supplied_content` from `synthetic_example`; it does not by itself verify a claim.
+- `slides` is the page order. Entries are slide file paths (after `project split`) or inline slide objects.
+- `local_templates` maps IDs to template files or inline definitions.
+- `context` keys are limited to `project`, `audience`, `outline`, `sources`, `claims`, `composition_log`, `decisions`, `win_strategy` and `state`. Linked files invalidate approvals when they change; a directory (such as `sources`) tracks every file in it. `state` names the generated `state.json`.
+- `sections` group slides in PowerPoint; manage them with `project section` ([editing slides](editing-slides.md#sections-and-dividers)).
+- Builds deduplicate media and shrink JPEGs to 220 ppi at quality 90 by default. To change that, set `media_optimization` with all six fields (`deduplicate`, `resize_jpeg`, `compression`, `pixels_per_inch`, `jpeg_quality`, `min_savings_percent`); `resize_jpeg: false` keeps original JPEG bytes. Vector and lossless images are never resized.
+- All paths are project-relative. Absolute paths, URLs, `..` and symlinks are rejected.
 
-Canonical shared template IDs are opaque keys such as `cards/3` or `architecture/layers-nav`, not scenario names guessed from a title. Optional shared `revision` is the decimal template revision; the toolchain lock separately pins the source bundle/files and engine. `values` must match that template's exact typed or named-slot contract. No missing-content specimen fallback exists.
+## A slide
 
-## Assets and local templates
-
-`assets` maps authored IDs to a registered `registry_id` or an original project-relative `path` and optional SHA256/provenance. Local file assets live inside the project; originals are retained independently from generated deck media. Slide values and local nodes refer to authored IDs. Shared template media fields use the contract's registered asset keys; inspect the contract before assuming project-local replacements are supported.
-
-`local_templates` defines reusable project designs independently from visible slide copy. Each declares:
-
-- frame reference: `wmds/frame/{none,left,right,nav}-{compact,tall}`;
-- optional `frame_options` for declared split/navigation/surface/source allocations;
-- grid reference: `wmds/grid/12-columns`;
-- typed content `zones`, with required/schema/capacity notes;
-- stable node IDs and bindings to slide values.
-
-Node kinds are `text`, `box`, `image`, `rule`, `group`, `component`, `composite`. Placement uses body/rail/short_body/tall_body zones and an explicit rectangle or grid span. Local title/eyebrow/source roles populate frame chrome. The component adapter set is bounded: consult the current checker/CLI; a catalog source example does not create an arbitrary runtime component adapter.
-
-To change shared geometry, create a local design with provenance pointing to its parent and reason. Preserve original shared identity and pin. A local template revision is the canonical definition SHA256. Editing a reusable local definition affects its dependent slides and approval hashes. If only one page should change, clone its local definition to a new stable local ID.
-
-The compiler expands YAML into the native foundation document and Go layout engine. A maintained project keeps authored source, lock, assets, context and generated receipt/object map together. Bitwise reproduction depends on pinned source, fonts/assets, runtime/executable and build inputs; it is not promised across arbitrary platforms/toolchains.
-
-## Deliberate local design changes
-
-```sh
-pptxgengo design project fork --project ./client-deck --template editorial-photo --as editorial-detail --slides page-detail --reason 'Give the detail page more text space'
-pptxgengo design project detach --project ./client-deck --bundle v5 --slide page-detail --as detached-detail --reason 'Adjust this source layout locally'
+```yaml
+id: situation
+template: {scope: shared, id: cards/3}
+content_kind: supplied_content
+brief: briefs/situation.md
+evidence_refs: [C03]
+notes_file: notes/situation.md
+hidden: false
+density: comfortable
+header_density: comfortable
+auto_density: true
+content:
+  eyebrow: What we heard
+  headline: Your PMs spend [[two days]] on each PRD while interviews go unsynthesized
+  cards:
+    - {key: prd, title: PRDs, body: Each takes about two days to write.}
+    - {key: interviews, title: Interviews, body: Recordings pile up unsynthesized.}
+    - {key: roadmap, title: Roadmap, body: Priorities go to whoever argues hardest.}
+bindings:
+  eyebrow: /eyebrow
+  headline: /title
+  cards: /cards
 ```
 
-`fork` clones a local definition and keeps its frozen ancestor snapshot; selected
-slides must belong to the parent design. `detach` converts a supported generic
-source-scene shared slide to a reusable local definition, retains authored values,
-frame chrome and key identity, and records source pins. Typed retained card rows
-and unsupported chrome/out-of-zone geometry remain shared and are rejected with
-an explicit limit. A rejected conversion does not overwrite the source deck.
-Inspect the result and run `project check` before the next build.
+| Field | Meaning |
+| --- | --- |
+| `id` | Stable slide ID; survives reordering |
+| `template` | `{scope: shared, id: KEY}` for a library template, or `{scope: local, id: ID}` for a local template. Optional `revision` pins a shared revision. |
+| `content_kind` | `supplied_content` for real copy, `synthetic_example` for placeholders. It labels content; it doesn't verify claims. |
+| `content` + `bindings` | Readable copy, and the map from each content key or pointer to the template slot it fills. Every content value must be bound; required slots and array counts still come from the template. `project scaffold --stock` writes a complete map. |
+| `values` | Template slot values in the template's own shape. Used by local templates and for slots not covered by `bindings`; detached local templates can also use `content` and `bindings`. |
+| `brief` | Project-relative path to the slide's internal brief |
+| `evidence_refs` | Claim IDs from `claims.md` that the slide relies on. `project check` fails on an unknown ID when `context.claims` is linked. |
+| `notes_file` or `notes` | Speaker notes (Markdown file, or inline text); not both |
+| `draft_review` | Optional internal status tab and off-slide review card; see [Draft Review Notes](draft-review-notes.md) for fields and client-export removal |
+| `hidden` | `true` hides the slide in PowerPoint |
+| `density` | Entire slide body: `comfortable`, `compact` or `dense`. Omit to start at the template's authored tier. |
+| `header_density` | Header typography tier, independently defaulting to `comfortable`. |
+| `auto_density` | V11 defaults to `true`: try denser body tiers when needed, with warnings. `false` keeps the requested tier. |
 
-Mutations preserve an exact predecessor YAML snapshot and a decision receipt.
-They currently rewrite YAML formatting/comments through the typed model; use
-the retained predecessor for any editorial comments that need recovery. These
-operations create local source changes, not shared-library patches or implicit
-qualification.
+- Get template keys from search or the catalog; never guess them.
+- Missing values are never filled from template examples.
+- `[[…]]` in a title applies the slide's highlight mark to one to four words, once per slide.
+- Image fields take a project asset ID (`photo: client-logo`) or a library asset key from `design asset-catalog`. Use `project:client-logo` if the two collide.
+- Density is slide metadata, outside `content`, `values` and `bindings`. Read
+  [typography density](typography-density.md) for role scales, limits and warnings.
+  These fields do not alter template geometry or fixed item counts. Edit them
+  directly in slide YAML; the `project edit` patch format does not include them.
 
-## Local component adapters
+## Assets
 
-Local definitions can use the component adapters that the selected compiler and
-bundle support, which may include `funnel`, `cycle`, `road`, `gauge`, `bracket`,
-`scorelegend`, `venn` and `maturity`. Check the active toolchain's checker or
-help for the adapter list; catalog availability alone does not establish an
-adapter. Character limits in example projects are local source constraints, not
-a general content-fit guarantee. Some bundles expose slim frames; inspect the
-selected bundle before assuming a frame variant exists.
+`assets` maps your IDs to a project-relative `path` (or a library `registry_id`), with optional SHA256 and provenance. Keep originals inside the project; builds never rewrite them. A derived image (cropped, resized) needs a `pptxgengo.asset-derivation.v1` JSON receipt naming the source asset, both hashes and the operation.
 
-Use executable IDs such as `wmds/component/venn` and the four special typed
-definitions listed in the runtime reference. Semantic catalog names such as
-`diagram.cycle` are discovery identities, not universal executable definition
-IDs. Local allocations contain the complete diagram ink and labels; the
-compiler reserves maturity endpoint stroke padding and plans label headroom
-inside the declared component allocation.
+## Local templates
+
+Design custom pages with [custom slide design](custom-slide-design.md) first. Start from `project scaffold --bundle v11 --template KEY --reason R` when a shared template is close ([editing slides](editing-slides.md#change-a-slides-layout)); use the project's locked bundle for a historical project.
+
+A local template declares:
+
+- `frame`: `{scope: shared, id: wmds/frame/<rail>-<footer>}`, where rail is `none`, `left`, `right` or `nav` and footer is `compact`, `tall` or source-supported `slim`. Optional `frame_options` sets `title_lines`, `source_lines`, header density, nav and split composition; `frame_chrome` keeps custom whiteboard geometry and emphasis. Use only allocations supported by the pinned source; these local-template options do not automatically modify stock frames or expand them during fitting.
+- `grid`: `{scope: shared, id: wmds/grid/12-columns}`.
+- `zones`: typed content slots with `role`, `required` and a JSON `schema` (single type, properties, required, items, min/max, enum/const, description). Roles `slide-title`, `eyebrow`, `source` and `nav` fill the frame; every other zone needs a node binding.
+- `nodes`: each with a stable `id`, a `kind`, and `placement` in the `body`, `rail`, `short_body` or `tall_body` zone by grid `span` (`{start, count, y_pt, height_pt}`) or `rect`.
+
+Node kinds:
+
+| Kind | Use |
+| --- | --- |
+| `component` or `composite` with `definition: {scope: shared, id: wmds/component/<type>}` | Any design-system component. Prefer these. |
+| Typed `text.block`, `card`, `data.metric`, `richtext` | Labeled text block, single card, metric, rich text |
+| `text`, `box`, `image`, `rule`, `group` | Simple elements. Never build a whole page from these. |
+
+Component `<type>` is the scene node type, not the catalog name (`stepper`, not `seq.stepper`). Accepted types:
+
+`text`, `textblock`, `bullets`, `ol`, `list`, `schedule`, `grouplabel`, `numhead`, `colhead`, `strongnum`, `pullquote`, `imageframe`, `logo`, `art`, `square`, `mark`, `thumbnail`, `table`, `chart`, `card`, `cardrow`, `metric`, `callout`, `feesummary`, `block`, `frame`, `chevron`, `textarrow`, `connector`, `container`, `cylinder`, `node`, `layerrow`, `matrix`, `beforeafter`, `stepper`, `vstepper`, `phasehead`, `phases`, `timeaxis`, `pyramid`, `funnel`, `cycle`, `road`, `roadfork`, `gauge`, `bracket`, `scorelegend`, `gantt`, `swimlane`, `legend`, `pod`, `role`, `person`, `orgchart`, `governance`, `logoslot`, `device`, `plane`, `dotmap`, `teamcurve`, `venn`, `maturity`.
+
+- Component arguments take literal values or `{binding: zone}`. They cannot set `type`, `id`, `x`, `y`, `w` or `h`; the placement sets the allocation. List-like components (bullets, tables, steppers, gantt and similar) take their height from content.
+- Diagram-internal geometry (stage positions, connector endpoints) is set explicitly in the arguments.
+- Arrays with item identities need matching `keys` entries.
+- The planned output must fit the allocation, or the build fails.
+- Images: PNG, JPEG or simple self-contained SVG, with `cover` or `contain`.
+- For working examples, see `examples/local-composition` (`venn`, `maturity`, `road`) under the release `root`. For each component's arguments, look at a shared template that uses it (`library-inspect`) or the design system's `source/components/v0/components.json` under `design_system_default` from `pptxgengo paths`.

@@ -30,7 +30,7 @@ Deck frame
 
 Value and differentiation
   Outcomes and metrics (baseline / target / illustrative):
-  Internal win logic (never shown to reviewers or the client):
+  Internal win logic: keep in win-strategy.md (context.win_strategy), never here
   Client-facing reasons to choose West Monroe, with proof:
   Unresolved value or proof questions:
   Links to seller-skill work:
@@ -132,8 +132,52 @@ Open issues and private rationale:
 
 ## `claims.md`
 
-| Claim ID | Exact claim or metric | Fact / inference / hypothesis / illustrative | Source IDs and locations | Basis, period, units | Uncertainty | Visible qualification | Validated by |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+The CLI checks every slide's `evidence_refs` against this file when `deck.yaml` links it as `context.claims`. Give each claim its own heading whose text is exactly the claim ID, or add `{#id}` to the heading. Use no other `##` headings in this file: any `## Word` heading becomes a claim ID.
+
+```markdown
+# Claims
+
+## C03
+
+- **Claim:** PMs spend about two days writing each PRD.
+- **Type:** fact (client-reported)
+- **Sources:** S02 discovery interview, 12:40–14:10
+- **Basis:** VP of Product's estimate, September 2026; not measured
+- **Visible qualification:** "about", attributed to the client
+- **Validated by:** operator
+```
+
+IDs: letters, digits, `.`, `_`, `-`, starting with a letter or digit. A YAML registry (`schema: pptxgengo.claims.v1` with `claims: [{id, text, source}]`) also works but accepts only those three fields.
+
+## `composition-log.yaml`
+
+Required. Write an entry for every slide, including hidden ones, before building it. `project check` and `build` fail when a slide has no entry, an entry names a slide that no longer exists, or `chosen_template` doesn't match the slide. Keep it at the project root as `composition-log.yaml` (or link another path as `context.composition_log`).
+
+```yaml
+schema: pptxgengo.composition-log.v1
+slides:
+  phases:
+    purpose: Show how the five-week assessment runs and who owns each step
+    relationship: sequence
+    candidates: [lifecycle/three-phases, phases/four, cards/4]
+    chosen_template: phases/four
+    rationale: |
+      Inventory: four stages, each with an owner and one output; ~110 words.
+      Story unit: the stages and their owners must stay together.
+      Search: "assessment phases" (scenario); --structures sequence --items 4 (shape).
+      lifecycle/three-phases: rejected, three phases; the work has four.
+      cards/4: rejected, parallel cards hide the sequence.
+      phases/four: selected, four stages with gates; used as is.
+      Copy changes: none. Variations shown: phases/four vs. stepper composition; Ri chose phases/four for scanability.
+      Render check 2026-10-04: squint, scan, neighbor, text-dump and balance pass.
+    unresolved: []
+```
+
+- Fields: `purpose`, `chosen_template` (the template ID without scope, for example `cards/3` or a local template ID) and `rationale` are required; `relationship`, `candidates` and `unresolved` are optional. No other fields are accepted.
+- Put the full decision record in `rationale`: the content inventory and story units, the searches run, every candidate with why it was rejected or chosen, the decision (as is, variation, edited copy, local derivative, new composition) and what changed, the ladder steps tried and wireframe for custom slides, variations shown and the operator's choice, and the render check.
+- A rejection reason should be about the content's structure or the argument. "Text didn't fit" is acceptable only after a roomier variant, a frame change, tighter copy and a split were tried and recorded.
+- When a page's design changes, rewrite its entry to describe the current decision and add the earlier one to `rationale` as history.
+- Update the log in the same step as any `slide add`, `remove`, `swap` or template change.
 
 ## `reviews/` log entry
 

@@ -1,6 +1,6 @@
 # Narrative and slide copy
 
-Write every page in the [West Monroe brand voice](brand-voice.md) and [Ri's slide voice](ri-slide-voice.md). Read both before drafting copy. This reference covers how to build the argument and write each part of a slide.
+Write every page in the [West Monroe brand voice](brand-voice.md) and [Ri's slide voice](ri-slide-voice.md). Read both before drafting copy.
 
 ## Build the argument before the copy
 
@@ -55,6 +55,8 @@ Each page answers one question the reader has. The title gives the answer; the b
 
 Slides need compressed copy. Compress sentences; keep the reasoning.
 
+Write to the template's slot sizes from the start: `project scaffold --stock` comments and `library-authoring --template KEY` give each slot's approximate characters and lines.
+
 When copy does not fit:
 
 1. Cut repetition, throat-clearing and self-description first.
@@ -63,7 +65,7 @@ When copy does not fit:
 4. Put fewer ideas on the page, or split the idea across two pages, each with its own conclusion title.
 5. Move optional depth to a referenced appendix.
 
-Never solve overflow by removing a material qualification, forcing unequal ideas into equal boxes, or shrinking the type until it is hard to read. If a fixed template would force one of those, choose a different template or composition (see [template selection](template-selection.md)).
+Do not jump to a custom slide to make copy fit; a custom slide is a design decision, not an overflow fix (see [custom slide design](custom-slide-design.md)). Never solve overflow by removing a material qualification, forcing unequal ideas into equal boxes, or shrinking the type until it is hard to read. If a fixed template would force one of those, choose a different template or composition (see [template selection](template-selection.md)).
 
 ### Reading mode
 
