@@ -77,7 +77,7 @@ func orderMappingFields(node *yaml.Node, preferred ...string) {
 }
 
 func orderAuthoredSlide(node *yaml.Node) {
-	orderMappingFields(node, "id", "template", "content_kind", "hidden", "brief", "notes_file", "notes", "content", "values", "bindings", "evidence_refs")
+	orderMappingFields(node, "id", "template", "content_kind", "hidden", "brief", "notes_file", "notes", "draft_review", "content", "values", "bindings", "evidence_refs")
 	orderMappingFields(mappingNode(node, "content"), "headline", "section_label", "source_note")
 }
 

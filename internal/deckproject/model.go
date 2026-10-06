@@ -33,14 +33,15 @@ type AssetFocus struct {
 	Y float64 `json:"y"`
 }
 type Slide struct {
-	ID           string         `json:"id"`
-	Hidden       bool           `json:"hidden,omitempty"`
-	Notes        string         `json:"notes,omitempty"`
-	ContentKind  string         `json:"content_kind"`
-	Template     Reference      `json:"template"`
-	Values       map[string]any `json:"values"`
-	Brief        string         `json:"brief,omitempty"`
-	EvidenceRefs []string       `json:"evidence_refs,omitempty"`
+	ID           string                    `json:"id"`
+	Hidden       bool                      `json:"hidden,omitempty"`
+	Notes        string                    `json:"notes,omitempty"`
+	DraftReview  *wmdesign.DraftReviewNote `json:"draft_review,omitempty"`
+	ContentKind  string                    `json:"content_kind"`
+	Template     Reference                 `json:"template"`
+	Values       map[string]any            `json:"values"`
+	Brief        string                    `json:"brief,omitempty"`
+	EvidenceRefs []string                  `json:"evidence_refs,omitempty"`
 }
 type Zone struct {
 	Role           string         `json:"role"`

@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func TestLibraryV7PublicationInheritedRendering(t *testing.T) {
+func TestLibraryV9PublicationInheritedRendering(t *testing.T) {
 	if testing.Short() {
 		t.Skip("paired exhaustive rendering of every retained native source specimen")
 	}
 	root := filepath.Join("..", "..")
-	previous := filepath.Join(root, "planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle")
-	current := filepath.Join(root, "library/wm-design-system/v7")
+	previous := filepath.Join(root, "planning/wm-design-contracts/v7/intake-20261005-616-frozen/bundle")
+	current := filepath.Join(root, "library/wm-design-system/v9")
 	gallery := filepath.Join(current, "catalog/design-system/index.json")
 	raw, err := os.ReadFile(gallery)
 	if err != nil {
@@ -29,8 +29,17 @@ func TestLibraryV7PublicationInheritedRendering(t *testing.T) {
 			keys = append(keys, entry.Template)
 		}
 	}
-	if len(keys) != 586 {
-		t.Fatalf("retained composition count=%d; want586", len(keys))
+	if index.Entries != 631 || len(index.Designs) != index.Entries {
+		t.Fatalf("published gallery count=%d/%d; want631", index.Entries, len(index.Designs))
+	}
+	if len(keys) != 616 {
+		t.Fatalf("retained composition count=%d; want616", len(keys))
+	}
+	if index.Entries-len(keys) != 15 {
+		t.Fatalf("newly reviewed specimens=%d; want15", index.Entries-len(keys))
+	}
+	if index.Qualification["reviewed_source_specimens"] != float64(631) || index.Qualification["arbitrary_content_qualified"] != false {
+		t.Fatalf("published specimen qualification=%v", index.Qualification)
 	}
 	count, err := VerifyLibraryPublicationRenderInheritance(LibraryPublicationOptions{Bundle: current, PreviousBundle: previous, Year: 2026}, keys)
 	if err != nil {

@@ -246,3 +246,53 @@ visibility metadata. Notes preserve authored text and line breaks (the PPTX
 writer normalizes newlines to CRLF), followed by existing provenance notes.
 Neither a slide brief path nor visible slide copy is substituted for notes.
 Notes, visibility and sections invalidate the relevant approval dependencies.
+
+## Draft Review Notes
+
+A slide can carry an optional `draft_review` overlay independently of its shared
+or local template. Normal builds include the native editable status tab and note
+body. The default `edge` placement keeps the tab at the slide's top-right edge
+and the note body outside the canvas; `pasteboard` puts the full component outside
+the canvas. The component is 234 × 144 pt with an 18 pt status tab.
+
+```yaml
+draft_review:
+  status: wip
+  status_text: Work in progress
+  status_color: kpi.risk
+  owner: Ri
+  due: "10/20"
+  updated: "10/05"
+  notes: |
+    Confirm the source for this claim.
+  placement: edge
+```
+
+Status is one of `notstarted`, `wip`, `complete`, or `qa`. The tab displays the
+selected status label by default. Optional `status_text` overrides that label;
+optional `status_color` independently overrides its color using `kpi.off`,
+`kpi.risk`, `kpi.on`, or `brand.blue`. Custom status text is a single line, at most
+128 bytes, and must fit the tab. Empty status text/color clears the override
+and restores the selected status default. Dates are authored text and must be
+quoted when YAML would otherwise interpret them as dates. Owner, due,
+updated and notes are optional strings. Placement defaults to `edge`. Draft notes
+are internal metadata and are excluded from audience copy review. Client export
+removes the entire native component and its metadata; reviewer, maintainer and
+offline exports retain it. The immutable draft build is preserved.
+
+```sh
+pptxdesign project slide draft-review set --project PATH --id findings \
+  --status wip --status-text 'Work in progress' --status-color kpi.risk --owner Ri --due 10/20 --updated 10/05 --notes 'Confirm source.'
+pptxdesign project slide draft-review set --project PATH --id findings --status qa
+pptxdesign project slide draft-review show --project PATH --id findings
+pptxdesign project slide draft-review clear --project PATH --id findings
+```
+
+`set` preserves omitted fields and initializes a new note with `notstarted`.
+Explicit empty strings clear optional text fields. Repeating an identical `set`
+or clearing an absent note preserves source bytes and produces no decision receipt.
+`clear` removes the entire
+property; `show` emits its current JSON value. Mutations preserve source comments
+and unrelated slide metadata, use the same atomic mutation guard and preimage
+backup as other slide operations, and invalidate the affected build/review inputs.
+Both inline and split source projects are supported. No template fork is needed.

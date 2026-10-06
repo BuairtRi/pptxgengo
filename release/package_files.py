@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -76,3 +77,44 @@ def validate_asset_gallery(directory, registry, photo_snapshot):
     if seen != expected:
         raise ValueError("asset gallery is incomplete")
     return len(items), len(seen)
+
+
+def validate_design_docs(directory, bundle_directory):
+    """Keep the documentation board and native library pinned to the same source."""
+    directory, bundle_directory = Path(directory), Path(bundle_directory)
+    source = json.loads((directory / "SOURCE.json").read_text())
+    bundle = json.loads((bundle_directory / "bundle.json").read_text())
+    if source.get("dirty") is not False or source.get("commit") != bundle["source_commit"]:
+        raise ValueError("design documentation source differs from the qualified native library")
+    html = (directory / "index.html").read_text()
+    for element, path in (("tokens", "tokens/v0/tokens.json"),
+                          ("data", "components/v0/components.json"),
+                          ("frames", "frames/v0/frames.json"),
+                          ("catalog", "templates/catalog.json")):
+        match = re.search(r'<script id="' + element + r'" type="application/json">(.*?)</script>', html, re.S)
+        expected = json.loads((bundle_directory / "source" / path).read_text())
+        if match is None or json.loads(match.group(1)) != expected:
+            raise ValueError(f"design documentation embedded source drift: {element}")
+    catalog = json.loads((directory / "catalog.json").read_text())
+    if catalog != json.loads((bundle_directory / "source/templates/catalog.json").read_text()):
+        raise ValueError("design documentation catalog drift")
+    if source.get("templates") != bundle["template_count"] or len(catalog["templates"]) != source["templates"]:
+        raise ValueError("design documentation template count mismatch")
+    components = json.loads((bundle_directory / "source/components/v0/components.json").read_text())
+    if source.get("families") != len(catalog["families"]) or source.get("components") != len(components["components"]):
+        raise ValueError("design documentation inventory count mismatch")
+    for path in ("changes.json", "CHANGELOG.md", "web-CHANGELOG.md"):
+        if not (directory / path).is_file():
+            raise ValueError(f"design documentation missing: {path}")
+    assets = source.get("assets", [])
+    if len(assets) != len(set(assets)):
+        raise ValueError("duplicate design documentation asset")
+    for name in assets:
+        if not re.fullmatch(r"[0-9a-f]{12}\.(jpg|png|svg|webp|woff2)", name):
+            raise ValueError(f"nonlocal design documentation asset: {name}")
+        if not file_digest(directory / "assets" / name).startswith(name.split(".")[0]):
+            raise ValueError(f"design documentation asset drift: {name}")
+    references = set(re.findall(r"assets/([0-9a-f]{12}\.[a-z0-9]+)", html))
+    if references != set(assets):
+        raise ValueError("design documentation asset references differ from its manifest")
+    return source

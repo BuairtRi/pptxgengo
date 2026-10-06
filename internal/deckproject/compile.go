@@ -176,6 +176,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 			c.Document.Slides = append(c.Document.Slides, doc.Slides...)
 			c.Document.Slides[len(c.Document.Slides)-1].Hidden = slide.Hidden
 			c.Document.Slides[len(c.Document.Slides)-1].Notes = slide.Notes
+			c.Document.Slides[len(c.Document.Slides)-1].DraftReview = slide.DraftReview
 			continue
 		}
 		t := p.Document.LocalTemplates[slide.Template.ID]
@@ -236,7 +237,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 		if e != nil {
 			return c, e
 		}
-		out := wmdesign.SlideSpec{ID: slide.ID, Hidden: slide.Hidden, Notes: slide.Notes, ContentKind: slide.ContentKind, Frame: frame}
+		out := wmdesign.SlideSpec{ID: slide.ID, Hidden: slide.Hidden, Notes: slide.Notes, DraftReview: slide.DraftReview, ContentKind: slide.ContentKind, Frame: frame}
 		if t.FrameChrome != nil {
 			out.LibraryChrome = &wmdesign.LibraryChrome{Emphasis: t.FrameChrome.Emphasis, Whiteboard: t.FrameChrome.Whiteboard, CustomWhiteboard: t.FrameChrome.CustomWhiteboard}
 		}

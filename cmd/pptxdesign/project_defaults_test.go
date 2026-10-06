@@ -47,6 +47,36 @@ func projectDefaultFixture(t *testing.T) string {
 	return root
 }
 
+func copyBundleFixture(t *testing.T, source, destination string) {
+	t.Helper()
+	if err := os.MkdirAll(destination, 0700); err != nil {
+		t.Fatal(err)
+	}
+	entries, err := os.ReadDir(source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		sourcePath := filepath.Join(source, entry.Name())
+		destinationPath := filepath.Join(destination, entry.Name())
+		info, err := os.Stat(sourcePath) // Deliberately materialize historical asset symlinks.
+		if err != nil {
+			t.Fatal(err)
+		}
+		if info.IsDir() {
+			copyBundleFixture(t, sourcePath, destinationPath)
+			continue
+		}
+		data, err := os.ReadFile(sourcePath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(destinationPath, data, info.Mode().Perm()); err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
 func projectCommandJSON(t *testing.T, args ...string) json.RawMessage {
 	t.Helper()
 	f, err := os.CreateTemp(t.TempDir(), "stdout")
@@ -73,13 +103,13 @@ func projectCommandJSON(t *testing.T, args ...string) json.RawMessage {
 
 func TestPublishedProjectBundleMetadata(t *testing.T) {
 	root := t.TempDir()
-	if got, err := publishedProjectBundle(root); err != nil || got != "v7" {
+	if got, err := publishedProjectBundle(root); err != nil || got != "v9" {
 		t.Fatalf("latest default: %q %v", got, err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "../v5", "v5 v3", ""} {
+	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "../v5", "v5 v3", ""} {
 		if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte(value+"\n"), 0600); err != nil {
 			t.Fatal(err)
 		}
@@ -94,7 +124,7 @@ func TestPublishedProjectBundleMetadata(t *testing.T) {
 	}
 }
 
-func TestProjectPublishedV7PreservesLockedRevisions(t *testing.T) {
+func TestProjectPublishedV9PreservesLockedRevisions(t *testing.T) {
 	stage := t.TempDir()
 	repoLibrary, err := filepath.Abs("../../library")
 	if err != nil {
@@ -103,21 +133,27 @@ func TestProjectPublishedV7PreservesLockedRevisions(t *testing.T) {
 	if err := os.Symlink(repoLibrary, filepath.Join(stage, "library")); err != nil {
 		t.Fatal(err)
 	}
-	repoPlanning, err := filepath.Abs("../../planning")
+	repoPlanning, err := filepath.Abs("../../planning/wm-design-contracts")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Symlink(repoPlanning, filepath.Join(stage, "planning")); err != nil {
-		t.Fatal(err)
+	for _, historical := range []struct{ revision, intake string }{
+		{"v5", "intake-20261003-587-frozen"},
+		{"v7", "intake-20261005-616-frozen"},
+		{"v8", "intake-20261006-623-frozen"},
+	} {
+		from := filepath.Join(repoPlanning, historical.revision, historical.intake, "bundle")
+		to := filepath.Join(stage, "planning/wm-design-contracts", historical.revision, historical.intake, "bundle")
+		copyBundleFixture(t, from, to)
 	}
 	if err := os.Mkdir(filepath.Join(stage, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(stage, "release/default-bundle.txt"), []byte("v7\n"), 0600); err != nil {
+	if err := os.WriteFile(filepath.Join(stage, "release/default-bundle.txt"), []byte("v9\n"), 0600); err != nil {
 		t.Fatal(err)
 	}
 	t.Setenv("PPTXGENGO_RELEASE_ROOT", stage)
-	for _, revision := range []string{"v5", "v7"} {
+	for _, revision := range []string{"v5", "v7", "v8", "v9"} {
 		t.Run(revision, func(t *testing.T) {
 			root := projectDefaultFixture(t)
 			projectCommandJSON(t, "init", "--project", root, "--bundle", revision)
@@ -175,7 +211,7 @@ func TestProjectPublishedV7PreservesLockedRevisions(t *testing.T) {
 		t.Fatal(err)
 	}
 	lock, _, err := deckproject.ReadLock(p)
-	if err != nil || lock.BundleRevision != "wmds-library.v7" {
+	if err != nil || lock.BundleRevision != "wmds-library.v9" {
 		t.Fatalf("new staged project pin: %+v %v", lock, err)
 	}
 }

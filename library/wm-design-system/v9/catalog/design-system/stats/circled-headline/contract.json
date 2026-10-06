@@ -1,0 +1,696 @@
+{
+  "key": "stats/circled-headline",
+  "source_file": "templates/library/evidence.json",
+  "source_sha256": "b629a77c53c4400c6bc3430af120202f06e541560b68913bd30bcf22284a80ce",
+  "source_revision": "wmds-library.v9",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "metric"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "card"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "card"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "card"
+    }
+  ],
+  "family": "evidence",
+  "tier": "core",
+  "name": "Key stats, circled headline",
+  "purpose": "One circled headline number, two compact supporting metrics and a short narrative that says what the numbers mean.",
+  "uses": [
+    "data.metric",
+    "mark.inline (circle)",
+    "card.presets (metric)",
+    "card.label (narrative)"
+  ],
+  "source_advisory_budget": {
+    "words": 70,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 24
+    },
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "headline value",
+      "maxChars": 7
+    },
+    {
+      "slot": "headline label",
+      "maxChars": 34
+    },
+    {
+      "slot": "card value",
+      "maxChars": 8
+    },
+    {
+      "slot": "card label",
+      "maxChars": 34
+    },
+    {
+      "slot": "narrative label",
+      "maxChars": 20
+    },
+    {
+      "slot": "narrative body",
+      "maxChars": 220
+    },
+    {
+      "slot": "source",
+      "maxChars": 90
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "metric",
+      "point"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [
+      "cards",
+      "text"
+    ],
+    "component_types": [
+      "card",
+      "metric"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body",
+        "component_type": "card",
+        "role": "metric",
+        "exact_count": 2,
+        "basis": "same_type_and_role_scene_siblings",
+        "scope": "primary",
+        "scope_basis": "combined_horizontal_span_of_siblings"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "metric",
+        "role": "metric",
+        "source_bounds": {
+          "w": 198,
+          "x": 165,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "card",
+        "role": "metric",
+        "source_bounds": {
+          "h": 162,
+          "w": 198,
+          "x": 489,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "card",
+        "role": "metric",
+        "source_bounds": {
+          "h": 162,
+          "w": 198,
+          "x": 705,
+          "y": 144
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "card",
+        "role": "point",
+        "source_bounds": {
+          "h": 90,
+          "w": 846,
+          "x": 57,
+          "y": 324
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "tall",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v9",
+    "source_sha256": "b629a77c53c4400c6bc3430af120202f06e541560b68913bd30bcf22284a80ce",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "parallel",
+    "groups": [
+      {
+        "alias": "/cards",
+        "role": "point",
+        "cardinality": 3,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/metrics",
+        "role": "metric",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "source.text",
+        "alias": "/source_note",
+        "source_pointer": "/source/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "source",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "source (string) at /source_note",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "source",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0",
+            "use": "Source lines and footnotes",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.label",
+        "alias": "/metrics/item_01/label",
+        "source_pointer": "/body/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/metrics",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /metrics/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.value",
+        "alias": "/metrics/item_01/value",
+        "source_pointer": "/body/0/value",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/metrics",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "value (string) at /metrics/item_01/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.metric.label",
+        "alias": "/cards/item_01/metric/label",
+        "source_pointer": "/body/1/metric/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_01/metric/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.metric.secondary.label",
+        "alias": "/cards/item_01/metric/secondary/label",
+        "source_pointer": "/body/1/metric/secondary/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_01/metric/secondary/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.metric.secondary.value",
+        "alias": "/cards/item_01/metric/secondary/value",
+        "source_pointer": "/body/1/metric/secondary/value",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "value (string) at /cards/item_01/metric/secondary/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.metric.value",
+        "alias": "/cards/item_01/metric/value",
+        "source_pointer": "/body/1/metric/value",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/cards",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "value (string) at /cards/item_01/metric/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.metric.label",
+        "alias": "/cards/item_02/metric/label",
+        "source_pointer": "/body/2/metric/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_02/metric/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.metric.secondary.label",
+        "alias": "/cards/item_02/metric/secondary/label",
+        "source_pointer": "/body/2/metric/secondary/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_02/metric/secondary/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.metric.secondary.value",
+        "alias": "/cards/item_02/metric/secondary/value",
+        "source_pointer": "/body/2/metric/secondary/value",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "value (string) at /cards/item_02/metric/secondary/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.metric.value",
+        "alias": "/cards/item_02/metric/value",
+        "source_pointer": "/body/2/metric/value",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/cards",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "value (string) at /cards/item_02/metric/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.body.item01.p",
+        "alias": "/cards/item_03/body/item_01/p",
+        "source_pointer": "/body/3/body/0/p",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /cards/item_03/body/item_01/p",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.label",
+        "alias": "/cards/item_03/label",
+        "source_pointer": "/body/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/cards",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "label (string) at /cards/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Business case"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "The program pays for itself within 14 months"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "West Monroe analysis of the FY26 baseline; net of one-time cost."
+    },
+    {
+      "name": "node01.label",
+      "source_pointer": "/body/0/label",
+      "kind": "string",
+      "synthetic_source_example": "annual run-rate savings"
+    },
+    {
+      "name": "node01.value",
+      "source_pointer": "/body/0/value",
+      "kind": "string",
+      "synthetic_source_example": "$4.2M"
+    },
+    {
+      "name": "node02.metric.label",
+      "source_pointer": "/body/1/metric/label",
+      "kind": "string",
+      "synthetic_source_example": "to close"
+    },
+    {
+      "name": "node02.metric.secondary.label",
+      "source_pointer": "/body/1/metric/secondary/label",
+      "kind": "string",
+      "synthetic_source_example": "today"
+    },
+    {
+      "name": "node02.metric.secondary.value",
+      "source_pointer": "/body/1/metric/secondary/value",
+      "kind": "string",
+      "synthetic_source_example": "12 days"
+    },
+    {
+      "name": "node02.metric.value",
+      "source_pointer": "/body/1/metric/value",
+      "kind": "string",
+      "synthetic_source_example": "5 days"
+    },
+    {
+      "name": "node03.metric.label",
+      "source_pointer": "/body/2/metric/label",
+      "kind": "string",
+      "synthetic_source_example": "to payback"
+    },
+    {
+      "name": "node03.metric.secondary.label",
+      "source_pointer": "/body/2/metric/secondary/label",
+      "kind": "string",
+      "synthetic_source_example": "business units"
+    },
+    {
+      "name": "node03.metric.secondary.value",
+      "source_pointer": "/body/2/metric/secondary/value",
+      "kind": "string",
+      "synthetic_source_example": "14"
+    },
+    {
+      "name": "node03.metric.value",
+      "source_pointer": "/body/2/metric/value",
+      "kind": "string",
+      "synthetic_source_example": "14 mo"
+    },
+    {
+      "name": "node04.body.item01.p",
+      "source_pointer": "/body/3/body/0/p",
+      "kind": "string",
+      "synthetic_source_example": "Faster closes free finance capacity in the first two waves, and that capacity pays for the later work. Cost is recovered in 14 months across all business units."
+    },
+    {
+      "name": "node04.label",
+      "source_pointer": "/body/3/label",
+      "kind": "string",
+      "synthetic_source_example": "What it means"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node04.body",
+      "source_pointer": "/body/3/body",
+      "count": 1
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 2,
+  "revised": "2026-10-02",
+  "status": "active"
+}

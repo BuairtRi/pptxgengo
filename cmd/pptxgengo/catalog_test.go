@@ -10,7 +10,7 @@ import (
 
 func TestCatalogSelectorsUseSingleCurrentGallery(t *testing.T) {
 	root := t.TempDir()
-	gallery := filepath.Join(root, "library", "wm-design-system", "v7", "catalog", "design-system.html")
+	gallery := filepath.Join(root, "library", "wm-design-system", "v9", "catalog", "design-system.html")
 	if err := os.MkdirAll(filepath.Dir(gallery), 0700); err != nil {
 		t.Fatal(err)
 	}
@@ -61,7 +61,7 @@ func TestCatalogComponentsGiveActionableDiscovery(t *testing.T) {
 
 func TestCatalogAssetsPrintUsesInstalledAssetGallery(t *testing.T) {
 	root := t.TempDir()
-	gallery := filepath.Join(root, "library", "wm-design-system", "v7", "catalog", "assets", "index.html")
+	gallery := filepath.Join(root, "library", "wm-design-system", "v9", "catalog", "assets", "index.html")
 	if err := os.MkdirAll(filepath.Dir(gallery), 0700); err != nil {
 		t.Fatal(err)
 	}

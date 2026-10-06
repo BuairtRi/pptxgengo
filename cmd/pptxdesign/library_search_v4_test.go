@@ -14,7 +14,7 @@ func TestLibrarySearchV5Shorthand(t *testing.T) {
 }
 
 func TestLibrarySearchLatestDefault(t *testing.T) {
-	testLibrarySearchPinnedShorthand(t, "", wmdesign.LibraryRevisionV7)
+	testLibrarySearchPinnedShorthand(t, "", wmdesign.LibraryRevisionV9)
 }
 
 func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) {
@@ -53,4 +53,12 @@ func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) 
 
 func TestLibrarySearchV7Shorthand(t *testing.T) {
 	testLibrarySearchPinnedShorthand(t, "v7", wmdesign.LibraryRevisionV7)
+}
+
+func TestLibrarySearchV8Shorthand(t *testing.T) {
+	testLibrarySearchPinnedShorthand(t, "v8", wmdesign.LibraryRevisionV8)
+}
+
+func TestLibrarySearchV9Shorthand(t *testing.T) {
+	testLibrarySearchPinnedShorthand(t, "v9", wmdesign.LibraryRevisionV9)
 }

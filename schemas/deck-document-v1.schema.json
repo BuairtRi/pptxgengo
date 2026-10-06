@@ -430,6 +430,9 @@
         },
         "notes_file": {
           "$ref": "#/$defs/relativePath"
+        },
+        "draft_review": {
+          "$ref": "#/$defs/draftReview"
         }
       },
       "allOf": [
@@ -1060,6 +1063,63 @@
           "$ref": "#/$defs/stableId"
         }
       }
+    },
+    "draftReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "notstarted",
+            "wip",
+            "complete",
+            "qa"
+          ]
+        },
+        "status_text": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[^\\r\\n]*$",
+          "$comment": "Optional displayed tab label. Defaults to the selected status label; independent of status_color."
+        },
+        "status_color": {
+          "enum": [
+            "",
+            "kpi.off",
+            "kpi.risk",
+            "kpi.on",
+            "brand.blue"
+          ],
+          "$comment": "Optional palette color override, independent of status and status_text. Empty resets to the selected status default."
+        },
+        "owner": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "due": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "updated": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 8192
+        },
+        "placement": {
+          "enum": [
+            "edge",
+            "pasteboard"
+          ],
+          "default": "edge"
+        }
+      },
+      "$comment": "Optional native slide overlay. Internal drafting metadata; client exports remove it."
     }
   }
 }

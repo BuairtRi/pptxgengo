@@ -249,7 +249,7 @@ func TestPhotoRegisteredRenderingAndOfflineProvenance(t *testing.T) {
 	withPhotoSnapshot(t, record)
 	scene, _ := json.Marshal(map[string]any{"type": "imageframe", "photo": record.ID, "x": 72, "y": 126, "w": 240, "h": 180})
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: 2026, BuildIdentity: &BuildIdentity{Timestamp: "2000-01-01T00:00:00Z", Seed: "registered-photo-pipeline"}, Slides: []SlideSpec{{ID: "new-photo", Frame: FrameRequest{NoHeader: true, NoPage: true}, Nodes: []Node{{ID: "photo", Kind: "scene", Scene: &SceneSpec{Node: scene}}}}}}
-	deck, _, err := BuildWithEngine(filepath.Join("..", "..", "library/wm-design-system/v7"), "", doc, CandidateEngine)
+	deck, _, err := BuildWithEngine(filepath.Join("..", "..", "library/wm-design-system/v9"), "", doc, CandidateEngine)
 	if err != nil {
 		t.Fatal(err)
 	}

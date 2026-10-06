@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from package_files import clone_or_copy, file_digest, validate_asset_gallery
+from package_files import clone_or_copy, file_digest, validate_asset_gallery, validate_design_docs
 
 
 class PackageFilesTest(unittest.TestCase):
@@ -79,6 +79,69 @@ class PackageFilesTest(unittest.TestCase):
         (self.root / "assets.json").write_text(json.dumps(items))
         with self.assertRaisesRegex(ValueError, "nonlocal"):
             validate_asset_gallery(self.root, registry, photos)
+
+    def docs_fixture(self):
+        site, bundle = self.root / "docs", self.root / "bundle"
+        (site / "assets").mkdir(parents=True)
+        catalog = {"templates": [{"key": "workshop/test"}], "families": ["workshops"]}
+        objects = {
+            "tokens": ("tokens/v0/tokens.json", {"styles": []}),
+            "data": ("components/v0/components.json", {"components": [{"id": "test"}]}),
+            "frames": ("frames/v0/frames.json", {"rails": []}),
+            "catalog": ("templates/catalog.json", catalog),
+        }
+        html = ""
+        for element, (relative, obj) in objects.items():
+            path = bundle / "source" / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(obj))
+            html += f'<script id="{element}" type="application/json">{json.dumps(obj)}</script>'
+        payload = b"<svg>test</svg>"
+        name = hashlib.sha256(payload).hexdigest()[:12] + ".svg"
+        (site / "assets" / name).write_bytes(payload)
+        (site / "index.html").write_text(html + f'<img src="assets/{name}">')
+        (site / "catalog.json").write_text(json.dumps(catalog))
+        for name in ("changes.json", "CHANGELOG.md", "web-CHANGELOG.md"):
+            (site / name).write_text("{}")
+        source = {"commit": "pinned", "dirty": False, "templates": 1,
+                  "families": 1, "components": 1, "assets": [hashlib.sha256(payload).hexdigest()[:12] + ".svg"]}
+        (site / "SOURCE.json").write_text(json.dumps(source))
+        (bundle / "bundle.json").write_text(json.dumps({"source_commit": "pinned", "template_count": 1}))
+        return site, bundle, source
+
+    def test_docs_validate_exact_source_and_assets(self):
+        site, bundle, source = self.docs_fixture()
+        self.assertEqual(validate_design_docs(site, bundle), source)
+
+    def test_docs_reject_newer_or_dirty_source(self):
+        site, bundle, source = self.docs_fixture()
+        for change in ({"commit": "newer"}, {"dirty": True}):
+            (site / "SOURCE.json").write_text(json.dumps(dict(source, **change)))
+            with self.assertRaisesRegex(ValueError, "source differs"):
+                validate_design_docs(site, bundle)
+
+    def test_docs_reject_embedded_source_and_catalog_drift(self):
+        site, bundle, _ = self.docs_fixture()
+        html = (site / "index.html").read_text()
+        (site / "index.html").write_text(html.replace('"rails": []', '"rails": ["changed"]'))
+        with self.assertRaisesRegex(ValueError, "embedded source drift: frames"):
+            validate_design_docs(site, bundle)
+        (site / "index.html").write_text(html)
+        (site / "catalog.json").write_text("{}")
+        with self.assertRaisesRegex(ValueError, "catalog drift"):
+            validate_design_docs(site, bundle)
+
+    def test_docs_reject_asset_drift_and_missing_changelog(self):
+        site, bundle, source = self.docs_fixture()
+        asset = site / "assets" / source["assets"][0]
+        payload = asset.read_bytes()
+        asset.write_bytes(b"drift")
+        with self.assertRaisesRegex(ValueError, "asset drift"):
+            validate_design_docs(site, bundle)
+        asset.write_bytes(payload)
+        (site / "CHANGELOG.md").unlink()
+        with self.assertRaisesRegex(ValueError, "missing: CHANGELOG.md"):
+            validate_design_docs(site, bundle)
 
 
 if __name__ == "__main__":

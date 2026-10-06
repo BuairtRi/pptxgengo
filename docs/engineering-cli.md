@@ -1,11 +1,11 @@
 # Engineering command reference
 
-These examples target the `0.1.0-local.16/v7` package and use its `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
+These examples target the `0.1.0-local.18/v9` package and use its `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
 
 ## Wrapper defaults and project pins
 
 The installed wrapper reads `release/default-bundle.txt` for the default
-published library (`v7` in local.16). Bundle-backed `pptxgengo design` commands
+published library (`v9` in local.18). Bundle-backed `pptxgengo design` commands
 receive that bundle path and the Go engine `wmds-go-foundation.v2` unless you
 pass explicit flags. Project commands use the project lock: `project init`
 creates a new lock against the published default and candidate engine; later
@@ -14,7 +14,7 @@ source-inventory, asset-gallery, and project commands do not receive a wrapper
 bundle or engine injection.
 
 For `library-find`, `library-inspect`, and `library-preview`, the wrapper also
-supplies the v7 SQLite index and catalog path when `--index` is omitted. If you
+supplies the v9 SQLite index and catalog path when `--index` is omitted. If you
 pass a custom index, pass its matching `--gallery` explicitly when verified
 preview paths are needed.
 
@@ -42,7 +42,7 @@ Review the diff and run `project check` before building:
 
 ```bash
 mv ./my-project/toolchain.lock.json ./my-project/toolchain.lock.json.pre-repin
-pptxgengo design project init --project ./my-project --bundle v7 \
+pptxgengo design project init --project ./my-project --bundle v9 \
   --engine wmds-go-foundation.v2
 pptxgengo design project check --project ./my-project
 pptxgengo design project build --project ./my-project
@@ -250,6 +250,45 @@ pptxgengo design project slide remove --project ./my-project --id recommendation
 `candidate-001`; use that ID when adding one, or edit its `id` before adding it
 under a meaningful project identity. The original supplied file remains intact.
 
+Attach internal Draft Review Notes to any slide without changing its template:
+
+```bash
+pptxgengo design project slide draft-review set --project ./my-project --id recommendation \
+  --status wip --status-text 'Work in progress' --status-color kpi.risk --owner Ri --due 10/20 --updated 10/05 --notes 'Confirm the source.'
+pptxgengo design project slide draft-review set --project ./my-project --id recommendation --status qa
+pptxgengo design project slide draft-review show --project ./my-project --id recommendation
+pptxgengo design project slide draft-review clear --project ./my-project --id recommendation
+```
+
+Statuses are `notstarted`, `wip`, `complete`, and `qa`. The tab displays the
+selected status label by default. `--status-text` sets a custom label independently
+of `--status-color`, which accepts `kpi.off`, `kpi.risk`, `kpi.on`, or `brand.blue`.
+Custom text must be a single line of at most 128 bytes and fit the tab. Empty
+status text/color resets the override to the selected status default. Other
+optional fields are `--owner`, `--due`, `--updated`, and `--notes`; dates are display
+strings.
+`--placement edge` (the default) shows the status tab at the top-right slide edge
+with its note body outside the canvas; `--placement pasteboard` places the entire
+234 × 144 pt component outside the canvas. `set` preserves omitted fields,
+initializes a new note with `notstarted`, and accepts explicit empty strings to
+clear optional text. The commands return JSON receipts and preserve comments,
+unrelated metadata, and unselected files in inline and split projects. Identical
+`set` calls and clearing an absent note preserve source bytes without a new decision.
+
+Normal builds and reviewer/maintainer/offline exports retain the editable native
+component. Client exports remove its status, body and metadata while preserving
+the immutable draft build. Audience copy review excludes Draft Review Notes.
+YAML authors can add the optional slide-level `draft_review` mapping with
+`status`, `status_text`, `status_color`, `owner`, `due`, `updated`, `notes`, and `placement` directly; quote date
+values that YAML could interpret as timestamps.
+
+Draft Review Notes were visually checked in Microsoft PowerPoint on 2026-10-05:
+the four default status labels, whole-pasteboard placement, and a custom
+`Work in progress` label with a blue tab all fit the fixed component. The standard
+short test suite and focused race checks passed. Automated native export was not
+qualified in that session because Apple event dispatch failed; the visual check
+used PowerPoint directly.
+
 Moving a section anchor requires `--reanchor`. Removed slide/notes files remain
 in the project and are listed in the receipt. When a composition log is present,
 update its authored entries after adding/removing a slide or changing a template;
@@ -442,3 +481,7 @@ thumbnails and review status when available; otherwise it reports the missing
 native evidence. Copies of the deck, PDF, PNGs and evidence are retained in the
 packet with their hashes. Audience mode uses only visible-page native output and
 does not include internal notes or verdicts.
+
+## Design-system documentation
+
+`pptxgengo docs` serves the installed foundations, primitives, components, composites, frames and template reference board. `pptxgengo paths` lists `design_docs` and its pinned `design_docs_source`. The installer verifies the docs commit, embedded canonical JSON and assets against the selected native library. The docs board explains the system; `pptxgengo catalog --design-system --open` opens the separate accepted native specimen gallery.

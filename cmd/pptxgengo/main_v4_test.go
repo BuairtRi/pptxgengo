@@ -26,7 +26,7 @@ func TestPathsIncludesLatestBundleOnly(t *testing.T) {
 	if err := json.NewDecoder(output).Decode(&paths); err != nil {
 		t.Fatal(err)
 	}
-	for _, revision := range []string{"v7"} {
+	for _, revision := range []string{"v9"} {
 		want := filepath.Join(paths["root"], "library", "wm-design-system", revision)
 		if got := paths["design_system_"+revision]; got != want {
 			t.Errorf("%s bundle path = %q; want %q", revision, got, want)
@@ -37,7 +37,7 @@ func TestPathsIncludesLatestBundleOnly(t *testing.T) {
 			t.Errorf("removed bundle advertised: %s", revision)
 		}
 	}
-	if paths["design_index"] != filepath.Join(paths["design_system_v7"], "library.sqlite") {
+	if paths["design_index"] != filepath.Join(paths["design_system_v9"], "library.sqlite") {
 		t.Fatalf("index outside current bundle: %v", paths)
 	}
 }

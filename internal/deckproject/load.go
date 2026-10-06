@@ -304,6 +304,9 @@ func (p *Project) validate() error {
 		if err := wmdesign.ValidateSpeakerNotes(s.Notes); err != nil {
 			return p.fail(path+"/notes", "notes must be valid XML text, at most 1 MiB")
 		}
+		if err := validateDraftReview(s.DraftReview); err != nil {
+			return p.fail(path+"/draft_review", "%v", err)
+		}
 		if s.Values == nil {
 			return p.fail(path+"/values", "values mapping required")
 		}

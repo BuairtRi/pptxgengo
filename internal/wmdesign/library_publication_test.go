@@ -136,7 +136,7 @@ func TestPublicationRelationshipPart(t *testing.T) {
 
 func TestPublicationPairedChartRendering(t *testing.T) {
 	root := filepath.Join("..", "..")
-	_, err := VerifyLibraryPublicationRenderInheritance(LibraryPublicationOptions{Bundle: filepath.Join(root, "library/wm-design-system/v7"), PreviousBundle: filepath.Join(root, "planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle"), Year: 2026}, []string{"chart/column-full"})
+	_, err := VerifyLibraryPublicationRenderInheritance(LibraryPublicationOptions{Bundle: filepath.Join(root, "library/wm-design-system/v9"), PreviousBundle: filepath.Join(root, "planning/wm-design-contracts/v5/intake-20261003-587-frozen/bundle"), Year: 2026}, []string{"chart/column-full"})
 	if err != nil {
 		t.Fatal(err)
 	}

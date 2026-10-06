@@ -25,9 +25,11 @@ const LibraryRevisionV4 = "wmds-library.v4"
 const LibraryRevisionV5 = "wmds-library.v5"
 const LibraryRevisionV6 = "wmds-library.v6"
 const LibraryRevisionV7 = "wmds-library.v7"
+const LibraryRevisionV8 = "wmds-library.v8"
+const LibraryRevisionV9 = "wmds-library.v9"
 
 func isV6OrLaterLibrary(revision string) bool {
-	return revision == LibraryRevisionV6 || revision == LibraryRevisionV7
+	return revision == LibraryRevisionV6 || revision == LibraryRevisionV7 || revision == LibraryRevisionV8 || revision == LibraryRevisionV9
 }
 
 // V6 carries the accepted V5 rendering semantics for unchanged compositions.
@@ -51,6 +53,8 @@ type sourcePin struct {
 }
 
 var sourcePins = map[string]sourcePin{
+	"0ad33b662d7e3a9b47a47237f0037c09cba959ee2693d39b4cc36ed230ab75c1": {"9ae0d5af692d4dfe3c9807d232202c2461f55168fe926689ee833f82f8001fb3", LibraryRevisionV9},
+	"0e9846c1cf96187a16ca210279297239169707c90743c80011ef76869fbf26c9": {"9ae84d46370e91146395d860379dcfb8ef4bf72c6623482f3451c68d9eaf64d3", LibraryRevisionV8},
 	"ce5bd8ad00261da22418f9ec9e93a79d6938f368aef3df3f3a6aa46d3833dc93": {"4f057cfbfd94feb4007f82ca6dfbbba1a0d410e89ec4f37f1b3e74343489abd2", LibraryRevisionV7},
 	bundleSHA256: {inventorySHA256, LibraryRevisionV1},
 	"c0926ec4e65d36b3a9fd53e74ae0a3204d03acd5d0ba9fe4919849700c8f3690": {"8e70c96c07b5346906c983f0893e686cd433fd73fae4c31642a71984f395dce3", LibraryRevisionV2},

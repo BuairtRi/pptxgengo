@@ -1,0 +1,80 @@
+{
+  "schema": "pptxgengo.local-release-qualification.v1",
+  "version": "0.1.0-local.18",
+  "date": "2026-10-06",
+  "source_revision": "wmds-library.v9",
+  "source_commit": "03c25c39643eb0edd75ece71663ddfd0c4cb5358",
+  "templates": 631,
+  "active": 630,
+  "workshops": 29,
+  "publication": {
+    "schema": "pptxgengo.library-publication.v1",
+    "source_revision": "wmds-library.v9",
+    "entries": 631,
+    "inherited_native_previews": 616,
+    "newly_reviewed_native_previews": 15
+  },
+  "native_review": {
+    "new_source_specimens": 15,
+    "mechanism": "Go CLI, Microsoft PowerPoint native PDF, PDFKit PNGs",
+    "accepted_by": "root and independent library audit agent",
+    "v8_manifest": "../planning/wm-design-contracts/v8/intake-20261006-623-frozen/native-review/review-manifest.json",
+    "v9_manifest": "../planning/wm-design-contracts/v9/intake-20261006-631-frozen/native-review/review-manifest.json",
+    "signed_export_receipts": true,
+    "arbitrary_content_qualified": false
+  },
+  "go_sweeps": {
+    "v8": "623 source / 622 active bound passed in75.333s",
+    "v9": "631 source / 630 active bound passed in81.395s",
+    "workshop_round_trips": 29,
+    "retained_rendering": "616 paired source specimen builds and visible parts checked;77.6s targeted test"
+  },
+  "tests": {
+    "short": {
+      "command": "make test",
+      "passed": true,
+      "wall_seconds": 42.58
+    },
+    "race": {
+      "command": "make test-race",
+      "passed": true,
+      "package_seconds": {
+        "deckproject": 13.284,
+        "nativeexport": 8.381,
+        "pptx": 1.298,
+        "wmdesign": 56.077
+      }
+    },
+    "packaging_unit_tests": 11,
+    "skill_frontmatter_and_relative_references": "passed"
+  },
+  "documentation": {
+    "source_commit": "03c25c39643eb0edd75ece71663ddfd0c4cb5358",
+    "templates": 631,
+    "families": 28,
+    "primitives": 13,
+    "components": 38,
+    "composites": 29,
+    "registered_frames": 36,
+    "hashed_assets": 23,
+    "embedded_json_and_asset_validation": "passed",
+    "browser_tabs_and_filters": "templates/workshops, frames, components, catalog reviewed",
+    "installed_server_from_unrelated_cwd": "passed",
+    "follow_up": "Browser reported high memory use; consider lazy rendering.",
+    "qualified_site_location": "Installed local.18 wmds-docs/site, pinned03c25c3. Repository docs may advance independently during upstream authoring."
+  },
+  "installed_package": {
+    "schema": "pptxgengo.installed-package-hash-audit.v1",
+    "version": "0.1.0-local.18",
+    "checked_files": 5077,
+    "drift": [],
+    "seconds": 3.367
+  },
+  "production_resources": "Only library/wm-design-system/v9 retained; historical V6 font/asset/calibration links reanchored to byte-identical immutable V5 resources. No source pins changed.",
+  "subsequent_upstream_changes": {
+    "documentation_commit": "c14fb286fb38e15800a6fd476a1ed67956f1165f",
+    "documentation_templates": 649,
+    "native_intake_status": "The approved release remains03c25c3/631. Concurrent design-agent publications now contain649 templates. Subsequent roadmap and pillar additions have not passed native intake in this release. The installer source guard rejects this newer docs site against v9 until a matching source intake is qualified."
+  },
+  "typography_density": "Analysis only; no new font or geometry policy implemented. Awaiting design agent role tables."
+}

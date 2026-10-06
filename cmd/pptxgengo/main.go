@@ -12,10 +12,11 @@ import (
 
 var version = "dev"
 
-const currentBundle = "v7"
+const currentBundle = "v9"
 
 var tools = map[string]string{
 	"design": "pptxdesign",
+	"docs":   "wmdsdocs",
 }
 
 var retiredRoutes = map[string]string{
@@ -33,6 +34,7 @@ func usage() {
 	fmt.Fprintln(os.Stderr, "usage: pptxgengo <design> <command> [flags]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--design-system|--assets] [--print|--open]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
+	fmt.Fprintln(os.Stderr, "       pptxgengo docs [--addr localhost:8787]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
 }
 
@@ -59,6 +61,15 @@ func hasFlag(args []string, flag string) bool {
 		}
 	}
 	return false
+}
+
+// Resolve the packaged documentation independently of the caller's directory.
+func docsArgs(root string, input []string) []string {
+	args := append([]string{}, input...)
+	if !hasFlag(args, "--dir") && !hasFlag(args, "-dir") {
+		args = append(args, "--dir", filepath.Join(root, "wmds-docs", "site"))
+	}
+	return args
 }
 
 func publishedBundle(root string) (string, error) {
@@ -200,6 +211,8 @@ func run() error {
 			"design_index":            filepath.Join(root, "library", "wm-design-system", bundle, "library.sqlite"),
 			"project_example":         filepath.Join(root, "examples", "deck-project"),
 			"skill":                   filepath.Join(root, "skills", "west-monroe-presentations", "SKILL.md"),
+			"design_docs":             filepath.Join(root, "wmds-docs", "site"),
+			"design_docs_source":      filepath.Join(root, "wmds-docs", "site", "SOURCE.json"),
 		}
 		return json.NewEncoder(os.Stdout).Encode(paths)
 	}
@@ -218,6 +231,9 @@ func run() error {
 	}
 	path := filepath.Join(root, "bin", tool)
 	args := append([]string{}, os.Args[2:]...)
+	if tool == "wmdsdocs" {
+		args = docsArgs(root, args)
+	}
 	if tool == "pptxdesign" && len(args) > 0 {
 		args, err = designArgs(root, args)
 		if err != nil {

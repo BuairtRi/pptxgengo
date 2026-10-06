@@ -130,7 +130,54 @@ func verifiedPublicationFile(path, declared string) ([]byte, error) {
 func compatiblePublicationStyle(a, b *Source) bool {
 	// Components can grow independently; rendered scene nodes and resolved
 	// styles/tokens/chrome are what affect retained source specimens.
-	return reflect.DeepEqual(a.Tokens, b.Tokens) && reflect.DeepEqual(a.Frames, b.Frames) && reflect.DeepEqual(a.styles, b.styles) && reflect.DeepEqual(a.loadedFontFiles, b.loadedFontFiles)
+	af, aok := publicationRenderingFrames(a.Frames)
+	bf, bok := publicationRenderingFrames(b.Frames)
+	return aok && bok && reflect.DeepEqual(a.Tokens, b.Tokens) && reflect.DeepEqual(af, bf) && reflect.DeepEqual(a.styles, b.styles) && reflect.DeepEqual(a.loadedFontFiles, b.loadedFontFiles)
+}
+
+// The documentation source can spell out existing renderer fallbacks. These
+// exact redundant entries do not affect ResolveFrame; every other geometry
+// field remains part of the dependency comparison. Native inheritance also
+// requires unchanged compositions and paired visible-package-part comparison.
+func publicationRenderingFrames(frames Frames) (Frames, bool) {
+	frames.Features = append(frames.Features[:0:0], frames.Features...)
+	for i := range frames.Features {
+		feature := &frames.Features[i]
+		if len(feature.Geometry) == 0 {
+			continue
+		}
+		var geometry map[string]any
+		if err := json.Unmarshal(feature.Geometry, &geometry); err != nil {
+			return Frames{}, false
+		}
+		var redundant map[string]string
+		switch feature.ID {
+		case "title-zone":
+			redundant = map[string]string{
+				"threeLine": `{"rule":180,"bodyTop":198}`,
+				"fourLine":  `{"rule":216,"bodyTop":234}`,
+			}
+		case "zone.source":
+			redundant = map[string]string{
+				"bodyBottomTable": `{"compact":[468,450,432],"tall":[450,450,432],"slim":[486,468,450]}`,
+			}
+		}
+		for key, expectedJSON := range redundant {
+			if value, exists := geometry[key]; exists {
+				var expected any
+				if err := json.Unmarshal([]byte(expectedJSON), &expected); err != nil || !reflect.DeepEqual(value, expected) {
+					return Frames{}, false
+				}
+				delete(geometry, key)
+			}
+		}
+		var err error
+		feature.Geometry, err = json.Marshal(geometry)
+		if err != nil {
+			return Frames{}, false
+		}
+	}
+	return frames, true
 }
 
 func previousPublicationPreviews(options LibraryPublicationOptions, current *Source) (map[string]publicationPreview, error) {

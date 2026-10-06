@@ -305,6 +305,12 @@ func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
 	if s.Revision == LibraryRevisionV7 {
 		expected = 616
 	}
+	if s.Revision == LibraryRevisionV8 {
+		expected = 623
+	}
+	if s.Revision == LibraryRevisionV9 {
+		expected = 631
+	}
 	if len(out) != expected {
 		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
 	}

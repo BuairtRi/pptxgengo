@@ -1,0 +1,154 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-444",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Cutover runbook",
+      "title": "Four levels put every [[issue]] in front of a decision-maker",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "header": "dark",
+              "dense": true,
+              "rowH": 54,
+              "cols": [
+                {
+                  "k": "l",
+                  "label": "Level",
+                  "w": 180
+                },
+                {
+                  "k": "t",
+                  "label": "Trigger",
+                  "w": 216
+                },
+                {
+                  "k": "m",
+                  "label": "Time threshold",
+                  "w": 108
+                },
+                {
+                  "k": "o",
+                  "label": "Contact or owner",
+                  "w": 162
+                },
+                {
+                  "k": "d",
+                  "label": "What this level decides",
+                  "w": 180
+                }
+              ],
+              "rows": [
+                {
+                  "l": "L1 · Workstream lead",
+                  "t": "A step runs late or a check fails",
+                  "m": "0–15 min",
+                  "o": "Workstream lead · bridge line",
+                  "d": "Retry the step or apply its rollback"
+                },
+                {
+                  "l": "L2 · Cutover lead",
+                  "t": "L1 cannot clear it, or the window slips",
+                  "m": "15–30 min",
+                  "o": "Program director · ext. 4410",
+                  "d": "Re-sequence steps; extend a window"
+                },
+                {
+                  "l": "L3 · Controller and CIO",
+                  "t": "Balances do not tie, or a gate is at risk",
+                  "m": "30–60 min",
+                  "o": "Controller and CIO · ext. 4420",
+                  "d": "Go or no-go; invoke full rollback"
+                },
+                {
+                  "l": "L4 · Steering committee",
+                  "t": "Rollback invoked or go-live date at risk",
+                  "m": "60+ min",
+                  "o": "Executive sponsor · ext. 4430",
+                  "d": "Reset the date; approve a new plan"
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "block",
+              "x": 57,
+              "y": 396,
+              "w": 846,
+              "h": 36,
+              "surface": "subtle",
+              "style": "small",
+              "align": "left",
+              "text": "Rule: the clock runs from the first alert. If a level has not acknowledged within its threshold, page the next level."
+            },
+            "source_pointer": "/body/1"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-444",
+        "template": "runbook/escalation",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/runbooks.json",
+        "source_sha256": "d7a67120eb6383f113662218903a1b6eaf24065c281e27823896ca8fa5dd4808",
+        "source_revision": "wmds-library.v9",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "block"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {
+        "emphasis": "highlight"
+      }
+    }
+  ]
+}

@@ -344,6 +344,9 @@ func dependencies(p *Project) (map[string]string, error) {
 		if s.Notes != "" {
 			m["slide:"+s.ID+":content"] = digest(canonical(map[string]any{"values": s.Values, "notes": s.Notes}))
 		}
+		if s.DraftReview != nil {
+			m["slide:"+s.ID+":draft-review"] = digest(canonical(s.DraftReview))
+		}
 		m["slide:"+s.ID+":selection"] = digest(canonical(s.Template))
 		if s.Hidden {
 			m["slide:"+s.ID+":selection"] = digest(canonical(map[string]any{"template": s.Template, "hidden": true}))

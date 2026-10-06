@@ -28,7 +28,7 @@ while [[ $# -gt 0 ]]; do
   esac
   shift 2
 done
-if [[ "$published_bundle" != v7 || "$bundle_revision" != "$published_bundle" ]]; then echo "only the current v7 library is packaged" >&2; exit 1; fi
+if [[ ! "$published_bundle" =~ ^v[1-9][0-9]*$ || "$bundle_revision" != "$published_bundle" ]]; then echo "only the current published library is packaged" >&2; exit 1; fi
 bundle_input="$repo_root/library/wm-design-system/$bundle_revision"
 if [[ ! "$version" =~ ^0\.1\.0-local\.[0-9]+(-candidate)?$ ]]; then echo "invalid package version: $version" >&2; exit 1; fi
 catalog_input="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$catalog_input")"
@@ -49,12 +49,13 @@ python3 - "$bundle_input" "$catalog_input" "$verification_input" "$bundle_revisi
 import json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(sys.argv[5]) / 'release'))
-from package_files import file_digest
+from package_files import file_digest, validate_design_docs
 bundle_root, catalog = map(Path, sys.argv[1:3])
 bundle = json.loads((bundle_root / 'bundle.json').read_text())
 index = json.loads((catalog / 'design-system/index.json').read_text())
 landing = json.loads((catalog / 'index.json').read_text())
 source = json.loads((bundle_root / 'source/templates/catalog.json').read_text())['templates']
+validate_design_docs(Path(sys.argv[5]) / 'wmds-docs/site', bundle_root)
 count = bundle['template_count']
 source_status = {r['key']: r.get('status', 'active') for r in source}
 if bundle['source_revision'] != 'wmds-library.' + sys.argv[4] or count <= 0 or len(source) != count or len(source_status) != count:
@@ -92,7 +93,7 @@ stage="$(mktemp -d "$release_parent/.${version}.stage.XXXXXXXX")"
 trap 'rm -r "$stage"' EXIT
 mkdir -p "$stage/bin"
 cd "$repo_root"
-for tool in pptxgengo pptxdesign; do
+for tool in pptxgengo pptxdesign wmdsdocs; do
   echo "building $tool" >&2
   if [[ "$tool" == pptxgengo ]]; then
     go build -buildvcs=false -trimpath -ldflags "-s -w -X main.version=$version" -o "$stage/bin/$tool" "./cmd/$tool"
@@ -112,7 +113,7 @@ bundle = dst / bundle_relative
 shutil.copytree(src / bundle_relative, bundle, ignore=shutil.ignore_patterns('catalog', 'library.sqlite'))
 shutil.copytree(selected_catalog, bundle / 'catalog',
                 ignore=lambda path, names: ['assets'] if Path(path) == selected_catalog else [])
-for path in ('skills/west-monroe-presentations', 'schemas', 'examples/deck-project', 'examples/local-composition'):
+for path in ('skills/west-monroe-presentations', 'schemas', 'examples/deck-project', 'examples/local-composition', 'wmds-docs'):
     shutil.copytree(src / path, dst / path)
 for path in ('release/README.md', 'release/VERSION', 'release/package_files.py', 'library/README.md', 'cmd/pptxdesign/README.md',
              'internal/deckproject/README.md', 'docs/semantic-template-discovery.md',
@@ -169,7 +170,7 @@ import json, sqlite3, subprocess, sys
 from pathlib import Path
 root, version, destination = Path(sys.argv[1]), sys.argv[2], Path(sys.argv[3])
 sys.path.insert(0, str(root / 'release'))
-from package_files import file_digest, validate_asset_gallery
+from package_files import file_digest, validate_asset_gallery, validate_design_docs
 bundle_relative = Path('library/wm-design-system') / sys.argv[4]
 bundle = root / bundle_relative
 catalog, index_path = bundle / 'catalog', bundle / 'library.sqlite'
@@ -199,6 +200,7 @@ with sqlite3.connect(index_path) as db:
     report['options']['gallery'] = str(destination / bundle_relative / 'catalog')
     db.execute("UPDATE meta SET value=? WHERE key='report'", (json.dumps(report),))
 source = json.loads((bundle / 'bundle.json').read_text())
+docs_source = validate_design_docs(root / 'wmds-docs/site', bundle)
 files = {str(p.relative_to(root)): file_digest(p) for p in sorted(root.rglob('*')) if p.is_file()}
 (root / 'release-manifest.json').write_text(json.dumps({
     'schema': 'pptxgengo.local-release-manifest.v1', 'version': version, 'selected_bundle': sys.argv[4],
@@ -206,6 +208,7 @@ files = {str(p.relative_to(root)): file_digest(p) for p in sorted(root.rglob('*'
     'template_count': source['template_count'], 'active_template_count': gallery['active'],
     'native_reviewed_source_specimens': gallery['qualification']['reviewed_source_specimens'],
     'asset_concepts': concepts, 'asset_variants': variants, 'photography_originals': len(photo_snapshot['photos']),
+    'documentation_source_commit': docs_source['commit'], 'documentation_templates': docs_source['templates'],
     'qualification': 'reviewed_source_specimens', 'file_count': len(files), 'files_sha256': files,
 }, indent=2) + '\n')
 print(f'validated {sys.argv[4]}: {source["template_count"]} designs, {len(artifacts)} artifact links, {len(files)} package files')

@@ -1,0 +1,373 @@
+{
+  "key": "cover/grid",
+  "source_file": "templates/library/covers.json",
+  "source_sha256": "f1b2d8f603007d51678c924e3c7e8cf0d118fe78e79ec88d27ac33ae3e615674",
+  "source_revision": "wmds-library.v9",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "logo"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    },
+    {
+      "id": "node03",
+      "source_pointer": "/body/2",
+      "expected_type": "text"
+    },
+    {
+      "id": "node04",
+      "source_pointer": "/body/3",
+      "expected_type": "text"
+    },
+    {
+      "id": "node05",
+      "source_pointer": "/body/4",
+      "expected_type": "square"
+    }
+  ],
+  "family": "covers",
+  "tier": "core",
+  "name": "Cover · whiteboard grid and stat square",
+  "purpose": "Opening slide that leads with a number: whiteboard dot grid with one inverse stat square.",
+  "uses": [
+    "header.display",
+    "grid.whiteboard",
+    "grid.squares"
+  ],
+  "source_advisory_budget": {
+    "words": 30,
+    "marks": 1
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 40
+    },
+    {
+      "slot": "title",
+      "maxChars": 48
+    },
+    {
+      "slot": "subtitle",
+      "maxChars": 90
+    },
+    {
+      "slot": "stat",
+      "maxChars": 8
+    },
+    {
+      "slot": "statLabel",
+      "maxChars": 24
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "point"
+    ],
+    "structures": [],
+    "visual_forms": [
+      "text"
+    ],
+    "component_types": [
+      "logo",
+      "square",
+      "text"
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "logo",
+        "role": "content",
+        "source_bounds": {
+          "w": 126,
+          "x": 57,
+          "y": 54
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 558,
+          "x": 57,
+          "y": 162
+        }
+      },
+      {
+        "source_pointer": "/body/2",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 540,
+          "x": 57,
+          "y": 180
+        }
+      },
+      {
+        "source_pointer": "/body/3",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 414,
+          "x": 57,
+          "y": 342
+        }
+      },
+      {
+        "source_pointer": "/body/4",
+        "component_type": "square",
+        "role": "content",
+        "source_bounds": {
+          "x": 705,
+          "y": 180
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v9",
+    "source_sha256": "f1b2d8f603007d51678c924e3c7e8cf0d118fe78e79ec88d27ac33ae3e615674",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "unknown",
+    "groups": [
+      {
+        "alias": "/squares",
+        "role": "content",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      }
+    ],
+    "slots": [
+      {
+        "name": "node02.text",
+        "alias": "/section_label",
+        "source_pointer": "/body/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "label (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 558,
+          "height_pt": 18,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node03.text",
+        "alias": "/headline",
+        "source_pointer": "/body/2/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 540,
+          "height_pt": 162,
+          "line_budget": 2,
+          "style": {
+            "id": "display",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 54,
+            "leading": 60,
+            "tracking": "-0.025em",
+            "use": "Covers, dividers",
+            "tracking_pt": -1.35
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node04.text",
+        "alias": "/subtitle",
+        "source_pointer": "/body/3/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "lead (string) at /subtitle",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "width_pt": 414,
+          "height_pt": 126,
+          "line_budget": 5,
+          "style": {
+            "id": "lead",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 16,
+            "leading": 24,
+            "tracking": "0",
+            "use": "Intro line under a title",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node05.label",
+        "alias": "/squares/item_01/label",
+        "source_pointer": "/body/4/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/squares",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /squares/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node05.stat",
+        "alias": "/squares/item_01/stat",
+        "source_pointer": "/body/4/stat",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "stat",
+        "group": "/squares",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "stat (string) at /squares/item_01/stat",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Proposal · Northfield Health System"
+    },
+    {
+      "name": "node03.text",
+      "source_pointer": "/body/2/text",
+      "kind": "string",
+      "synthetic_source_example": "A five-day close that [[pays]] for itself"
+    },
+    {
+      "name": "node04.text",
+      "source_pointer": "/body/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Record-to-report redesign for 14 business units"
+    },
+    {
+      "name": "node05.label",
+      "source_pointer": "/body/4/label",
+      "kind": "string",
+      "synthetic_source_example": "days to close"
+    },
+    {
+      "name": "node05.stat",
+      "source_pointer": "/body/4/stat",
+      "kind": "string",
+      "synthetic_source_example": "12 → 5"
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "status": "active"
+}

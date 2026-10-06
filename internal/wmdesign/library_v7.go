@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// V7 candidate amendments repair allocation defects while preserving the frozen
+// V7 and later candidate amendments repair allocation defects while preserving the frozen
 // source bytes, copy, typography and semantic values. Native acceptance is separate.
 func applyV7WorkshopRefinements(key string, slide *SlideSpec) error {
 	type amendment struct {

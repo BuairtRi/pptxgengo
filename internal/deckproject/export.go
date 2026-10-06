@@ -72,6 +72,12 @@ func Export(p *Project, opts ExportOptions) (ExportReceipt, error) {
 		if e = add("deck.pptx", filepath.Join(builddir, "deck.pptx")); e != nil {
 			return r, e
 		}
+		if opts.Mode == "client" {
+			files["deck.pptx"], e = wmdesign.RemoveDraftReviewNotes(files["deck.pptx"])
+			if e != nil {
+				return r, e
+			}
+		}
 		if _, e = os.Stat(filepath.Join(builddir, "deck.pdf")); e == nil {
 			return r, fmt.Errorf("PDF is not yet a recorded build artifact; import/qualification is required before packaging")
 		}

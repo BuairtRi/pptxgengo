@@ -42,6 +42,7 @@ type SlideSpec struct {
 	ID              string               `json:"id"`
 	Hidden          bool                 `json:"hidden,omitempty"`
 	Notes           string               `json:"notes,omitempty"`
+	DraftReview     *DraftReviewNote     `json:"draft_review,omitempty"`
 	Frame           FrameRequest         `json:"frame"`
 	Eyebrow         string               `json:"eyebrow"`
 	Title           string               `json:"title"`
@@ -78,6 +79,7 @@ type SlideReport struct {
 	ID              string               `json:"id"`
 	Hidden          bool                 `json:"hidden,omitempty"`
 	Notes           string               `json:"notes,omitempty"`
+	DraftReview     *DraftReviewRecord   `json:"draft_review,omitempty"`
 	Page            int                  `json:"page"`
 	Frame           ResolvedFrame        `json:"frame"`
 	Texts           []TextRecord         `json:"texts"`
@@ -438,6 +440,9 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 	}
 	slideIDs := make([]string, len(doc.Slides))
 	for i, slide := range doc.Slides {
+		if err := ValidateDraftReviewNote(slide.DraftReview); err != nil {
+			return nil, report, fmt.Errorf("slide %s: %w", slide.ID, err)
+		}
 		if err := ValidateSpeakerNotes(slide.Notes); err != nil {
 			return nil, report, fmt.Errorf("slide %s: %w", slide.ID, err)
 		}
@@ -887,6 +892,11 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 		if r.err != nil {
 			return nil, report, r.err
 		}
+		if slide.DraftReview != nil {
+			if err := r.drawDraftReview(slide.ID, *slide.DraftReview, &sr); err != nil {
+				return nil, report, err
+			}
+		}
 		if e = validateOwnedParts(sr); e != nil {
 			return nil, report, e
 		}
@@ -901,6 +911,9 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 		records := map[int][]TextRecord{}
 		for i, sr := range report.Slides {
 			records[i+1] = sr.Texts
+			if sr.DraftReview != nil {
+				records[i+1] = append(append([]TextRecord(nil), sr.Texts...), sr.DraftReview.Texts...)
+			}
 			for _, tr := range sr.Texts {
 				if tr.Rich != nil {
 					for _, paragraph := range tr.Rich.Paragraphs {
@@ -937,6 +950,10 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 		return nil, report, e
 	}
 	raw, e = sceneNativeGroups(raw, report.Slides)
+	if e != nil {
+		return nil, report, e
+	}
+	raw, e = draftReviewNativeMetadata(raw, report.Slides)
 	if e != nil {
 		return nil, report, e
 	}
