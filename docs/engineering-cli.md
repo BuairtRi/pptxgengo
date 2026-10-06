@@ -325,7 +325,11 @@ pptxgengo design render --pptx ./my-project/builds/BUILD-ID/deck.pptx \
   --out "$work/render" --pdf --png --slides 3,5-7 --contact-sheet
 ```
 
-Rendering uses local Microsoft PowerPoint and PDFKit. The render command leaves the source PPTX unchanged; inspect the resulting pages and contact sheet after export.
+The production Mac release uses local Microsoft PowerPoint and PDFKit. The
+experimental Windows preview uses desktop PowerPoint COM for native PDF and
+slide PNG export. Both leave the source PPTX unchanged; inspect full-size pages
+and the contact sheet after export. The Windows tester ZIP includes a user-level
+installer and smoke-test script; see [Windows tester guide](../internal/releasepackage/WINDOWS.md).
 
 Render detects PowerPoint's Grant File Access dialog and reports it as a file
 access failure. Failed runs attempt to leave `render-error.txt`, including

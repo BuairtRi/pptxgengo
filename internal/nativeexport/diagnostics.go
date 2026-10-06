@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -147,7 +148,15 @@ func stagingConfiguration(configured string) (string, string, error) {
 		if err != nil {
 			return "", "", err
 		}
-		configured = filepath.Join(home, "Library/Caches/pptxgengo/native")
+		if runtime.GOOS == "windows" {
+			cache, e := os.UserCacheDir()
+			if e != nil {
+				return "", "", e
+			}
+			configured = filepath.Join(cache, "pptxgengo", "native")
+		} else {
+			configured = filepath.Join(home, "Library/Caches/pptxgengo/native")
+		}
 		kind = "user cache; PowerPoint access unverified until export"
 	}
 	return configured, kind, nil
@@ -181,7 +190,7 @@ func Doctor(ctx context.Context, opts DoctorOptions) []Diagnostic {
 	_, cleanupErr := workerProcess(cleanupCtx, workerRequest{Cleanup: &cleanupTask{StagingRoot: opts.StagingRoot, TaskID: taskID}})
 	cleanupCancel()
 	if err != nil {
-		return []Diagnostic{{Check: "doctor-worker", Status: "fail", Detail: err.Error(), Fix: "Inspect PowerPoint and macOS for a pending prompt; try a qualified --staging-dir from the signed-in desktop session."}}
+		return []Diagnostic{{Check: "doctor-worker", Status: "fail", Detail: err.Error(), Fix: "Inspect desktop PowerPoint for a pending setup or permission prompt; try a qualified --staging-dir from the signed-in desktop session."}}
 	}
 	var checks []Diagnostic
 	if err = json.Unmarshal(data, &checks); err != nil {
@@ -199,6 +208,9 @@ func doctor(ctx context.Context, opts DoctorOptions, run runner, platform string
 	ctx, cancel := context.WithTimeout(ctx, opts.Timeout)
 	defer cancel()
 	checks := []Diagnostic{}
+	if platform == "windows" {
+		return windowsDoctor(ctx, opts, run)
+	}
 	if platform != "darwin" {
 		return []Diagnostic{{Check: "platform", Status: "fail", Detail: "native rendering requires macOS", Fix: "Use a logged-in Mac with Microsoft PowerPoint installed."}}
 	}

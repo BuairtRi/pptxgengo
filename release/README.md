@@ -116,6 +116,38 @@ Required: Go 1.27.1+, Python 3 and registered branding files (set
 `WMDS_BRANDING_ROOT` if they are outside `~/Documents/branding`). Native review
 requires local PowerPoint. Generation itself runs in Go.
 
+### Windows tester ZIP
+
+The Windows preview adds portable `.exe` binaries, a user-level PowerShell
+installer, font installation, a smoke-test harness, platform-specific browser
+opening and an experimental native PowerPoint COM backend. The qualified Mac
+installation/version is unchanged. Windows runtime and visual acceptance must
+be recorded on a real Windows desktop before promoting this preview.
+
+Cross-compile, then package from an existing qualified release (the producer
+needs Go; the recipient does not need Go or Python):
+
+```sh
+GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath \
+  -ldflags '-s -w -X main.version=0.1.0-local.21-windows-preview.1' \
+  -o /tmp/pptxgengo-windows-bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs
+go run ./cmd/pptxgengo package \
+  --release "$HOME/.local/share/pptxgengo/releases/0.1.0-local.21" \
+  --binaries /tmp/pptxgengo-windows-bin \
+  --skill skills/west-monroe-presentations \
+  --version 0.1.0-local.21-windows-preview.1 \
+  --out /tmp/pptxgengo-windows-amd64.zip --without-photos
+```
+
+Omit `--without-photos` for original photography as well. Use `GOARCH=arm64`
+and `--arch arm64` for a separate ARM64 package. Packaging verifies retained
+release file hashes and executable architecture, replaces the skill with the
+provided current copy, emits a new manifest, and never edits the installed
+release. `--out` must be new. The existing SQLite file is portable; the wrapper
+supplies the relocated bundle and gallery paths to discovery commands.
+
+Recipient instructions: [Windows tester guide](../internal/releasepackage/WINDOWS.md).
+
 The [local.20 qualification](qualification-local20.json) records density checks, source/bound sweeps, native review, documentation integrity, package verification and the global installation.
 
 [Local.21 migration qualification](qualification-local21.json) records the focused migration tests and installed command checks.

@@ -189,7 +189,11 @@ func cleanupExactTaskWithRunner(ctx context.Context, task cleanupTask, run runne
 		if err = os.WriteFile(scriptPath, exportScript, 0600); err != nil {
 			return err
 		}
-		_, err = run(ctx, "/usr/bin/osascript", taskCloseArguments(scriptPath, taskPath, pdfPath, task.TaskID, 3, owned)...)
+		if runtime.GOOS == "windows" {
+			_, err = windowsPowerPoint(ctx, run, work, windowsExportRequest{Action: "close", PPTX: taskPath})
+		} else {
+			_, err = run(ctx, "/usr/bin/osascript", taskCloseArguments(scriptPath, taskPath, pdfPath, task.TaskID, 3, owned)...)
+		}
 		if err != nil {
 			return fmt.Errorf("could not confirm exact-task PowerPoint close; task copy retained at %s: %w", taskPath, err)
 		}

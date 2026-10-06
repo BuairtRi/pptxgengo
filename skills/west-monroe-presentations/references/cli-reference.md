@@ -150,11 +150,11 @@ pptxgengo design render --pptx ./client-deck/builds/<build-id>/deck.pptx --out .
   --png --pdf --slides 3,5-7 --contact-sheet
 ```
 
-- `render-doctor` checks PowerPoint, the GUI session, the staging folder, automation, PDFKit and file access, with a fix for each failure. It opens and closes a test deck in the staging folder to check file access, which can bring up PowerPoint's Grant File Access dialog for the operator to clear. A pass doesn't guarantee the next render succeeds.
+- On macOS, `render-doctor` checks PowerPoint, the GUI session, the staging folder, automation, PDFKit and file access. The Windows preview uses PowerShell COM to probe actual PDF/PNG export and font availability; read [Windows workflows](windows.md). A pass doesn't guarantee the next render succeeds.
 - `render` flags: `--pptx`, `--out` (new), `--pdf` and/or `--png`, `--slides` (pages or ranges), `--contact-sheet`, `--include-hidden`, `--staging-dir` (or `PPTXGENGO_NATIVE_STAGING`), `--timeout` (default 5m).
 - Output: a signed `render-manifest.json`, `native-pages/slide-NNN.png` (numbered by source slide), the PDF and the contact sheet. Never edit the manifest; `attach-render` rejects anything not signed by a render on this machine.
 - It works on a temporary copy and never changes the source deck.
-- **First render on a machine:** PowerPoint shows a "Grant File Access" dialog for the staging folder. The operator must click Grant. Until then, renders fail within seconds with `file_access_denied … PowerPoint is showing Grant File Access`. Every failed render writes `render-error.txt` in `--out`.
+- **First macOS render:** PowerPoint may show a "Grant File Access" dialog for the staging folder. The operator must click Grant. Until then, renders fail within seconds with `file_access_denied … PowerPoint is showing Grant File Access`. Windows has its own setup, policy and Protected View diagnostics. Every failed render writes `render-error.txt` in `--out`.
 - If a render fails, read `render-error.txt`, run `render-doctor`, ask the operator to clear what they report, then retry once.
 
 ## Inspect an existing PowerPoint

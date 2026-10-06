@@ -44,3 +44,25 @@ exhaustive:
     - when: never
   script:
     - make "$TEST_TARGET"
+
+# Opt-in for the home-lab Windows shell runner. Run its agent from the signed-in
+# desktop; a Session 0 Windows service cannot qualify PowerPoint automation.
+windows-native:
+  stage: test
+  tags: [windows, pptxgengo-windows-native]
+  timeout: 10 minutes
+  interruptible: false
+  rules:
+    - if: '$PPTXGENGO_WINDOWS_NATIVE == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "web"'
+      when: manual
+      allow_failure: false
+    - when: never
+  script:
+    - '$env:CGO_ENABLED = "0"'
+    - 'go build -trimpath -o bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }'
+    - 'Copy-Item internal/releasepackage/smoke-test-windows.ps1 .'
+    - 'powershell -NoProfile -ExecutionPolicy Bypass -File .\smoke-test-windows.ps1 -Native -Out "$env:CI_PROJECT_DIR\windows-native-results"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }'
+  artifacts:
+    when: always
+    expire_in: 14 days
+    paths: [windows-native-results/]

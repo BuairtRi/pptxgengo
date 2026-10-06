@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -18,7 +19,7 @@ func runRender(args []string) (err error) {
 	source := flags.String("pptx", "", "existing PowerPoint deck (never modified)")
 	out := flags.String("out", "", "new output directory")
 	pdf := flags.Bool("pdf", false, "export PDF through local Microsoft PowerPoint")
-	png := flags.Bool("png", false, "render each native PDF page to PNG with macOS PDFKit")
+	png := flags.Bool("png", false, "export native PNGs: macOS PDFKit or Windows PowerPoint COM")
 	hidden := flags.Bool("include-hidden", false, "make hidden slides visible in the temporary review copy")
 	slides := flags.String("slides", "", "one-based source slide numbers or ranges, e.g. 3,5-7")
 	contact := flags.Bool("contact-sheet", false, "create a PNG contact sheet labeled with source slide numbers")
@@ -43,6 +44,9 @@ func runRender(args []string) (err error) {
 		return fmt.Errorf("render accepts no positional arguments")
 	}
 	renderStarted = true
+	if runtime.GOOS == "windows" {
+		fmt.Fprintln(os.Stderr, "warning: Windows native PowerPoint rendering is experimental; review exported pages and report any COM or policy failures.")
+	}
 	receipt, err := nativeexport.Render(context.Background(), nativeexport.Options{PPTX: *source, Out: *out, PDF: *pdf, PNG: *png, IncludeHidden: *hidden, Timeout: *timeout, Slides: *slides, ContactSheet: *contact, StagingRoot: *staging})
 	if err != nil {
 		return err

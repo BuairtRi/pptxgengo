@@ -42,8 +42,11 @@ func readIssuerKey(path string) (ed25519.PrivateKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !info.Mode().IsRegular() || info.Mode().Perm()&0077 != 0 {
+	if !info.Mode().IsRegular() {
 		return nil, fmt.Errorf("native issuer key must be a private regular file (mode 0600): %s", path)
+	}
+	if err = validateTrustPermissions(path, info); err != nil {
+		return nil, err
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -77,8 +80,14 @@ func localIssuerKey(create bool) (ed25519.PrivateKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !info.IsDir() || info.Mode().Perm()&0077 != 0 {
+	if !info.IsDir() {
 		return nil, fmt.Errorf("native trust directory must be private (mode 0700): %s", dir)
+	}
+	if err = protectTrustPermissions(dir); err != nil {
+		return nil, err
+	}
+	if err = validateTrustPermissions(dir, info); err != nil {
+		return nil, err
 	}
 	_, key, err = ed25519.GenerateKey(rand.Reader)
 	if err != nil {
@@ -95,6 +104,10 @@ func localIssuerKey(create bool) (ed25519.PrivateKey, error) {
 		return nil, err
 	}
 	defer os.Remove(f.Name())
+	if err = protectTrustPermissions(f.Name()); err != nil {
+		f.Close()
+		return nil, err
+	}
 	if _, err = f.Write(data); err != nil {
 		f.Close()
 		return nil, err

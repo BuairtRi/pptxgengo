@@ -299,7 +299,10 @@ func TestNativeIssuerConcurrentCreation(t *testing.T) {
 		t.Fatal(err)
 	}
 	info, err := os.Lstat(path)
-	if err != nil || info.Mode().Perm() != 0600 {
+	if err != nil {
 		t.Fatal(info, err)
+	}
+	if err := validateTrustPermissions(path, info); err != nil {
+		t.Fatal(err)
 	}
 }

@@ -21,6 +21,9 @@ func TestMain(m *testing.M) {
 	if len(os.Args) > 1 && os.Args[1] == "render-native-worker" {
 		if os.Getenv("PPTXGENGO_TEST_BLOCK_WORKER") == "1" {
 			child := exec.Command("/bin/sleep", "60")
+			if runtime.GOOS == "windows" {
+				child = exec.Command("powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-Command", "Start-Sleep -Seconds 60")
+			}
 			child.Stdout = os.Stdout
 			child.Stderr = os.Stderr
 			if err := child.Start(); err != nil {
@@ -28,7 +31,7 @@ func TestMain(m *testing.M) {
 				os.Exit(1)
 			}
 			if ready := os.Getenv("PPTXGENGO_TEST_WORKER_READY"); ready != "" {
-				if err := os.WriteFile(ready, []byte("helper started\n"), 0600); err != nil {
+				if err := os.WriteFile(ready, []byte(fmt.Sprintf("%d\n", child.Process.Pid)), 0600); err != nil {
 					_ = child.Process.Kill()
 					_ = child.Wait()
 					fmt.Fprintln(os.Stderr, err)
@@ -53,6 +56,11 @@ func TestMain(m *testing.M) {
 	if os.Getenv("PPTXGENGO_NATIVE_LIVE_OUT") == "" {
 		_ = os.Setenv("HOME", home)
 		_ = os.Setenv("XDG_CONFIG_HOME", filepath.Join(home, "config"))
+		if runtime.GOOS == "windows" {
+			_ = os.Setenv("USERPROFILE", home)
+			_ = os.Setenv("APPDATA", filepath.Join(home, "config"))
+			_ = os.Setenv("LOCALAPPDATA", filepath.Join(home, "cache"))
+		}
 	}
 	code := m.Run()
 	_ = os.RemoveAll(home)

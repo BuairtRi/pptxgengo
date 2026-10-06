@@ -188,6 +188,9 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	scriptPath := filepath.Join(work, "export.applescript")
 	swiftPath := filepath.Join(work, "pdf.swift")
 	for path, data := range map[string][]byte{scriptPath: exportScript, swiftPath: pdfScript} {
+		if platform == "windows" {
+			break
+		}
 		if err = os.WriteFile(path, data, 0600); err != nil {
 			return nil, err
 		}
@@ -197,10 +200,21 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 		return nil, err
 	}
 	cleanupConfirmed = false
-	if _, err = run(ctx, "/usr/bin/osascript", taskExportArguments(scriptPath, taskPath, pdfPath, opts.taskID, seconds)...); err != nil {
+	var windowsResult windowsExportResult
+	if platform == "windows" {
+		windowsResult, err = windowsNativeExport(ctx, run, work, taskPath, pdfPath, opts.PNG || opts.ContactSheet, true)
+	} else {
+		_, err = run(ctx, "/usr/bin/osascript", taskExportArguments(scriptPath, taskPath, pdfPath, opts.taskID, seconds)...)
+	}
+	if err != nil {
 		// Resolve the exact task-copy path again; never close by display name.
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-		_, closeErr := run(cleanupCtx, "/usr/bin/osascript", taskCloseArguments(scriptPath, taskPath, pdfPath, opts.taskID, 3, true)...)
+		var closeErr error
+		if platform == "windows" {
+			_, closeErr = windowsPowerPoint(cleanupCtx, run, work, windowsExportRequest{Action: "close", PPTX: taskPath})
+		} else {
+			_, closeErr = run(cleanupCtx, "/usr/bin/osascript", taskCloseArguments(scriptPath, taskPath, pdfPath, opts.taskID, 3, true)...)
+		}
 		cancel()
 		cleanupConfirmed = closeErr == nil
 		if closeErr != nil {
@@ -223,15 +237,25 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	if opts.PNG || opts.ContactSheet {
 		mode = "png"
 	}
-	metadata, err := run(ctx, "/usr/bin/swift", swiftPath, pdfPath, filepath.Join(work, "native-pages"), mode)
-	if err != nil {
-		return nil, err
-	}
 	var result struct {
 		Pages int `json:"pages"`
 	}
-	if err = json.Unmarshal(metadata, &result); err != nil {
-		return nil, fmt.Errorf("PDFKit returned invalid metadata: %w", err)
+	if platform == "windows" {
+		result.Pages, err = windowsPDFPageCount(pdfBytes)
+		if err != nil {
+			return nil, err
+		}
+		if result.Pages != windowsResult.Pages {
+			return nil, fmt.Errorf("native PDF page count %d differs from Windows PowerPoint count %d", result.Pages, windowsResult.Pages)
+		}
+	} else {
+		metadata, exportErr := run(ctx, "/usr/bin/swift", swiftPath, pdfPath, filepath.Join(work, "native-pages"), mode)
+		if exportErr != nil {
+			return nil, exportErr
+		}
+		if err = json.Unmarshal(metadata, &result); err != nil {
+			return nil, fmt.Errorf("PDFKit returned invalid metadata: %w", err)
+		}
 	}
 	expected := len(mappings)
 	if result.Pages != expected {
@@ -239,6 +263,9 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 	}
 	selected, _ := ParseSlides(opts.Slides, total)
 	receipt := &Receipt{TaskID: filepath.Base(work), Renderer: "Microsoft PowerPoint (local native PDF); macOS PDFKit PNG", Source: Artifact{Path: source, SHA256: hash(original)}, ReviewCopySHA256: hash(review), IncludeHidden: opts.IncludeHidden, HiddenSlidesMadeVisible: []string{}, Slides: total, Pages: result.Pages, PageMappings: mappings, SelectedSlides: selected, Staging: qualification + "; qualified by this successful export", StagingPath: staging}
+	if platform == "windows" {
+		receipt.Renderer = "Microsoft PowerPoint (local native PDF); Windows PowerPoint COM slide PNG"
+	}
 	if opts.IncludeHidden {
 		receipt.HiddenSlidesMadeVisible = hidden
 	}
@@ -335,8 +362,8 @@ func render(ctx context.Context, opts Options, run runner, platform string) (_ *
 }
 
 func validateRenderOptions(opts Options, platform string) error {
-	if platform != "darwin" {
-		return fmt.Errorf("native rendering requires macOS with Microsoft PowerPoint and the Swift/PDFKit tools installed")
+	if platform != "darwin" && platform != "windows" {
+		return fmt.Errorf("native rendering requires macOS (Swift/PDFKit) or Windows (PowerShell COM) with desktop Microsoft PowerPoint")
 	}
 	if opts.PPTX == "" || opts.Out == "" || (!opts.PDF && !opts.PNG) {
 		return fmt.Errorf("--pptx, --out, and at least one of --pdf or --png are required")

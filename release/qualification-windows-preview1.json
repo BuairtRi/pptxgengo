@@ -1,0 +1,59 @@
+{
+  "schema": "pptxgengo.windows-preview-qualification.v1",
+  "version": "0.1.0-local.21-windows-preview.1",
+  "date": "2026-10-06",
+  "baseline_commit": "99bf820b6391735789dc606a00e73ae68b2f62ca",
+  "source_revision": "wmds-library.v11",
+  "inherited_gallery_qualification": "qualification-local21.json",
+  "source_and_gallery_unchanged": true,
+  "template_count": 649,
+  "builds": {
+    "windows_amd64": "cross_compilation_passed",
+    "windows_arm64": "cross_compilation_passed",
+    "windows_native_test_binary": "cross_compilation_passed"
+  },
+  "tests": {
+    "make_test_on_macos": "passed",
+    "focused_nativeexport_releasepackage_launcher_tests": "passed",
+    "targeted_nativeexport_and_releasepackage_race_tests": "passed",
+    "macos_native_powerpoint_regression": "passed",
+    "actual_powerpoint_pdf_page_reader": "passed",
+    "powershell_script_ast_parsing": "passed_on_powershell_7_macos",
+    "portable_smoke_script": {
+      "status": "passed",
+      "cli_commands": 13,
+      "host": "macOS with PowerShell 7 and native Mac CLI shims",
+      "windows_runtime_qualification": false
+    },
+    "skill_validation": "passed",
+    "zip_crc_checks": "passed_for_both_archives"
+  },
+  "packages": [
+    {
+      "filename": "pptxgengo-windows-amd64-tester-20261006.zip",
+      "bytes": 265697582,
+      "files": 4635,
+      "original_photographs_included": false,
+      "sha256": "f918df24dbe0a3703f3bb62b8fd8ab406bf93e1b96ba94eaba322677f40e5259"
+    },
+    {
+      "filename": "pptxgengo-windows-amd64-full-20261006.zip",
+      "bytes": 4270837033,
+      "files": 5156,
+      "original_photographs_included": true,
+      "sha256": "040cff365ba7e789fc2c2085f9e5e0701ac7e21f05ddff881c5d1a8c4cd306c9"
+    }
+  ],
+  "windows_runtime_qualified": false,
+  "windows_native_render_status": "experimental; requires first real Windows desktop PowerPoint smoke and visual review",
+  "windows_ci": {
+    "portable": ".github/workflows/windows-tests.yml",
+    "native": ".github/workflows/windows-tests.yml and .gitlab-ci.yml",
+    "status": "configured; not observed running",
+    "native_runner_label": "pptxgengo-windows-native",
+    "native_opt_in_variable": "PPTXGENGO_WINDOWS_NATIVE=true"
+  },
+  "global_macos_install_unchanged": true,
+  "existing_sample_decks_modified": false,
+  "limitation": "Cross compilation, simulated COM exports, PowerShell parsing and Mac regression checks do not qualify Windows execution or Windows native rendering. Colleagues should run the bundled smoke script and review native full-size PNGs."
+}

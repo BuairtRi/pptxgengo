@@ -46,6 +46,34 @@ tagged `pptxgengo-integration`.
 Do not set the live native output environment variable in general CI jobs.
 Native PowerPoint qualification remains a separate `make test-native` run.
 
+### Windows preview
+
+`.github/workflows/windows-tests.yml` builds the three Windows executables,
+parses the PowerShell scripts, runs portable Go regression tests and a package-style
+smoke test in a path containing spaces. It uses hosted `windows-latest`, does not
+open PowerPoint and needs no private photographs. Windows COM export and NTFS
+receipt permissions also have simulated regression coverage.
+
+Actual Windows PowerPoint qualification is a separate opt-in workflow job. Register
+a self-hosted runner with labels `Windows` and `pptxgengo-windows-native`, install
+desktop PowerPoint and the bundled IBM Plex fonts, and start the runner's `run.cmd`
+from the signed-in desktop account. A Windows service/session-zero runner is not
+an eligible Office automation session. Set repository variable
+`PPTXGENGO_WINDOWS_NATIVE=true`, then manually dispatch the workflow on the default
+branch. It retains PDFs, PNGs, receipts and logs; a human must still inspect the
+full-size images. No native job is enabled for pull requests.
+
+GitLab has the matching opt-in `windows-native` job for a PowerShell shell runner
+tagged `windows` and `pptxgengo-windows-native`. Enable
+`PPTXGENGO_WINDOWS_NATIVE=true` and run its manual job in a web pipeline on the
+protected default branch. It also requires an interactive desktop runner and
+retains the smoke-test output as an artifact.
+
+The tester ZIP includes `smoke-test-windows.ps1`; use `-Native` only on a real
+Windows desktop with PowerPoint. Its manifest explicitly reports that a
+cross-compiled build has not yet received Windows runtime qualification. See
+`internal/releasepackage/WINDOWS.md` for installation and operator checks.
+
 ## Short-mode skips
 
 The following tests retain their full assertions in `make test-integration` and

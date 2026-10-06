@@ -4,9 +4,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -35,6 +37,7 @@ func usage() {
 	fmt.Fprintln(os.Stderr, "       pptxgengo catalog [--templates|--design-system|--assets] [--print|--open]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
 	fmt.Fprintln(os.Stderr, "       pptxgengo docs [--addr localhost:8787]")
+	fmt.Fprintln(os.Stderr, "       pptxgengo package --binaries DIR --version VERSION --out NEW.zip [--arch amd64|arm64] [--without-photos]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
 }
 
@@ -165,7 +168,37 @@ func runCatalog(root string, args []string) error {
 		fmt.Println(path)
 		return nil
 	}
-	return exec.Command("open", path).Run()
+	name, args := catalogOpenCommand(path, runtime.GOOS)
+	return exec.Command(name, args...).Run()
+}
+
+// Pass paths as arguments, never through cmd.exe or a shell. Catalog filenames
+// may contain spaces, ampersands or other shell metacharacters.
+func catalogOpenCommand(path, platform string) (string, []string) {
+	switch platform {
+	case "windows":
+		uri := &url.URL{Scheme: "file", Path: "/" + strings.ReplaceAll(path, `\`, "/")}
+		if strings.HasPrefix(uri.Path, "///") {
+			parts := strings.SplitN(strings.TrimPrefix(uri.Path, "///"), "/", 2)
+			uri.Host = parts[0]
+			uri.Path = "/"
+			if len(parts) == 2 {
+				uri.Path += parts[1]
+			}
+		}
+		return "rundll32.exe", []string{"url.dll,FileProtocolHandler", uri.String()}
+	case "darwin":
+		return "open", []string{path}
+	default:
+		return "xdg-open", []string{path}
+	}
+}
+
+func toolFilename(tool, platform string) string {
+	if platform == "windows" {
+		return tool + ".exe"
+	}
+	return tool
 }
 
 func run() error {
@@ -191,6 +224,9 @@ func run() error {
 	}
 	if name == "catalog" {
 		return runCatalog(root, os.Args[2:])
+	}
+	if name == "package" {
+		return runPackage(root, os.Args[2:])
 	}
 	if name == "paths" {
 		if len(os.Args) != 2 {
@@ -229,7 +265,7 @@ func run() error {
 		usage()
 		return fmt.Errorf("unknown tool %q", name)
 	}
-	path := filepath.Join(root, "bin", tool)
+	path := filepath.Join(root, "bin", toolFilename(tool, runtime.GOOS))
 	args := append([]string{}, os.Args[2:]...)
 	if tool == "wmdsdocs" {
 		args = docsArgs(root, args)
