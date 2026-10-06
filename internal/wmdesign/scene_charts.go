@@ -978,7 +978,7 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 			ts := st
 			ts.ID = "source.quadrant-tag.8.5.12"
 			ts.Size = 8.5
-			tl, err := r.typeEngine.Measure(q.Tag, ts, midX-18)
+			tl, err := r.measureText(q.Tag, ts, midX-18)
 			if err != nil {
 				return err
 			}
@@ -1036,7 +1036,7 @@ func (r *renderer) sceneQuadrantChart(p *scenePlan, id string, n sceneChartSourc
 		text string
 		cy   float64
 	}{{"High", y + 18}, {"Low", y + plotH - 18}, {n.YTitle + " →", y + midY}} {
-		l, err := r.typeEngine.Measure(a.text, ys, plotH)
+		l, err := r.measureText(a.text, ys, plotH)
 		if err != nil {
 			return err
 		}

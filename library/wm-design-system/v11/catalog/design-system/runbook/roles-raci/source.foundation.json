@@ -1,0 +1,197 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-474",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Cutover runbook",
+      "title": "Every cutover step has exactly one [[accountable]] role",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "header": "dark",
+              "rowHeader": true,
+              "preset": "raci",
+              "rowH": 36,
+              "cols": [
+                {
+                  "k": "act",
+                  "label": "Cutover step",
+                  "w": 270
+                },
+                {
+                  "k": "c",
+                  "label": "Cutover lead",
+                  "w": 96,
+                  "type": "raci"
+                },
+                {
+                  "k": "l",
+                  "label": "Ledger owner",
+                  "w": 96,
+                  "type": "raci"
+                },
+                {
+                  "k": "t",
+                  "label": "Technical lead",
+                  "w": 96,
+                  "type": "raci"
+                },
+                {
+                  "k": "i",
+                  "label": "Integration lead",
+                  "w": 96,
+                  "type": "raci"
+                },
+                {
+                  "k": "d",
+                  "label": "Data lead",
+                  "w": 96,
+                  "type": "raci"
+                },
+                {
+                  "k": "s",
+                  "label": "Support lead",
+                  "w": 96,
+                  "type": "raci"
+                }
+              ],
+              "rows": [
+                {
+                  "act": "Freeze legacy postings",
+                  "c": "A",
+                  "l": "C",
+                  "t": "R",
+                  "i": "I",
+                  "d": "I",
+                  "s": "I"
+                },
+                {
+                  "act": "Extract and reconcile balances",
+                  "c": "I",
+                  "l": "A",
+                  "t": "C",
+                  "i": "I",
+                  "d": "R",
+                  "s": "I"
+                },
+                {
+                  "act": "Load balances to the new ledger",
+                  "c": "I",
+                  "l": "A",
+                  "t": "R",
+                  "i": "I",
+                  "d": "C",
+                  "s": "I"
+                },
+                {
+                  "act": "Switch interfaces to the new ledger",
+                  "c": "I",
+                  "l": "I",
+                  "t": "C",
+                  "i": "A/R",
+                  "d": "C",
+                  "s": "I"
+                },
+                {
+                  "act": "Hold the go or no-go decision",
+                  "c": "A/R",
+                  "l": "C",
+                  "t": "C",
+                  "i": "C",
+                  "d": "C",
+                  "s": "I"
+                },
+                {
+                  "act": "Notify users and open hypercare",
+                  "c": "A",
+                  "l": "I",
+                  "t": "I",
+                  "i": "I",
+                  "d": "I",
+                  "s": "R"
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "block",
+              "x": 57,
+              "y": 414,
+              "w": 846,
+              "h": 36,
+              "surface": "subtle",
+              "style": "small",
+              "align": "left",
+              "text": "Authority: only the accountable role signs a step off. The cutover lead's go or no-go call overrides any other sign-off."
+            },
+            "source_pointer": "/body/1"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-474",
+        "template": "runbook/roles-raci",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/runbooks.json",
+        "source_sha256": "36d5e149b055381cbd8f4d5b5a03fe285141ad172e3df1db881ec20335da2b97",
+        "source_revision": "wmds-library.v11",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "block"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {
+        "emphasis": "highlight"
+      }
+    }
+  ]
+}

@@ -467,7 +467,7 @@ func (r *renderer) planIntakeCurveScene(id string, raw json.RawMessage, ctx Scen
 				// A fixed180pt box clamped at the component edge can shift a
 				// short label into the adjacent band. Center its measured native
 				// width on the authored sample instead.
-				layout, e := r.typeEngine.Measure(se.Name, st, labelW)
+				layout, e := r.measureText(se.Name, st, labelW)
 				if e != nil {
 					return nil, true, e
 				}

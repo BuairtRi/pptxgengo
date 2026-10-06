@@ -162,7 +162,7 @@ func (r *renderer) round12Stack(p *scenePlan, id string, parts []round12TextPart
 			record = *child.Items[0].Text
 			p.Warnings = append(p.Warnings, child.Warnings...)
 		} else {
-			l, err := r.typeEngine.Measure(part.text, st, b.W)
+			l, err := r.measureText(part.text, st, b.W)
 			if err != nil {
 				return err
 			}

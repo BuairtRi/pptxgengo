@@ -8,6 +8,9 @@ import (
 // These named composition amendments preserve the pinned source and caller copy.
 // They are not content-driven shrinking or geometry supplied by a binding.
 func applyLibraryRefinements(key, revision string, doc *SlideSpec) error {
+	if revision == LibraryRevisionV11 {
+		return applyLibraryRefinements(key, LibraryRevisionV10, doc)
+	}
 	if revision == LibraryRevisionV10 {
 		if err := applyV10AllocationRefinements(key, doc); err != nil {
 			return err

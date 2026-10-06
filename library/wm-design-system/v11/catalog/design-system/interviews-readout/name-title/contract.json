@@ -1,0 +1,2622 @@
+{
+  "key": "interviews-readout/name-title",
+  "source_file": "templates/library/interviews.json",
+  "source_sha256": "9b198a491667120ab6cbb61b938b23f4533694e79d4e4479bc4a5f469892a92d",
+  "source_revision": "wmds-library.v11",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "legend"
+    }
+  ],
+  "family": "interviews",
+  "tier": "core",
+  "name": "Interview readout · name and title cells",
+  "purpose": "A calmer readout with name and title stacked in one cell, date and format stacked, and the request with its due date beneath.",
+  "uses": [
+    "table ({text, sub} cells, status)",
+    "legend"
+  ],
+  "source_advisory_budget": {
+    "words": 202,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 60
+    },
+    {
+      "slot": "row",
+      "count": "7"
+    },
+    {
+      "slot": "cell text",
+      "maxChars": 30
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "legend",
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 7,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "legend",
+        "role": "content",
+        "exact_count": 3,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "legend",
+        "role": "content",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 432
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v11",
+    "source_sha256": "9b198a491667120ab6cbb61b938b23f4533694e79d4e4479bc4a5f469892a92d",
+    "review_status": "inferred_from_pinned_source",
+    "recipe": "interview-readout-columns.v1",
+    "semantic_status": "engineering_recipe_requires_review",
+    "relationship": "table",
+    "groups": [
+      {
+        "alias": "/interview_columns",
+        "role": "column",
+        "cardinality": 6,
+        "source_pointer": "/body",
+        "basis": "explicit_source_recipe"
+      },
+      {
+        "alias": "/interviewees",
+        "role": "person",
+        "cardinality": 7,
+        "source_pointer": "/body",
+        "basis": "explicit_source_recipe"
+      },
+      {
+        "alias": "/legends/item_01/items",
+        "role": "content",
+        "cardinality": 3,
+        "source_pointer": "/body/1/items",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "source.text",
+        "alias": "/source_note",
+        "source_pointer": "/source/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "source",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "source (string) at /source_note",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "source",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0",
+            "use": "Source lines and footnotes",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the template's preferred authored body density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item01.label",
+        "alias": "/interview_columns/item_01/label",
+        "source_pointer": "/body/0/cols/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 0,
+        "cardinality": 6,
+        "description": "interview_columns item_01 label; pinned source field /body/0/cols/0/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item02.label",
+        "alias": "/interview_columns/item_02/label",
+        "source_pointer": "/body/0/cols/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 1,
+        "cardinality": 6,
+        "description": "interview_columns item_02 label; pinned source field /body/0/cols/1/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item03.label",
+        "alias": "/interview_columns/item_03/label",
+        "source_pointer": "/body/0/cols/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 2,
+        "cardinality": 6,
+        "description": "interview_columns item_03 label; pinned source field /body/0/cols/2/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item04.label",
+        "alias": "/interview_columns/item_04/label",
+        "source_pointer": "/body/0/cols/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 3,
+        "cardinality": 6,
+        "description": "interview_columns item_04 label; pinned source field /body/0/cols/3/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.label",
+        "alias": "/interview_columns/item_05/label",
+        "source_pointer": "/body/0/cols/4/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 4,
+        "cardinality": 6,
+        "description": "interview_columns item_05 label; pinned source field /body/0/cols/4/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.labels.blocked",
+        "alias": "/interview_columns/item_05/labels/blocked",
+        "source_pointer": "/body/0/cols/4/labels/blocked",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 4,
+        "cardinality": 6,
+        "description": "interview_columns item_05 labels blocked; pinned source field /body/0/cols/4/labels/blocked",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.labels.notstarted",
+        "alias": "/interview_columns/item_05/labels/notstarted",
+        "source_pointer": "/body/0/cols/4/labels/notstarted",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 4,
+        "cardinality": 6,
+        "description": "interview_columns item_05 labels notstarted; pinned source field /body/0/cols/4/labels/notstarted",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.labels.off",
+        "alias": "/interview_columns/item_05/labels/off",
+        "source_pointer": "/body/0/cols/4/labels/off",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 4,
+        "cardinality": 6,
+        "description": "interview_columns item_05 labels off; pinned source field /body/0/cols/4/labels/off",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.labels.risk",
+        "alias": "/interview_columns/item_05/labels/risk",
+        "source_pointer": "/body/0/cols/4/labels/risk",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 4,
+        "cardinality": 6,
+        "description": "interview_columns item_05 labels risk; pinned source field /body/0/cols/4/labels/risk",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item06.label",
+        "alias": "/interview_columns/item_06/label",
+        "source_pointer": "/body/0/cols/5/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/interview_columns",
+        "group_index": 5,
+        "cardinality": 6,
+        "description": "interview_columns item_06 label; pinned source field /body/0/cols/5/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.d",
+        "alias": "/interviewees/item_01/department",
+        "source_pointer": "/body/0/rows/0/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "department",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 department; pinned source field /body/0/rows/0/d",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.m.text",
+        "alias": "/interviewees/item_01/met/text",
+        "source_pointer": "/body/0/rows/0/m/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 met text; pinned source field /body/0/rows/0/m/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.m.sub",
+        "alias": "/interviewees/item_01/met/sub",
+        "source_pointer": "/body/0/rows/0/m/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 met sub; pinned source field /body/0/rows/0/m/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.o",
+        "alias": "/interviewees/item_01/owner",
+        "source_pointer": "/body/0/rows/0/o",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "owner",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 owner; pinned source field /body/0/rows/0/o",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.p.text",
+        "alias": "/interviewees/item_01/person/text",
+        "source_pointer": "/body/0/rows/0/p/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 person text; pinned source field /body/0/rows/0/p/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.p.sub",
+        "alias": "/interviewees/item_01/person/sub",
+        "source_pointer": "/body/0/rows/0/p/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 person sub; pinned source field /body/0/rows/0/p/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.q.text",
+        "alias": "/interviewees/item_01/follow_up_request/text",
+        "source_pointer": "/body/0/rows/0/q/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 follow_up_request text; pinned source field /body/0/rows/0/q/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.q.sub",
+        "alias": "/interviewees/item_01/follow_up_request/sub",
+        "source_pointer": "/body/0/rows/0/q/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 follow_up_request sub; pinned source field /body/0/rows/0/q/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.s",
+        "alias": "/interviewees/item_01/request_status",
+        "source_pointer": "/body/0/rows/0/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "request_status",
+        "group": "/interviewees",
+        "group_index": 0,
+        "cardinality": 7,
+        "description": "interviewees item_01 request_status; pinned source field /body/0/rows/0/s",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.d",
+        "alias": "/interviewees/item_02/department",
+        "source_pointer": "/body/0/rows/1/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "department",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 department; pinned source field /body/0/rows/1/d",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.m.text",
+        "alias": "/interviewees/item_02/met/text",
+        "source_pointer": "/body/0/rows/1/m/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 met text; pinned source field /body/0/rows/1/m/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.m.sub",
+        "alias": "/interviewees/item_02/met/sub",
+        "source_pointer": "/body/0/rows/1/m/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 met sub; pinned source field /body/0/rows/1/m/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.o",
+        "alias": "/interviewees/item_02/owner",
+        "source_pointer": "/body/0/rows/1/o",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "owner",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 owner; pinned source field /body/0/rows/1/o",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.p.text",
+        "alias": "/interviewees/item_02/person/text",
+        "source_pointer": "/body/0/rows/1/p/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 person text; pinned source field /body/0/rows/1/p/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.p.sub",
+        "alias": "/interviewees/item_02/person/sub",
+        "source_pointer": "/body/0/rows/1/p/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 person sub; pinned source field /body/0/rows/1/p/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.q.text",
+        "alias": "/interviewees/item_02/follow_up_request/text",
+        "source_pointer": "/body/0/rows/1/q/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 follow_up_request text; pinned source field /body/0/rows/1/q/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.q.sub",
+        "alias": "/interviewees/item_02/follow_up_request/sub",
+        "source_pointer": "/body/0/rows/1/q/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 follow_up_request sub; pinned source field /body/0/rows/1/q/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.s",
+        "alias": "/interviewees/item_02/request_status",
+        "source_pointer": "/body/0/rows/1/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "request_status",
+        "group": "/interviewees",
+        "group_index": 1,
+        "cardinality": 7,
+        "description": "interviewees item_02 request_status; pinned source field /body/0/rows/1/s",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.d",
+        "alias": "/interviewees/item_03/department",
+        "source_pointer": "/body/0/rows/2/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "department",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 department; pinned source field /body/0/rows/2/d",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.m.text",
+        "alias": "/interviewees/item_03/met/text",
+        "source_pointer": "/body/0/rows/2/m/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 met text; pinned source field /body/0/rows/2/m/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.m.sub",
+        "alias": "/interviewees/item_03/met/sub",
+        "source_pointer": "/body/0/rows/2/m/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 met sub; pinned source field /body/0/rows/2/m/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.o",
+        "alias": "/interviewees/item_03/owner",
+        "source_pointer": "/body/0/rows/2/o",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "owner",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 owner; pinned source field /body/0/rows/2/o",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.p.text",
+        "alias": "/interviewees/item_03/person/text",
+        "source_pointer": "/body/0/rows/2/p/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 person text; pinned source field /body/0/rows/2/p/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.p.sub",
+        "alias": "/interviewees/item_03/person/sub",
+        "source_pointer": "/body/0/rows/2/p/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 person sub; pinned source field /body/0/rows/2/p/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.q.text",
+        "alias": "/interviewees/item_03/follow_up_request/text",
+        "source_pointer": "/body/0/rows/2/q/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 follow_up_request text; pinned source field /body/0/rows/2/q/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.q.sub",
+        "alias": "/interviewees/item_03/follow_up_request/sub",
+        "source_pointer": "/body/0/rows/2/q/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 follow_up_request sub; pinned source field /body/0/rows/2/q/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.s",
+        "alias": "/interviewees/item_03/request_status",
+        "source_pointer": "/body/0/rows/2/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "request_status",
+        "group": "/interviewees",
+        "group_index": 2,
+        "cardinality": 7,
+        "description": "interviewees item_03 request_status; pinned source field /body/0/rows/2/s",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.d",
+        "alias": "/interviewees/item_04/department",
+        "source_pointer": "/body/0/rows/3/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "department",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 department; pinned source field /body/0/rows/3/d",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.m.text",
+        "alias": "/interviewees/item_04/met/text",
+        "source_pointer": "/body/0/rows/3/m/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 met text; pinned source field /body/0/rows/3/m/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.m.sub",
+        "alias": "/interviewees/item_04/met/sub",
+        "source_pointer": "/body/0/rows/3/m/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 met sub; pinned source field /body/0/rows/3/m/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.o",
+        "alias": "/interviewees/item_04/owner",
+        "source_pointer": "/body/0/rows/3/o",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "owner",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 owner; pinned source field /body/0/rows/3/o",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.p.text",
+        "alias": "/interviewees/item_04/person/text",
+        "source_pointer": "/body/0/rows/3/p/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 person text; pinned source field /body/0/rows/3/p/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.p.sub",
+        "alias": "/interviewees/item_04/person/sub",
+        "source_pointer": "/body/0/rows/3/p/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 person sub; pinned source field /body/0/rows/3/p/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.q.text",
+        "alias": "/interviewees/item_04/follow_up_request/text",
+        "source_pointer": "/body/0/rows/3/q/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 follow_up_request text; pinned source field /body/0/rows/3/q/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.q.sub",
+        "alias": "/interviewees/item_04/follow_up_request/sub",
+        "source_pointer": "/body/0/rows/3/q/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 follow_up_request sub; pinned source field /body/0/rows/3/q/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.s",
+        "alias": "/interviewees/item_04/request_status",
+        "source_pointer": "/body/0/rows/3/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "request_status",
+        "group": "/interviewees",
+        "group_index": 3,
+        "cardinality": 7,
+        "description": "interviewees item_04 request_status; pinned source field /body/0/rows/3/s",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.d",
+        "alias": "/interviewees/item_05/department",
+        "source_pointer": "/body/0/rows/4/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "department",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 department; pinned source field /body/0/rows/4/d",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.m.text",
+        "alias": "/interviewees/item_05/met/text",
+        "source_pointer": "/body/0/rows/4/m/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 met text; pinned source field /body/0/rows/4/m/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.m.sub",
+        "alias": "/interviewees/item_05/met/sub",
+        "source_pointer": "/body/0/rows/4/m/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 met sub; pinned source field /body/0/rows/4/m/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.o",
+        "alias": "/interviewees/item_05/owner",
+        "source_pointer": "/body/0/rows/4/o",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "owner",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 owner; pinned source field /body/0/rows/4/o",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.p.text",
+        "alias": "/interviewees/item_05/person/text",
+        "source_pointer": "/body/0/rows/4/p/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 person text; pinned source field /body/0/rows/4/p/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.p.sub",
+        "alias": "/interviewees/item_05/person/sub",
+        "source_pointer": "/body/0/rows/4/p/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 person sub; pinned source field /body/0/rows/4/p/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.q.text",
+        "alias": "/interviewees/item_05/follow_up_request/text",
+        "source_pointer": "/body/0/rows/4/q/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 follow_up_request text; pinned source field /body/0/rows/4/q/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.q.sub",
+        "alias": "/interviewees/item_05/follow_up_request/sub",
+        "source_pointer": "/body/0/rows/4/q/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 follow_up_request sub; pinned source field /body/0/rows/4/q/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.s",
+        "alias": "/interviewees/item_05/request_status",
+        "source_pointer": "/body/0/rows/4/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "request_status",
+        "group": "/interviewees",
+        "group_index": 4,
+        "cardinality": 7,
+        "description": "interviewees item_05 request_status; pinned source field /body/0/rows/4/s",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.d",
+        "alias": "/interviewees/item_06/department",
+        "source_pointer": "/body/0/rows/5/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "department",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 department; pinned source field /body/0/rows/5/d",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.m.text",
+        "alias": "/interviewees/item_06/met/text",
+        "source_pointer": "/body/0/rows/5/m/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 met text; pinned source field /body/0/rows/5/m/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.m.sub",
+        "alias": "/interviewees/item_06/met/sub",
+        "source_pointer": "/body/0/rows/5/m/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 met sub; pinned source field /body/0/rows/5/m/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.o",
+        "alias": "/interviewees/item_06/owner",
+        "source_pointer": "/body/0/rows/5/o",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "owner",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 owner; pinned source field /body/0/rows/5/o",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.p.text",
+        "alias": "/interviewees/item_06/person/text",
+        "source_pointer": "/body/0/rows/5/p/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 person text; pinned source field /body/0/rows/5/p/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.p.sub",
+        "alias": "/interviewees/item_06/person/sub",
+        "source_pointer": "/body/0/rows/5/p/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 person sub; pinned source field /body/0/rows/5/p/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.q.text",
+        "alias": "/interviewees/item_06/follow_up_request/text",
+        "source_pointer": "/body/0/rows/5/q/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 follow_up_request text; pinned source field /body/0/rows/5/q/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.q.sub",
+        "alias": "/interviewees/item_06/follow_up_request/sub",
+        "source_pointer": "/body/0/rows/5/q/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 follow_up_request sub; pinned source field /body/0/rows/5/q/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.s",
+        "alias": "/interviewees/item_06/request_status",
+        "source_pointer": "/body/0/rows/5/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "request_status",
+        "group": "/interviewees",
+        "group_index": 5,
+        "cardinality": 7,
+        "description": "interviewees item_06 request_status; pinned source field /body/0/rows/5/s",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.d",
+        "alias": "/interviewees/item_07/department",
+        "source_pointer": "/body/0/rows/6/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "department",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 department; pinned source field /body/0/rows/6/d",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.m.text",
+        "alias": "/interviewees/item_07/met/text",
+        "source_pointer": "/body/0/rows/6/m/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 met text; pinned source field /body/0/rows/6/m/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.m.sub",
+        "alias": "/interviewees/item_07/met/sub",
+        "source_pointer": "/body/0/rows/6/m/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "met",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 met sub; pinned source field /body/0/rows/6/m/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.o",
+        "alias": "/interviewees/item_07/owner",
+        "source_pointer": "/body/0/rows/6/o",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "owner",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 owner; pinned source field /body/0/rows/6/o",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.p.text",
+        "alias": "/interviewees/item_07/person/text",
+        "source_pointer": "/body/0/rows/6/p/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 person text; pinned source field /body/0/rows/6/p/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.p.sub",
+        "alias": "/interviewees/item_07/person/sub",
+        "source_pointer": "/body/0/rows/6/p/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "person",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 person sub; pinned source field /body/0/rows/6/p/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.q.text",
+        "alias": "/interviewees/item_07/follow_up_request/text",
+        "source_pointer": "/body/0/rows/6/q/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 follow_up_request text; pinned source field /body/0/rows/6/q/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.q.sub",
+        "alias": "/interviewees/item_07/follow_up_request/sub",
+        "source_pointer": "/body/0/rows/6/q/sub",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "follow_up_request",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 follow_up_request sub; pinned source field /body/0/rows/6/q/sub",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.s",
+        "alias": "/interviewees/item_07/request_status",
+        "source_pointer": "/body/0/rows/6/s",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "request_status",
+        "group": "/interviewees",
+        "group_index": 6,
+        "cardinality": 7,
+        "description": "interviewees item_07 request_status; pinned source field /body/0/rows/6/s",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "explicit_source_recipe_unreviewed",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item01.status",
+        "alias": "/legends/item_01/items/item_01/status",
+        "source_pointer": "/body/1/items/0/status",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "status",
+        "group": "/legends/item_01/items",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "status (string) at /legends/item_01/items/item_01/status",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item01.text",
+        "alias": "/legends/item_01/items/item_01/text",
+        "source_pointer": "/body/1/items/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/legends/item_01/items",
+        "group_index": 0,
+        "cardinality": 3,
+        "description": "body (string) at /legends/item_01/items/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item02.status",
+        "alias": "/legends/item_01/items/item_02/status",
+        "source_pointer": "/body/1/items/1/status",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "status",
+        "group": "/legends/item_01/items",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "status (string) at /legends/item_01/items/item_02/status",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item02.text",
+        "alias": "/legends/item_01/items/item_02/text",
+        "source_pointer": "/body/1/items/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/legends/item_01/items",
+        "group_index": 1,
+        "cardinality": 3,
+        "description": "body (string) at /legends/item_01/items/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item03.status",
+        "alias": "/legends/item_01/items/item_03/status",
+        "source_pointer": "/body/1/items/2/status",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "status",
+        "group": "/legends/item_01/items",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "status (string) at /legends/item_01/items/item_03/status",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item03.text",
+        "alias": "/legends/item_01/items/item_03/text",
+        "source_pointer": "/body/1/items/2/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/legends/item_01/items",
+        "group_index": 2,
+        "cardinality": 3,
+        "description": "body (string) at /legends/item_01/items/item_03/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Stakeholder interviews"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Each leader gave us one data request; two are still open"
+    },
+    {
+      "name": "source.text",
+      "source_pointer": "/source/text",
+      "kind": "string",
+      "synthetic_source_example": "Sample names for layout only; replace with engagement stakeholders before use."
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Person"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Department"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Met"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Follow-up request"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "Request status"
+    },
+    {
+      "name": "node01.cols.item05.labels.blocked",
+      "source_pointer": "/body/0/cols/4/labels/blocked",
+      "kind": "string",
+      "synthetic_source_example": "Blocked"
+    },
+    {
+      "name": "node01.cols.item05.labels.notstarted",
+      "source_pointer": "/body/0/cols/4/labels/notstarted",
+      "kind": "string",
+      "synthetic_source_example": "Not yet asked"
+    },
+    {
+      "name": "node01.cols.item05.labels.off",
+      "source_pointer": "/body/0/cols/4/labels/off",
+      "kind": "string",
+      "synthetic_source_example": "Overdue"
+    },
+    {
+      "name": "node01.cols.item05.labels.risk",
+      "source_pointer": "/body/0/cols/4/labels/risk",
+      "kind": "string",
+      "synthetic_source_example": "Pending"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "Owner"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "Revenue cycle"
+    },
+    {
+      "name": "node01.rows.item01.m.text",
+      "source_pointer": "/body/0/rows/0/m/text",
+      "kind": "string",
+      "synthetic_source_example": "Sep 8"
+    },
+    {
+      "name": "node01.rows.item01.m.sub",
+      "source_pointer": "/body/0/rows/0/m/sub",
+      "kind": "string",
+      "synthetic_source_example": "Onsite"
+    },
+    {
+      "name": "node01.rows.item01.o",
+      "source_pointer": "/body/0/rows/0/o",
+      "kind": "string",
+      "synthetic_source_example": "K. Ortiz"
+    },
+    {
+      "name": "node01.rows.item01.p.text",
+      "source_pointer": "/body/0/rows/0/p/text",
+      "kind": "string",
+      "synthetic_source_example": "J. Alvarez"
+    },
+    {
+      "name": "node01.rows.item01.p.sub",
+      "source_pointer": "/body/0/rows/0/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "VP Revenue Cycle"
+    },
+    {
+      "name": "node01.rows.item01.q.text",
+      "source_pointer": "/body/0/rows/0/q/text",
+      "kind": "string",
+      "synthetic_source_example": "Denial reason-code extract"
+    },
+    {
+      "name": "node01.rows.item01.q.sub",
+      "source_pointer": "/body/0/rows/0/q/sub",
+      "kind": "string",
+      "synthetic_source_example": "Asked Sep 8 · due Oct 6"
+    },
+    {
+      "name": "node01.rows.item01.s",
+      "source_pointer": "/body/0/rows/0/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "Patient access"
+    },
+    {
+      "name": "node01.rows.item02.m.text",
+      "source_pointer": "/body/0/rows/1/m/text",
+      "kind": "string",
+      "synthetic_source_example": "Sep 9"
+    },
+    {
+      "name": "node01.rows.item02.m.sub",
+      "source_pointer": "/body/0/rows/1/m/sub",
+      "kind": "string",
+      "synthetic_source_example": "Onsite"
+    },
+    {
+      "name": "node01.rows.item02.o",
+      "source_pointer": "/body/0/rows/1/o",
+      "kind": "string",
+      "synthetic_source_example": "W. Lee"
+    },
+    {
+      "name": "node01.rows.item02.p.text",
+      "source_pointer": "/body/0/rows/1/p/text",
+      "kind": "string",
+      "synthetic_source_example": "M. Chen"
+    },
+    {
+      "name": "node01.rows.item02.p.sub",
+      "source_pointer": "/body/0/rows/1/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Director, Patient Access"
+    },
+    {
+      "name": "node01.rows.item02.q.text",
+      "source_pointer": "/body/0/rows/1/q/text",
+      "kind": "string",
+      "synthetic_source_example": "Registration error log"
+    },
+    {
+      "name": "node01.rows.item02.q.sub",
+      "source_pointer": "/body/0/rows/1/q/sub",
+      "kind": "string",
+      "synthetic_source_example": "Asked Sep 9 · due Oct 8"
+    },
+    {
+      "name": "node01.rows.item02.s",
+      "source_pointer": "/body/0/rows/1/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "IT"
+    },
+    {
+      "name": "node01.rows.item03.m.text",
+      "source_pointer": "/body/0/rows/2/m/text",
+      "kind": "string",
+      "synthetic_source_example": "Sep 10"
+    },
+    {
+      "name": "node01.rows.item03.m.sub",
+      "source_pointer": "/body/0/rows/2/m/sub",
+      "kind": "string",
+      "synthetic_source_example": "Video"
+    },
+    {
+      "name": "node01.rows.item03.o",
+      "source_pointer": "/body/0/rows/2/o",
+      "kind": "string",
+      "synthetic_source_example": "K. Ortiz"
+    },
+    {
+      "name": "node01.rows.item03.p.text",
+      "source_pointer": "/body/0/rows/2/p/text",
+      "kind": "string",
+      "synthetic_source_example": "R. Okafor"
+    },
+    {
+      "name": "node01.rows.item03.p.sub",
+      "source_pointer": "/body/0/rows/2/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Chief Information Officer"
+    },
+    {
+      "name": "node01.rows.item03.q.text",
+      "source_pointer": "/body/0/rows/2/q/text",
+      "kind": "string",
+      "synthetic_source_example": "Application inventory"
+    },
+    {
+      "name": "node01.rows.item03.q.sub",
+      "source_pointer": "/body/0/rows/2/q/sub",
+      "kind": "string",
+      "synthetic_source_example": "Asked Sep 10 · due Oct 10"
+    },
+    {
+      "name": "node01.rows.item03.s",
+      "source_pointer": "/body/0/rows/2/s",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "IT"
+    },
+    {
+      "name": "node01.rows.item04.m.text",
+      "source_pointer": "/body/0/rows/3/m/text",
+      "kind": "string",
+      "synthetic_source_example": "Sep 11"
+    },
+    {
+      "name": "node01.rows.item04.m.sub",
+      "source_pointer": "/body/0/rows/3/m/sub",
+      "kind": "string",
+      "synthetic_source_example": "Video"
+    },
+    {
+      "name": "node01.rows.item04.o",
+      "source_pointer": "/body/0/rows/3/o",
+      "kind": "string",
+      "synthetic_source_example": "A. Cole"
+    },
+    {
+      "name": "node01.rows.item04.p.text",
+      "source_pointer": "/body/0/rows/3/p/text",
+      "kind": "string",
+      "synthetic_source_example": "S. Patel"
+    },
+    {
+      "name": "node01.rows.item04.p.sub",
+      "source_pointer": "/body/0/rows/3/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Dir., Enterprise Apps"
+    },
+    {
+      "name": "node01.rows.item04.q.text",
+      "source_pointer": "/body/0/rows/3/q/text",
+      "kind": "string",
+      "synthetic_source_example": "Interface and integration map"
+    },
+    {
+      "name": "node01.rows.item04.q.sub",
+      "source_pointer": "/body/0/rows/3/q/sub",
+      "kind": "string",
+      "synthetic_source_example": "Asked Sep 11 · due Oct 12"
+    },
+    {
+      "name": "node01.rows.item04.s",
+      "source_pointer": "/body/0/rows/3/s",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node01.rows.item05.d",
+      "source_pointer": "/body/0/rows/4/d",
+      "kind": "string",
+      "synthetic_source_example": "Finance"
+    },
+    {
+      "name": "node01.rows.item05.m.text",
+      "source_pointer": "/body/0/rows/4/m/text",
+      "kind": "string",
+      "synthetic_source_example": "Sep 15"
+    },
+    {
+      "name": "node01.rows.item05.m.sub",
+      "source_pointer": "/body/0/rows/4/m/sub",
+      "kind": "string",
+      "synthetic_source_example": "Onsite"
+    },
+    {
+      "name": "node01.rows.item05.o",
+      "source_pointer": "/body/0/rows/4/o",
+      "kind": "string",
+      "synthetic_source_example": "W. Lee"
+    },
+    {
+      "name": "node01.rows.item05.p.text",
+      "source_pointer": "/body/0/rows/4/p/text",
+      "kind": "string",
+      "synthetic_source_example": "L. Brandt"
+    },
+    {
+      "name": "node01.rows.item05.p.sub",
+      "source_pointer": "/body/0/rows/4/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Chief Financial Officer"
+    },
+    {
+      "name": "node01.rows.item05.q.text",
+      "source_pointer": "/body/0/rows/4/q/text",
+      "kind": "string",
+      "synthetic_source_example": "FY26 budget by department"
+    },
+    {
+      "name": "node01.rows.item05.q.sub",
+      "source_pointer": "/body/0/rows/4/q/sub",
+      "kind": "string",
+      "synthetic_source_example": "Asked Sep 15 · due Oct 14"
+    },
+    {
+      "name": "node01.rows.item05.s",
+      "source_pointer": "/body/0/rows/4/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item06.d",
+      "source_pointer": "/body/0/rows/5/d",
+      "kind": "string",
+      "synthetic_source_example": "Finance"
+    },
+    {
+      "name": "node01.rows.item06.m.text",
+      "source_pointer": "/body/0/rows/5/m/text",
+      "kind": "string",
+      "synthetic_source_example": "Sep 16"
+    },
+    {
+      "name": "node01.rows.item06.m.sub",
+      "source_pointer": "/body/0/rows/5/m/sub",
+      "kind": "string",
+      "synthetic_source_example": "Onsite"
+    },
+    {
+      "name": "node01.rows.item06.o",
+      "source_pointer": "/body/0/rows/5/o",
+      "kind": "string",
+      "synthetic_source_example": "A. Cole"
+    },
+    {
+      "name": "node01.rows.item06.p.text",
+      "source_pointer": "/body/0/rows/5/p/text",
+      "kind": "string",
+      "synthetic_source_example": "D. Moreau"
+    },
+    {
+      "name": "node01.rows.item06.p.sub",
+      "source_pointer": "/body/0/rows/5/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Controller"
+    },
+    {
+      "name": "node01.rows.item06.q.text",
+      "source_pointer": "/body/0/rows/5/q/text",
+      "kind": "string",
+      "synthetic_source_example": "Month-end close calendar"
+    },
+    {
+      "name": "node01.rows.item06.q.sub",
+      "source_pointer": "/body/0/rows/5/q/sub",
+      "kind": "string",
+      "synthetic_source_example": "Asked Sep 16 · due Oct 16"
+    },
+    {
+      "name": "node01.rows.item06.s",
+      "source_pointer": "/body/0/rows/5/s",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node01.rows.item07.d",
+      "source_pointer": "/body/0/rows/6/d",
+      "kind": "string",
+      "synthetic_source_example": "Clinical ops"
+    },
+    {
+      "name": "node01.rows.item07.m.text",
+      "source_pointer": "/body/0/rows/6/m/text",
+      "kind": "string",
+      "synthetic_source_example": "Sep 17"
+    },
+    {
+      "name": "node01.rows.item07.m.sub",
+      "source_pointer": "/body/0/rows/6/m/sub",
+      "kind": "string",
+      "synthetic_source_example": "Video"
+    },
+    {
+      "name": "node01.rows.item07.o",
+      "source_pointer": "/body/0/rows/6/o",
+      "kind": "string",
+      "synthetic_source_example": "K. Ortiz"
+    },
+    {
+      "name": "node01.rows.item07.p.text",
+      "source_pointer": "/body/0/rows/6/p/text",
+      "kind": "string",
+      "synthetic_source_example": "A. Nguyen"
+    },
+    {
+      "name": "node01.rows.item07.p.sub",
+      "source_pointer": "/body/0/rows/6/p/sub",
+      "kind": "string",
+      "synthetic_source_example": "Chief Medical Officer"
+    },
+    {
+      "name": "node01.rows.item07.q.text",
+      "source_pointer": "/body/0/rows/6/q/text",
+      "kind": "string",
+      "synthetic_source_example": "Clinical documentation audit"
+    },
+    {
+      "name": "node01.rows.item07.q.sub",
+      "source_pointer": "/body/0/rows/6/q/sub",
+      "kind": "string",
+      "synthetic_source_example": "Asked Sep 17 · due Oct 18"
+    },
+    {
+      "name": "node01.rows.item07.s",
+      "source_pointer": "/body/0/rows/6/s",
+      "kind": "string",
+      "synthetic_source_example": "blocked"
+    },
+    {
+      "name": "node02.items.item01.status",
+      "source_pointer": "/body/1/items/0/status",
+      "kind": "string",
+      "synthetic_source_example": "on"
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Received"
+    },
+    {
+      "name": "node02.items.item02.status",
+      "source_pointer": "/body/1/items/1/status",
+      "kind": "string",
+      "synthetic_source_example": "risk"
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Pending, inside due date"
+    },
+    {
+      "name": "node02.items.item03.status",
+      "source_pointer": "/body/1/items/2/status",
+      "kind": "string",
+      "synthetic_source_example": "off"
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Overdue or blocked"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 6
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 7
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 3
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

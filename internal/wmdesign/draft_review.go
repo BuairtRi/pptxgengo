@@ -128,13 +128,15 @@ func (r *renderer) planDraftReview(id string, note DraftReviewNote) (*scenePlan,
 	if err != nil {
 		return nil, err
 	}
-	label.Size, label.Leading, label.TrackingPt = 7, 10, .28
+	if !densityRoleCorrections(r.source) {
+		label.Size, label.Leading, label.TrackingPt = 7, 10, .28
+	}
 	// Literal collaboration copy does not interpret presentation rich-text marks.
 	text := func(suffix, copy string, style Style, box Rect, color, align string, middle, single bool) error {
 		if copy == "" {
 			return nil
 		}
-		layout, err := r.typeEngine.Measure(copy, style, box.W)
+		layout, err := r.measureText(copy, style, box.W)
 		if err != nil {
 			return fmt.Errorf("draft_review.%s: %w", strings.TrimPrefix(suffix, "."), err)
 		}
@@ -152,6 +154,7 @@ func (r *renderer) planDraftReview(id string, note DraftReviewNote) (*scenePlan,
 			tr.VerticalAlign = "middle"
 		}
 		p.Items = append(p.Items, sceneItem{Text: &tr})
+		r.auditLiteralContrast(p, tr.ID, style, box, color)
 		return nil
 	}
 	ink := func(background string) string {
@@ -160,16 +163,23 @@ func (r *renderer) planDraftReview(id string, note DraftReviewNote) (*scenePlan,
 		}
 		return grounded
 	}
-	if err := text(".status", statusText, label, Rect{x - 63, 63, 144, 18}, ink(current), "center", true, true); err != nil {
+	statusStyle := label
+	if densityRoleCorrections(r.source) {
+		statusStyle.Size, statusStyle.Leading, statusStyle.TrackingPt = 8, 10, .8
+	}
+	if err := text(".status", statusText, statusStyle, Rect{x - 63, 63, 144, 18}, ink(current), "center", true, true); err != nil {
 		return nil, err
 	}
 	p.Items[len(p.Items)-1].Text.Rotation = 270
 	owner := small
-	owner.Weight, owner.Size, owner.Leading = 600, 12, 18
+	owner.Weight = 600
+	if !densityRoleCorrections(r.source) {
+		owner.Size, owner.Leading = 12, 18
+	}
 	ownerWidth := 198.0
 	if note.Due != "" {
 		due := "Due " + note.Due
-		layout, err := r.typeEngine.Measure(due, label, 90)
+		layout, err := r.measureText(due, label, 90)
 		if err != nil || len(layout.Lines) != 1 {
 			return nil, fmt.Errorf("draft_review.text_overflow: due must fit one line in 90pt")
 		}

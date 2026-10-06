@@ -10,7 +10,7 @@ import (
 func TestBundleShorthandEveryCommandRoute(t *testing.T) {
 	root := t.TempDir()
 	t.Setenv("PPTXGENGO_RELEASE_ROOT", root)
-	for _, revision := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v10"} {
+	for _, revision := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v10", "v11"} {
 		for _, route := range []string{"catalog", "search", "index"} {
 			t.Run(revision+"/"+route, func(t *testing.T) {
 				var err error
@@ -44,6 +44,19 @@ func TestV8ShorthandResolvesFrozenIntake(t *testing.T) {
 
 func TestV9ShorthandResolvesFrozenIntake(t *testing.T) {
 	testHistoricalShorthandResolvesFrozenIntake(t, "v9", "intake-20261006-631-frozen")
+}
+
+func TestV10ShorthandResolvesFrozenIntake(t *testing.T) {
+	testHistoricalShorthandResolvesFrozenIntake(t, "v10", "intake-20261006-649-frozen")
+}
+
+func TestV11ShorthandUsesInstalledCurrentBundle(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("PPTXGENGO_RELEASE_ROOT", root)
+	path := filepath.Join(root, "library", "wm-design-system", currentDesignBundle)
+	if got := designBundlePath(currentDesignBundle); got != path {
+		t.Fatalf("current bundle path = %q; want installed bundle %q", got, path)
+	}
 }
 
 func testHistoricalShorthandResolvesFrozenIntake(t *testing.T, revision, intake string) {

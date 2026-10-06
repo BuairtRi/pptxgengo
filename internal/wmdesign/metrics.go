@@ -111,8 +111,8 @@ func (r *renderer) planMetricContent(p *componentPlan, id string, card *CardSpec
 		}
 		// Number and label share their first baseline. The value gets its measured
 		// one-line width, leaving the rest of the content width to the label.
-		st, _ := r.source.Style("number")
-		vl, e := r.typeEngine.Measure(m.Secondary.Value, st, b.W)
+		st, _ := r.bodyStyle("number")
+		vl, e := r.measureText(m.Secondary.Value, st, b.W)
 		if e != nil {
 			return 0, e
 		}
@@ -131,8 +131,8 @@ func (r *renderer) planMetricContent(p *componentPlan, id string, card *CardSpec
 		if e != nil {
 			return 0, e
 		}
-		ls, _ := r.source.Style("small")
-		ll, e := r.typeEngine.Measure(m.Secondary.Label, ls, b.W-nw-9)
+		ls, _ := r.bodyStyle("small")
+		ll, e := r.measureText(m.Secondary.Label, ls, b.W-nw-9)
 		if e != nil {
 			return 0, e
 		}

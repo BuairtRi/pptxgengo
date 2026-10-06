@@ -35,22 +35,24 @@ type LibraryTint struct {
 	Surface string  `json:"surface,omitempty"`
 }
 type librarySlide struct {
-	Type        string      `json:"type"`
-	Rail        string      `json:"rail"`
-	Footer      string      `json:"footer"`
-	Surface     string      `json:"surface,omitempty"`
-	RailSurface string      `json:"railSurface,omitempty"`
-	Eyebrow     string      `json:"eyebrow,omitempty"`
-	Title       string      `json:"title,omitempty"`
-	TitleLines  int         `json:"titleLines,omitempty"`
-	Density     string      `json:"density,omitempty"`
-	Page        string      `json:"page,omitempty"`
-	NoPage      bool        `json:"noPage,omitempty"`
-	Emphasis    string      `json:"emphasis,omitempty"`
-	Stamp       string      `json:"stamp,omitempty"`
-	Split       string      `json:"split,omitempty"`
-	Nav         *libraryNav `json:"nav,omitempty"`
-	Source      *struct {
+	Type          string      `json:"type"`
+	Rail          string      `json:"rail"`
+	Footer        string      `json:"footer"`
+	Surface       string      `json:"surface,omitempty"`
+	RailSurface   string      `json:"railSurface,omitempty"`
+	Eyebrow       string      `json:"eyebrow,omitempty"`
+	Title         string      `json:"title,omitempty"`
+	TitleLines    int         `json:"titleLines,omitempty"`
+	Density       string      `json:"density,omitempty"`
+	DensityLimit  string      `json:"densityLimit,omitempty"`
+	HeaderDensity string      `json:"headerDensity,omitempty"`
+	Page          string      `json:"page,omitempty"`
+	NoPage        bool        `json:"noPage,omitempty"`
+	Emphasis      string      `json:"emphasis,omitempty"`
+	Stamp         string      `json:"stamp,omitempty"`
+	Split         string      `json:"split,omitempty"`
+	Nav           *libraryNav `json:"nav,omitempty"`
+	Source        *struct {
 		Text  string   `json:"text,omitempty"`
 		Notes []string `json:"notes,omitempty"`
 	} `json:"source,omitempty"`
@@ -311,7 +313,7 @@ func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
 	if s.Revision == LibraryRevisionV9 {
 		expected = 631
 	}
-	if s.Revision == LibraryRevisionV10 {
+	if s.Revision == LibraryRevisionV10 || s.Revision == LibraryRevisionV11 {
 		expected = 649
 	}
 	if len(out) != expected {
@@ -326,7 +328,7 @@ func v4UnversionedFamily(revision, path string, catalog templateSourceCatalog) b
 	if !isExpandedLibrary(revision) || catalog.Schema != "" || path != "templates/library/"+catalog.Family+".json" {
 		return false
 	}
-	if revision == LibraryRevisionV10 && catalog.Family == "roadmaps" {
+	if (revision == LibraryRevisionV10 || revision == LibraryRevisionV11) && catalog.Family == "roadmaps" {
 		return true
 	}
 	switch catalog.Family {
@@ -382,7 +384,7 @@ func libraryObject(raw []byte) (map[string]any, error) {
 
 // The content projection is closed by a source-pinned definition. A token,
 // geometry or structural discriminator never becomes an editable content slot.
-var libraryFixedString = map[string]bool{"target": true, "placement": true, "arrow": true, "type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "corner": true, "event": true}
+var libraryFixedString = map[string]bool{"target": true, "placement": true, "arrow": true, "type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numTile": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "headerDensity": true, "densityLimit": true, "corner": true, "event": true}
 var libraryNumbers = map[string]bool{"values": true, "value": true, "alloc": true, "from": true, "to": true, "at": true, "softStart": true, "softEnd": true}
 var libraryIntakeFixedString = map[string]bool{"curve": true, "labelStyle": true, "scale": true, "heatScale": true, "orient": true, "ramp": true, "direction": true, "rowHeader": true}
 
@@ -804,6 +806,11 @@ func compileLibrarySlide(raw json.RawMessage, keys map[string][]string) (SlideSp
 		return SlideSpec{}, err
 	}
 	q := FrameRequest{Rail: src.Rail, Footer: src.Footer, Surface: src.Surface, RailSurface: src.RailSurface, TitleLines: src.TitleLines, Density: src.Density, NoHeader: src.Title == "" && src.Eyebrow == "", NoPage: src.NoPage, Split: src.Split}
+	q.HeaderDensity = src.HeaderDensity
+	bodyDensity := ""
+	if src.Density != "" && src.Density != "standard" && src.Density != "appendix" {
+		bodyDensity, q.Density = src.Density, "standard"
+	}
 	if src.Nav != nil {
 		if src.Rail != "nav" || src.Nav.Active == nil || len(src.Nav.Items) < 2 || len(src.Nav.Items) > 6 || *src.Nav.Active < 0 || *src.Nav.Active >= len(src.Nav.Items) {
 			return SlideSpec{}, fmt.Errorf("library.invalid_nav")
@@ -846,7 +853,10 @@ func compileLibrarySlide(raw json.RawMessage, keys map[string][]string) (SlideSp
 			}
 		}
 	}
-	doc := SlideSpec{Frame: q, Eyebrow: src.Eyebrow, Title: src.Title, LibraryChrome: chrome}
+	if _, _, err := densityLimit(src.DensityLimit); err != nil {
+		return SlideSpec{}, err
+	}
+	doc := SlideSpec{Frame: q, Density: bodyDensity, DensityLimit: src.DensityLimit, Eyebrow: src.Eyebrow, Title: src.Title, LibraryChrome: chrome}
 	if src.Source != nil {
 		chrome.Notes = src.Source.Notes
 		doc.Source = ""

@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
+	"gopkg.in/yaml.v3"
 )
 
 func TestStockAliasesIndependentOfSuppliedHeadingCopy(t *testing.T) {
@@ -51,5 +52,42 @@ func TestStockScaffoldCommentsAndDecorativeContract(t *testing.T) {
 		if v != "" {
 			t.Fatal("nonempty copy hidden as decoration")
 		}
+	}
+}
+
+func TestStockCommentsRefreshPerSlideDensityAndMarkUnsupportedCells(t *testing.T) {
+	bundle := "../../planning/wm-design-contracts/v11/intake-20261006-649-frozen/bundle"
+	defaultSource, err := StockScaffoldSlideSource(bundle, "offers-sku/compare-table", "density-comments", 2026)
+	if err != nil {
+		t.Fatal(err)
+	}
+	denseNode, err := sourceYAML(defaultSource)
+	if err != nil {
+		t.Fatal(err)
+	}
+	denseSlide := denseNode.Content[0]
+	denseSlide.Content = append(denseSlide.Content,
+		&yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: "density"},
+		&yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: "dense"},
+	)
+	if err := refreshStockComments(denseSlide, bundle); err != nil {
+		t.Fatal(err)
+	}
+	denseSource, err := encodeSourceYAML(denseNode)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defaultText, denseText := string(defaultSource), string(denseSource)
+	if !strings.Contains(defaultText, "at 12 pt type") {
+		t.Fatalf("default body capacity did not use its comfortable authored tier:\n%s", defaultText)
+	}
+	if !strings.Contains(denseText, "at 11 pt type") || strings.Contains(denseText, "at 12 pt type") {
+		t.Fatalf("dense per-slide override left stale comfortable body capacity comments:\n%s", denseText)
+	}
+	if !strings.Contains(denseText, "density override not recalculated") {
+		t.Fatal("unsupported table-cell estimates were not called out after density override")
+	}
+	if strings.Count(denseText, "Metadata: ") != strings.Count(denseText, "Stock slot: ") {
+		t.Fatal("density refresh duplicated generated capacity comments")
 	}
 }

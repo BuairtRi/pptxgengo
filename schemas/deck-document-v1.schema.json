@@ -385,6 +385,26 @@
             "synthetic_example"
           ]
         },
+        "density": {
+          "enum": [
+            "comfortable",
+            "compact",
+            "dense"
+          ],
+          "$comment": "Requested whole-slide body typography density. Omit to use the template's authored tier, or comfortable when the template specifies none, before automatic fit adjustment."
+        },
+        "header_density": {
+          "enum": [
+            "comfortable",
+            "compact",
+            "dense"
+          ],
+          "$comment": "Header typography density. Omit to keep the comfortable header independently of body density."
+        },
+        "auto_density": {
+          "type": "boolean",
+          "$comment": "In the V11 density policy, automatic body-density adjustment defaults to true. Set false to opt out for this slide. Older locked source bundles retain their published behavior when omitted."
+        },
         "template": {
           "$ref": "#/$defs/reference"
         },

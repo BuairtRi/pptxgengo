@@ -42,10 +42,13 @@ type BoundDocument struct {
 	MediaOptimization *pptx.MediaOptimizationOptions `json:"media_optimization,omitempty"`
 }
 type BoundSlide struct {
-	ID          string          `json:"id"`
-	Template    string          `json:"template"`
-	ContentKind string          `json:"content_kind"`
-	Values      json.RawMessage `json:"values"`
+	ID            string          `json:"id"`
+	Template      string          `json:"template"`
+	ContentKind   string          `json:"content_kind"`
+	Density       string          `json:"density,omitempty"`
+	HeaderDensity string          `json:"header_density,omitempty"`
+	AutoDensity   *bool           `json:"auto_density,omitempty"`
+	Values        json.RawMessage `json:"values"`
 }
 
 // TextContent is one closed content union: a visible plain string, or the direct
@@ -384,12 +387,28 @@ func validateBoundDocument(d BoundDocument) error {
 		if s.ContentKind != "synthetic_example" && s.ContentKind != "supplied_content" {
 			return fmt.Errorf("binding.invalid_content_kind: %s", s.ContentKind)
 		}
+		if s.Density != "" && !validBoundTypographyDensity(s.Density) {
+			return fmt.Errorf("binding.invalid_density: %s", s.Density)
+		}
+		if s.HeaderDensity != "" && !validBoundTypographyDensity(s.HeaderDensity) {
+			return fmt.Errorf("binding.invalid_header_density: %s", s.HeaderDensity)
+		}
 		if len(s.Values) == 0 || bytes.Equal(bytes.TrimSpace(s.Values), []byte("null")) {
 			return fmt.Errorf("binding.missing_values: %s", s.ID)
 		}
 	}
 	return nil
 }
+
+func validBoundTypographyDensity(value string) bool {
+	switch value {
+	case "comfortable", "compact", "dense":
+		return true
+	default:
+		return false
+	}
+}
+
 func boundPlain(field, value string) error {
 	if strings.TrimSpace(value) == "" {
 		return fmt.Errorf("binding.missing_visible_content: %s", field)
@@ -520,6 +539,7 @@ func BindTemplates(bundle, sourceOverride string, input BoundDocument) (Document
 			if e != nil {
 				return Document{}, BindingReport{}, fmt.Errorf("binding.slide %s: %w", bound.ID, e)
 			}
+			applyBoundDensity(&slide, bound)
 			doc.Slides = append(doc.Slides, slide)
 			report.Slides = append(report.Slides, record)
 			continue
@@ -533,11 +553,25 @@ func BindTemplates(bundle, sourceOverride string, input BoundDocument) (Document
 		if err := assignBoundTemplate(&slide, def, bound.Values, &record); err != nil {
 			return Document{}, BindingReport{}, fmt.Errorf("binding.slide %s: %w", bound.ID, err)
 		}
+		applyBoundDensity(&slide, bound)
 		slide.TemplateBinding = &record
 		doc.Slides = append(doc.Slides, slide)
 		report.Slides = append(report.Slides, record)
 	}
 	return doc, report, nil
+}
+
+func applyBoundDensity(slide *SlideSpec, bound BoundSlide) {
+	if bound.Density != "" {
+		slide.Density = bound.Density
+	}
+	if bound.HeaderDensity != "" {
+		slide.Frame.HeaderDensity = bound.HeaderDensity
+	}
+	if bound.AutoDensity != nil {
+		auto := *bound.AutoDensity
+		slide.AutoDensity = &auto
+	}
 }
 
 func templateIdentity(def TemplateDefinition, id, expected string) (TemplateIdentity, error) {

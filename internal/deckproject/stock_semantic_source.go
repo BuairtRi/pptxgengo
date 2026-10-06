@@ -64,6 +64,9 @@ func annotateStockSlide(node *yaml.Node, metadata wmdesign.LibraryAuthoring) {
 		}
 		c := slot.Capacity
 		capacity := "capacity unavailable (" + c.Basis + ")"
+		if c.Status == "unsupported" && strings.HasPrefix(c.Basis, "density_capacity_") {
+			capacity = "capacity unavailable (density override not recalculated: " + c.Basis + ")"
+		}
 		if c.LineBudget > 0 && c.Style != nil {
 			capacity = fmt.Sprintf("approximate capacity: %d line(s), %.0f pt wide at %.0f pt type", c.LineBudget, c.WidthPt, c.Style.Size)
 			if c.ApproxCharacters > 0 {
@@ -176,7 +179,11 @@ func refreshStockComments(node *yaml.Node, bundle string) error {
 	if ref.Scope != "shared" {
 		return nil
 	}
-	catalog, err := wmdesign.LibraryCatalog(bundle, "")
+	source, err := wmdesign.Load(bundle, "")
+	if err != nil {
+		return err
+	}
+	catalog, err := wmdesign.LibraryCatalogFromSource(source)
 	if err != nil {
 		return err
 	}
@@ -188,11 +195,34 @@ func refreshStockComments(node *yaml.Node, bundle string) error {
 		if err != nil {
 			return err
 		}
-		typography, err := wmdesign.NewTypography(filepath.Join(bundle, "fonts"))
+		// Match the renderer's source-pinned density calibration when recomputing
+		// line budgets for a per-slide override. Plain NewTypography would use
+		// only the historical font calibration and could leave stale capacity
+		// estimates in the generated YAML comments.
+		typography, err := wmdesign.NewSourceTypographyEngine(source, filepath.Join(bundle, "fonts"), wmdesign.CandidateEngine)
 		if err != nil {
 			return err
 		}
+		bodyDensity := stockDensityOverride(node, "density")
+		headerDensity := stockDensityOverride(node, "header_density")
 		for i := range metadata.Slots {
+			if bodyDensity != "" && metadata.Slots[i].SourcePointer != "/title" && metadata.Slots[i].SourcePointer != "/eyebrow" && metadata.Slots[i].SourcePointer != "/source/text" {
+				scope := "body"
+				if strings.Contains(metadata.Slots[i].Capacity.Basis, "table_cell") {
+					scope = "cell"
+				}
+				metadata.Slots[i].Capacity, err = wmdesign.RestyleLibrarySlotCapacityAtDensity(source, typography, metadata.Slots[i].Capacity, bodyDensity, scope, 0)
+				if err != nil {
+					return err
+				}
+			}
+			if headerDensity != "" && (metadata.Slots[i].SourcePointer == "/title" || metadata.Slots[i].SourcePointer == "/eyebrow") {
+				maxLines := metadata.Slots[i].Capacity.LineBudget
+				metadata.Slots[i].Capacity, err = wmdesign.RestyleLibrarySlotCapacityAtDensity(source, typography, metadata.Slots[i].Capacity, headerDensity, "header", maxLines)
+				if err != nil {
+					return err
+				}
+			}
 			metadata.Slots[i].Capacity, err = wmdesign.EstimateLibrarySlotCapacity(typography, metadata.Slots[i].Capacity)
 			if err != nil {
 				return err
@@ -203,6 +233,19 @@ func refreshStockComments(node *yaml.Node, bundle string) error {
 	}
 	return fmt.Errorf("unknown shared template %s", ref.ID)
 }
+
+func stockDensityOverride(node *yaml.Node, name string) string {
+	field := mappingNode(node, name)
+	if field == nil {
+		return ""
+	}
+	var value string
+	if field.Decode(&value) != nil {
+		return ""
+	}
+	return value
+}
+
 func stockYAMLAt(node *yaml.Node, pointer string) *yaml.Node {
 	for _, part := range strings.Split(strings.TrimPrefix(pointer, "/"), "/") {
 		part = strings.ReplaceAll(strings.ReplaceAll(part, "~1", "/"), "~0", "~")
@@ -236,7 +279,11 @@ func StockScaffoldSlideSource(bundle, key, id string, year int) ([]byte, error) 
 	if e != nil {
 		return nil, e
 	}
-	catalog, e := wmdesign.LibraryCatalog(bundle, "")
+	source, e := wmdesign.Load(bundle, "")
+	if e != nil {
+		return nil, e
+	}
+	catalog, e := wmdesign.LibraryCatalogFromSource(source)
 	if e != nil {
 		return nil, e
 	}
@@ -248,7 +295,7 @@ func StockScaffoldSlideSource(bundle, key, id string, year int) ([]byte, error) 
 		if e != nil {
 			return nil, e
 		}
-		typography, e := wmdesign.NewTypography(filepath.Join(bundle, "fonts"))
+		typography, e := wmdesign.NewSourceTypographyEngine(source, filepath.Join(bundle, "fonts"), wmdesign.CandidateEngine)
 		if e != nil {
 			return nil, e
 		}

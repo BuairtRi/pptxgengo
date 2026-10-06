@@ -16,7 +16,7 @@ import (
 
 func run() error {
 	if len(os.Args) < 2 {
-		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|photo-register|library-publish|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-catalog|library-search|templates|template|build|inspect|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
+		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|photo-register|library-publish|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-catalog|library-search|templates|template|build|inspect|measure-style|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
 	}
 	command := os.Args[1]
 	if command == "photo-register" {
@@ -46,6 +46,9 @@ func run() error {
 	if command == "render" {
 		return runRender(os.Args[2:])
 	}
+	if command == "measure-style" {
+		return runMeasureStyle(os.Args[2:])
+	}
 	if command == "project" {
 		return runProject(os.Args[2:])
 	}
@@ -56,13 +59,14 @@ func run() error {
 		return runLibrarySearch(os.Args[2:])
 	}
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "v10", "pinned foundation bundle path or v10 (default)")
+	bundle := f.String("bundle", currentDesignBundle, "pinned foundation bundle path or v11 (default)")
 	engine := f.String("engine", wmdesign.CandidateEngine, "typography engine: wmds-go-foundation.v1 or wmds-go-foundation.v2 (candidate)")
 	source := f.String("source", "", "optional WMDS source override; must match pinned snapshot")
 	out := f.String("out", "", "new output directory")
 	spec := f.String("spec", "", "foundation document JSON")
 	family := f.String("family", "", "source library family for library references")
 	templateKeys := f.String("template-keys", "", "comma-separated library keys for a focused reference")
+	templateKeysFile := f.String("template-keys-file", "", "file of library keys (one per line, CSV, or JSON string array)")
 	includeDeprecated := f.Bool("include-deprecated", false, "include deprecated entries in library-catalog")
 	year := f.Int("year", time.Now().Year(), "explicit legal year for reference generation")
 	if e := f.Parse(os.Args[2:]); e != nil {
@@ -75,7 +79,7 @@ func run() error {
 		*bundle = designBundlePath(*bundle)
 	}
 	if command == "asset-catalog" {
-		if *out != "" || *spec != "" || *family != "" || *source != "" || *templateKeys != "" || *includeDeprecated {
+		if *out != "" || *spec != "" || *family != "" || *source != "" || *templateKeys != "" || *templateKeysFile != "" || *includeDeprecated {
 			return fmt.Errorf("asset-catalog does not accept output, content or source filters")
 		}
 		return json.NewEncoder(os.Stdout).Encode(wmdesign.PrimitiveAssetCatalog())
@@ -84,10 +88,10 @@ func run() error {
 		if *spec != "" {
 			return fmt.Errorf("%s does not accept --spec", command)
 		}
-		return runLibrary(command, *bundle, *source, *engine, *out, *family, *templateKeys, *includeDeprecated, *year)
+		return runLibrary(command, *bundle, *source, *engine, *out, *family, *templateKeys, *templateKeysFile, *includeDeprecated, *year)
 	}
-	if *templateKeys != "" || *includeDeprecated {
-		return fmt.Errorf("--template-keys/--include-deprecated require a library command")
+	if *templateKeys != "" || *templateKeysFile != "" || *includeDeprecated {
+		return fmt.Errorf("--template-keys/--template-keys-file/--include-deprecated require a library command")
 	}
 	if *family != "" {
 		return fmt.Errorf("--family is supported only by library reference and sweep commands")
@@ -220,6 +224,7 @@ func run() error {
 	if e != nil {
 		return e
 	}
+	emitDensityWarnings(report)
 	if e = os.MkdirAll(*out, 0755); e != nil {
 		return e
 	}

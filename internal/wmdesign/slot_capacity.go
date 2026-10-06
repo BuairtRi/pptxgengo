@@ -12,6 +12,7 @@ import (
 type LibrarySlotCapacity struct {
 	Status           string   `json:"status"`
 	Basis            string   `json:"basis"`
+	Density          string   `json:"density,omitempty"`
 	WidthPt          float64  `json:"width_pt,omitempty"`
 	HeightPt         float64  `json:"height_pt,omitempty"`
 	LineBudget       int      `json:"line_budget,omitempty"`
@@ -112,12 +113,26 @@ func authoringCapacity(def LibraryTemplate, obj, node map[string]any, slot Libra
 	} else {
 		return unknownSlotCapacity("component_internal_layout_not_modeled")
 	}
-	st, e := source.Style(token)
+	density := preferredTemplateDensity(def, source)
+	scope := "body"
+	if slot.SourcePointer == "/title" || slot.SourcePointer == "/eyebrow" {
+		scope = "header"
+	}
+	st, e := source.StyleForDensity(token, density.Requested, scope)
 	if e != nil || c.WidthPt <= 0 || c.HeightPt <= 0 {
 		return unknownSlotCapacity("no_fixed_text_geometry")
 	}
 	if weight, ok := discoveryNumber(node["weight"]); ok && weight > 0 {
 		st.Weight = int(weight)
+	}
+	if source.Tokens.Density != nil {
+		c.Density = density.Requested
+		if scope == "header" {
+			c.Density = density.Header
+			c.Assumptions = append(c.Assumptions, "Capacity uses the preferred header density; automatic fit adjustment is not included.")
+		} else {
+			c.Assumptions = append(c.Assumptions, "Capacity uses the template's preferred authored body density; automatic fit adjustment is not included.")
+		}
 	}
 	c.Style = &st
 	c.LineBudget = int(math.Floor((c.HeightPt-1.2*st.Size)/st.Leading)) + 1
@@ -153,6 +168,51 @@ func EstimateLibrarySlotCapacity(t *Typography, c LibrarySlotCapacity) (LibraryS
 	c.Status = "estimated_go_shaping"
 	c.Assumptions = append(c.Assumptions, "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count.")
 	return c, nil
+}
+
+// RestyleLibrarySlotCapacityAtDensity recalculates a static preferred-tier
+// estimate for an explicit per-slide override. It never tries alternate tiers
+// or claims that supplied copy fits natively.
+func RestyleLibrarySlotCapacityAtDensity(source *Source, typography *Typography, capacity LibrarySlotCapacity, level, scope string, maxLines int) (LibrarySlotCapacity, error) {
+	if capacity.Style == nil || source == nil || typography == nil || capacity.WidthPt <= 0 || capacity.HeightPt <= 0 {
+		return unsupportedDensityCapacity(capacity, "density_capacity_missing_geometry_or_style"), nil
+	}
+	style, err := source.StyleForDensity(capacity.Style.ID, level, scope)
+	if err != nil {
+		return unsupportedDensityCapacity(capacity, "density_capacity_style_unavailable"), nil
+	}
+	// Density changes size and leading. Preserve source-literal weight and
+	// decorative settings that aren't represented by the role token.
+	style.Weight = capacity.Style.Weight
+	style.Italic = capacity.Style.Italic
+	style.Tracking = capacity.Style.Tracking
+	style.TrackingPt = capacity.Style.TrackingPt
+	style.Case = capacity.Style.Case
+	lines := shapedComponentLineBudget(typography, style, capacity.WidthPt, capacity.HeightPt)
+	if maxLines > 0 && lines > maxLines {
+		lines = maxLines
+	}
+	if lines < 1 {
+		return unsupportedDensityCapacity(capacity, "density_capacity_no_preferred_tier_line"), nil
+	}
+	capacity.Style = &style
+	capacity.LineBudget = lines
+	capacity.Density = level
+	capacity.ApproxCharacters = 0
+	capacity.Status = "estimated_geometry"
+	capacity.Assumptions = append(capacity.Assumptions, "Uses the explicit per-slide preferred density; automatic density adjustment and native fit are not included.")
+	return EstimateLibrarySlotCapacity(typography, capacity)
+}
+
+func unsupportedDensityCapacity(capacity LibrarySlotCapacity, basis string) LibrarySlotCapacity {
+	capacity.Status = "unsupported"
+	capacity.Basis = basis
+	capacity.LineBudget = 0
+	capacity.ApproxCharacters = 0
+	capacity.Style = nil
+	capacity.Density = ""
+	capacity.Assumptions = append(capacity.Assumptions, "Capacity was not recalculated for the per-slide density override.")
+	return capacity
 }
 
 type LibrarySlotFit struct {

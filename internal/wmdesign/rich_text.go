@@ -54,6 +54,8 @@ type RichParagraphLayout struct {
 	FirstLine         int             `json:"first_line"`
 	LineCount         int             `json:"line_count"`
 	Bullet            bool            `json:"bullet,omitempty"`
+	BulletIndentPt    float64         `json:"bullet_indent_pt,omitempty"`
+	BulletMarkerPt    float64         `json:"bullet_marker_pt,omitempty"`
 	ParagraphGapAfter float64         `json:"paragraph_gap_after_pt,omitempty"`
 	LineBreaks        []int           `json:"explicit_line_break_runes,omitempty"`
 }
@@ -152,7 +154,7 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 	if b.W <= 0 || b.W > 8191 || math.IsNaN(b.X+b.Y+b.W+b.H) || math.IsInf(b.X+b.Y+b.W+b.H, 0) || b.H < 0 {
 		return out, fmt.Errorf("rich.invalid_geometry: %s", n.ID)
 	}
-	st, err := r.source.Style(n.Style)
+	st, err := r.bodyStyle(n.Style)
 	if err != nil {
 		return out, err
 	}
@@ -177,7 +179,7 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 	if st.Size >= 18 || st.Size >= 14 && st.Weight >= 700 {
 		baseMinimum = 3
 	}
-	if contrast(baseColor, bg) < baseMinimum {
+	if !r.contrastAllows(n.ID, st, baseColor, bg, baseMinimum) {
 		return out, fmt.Errorf("text.insufficient_contrast: %s base defaults", n.ID)
 	}
 	align := n.Align
@@ -190,11 +192,18 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 	l := TextLayout{Style: st, Font: baseID, Features: map[string]int{"kern": 0, "liga": 1, "clig": 1}, VerticalPolicy: "mixed-run candidate: common maximum face baseline; conservative maximum terminal height; native mixed-run parity unqualified"}
 	rich := RichTextLayout{Contract: RichTextContract}
 	baseline, terminal, allKnown := 0.0, 0.0, true
+	observedLeading, calibrationSHA := 0., CandidateCalibrationSHA
 	anchor := func(id FontIdentity) bool {
 		a, known := r.typeEngine.anchors[anchorKey(id.SHA256, st.Size, st.Leading)]
 		bl, ht := .75*st.Leading, math.Max(st.Leading, 1.5*st.Size)
 		if known {
 			bl, ht = a.Baseline, a.TerminalHeight
+			observedLeading = math.Max(observedLeading, effectiveAnchorLeading(a, st.Leading))
+			if sha := r.typeEngine.anchorCalibrationSHA(a); sha != CandidateCalibrationSHA {
+				calibrationSHA = sha
+			}
+		} else {
+			observedLeading = math.Max(observedLeading, st.Leading)
 		}
 		baseline, terminal = math.Max(baseline, bl), math.Max(terminal, ht)
 		allKnown = allKnown && known
@@ -239,7 +248,7 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 			if rs.Size >= 18 || rs.Size >= 14 && rs.Weight >= 700 {
 				minimum = 3
 			}
-			if contrast(color, bg) < minimum {
+			if !r.contrastAllows(n.ID+"/"+p.Key+"/"+run.Key, rs, color, bg, minimum) {
 				return out, fmt.Errorf("text.insufficient_contrast: %s/%s/%s", n.ID, p.Key, run.Key)
 			}
 			display := run.Text
@@ -267,7 +276,7 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 		if strings.Contains(original, "[[") || strings.Contains(original, "]]") || strings.Contains(original, "[^") {
 			return out, fmt.Errorf("rich.run_break_or_markup: %s/%s concatenated runs", n.ID, p.Key)
 		}
-		lines, err := r.typeEngine.richParagraphLines(q, b.W)
+		lines, err := r.measureRichParagraph(q, b.W)
 		if err != nil {
 			return out, fmt.Errorf("%s/%s: %w", n.ID, p.Key, err)
 		}
@@ -304,7 +313,7 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 					local = append(local, rr)
 				}
 				prefix.Runs = local
-				candidate, e := r.typeEngine.richParagraphLines(prefix, 8191)
+				candidate, e := r.measureRichParagraph(prefix, 8191)
 				if e != nil {
 					return out, e
 				}
@@ -324,11 +333,14 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 		return out, fmt.Errorf("rich.empty_visible_content: %s", n.ID)
 	}
 	if allKnown {
-		l.CalibrationSHA256 = CandidateCalibrationSHA
+		l.CalibrationSHA256 = calibrationSHA
+	}
+	if calibrationSHA == CandidateCalibrationSHA {
+		observedLeading = st.Leading
 	}
 	first, last := -1, -1
 	for i := range l.Lines {
-		l.Lines[i].Baseline = baseline + float64(i)*st.Leading
+		l.Lines[i].Baseline = baseline + float64(i)*observedLeading
 		if strings.TrimSpace(l.Lines[i].Text) != "" {
 			if first < 0 {
 				first = i
@@ -336,13 +348,13 @@ func (r *renderer) planRich(n Node, b, zone Rect, surface string, spec *RichText
 			last = i
 		}
 	}
-	l.AllocationHeight = float64(len(l.Lines)) * st.Leading
-	l.OccupiedTop = float64(first) * st.Leading
+	l.AllocationHeight = float64(len(l.Lines)) * math.Max(st.Leading, observedLeading)
+	l.OccupiedTop = float64(first) * observedLeading
 	lastHeight := terminal
 	if last < len(l.Lines)-1 {
-		lastHeight = st.Leading
+		lastHeight = observedLeading
 	}
-	l.EstimatedOccupiedHeight = float64(last-first)*st.Leading + lastHeight
+	l.EstimatedOccupiedHeight = float64(last-first)*observedLeading + lastHeight
 	need := math.Max(l.AllocationHeight, l.OccupiedTop+l.EstimatedOccupiedHeight)
 	if b.H == 0 {
 		b.H = need

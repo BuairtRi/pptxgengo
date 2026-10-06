@@ -1,0 +1,1796 @@
+{
+  "family": "venn",
+  "name": "Venn diagrams",
+  "summary": "Two-, three- and four-circle Venn diagrams with set text, labelled overlaps and plotted points, in every frame.",
+  "templates": [
+    {
+      "id": "venn",
+      "variant": "two-text",
+      "name": "Venn, two sets with overlap",
+      "tier": "core",
+      "purpose": "Two overlapping circles in the tall column, each with a short description and a labelled overlap, with the explanation in the short column.",
+      "uses": [
+        "venn",
+        "text.block",
+        "list.set"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 57,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 16
+        },
+        {
+          "slot": "set text",
+          "maxChars": 40
+        },
+        {
+          "slot": "overlap label",
+          "maxChars": 18
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "bullet lead",
+          "maxChars": 12
+        },
+        {
+          "slot": "bullet text",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Operating model",
+        "title": "Margin gains sit where two teams meet",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 432,
+            "sets": [
+              {
+                "label": "Clinical operations",
+                "text": "Case mix, staffing and patient flow"
+              },
+              {
+                "label": "Finance",
+                "text": "Cost, reimbursement and forecasting"
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "Margin per case",
+                "text": "One shared view"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Why the overlap matters"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Clinical.",
+                "text": "Owns volume and throughput."
+              },
+              {
+                "lead": "Finance.",
+                "text": "Owns cost and payment."
+              },
+              {
+                "lead": "Overlap.",
+                "text": "One shared margin view per case."
+              }
+            ]
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "two-points",
+      "name": "Venn, two sets with plotted items",
+      "tier": "core",
+      "purpose": "Two overlapping circles on the left of a split frame with numbered initiatives plotted by where they land, and a numbered legend in the short column.",
+      "uses": [
+        "venn",
+        "list.numbered"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 58,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 16
+        },
+        {
+          "slot": "point label",
+          "maxChars": 2
+        },
+        {
+          "slot": "legend title",
+          "maxChars": 24
+        },
+        {
+          "slot": "legend text",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Initiative portfolio",
+        "title": "Most AI initiatives cut cost, few grow revenue",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 57,
+            "y": 36,
+            "w": 558,
+            "h": 432,
+            "sets": [
+              {
+                "label": "Cost out"
+              },
+              {
+                "label": "Revenue up"
+              }
+            ],
+            "points": [
+              {
+                "x": 0.204,
+                "y": 0.28,
+                "label": "Claims bot"
+              },
+              {
+                "x": 0.231,
+                "y": 0.72,
+                "label": "Staffing"
+              },
+              {
+                "x": 0.446,
+                "y": 0.5,
+                "label": "Referrals"
+              },
+              {
+                "x": 0.679,
+                "y": 0.28,
+                "label": "Outreach"
+              },
+              {
+                "x": 0.688,
+                "y": 0.72,
+                "label": "Pricing"
+              }
+            ]
+          },
+          {
+            "type": "strongnum",
+            "x": 633,
+            "y": 180,
+            "w": 270,
+            "numInk": "emphasis",
+            "numStyle": "number",
+            "items": [
+              {
+                "title": "Claims status bot",
+                "text": "Cost out only."
+              },
+              {
+                "title": "Staffing forecast",
+                "text": "Mostly cost out."
+              },
+              {
+                "title": "Referral matching",
+                "text": "Both, at the overlap."
+              },
+              {
+                "title": "Outreach scoring",
+                "text": "Mostly revenue."
+              },
+              {
+                "title": "Pricing analytics",
+                "text": "Revenue up only."
+              }
+            ]
+          }
+        ],
+        "split": "tall-left",
+        "titleLines": 2,
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "venn",
+      "variant": "two-bullets",
+      "name": "Venn, two sets with bullets",
+      "tier": "core",
+      "purpose": "Two overlapping circles with two bullets per set and a bulleted overlap in the tall column, with the reading in the short column.",
+      "uses": [
+        "venn",
+        "text.block",
+        "list.set"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 48,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 16
+        },
+        {
+          "slot": "set text",
+          "maxChars": 40
+        },
+        {
+          "slot": "overlap label",
+          "maxChars": 18
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "bullet lead",
+          "maxChars": 12
+        },
+        {
+          "slot": "bullet text",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Sourcing",
+        "title": "Build and buy overlap on shared data",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 432,
+            "sets": [
+              {
+                "label": "Build",
+                "bullets": [
+                  "Own roadmap",
+                  "Slower start"
+                ]
+              },
+              {
+                "label": "Buy",
+                "bullets": [
+                  "Fast launch",
+                  "Vendor lock-in"
+                ]
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "Hybrid",
+                "bullets": [
+                  "Buy core",
+                  "Build edge"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Choose by differentiation"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Build.",
+                "text": "Where we compete."
+              },
+              {
+                "lead": "Buy.",
+                "text": "Where we do not."
+              },
+              {
+                "lead": "Hybrid.",
+                "text": "Where both help."
+              }
+            ]
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "two-nav",
+      "name": "Venn, two sets, nav rail",
+      "tier": "core",
+      "purpose": "Two overlapping circles beside a short explanation, with the nav rail and a compact footer.",
+      "uses": [
+        "venn",
+        "text.block",
+        "nav.rail"
+      ],
+      "legacy": "nav variant of venn/two-text",
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "nav item",
+          "maxChars": 12
+        },
+        {
+          "slot": "set label",
+          "maxChars": 16
+        },
+        {
+          "slot": "set text",
+          "maxChars": 32
+        },
+        {
+          "slot": "overlap label",
+          "maxChars": 18
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "bullet lead",
+          "maxChars": 12
+        },
+        {
+          "slot": "bullet text",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "nav": {
+          "items": [
+            "Context",
+            "Options",
+            "Sourcing",
+            "Plan"
+          ],
+          "active": 2
+        },
+        "footer": "compact",
+        "eyebrow": "Sourcing",
+        "title": "Co-delivery blends internal and partner strengths",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "h": 324,
+            "sets": [
+              {
+                "label": "Internal team",
+                "text": "Knows Northfield systems"
+              },
+              {
+                "label": "Partner",
+                "text": "Brings scale and tooling"
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "Co-delivery",
+                "text": "Shared plan"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "Why co-deliver"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 180,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Internal.",
+                "text": "Keeps context and ownership."
+              },
+              {
+                "lead": "Partner.",
+                "text": "Adds capacity and speed."
+              },
+              {
+                "lead": "Together.",
+                "text": "Faster, with knowledge retained."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 633,
+            "y": 306,
+            "w": 270,
+            "text": "Blend the two teams on every workstream, not only at handoffs."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "three-text",
+      "name": "Venn, three sets with sweet spot",
+      "tier": "core",
+      "purpose": "Three overlapping circles with a short statement in each, a labelled centre sweet spot and numbered markers on the three pairwise overlaps, with a numbered key in the short column.",
+      "uses": [
+        "venn",
+        "list.numbered",
+        "text.block"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 79,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 12
+        },
+        {
+          "slot": "set text",
+          "maxChars": 32
+        },
+        {
+          "slot": "centre label",
+          "maxChars": 16
+        },
+        {
+          "slot": "point label",
+          "maxChars": 2
+        },
+        {
+          "slot": "key title",
+          "maxChars": 16
+        },
+        {
+          "slot": "key text",
+          "maxChars": 40
+        },
+        {
+          "slot": "closing line",
+          "maxChars": 64
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Prioritization",
+        "title": "Fund what passes all three tests",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 414,
+            "sets": [
+              {
+                "label": "Desirable",
+                "text": "Patients and staff ask for it"
+              },
+              {
+                "label": "Feasible",
+                "text": "Data and systems are ready"
+              },
+              {
+                "label": "Viable",
+                "text": "Payback inside 18 months"
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "No ROI",
+                "w": 28
+              },
+              {
+                "in": [
+                  0,
+                  2
+                ],
+                "label": "Not yet",
+                "w": 24
+              },
+              {
+                "in": [
+                  1,
+                  2
+                ],
+                "label": "No pull",
+                "w": 30
+              },
+              {
+                "in": [
+                  0,
+                  1,
+                  2
+                ],
+                "label": "Sweet spot"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 162,
+            "w": 270,
+            "text": "Three ways to miss"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 216,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Unfunded.",
+                "text": "Wanted and buildable, no payback."
+              },
+              {
+                "lead": "Not yet.",
+                "text": "Wanted and pays back, not buildable."
+              },
+              {
+                "lead": "No demand.",
+                "text": "Buildable and pays back, unwanted."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 270,
+            "text": "Fund the sweet spot first, then fix the gap in each overlap."
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "three-bullets",
+      "name": "Venn, three sets with bullets",
+      "tier": "core",
+      "purpose": "Three circles with two bullets per set and a centre label, with supporting narrative in the short column.",
+      "uses": [
+        "venn",
+        "text.block",
+        "list.set"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 65,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 10
+        },
+        {
+          "slot": "bullet",
+          "maxChars": 28
+        },
+        {
+          "slot": "centre label",
+          "maxChars": 24
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "narrative",
+          "maxChars": 120
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Capabilities",
+        "title": "AI pays off only on shared process and data",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 414,
+            "sets": [
+              {
+                "label": "AI",
+                "bullets": [
+                  "Predicts denials",
+                  "Drafts appeals"
+                ]
+              },
+              {
+                "label": "Process",
+                "bullets": [
+                  "One close calendar",
+                  "Standard intake"
+                ]
+              },
+              {
+                "label": "Data",
+                "bullets": [
+                  "Clean claims feed",
+                  "Shared patient ID"
+                ]
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "Rules"
+              },
+              {
+                "in": [
+                  0,
+                  2
+                ],
+                "label": "ML"
+              },
+              {
+                "in": [
+                  1,
+                  2
+                ],
+                "label": "Flow"
+              },
+              {
+                "in": [
+                  0,
+                  1,
+                  2
+                ],
+                "label": "Automation"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Three capabilities, one result"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "text": "Each capability stalls alone. Models need clean data, and clean data needs a standard process to keep it that way."
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "three-points",
+      "name": "Venn, three sets with plotted items",
+      "tier": "core",
+      "purpose": "Three circles with numbered items plotted by which capabilities they draw on, and a numbered list in the short column.",
+      "uses": [
+        "venn",
+        "list.numbered"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 58,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 12
+        },
+        {
+          "slot": "point label",
+          "maxChars": 2
+        },
+        {
+          "slot": "list title",
+          "maxChars": 24
+        },
+        {
+          "slot": "list text",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Initiative portfolio",
+        "title": "Six initiatives mapped to three capabilities",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 414,
+            "sets": [
+              {
+                "label": "AI"
+              },
+              {
+                "label": "Process"
+              },
+              {
+                "label": "Data"
+              }
+            ],
+            "points": [
+              {
+                "x": 0.231,
+                "y": 0.415,
+                "label": "Denial"
+              },
+              {
+                "x": 0.769,
+                "y": 0.415,
+                "label": "Intake",
+                "side": "left"
+              },
+              {
+                "x": 0.428,
+                "y": 0.754,
+                "label": "Master index"
+              },
+              {
+                "x": 0.446,
+                "y": 0.331,
+                "label": "Appeals"
+              },
+              {
+                "x": 0.306,
+                "y": 0.577,
+                "label": "Claims"
+              },
+              {
+                "x": 0.461,
+                "y": 0.483,
+                "label": "Coding"
+              }
+            ]
+          },
+          {
+            "type": "strongnum",
+            "x": 57,
+            "y": 162,
+            "w": 270,
+            "numInk": "emphasis",
+            "numStyle": "number",
+            "items": [
+              {
+                "title": "Denial prediction",
+                "text": "AI only."
+              },
+              {
+                "title": "Intake redesign",
+                "text": "Process only."
+              },
+              {
+                "title": "Patient master index",
+                "text": "Data only."
+              },
+              {
+                "title": "Appeal drafting",
+                "text": "AI and process."
+              },
+              {
+                "title": "Claims analytics",
+                "text": "AI and data."
+              },
+              {
+                "title": "Autonomous coding",
+                "text": "All three."
+              }
+            ]
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2,
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "venn",
+      "variant": "three-left",
+      "name": "Venn, three sets on the left",
+      "tier": "core",
+      "purpose": "Three overlapping circles in the left tall column with the supporting narrative in the short column on the right.",
+      "uses": [
+        "venn",
+        "text.block",
+        "list.set"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 53,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 12
+        },
+        {
+          "slot": "set text",
+          "maxChars": 32
+        },
+        {
+          "slot": "centre label",
+          "maxChars": 20
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "bullet lead",
+          "maxChars": 12
+        },
+        {
+          "slot": "bullet text",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Operating model",
+        "title": "Three teams share one operating model",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 57,
+            "y": 36,
+            "w": 558,
+            "h": 414,
+            "sets": [
+              {
+                "label": "People",
+                "text": "Roles, skills and capacity"
+              },
+              {
+                "label": "Process",
+                "text": "Standard ways of working"
+              },
+              {
+                "label": "Technology",
+                "text": "Shared platforms"
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "Roles"
+              },
+              {
+                "in": [
+                  0,
+                  2
+                ],
+                "label": "UX"
+              },
+              {
+                "in": [
+                  1,
+                  2
+                ],
+                "label": "Auto"
+              },
+              {
+                "in": [
+                  0,
+                  1,
+                  2
+                ],
+                "label": "One model"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 633,
+            "y": 180,
+            "w": 270,
+            "text": "What each team brings"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 234,
+            "w": 270,
+            "items": [
+              {
+                "lead": "People.",
+                "text": "Hire and train for the model."
+              },
+              {
+                "lead": "Process.",
+                "text": "Document it once."
+              },
+              {
+                "lead": "Technology.",
+                "text": "Automate the standard."
+              }
+            ]
+          }
+        ],
+        "split": "tall-left",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "three-nav",
+      "name": "Venn, three sets, nav rail",
+      "tier": "core",
+      "purpose": "Three overlapping circles in the tall column with the nav rail and a tall footer, and a short reading in the left column.",
+      "uses": [
+        "venn",
+        "text.block",
+        "nav.rail"
+      ],
+      "legacy": "nav variant of venn/three-text",
+      "budget": {
+        "words": 61,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "nav item",
+          "maxChars": 12
+        },
+        {
+          "slot": "set label",
+          "maxChars": 12
+        },
+        {
+          "slot": "set text",
+          "maxChars": 32
+        },
+        {
+          "slot": "centre label",
+          "maxChars": 20
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "bullet",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "nav": {
+          "items": [
+            "Diagnose",
+            "Options",
+            "Prioritize",
+            "Roadmap"
+          ],
+          "active": 1
+        },
+        "footer": "tall",
+        "eyebrow": "Options",
+        "title": "Options that clear all three tests",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 414,
+            "sets": [
+              {
+                "label": "Desirable",
+                "text": "Patients and staff ask for it"
+              },
+              {
+                "label": "Feasible",
+                "text": "Data and systems are ready"
+              },
+              {
+                "label": "Viable",
+                "text": "Payback inside 18 months"
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "No ROI",
+                "w": 28
+              },
+              {
+                "in": [
+                  0,
+                  2
+                ],
+                "label": "Not yet",
+                "w": 24
+              },
+              {
+                "in": [
+                  1,
+                  2
+                ],
+                "label": "No pull",
+                "w": 30
+              },
+              {
+                "in": [
+                  0,
+                  1,
+                  2
+                ],
+                "label": "Sweet spot"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Screening result"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "items": [
+              "Two options clear all three tests",
+              "Four clear two and need a fix"
+            ]
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "four-text",
+      "name": "Venn, four sets with centre",
+      "tier": "core",
+      "purpose": "Four overlapping circles in the tall column with a label and short line in each and a shared centre region, with the reading in the short column.",
+      "uses": [
+        "venn",
+        "text.block"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 63,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 12
+        },
+        {
+          "slot": "set text",
+          "maxChars": 28
+        },
+        {
+          "slot": "centre label",
+          "maxChars": 6
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "narrative",
+          "maxChars": 110
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Value drivers",
+        "title": "Value-based care needs all four drivers",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 432,
+            "sets": [
+              {
+                "label": "Access",
+                "text": "Shorter waits"
+              },
+              {
+                "label": "Quality",
+                "text": "Fewer readmits"
+              },
+              {
+                "label": "Cost",
+                "text": "Lower unit cost"
+              },
+              {
+                "label": "Experience",
+                "text": "Easier journeys"
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "Timely care"
+              },
+              {
+                "in": [
+                  0,
+                  2
+                ],
+                "label": "Affordable"
+              },
+              {
+                "in": [
+                  1,
+                  3
+                ],
+                "label": "Trust"
+              },
+              {
+                "in": [
+                  2,
+                  3
+                ],
+                "label": "Fair price"
+              },
+              {
+                "in": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "label": "VBC"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Four drivers, one aim"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "text": "Gains in one driver often cost another. Value-based care (VBC) shows up only where all four hold."
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "callout",
+            "x": 57,
+            "y": 342,
+            "w": 270,
+            "text": "VBC: small, and worth protecting."
+          }
+        ],
+        "split": "tall-right",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "venn",
+      "variant": "four-points",
+      "name": "Venn, four sets with plotted items",
+      "tier": "core",
+      "purpose": "Four circles with numbered items plotted where capabilities overlap, and a numbered legend in the short column.",
+      "uses": [
+        "venn",
+        "list.numbered"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 12
+        },
+        {
+          "slot": "point label",
+          "maxChars": 2
+        },
+        {
+          "slot": "list title",
+          "maxChars": 24
+        },
+        {
+          "slot": "list text",
+          "maxChars": 32
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Initiative portfolio",
+        "title": "Six initiatives across four capabilities",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 57,
+            "y": 36,
+            "w": 558,
+            "h": 432,
+            "sets": [
+              {
+                "label": "Data"
+              },
+              {
+                "label": "Process"
+              },
+              {
+                "label": "People"
+              },
+              {
+                "label": "Technology"
+              }
+            ],
+            "points": [
+              {
+                "x": 0.249,
+                "y": 0.326,
+                "label": "MDM hub"
+              },
+              {
+                "x": 0.751,
+                "y": 0.326,
+                "label": "Calendar",
+                "side": "left"
+              },
+              {
+                "x": 0.751,
+                "y": 0.685,
+                "label": "ERP",
+                "side": "left"
+              },
+              {
+                "x": 0.464,
+                "y": 0.234,
+                "label": "Steward"
+              },
+              {
+                "x": 0.464,
+                "y": 0.766,
+                "label": "Academy"
+              },
+              {
+                "x": 0.285,
+                "y": 0.5,
+                "label": "Skills"
+              }
+            ]
+          },
+          {
+            "type": "strongnum",
+            "x": 633,
+            "y": 162,
+            "w": 270,
+            "numInk": "emphasis",
+            "numStyle": "number",
+            "items": [
+              {
+                "title": "Master data hub",
+                "text": "Data only."
+              },
+              {
+                "title": "Close calendar",
+                "text": "Process only."
+              },
+              {
+                "title": "ERP upgrade",
+                "text": "Technology only."
+              },
+              {
+                "title": "Data stewardship",
+                "text": "Data and process."
+              },
+              {
+                "title": "Finance academy",
+                "text": "People and technology."
+              },
+              {
+                "title": "Skills inventory",
+                "text": "Data and people."
+              }
+            ]
+          }
+        ],
+        "split": "tall-left",
+        "titleLines": 2,
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "venn",
+      "variant": "four-callout",
+      "name": "Venn, four sets with centre callout",
+      "tier": "core",
+      "purpose": "Four overlapping circles on the left with the centre nugget named in bold, and a callout in the short column that explains what sits in the centre.",
+      "uses": [
+        "venn",
+        "text.block"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 61,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 42
+        },
+        {
+          "slot": "set label",
+          "maxChars": 12
+        },
+        {
+          "slot": "set text",
+          "maxChars": 28
+        },
+        {
+          "slot": "centre label",
+          "maxChars": 6
+        },
+        {
+          "slot": "subhead",
+          "maxChars": 28
+        },
+        {
+          "slot": "narrative",
+          "maxChars": 110
+        },
+        {
+          "slot": "source",
+          "maxChars": 60
+        },
+        {
+          "slot": "callout value",
+          "maxChars": 14
+        },
+        {
+          "slot": "callout text",
+          "maxChars": 80
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Operating model",
+        "title": "The centre is where the four teams align",
+        "source": {
+          "text": "Northfield finance and operations workshops, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "venn",
+            "x": 57,
+            "y": 36,
+            "w": 558,
+            "h": 432,
+            "sets": [
+              {
+                "label": "Strategy",
+                "text": "Sets direction"
+              },
+              {
+                "label": "Finance",
+                "text": "Funds the plan"
+              },
+              {
+                "label": "Operations",
+                "text": "Runs the work"
+              },
+              {
+                "label": "Technology",
+                "text": "Builds the tools"
+              }
+            ],
+            "regions": [
+              {
+                "in": [
+                  0,
+                  1
+                ],
+                "label": "Targets"
+              },
+              {
+                "in": [
+                  0,
+                  2
+                ],
+                "label": "Priorities"
+              },
+              {
+                "in": [
+                  1,
+                  3
+                ],
+                "label": "Business case"
+              },
+              {
+                "in": [
+                  2,
+                  3
+                ],
+                "label": "Delivery"
+              },
+              {
+                "in": [
+                  0,
+                  1,
+                  2,
+                  3
+                ],
+                "label": "CORE"
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "x": 633,
+            "y": 162,
+            "w": 270,
+            "label": "Centre",
+            "value": "Core",
+            "text": "Where strategy, funding, delivery and tooling agree on the same targets.",
+            "surface": "inverse"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 342,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Targets.",
+                "text": "Strategy and finance."
+              },
+              {
+                "lead": "Delivery.",
+                "text": "Operations and technology."
+              }
+            ]
+          }
+        ],
+        "split": "tall-left",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    }
+  ]
+}

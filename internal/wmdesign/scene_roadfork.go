@@ -69,7 +69,7 @@ func (r *renderer) planRoadForkScene(id string, raw json.RawMessage, ctx SceneCo
 	if tag.Type != "roadfork" {
 		return nil, false, nil
 	}
-	if r.source.Revision != LibraryRevisionV10 {
+	if r.source.Revision != LibraryRevisionV10 && r.source.Revision != LibraryRevisionV11 {
 		return nil, true, fmt.Errorf("scene.roadfork_requires_v10")
 	}
 	var fields map[string]json.RawMessage
@@ -215,7 +215,7 @@ func (r *renderer) roadForkStack(p *scenePlan, id string, parts []roadForkTextPa
 		if part.leading > 0 {
 			st.Leading = st.Size * part.leading
 		}
-		l, err := r.typeEngine.Measure(part.text, st, b.W)
+		l, err := r.measureText(part.text, st, b.W)
 		if err != nil {
 			return 0, fmt.Errorf("%s: %w", id, err)
 		}
@@ -259,7 +259,11 @@ func (r *renderer) roadForkPin(p *scenePlan, id string, q curvePoint, number str
 		return err
 	}
 	st.Family, st.Size, st.Leading, st.Weight, st.TrackingPt, st.Case = "IBM Plex Mono", 10, 10, 600, 0, ""
-	if err = r.intakeVennSingleText(p, id+".number", number, st, Rect{q.x - 12, q.y - 12, 24, 24}, surface, "#"+ring, "center", true); err != nil {
+	ink := ring
+	if grey && r.hasDensityContrastRules() {
+		ink = "070154"
+	}
+	if err = r.intakeVennSingleText(p, id+".number", number, st, Rect{q.x - 12, q.y - 12, 24, 24}, surface, "#"+ink, "center", true); err != nil {
 		return err
 	}
 	if m.Here {
@@ -272,7 +276,7 @@ func (r *renderer) roadForkPin(p *scenePlan, id string, q curvePoint, number str
 			return err
 		}
 		st.Weight = 600
-		l, err := r.typeEngine.Measure(label, st, 8191)
+		l, err := r.measureText(label, st, 8191)
 		if err != nil {
 			return err
 		}
@@ -524,7 +528,7 @@ func (r *renderer) roadFork(id string, n roadForkSpec, ctx SceneContext) (*scene
 			return nil, e
 		}
 		st.Weight = 600
-		l, e := r.typeEngine.Measure(tag, st, 8191)
+		l, e := r.measureText(tag, st, 8191)
 		if e != nil {
 			return nil, e
 		}
@@ -544,7 +548,7 @@ func (r *renderer) roadFork(id string, n roadForkSpec, ctx SceneContext) (*scene
 		}
 		titleStyle.Leading = titleStyle.Size * 1.15
 		// Both spans share the browser row's baseline.
-		tagLayout, e := r.typeEngine.Measure(tag, st, tagW+roadForkNoWrapClearance)
+		tagLayout, e := r.measureText(tag, st, tagW+roadForkNoWrapClearance)
 		if e != nil {
 			return nil, e
 		}

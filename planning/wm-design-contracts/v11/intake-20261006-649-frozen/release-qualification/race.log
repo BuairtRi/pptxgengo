@@ -1,0 +1,8 @@
+go test -race -count=1 -timeout=150s -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity' ./internal/deckproject
+ok  	github.com/buairtri/pptxgengo/internal/deckproject	25.381s
+PPTXGENGO_NATIVE_LIVE_OUT= go test -race -short -count=1 -timeout=150s ./internal/nativeexport
+ok  	github.com/buairtri/pptxgengo/internal/nativeexport	8.130s
+go test -race -count=1 -timeout=150s -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace' ./pptx
+ok  	github.com/buairtri/pptxgengo/pptx	1.337s
+go test -race -count=1 -timeout=150s -run 'TestLibraryCatalogCache' ./internal/wmdesign
+ok  	github.com/buairtri/pptxgengo/internal/wmdesign	104.581s

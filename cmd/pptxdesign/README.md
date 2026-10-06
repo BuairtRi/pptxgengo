@@ -60,6 +60,21 @@ go build -o /tmp/pptxdesign ./cmd/pptxdesign
 Open those screenshots when choosing a layout. Search ranking is a discovery
 signal, not a fit guarantee. See [semantic template discovery](../../docs/semantic-template-discovery.md).
 
+For a focused library reference, pass keys directly or load them from a file:
+
+```sh
+/tmp/pptxdesign library-source-reference --bundle library/wm-design-system/v11 \
+  --template-keys-file /tmp/template-keys.txt --out /tmp/NEW-reference
+```
+
+The file may contain one key per line, comma-separated keys, or a JSON array of
+strings. Blank lines are ignored. Keys must exist in the pinned library and may
+not repeat. Empty or unreadable files, unknown keys, and duplicates are errors.
+Use either `--template-keys` or `--template-keys-file`; either selector also
+cannot be combined with `--family`. These options are available on
+`library-reference`, `library-source-reference`, `library-catalog`, and the
+library sweep commands.
+
 To make a new index after deliberate relocation:
 
 ```sh
@@ -87,6 +102,56 @@ Source context, slide brief files, notes, hidden states, sections and custom ass
 remain maintained inputs. Builds and receipts are immutable derived artifacts.
 The toolchain lock pins the executable, engine, library, fonts and asset hashes.
 Save PowerPoint edits separately; baseline changes block regeneration.
+
+### Set typography density
+
+Typography can be overridden per slide. `density` sets the body tier for the
+whole slide, including its components, composites and tables; when omitted,
+the template's authored tier applies (comfortable if the template sets none).
+`header_density` sets the title and eyebrow independently; when omitted,
+headers stay comfortable. Use `comfortable`, `compact` or `dense`:
+
+```yaml
+slides:
+  - id: market-landscape
+    content_kind: supplied_content
+    template: {scope: shared, id: cards/3}
+    density: compact
+    header_density: comfortable
+    auto_density: false
+    values:
+      # Normal template content fields remain here.
+```
+
+Automatic density can step body text down to fit authored content while keeping
+slide boxes and geometry fixed. It is enabled by default in the V11 density
+policy; set `auto_density: false` on a slide to keep its requested body tier.
+The bundle can set a source-owned `densityLimit` on a template. This caps how
+far automatic adjustment can go; project YAML cannot relax it. An explicit
+body tier denser than that limit is rejected with `density.prohibited_tier`. If
+automatic adjustment reaches the limit and content still does not fit, the
+build fails with `density.limit_exhausted`; shorten or split the content, or
+choose another template. The header remains at its separately requested tier.
+
+`project build`, `build`, library reference generation, and `library-match`
+print automatic body density changes to stderr, including the attempted steps
+and resolved tier. The layout report also records requested/resolved tiers,
+the source limit, and the adjustment trace. Older locked source bundles keep
+their published rendering behavior and reject density options when their
+pinned source does not provide density tokens.
+
+Inspect the shaped result for a source typography role with `measure-style`:
+
+```sh
+/tmp/pptxdesign measure-style --bundle library/wm-design-system/v11 \
+  --style small --text 'A compact cell value' --width 180 \
+  --density dense --scope cell
+```
+
+The command writes one JSON measurement containing the resolved style, font,
+line advances and estimated height. It does not test a template box or certify
+native PowerPoint fit. Omitting `--density` and using the default `body` scope
+keeps the legacy source-style lookup.
 
 ## Start with a shared stock slide
 

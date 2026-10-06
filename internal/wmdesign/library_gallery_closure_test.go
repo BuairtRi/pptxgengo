@@ -10,7 +10,7 @@ import (
 )
 
 func TestFrozenGalleryNativePreviewClosure(t *testing.T) {
-	root := filepath.Join("..", "..", "library", "wm-design-system", "v10", "catalog")
+	root := filepath.Join("..", "..", "library", "wm-design-system", "v11", "catalog")
 	raw, err := os.ReadFile(filepath.Join(root, "design-system", "index.json"))
 	if err != nil {
 		t.Fatal(err)

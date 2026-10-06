@@ -97,7 +97,7 @@ func (r *renderer) planText(p *componentPlan, id, text, style, surface, role str
 	if strings.Contains(text, "[[") || strings.Contains(text, "]]") || strings.Contains(text, "[^") {
 		return out, fmt.Errorf("text.unsupported_emphasis_or_footnote: %s", id)
 	}
-	st, e := r.source.Style(style)
+	st, e := r.bodyStyle(style)
 	if e != nil {
 		return out, e
 	}
@@ -113,10 +113,10 @@ func (r *renderer) planText(p *componentPlan, id, text, style, surface, role str
 	if st.Size >= 18 || st.Size >= 14 && st.Weight >= 700 {
 		min = 3
 	}
-	if contrast(fg, bg) < min {
+	if !r.contrastAllows(id, st, fg, bg, min) {
 		return out, fmt.Errorf("text.insufficient_contrast: %s", id)
 	}
-	l, e := r.typeEngine.Measure(text, st, w)
+	l, e := r.measureText(text, st, w)
 	if e != nil {
 		return out, fmt.Errorf("%s: %w", id, e)
 	}
@@ -131,7 +131,7 @@ func (r *renderer) planText(p *componentPlan, id, text, style, surface, role str
 			if i+1 < len(l.Lines) && strings.Contains(l.Displayed, line.Text+l.Lines[i+1].Text) {
 				next := strings.Fields(l.Lines[i+1].Text)
 				if len(next) > 0 {
-					candidate, e := r.typeEngine.Measure(strings.TrimRight(line.Text, " ")+" "+next[0], st, 8191)
+					candidate, e := r.measureText(strings.TrimRight(line.Text, " ")+" "+next[0], st, 8191)
 					if e == nil && len(candidate.Lines) == 1 && math.Abs(w-candidate.Lines[0].Advance) <= .25 {
 						return out, fmt.Errorf("component.uncertain_wrap_boundary: %s next word is within 0.25pt of %.3fpt", id, w)
 					}
@@ -349,8 +349,8 @@ func (r *renderer) planComponent(n Node, b, zone Rect, surface string) (componen
 			tx, tw := x, w
 			startY := y
 			if v.InlineNumber != "" {
-				st, _ := r.source.Style("number")
-				l, e := r.typeEngine.Measure(v.InlineNumber, st, w)
+				st, _ := r.bodyStyle("number")
+				l, e := r.measureText(v.InlineNumber, st, w)
 				if e != nil {
 					return p, e
 				}
@@ -359,8 +359,8 @@ func (r *renderer) planComponent(n Node, b, zone Rect, surface string) (componen
 				}
 				nw := l.Lines[0].Advance + .01
 				// Baseline alignment between Mono number and either title token.
-				ts, _ := r.source.Style(titleStyle)
-				tl, e := r.typeEngine.Measure(v.Title, ts, w-nw-9)
+				ts, _ := r.bodyStyle(titleStyle)
+				tl, e := r.measureText(v.Title, ts, w-nw-9)
 				if e != nil {
 					return p, e
 				}

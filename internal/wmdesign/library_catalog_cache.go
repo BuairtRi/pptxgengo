@@ -41,15 +41,16 @@ func libraryCatalogFingerprint(s *Source) ([32]byte, error) {
 		return [32]byte{}, fmt.Errorf("source.catalog_snapshot_required")
 	}
 	dependencies := struct {
-		Revision    string
-		Commit      string
-		Files       []SourceFile
-		Tokens      Tokens
-		Frames      Frames
-		Styles      map[string]Style
-		Fonts       []SourceFile
-		Calibration string
-	}{s.Revision, s.Commit, s.Files, s.Tokens, s.Frames, s.styles, s.loadedFontFiles, CandidateCalibrationSHA}
+		Revision           string
+		Commit             string
+		Files              []SourceFile
+		Tokens             Tokens
+		Frames             Frames
+		Styles             map[string]Style
+		Fonts              []SourceFile
+		Calibration        string
+		DensityCalibration string
+	}{s.Revision, s.Commit, s.Files, s.Tokens, s.Frames, s.styles, s.loadedFontFiles, CandidateCalibrationSHA, densityCalibrationForSource(s)}
 	raw, err := json.Marshal(dependencies)
 	if err != nil {
 		return [32]byte{}, fmt.Errorf("source.catalog_dependency_encoding: %w", err)

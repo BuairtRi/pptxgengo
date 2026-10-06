@@ -168,7 +168,7 @@ func (r *renderer) sceneTableRowGroupLabels(p *scenePlan, id string, n sceneTabl
 		st.TrackingPt = .8
 		st.Case = "upper"
 		text := g.Label
-		layout, err := r.typeEngine.Measure(text, st, box.H)
+		layout, err := r.measureText(text, st, box.H)
 		if err != nil {
 			return err
 		}

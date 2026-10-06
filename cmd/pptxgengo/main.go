@@ -12,7 +12,7 @@ import (
 
 var version = "dev"
 
-const currentBundle = "v10"
+const currentBundle = "v11"
 
 var tools = map[string]string{
 	"design": "pptxdesign",

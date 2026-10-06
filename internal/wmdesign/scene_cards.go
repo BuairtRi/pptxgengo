@@ -58,6 +58,7 @@ type sceneCardSource struct {
 	BandNumber    string            `json:"bandNumber,omitempty"`
 	CornerNumber  string            `json:"cornerNumber,omitempty"`
 	NumInk        string            `json:"numInk,omitempty"`
+	NumTile       string            `json:"numTile,omitempty"`
 	Body          []json.RawMessage `json:"body,omitempty"`
 	BodySize      string            `json:"bodySize,omitempty"`
 	Band          *CardBand         `json:"band,omitempty"`
@@ -222,10 +223,10 @@ func (r *renderer) sceneDataText(p *scenePlan, id, text string, st Style, b Rect
 	if st.Size >= 18 || st.Size >= 14 && st.Weight >= 700 {
 		minimum = 3
 	}
-	if contrast(color, bg) < minimum {
-		return tr, fmt.Errorf("scene.text_contrast: %s", id)
+	if !r.contrastAllows(id, st, color, bg, minimum) {
+		return tr, fmt.Errorf("scene.text_contrast: %s role=%s size=%.3fpt weight=%d ink=%s background=%s ratio=%.4f minimum=%.1f density=%s", id, st.ID, st.Size, st.Weight, color, bg, contrast(color, bg), minimum, r.bodyDensity)
 	}
-	layout, e := r.typeEngine.Measure(text, st, b.W)
+	layout, e := r.measureText(text, st, b.W)
 	if e != nil {
 		return tr, e
 	}
@@ -504,8 +505,22 @@ func ptrSceneBool(v bool) *bool { return &v }
 func (r *renderer) sceneDataBullets(p *scenePlan, id string, items []json.RawMessage, ctx SceneContext, path string, b Rect, surface string, st Style) (float64, error) {
 	y := b.Y
 	mark, inset, gap, offset := 4.0, 15.0, 6.0, 8.5
-	if st.Size <= 12 {
+	small := st.Size <= 12
+	if r.source.Tokens.Density != nil {
+		small = st.ID == "small"
+	}
+	if small {
 		mark, inset, gap, offset = 3, 12, 3, 7
+	}
+	if r.source.Tokens.Density != nil {
+		suffix := ""
+		if small {
+			suffix = "-small"
+		}
+		mark = r.listMetric("list-marker"+suffix, mark)
+		inset = r.listMetric("list-indent"+suffix, inset)
+		gap = r.listMetric("list-gap"+suffix, gap)
+		offset = densityMarkerOffset(st, mark, small)
 	}
 	for i, raw := range items {
 		key, e := sceneDataKey(ctx, path, i)
@@ -688,6 +703,9 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 	if n.BodySize != "" && n.BodySize != "small" {
 		return nil, fmt.Errorf("scene.unsupported_body_size")
 	}
+	if n.NumTile != "" && (n.NumTile != "callout" || !densityRoleCorrections(r.source) || n.InlineNumber == "" || n.Title == "" || n.Band != nil) {
+		return nil, fmt.Errorf("scene.unsupported_num_tile: %s", n.NumTile)
+	}
 	if n.Icon != nil && (n.Icon.Size <= 0 || n.Icon.Layout != "inline" && n.Icon.Layout != "stack" && n.Icon.Layout != "side") {
 		return nil, fmt.Errorf("scene.invalid_card_icon")
 	}
@@ -847,8 +865,37 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 			return top, e
 		}
 		if number != "" {
+			if n.NumTile != "" {
+				if n.NumTile != "callout" || !densityRoleCorrections(r.source) {
+					return top, fmt.Errorf("scene.unsupported_num_tile: %s", n.NumTile)
+				}
+				if iw <= 36 {
+					return top, fmt.Errorf("scene.num_tile_title_width: %s", id)
+				}
+				tile := Rect{ix, top + (st.Leading-27)/2, 27, 27}
+				if err := r.sceneRect(p, id+".number-tile", tile, "callout"); err != nil {
+					return top, err
+				}
+				ns, _ := r.sceneDataToken("number", 0)
+				ns.ID, ns.Family, ns.Weight, ns.Size, ns.Leading, ns.Tracking, ns.TrackingPt, ns.Case = "source.card-number-tile.14.14", "IBM Plex Mono", 600, 14, 14, "0", 0, ""
+				nr, err := r.sceneDataText(p, id+".number", number, ns, tile, "callout", "#070154", "center", ctx)
+				if err != nil {
+					return top, err
+				}
+				if len(nr.Layout.Lines) != 1 {
+					return top, fmt.Errorf("scene.number_tile_wrap: %s", id)
+				}
+				p.Items[len(p.Items)-1].Text.VerticalAlign = "middle"
+				tr, err := r.sceneDataText(p, id+".title", n.Title, st, Rect{ix + 36, top, iw - 36, 0}, surface, titleInk, "left", ctx)
+				if err != nil {
+					return top, err
+				}
+				// The fixed tile occupies a zero-height source title slot. Its
+				// decorative envelope does not change title/body flow.
+				return tr.Rect.Y + tr.Rect.H, nil
+			}
 			ns, _ := r.sceneDataToken("number", 0)
-			nl, e := r.typeEngine.Measure(number, ns, iw)
+			nl, e := r.measureText(number, ns, iw)
 			if e != nil {
 				return top, e
 			}
@@ -860,7 +907,7 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 			if e != nil {
 				return top, e
 			}
-			tl, e := r.typeEngine.Measure(n.Title, st, iw-nw-9)
+			tl, e := r.measureText(n.Title, st, iw-nw-9)
 			if e != nil {
 				return top, e
 			}
@@ -1065,14 +1112,14 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 		if q.Layout != "" && q.Layout != "stack" && q.Layout != "side" {
 			return nil, fmt.Errorf("scene.invalid_quote_layout")
 		}
-		st, _ := r.sceneDataToken("heading", 0)
-		st.Size = 48
-		if strings.HasSuffix(st.Tracking, "em") {
-			v, _ := strconv.ParseFloat(strings.TrimSuffix(st.Tracking, "em"), 64)
-			st.TrackingPt = math.Round(v*st.Size*100) / 100
+		st, err := r.quoteMarkStyle(true)
+		if err != nil {
+			return nil, err
 		}
-		st.Leading = 36
 		st.ID = "source.quote-mark.48.36"
+		if r.hasDensityVisualRules() {
+			st.ID = fmt.Sprintf("source.quote-mark.%g.%g", st.Size, st.Leading)
+		}
 		ink := q.MarkInk
 		if ink == "" {
 			ink = "emphasis"
@@ -1104,7 +1151,7 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 		}
 		y = tr.Rect.Y + tr.Rect.H + n.Gap
 		st, _ = r.sceneDataToken("label", 0)
-		by, e := r.typeEngine.Measure(q.By, st, w)
+		by, e := r.measureText(q.By, st, w)
 		if e != nil {
 			return nil, e
 		}
@@ -1129,7 +1176,7 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 			bg, _ := r.sceneColor(surface, "bg")
 			r.sceneDataShape(p, id+".bio.initials-bg", Rect{x, y, 54, 54}, pptx.ShapeTypeRect, fg, nil)
 			st, _ := r.sceneDataToken("number", 0)
-			layout, e := r.typeEngine.Measure(bio.Initials, st, 48)
+			layout, e := r.measureText(bio.Initials, st, 48)
 			if e != nil {
 				return nil, e
 			}
@@ -1161,7 +1208,7 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 			if e != nil {
 				return nil, e
 			}
-			tl, e := r.typeEngine.Measure(tag, st, w-12)
+			tl, e := r.measureText(tag, st, w-12)
 			if e != nil {
 				return nil, e
 			}
@@ -1269,7 +1316,7 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 	}
 	if n.State == "featured" && n.Tag != "" {
 		st, _ := r.sceneDataToken("label", 600)
-		tl, e := r.typeEngine.Measure(n.Tag, st, b.W-12)
+		tl, e := r.measureText(n.Tag, st, b.W-12)
 		if e != nil {
 			return nil, e
 		}
@@ -1330,7 +1377,10 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 				}
 			case "metric":
 				st, _ := r.sceneDataToken("number", 0)
-				if len([]rune(bb.Value)) > 5 {
+				if len([]rune(bb.Value)) > 5 && densityRoleCorrections(r.source) {
+					st, _ = r.bodyStyle("number-long")
+				}
+				if len([]rune(bb.Value)) > 5 && r.source.Tokens.Density == nil {
 					st.ID = "source.badge-number.13"
 					st.Size = 13
 					if strings.HasSuffix(st.Tracking, "em") {
@@ -1339,11 +1389,11 @@ func (r *renderer) sceneCard(id string, n sceneCardSource, ctx SceneContext) (*s
 					}
 				}
 				ls, _ := r.sceneDataToken("label", 0)
-				vl, e := r.typeEngine.Measure(bb.Value, st, size-6)
+				vl, e := r.measureText(bb.Value, st, size-6)
 				if e != nil {
 					return nil, e
 				}
-				ll, e := r.typeEngine.Measure(bb.Label, ls, size-6)
+				ll, e := r.measureText(bb.Label, ls, size-6)
 				if e != nil {
 					return nil, e
 				}
@@ -1508,7 +1558,7 @@ secondary:
 					return y, e
 				}
 				st, _ := r.sceneDataToken("number", 0)
-				vl, e := r.typeEngine.Measure(value, st, track)
+				vl, e := r.measureText(value, st, track)
 				if e != nil {
 					return y, e
 				}
@@ -1522,7 +1572,7 @@ secondary:
 					return y, e
 				}
 				ls, _ := r.sceneDataToken("small", 0)
-				ll, e := r.typeEngine.Measure(sm.Label, ls, track-nw-9)
+				ll, e := r.measureText(sm.Label, ls, track-nw-9)
 				if e != nil {
 					return y, e
 				}
@@ -1562,7 +1612,7 @@ secondary:
 				return y, e
 			}
 			st, _ := r.sceneDataToken("label", 0)
-			ll, e := r.typeEngine.Measure(name, st, b.W-14)
+			ll, e := r.measureText(name, st, b.W-14)
 			if e != nil {
 				return y, e
 			}
@@ -1632,7 +1682,7 @@ func (r *renderer) sceneDirectMetric(id string, raw json.RawMessage, ctx SceneCo
 		if surface != "callout" && surface != "inverse" {
 			return nil, fmt.Errorf("scene.callout_surface: %s", surface)
 		}
-		p := &scenePlan{ID: id}
+		p := &scenePlan{ID: id, TextFlowBounds: c.H == 0}
 		b := Rect{c.X, c.Y, c.W, c.H}
 		if e = r.sceneRect(p, id+".container", Rect{c.X, c.Y, c.W, 1}, surface); e != nil {
 			return nil, e
@@ -1679,7 +1729,7 @@ func (r *renderer) sceneDirectMetric(id string, raw json.RawMessage, ctx SceneCo
 		if e != nil {
 			return nil, e
 		}
-		l, e := r.typeEngine.Measure(val, st, b.W)
+		l, e := r.measureText(val, st, b.W)
 		if e != nil {
 			return nil, e
 		}
@@ -1742,7 +1792,7 @@ func (r *renderer) sceneFeeSummary(id string, raw json.RawMessage, ctx SceneCont
 	}
 	x, y, w := n.X+18, n.Y+18, n.W-36
 	ls, _ := r.sceneDataToken("label", 600)
-	ll, e := r.typeEngine.Measure(n.Model, ls, w-12)
+	ll, e := r.measureText(n.Model, ls, w-12)
 	if e != nil {
 		return nil, e
 	}
@@ -1783,7 +1833,7 @@ func (r *renderer) sceneFeeSummary(id string, raw json.RawMessage, ctx SceneCont
 		vs.ID = "source.fee-line.mono.12.18"
 		vs.Family = "IBM Plex Mono"
 		vs.Weight = 600
-		vl, e := r.typeEngine.Measure(line[1], vs, w)
+		vl, e := r.measureText(line[1], vs, w)
 		if e != nil {
 			return nil, e
 		}

@@ -171,7 +171,7 @@ func (r *renderer) cycleTextRecord(id, text string, style Style, width float64, 
 		}
 		return *child.Items[0].Text, nil
 	}
-	l, e := r.typeEngine.Measure(text, style, width)
+	l, e := r.measureText(text, style, width)
 	if e != nil {
 		return TextRecord{}, e
 	}

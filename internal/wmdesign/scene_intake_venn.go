@@ -261,7 +261,13 @@ func (r *renderer) planIntakeVennScene(id string, raw json.RawMessage, ctx Scene
 					return nil, true, e
 				}
 				st.Size, st.Leading, st.Weight, st.TrackingPt, st.Case = 9.5, 9.5, 600, 9.5*.06, "upper"
-				layout, e := r.typeEngine.Measure(pt.Label, st, 8191)
+				if densityRoleCorrections(r.source) {
+					st, e = r.intakeVennDensityBadgeStyle(st)
+					if e != nil {
+						return nil, true, e
+					}
+				}
+				layout, e := r.measureText(pt.Label, st, 8191)
 				if e != nil {
 					return nil, true, e
 				}
@@ -381,7 +387,13 @@ func (r *renderer) planIntakeVennScene(id string, raw json.RawMessage, ctx Scene
 			if round12 {
 				st.Size, st.Leading, st.TrackingPt = 9.5, 9.5, 9.5*.06
 			}
-			layout, e := r.typeEngine.Measure(pt.Label, st, 8191)
+			if densityRoleCorrections(r.source) {
+				st, e = r.intakeVennDensityBadgeStyle(st)
+				if e != nil {
+					return nil, true, e
+				}
+			}
+			layout, e := r.measureText(pt.Label, st, 8191)
 			if e != nil {
 				return nil, true, e
 			}
@@ -426,6 +438,17 @@ func (r *renderer) planIntakeVennScene(id string, raw json.RawMessage, ctx Scene
 	primitiveFinish(p, "venn")
 	p.Groups[len(p.Groups)-1].Contract = IntakeVennContract
 	return p, true, nil
+}
+
+func (r *renderer) intakeVennDensityBadgeStyle(st Style) (Style, error) {
+	label, err := r.sceneStyle("label")
+	if err != nil {
+		return st, err
+	}
+	st.Size, st.Leading = label.Size*9.5/9, label.Size*9.5/9
+	st.Tracking, st.TrackingPt = ".06em", math.Round(st.Size*.06*100)/100
+	st.Weight, st.Case = 600, "upper"
+	return st, nil
 }
 
 func intakeVennNumber(raw json.RawMessage) (string, error) {
@@ -500,7 +523,7 @@ func intakeVennBullets(items []json.RawMessage, depth int, total, copyRunes *int
 	return nil
 }
 func (r *renderer) intakeVennSingleText(p *scenePlan, id, text string, st Style, b Rect, surface, ink, align string, middle bool) error {
-	l, err := r.typeEngine.Measure(text, st, b.W)
+	l, err := r.measureText(text, st, b.W)
 	if err != nil {
 		return err
 	}

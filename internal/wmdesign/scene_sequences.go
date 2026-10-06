@@ -79,7 +79,7 @@ func (r *renderer) sequenceNeed(text string, st Style, w float64) (float64, floa
 	if text == "" {
 		return 0, 0, nil
 	}
-	l, e := r.typeEngine.Measure(text, st, w)
+	l, e := r.measureText(text, st, w)
 	if e != nil {
 		return 0, 0, e
 	}
@@ -277,11 +277,11 @@ func (r *renderer) planSequenceScene(id string, raw json.RawMessage, ctx SceneCo
 				if e = r.sceneText(p, pre+".title", s.Title, ts, Rect{x, y, tw, th}, ctx.Surface, "display", "left"); e != nil {
 					return nil, true, e
 				}
-				titleLayout, e := r.typeEngine.Measure(s.Title, ts, tw)
+				titleLayout, e := r.measureText(s.Title, ts, tw)
 				if e != nil {
 					return nil, true, e
 				}
-				labelLayout, e := r.typeEngine.Measure(s.Label, ls, lw)
+				labelLayout, e := r.measureText(s.Label, ls, lw)
 				if e != nil {
 					return nil, true, e
 				}
@@ -661,11 +661,20 @@ type ganttLayout struct {
 }
 
 func (r *renderer) sequenceLiteralText(p *scenePlan, id, text string, st Style, b Rect, color, align string, middle bool) error {
+	if r.contrastProbe != nil {
+		before := r.contrastProbe.SuppressChecks
+		r.contrastProbe.SuppressChecks = true
+		defer func() { r.contrastProbe.SuppressChecks = before }()
+	}
 	if e := r.diagramStyledText(p, id, text, st, b, "light", "primary", align, middle); e != nil {
 		return e
 	}
 	if text != "" {
 		p.Items[len(p.Items)-1].Text.Color = color
+		if r.contrastProbe != nil {
+			r.contrastProbe.SuppressChecks = false
+			r.auditLiteralContrast(p, id, st, p.Items[len(p.Items)-1].Text.Rect, color)
+		}
 	}
 	return nil
 }
@@ -931,7 +940,11 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		if e = r.sceneRect(p, id+".gates."+k+".chip", Rect{left, gateTop, w, 18}, surf); e != nil {
 			return nil, e
 		}
-		if e = r.diagramStyledText(p, id+".gates."+k+".label", g.Label, label, Rect{left + 10, gateTop, w - 20, 18}, surf, "display", "left", true); e != nil {
+		gateInk := "display"
+		if isKey && r.hasDensityVisualRules() {
+			gateInk = "primary"
+		}
+		if e = r.diagramStyledText(p, id+".gates."+k+".label", g.Label, label, Rect{left + 10, gateTop, w - 20, 18}, surf, gateInk, "left", true); e != nil {
 			return nil, e
 		}
 		p.Warnings = append(p.Warnings, "Adapter resolution wmds.native-inline-chip-width.v1: add trailing native textbox space to Gantt gate labels and retain the complete chip within the timeline.")
@@ -989,7 +1002,14 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 			return nil, e
 		}
 		ts := small
-		ts.Size = 12.5
+		titleSize := 12.5
+		if densityRoleCorrections(r.source) {
+			titleSize = ts.Size * 12.5 / 12
+		}
+		ts, e = primitiveStyleSize(ts, titleSize)
+		if e != nil {
+			return nil, e
+		}
 		ts.Tracking = "0"
 		ts.TrackingPt = 0
 		need, _, e := r.sequenceNeed(L.lane.Title, ts, lw-45)

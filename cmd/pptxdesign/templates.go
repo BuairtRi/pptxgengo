@@ -58,6 +58,7 @@ func runTemplates(command, bundle, source, engine, out, spec string, year int) e
 	if e != nil {
 		return e
 	}
+	emitDensityWarnings(layout)
 	if e = os.MkdirAll(out, 0755); e != nil {
 		return e
 	}

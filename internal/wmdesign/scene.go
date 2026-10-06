@@ -38,6 +38,9 @@ type scenePlan struct {
 	Items    []sceneItem
 	Groups   []ComponentRecord
 	Warnings []string
+	// Only an auto-height callout owns this text-derived container envelope.
+	// It permits a density retry without changing any authored outer rectangle.
+	TextFlowBounds bool
 }
 
 type sceneItem struct {
@@ -95,7 +98,7 @@ func sceneDecode(raw json.RawMessage, v any) error {
 	return nil
 }
 
-func (r *renderer) sceneStyle(name string) (Style, error) { return r.source.Style(name) }
+func (r *renderer) sceneStyle(name string) (Style, error) { return r.bodyStyle(name) }
 
 func (r *renderer) sceneColor(surface, ref string) (string, error) {
 	if surface == "" {
@@ -229,7 +232,7 @@ func (r *renderer) sceneText(p *scenePlan, id, text string, style Style, box Rec
 	if align != "left" && align != "right" && align != "center" {
 		return fmt.Errorf("scene.unsupported_align: %s", align)
 	}
-	l, err := r.typeEngine.Measure(text, style, box.W)
+	l, err := r.measureText(text, style, box.W)
 	if err != nil {
 		return fmt.Errorf("%s: %w", id, err)
 	}
@@ -244,6 +247,7 @@ func (r *renderer) sceneText(p *scenePlan, id, text string, style Style, box Rec
 	if err != nil {
 		return err
 	}
+	r.auditTextContrast(id, style, color, surface)
 	p.Items = append(p.Items, sceneItem{Text: &TextRecord{ID: id, Rect: box, Color: color, Align: align, Layout: l}})
 	return nil
 }
@@ -280,7 +284,7 @@ func (r *renderer) planSceneNode(id string, raw json.RawMessage, ctx SceneContex
 	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planRoadForkScene, r.planIntakeGaugeScene, r.planIntakeCycleScene, r.planIntakeRoadScene, r.planIntakeScoreLegendScene, r.planIntakeRound12Scene, r.planIntakeVennScene, r.planIntakeMaturityScene, r.planIntakeArchitectureScene, r.planIntakeGeographyScene, r.planIntakeCurveScene, r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
 		plan, handled, err := handler(id, raw, ctx)
 		if handled || err != nil {
-			if err == nil {
+			if err == nil && r.contrastProbe == nil {
 				err = sceneTextEnvelope(plan, ctx)
 			}
 			return plan, err
@@ -313,10 +317,18 @@ func sceneTextEnvelope(p *scenePlan, ctx SceneContext) error {
 			continue
 		}
 		if !inside(box, canvas) {
-			return fmt.Errorf("scene.content_outside_canvas: %s at %+v", id, box)
+			err := fmt.Errorf("scene.content_outside_canvas: %s at %+v", id, box)
+			if item.Text != nil {
+				return &densityFitError{cause: err}
+			}
+			return err
 		}
 		if ctx.Zone.H > 0 && box.Y+box.H > ctx.Zone.Y+ctx.Zone.H+.02 {
-			return fmt.Errorf("scene.content_overlaps_reserved_footer: %s bottom %.3fpt capacity %.3fpt", id, box.Y+box.H, ctx.Zone.Y+ctx.Zone.H)
+			err := fmt.Errorf("scene.content_overlaps_reserved_footer: %s bottom %.3fpt capacity %.3fpt", id, box.Y+box.H, ctx.Zone.Y+ctx.Zone.H)
+			if item.Text != nil {
+				return &densityFitError{cause: err}
+			}
+			return err
 		}
 	}
 	return nil

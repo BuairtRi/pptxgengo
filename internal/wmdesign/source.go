@@ -28,9 +28,10 @@ const LibraryRevisionV7 = "wmds-library.v7"
 const LibraryRevisionV8 = "wmds-library.v8"
 const LibraryRevisionV9 = "wmds-library.v9"
 const LibraryRevisionV10 = "wmds-library.v10"
+const LibraryRevisionV11 = "wmds-library.v11"
 
 func isV6OrLaterLibrary(revision string) bool {
-	return revision == LibraryRevisionV6 || revision == LibraryRevisionV7 || revision == LibraryRevisionV8 || revision == LibraryRevisionV9 || revision == LibraryRevisionV10
+	return revision == LibraryRevisionV6 || revision == LibraryRevisionV7 || revision == LibraryRevisionV8 || revision == LibraryRevisionV9 || revision == LibraryRevisionV10 || revision == LibraryRevisionV11
 }
 
 // V6 carries the accepted V5 rendering semantics for unchanged compositions.
@@ -54,6 +55,8 @@ type sourcePin struct {
 }
 
 var sourcePins = map[string]sourcePin{
+	"eb7dbb02d78b0a32b8bba552ba54bfd96f60e462985d7829f6fe91b4d00ff633": {"5fd96a039055e8d281c95fbb55fc472ca816308dfde34c62a0b869f223cacba1", LibraryRevisionV11},
+	"c913e0bc7c50312d6f4ab549477aed0006a574840af34e65cf62ec27315cb252": {"379b1462076ecaca7c0858979afd1efebbfaee5112ffc2f20b3a8078cd3e2b7d", LibraryRevisionV11},
 	"45d25e4d920165425a661aa8ceea36a24b979070b673f547f2294d0a65d109c0": {"aea092e8e5e1aca02900ab87b90b294d014ac2c19937049f735e1ad30a7c9124", LibraryRevisionV10},
 	"0ad33b662d7e3a9b47a47237f0037c09cba959ee2693d39b4cc36ed230ab75c1": {"9ae0d5af692d4dfe3c9807d232202c2461f55168fe926689ee833f82f8001fb3", LibraryRevisionV9},
 	"0e9846c1cf96187a16ca210279297239169707c90743c80011ef76869fbf26c9": {"9ae84d46370e91146395d860379dcfb8ef4bf72c6623482f3451c68d9eaf64d3", LibraryRevisionV8},
@@ -134,11 +137,12 @@ type Grid struct {
 	} `json:"fiveUp"`
 }
 type Tokens struct {
-	Schema string  `json:"schema"`
-	Units  string  `json:"units"`
-	Type   []Style `json:"type"`
-	Grid   Grid    `json:"grid"`
-	Colors struct {
+	Schema  string             `json:"schema"`
+	Units   string             `json:"units"`
+	Type    []Style            `json:"type"`
+	Grid    Grid               `json:"grid"`
+	Density *TypographyDensity `json:"density,omitempty"`
+	Colors  struct {
 		Surfaces map[string]map[string]string `json:"surfaces"`
 		Dataviz  struct {
 			KPI map[string]string `json:"kpi"`
@@ -185,6 +189,13 @@ type Source struct {
 	Components json.RawMessage            `json:"components"`
 	Templates  map[string]json.RawMessage `json:"templates"`
 	styles     map[string]Style
+	// Recognized browser contract, derived only from hash-validated snapshot
+	// bytes. Future pins retaining these rules inherit the same behavior.
+	densityVisualRules   bool
+	densityContrastRules bool
+	// Read-only source restrictions are derived once during Load. Renderer
+	// retries never copy whole catalogs or re-read fonts to resolve a limit.
+	densityLimits map[string]string
 	// These attest only to this in-memory snapshot. Load still validates every
 	// file on every call; they never allow a path/mtime cache to bypass drift.
 	loadedCatalogKey [32]byte
@@ -267,6 +278,9 @@ func Load(bundle, override string) (*Source, error) {
 			err = json.Unmarshal(b, &s.Frames)
 		case "components/v0/components.json":
 			s.Components = append([]byte(nil), b...)
+		case "explorations/components.src.html":
+			s.densityVisualRules = recognizesDensityVisualRules(b)
+			s.densityContrastRules = recognizesDensityContrastRules(b)
 		default:
 			if strings.HasPrefix(f.Path, "templates/library/") && !strings.HasPrefix(filepath.Base(f.Path), "_") {
 				s.Templates[f.Path] = append([]byte(nil), b...)
@@ -303,6 +317,12 @@ func Load(bundle, override string) (*Source, error) {
 	}
 	if len(s.styles) != 14 {
 		return nil, fmt.Errorf("source.conflict: expected 14 styles")
+	}
+	if err = validateTypographyDensity(s.Tokens.Density); err != nil {
+		return nil, err
+	}
+	if err = loadSourceDensityLimits(s); err != nil {
+		return nil, err
 	}
 	s.loadedCatalogKey, err = libraryCatalogFingerprint(s)
 	if err != nil {

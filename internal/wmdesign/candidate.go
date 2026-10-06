@@ -25,12 +25,13 @@ const CandidateProfile = "wmds-native.v2-candidate"
 const CandidateCalibrationSHA = "fd9b1b8704e3ce26404e1acf8af2c58b4790a1ff1f025d3ee4c15b2868d77f0a"
 
 type VerticalAnchor struct {
-	FontSHA        string  `json:"font_sha256"`
-	Size           float64 `json:"size_pt"`
-	Leading        float64 `json:"leading_pt"`
-	Baseline       float64 `json:"first_baseline_pt"`
-	TerminalHeight float64 `json:"terminal_character_height_pt"`
-	ProbeID        string  `json:"source_probe_id"`
+	FontSHA          string  `json:"font_sha256"`
+	Size             float64 `json:"size_pt"`
+	Leading          float64 `json:"leading_pt"`
+	Baseline         float64 `json:"first_baseline_pt"`
+	TerminalHeight   float64 `json:"terminal_character_height_pt"`
+	ProbeID          string  `json:"source_probe_id"`
+	EffectiveLeading float64 `json:"observed_leading_pt,omitempty"`
 }
 type CandidateCalibration struct {
 	Schema  string           `json:"schema"`
@@ -129,17 +130,22 @@ func (t *Typography) measureCandidate(text string, s Style, width float64) (Text
 	result = TextLayout{Original: text, Displayed: display, Style: s, Font: id, Features: map[string]int{"kern": 0, "liga": 1, "clig": 1}}
 	anchor, known := t.anchors[anchorKey(id.SHA256, s.Size, s.Leading)]
 	baseline, terminal := .75*s.Leading, math.Max(s.Leading, 1.5*s.Size)
+	pitch := s.Leading
 	result.VerticalPolicy = "uncalibrated: 0.75 leading baseline and conservative max(leading, 1.5 em) terminal allocation; requires native review"
 	if known {
 		baseline, terminal = anchor.Baseline, anchor.TerminalHeight
 		result.VerticalPolicy = "v1 native-control anchor adopted as v2 candidate estimate; exact source font/size/leading key; native v2 validation pending"
-		result.CalibrationSHA256 = CandidateCalibrationSHA
+		result.CalibrationSHA256 = t.anchorCalibrationSHA(anchor)
+		pitch = effectiveAnchorLeading(anchor, s.Leading)
+		if anchor.EffectiveLeading > 0 {
+			result.VerticalPolicy = "density native-control estimate for exact font/size/authored-leading key; observed native line pitch; same-environment controls, arbitrary content remains unqualified"
+		}
 	}
 	features := []shaping.FontFeature{{Tag: ot.MustNewTag("kern"), Value: 0}, {Tag: ot.MustNewTag("liga"), Value: 1}, {Tag: ot.MustNewTag("clig"), Value: 1}}
 	for _, paragraph := range strings.Split(display, "\n") {
 		runes := []rune(paragraph)
 		if len(runes) == 0 {
-			result.Lines = append(result.Lines, TextLine{"", 0, baseline + float64(len(result.Lines))*s.Leading})
+			result.Lines = append(result.Lines, TextLine{"", 0, baseline + float64(len(result.Lines))*pitch})
 			continue
 		}
 		for _, r := range runes {
@@ -189,10 +195,10 @@ func (t *Typography) measureCandidate(text string, s Style, width float64) (Text
 			if advance > width+.02 {
 				return result, fmt.Errorf("text.horizontal_overflow: %.3f exceeds %.3f", advance, width)
 			}
-			result.Lines = append(result.Lines, TextLine{string(runes[start:end]), advance, baseline + float64(len(result.Lines))*s.Leading})
+			result.Lines = append(result.Lines, TextLine{string(runes[start:end]), advance, baseline + float64(len(result.Lines))*pitch})
 		}
 	}
-	result.AllocationHeight = float64(len(result.Lines)) * s.Leading
+	result.AllocationHeight = float64(len(result.Lines)) * math.Max(s.Leading, pitch)
 	first, last := -1, -1
 	for i, l := range result.Lines {
 		if strings.TrimSpace(l.Text) != "" {
@@ -203,12 +209,12 @@ func (t *Typography) measureCandidate(text string, s Style, width float64) (Text
 		}
 	}
 	if first >= 0 {
-		result.OccupiedTop = float64(first) * s.Leading
+		result.OccupiedTop = float64(first) * pitch
 		lastHeight := terminal
 		if last < len(result.Lines)-1 {
-			lastHeight = s.Leading
+			lastHeight = pitch
 		}
-		result.EstimatedOccupiedHeight = float64(last-first)*s.Leading + lastHeight
+		result.EstimatedOccupiedHeight = float64(last-first)*pitch + lastHeight
 	}
 	return result, nil
 }

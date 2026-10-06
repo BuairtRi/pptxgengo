@@ -42,12 +42,14 @@ type resolvedFace struct {
 	Face     *font.Face
 }
 type Typography struct {
-	faces     map[string]resolvedFace
-	shaper    shaping.HarfbuzzShaper
-	segmenter shaping.Segmenter
-	wrapper   shaping.LineWrapper
-	engine    string
-	anchors   map[string]VerticalAnchor
+	faces                map[string]resolvedFace
+	shaper               shaping.HarfbuzzShaper
+	segmenter            shaping.Segmenter
+	wrapper              shaping.LineWrapper
+	engine               string
+	anchors              map[string]VerticalAnchor
+	densityAnchors       map[string]bool
+	densitySupplementSHA string
 }
 
 func fontKey(f string, w int, i bool) string { return fmt.Sprintf("%s/%d/%t", f, w, i) }

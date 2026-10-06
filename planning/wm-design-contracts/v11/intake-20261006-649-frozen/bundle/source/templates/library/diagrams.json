@@ -1,0 +1,1551 @@
+{
+  "family": "diagrams",
+  "name": "Funnels and pyramids",
+  "summary": "Funnels and pyramids: stages that narrow and levels that build on each other. Roadmaps and timelines moved to the Roadmaps family on 2026-10-06.",
+  "templates": [
+    {
+      "id": "funnel",
+      "variant": "conversion",
+      "name": "Conversion funnel with values and side text",
+      "tier": "core",
+      "purpose": "A five-stage conversion funnel across the full width: each band carries its label and count, with a dotted leader to a short line of what happens at that stage.",
+      "uses": [
+        "funnel"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 79,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage label",
+          "count": 5,
+          "maxChars": 22
+        },
+        {
+          "slot": "stage value",
+          "count": 5,
+          "maxChars": 8
+        },
+        {
+          "slot": "stage text",
+          "count": 5,
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Digital front door",
+        "title": "Only one in five eligible patients completes a visit online",
+        "source": {
+          "text": "Northfield Health System digital front door program, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "funnel",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "h": 324,
+            "shapeW": 468,
+            "neck": 0.34,
+            "stages": [
+              {
+                "label": "Eligible patients",
+                "value": "48,000",
+                "text": "Active patients with a verified phone or email on file."
+              },
+              {
+                "label": "Invited",
+                "value": "41,200",
+                "text": "Received a text or email invitation to the portal."
+              },
+              {
+                "label": "Registered",
+                "value": "22,600",
+                "text": "Created an account; identity check passed on the first try for most."
+              },
+              {
+                "label": "Booked online",
+                "value": "13,900",
+                "text": "Chose a slot without calling the access center."
+              },
+              {
+                "label": "Completed visit",
+                "value": "9,700",
+                "text": "Arrived and checked in digitally."
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "funnel",
+      "variant": "pipeline",
+      "name": "Pipeline funnel with summary panel",
+      "tier": "working",
+      "purpose": "A referral intake pipeline funnel beside a right panel of headline numbers; stage values sit in the bands and short notes at the side.",
+      "uses": [
+        "funnel",
+        "text.stat"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 76,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage label",
+          "count": 5,
+          "maxChars": 22
+        },
+        {
+          "slot": "stage value",
+          "count": 5,
+          "maxChars": 8
+        },
+        {
+          "slot": "stage text",
+          "count": 5,
+          "maxChars": 60
+        },
+        {
+          "slot": "panel stat",
+          "count": 3,
+          "maxChars": 8
+        },
+        {
+          "slot": "panel text",
+          "count": 3,
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "footer": "compact",
+        "eyebrow": "Referral intake",
+        "title": "Referrals stall at insurance verification",
+        "railSurface": "inverse",
+        "source": {
+          "text": "Sample figures for layout only; replace with current firm data before use."
+        },
+        "body": [
+          {
+            "type": "funnel",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "h": 324,
+            "shapeW": 306,
+            "neck": 0.38,
+            "stages": [
+              {
+                "label": "Received",
+                "value": "1,820",
+                "text": "Fax, portal and phone."
+              },
+              {
+                "label": "Triaged",
+                "value": "1,640",
+                "text": "Clinical review in 2 days."
+              },
+              {
+                "label": "Verified",
+                "value": "1,010",
+                "text": "Insurance check is the slowest step."
+              },
+              {
+                "label": "Scheduled",
+                "value": "880",
+                "text": "Slot offered within 5 days."
+              },
+              {
+                "label": "Seen",
+                "value": "790",
+                "text": "Visit completed."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Intake this quarter",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "display",
+            "x": 705,
+            "y": 162,
+            "w": 198,
+            "text": "43%",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 198,
+            "w": 198,
+            "text": "of referrals reach a visit.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "display",
+            "x": 705,
+            "y": 252,
+            "w": 198,
+            "text": "9 days",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 288,
+            "w": 198,
+            "text": "median from receipt to scheduled slot.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "display",
+            "x": 705,
+            "y": 342,
+            "w": 198,
+            "text": "38%",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 378,
+            "w": 198,
+            "text": "of verification losses are missing member IDs.",
+            "on": "inverse"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "funnel",
+      "variant": "dropoff",
+      "name": "Funnel with drop-off percentages between stages",
+      "tier": "core",
+      "purpose": "A funnel with the loss between each pair of stages printed at the band boundaries, each with the reason people leave.",
+      "uses": [
+        "funnel",
+        "text.stat"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 62,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage label",
+          "count": 5,
+          "maxChars": 22
+        },
+        {
+          "slot": "stage value",
+          "count": 5,
+          "maxChars": 8
+        },
+        {
+          "slot": "drop-off",
+          "count": 4,
+          "maxChars": 6
+        },
+        {
+          "slot": "reason",
+          "count": 4,
+          "maxChars": 36
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Digital front door",
+        "title": "The biggest leak is at slot selection, not sign-up",
+        "source": {
+          "text": "Sample figures for layout only; replace with current firm data before use."
+        },
+        "body": [
+          {
+            "type": "funnel",
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "h": 324,
+            "shapeW": 414,
+            "neck": 0.34,
+            "stages": [
+              {
+                "label": "Invited",
+                "value": "41,200"
+              },
+              {
+                "label": "Opened",
+                "value": "28,900"
+              },
+              {
+                "label": "Registered",
+                "value": "22,600"
+              },
+              {
+                "label": "Booked",
+                "value": "13,900"
+              },
+              {
+                "label": "Visit",
+                "value": "9,700"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 507,
+            "y": 126,
+            "w": 396,
+            "text": "Drop-off between stages"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                456,
+                189
+              ],
+              [
+                495,
+                189
+              ]
+            ],
+            "style": "dotted",
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "emphasis",
+            "x": 507,
+            "y": 162,
+            "w": 108,
+            "text": "-30%"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 627,
+            "y": 171,
+            "w": 276,
+            "text": "never open the invitation"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                428,
+                255
+              ],
+              [
+                495,
+                255
+              ]
+            ],
+            "style": "dotted",
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "emphasis",
+            "x": 507,
+            "y": 228,
+            "w": 108,
+            "text": "-22%"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 627,
+            "y": 237,
+            "w": 276,
+            "text": "abandon identity check"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                401,
+                321
+              ],
+              [
+                495,
+                321
+              ]
+            ],
+            "style": "dotted",
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "emphasis",
+            "x": 507,
+            "y": 294,
+            "w": 108,
+            "text": "-38%"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 627,
+            "y": 303,
+            "w": 276,
+            "text": "find no slot they like"
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                374,
+                387
+              ],
+              [
+                495,
+                387
+              ]
+            ],
+            "style": "dotted",
+            "head": "none"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "emphasis",
+            "x": 507,
+            "y": 360,
+            "w": 108,
+            "text": "-30%"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 627,
+            "y": 369,
+            "w": 276,
+            "text": "no-show or reschedule by phone"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "funnel",
+      "variant": "insights",
+      "name": "Funnel with insight cards",
+      "tier": "core",
+      "purpose": "A funnel on the left with three insight cards stacked on the right that interpret the narrowing: where it leaks, why, and what to test.",
+      "uses": [
+        "funnel",
+        "card"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 84,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage label",
+          "count": 4,
+          "maxChars": 22
+        },
+        {
+          "slot": "stage value",
+          "count": 4,
+          "maxChars": 8
+        },
+        {
+          "slot": "card label",
+          "count": 3,
+          "maxChars": 14
+        },
+        {
+          "slot": "card title",
+          "count": 3,
+          "maxChars": 36
+        },
+        {
+          "slot": "card body",
+          "count": 3,
+          "maxChars": 96
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Digital front door",
+        "title": "Three insights explain where patients drop away",
+        "source": {
+          "text": "Sample figures for layout only; replace with current firm data before use."
+        },
+        "body": [
+          {
+            "type": "funnel",
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "h": 312,
+            "shapeW": 414,
+            "neck": 0.34,
+            "stages": [
+              {
+                "label": "Invited",
+                "value": "41,200"
+              },
+              {
+                "label": "Registered",
+                "value": "22,600"
+              },
+              {
+                "label": "Booked online",
+                "value": "13,900"
+              },
+              {
+                "label": "Completed visit",
+                "value": "9,700"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 126,
+            "w": 414,
+            "h": 96,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Insight 1: Registration loses 45% of invitees",
+            "body": [
+              {
+                "p": "Identity checks fail on the first try for one in five."
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 234,
+            "w": 414,
+            "h": 96,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Insight 2: Booking is a phone habit",
+            "body": [
+              {
+                "p": "Patients over 65 book 3x more by phone than online."
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 342,
+            "w": 414,
+            "h": 96,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Insight 3: Visits convert once booked",
+            "body": [
+              {
+                "p": "70% of online bookings are completed, above phone."
+              }
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "funnel",
+      "variant": "conversion-split",
+      "name": "Funnel in a split frame",
+      "tier": "working",
+      "purpose": "The conversion funnel in the tall column of a split frame with a narrative and a headline stat in the short column.",
+      "uses": [
+        "funnel",
+        "text.block"
+      ],
+      "legacy": "split variant of funnel/conversion",
+      "budget": {
+        "words": 77,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage label",
+          "count": 6,
+          "maxChars": 22
+        },
+        {
+          "slot": "stage value",
+          "count": 6,
+          "maxChars": 8
+        },
+        {
+          "slot": "stage text",
+          "count": 6,
+          "maxChars": 60
+        },
+        {
+          "slot": "lead text",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Digital front door",
+        "title": "One in five eligible patients completes a visit",
+        "split": "tall-right",
+        "titleLines": 3,
+        "source": {
+          "text": "Sample figures for layout only."
+        },
+        "body": [
+          {
+            "type": "funnel",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "h": 414,
+            "shapeW": 330,
+            "neck": 0.34,
+            "stages": [
+              {
+                "label": "Eligible",
+                "value": "48,000",
+                "text": "Verified contact on file."
+              },
+              {
+                "label": "Invited",
+                "value": "41,200",
+                "text": "Text or email sent."
+              },
+              {
+                "label": "Opened",
+                "value": "28,900",
+                "text": "Read the invitation."
+              },
+              {
+                "label": "Registered",
+                "value": "22,600",
+                "text": "Account created."
+              },
+              {
+                "label": "Booked",
+                "value": "13,900",
+                "text": "Chose a slot online."
+              },
+              {
+                "label": "Visit",
+                "value": "9,700",
+                "text": "Checked in digitally."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 198,
+            "w": 270,
+            "text": "Each stage removes patients for a different reason, so each needs its own fix."
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "display",
+            "x": 57,
+            "y": 288,
+            "w": 270,
+            "text": "20%"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 354,
+            "w": 270,
+            "text": "of eligible patients complete a visit online, against a 35% target for FY27."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "funnel",
+      "variant": "narrowing",
+      "name": "Narrowing-options funnel, many ideas to few bets",
+      "tier": "working",
+      "purpose": "A funnel of options narrowing through screens, with the idea count in each band and the filter applied at each step.",
+      "uses": [
+        "funnel"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 71,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage label",
+          "count": 5,
+          "maxChars": 22
+        },
+        {
+          "slot": "stage value",
+          "count": 5,
+          "maxChars": 8
+        },
+        {
+          "slot": "stage text",
+          "count": 5,
+          "maxChars": 60
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "compact",
+        "eyebrow": "Prioritize",
+        "title": "A long list of ideas narrows to three funded bets",
+        "nav": {
+          "items": [
+            "Diagnose",
+            "Prioritize",
+            "Design",
+            "Deliver"
+          ],
+          "active": 1
+        },
+        "source": {
+          "text": "Northfield Health System digital front door program, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "funnel",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "h": 324,
+            "shapeW": 360,
+            "neck": 0.3,
+            "labelSide": true,
+            "ramp": "light",
+            "dark": false,
+            "stages": [
+              {
+                "label": "Ideas collected",
+                "value": "120",
+                "text": "Workshops, staff survey and patient feedback."
+              },
+              {
+                "label": "Fit with strategy",
+                "value": "46",
+                "text": "Screened against the three access goals."
+              },
+              {
+                "label": "Feasible in 12 months",
+                "value": "18",
+                "text": "Data, vendor and staffing checks."
+              },
+              {
+                "label": "Scored on value",
+                "value": "7",
+                "text": "Reach, revenue and experience scoring."
+              },
+              {
+                "label": "Funded bets",
+                "value": "3",
+                "text": "Chosen by the executive committee.",
+                "active": true
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "funnel",
+      "variant": "compare",
+      "name": "Two funnels, before and after",
+      "tier": "working",
+      "purpose": "Two matched funnels side by side, the earlier state in light blue and the current state in full color, with the change at each end.",
+      "uses": [
+        "funnel",
+        "text.stat"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 55,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "stage label",
+          "count": 4,
+          "maxChars": 22
+        },
+        {
+          "slot": "stage value",
+          "count": 4,
+          "maxChars": 8
+        },
+        {
+          "slot": "column header",
+          "count": 2,
+          "maxChars": 24
+        },
+        {
+          "slot": "result text",
+          "count": 2,
+          "maxChars": 70
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Digital front door",
+        "title": "Redesigned registration doubled online completions",
+        "source": {
+          "text": "Sample figures for layout only; replace with current firm data before use."
+        },
+        "body": [
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "text": "Before: Jan 2026"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 489,
+            "y": 126,
+            "w": 414,
+            "text": "After: Sep 2026"
+          },
+          {
+            "type": "funnel",
+            "x": 57,
+            "y": 162,
+            "w": 414,
+            "h": 252,
+            "shapeW": 414,
+            "neck": 0.4,
+            "stages": [
+              {
+                "label": "Invited",
+                "value": "38,000"
+              },
+              {
+                "label": "Registered",
+                "value": "14,100"
+              },
+              {
+                "label": "Booked",
+                "value": "7,200"
+              },
+              {
+                "label": "Visit",
+                "value": "4,500"
+              }
+            ],
+            "ramp": "light",
+            "dark": false
+          },
+          {
+            "type": "funnel",
+            "x": 489,
+            "y": 162,
+            "w": 414,
+            "h": 252,
+            "shapeW": 414,
+            "neck": 0.4,
+            "stages": [
+              {
+                "label": "Invited",
+                "value": "41,200"
+              },
+              {
+                "label": "Registered",
+                "value": "22,600"
+              },
+              {
+                "label": "Booked",
+                "value": "13,900"
+              },
+              {
+                "label": "Visit",
+                "value": "9,700"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 432,
+            "w": 414,
+            "text": "12% of invitees completed a visit."
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "display",
+            "x": 489,
+            "y": 432,
+            "w": 414,
+            "text": "24% of invitees completed a visit."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "pyramid",
+      "variant": "hierarchy",
+      "name": "Hierarchy pyramid with side text",
+      "tier": "core",
+      "purpose": "A five-level hierarchy from apex to base, each level labelled in its band with a dotted leader to what it means.",
+      "uses": [
+        "pyramid"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 68,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level label",
+          "count": 5,
+          "maxChars": 24
+        },
+        {
+          "slot": "level text",
+          "count": 5,
+          "maxChars": 64
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Operating model",
+        "title": "Strategy narrows from system goals to daily work",
+        "source": {
+          "text": "Northfield Health System digital front door program, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "pyramid",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "h": 324,
+            "shapeW": 450,
+            "labelSide": true,
+            "levels": [
+              {
+                "label": "Vision",
+                "text": "One front door to care for every Northfield patient."
+              },
+              {
+                "label": "Goals",
+                "text": "Three access targets set by the board each year."
+              },
+              {
+                "label": "Programs",
+                "text": "Five funded programs, each with an executive owner."
+              },
+              {
+                "label": "Products",
+                "text": "Portal, scheduling and messaging owned by product teams."
+              },
+              {
+                "label": "Daily operations",
+                "text": "Clinic staff and the access center run the service."
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "pyramid",
+      "variant": "foundations",
+      "name": "Foundations pyramid, bottom-up capabilities",
+      "tier": "core",
+      "purpose": "A capability pyramid built from the base up, labelled at the side, with the build order in a numbered list in the right column.",
+      "uses": [
+        "pyramid",
+        "list.strongnum"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 87,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level label",
+          "count": 5,
+          "maxChars": 24
+        },
+        {
+          "slot": "level text",
+          "count": 5,
+          "maxChars": 64
+        },
+        {
+          "slot": "step title",
+          "count": 3,
+          "maxChars": 24
+        },
+        {
+          "slot": "step text",
+          "count": 3,
+          "maxChars": 72
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Capabilities",
+        "title": "Each layer of the digital front door rests on the one below",
+        "source": {
+          "text": "Northfield Health System digital front door program, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "pyramid",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "h": 324,
+            "shapeW": 270,
+            "labelSide": true,
+            "levels": [
+              {
+                "label": "Personal",
+                "text": "Care journeys that adapt."
+              },
+              {
+                "label": "Predictive",
+                "text": "Demand and no-show models."
+              },
+              {
+                "label": "Self-service",
+                "text": "Book, pay and message."
+              },
+              {
+                "label": "Integrated data",
+                "text": "One patient profile."
+              },
+              {
+                "label": "Identity and platform",
+                "text": "Secure sign-in, one patient ID."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "Build order"
+          },
+          {
+            "type": "strongnum",
+            "x": 633,
+            "y": 156,
+            "w": 270,
+            "numInk": "emphasis",
+            "items": [
+              {
+                "title": "Lay the base first",
+                "text": "Identity and a secure platform come before any new service."
+              },
+              {
+                "title": "Connect the data",
+                "text": "Scheduling, billing and clinical records feed one profile."
+              },
+              {
+                "title": "Then add intelligence",
+                "text": "Prediction needs clean, connected data."
+              }
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "pyramid",
+      "variant": "narrative",
+      "name": "Pyramid with narrative panel",
+      "tier": "working",
+      "purpose": "A left panel carries the argument in a few sentences; the pyramid with side text sits in the main area.",
+      "uses": [
+        "pyramid",
+        "text.block"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 79,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level label",
+          "count": 4,
+          "maxChars": 24
+        },
+        {
+          "slot": "level text",
+          "count": 4,
+          "maxChars": 64
+        },
+        {
+          "slot": "panel text",
+          "count": 3,
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "eyebrow": "Care model",
+        "title": "Most patients need light-touch care",
+        "railSurface": "inverse",
+        "source": {
+          "text": "Sample figures for layout only; replace with current firm data before use."
+        },
+        "body": [
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "Match effort to need",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 180,
+            "w": 198,
+            "text": "Intensive care management is reserved for the few patients who drive most cost.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 270,
+            "w": 198,
+            "text": "Digital tools carry the broad base so nurses can focus on the top two tiers.",
+            "on": "inverse"
+          },
+          {
+            "type": "pyramid",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "h": 324,
+            "shapeW": 270,
+            "levels": [
+              {
+                "label": "5%",
+                "text": "High-risk: a named nurse and a care plan."
+              },
+              {
+                "label": "15%",
+                "text": "Rising-risk: outreach and a coach."
+              },
+              {
+                "label": "30%",
+                "text": "Chronic stable: reminders and remote checks."
+              },
+              {
+                "label": "50%",
+                "text": "Healthy: self-service and prevention nudges."
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "pyramid",
+      "variant": "needs",
+      "name": "Needs pyramid for a product",
+      "tier": "working",
+      "purpose": "A Maslow-style pyramid of user needs for a product: safe and reliable at the base up to delightful at the apex, in a single light ramp.",
+      "uses": [
+        "pyramid"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level label",
+          "count": 5,
+          "maxChars": 24
+        },
+        {
+          "slot": "level text",
+          "count": 5,
+          "maxChars": 64
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Patient portal",
+        "title": "Fix the basics before adding delight",
+        "source": {
+          "text": "Northfield Health System digital front door program, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "pyramid",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "h": 324,
+            "shapeW": 414,
+            "ramp": "light",
+            "dark": false,
+            "labelSide": true,
+            "levels": [
+              {
+                "label": "Delightful",
+                "text": "Feels personal: remembers my clinic and preferred times."
+              },
+              {
+                "label": "Useful",
+                "text": "Does the jobs I came for: book, pay, message."
+              },
+              {
+                "label": "Easy",
+                "text": "Finished in a few taps on a phone."
+              },
+              {
+                "label": "Reliable",
+                "text": "Works every time, including after hours."
+              },
+              {
+                "label": "Safe",
+                "text": "Protects my identity and my records."
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "pyramid",
+      "variant": "inverted",
+      "name": "Inverted pyramid for prioritization",
+      "tier": "working",
+      "purpose": "A deliberately inverted pyramid: the widest band is the full list and the point is the single top priority, with the screening rule at each band.",
+      "uses": [
+        "funnel"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 53,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level label",
+          "count": 4,
+          "maxChars": 24
+        },
+        {
+          "slot": "level text",
+          "count": 4,
+          "maxChars": 64
+        },
+        {
+          "slot": "level value",
+          "count": 4,
+          "maxChars": 4
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Prioritize",
+        "title": "Narrow every list down to one priority",
+        "source": {
+          "text": "Northfield Health System digital front door program, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "funnel",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "h": 324,
+            "shapeW": 420,
+            "neck": 0.08,
+            "labelSide": true,
+            "gap": 6,
+            "stages": [
+              {
+                "value": "12",
+                "label": "Candidate initiatives",
+                "text": "Everything proposed by service lines."
+              },
+              {
+                "value": "6",
+                "label": "Meet the access goal",
+                "text": "Directly lift booking or wait times."
+              },
+              {
+                "value": "3",
+                "label": "Ready to start",
+                "text": "Funding, owner and data available."
+              },
+              {
+                "value": "1",
+                "label": "First priority",
+                "text": "Online self-scheduling for primary care.",
+                "active": true
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "pyramid",
+      "variant": "tiers-nav",
+      "name": "Pyramid in a nav frame",
+      "tier": "working",
+      "purpose": "A population-health tier pyramid with patient shares in the bands and side text, inside the nav-rail frame.",
+      "uses": [
+        "pyramid"
+      ],
+      "legacy": "new 2026-10-03",
+      "budget": {
+        "words": 57,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "level label",
+          "count": 4,
+          "maxChars": 24
+        },
+        {
+          "slot": "level value",
+          "count": 4,
+          "maxChars": 6
+        },
+        {
+          "slot": "level text",
+          "count": 4,
+          "maxChars": 64
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "footer": "compact",
+        "eyebrow": "Care model",
+        "title": "Four risk tiers decide how we reach each patient",
+        "nav": {
+          "items": [
+            "Context",
+            "Care model",
+            "Technology",
+            "Plan"
+          ],
+          "active": 1
+        },
+        "source": {
+          "text": "Sample figures for layout only; replace with current firm data before use."
+        },
+        "body": [
+          {
+            "type": "pyramid",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "h": 324,
+            "shapeW": 378,
+            "labelSide": true,
+            "levels": [
+              {
+                "value": "5%",
+                "label": "High risk",
+                "text": "Named nurse, care plan and weekly contact."
+              },
+              {
+                "value": "15%",
+                "label": "Rising risk",
+                "text": "Health coach and quarterly outreach."
+              },
+              {
+                "value": "30%",
+                "label": "Chronic",
+                "text": "Remote monitoring and reminders."
+              },
+              {
+                "value": "50%",
+                "label": "Healthy",
+                "text": "Self-service, screening nudges."
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    }
+  ]
+}

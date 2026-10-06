@@ -44,18 +44,19 @@ type NavTab struct {
 	Label string `json:"label"`
 }
 type FrameRequest struct {
-	Rail        string   `json:"rail"`
-	Footer      string   `json:"footer"`
-	Surface     string   `json:"surface"`
-	RailSurface string   `json:"rail_surface"`
-	TitleLines  int      `json:"title_lines"`
-	Density     string   `json:"density"`
-	SourceLines int      `json:"source_lines"`
-	NoHeader    bool     `json:"no_header"`
-	NoPage      bool     `json:"no_page"`
-	Nav         []NavTab `json:"nav,omitempty"`
-	Active      string   `json:"active,omitempty"`
-	Split       string   `json:"split,omitempty"`
+	Rail          string   `json:"rail"`
+	Footer        string   `json:"footer"`
+	Surface       string   `json:"surface"`
+	RailSurface   string   `json:"rail_surface"`
+	TitleLines    int      `json:"title_lines"`
+	Density       string   `json:"density"`
+	HeaderDensity string   `json:"header_density,omitempty"`
+	SourceLines   int      `json:"source_lines"`
+	NoHeader      bool     `json:"no_header"`
+	NoPage        bool     `json:"no_page"`
+	Nav           []NavTab `json:"nav,omitempty"`
+	Active        string   `json:"active,omitempty"`
+	Split         string   `json:"split,omitempty"`
 }
 type ResolvedFrame struct {
 	Request    FrameRequest `json:"request"`

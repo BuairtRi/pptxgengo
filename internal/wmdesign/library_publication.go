@@ -132,7 +132,22 @@ func compatiblePublicationStyle(a, b *Source) bool {
 	// styles/tokens/chrome are what affect retained source specimens.
 	af, aok := publicationRenderingFrames(a.Frames)
 	bf, bok := publicationRenderingFrames(b.Frames)
-	return aok && bok && reflect.DeepEqual(a.Tokens, b.Tokens) && reflect.DeepEqual(af, bf) && reflect.DeepEqual(a.styles, b.styles) && reflect.DeepEqual(a.loadedFontFiles, b.loadedFontFiles)
+	return aok && bok && compatiblePublicationTokens(a, b) && reflect.DeepEqual(af, bf) && reflect.DeepEqual(a.styles, b.styles) && reflect.DeepEqual(a.loadedFontFiles, b.loadedFontFiles)
+}
+
+// V11 introduces density roles without changing the existing foundation tokens.
+// This permits the subsequent exact composition and visible-package comparisons;
+// it does not qualify changed density or inherit previews merely by template key.
+func compatiblePublicationTokens(a, b *Source) bool {
+	if reflect.DeepEqual(a.Tokens, b.Tokens) {
+		return true
+	}
+	if a.Revision != LibraryRevisionV10 || b.Revision != LibraryRevisionV11 || a.Tokens.Density != nil || b.Tokens.Density == nil || validateTypographyDensity(b.Tokens.Density) != nil {
+		return false
+	}
+	current := b.Tokens
+	current.Density = nil
+	return reflect.DeepEqual(a.Tokens, current)
 }
 
 // The documentation source can spell out existing renderer fallbacks. These
@@ -567,7 +582,11 @@ func comparePublicationVisibleParts(a, b []byte) error {
 		if !lOK || !rOK {
 			return fmt.Errorf("visible_part_missing: %s / %s", lp, rp)
 		}
-		if !bytes.Equal(l, r) {
+		if strings.HasPrefix(lp, "ppt/embeddings/") && strings.HasSuffix(lp, ".xlsx") && strings.HasPrefix(rp, "ppt/embeddings/") && strings.HasSuffix(rp, ".xlsx") {
+			if err := comparePublicationWorkbooks(l, r); err != nil {
+				return fmt.Errorf("visible_part_changed: %s: %w", lp, err)
+			}
+		} else if !bytes.Equal(l, r) {
 			return fmt.Errorf("visible_part_changed: %s", lp)
 		}
 		lr, err := publicationVisibleRelationships(left, lp)

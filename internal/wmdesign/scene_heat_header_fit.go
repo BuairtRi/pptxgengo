@@ -16,7 +16,7 @@ func (r *renderer) v6HeatHeaderFit(c sceneTableColumn, st Style, minimum *float6
 	if !isV6OrLaterLibrary(r.source.Revision) || c.Type != "heat" || minimum == nil || *minimum <= 0 || len(strings.Fields(c.Label)) != 1 {
 		return st, 12, 12, nil
 	}
-	layout, err := r.typeEngine.Measure(c.Label, st, 960)
+	layout, err := r.measureText(c.Label, st, 960)
 	if err != nil {
 		return st, 12, 12, err
 	}
@@ -34,7 +34,7 @@ func (r *renderer) v6HeatHeaderFit(c sceneTableColumn, st Style, minimum *float6
 		fitted := st
 		fitted.TrackingPt *= 8 / fitted.Size
 		fitted.Size = 8
-		layout, err = r.typeEngine.Measure(c.Label, fitted, 960)
+		layout, err = r.measureText(c.Label, fitted, 960)
 		if err != nil {
 			return st, 12, 12, err
 		}

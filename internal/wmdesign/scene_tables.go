@@ -196,7 +196,7 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	if n.Highlight != "" && hi < 0 {
 		return nil, fmt.Errorf("scene.table_unknown_highlight")
 	}
-	base, _ := r.sceneStyle(bodyName)
+	base, _ := r.cellStyle(bodyName)
 	font, err := r.typeEngine.Resolve(base)
 	if err != nil {
 		return nil, err
@@ -494,7 +494,7 @@ func (r *renderer) sceneNativeCell(id, text string, st Style, b Rect, surface, r
 		}
 		tr = *pp.Items[len(pp.Items)-1].Text
 	} else {
-		l, err := r.typeEngine.Measure(text, st, b.W-left-right)
+		l, err := r.measureText(text, st, b.W-left-right)
 		if err != nil {
 			return cell, tr, err
 		}
@@ -505,6 +505,9 @@ func (r *renderer) sceneNativeCell(id, text string, st Style, b Rect, surface, r
 		color, err := r.sceneColor(surface, role)
 		if err != nil {
 			return cell, tr, err
+		}
+		if text != "" {
+			r.auditTextContrast(id, st, color, surface)
 		}
 		tr = TextRecord{ID: id, Rect: Rect{b.X + left, b.Y, b.W - left - right, b.H}, Color: color, Align: align, Layout: l}
 	}
@@ -517,6 +520,9 @@ func (r *renderer) sceneNativeCell(id, text string, st Style, b Rect, surface, r
 }
 
 func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, raw json.RawMessage, st Style, b Rect, surface, deltaUnit string, ctx SceneContext, path string, underlays *scenePlan) (pptx.TableCell, TextRecord, error) {
+	oldScope := r.densityScope
+	r.densityScope = "cell"
+	defer func() { r.densityScope = oldScope }()
 	var text string
 	left, right := 12., 12.
 	align := sceneTableAlign(c.Type)
@@ -583,7 +589,7 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 			if deltaUnit == "$M" {
 				text = sign + "$" + mag + "M"
 			}
-			layout, err := r.typeEngine.Measure(text, st, b.W-24)
+			layout, err := r.measureText(text, st, b.W-24)
 			if err != nil {
 				return pptx.TableCell{}, TextRecord{}, err
 			}
@@ -651,7 +657,7 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 			return pptx.TableCell{}, TextRecord{}, err
 		}
 		st, _ = r.sceneStyle("label")
-		l, err := r.typeEngine.Measure(text, st, b.W-32)
+		l, err := r.measureText(text, st, b.W-32)
 		if err != nil {
 			return pptx.TableCell{}, TextRecord{}, err
 		}
@@ -682,6 +688,9 @@ func (r *renderer) sceneTableValue(p *scenePlan, id string, c sceneTableColumn, 
 		}
 		text = ""
 	case "bullets":
+		if r.source.Tokens.Density != nil && c.Size == "body" {
+			return r.sceneTableBulletCellForToken(id, raw, b, surface, ctx, path, "body")
+		}
 		return r.sceneTableBulletCell(id, raw, b, surface, ctx, path)
 	case "icon":
 		var name string
@@ -859,7 +868,7 @@ func (r *renderer) sceneRACILegend(p *scenePlan, id string, b Rect, surface stri
 		if err := r.sceneRACISquare(p, id+"."+item.role, item.role, Rect{x, b.Y, 18, 18}); err != nil {
 			return err
 		}
-		l, err := r.typeEngine.Measure(item.label, st, b.W)
+		l, err := r.measureText(item.label, st, b.W)
 		if err != nil {
 			return err
 		}
@@ -878,14 +887,24 @@ func (r *renderer) sceneRACILegend(p *scenePlan, id string, b Rect, surface stri
 // A bullet is a real native paragraph. Its square is 3pt and its measured text
 // starts 12pt after the native cell's 12pt left margin.
 func (r *renderer) sceneTableBulletCell(id string, raw json.RawMessage, b Rect, surface string, ctx SceneContext, path string) (pptx.TableCell, TextRecord, error) {
+	return r.sceneTableBulletCellForToken(id, raw, b, surface, ctx, path, "small")
+}
+func (r *renderer) sceneTableBulletCellForToken(id string, raw json.RawMessage, b Rect, surface string, ctx SceneContext, path, token string) (pptx.TableCell, TextRecord, error) {
 	var items []json.RawMessage
 	if err := sceneDecode(raw, &items); err != nil || len(items) == 0 {
 		return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_empty_or_invalid_bullets")
 	}
-	st, err := r.sceneStyle("small")
+	st, err := r.cellStyle(token)
 	if err != nil {
 		return pptx.TableCell{}, TextRecord{}, err
 	}
+	suffix := "-small"
+	if token == "body" {
+		suffix = ""
+	}
+	indent := r.listMetric("list-indent"+suffix, 12)
+	marker := r.listMetric("list-marker"+suffix, 3)
+	gap := r.listMetric("list-gap"+suffix, 3)
 	cell, tr, err := r.sceneNativeCell(id, "", st, b, surface, "primary", "left", 12, 12, ctx)
 	if err != nil {
 		return cell, tr, err
@@ -908,7 +927,7 @@ func (r *renderer) sceneTableBulletCell(id string, raw json.RawMessage, b Rect, 
 			return cell, tr, fmt.Errorf("scene.table_cell_marks_unsupported: %s", id)
 		}
 		tmp := &scenePlan{}
-		if err := r.primitiveRichText(tmp, id+"."+key, text, st, Rect{b.X + 24, b.Y, b.W - 36, 0}, surface, "primary", "left", "", "", ctx); err != nil {
+		if err := r.primitiveRichText(tmp, id+"."+key, text, st, Rect{b.X + 12 + indent, b.Y, b.W - 24 - indent, 0}, surface, "primary", "left", "", "", ctx); err != nil {
 			return cell, tr, err
 		}
 		var part TextRecord
@@ -931,10 +950,13 @@ func (r *renderer) sceneTableBulletCell(id string, raw json.RawMessage, b Rect, 
 			paragraph.Key = key
 		}
 		paragraph.Bullet = true
+		if r.source.Tokens.Density != nil {
+			paragraph.BulletIndentPt, paragraph.BulletMarkerPt = indent, marker
+		}
 		paragraph.FirstLine = len(layout.Lines)
 		paragraph.LineCount = len(part.Layout.Lines)
 		if i < len(items)-1 {
-			paragraph.ParagraphGapAfter = 3
+			paragraph.ParagraphGapAfter = gap
 		}
 		for _, line := range part.Layout.Lines {
 			line.Baseline += offset
@@ -955,6 +977,9 @@ func (r *renderer) sceneTableBulletCell(id string, raw json.RawMessage, b Rect, 
 	layout.AllocationHeight = offset
 	layout.EstimatedOccupiedHeight = lastOccupied - firstBaseline
 	layout.VerticalPolicy = "Source small bullet paragraphs, exact 18pt leading and 3pt gaps; native paragraph parity unqualified"
+	if r.source.Tokens.Density != nil {
+		layout.VerticalPolicy = fmt.Sprintf("Source %s bullet paragraphs, density %s, %.3fpt leading and %.3fpt gaps; native paragraph parity unqualified", token, r.bodyDensity, st.Leading, gap)
+	}
 	if math.Max(layout.AllocationHeight, lastOccupied) > b.H+.02 {
 		return cell, tr, fmt.Errorf("scene.table_bullet_overflow: %s needs%.3fpt capacity%.3fpt", id, math.Max(layout.AllocationHeight, lastOccupied), b.H)
 	}

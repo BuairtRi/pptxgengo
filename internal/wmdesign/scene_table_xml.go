@@ -223,7 +223,7 @@ func sceneTableDefaultRun(tr TextRecord) string {
 	s, id := tr.Layout.Style, tr.Layout.Font
 	return ` lang="en-US" sz="` + strconv.Itoa(int(math.Round(s.Size*100))) + `" spc="` + strconv.Itoa(int(math.Round(s.TrackingPt*100))) + `" kern="0" b="` + sceneTableXMLBool(id.Bold) + `" i="` + sceneTableXMLBool(id.NativeItalic) + `" dirty="0">` + `<a:solidFill><a:srgbClr val="` + sceneTableXMLEscape(tr.Color) + `"/></a:solidFill><a:latin typeface="` + sceneTableXMLEscape(id.Typeface) + `"/><a:ea typeface="` + sceneTableXMLEscape(id.Typeface) + `"/><a:cs typeface="` + sceneTableXMLEscape(id.Typeface) + `"/>`
 }
-func sceneTableParagraphProperties(tr TextRecord, gap float64, bullet bool) []byte {
+func sceneTableParagraphProperties(tr TextRecord, gap float64, bullet bool, paragraph ...RichParagraphLayout) []byte {
 	align := map[string]string{"left": "l", "center": "ctr", "right": "r"}[tr.Align]
 	if align == "" {
 		align = "l"
@@ -231,8 +231,18 @@ func sceneTableParagraphProperties(tr TextRecord, gap float64, bullet bool) []by
 	margin := ` marL="0" indent="0"`
 	marker := `<a:buNone/>`
 	if bullet {
-		margin = ` marL="152400" indent="-152400"`
-		marker = `<a:buSzPts val="300"/><a:buFont typeface="` + sceneTableXMLEscape(tr.Layout.Font.Typeface) + `"/><a:buChar char="■"/>`
+		indent, size := 12., 3.
+		if len(paragraph) > 0 {
+			if paragraph[0].BulletIndentPt > 0 {
+				indent = paragraph[0].BulletIndentPt
+			}
+			if paragraph[0].BulletMarkerPt > 0 {
+				size = paragraph[0].BulletMarkerPt
+			}
+		}
+		emu := strconv.Itoa(int(math.Round(indent * 12700)))
+		margin = ` marL="` + emu + `" indent="-` + emu + `"`
+		marker = `<a:buSzPts val="` + strconv.Itoa(int(math.Round(size*100))) + `"/><a:buFont typeface="` + sceneTableXMLEscape(tr.Layout.Font.Typeface) + `"/><a:buChar char="■"/>`
 	}
 	return []byte(`<a:pPr algn="` + align + `"` + margin + `><a:lnSpc><a:spcPts val="` + strconv.Itoa(int(math.Round(tr.Layout.Style.Leading*100))) + `"/></a:lnSpc><a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="` + strconv.Itoa(int(math.Round(gap*100))) + `"/></a:spcAft>` + marker + `<a:defRPr` + sceneTableDefaultRun(tr) + `</a:defRPr></a:pPr>`)
 }
@@ -259,7 +269,7 @@ func sceneTableCellTextXML(tr TextRecord) ([]byte, error) {
 					one.Layout.Style.Leading = math.Max(one.Layout.Style.Leading, run.Style.Leading)
 				}
 			}
-			text.Write(richParagraphXML(one, sceneTableParagraphProperties(one, para.ParagraphGapAfter, para.Bullet)))
+			text.Write(richParagraphXML(one, sceneTableParagraphProperties(one, para.ParagraphGapAfter, para.Bullet, para)))
 		}
 	}
 	if tr.Rich == nil || len(tr.Rich.Paragraphs) == 0 {

@@ -169,7 +169,7 @@ func (r *renderer) diagramStyledText(p *scenePlan, id, text string, st Style, b 
 		return nil
 	}
 	if middle && b.H > 0 {
-		l, e := r.typeEngine.Measure(text, st, b.W)
+		l, e := r.measureText(text, st, b.W)
 		if e != nil {
 			return e
 		}
@@ -346,7 +346,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 			pad = math.Min(6, b.W/6)
 			p.Warnings = append(p.Warnings, "Adapter resolution wmds.compact-label-block.v1: preserve native shape/font sizes; compact label padding is6pt (3pt for18pt badges).")
 		}
-		text("text", n.Text, token, Rect{b.X + pad, b.Y, b.W - 2*pad, b.H}, surface, "display", a, 0, true)
+		text("text", n.Text, token, Rect{b.X + pad, b.Y, b.W - 2*pad, b.H}, surface, r.shapeTextInk(surface, token), a, 0, true)
 		if heatInk != "" {
 			for i := range p.Items {
 				if p.Items[i].Text != nil {
@@ -405,7 +405,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 					return nil, true, e
 				}
 				st.Weight = 600
-				l, e := r.typeEngine.Measure(n.Label, st, math.Max(1, b.W-12))
+				l, e := r.measureText(n.Label, st, math.Max(1, b.W-12))
 				if e != nil {
 					return nil, true, e
 				}
@@ -450,7 +450,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 				if n.Style == "external" && err == nil {
 					st, _ := r.sceneStyle(token)
 					st.Weight = 600
-					l, e := r.typeEngine.Measure(n.Label, st, b.W-24)
+					l, e := r.measureText(n.Label, st, b.W-24)
 					if e != nil {
 						return nil, true, e
 					}
@@ -544,11 +544,11 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 				return nil, true, e
 			}
 			st.Weight = 600
-			nl, e := r.typeEngine.Measure(n.Number, nst, tx.W)
+			nl, e := r.measureText(n.Number, nst, tx.W)
 			if e != nil {
 				return nil, true, e
 			}
-			l, e := r.typeEngine.Measure(n.Text, st, tx.W)
+			l, e := r.measureText(n.Text, st, tx.W)
 			if e != nil {
 				return nil, true, e
 			}
@@ -558,7 +558,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 				return nil, true, fmt.Errorf("scene.chevron_compact_stack_overflow: %s", id)
 			}
 			top := tx.Y + (tx.H-nh-th)/2
-			text("number", n.Number, "number", Rect{tx.X, top, tx.W, nh}, surface, "emphasis", "center", 0, false)
+			text("number", n.Number, "number", Rect{tx.X, top, tx.W, nh}, surface, r.chevronNumberInk(surface), "center", 0, false)
 			text("text", n.Text, token, Rect{tx.X, top + nh, tx.W, th}, surface, "display", "center", 600, false)
 			p.Warnings = append(p.Warnings, "wmds.v4.compact-chevron-number-above-heading")
 			break
@@ -567,25 +567,25 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 			x := tx.X
 			if n.Number != "" {
 				st, _ := r.sceneStyle("number")
-				l, e := r.typeEngine.Measure(n.Number, st, tx.W)
+				l, e := r.measureText(n.Number, st, tx.W)
 				if e != nil {
 					return nil, true, e
 				}
 				nw := l.Lines[0].Advance + .01
-				text("number", n.Number, "number", Rect{x, tx.Y, nw, tx.H}, surface, "emphasis", "left", 0, true)
+				text("number", n.Number, "number", Rect{x, tx.Y, nw, tx.H}, surface, r.chevronNumberInk(surface), "left", 0, true)
 				tx.X += nw + 9
 				tx.W -= nw + 9
 			}
 			st, _ := r.sceneStyle(token)
 			st.Weight = 600
-			l, e := r.typeEngine.Measure(n.Text, st, tx.W)
+			l, e := r.measureText(n.Text, st, tx.W)
 			if e != nil {
 				return nil, true, e
 			}
 			need := math.Max(l.AllocationHeight, l.OccupiedTop+l.EstimatedOccupiedHeight)
 			if n.Sub != "" {
 				ss, _ := r.sceneStyle("small")
-				sl, e := r.typeEngine.Measure(n.Sub, ss, tx.W)
+				sl, e := r.measureText(n.Sub, ss, tx.W)
 				if e != nil {
 					return nil, true, e
 				}
@@ -600,7 +600,7 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 				text("text", n.Text, token, tx, surface, "display", "left", 600, true)
 			}
 		} else {
-			text("text", n.Text, token, Rect{tx.X + 12, tx.Y, tx.W - 24, tx.H}, surface, "display", "center", 0, true)
+			text("text", n.Text, token, Rect{tx.X + 12, tx.Y, tx.W - 24, tx.H}, surface, r.shapeTextInk(surface, token), "center", 0, true)
 		}
 	case "connector":
 		err = r.planDiagramConnector(p, id, n, ctx)
@@ -618,14 +618,14 @@ func (r *renderer) planDiagramScene(id string, raw json.RawMessage, ctx SceneCon
 		box := Rect{b.X, b.Y + 2*ry, b.W, b.H - 3*ry}
 		st, _ := r.sceneStyle("small")
 		st.Weight = 600
-		l, e := r.typeEngine.Measure(n.Text, st, box.W)
+		l, e := r.measureText(n.Text, st, box.W)
 		if e != nil {
 			return nil, true, e
 		}
 		need := math.Max(l.AllocationHeight, l.OccupiedTop+l.EstimatedOccupiedHeight)
 		if n.Sub != "" {
 			ss, _ := r.sceneStyle("label")
-			sl, e := r.typeEngine.Measure(n.Sub, ss, box.W)
+			sl, e := r.measureText(n.Sub, ss, box.W)
 			if e != nil {
 				return nil, true, e
 			}
@@ -842,7 +842,7 @@ func (r *renderer) planDiagramConnector(p *scenePlan, id string, n diagramSpec, 
 			}
 		}
 		st, _ := r.sceneStyle("label")
-		l, e := r.typeEngine.Measure(n.Label, st, 8191)
+		l, e := r.measureText(n.Label, st, 8191)
 		if e != nil {
 			return e
 		}
@@ -1019,7 +1019,7 @@ func (r *renderer) planDiagramMatrix(p *scenePlan, id string, n diagramSpec, ctx
 						p.Warnings = append(p.Warnings, "Adapter resolution wmds.compact-matrix-line.v1: retain cell surfaces; center measured text in the existing cell-plus-gap pitch.")
 					}
 				}
-				if e := r.diagramText(p, prefix+".cells."+ck+".text", cell.Text, token, textBox, surf, "display", "center", 0, true); e != nil {
+				if e := r.diagramText(p, prefix+".cells."+ck+".text", cell.Text, token, textBox, surf, r.shapeTextInk(surf, token), "center", 0, true); e != nil {
 					return e
 				}
 			}
@@ -1081,7 +1081,7 @@ func (r *renderer) planDiagramBeforeAfter(p *scenePlan, id string, n diagramSpec
 		if len(row) == 3 && row[2] != "" {
 			st, _ := r.sceneStyle("label")
 			st.Weight = 600
-			l, e := r.typeEngine.Measure(row[2], st, 8191)
+			l, e := r.measureText(row[2], st, 8191)
 			if e != nil {
 				return e
 			}

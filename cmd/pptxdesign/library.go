@@ -6,10 +6,9 @@ import (
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
-func runLibrary(command, bundle, source, engine, out, family, templateKeys string, includeDeprecated bool, year int) error {
+func runLibrary(command, bundle, source, engine, out, family, templateKeys, templateKeysFile string, includeDeprecated bool, year int) error {
 	if engine != wmdesign.CandidateEngine {
 		return fmt.Errorf("%s requires --engine %s", command, wmdesign.CandidateEngine)
 	}
@@ -20,30 +19,9 @@ func runLibrary(command, bundle, source, engine, out, family, templateKeys strin
 	if includeDeprecated && command != "library-catalog" {
 		return fmt.Errorf("--include-deprecated is supported only by library-catalog")
 	}
-	var selected []string
-	seen := map[string]bool{}
-	if templateKeys != "" {
-		if family != "" {
-			return fmt.Errorf("choose --family or --template-keys")
-		}
-		for _, key := range strings.Split(templateKeys, ",") {
-			key = strings.TrimSpace(key)
-			if key == "" || seen[key] {
-				return fmt.Errorf("invalid or duplicate template key: %s", key)
-			}
-			found := false
-			for _, t := range catalog {
-				if t.Key == key {
-					found = true
-					break
-				}
-			}
-			if !found {
-				return fmt.Errorf("unknown template key: %s", key)
-			}
-			seen[key] = true
-			selected = append(selected, key)
-		}
+	selected, seen, err := libraryTemplateSelection(catalog, family, templateKeys, templateKeysFile)
+	if err != nil {
+		return err
 	}
 	if command == "library-catalog" {
 		if family != "" {
@@ -123,6 +101,7 @@ func runLibrary(command, bundle, source, engine, out, family, templateKeys strin
 	if err != nil {
 		return err
 	}
+	emitDensityWarnings(report)
 	if err = os.MkdirAll(out, 0755); err != nil {
 		return err
 	}
@@ -171,6 +150,7 @@ func librarySweep(bundle, source, engine, out string, doc wmdesign.Document) err
 			r.Error = err.Error()
 			fmt.Printf("FAIL %s: %s\n", r.Template, r.Error)
 		} else {
+			emitDensityWarnings(report)
 			dir := filepath.Join(out, slide.ID)
 			if err = os.MkdirAll(dir, 0755); err != nil {
 				return err

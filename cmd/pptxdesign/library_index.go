@@ -13,7 +13,7 @@ import (
 
 func runLibraryIndex(command string, args []string) error {
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "", "pinned bundle path or v10; new indices default to v10")
+	bundle := f.String("bundle", "", "pinned bundle path or v11; new indices default to v11")
 	source := f.String("source", "", "matching source override")
 	legacy := f.String("legacy-index", "", "optional legacy catalog-library.sqlite projection")
 	legacyRoot := f.String("legacy-root", "", "original/relocated release root for legacy contract resource paths")
@@ -89,7 +89,7 @@ func runLibraryIndex(command string, args []string) error {
 	options := wmdesign.LibraryIndexOptions{Bundle: *bundle, Source: *source, LegacyIndex: *legacy, LegacyRoot: *legacyRoot, Gallery: *gallery}
 	if command == "library-index" {
 		if options.Bundle == "" {
-			options.Bundle = designBundlePath("v10")
+			options.Bundle = designBundlePath(currentDesignBundle)
 		}
 		if *out == "" {
 			return fmt.Errorf("library-index requires --out NEW-SQLITE-FILE")
@@ -102,7 +102,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	if command == "library-fit" {
 		if options.Bundle == "" {
-			options.Bundle = designBundlePath("v10")
+			options.Bundle = designBundlePath(currentDesignBundle)
 		}
 		if *spec == "" || *out == "" {
 			return fmt.Errorf("library-fit requires --spec FILE --out NEW-DIR")
@@ -123,7 +123,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	if *indexPath == "" {
 		if options.Bundle == "" {
-			options.Bundle = designBundlePath("v10")
+			options.Bundle = designBundlePath(currentDesignBundle)
 		}
 		*indexPath = filepath.Join(options.Bundle, "library.sqlite")
 		if options.Gallery == "" {

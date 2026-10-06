@@ -136,7 +136,7 @@ func (r *renderer) maturityMarker(p *scenePlan, id string, q curvePoint, number 
 		st.Size = 9
 	}
 	st.Leading = st.Size
-	l, err := r.typeEngine.Measure(number, st, 20)
+	l, err := r.measureText(number, st, 20)
 	if err != nil {
 		return err
 	}
@@ -144,6 +144,11 @@ func (r *renderer) maturityMarker(p *scenePlan, id string, q curvePoint, number 
 		return fmt.Errorf("scene.maturity_marker_number_overflow: %s", id)
 	}
 	if isExpandedLibrary(r.source.Revision) {
+		if r.contrastProbe != nil {
+			prior := r.contrastProbe.SuppressChecks
+			r.contrastProbe.SuppressChecks = true
+			defer func() { r.contrastProbe.SuppressChecks = prior }()
+		}
 		// Center the native line in the complete marker box. Centering a
 		// conservative allocation and then using native top alignment puts the
 		// numeral's baseline near the circle center and its ink above it.
@@ -151,6 +156,10 @@ func (r *renderer) maturityMarker(p *scenePlan, id string, q curvePoint, number 
 			return err
 		}
 		p.Items[len(p.Items)-1].Text.VerticalAlign = "middle"
+		if r.contrastProbe != nil {
+			r.contrastProbe.SuppressChecks = false
+			r.contrastAllows(id+".number", st, strings.TrimPrefix(ink, "#"), fill, textContrastMinimum(st))
+		}
 		return nil
 	}
 	return r.diagramStyledText(p, id+".number", number, st, Rect{q.x - 10, q.y - 12, 20, 24}, "light", ink, "center", true)
@@ -481,7 +490,7 @@ func (r *renderer) planIntakeMaturityScene(id string, raw json.RawMessage, ctx S
 			return nil, true, e
 		}
 		st.Weight = 600
-		layout, e := r.typeEngine.Measure(label, st, 148)
+		layout, e := r.measureText(label, st, 148)
 		if e != nil {
 			return nil, true, e
 		}
@@ -512,7 +521,11 @@ func (r *renderer) planIntakeMaturityScene(id string, raw json.RawMessage, ctx S
 			return nil, true, e
 		}
 		st.Weight = 600
-		if err = r.sceneText(p, id+".inflection", label, st, Rect{q.x - 110, q.y + 40, 110, 0}, ctx.Surface, "callout", "right"); err != nil {
+		ink := "callout"
+		if r.hasDensityContrastRules() {
+			ink = "emphasis"
+		}
+		if err = r.sceneText(p, id+".inflection", label, st, Rect{q.x - 110, q.y + 40, 110, 0}, ctx.Surface, ink, "right"); err != nil {
 			return nil, true, err
 		}
 	}

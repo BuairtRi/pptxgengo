@@ -355,8 +355,8 @@ func (r *renderer) planDataMetric(n Node, b, zone Rect, surface string) (compone
 		bottom := y
 		for i, sm := range m.Secondary {
 			x := b.X + float64(i)*(track+18)
-			st, _ := r.source.Style("number")
-			vl, err := r.typeEngine.Measure(sm.Value, st, track)
+			st, _ := r.bodyStyle("number")
+			vl, err := r.measureText(sm.Value, st, track)
 			if err != nil {
 				return p, err
 			}
@@ -372,8 +372,8 @@ func (r *renderer) planDataMetric(n Node, b, zone Rect, surface string) (compone
 			if err != nil {
 				return p, err
 			}
-			ls, _ := r.source.Style("small")
-			ll, err := r.typeEngine.Measure(sm.Label, ls, track-w-9)
+			ls, _ := r.bodyStyle("small")
+			ll, err := r.measureText(sm.Label, ls, track-w-9)
 			if err != nil {
 				return p, err
 			}
@@ -412,8 +412,8 @@ func (r *renderer) planDataMetric(n Node, b, zone Rect, surface string) (compone
 			x += 17
 			w -= 17
 			// Reserve a content-sized status label, then the source's 9pt gap.
-			st, _ := r.source.Style("label")
-			sl, err := r.typeEngine.Measure(name, st, w)
+			st, _ := r.bodyStyle("label")
+			sl, err := r.measureText(name, st, w)
 			if err != nil {
 				return p, err
 			}

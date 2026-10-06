@@ -301,6 +301,12 @@ func (p *Project) validate() error {
 		if s.ContentKind != "supplied_content" && s.ContentKind != "synthetic_example" {
 			return p.fail(path+"/content_kind", "explicit content kind required")
 		}
+		if s.Density != "" && !validTypographyDensity(s.Density) {
+			return p.fail(path+"/density", "must be comfortable, compact, or dense")
+		}
+		if s.HeaderDensity != "" && !validTypographyDensity(s.HeaderDensity) {
+			return p.fail(path+"/header_density", "must be comfortable, compact, or dense")
+		}
 		if err := wmdesign.ValidateSpeakerNotes(s.Notes); err != nil {
 			return p.fail(path+"/notes", "notes must be valid XML text, at most 1 MiB")
 		}
@@ -471,4 +477,13 @@ func (p *Project) validate() error {
 		}
 	}
 	return nil
+}
+
+func validTypographyDensity(value string) bool {
+	switch value {
+	case "comfortable", "compact", "dense":
+		return true
+	default:
+		return false
+	}
 }

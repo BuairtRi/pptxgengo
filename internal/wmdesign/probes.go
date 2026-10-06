@@ -46,7 +46,7 @@ func TypographyProbesWithEngine(bundle, override, engine string) ([]byte, ProbeM
 	if e != nil {
 		return nil, m, e
 	}
-	t, e := NewTypographyEngine(filepath.Join(bundle, "fonts"), engine)
+	t, e := NewSourceTypographyEngine(s, filepath.Join(bundle, "fonts"), engine)
 	if e != nil {
 		return nil, m, e
 	}

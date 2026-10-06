@@ -27,11 +27,34 @@ func authoringFonts(source *Source) authoringFontLoader {
 				if fontRoot == "" {
 					fontRoot = filepath.Join(filepath.Dir(source.Root), "fonts")
 				}
-				typography, err = NewTypographyEngine(fontRoot, CandidateEngine)
+				typography, err = NewSourceTypographyEngine(source, fontRoot, CandidateEngine)
 			}
 		}
 		return typography, err
 	}
+}
+
+func preferredTemplateDensity(def LibraryTemplate, source *Source) SlideDensityRecord {
+	comfortable := SlideDensityRecord{Requested: "comfortable", Resolved: "comfortable", Header: "comfortable"}
+	if source == nil || len(def.RawSlide) == 0 {
+		return comfortable
+	}
+	slide, err := compileLibrarySlide(def.RawSlide, nil)
+	if err != nil {
+		return comfortable
+	}
+	density, err := slideDensity(source, slide)
+	if err != nil {
+		return comfortable
+	}
+	return density
+}
+
+func preferredDensityLabel(source *Source, density SlideDensityRecord) string {
+	if source != nil && source.Tokens.Density != nil {
+		return density.Requested
+	}
+	return ""
 }
 
 // Typed cards share their actual renderer planner. Reserve the full supported
@@ -51,6 +74,8 @@ func typedCardAuthoringCapacities(def LibraryTemplate, source *Source, fonts aut
 	if err != nil {
 		return out
 	}
+	density := preferredTemplateDensity(def, source)
+	densityLabel := preferredDensityLabel(source, density)
 	typography, err := fonts()
 	if err != nil {
 		return out
@@ -64,7 +89,7 @@ func typedCardAuthoringCapacities(def LibraryTemplate, source *Source, fonts aut
 			card.Title = "Capacity\nCapacity"
 			card.Body = []BodyBlock{{Key: "copy", Paragraph: "Capacity"}}
 		}
-		r := renderer{source: source, typeEngine: typography}
+		r := renderer{source: source, typeEngine: typography, bodyDensity: density.Requested, headerDensity: density.Header, densityScope: "body"}
 		plan, err := r.planCardRow(node, node.Rect, frame.Body, node.Surface)
 		if err != nil {
 			return out
@@ -85,11 +110,14 @@ func typedCardAuthoringCapacities(def LibraryTemplate, source *Source, fonts aut
 					continue
 				}
 				style := text.Layout.Style
-				capacity := LibrarySlotCapacity{Status: "estimated_geometry", Basis: "pinned_card_row_renderer_plan_with_two_line_title", WidthPt: text.Rect.W, HeightPt: height, LineBudget: lines, Style: &style, NativeFit: "not_evaluated", Assumptions: []string{
+				capacity := LibrarySlotCapacity{Status: "estimated_geometry", Basis: "pinned_card_row_renderer_plan_with_two_line_title", Density: densityLabel, WidthPt: text.Rect.W, HeightPt: height, LineBudget: lines, Style: &style, NativeFit: "not_evaluated", Assumptions: []string{
 					"Actual card row renderer geometry, padding, numbered title and band placement; fixed pinned font size.",
 					"Body space reserves a full two-line title in every card; shorter titles can leave additional space.",
 					"Plain text only. Go shaping is advisory; wrap boundaries and final native PowerPoint fit still require build/native review.",
 				}}
+				if densityLabel != "" {
+					capacity.Assumptions = append(capacity.Assumptions, "Preferred authored density only; automatic density adjustment is not included in this estimate.")
+				}
 				capacity, err = EstimateLibrarySlotCapacity(typography, capacity)
 				if err != nil {
 					continue
@@ -137,11 +165,13 @@ func fixedSceneAuthoringCapacities(def LibraryTemplate, obj map[string]any, sour
 	if !needed {
 		return out
 	}
+	density := preferredTemplateDensity(def, source)
+	densityLabel := preferredDensityLabel(source, density)
 	typography, err := fonts()
 	if err != nil {
 		return out
 	}
-	r := renderer{source: source, typeEngine: typography}
+	r := renderer{source: source, typeEngine: typography, bodyDensity: density.Requested, headerDensity: density.Header, densityScope: "body"}
 	for index, raw := range body {
 		node, _ := raw.(map[string]any)
 		data, err := json.Marshal(node)
@@ -192,7 +222,7 @@ func fixedSceneAuthoringCapacities(def LibraryTemplate, obj map[string]any, sour
 					if cell.Row > 0 {
 						pointer = fmt.Sprintf("%s/rows/%d/%s", path, cell.Row-1, table.Columns[cell.Column].Key)
 					}
-					out[pointer] = plannedAuthoringCapacity(typography, cell.Text, cell.Text.Rect.H, "pinned_plain_native_table_cell_plan", []string{"Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.", "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement."})
+					out[pointer] = plannedAuthoringCapacity(typography, cell.Text, cell.Text.Rect.H, "pinned_plain_native_table_cell_plan", []string{"Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.", "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement."}, densityLabel)
 				}
 			}
 		} else if node["type"] == "vstepper" {
@@ -228,9 +258,9 @@ func fixedSceneAuthoringCapacities(def LibraryTemplate, obj map[string]any, sour
 					if item.Text == nil || item.Text.ID != "capacity.steps."+key+".description.part-0" {
 						continue
 					}
-					titleStyle, _ := source.Style("body")
+					titleStyle, _ := source.StyleForDensity("body", density.Requested, "body")
 					titleStyle.Weight = 600
-					labelStyle, _ := source.Style("label")
+					labelStyle, _ := source.StyleForDensity("label", density.Requested, "body")
 					titleHeight, _, err := r.sequenceNeed(step.Title, titleStyle, sequence.W-36)
 					if err != nil {
 						continue
@@ -240,7 +270,7 @@ func fixedSceneAuthoringCapacities(def LibraryTemplate, obj map[string]any, sour
 						continue
 					}
 					height := verticalSequenceStepPitch - math.Max(titleHeight, labelHeight) - 3
-					out[fmt.Sprintf("%s/steps/%d/text", path, i)] = plannedAuthoringCapacity(typography, *item.Text, height, "pinned_vertical_stepper_description_plan", []string{"Actual vertical stepper renderer pitch and description width; reserves a two-line heading and label.", "Title and label share a content-dependent inline width and remain unsupported; headings longer than two lines require build measurement."})
+					out[fmt.Sprintf("%s/steps/%d/text", path, i)] = plannedAuthoringCapacity(typography, *item.Text, height, "pinned_vertical_stepper_description_plan", []string{"Actual vertical stepper renderer pitch and description width; reserves a two-line heading and label.", "Title and label share a content-dependent inline width and remain unsupported; headings longer than two lines require build measurement."}, densityLabel)
 				}
 			}
 		}
@@ -248,13 +278,21 @@ func fixedSceneAuthoringCapacities(def LibraryTemplate, obj map[string]any, sour
 	return out
 }
 
-func plannedAuthoringCapacity(t *Typography, text TextRecord, height float64, basis string, assumptions []string) LibrarySlotCapacity {
+func plannedAuthoringCapacity(t *Typography, text TextRecord, height float64, basis string, assumptions []string, density ...string) LibrarySlotCapacity {
 	style := text.Layout.Style
 	lines := shapedComponentLineBudget(t, style, text.Rect.W, height)
 	if lines < 1 {
 		return unknownSlotCapacity("planned_text_has_no_fixed_line_budget")
 	}
-	c := LibrarySlotCapacity{Status: "estimated_geometry", Basis: basis, WidthPt: text.Rect.W, HeightPt: height, LineBudget: lines, Style: &style, Assumptions: append(assumptions, "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking."), NativeFit: "not_evaluated"}
+	level := ""
+	if len(density) > 0 {
+		level = density[0]
+	}
+	assumptions = append(assumptions, "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.")
+	if level != "" {
+		assumptions = append(assumptions, "Preferred authored density only; automatic density adjustment is not included in this estimate.")
+	}
+	c := LibrarySlotCapacity{Status: "estimated_geometry", Basis: basis, Density: level, WidthPt: text.Rect.W, HeightPt: height, LineBudget: lines, Style: &style, Assumptions: assumptions, NativeFit: "not_evaluated"}
 	c, err := EstimateLibrarySlotCapacity(t, c)
 	if err != nil {
 		return unknownSlotCapacity("pinned_fonts_unavailable")

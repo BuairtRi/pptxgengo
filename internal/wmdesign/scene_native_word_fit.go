@@ -36,7 +36,7 @@ func (r *renderer) v5WordInsets(text string, st Style, width, left, right float6
 	}
 	need := 0.0
 	for _, word := range strings.Fields(text) {
-		layout, err := r.typeEngine.Measure(word, st, 960)
+		layout, err := r.measureText(word, st, 960)
 		if err != nil {
 			return left, right, err
 		}

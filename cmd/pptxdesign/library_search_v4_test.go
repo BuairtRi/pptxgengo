@@ -14,7 +14,7 @@ func TestLibrarySearchV5Shorthand(t *testing.T) {
 }
 
 func TestLibrarySearchLatestDefault(t *testing.T) {
-	testLibrarySearchPinnedShorthand(t, "", wmdesign.LibraryRevisionV10)
+	testLibrarySearchPinnedShorthand(t, "", wmdesign.LibraryRevisionV11)
 }
 
 func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) {
@@ -22,6 +22,12 @@ func testLibrarySearchPinnedShorthand(t *testing.T, shorthand, revision string) 
 	root, err := filepath.Abs(filepath.Join("..", ".."))
 	if err != nil {
 		t.Fatal(err)
+	}
+	if shorthand == "" || shorthand == currentDesignBundle {
+		root = t.TempDir()
+		stagedBundle := filepath.Join(root, "library", "wm-design-system", currentDesignBundle)
+		sourceBundle := filepath.Join("..", "..", "planning", "wm-design-contracts", currentDesignBundle, "intake-20261006-649-frozen", "bundle")
+		copyBundleFixture(t, sourceBundle, stagedBundle)
 	}
 	t.Setenv("PPTXGENGO_RELEASE_ROOT", root)
 	output, err := os.CreateTemp(t.TempDir(), "search-*.json")
@@ -65,4 +71,8 @@ func TestLibrarySearchV9Shorthand(t *testing.T) {
 
 func TestLibrarySearchV10Shorthand(t *testing.T) {
 	testLibrarySearchPinnedShorthand(t, "v10", wmdesign.LibraryRevisionV10)
+}
+
+func TestLibrarySearchV11Shorthand(t *testing.T) {
+	testLibrarySearchPinnedShorthand(t, currentDesignBundle, wmdesign.LibraryRevisionV11)
 }

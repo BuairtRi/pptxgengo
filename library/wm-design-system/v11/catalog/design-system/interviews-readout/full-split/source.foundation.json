@@ -1,0 +1,236 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-250",
+      "density": "compact",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 2,
+        "density": "standard",
+        "source_lines": 1,
+        "no_header": false,
+        "no_page": false,
+        "split": "tall-left-narrow"
+      },
+      "eyebrow": "Stakeholder interviews",
+      "title": "Finance and compliance answered fastest",
+      "source": "Source: Sample names for layout only; replace with engagement stakeholders before use.",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 345,
+              "y": 162,
+              "w": 558,
+              "header": "dark",
+              "dense": true,
+              "rowH": 40,
+              "cols": [
+                {
+                  "k": "p",
+                  "label": "Person",
+                  "w": 168
+                },
+                {
+                  "k": "d",
+                  "label": "Department",
+                  "w": 102
+                },
+                {
+                  "k": "dt",
+                  "label": "Met",
+                  "w": 66
+                },
+                {
+                  "k": "q",
+                  "label": "Follow-up request",
+                  "w": 132
+                },
+                {
+                  "k": "s",
+                  "label": "Status",
+                  "w": 90,
+                  "type": "status",
+                  "labels": {
+                    "on": "Received",
+                    "risk": "Pending",
+                    "off": "Overdue",
+                    "blocked": "Blocked",
+                    "notstarted": "Not yet asked"
+                  }
+                }
+              ],
+              "rows": [
+                {
+                  "p": {
+                    "text": "J. Alvarez",
+                    "sub": "VP Revenue Cycle"
+                  },
+                  "d": "Revenue cycle",
+                  "dt": "Sep 8",
+                  "q": "Denial reason-code extract",
+                  "s": "on"
+                },
+                {
+                  "p": {
+                    "text": "M. Chen",
+                    "sub": "Director, Patient Access"
+                  },
+                  "d": "Patient access",
+                  "dt": "Sep 9",
+                  "q": "Registration error log",
+                  "s": "on"
+                },
+                {
+                  "p": {
+                    "text": "R. Okafor",
+                    "sub": "Chief Information Officer"
+                  },
+                  "d": "IT",
+                  "dt": "Sep 10",
+                  "q": "Application inventory",
+                  "s": "risk"
+                },
+                {
+                  "p": {
+                    "text": "S. Patel",
+                    "sub": "Dir., Enterprise Apps"
+                  },
+                  "d": "IT",
+                  "dt": "Sep 11",
+                  "q": "Interface and integration map",
+                  "s": "risk"
+                },
+                {
+                  "p": {
+                    "text": "L. Brandt",
+                    "sub": "Chief Financial Officer"
+                  },
+                  "d": "Finance",
+                  "dt": "Sep 15",
+                  "q": "FY26 budget by department",
+                  "s": "on"
+                },
+                {
+                  "p": {
+                    "text": "D. Moreau",
+                    "sub": "Controller"
+                  },
+                  "d": "Finance",
+                  "dt": "Sep 16",
+                  "q": "Month-end close calendar",
+                  "s": "on"
+                }
+              ],
+              "rowHeader": true
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "bullets",
+              "x": 57,
+              "y": 54,
+              "w": 270,
+              "items": [
+                {
+                  "lead": "Finance and compliance.",
+                  "text": "Every request met inside a week of the interview."
+                },
+                {
+                  "lead": "Clinical operations.",
+                  "text": "One request blocked pending CMO sponsor action."
+                },
+                {
+                  "lead": "Patient access.",
+                  "text": "Prior-authorization data is slow to arrive."
+                },
+                {
+                  "lead": "IT.",
+                  "text": "Two inventories are in progress, due next week."
+                }
+              ]
+            },
+            "source_pointer": "/body/1"
+          }
+        },
+        {
+          "id": "node03",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "callout",
+              "x": 57,
+              "y": 270,
+              "w": 270,
+              "label": "Requests met",
+              "value": "5 of 12",
+              "text": "with four pending and three open."
+            },
+            "source_pointer": "/body/2"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-250",
+        "template": "interviews-readout/full-split",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/interviews.json",
+        "source_sha256": "9b198a491667120ab6cbb61b938b23f4533694e79d4e4479bc4a5f469892a92d",
+        "source_revision": "wmds-library.v11",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "bullets"
+          },
+          {
+            "id": "node03",
+            "source_pointer": "/body/2",
+            "expected_type": "callout"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

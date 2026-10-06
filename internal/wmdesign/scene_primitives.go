@@ -307,7 +307,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 			err = e
 			break
 		}
-		l, e := r.typeEngine.Measure(n.N, st, n.W)
+		l, e := r.measureText(n.N, st, n.W)
 		if e != nil {
 			err = e
 			break
@@ -340,7 +340,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 			err = e
 			break
 		}
-		l, e := r.typeEngine.Measure(n.Text, st, n.W)
+		l, e := r.measureText(n.Text, st, n.W)
 		if e != nil {
 			err = e
 			break
@@ -373,17 +373,11 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 			p.Warnings = append(p.Warnings, "wmds.grouplabel-native-width.v2: "+id+" reserves2pt in its text box; rule starts12pt after the measured label and respects the explicit end gap.")
 		}
 	case "pullquote":
-		st, e := r.sceneStyle("heading")
+		st, e := r.quoteMarkStyle(false)
 		if e != nil {
 			err = e
 			break
 		}
-		st, e = primitiveStyleSize(st, 60)
-		if e != nil {
-			err = e
-			break
-		}
-		st.Leading = 30
 		ink := n.MarkInk
 		if ink == "" {
 			ink = "emphasis"
@@ -392,7 +386,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 			}
 		}
 		err = r.primitiveRichText(p, id+".quote-mark", "“", st, Rect{X: n.X, Y: y, W: n.W}, surface, ink, "left", "", "", ctx)
-		y += 39
+		y += st.Leading + 9
 		if err == nil {
 			err = add("quote", n.Text, "heading", "display", n.X, n.W, 0, 0)
 			y += 9
@@ -432,10 +426,18 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 		}
 		col := 30.
 		nst, e := r.sceneStyle("number")
+		if densityRoleCorrections(r.source) && n.NumStyle != "stat-sm" {
+			body, bodyErr := r.sceneStyle(token)
+			if bodyErr != nil {
+				return nil, true, bodyErr
+			}
+			nst, e = primitiveStyleSize(nst, body.Size)
+			nst.Leading = body.Leading
+		}
 		if n.NumStyle == "stat-sm" {
 			col = 54
 			nst, e = r.sceneStyle("stat-sm")
-		} else {
+		} else if r.source.Tokens.Density == nil {
 			nst.Size = 14
 			nst.Leading = 21
 			if token == "small" {
@@ -536,7 +538,11 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 					err = e
 					break
 				}
-				st, e = primitiveStyleSize(st, 11)
+				size := 11.
+				if densityRoleCorrections(r.source) {
+					size = st.Size * 11 / 9
+				}
+				st, e = primitiveStyleSize(st, size)
 				if e != nil {
 					err = e
 					break
@@ -623,6 +629,19 @@ func (r *renderer) primitiveBullets(p *scenePlan, id string, items []json.RawMes
 	st, e := r.sceneStyle(token)
 	if e != nil {
 		return e
+	}
+	if r.source.Tokens.Density != nil {
+		suffix := ""
+		if token == "small" {
+			suffix = "-small"
+		}
+		gap = r.listMetric("list-gap"+suffix, gap)
+		indent = r.listMetric("list-indent"+suffix, indent)
+		dot = r.listMetric("list-marker"+suffix, dot)
+		top = densityMarkerOffset(st, dot, token == "small")
+		if ordered {
+			indent = r.listMetric("ol-col"+suffix, indent)
+		}
 	}
 	y := b.Y
 	for i, raw := range items {
@@ -768,6 +787,7 @@ func (r *renderer) primitiveMeasureRuns(id string, runs []primitiveRun, st Style
 	if e != nil {
 		return rec, e
 	}
+	r.auditTextContrast(id, st, color, surface)
 	base, e := r.typeEngine.Resolve(st)
 	if e != nil {
 		return rec, e
@@ -779,7 +799,7 @@ func (r *renderer) primitiveMeasureRuns(id string, runs []primitiveRun, st Style
 		}
 		ss := st
 		ss.TrackingPt = 0
-		layout, e := r.typeEngine.Measure(" ", ss, 8191)
+		layout, e := r.measureText(" ", ss, 8191)
 		if e != nil {
 			return e
 		}
@@ -815,6 +835,7 @@ func (r *renderer) primitiveMeasureRuns(id string, runs []primitiveRun, st Style
 				return rec, e
 			}
 		}
+		r.auditTextContrast(fmt.Sprintf("%s/run-%03d", id, i+1), rs, c, surface)
 		original += run.Text
 		before, after := 0., 0.
 		switch run.Mark {
@@ -852,15 +873,16 @@ func (r *renderer) primitiveMeasureRuns(id string, runs []primitiveRun, st Style
 	}
 	// Validate every run through the same Go font engine before combined wrapping.
 	for _, rr := range q.Runs {
-		if _, e = r.typeEngine.Measure(rr.Displayed, rr.Style, 8191); e != nil {
+		if _, e = r.measureText(rr.Displayed, rr.Style, 8191); e != nil {
 			return rec, e
 		}
 	}
-	lines, e := r.typeEngine.richParagraphLines(q, b.W)
+	lines, e := r.measureRichParagraph(q, b.W)
 	if e != nil {
 		return rec, fmt.Errorf("%s: %w", id, e)
 	}
 	baseline, terminal := 0., 0.
+	observedLeading, calibrationSHA := 0., CandidateCalibrationSHA
 	allKnown := true
 	for _, rr := range q.Runs {
 		if rr.BaselineShift != 0 {
@@ -870,19 +892,30 @@ func (r *renderer) primitiveMeasureRuns(id string, runs []primitiveRun, st Style
 		if known {
 			baseline = math.Max(baseline, a.Baseline)
 			terminal = math.Max(terminal, a.TerminalHeight)
+			observedLeading = math.Max(observedLeading, effectiveAnchorLeading(a, rr.Style.Leading))
+			if sha := r.typeEngine.anchorCalibrationSHA(a); sha != CandidateCalibrationSHA {
+				calibrationSHA = sha
+			}
 		} else {
 			allKnown = false
 			baseline = math.Max(baseline, st.Leading*.75)
 			terminal = math.Max(terminal, math.Max(st.Leading, st.Size*1.5))
+			observedLeading = math.Max(observedLeading, st.Leading)
 		}
 	}
+	if calibrationSHA == CandidateCalibrationSHA {
+		observedLeading = st.Leading
+	}
 	for i := range lines {
-		lines[i].Baseline = baseline + float64(i)*st.Leading
+		lines[i].Baseline = baseline + float64(i)*observedLeading
 	}
 	q.LineCount = len(lines)
-	l := TextLayout{Original: original, Displayed: q.Displayed, Style: st, Font: base, Lines: lines, AllocationHeight: float64(len(lines)) * st.Leading, EstimatedOccupiedHeight: float64(len(lines)-1)*st.Leading + terminal, Features: map[string]int{"kern": 0, "liga": 1, "clig": 1}, VerticalPolicy: "source rich text: measured combined Go runs; native mixed-size baseline unqualified"}
+	l := TextLayout{Original: original, Displayed: q.Displayed, Style: st, Font: base, Lines: lines, AllocationHeight: float64(len(lines)) * math.Max(st.Leading, observedLeading), EstimatedOccupiedHeight: float64(len(lines)-1)*observedLeading + terminal, Features: map[string]int{"kern": 0, "liga": 1, "clig": 1}, VerticalPolicy: "source rich text: measured combined Go runs; native mixed-size baseline unqualified"}
 	if allKnown {
-		l.CalibrationSHA256 = CandidateCalibrationSHA
+		l.CalibrationSHA256 = calibrationSHA
+	}
+	if r.contrastProbe != nil {
+		l.AllocationHeight, l.EstimatedOccupiedHeight = .001, .001
 	}
 	need := math.Max(l.AllocationHeight, l.EstimatedOccupiedHeight)
 	if b.H == 0 {
@@ -974,7 +1007,7 @@ func (r *renderer) primitiveRichTextVariant(p *scenePlan, id, text string, st St
 				if part.Displayed == "" {
 					return 0, nil
 				}
-				lines, e := r.typeEngine.richParagraphLines(part, 8191)
+				lines, e := r.measureRichParagraph(part, 8191)
 				if e != nil {
 					return 0, e
 				}

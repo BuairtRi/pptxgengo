@@ -450,7 +450,11 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 	if e != nil {
 		return c, e
 	}
-	typography, e := wmdesign.NewTypographyEngine(filepath.Join(bundle, "fonts"), engine)
+	source, e := wmdesign.Load(bundle, "")
+	if e != nil {
+		return c, e
+	}
+	typography, e := wmdesign.NewSourceTypographyEngine(source, filepath.Join(bundle, "fonts"), engine)
 	if e != nil {
 		return c, e
 	}
@@ -484,7 +488,7 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 			overflow = true
 		}
 	}
-	if overflow {
+	if preferredSlotOverflowBlocksBuild(overflow, source, bound.AutoDensity) {
 		c.Status = "slot_overflow"
 		return c, nil
 	}
@@ -507,6 +511,20 @@ func MapPageToTemplate(page PageSpec, def wmdesign.LibraryTemplate, bundle, engi
 	c.deckBytes = deck
 	c.layout = &layout
 	return c, nil
+}
+
+// Slot metadata describes the authored preferred tier. On density-capable
+// snapshots, the complete Go build remains responsible for trying automatic
+// density before rejecting a supplied slide. Historical snapshots and an
+// explicit author opt-out keep the preferred-tier overflow gate.
+func preferredSlotOverflowBlocksBuild(overflow bool, source *wmdesign.Source, autoDensity *bool) bool {
+	if !overflow {
+		return false
+	}
+	if autoDensity != nil {
+		return !*autoDensity
+	}
+	return source == nil || source.Tokens.Density == nil
 }
 
 func MatchPage(page PageSpec, options LibraryMatchOptions) (LibraryMatchReport, error) {

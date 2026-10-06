@@ -42,13 +42,17 @@ func (r *renderer) sceneTableReferenceCell(p *scenePlan, id string, raw json.Raw
 		return pptx.TableCell{}, TextRecord{}, err
 	}
 	badgeStyle.Family = "IBM Plex Mono"
-	badgeStyle.Size = 9
-	badgeStyle.Leading = 13
+	if densityRoleCorrections(r.source) {
+		badgeStyle.Leading = badgeStyle.Size * 13 / 9
+	} else {
+		badgeStyle.Size = 9
+		badgeStyle.Leading = 13
+	}
 	badgeStyle.Weight = 600
 	badgeStyle.Tracking = "0.04em"
-	badgeStyle.TrackingPt = .36
+	badgeStyle.TrackingPt = math.Round(badgeStyle.Size*.04*100) / 100
 	badgeStyle.Case = ""
-	badge, err := r.typeEngine.Measure(*n.Ref, badgeStyle, b.W-24)
+	badge, err := r.measureText(*n.Ref, badgeStyle, b.W-24)
 	if err != nil {
 		return pptx.TableCell{}, TextRecord{}, err
 	}
@@ -85,7 +89,7 @@ func (r *renderer) sceneTableReferenceCell(p *scenePlan, id string, raw json.Raw
 		}
 		subStyle.Weight = 400
 		subStyle.Leading = subStyle.Size * 1.2
-		subLayout, e := r.typeEngine.Measure(n.Sub, subStyle, b.W-24)
+		subLayout, e := r.measureText(n.Sub, subStyle, b.W-24)
 		if e != nil {
 			return cell, tr, e
 		}
@@ -145,7 +149,7 @@ func (r *renderer) sceneTablePriorityCell(p *scenePlan, id string, raw json.RawM
 		return pptx.TableCell{}, TextRecord{}, err
 	}
 	chipStyle.Weight = 600
-	label, err := r.typeEngine.Measure(chip.Label, chipStyle, b.W-24-2*chip.PaddingX)
+	label, err := r.measureText(chip.Label, chipStyle, b.W-24-2*chip.PaddingX)
 	if err != nil {
 		return pptx.TableCell{}, TextRecord{}, err
 	}

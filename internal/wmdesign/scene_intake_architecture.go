@@ -165,7 +165,7 @@ func (r *renderer) planIntakeArchitectureScene(id string, raw json.RawMessage, c
 }
 
 func (r *renderer) intakeTextHeight(text string, style Style, width float64) (float64, error) {
-	l, e := r.typeEngine.Measure(text, style, width)
+	l, e := r.measureText(text, style, width)
 	if e != nil {
 		return 0, e
 	}

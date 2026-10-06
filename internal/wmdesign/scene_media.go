@@ -368,7 +368,7 @@ func (r *renderer) planMediaScene(id string, raw json.RawMessage, ctx SceneConte
 				err = e
 				break
 			}
-			sl, e := r.typeEngine.Measure(n.Stat, st, b.W-24)
+			sl, e := r.measureText(n.Stat, st, b.W-24)
 			if e != nil {
 				err = e
 				break
@@ -381,7 +381,7 @@ func (r *renderer) planMediaScene(id string, raw json.RawMessage, ctx SceneConte
 					err = e
 					break
 				}
-				ll, e := r.typeEngine.Measure(n.Label, ls, b.W-24)
+				ll, e := r.measureText(n.Label, ls, b.W-24)
 				if e != nil {
 					err = e
 					break
@@ -465,6 +465,12 @@ func (r *renderer) planIconScene(id, name string, size float64, b Rect, surface,
 	return p, nil
 }
 func (r *renderer) primitiveArtworkImage(id, asset string, b Rect, surface, ink string) (*pptx.ImageProps, error) {
+	if r.contrastProbe != nil {
+		// Marks carry no editable text. A text-only contrast probe deliberately
+		// has tiny advances; rasterizing that artificial mark envelope would
+		// turn a completed text traversal into an unrelated image-fit error.
+		return &pptx.ImageProps{PositionProps: pos(b), ObjectNameProps: pptx.ObjectNameProps{ObjectName: id}}, nil
+	}
 	data, a, e := r.primitiveAssetBytes(asset)
 	if e != nil {
 		return nil, e

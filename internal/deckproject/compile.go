@@ -169,7 +169,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 				return c, p.fail(ptr+"/values", "%v", e)
 			}
 			values := canonical(resolved)
-			doc, _, e := wmdesign.BindTemplates(bundle, "", wmdesign.BoundDocument{Schema: wmdesign.BoundDocumentSchema, Year: p.Document.Year, Slides: []wmdesign.BoundSlide{{ID: slide.ID, Template: slide.Template.ID, ContentKind: slide.ContentKind, Values: values}}})
+			doc, _, e := wmdesign.BindTemplates(bundle, "", wmdesign.BoundDocument{Schema: wmdesign.BoundDocumentSchema, Year: p.Document.Year, Slides: []wmdesign.BoundSlide{{ID: slide.ID, Template: slide.Template.ID, ContentKind: slide.ContentKind, Density: slide.Density, HeaderDensity: slide.HeaderDensity, AutoDensity: slide.AutoDensity, Values: values}}})
 			if e != nil {
 				return c, p.fail(ptr+"/values", "%v", e)
 			}
@@ -237,7 +237,10 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 		if e != nil {
 			return c, e
 		}
-		out := wmdesign.SlideSpec{ID: slide.ID, Hidden: slide.Hidden, Notes: slide.Notes, DraftReview: slide.DraftReview, ContentKind: slide.ContentKind, Frame: frame}
+		if slide.HeaderDensity != "" {
+			frame.HeaderDensity = slide.HeaderDensity
+		}
+		out := wmdesign.SlideSpec{ID: slide.ID, Hidden: slide.Hidden, Notes: slide.Notes, DraftReview: slide.DraftReview, ContentKind: slide.ContentKind, Density: slide.Density, AutoDensity: slide.AutoDensity, Frame: frame}
 		if t.FrameChrome != nil {
 			out.LibraryChrome = &wmdesign.LibraryChrome{Emphasis: t.FrameChrome.Emphasis, Whiteboard: t.FrameChrome.Whiteboard, CustomWhiteboard: t.FrameChrome.CustomWhiteboard}
 		}

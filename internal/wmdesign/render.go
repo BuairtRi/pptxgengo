@@ -40,6 +40,9 @@ type Node struct {
 }
 type SlideSpec struct {
 	ID              string               `json:"id"`
+	Density         string               `json:"density,omitempty"`
+	DensityLimit    string               `json:"source_density_limit,omitempty"`
+	AutoDensity     *bool                `json:"auto_density,omitempty"`
 	Hidden          bool                 `json:"hidden,omitempty"`
 	Notes           string               `json:"notes,omitempty"`
 	DraftReview     *DraftReviewNote     `json:"draft_review,omitempty"`
@@ -77,6 +80,7 @@ type TextRecord struct {
 }
 type SlideReport struct {
 	ID              string               `json:"id"`
+	Density         *SlideDensityRecord  `json:"density,omitempty"`
 	Hidden          bool                 `json:"hidden,omitempty"`
 	Notes           string               `json:"notes,omitempty"`
 	DraftReview     *DraftReviewRecord   `json:"draft_review,omitempty"`
@@ -93,6 +97,7 @@ type SlideReport struct {
 	TemplateBinding *TemplateSlideRecord `json:"template_binding,omitempty"`
 }
 type Report struct {
+	DensityAdjustments []SlideDensityAdjustment      `json:"density_adjustments,omitempty"`
 	Schema             string                        `json:"schema"`
 	Profile            string                        `json:"profile"`
 	Engine             string                        `json:"engine"`
@@ -112,6 +117,10 @@ type Report struct {
 	MediaOptimization  *pptx.MediaOptimizationReport `json:"media_optimization,omitempty"`
 }
 type renderer struct {
+	contrastProbe *contrastProbe
+	bodyDensity   string
+	headerDensity string
+	densityScope  string
 	projectAssets map[string]AssetData
 	source        *Source
 	typeEngine    *Typography
@@ -167,7 +176,7 @@ func (r *renderer) text(id, text string, style Style, b Rect, color, align strin
 		r.err = fmt.Errorf("text.unsupported_align: %s", align)
 		return
 	}
-	l, e := r.typeEngine.Measure(text, style, b.W)
+	l, e := r.measureText(text, style, b.W)
 	if e != nil {
 		r.err = fmt.Errorf("%s: %w", id, e)
 		return
@@ -338,7 +347,7 @@ func (r *renderer) chrome(f ResolvedFrame, year int) {
 }
 
 func (r *renderer) centerFooterText(text string, style Style, box, row Rect) Rect {
-	layout, err := r.typeEngine.Measure(text, style, box.W)
+	layout, err := r.measureText(text, style, box.W)
 	if err != nil {
 		r.err = err
 		return box
@@ -375,7 +384,7 @@ func (r *renderer) nav(f ResolvedFrame) {
 			return
 		}
 		text := strings.ToUpper(tab.Label)
-		l, e := r.typeEngine.Measure(text, st, labelWidth)
+		l, e := r.measureText(text, st, labelWidth)
 		if e != nil || len(l.Lines) != 1 {
 			r.err = fmt.Errorf("frame.nav_label_does_not_fit: %s", tab.Label)
 			return
@@ -420,16 +429,23 @@ func BuildWithEngineAndAssets(bundle, sourceOverride string, doc Document, engin
 // buildWithLoadedSource keeps prototype source observations internal. Public
 // builds still require Load's registered, checksum-verified source bundle.
 func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string, assets map[string]AssetData) (output []byte, report Report, buildErr error) {
+	t, err := NewSourceTypographyEngine(s, filepath.Join(bundle, "fonts"), engine)
+	if err != nil {
+		return nil, report, err
+	}
+	return buildWithSlideDensities(bundle, s, t, doc, engine, assets)
+}
+
+func buildWithTypography(bundle string, s *Source, t *Typography, doc Document, engine string, assets map[string]AssetData, layoutOnly bool) (output []byte, report Report, buildErr error) {
+	activeBody := false
 	activeSlideID := ""
 	defer func() {
+		buildErr = bodyDensityFitFailure(buildErr, activeBody)
 		if buildErr != nil && activeSlideID != "" && !strings.HasPrefix(buildErr.Error(), "slide "+activeSlideID) {
 			buildErr = fmt.Errorf("slide %s: %w", activeSlideID, buildErr)
 		}
 	}()
-	t, e := NewTypographyEngine(filepath.Join(bundle, "fonts"), engine)
-	if e != nil {
-		return nil, report, e
-	}
+	var e error
 	for _, st := range s.Tokens.Type {
 		if _, e = t.Resolve(st); e != nil {
 			return nil, report, e
@@ -486,6 +502,11 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 			"paragraphs":      "CRLF/CR normalized to LF; explicit paragraph for each hard break including trailing/empty paragraphs, with complete end defaults",
 			"font_names":      "original IBM family and PostScript names; no renamed fonts",
 		}
+		if len(t.densityAnchors) > 0 {
+			report.MeasurementPolicy["density_calibration_sha256"] = densityCalibrationForSource(s)
+			report.MeasurementPolicy["density_leading"] = "observed native line pitch for exact supplemental font/size/authored-leading keys; authored paragraph spacing unchanged"
+			report.MeasurementPolicy["density_qualification"] = "same-environment native controls; arbitrary content and native font file identity remain unqualified"
+		}
 	}
 	entries, e := os.ReadDir(filepath.Join(bundle, "assets"))
 	if e != nil {
@@ -514,6 +535,12 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 	sectionTitle := ""
 	for i, slide := range doc.Slides {
 		activeSlideID = slide.ID
+		activeBody = false
+		density, err := slideDensity(s, slide)
+		if err != nil {
+			return nil, report, err
+		}
+		r.bodyDensity, r.headerDensity, r.densityScope = density.Resolved, density.Header, "body"
 		if slide.ID == "" || seen[slide.ID] {
 			return nil, report, fmt.Errorf("slide.invalid_or_duplicate_id")
 		}
@@ -596,13 +623,13 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 			r.slide.AddNotes("WMDS foundation reference; synthetic labels. Source files and exact font identities are in layout-report.json. This Go layout profile requires PowerPoint qualification.")
 		}
 		if !f.Request.NoHeader {
-			st, _ := s.Style("eyebrow")
+			st, _ := r.headerStyle("eyebrow")
 			eyebrowWidth := f.Header.W
 			if slide.LibraryChrome != nil && slide.LibraryChrome.Stamp != "" {
 				eyebrowWidth -= 180
 			}
 			r.text("eyebrow", slide.Eyebrow, st, Rect{f.Header.X, 36, eyebrowWidth, 12}, r.ink(f.Request.Surface, "emphasis"), "left", 1)
-			st, _ = s.Style(f.TitleStyle)
+			st, _ = r.headerStyle(f.TitleStyle)
 			if slide.LibraryChrome != nil && (strings.Contains(slide.Title, "[[") || strings.Contains(slide.Title, "[^")) {
 				plan := &scenePlan{ID: "library-header", Bounds: Rect{f.Header.X, 54, f.Header.W, f.TitleRule - 54}}
 				ctx := SceneContext{Surface: f.Request.Surface, Zone: f.Header, Path: "/title", Notes: slide.LibraryChrome.Notes}
@@ -637,6 +664,10 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 			}
 			r.text("wm.page", fmt.Sprint(i+1), st, pageBox, r.ink(surf, "primary"), "right", 1)
 		}
+		if r.err != nil {
+			return nil, report, r.err
+		}
+		activeBody = true
 		nodeIDs := map[string]bool{}
 		for _, n := range slide.Nodes {
 			if n.ID == "" || nodeIDs[n.ID] || n.ID == "title" || n.ID == "eyebrow" || n.ID == "source" || strings.HasPrefix(n.ID, "wm.") || strings.HasPrefix(n.ID, "nav.") {
@@ -767,7 +798,11 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 					splitBoundsOK = inside(plan.Bounds, sceneZone)
 				}
 				if f.Request.Split != "" && sceneZone.W != 960 && !splitBoundsOK {
-					return nil, report, fmt.Errorf("scene.outside_split_zone: %s/%s: %+v", slide.ID, n.ID, plan.Bounds)
+					err := fmt.Errorf("scene.outside_split_zone: %s/%s: %+v", slide.ID, n.ID, plan.Bounds)
+					if densityTextOnlyBottomOverflow(plan, sceneZone) {
+						return nil, report, &densityFitError{cause: err}
+					}
+					return nil, report, err
 				}
 				plan.Warnings = append(plan.Warnings, n.Scene.Resolutions...)
 				if err = r.drawScene(plan, &sr, n.Scene.Path); err != nil {
@@ -817,7 +852,7 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 				r.drawRich(tr)
 				b = tr.Rect
 			case "text":
-				st, e := s.Style(n.Style)
+				st, e := r.bodyStyle(n.Style)
 				if e != nil {
 					return nil, report, e
 				}
@@ -892,6 +927,7 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 		if r.err != nil {
 			return nil, report, r.err
 		}
+		activeBody = false
 		if slide.DraftReview != nil {
 			if err := r.drawDraftReview(slide.ID, *slide.DraftReview, &sr); err != nil {
 				return nil, report, err
@@ -903,6 +939,9 @@ func buildWithLoadedSource(bundle string, s *Source, doc Document, engine string
 		report.Slides = append(report.Slides, sr)
 	}
 	activeSlideID = ""
+	if layoutOnly {
+		return nil, report, nil
+	}
 	raw, e := p.Write()
 	if e != nil {
 		return nil, report, e
