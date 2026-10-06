@@ -36,6 +36,7 @@
       "name": "Delivery",
       "families": [
         "approach",
+        "roadmaps",
         "team-curves",
         "interviews",
         "workshops",
@@ -130,15 +131,13 @@
     },
     {
       "id": "diagrams",
-      "name": "Funnels, pyramids and roadmaps",
-      "summary": "Funnels that narrow (conversion, pipeline, drop-off, comparison, narrowing options), pyramids that build or rank (hierarchy, foundations, needs, inverted), and graphic roadmaps and timelines (winding roads to the right or left, phases, milestone cards, we-are-here, horizontal, vertical and swimlane timelines).",
+      "name": "Funnels and pyramids",
+      "summary": "Funnels and pyramids: stages that narrow and levels that build on each other. Roadmaps and timelines moved to the Roadmaps family on 2026-10-06.",
       "file": "templates/library/diagrams.json",
-      "count": 22,
+      "count": 13,
       "sections": [
         "Funnels",
-        "Pyramids",
-        "Graphic roadmaps",
-        "Timelines"
+        "Pyramids"
       ]
     },
     {
@@ -226,14 +225,10 @@
       "name": "Software product delivery",
       "summary": "Capability maps, now/next/later roadmaps and product development lifecycle (PDLC) slides for a software product build and enhancement offering, with the SDLC drawn as an overlay.",
       "file": "templates/library/software.json",
-      "count": 19,
+      "count": 7,
       "sections": [
         "Capability maps",
-        "Capability maps with narrative",
-        "Now, next, later",
-        "Roadmap structures",
-        "Confidence and status",
-        "Dense roadmap grids"
+        "Capability maps with narrative"
       ]
     },
     {
@@ -282,13 +277,31 @@
       "name": "Approach and plan",
       "summary": "Phases, phase detail, gates, roadmaps, work plans and cutover.",
       "file": "templates/library/approach.json",
-      "count": 18,
+      "count": 16,
       "sections": [
-        "Plans and roadmaps",
+        "Plans and cutover",
         "Phases",
         "Phase detail",
         "Roles by phase",
         "Step sequences"
+      ]
+    },
+    {
+      "id": "roadmaps",
+      "name": "Roadmaps",
+      "summary": "Roadmaps and timelines: graphic roads (straight and branching), now/next/later, roadmap structures and dense grids, narrative roadmaps, phased plans and milestone timelines. Collected from the diagrams, software and approach families on 2026-10-06.",
+      "file": "templates/library/roadmaps.json",
+      "count": 36,
+      "sections": [
+        "Graphic roadmaps",
+        "Branching roadmaps",
+        "Now, next, later",
+        "Roadmap structures",
+        "Narrative roadmaps",
+        "Dense roadmap grids",
+        "Phased plans",
+        "Confidence and status",
+        "Timelines"
       ]
     },
     {
@@ -6804,340 +6817,6 @@
       "replacedBy": null
     },
     {
-      "key": "road/right",
-      "name": "Roadmap, road to the right",
-      "family": "diagrams",
-      "section": "Graphic roadmaps",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A winding road that rises to the right across the full width, with numbered pins and a date, name and line of detail at each milestone.",
-      "nodes": [
-        "road",
-        "text"
-      ],
-      "uses": [
-        "road"
-      ],
-      "slots": [
-        "title",
-        "milestone label",
-        "milestone date",
-        "milestone text"
-      ],
-      "budget": {
-        "words": 87,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "road/left",
-      "name": "Roadmap, road to the left",
-      "family": "diagrams",
-      "section": "Graphic roadmaps",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A winding road that runs from the right edge to the left, for a journey that starts at today on the right and ends at a destination on the left.",
-      "nodes": [
-        "road",
-        "text"
-      ],
-      "uses": [
-        "road"
-      ],
-      "slots": [
-        "title",
-        "milestone label",
-        "milestone date",
-        "milestone text"
-      ],
-      "budget": {
-        "words": 86,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "road/phases",
-      "name": "Roadmap with phases bracketed above",
-      "family": "diagrams",
-      "section": "Graphic roadmaps",
-      "tier": "working",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A road with its milestones grouped into three phases by brackets above the road, each bracket named for the phase.",
-      "nodes": [
-        "bracket",
-        "road",
-        "text"
-      ],
-      "uses": [
-        "road",
-        "bracket"
-      ],
-      "slots": [
-        "title",
-        "milestone label",
-        "milestone date",
-        "milestone text",
-        "phase label",
-        "phase note"
-      ],
-      "budget": {
-        "words": 93,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "road/cards",
-      "name": "Roadmap with milestone detail cards",
-      "family": "diagrams",
-      "section": "Graphic roadmaps",
-      "tier": "working",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A shorter road across the top with four milestones, and one detail card per milestone in a row below.",
-      "nodes": [
-        "cardrow",
-        "road"
-      ],
-      "uses": [
-        "road",
-        "card"
-      ],
-      "slots": [
-        "title",
-        "milestone label",
-        "milestone date",
-        "card title",
-        "card body"
-      ],
-      "budget": {
-        "words": 76,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "road/narrative-split",
-      "name": "Roadmap in a split frame with a narrative",
-      "family": "diagrams",
-      "section": "Graphic roadmaps",
-      "tier": "working",
-      "frame": "split tall-right · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A tall road in the tall column with five milestones, and the story in the short column: a lead line and two supporting points.",
-      "nodes": [
-        "bullets",
-        "road",
-        "text"
-      ],
-      "uses": [
-        "road",
-        "text.block",
-        "bullets"
-      ],
-      "slots": [
-        "title",
-        "milestone label",
-        "milestone date",
-        "lead",
-        "bullet"
-      ],
-      "budget": {
-        "words": 88,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "road/here",
-      "name": "Roadmap with active milestone, we are here",
-      "family": "diagrams",
-      "section": "Graphic roadmaps",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A winding road with the current milestone filled Magenta and tagged 'We are here', completed milestones dated Done and future ones dated.",
-      "nodes": [
-        "block",
-        "road"
-      ],
-      "uses": [
-        "road"
-      ],
-      "slots": [
-        "title",
-        "milestone label",
-        "milestone date",
-        "milestone text",
-        "status tag"
-      ],
-      "budget": {
-        "words": 68,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "timeline/milestones",
-      "name": "Horizontal milestone timeline",
-      "family": "diagrams",
-      "section": "Timelines",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A horizontal timeline built from a line, numbered markers and text: dates above, a name and a line of detail below, phases bracketed above and an exit test per phase below.",
-      "nodes": [
-        "block",
-        "bracket",
-        "cardrow",
-        "connector",
-        "text",
-        "textblock"
-      ],
-      "uses": [
-        "connector",
-        "block",
-        "text",
-        "bracket",
-        "card"
-      ],
-      "slots": [
-        "title",
-        "date",
-        "milestone",
-        "detail",
-        "phase exit"
-      ],
-      "budget": {
-        "words": 111,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "timeline/vertical",
-      "name": "Vertical timeline with decisions panel",
-      "family": "diagrams",
-      "section": "Timelines",
-      "tier": "working",
-      "frame": "right rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A vertical timeline of six dated milestones down the main area, with the decisions the executive group must take in a right panel.",
-      "nodes": [
-        "block",
-        "connector",
-        "text"
-      ],
-      "uses": [
-        "connector",
-        "block",
-        "text"
-      ],
-      "slots": [
-        "title",
-        "date",
-        "milestone",
-        "detail",
-        "decision",
-        "decision text"
-      ],
-      "budget": {
-        "words": 118,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "timeline/swimlanes",
-      "name": "Timeline with swimlanes",
-      "family": "diagrams",
-      "section": "Timelines",
-      "tier": "working",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A quarterly timeline with three swimlanes (access, operations, data): bars span the quarters they run, and dark bars mark go-live milestones.",
-      "nodes": [
-        "block",
-        "rule",
-        "text"
-      ],
-      "uses": [
-        "block",
-        "rule",
-        "text"
-      ],
-      "slots": [
-        "title",
-        "quarter",
-        "lane name",
-        "bar"
-      ],
-      "budget": {
-        "words": 60,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
       "key": "capability-heat/dense",
       "name": "Capability heat map, six sites",
       "family": "heatmaps",
@@ -12157,472 +11836,6 @@
       "replacedBy": null
     },
     {
-      "key": "roadmap/now-next-later",
-      "name": "Now, next, later roadmap",
-      "family": "software",
-      "section": "Now, next, later",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Three columns of product capabilities under Now, Next and Later, each with a one-line theme; the Now header carries the Magenta emphasis.",
-      "nodes": [
-        "block",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "card.option",
-        "text.label"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "horizon",
-        "timeframe",
-        "theme",
-        "capability"
-      ],
-      "budget": {
-        "words": 91,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/grid-rows",
-      "name": "Roadmap grid, horizons by capability group",
-      "family": "software",
-      "section": "Dense roadmap grids",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Dense now, next and later roadmap with horizons as columns and capability groups as rows; each cell lists two or three releases.",
-      "nodes": [
-        "bullets",
-        "table"
-      ],
-      "uses": [
-        "table.standard"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "group",
-        "horizon",
-        "release"
-      ],
-      "budget": {
-        "words": 103,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/grid-columns",
-      "name": "Roadmap grid, capability groups as columns",
-      "family": "software",
-      "section": "Dense roadmap grids",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Dense now, next and later roadmap transposed: horizons as rows, four capability groups as columns, each cell a short release list.",
-      "nodes": [
-        "block",
-        "card",
-        "rule",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "card.option",
-        "heading.group"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "group",
-        "horizon",
-        "timeframe",
-        "release"
-      ],
-      "budget": {
-        "words": 118,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/now-next-later-nav",
-      "name": "Now, next, later roadmap with section rail",
-      "family": "software",
-      "section": "Now, next, later",
-      "tier": "working",
-      "frame": "nav rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Now, next and later columns with an outcome line and squad-labelled releases, inside a long deck's navigation rail.",
-      "nodes": [
-        "card",
-        "chevron",
-        "text"
-      ],
-      "uses": [
-        "shape.chevron",
-        "card.option",
-        "nav.rail"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "horizon",
-        "timeframe",
-        "outcome",
-        "squad",
-        "release"
-      ],
-      "budget": {
-        "words": 101,
-        "marks": 0
-      },
-      "legacy": "nav variant of roadmap/now-next-later",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/now-next-later-split",
-      "name": "Now, next, later roadmap with tall lanes",
-      "family": "software",
-      "section": "Now, next, later",
-      "tier": "working",
-      "frame": "split tall-right · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A tall column of three horizon lanes, each with six releases and an outcome line, beside a short column of reading guidance.",
-      "nodes": [
-        "block",
-        "bullets",
-        "card",
-        "rule",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "card.option",
-        "list.set"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "lead",
-        "guidance",
-        "horizon",
-        "timeframe",
-        "release",
-        "outcome"
-      ],
-      "budget": {
-        "words": 113,
-        "marks": 0
-      },
-      "legacy": "split variant of roadmap/now-next-later",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/outcomes-left",
-      "name": "Roadmap by outcome, left panel narrative",
-      "family": "software",
-      "section": "Roadmap structures",
-      "tier": "working",
-      "frame": "left rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A left panel explains the sequencing logic; three horizon rows each name the patient problem to solve, how it is measured and what ships.",
-      "nodes": [
-        "block",
-        "card",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "card.option",
-        "panel.narrative"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "panel heading",
-        "horizon",
-        "problem",
-        "measure",
-        "ships"
-      ],
-      "budget": {
-        "words": 135,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/compact-narrative-right",
-      "name": "Compact roadmap beside a narrative panel",
-      "family": "software",
-      "section": "Now, next, later",
-      "tier": "working",
-      "frame": "right rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A compact now, next, later roadmap of five releases per horizon beside a right panel that tells the story in three lines.",
-      "nodes": [
-        "block",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "panel.narrative"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "horizon",
-        "release",
-        "panel heading",
-        "panel line"
-      ],
-      "budget": {
-        "words": 82,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/swimlane-bars",
-      "name": "Roadmap swimlanes by product area",
-      "family": "software",
-      "section": "Roadmap structures",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Four product-area swimlanes cut across three horizon columns; bars show when each release lands and a Magenta bar marks the one commitment to hold.",
-      "nodes": [
-        "block",
-        "rule",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "text.label"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "lane",
-        "horizon",
-        "release bar",
-        "legend note"
-      ],
-      "budget": {
-        "words": 100,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/confidence-levels",
-      "name": "Roadmap horizons with confidence levels",
-      "family": "software",
-      "section": "Confidence and status",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Three horizons, each headed by how firm the plan is (committed, probable, exploratory) with a dot score of confidence on every release.",
-      "nodes": [
-        "block",
-        "dots",
-        "table",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "table.dots"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "horizon",
-        "confidence line",
-        "release",
-        "confidence dots",
-        "note"
-      ],
-      "budget": {
-        "words": 66,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/themes-bets",
-      "name": "Roadmap by themes and key bets",
-      "family": "software",
-      "section": "Roadmap structures",
-      "tier": "working",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Three themes each carry two bets tagged with their horizon; one Magenta edge marks the bet the roadmap is built around.",
-      "nodes": [
-        "card",
-        "rule",
-        "text"
-      ],
-      "uses": [
-        "card.option",
-        "heading.group"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "theme label",
-        "theme",
-        "theme line",
-        "bet tag",
-        "bet",
-        "bet note"
-      ],
-      "budget": {
-        "words": 120,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/dependencies",
-      "name": "Now, next, later roadmap with dependencies",
-      "family": "software",
-      "section": "Roadmap structures",
-      "tier": "working",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Three horizon columns with arrows between releases that depend on each other, one Magenta release on the critical path and a note on what a slip would move.",
-      "nodes": [
-        "block",
-        "connector",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "diagram.connector"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "horizon",
-        "release",
-        "arrow note",
-        "critical path note"
-      ],
-      "budget": {
-        "words": 70,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/status-markers",
-      "name": "Roadmap with status markers",
-      "family": "software",
-      "section": "Confidence and status",
-      "tier": "working",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "Now, next and later columns where every release carries a status marker (shipped, on track, at risk, not started) and its owning squad; Magenta marks only the at-risk item.",
-      "nodes": [
-        "block",
-        "text"
-      ],
-      "uses": [
-        "shape.block",
-        "text.label"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "horizon",
-        "release",
-        "owner line",
-        "legend label"
-      ],
-      "budget": {
-        "words": 117,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-03",
-      "rev": 1,
-      "added": "2026-10-03",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
       "key": "lifecycle/three-phases",
       "name": "Modernization lifecycle · three phases",
       "family": "modernization",
@@ -14547,7 +13760,7 @@
       "key": "plan/gantt",
       "name": "Work plan · eight weeks",
       "family": "approach",
-      "section": "Plans and roadmaps",
+      "section": "Plans and cutover",
       "tier": "core",
       "frame": "none rail · compact footer",
       "surface": "light",
@@ -14911,45 +14124,10 @@
       "replacedBy": null
     },
     {
-      "key": "roadmap/staggered-phases",
-      "name": "Roadmap · staggered phases and milestones",
-      "family": "approach",
-      "section": "Plans and roadmaps",
-      "tier": "working",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "A months-based roadmap where each phase starts as the last one settles: staggered bars with hatched extension windows, starred milestones, and an ongoing program lane.",
-      "nodes": [
-        "gantt"
-      ],
-      "uses": [
-        "advanced.gantt",
-        "seq.timeaxis"
-      ],
-      "slots": [
-        "title",
-        "lane title",
-        "lane subtitle",
-        "bar label",
-        "milestone"
-      ],
-      "budget": {
-        "words": 107,
-        "marks": 0
-      },
-      "legacy": "pptxgengo t039-uhg-038",
-      "rev": 1,
-      "added": null,
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
       "key": "cutover/wave-matrix",
       "name": "Cutover · AI support and wave matrix",
       "family": "approach",
-      "section": "Plans and roadmaps",
+      "section": "Plans and cutover",
       "tier": "working",
       "frame": "none rail · compact footer",
       "surface": "light",
@@ -14981,41 +14159,6 @@
       "legacy": "pptxgengo t027-software-modernization-035",
       "rev": 1,
       "added": null,
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
-      "key": "roadmap/staggered-phases-nav",
-      "name": "Roadmap · staggered phases with nav rail",
-      "family": "approach",
-      "section": "Plans and roadmaps",
-      "tier": "working",
-      "frame": "nav rail · compact footer",
-      "surface": "light",
-      "density": "standard",
-      "purpose": "The staggered roadmap in a long deck: section tabs down the left edge show where the roadmap sits (compact footer).",
-      "nodes": [
-        "gantt"
-      ],
-      "uses": [
-        "advanced.gantt",
-        "seq.timeaxis"
-      ],
-      "slots": [
-        "title",
-        "lane title",
-        "lane subtitle",
-        "bar label",
-        "milestone"
-      ],
-      "budget": {
-        "words": 111,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-02",
-      "rev": 1,
-      "added": "2026-10-02",
       "revised": null,
       "status": "active",
       "replacedBy": null
@@ -15263,6 +14406,1336 @@
       "legacy": "new 2026-10-03; from pick-deck review",
       "rev": 1,
       "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road/right",
+      "name": "Roadmap, road to the right",
+      "family": "roadmaps",
+      "section": "Graphic roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A winding road that rises to the right across the full width, with numbered pins and a date, name and line of detail at each milestone.",
+      "nodes": [
+        "road",
+        "text"
+      ],
+      "uses": [
+        "road"
+      ],
+      "slots": [
+        "title",
+        "milestone label",
+        "milestone date",
+        "milestone text"
+      ],
+      "budget": {
+        "words": 87,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road/left",
+      "name": "Roadmap, road to the left",
+      "family": "roadmaps",
+      "section": "Graphic roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A winding road that runs from the right edge to the left, for a journey that starts at today on the right and ends at a destination on the left.",
+      "nodes": [
+        "road",
+        "text"
+      ],
+      "uses": [
+        "road"
+      ],
+      "slots": [
+        "title",
+        "milestone label",
+        "milestone date",
+        "milestone text"
+      ],
+      "budget": {
+        "words": 86,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road/phases",
+      "name": "Roadmap with phases bracketed above",
+      "family": "roadmaps",
+      "section": "Graphic roadmaps",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A road with its milestones grouped into three phases by brackets above the road, each bracket named for the phase.",
+      "nodes": [
+        "bracket",
+        "road",
+        "text"
+      ],
+      "uses": [
+        "road",
+        "bracket"
+      ],
+      "slots": [
+        "title",
+        "milestone label",
+        "milestone date",
+        "milestone text",
+        "phase label",
+        "phase note"
+      ],
+      "budget": {
+        "words": 93,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road/cards",
+      "name": "Roadmap with milestone detail cards",
+      "family": "roadmaps",
+      "section": "Graphic roadmaps",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A shorter road across the top with four milestones, and one detail card per milestone in a row below.",
+      "nodes": [
+        "cardrow",
+        "road"
+      ],
+      "uses": [
+        "road",
+        "card"
+      ],
+      "slots": [
+        "title",
+        "milestone label",
+        "milestone date",
+        "card title",
+        "card body"
+      ],
+      "budget": {
+        "words": 76,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road/narrative-split",
+      "name": "Roadmap in a split frame with a narrative",
+      "family": "roadmaps",
+      "section": "Graphic roadmaps",
+      "tier": "working",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A tall road in the tall column with five milestones, and the story in the short column: a lead line and two supporting points.",
+      "nodes": [
+        "bullets",
+        "road",
+        "text"
+      ],
+      "uses": [
+        "road",
+        "text.block",
+        "bullets"
+      ],
+      "slots": [
+        "title",
+        "milestone label",
+        "milestone date",
+        "lead",
+        "bullet"
+      ],
+      "budget": {
+        "words": 88,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road/here",
+      "name": "Roadmap with active milestone, we are here",
+      "family": "roadmaps",
+      "section": "Graphic roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A winding road with the current milestone filled Magenta and tagged 'We are here', completed milestones dated Done and future ones dated.",
+      "nodes": [
+        "block",
+        "road"
+      ],
+      "uses": [
+        "road"
+      ],
+      "slots": [
+        "title",
+        "milestone label",
+        "milestone date",
+        "milestone text",
+        "status tag"
+      ],
+      "budget": {
+        "words": 68,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "timeline/milestones",
+      "name": "Horizontal milestone timeline",
+      "family": "roadmaps",
+      "section": "Timelines",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A horizontal timeline built from a line, numbered markers and text: dates above, a name and a line of detail below, phases bracketed above and an exit test per phase below.",
+      "nodes": [
+        "block",
+        "bracket",
+        "cardrow",
+        "connector",
+        "text",
+        "textblock"
+      ],
+      "uses": [
+        "connector",
+        "block",
+        "text",
+        "bracket",
+        "card"
+      ],
+      "slots": [
+        "title",
+        "date",
+        "milestone",
+        "detail",
+        "phase exit"
+      ],
+      "budget": {
+        "words": 111,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "timeline/vertical",
+      "name": "Vertical timeline with decisions panel",
+      "family": "roadmaps",
+      "section": "Timelines",
+      "tier": "working",
+      "frame": "right rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A vertical timeline of six dated milestones down the main area, with the decisions the executive group must take in a right panel.",
+      "nodes": [
+        "block",
+        "connector",
+        "text"
+      ],
+      "uses": [
+        "connector",
+        "block",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "date",
+        "milestone",
+        "detail",
+        "decision",
+        "decision text"
+      ],
+      "budget": {
+        "words": 118,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "timeline/swimlanes",
+      "name": "Timeline with swimlanes",
+      "family": "roadmaps",
+      "section": "Timelines",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A quarterly timeline with three swimlanes (access, operations, data): bars span the quarters they run, and dark bars mark go-live milestones.",
+      "nodes": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "quarter",
+        "lane name",
+        "bar"
+      ],
+      "budget": {
+        "words": 60,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/now-next-later",
+      "name": "Now, next, later roadmap",
+      "family": "roadmaps",
+      "section": "Now, next, later",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three columns of product capabilities under Now, Next and Later, each with a one-line theme; the Now header carries the Magenta emphasis.",
+      "nodes": [
+        "block",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "card.option",
+        "text.label"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "horizon",
+        "timeframe",
+        "theme",
+        "capability"
+      ],
+      "budget": {
+        "words": 91,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/grid-rows",
+      "name": "Roadmap grid, horizons by capability group",
+      "family": "roadmaps",
+      "section": "Dense roadmap grids",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Dense now, next and later roadmap with horizons as columns and capability groups as rows; each cell lists two or three releases.",
+      "nodes": [
+        "bullets",
+        "table"
+      ],
+      "uses": [
+        "table.standard"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "group",
+        "horizon",
+        "release"
+      ],
+      "budget": {
+        "words": 103,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/grid-columns",
+      "name": "Roadmap grid, capability groups as columns",
+      "family": "roadmaps",
+      "section": "Dense roadmap grids",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Dense now, next and later roadmap transposed: horizons as rows, four capability groups as columns, each cell a short release list.",
+      "nodes": [
+        "block",
+        "card",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "card.option",
+        "heading.group"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "group",
+        "horizon",
+        "timeframe",
+        "release"
+      ],
+      "budget": {
+        "words": 118,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/now-next-later-nav",
+      "name": "Now, next, later roadmap with section rail",
+      "family": "roadmaps",
+      "section": "Now, next, later",
+      "tier": "working",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Now, next and later columns with an outcome line and squad-labelled releases, inside a long deck's navigation rail.",
+      "nodes": [
+        "card",
+        "chevron",
+        "text"
+      ],
+      "uses": [
+        "shape.chevron",
+        "card.option",
+        "nav.rail"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "horizon",
+        "timeframe",
+        "outcome",
+        "squad",
+        "release"
+      ],
+      "budget": {
+        "words": 101,
+        "marks": 0
+      },
+      "legacy": "nav variant of roadmap/now-next-later",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/now-next-later-split",
+      "name": "Now, next, later roadmap with tall lanes",
+      "family": "roadmaps",
+      "section": "Now, next, later",
+      "tier": "working",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A tall column of three horizon lanes, each with six releases and an outcome line, beside a short column of reading guidance.",
+      "nodes": [
+        "block",
+        "bullets",
+        "card",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "card.option",
+        "list.set"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "lead",
+        "guidance",
+        "horizon",
+        "timeframe",
+        "release",
+        "outcome"
+      ],
+      "budget": {
+        "words": 113,
+        "marks": 0
+      },
+      "legacy": "split variant of roadmap/now-next-later",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/outcomes-left",
+      "name": "Roadmap by outcome, left panel narrative",
+      "family": "roadmaps",
+      "section": "Roadmap structures",
+      "tier": "working",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A left panel explains the sequencing logic; three horizon rows each name the patient problem to solve, how it is measured and what ships.",
+      "nodes": [
+        "block",
+        "card",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "card.option",
+        "panel.narrative"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "panel heading",
+        "horizon",
+        "problem",
+        "measure",
+        "ships"
+      ],
+      "budget": {
+        "words": 135,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/compact-narrative-right",
+      "name": "Compact roadmap beside a narrative panel",
+      "family": "roadmaps",
+      "section": "Now, next, later",
+      "tier": "working",
+      "frame": "right rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A compact now, next, later roadmap of five releases per horizon beside a right panel that tells the story in three lines.",
+      "nodes": [
+        "block",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "panel.narrative"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "horizon",
+        "release",
+        "panel heading",
+        "panel line"
+      ],
+      "budget": {
+        "words": 82,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/swimlane-bars",
+      "name": "Roadmap swimlanes by product area",
+      "family": "roadmaps",
+      "section": "Roadmap structures",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Four product-area swimlanes cut across three horizon columns; bars show when each release lands and a Magenta bar marks the one commitment to hold.",
+      "nodes": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "text.label"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "lane",
+        "horizon",
+        "release bar",
+        "legend note"
+      ],
+      "budget": {
+        "words": 100,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/confidence-levels",
+      "name": "Roadmap horizons with confidence levels",
+      "family": "roadmaps",
+      "section": "Confidence and status",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three horizons, each headed by how firm the plan is (committed, probable, exploratory) with a dot score of confidence on every release.",
+      "nodes": [
+        "block",
+        "dots",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "table.dots"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "horizon",
+        "confidence line",
+        "release",
+        "confidence dots",
+        "note"
+      ],
+      "budget": {
+        "words": 66,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/themes-bets",
+      "name": "Roadmap by themes and key bets",
+      "family": "roadmaps",
+      "section": "Roadmap structures",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three themes each carry two bets tagged with their horizon; one Magenta edge marks the bet the roadmap is built around.",
+      "nodes": [
+        "card",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "card.option",
+        "heading.group"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "theme label",
+        "theme",
+        "theme line",
+        "bet tag",
+        "bet",
+        "bet note"
+      ],
+      "budget": {
+        "words": 120,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/dependencies",
+      "name": "Now, next, later roadmap with dependencies",
+      "family": "roadmaps",
+      "section": "Roadmap structures",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Three horizon columns with arrows between releases that depend on each other, one Magenta release on the critical path and a note on what a slip would move.",
+      "nodes": [
+        "block",
+        "connector",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "diagram.connector"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "horizon",
+        "release",
+        "arrow note",
+        "critical path note"
+      ],
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/status-markers",
+      "name": "Roadmap with status markers",
+      "family": "roadmaps",
+      "section": "Confidence and status",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Now, next and later columns where every release carries a status marker (shipped, on track, at risk, not started) and its owning squad; Magenta marks only the at-risk item.",
+      "nodes": [
+        "block",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "text.label"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "horizon",
+        "release",
+        "owner line",
+        "legend label"
+      ],
+      "budget": {
+        "words": 117,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/staggered-phases",
+      "name": "Roadmap · staggered phases and milestones",
+      "family": "roadmaps",
+      "section": "Phased plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A months-based roadmap where each phase starts as the last one settles: staggered bars with hatched extension windows, starred milestones, and an ongoing program lane.",
+      "nodes": [
+        "gantt"
+      ],
+      "uses": [
+        "advanced.gantt",
+        "seq.timeaxis"
+      ],
+      "slots": [
+        "title",
+        "lane title",
+        "lane subtitle",
+        "bar label",
+        "milestone"
+      ],
+      "budget": {
+        "words": 107,
+        "marks": 0
+      },
+      "legacy": "pptxgengo t039-uhg-038",
+      "rev": 1,
+      "added": null,
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap/staggered-phases-nav",
+      "name": "Roadmap · staggered phases with nav rail",
+      "family": "roadmaps",
+      "section": "Phased plans",
+      "tier": "working",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The staggered roadmap in a long deck: section tabs down the left edge show where the roadmap sits (compact footer).",
+      "nodes": [
+        "gantt"
+      ],
+      "uses": [
+        "advanced.gantt",
+        "seq.timeaxis"
+      ],
+      "slots": [
+        "title",
+        "lane title",
+        "lane subtitle",
+        "bar label",
+        "milestone"
+      ],
+      "budget": {
+        "words": 111,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-02",
+      "rev": 1,
+      "added": "2026-10-02",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road-fork/parallel",
+      "name": "Branching roadmap, parallel tracks",
+      "family": "roadmaps",
+      "section": "Branching roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A foundation of two steps, then the road splits into three tracks that run in parallel, each with two dated milestones.",
+      "nodes": [
+        "roadfork"
+      ],
+      "uses": [
+        "roadfork"
+      ],
+      "slots": [
+        "title",
+        "trunk milestone",
+        "track",
+        "track milestone"
+      ],
+      "budget": {
+        "words": 92,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road-fork/decision",
+      "name": "Branching roadmap, decision fork",
+      "family": "roadmaps",
+      "section": "Branching roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Two initial steps, then a clearly signalled fork where Northfield must choose between three roads; the options are dashed until chosen.",
+      "nodes": [
+        "roadfork"
+      ],
+      "uses": [
+        "roadfork"
+      ],
+      "slots": [
+        "title",
+        "trunk milestone",
+        "option",
+        "option milestone"
+      ],
+      "budget": {
+        "words": 96,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road-fork/decision-chosen",
+      "name": "Branching roadmap, decision made",
+      "family": "roadmaps",
+      "section": "Branching roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The same decision fork after the choice: the chosen road is solid, the others grey, with a short note on why.",
+      "nodes": [
+        "grouplabel",
+        "roadfork",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "roadfork",
+        "text.block"
+      ],
+      "slots": [
+        "title",
+        "rationale"
+      ],
+      "budget": {
+        "words": 110,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road-fork/parallel-split",
+      "name": "Branching roadmap in a split frame",
+      "family": "roadmaps",
+      "section": "Branching roadmaps",
+      "tier": "working",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A split frame: the narrative and the three track owners in the short column, and the forked road in the tall column.",
+      "nodes": [
+        "bullets",
+        "grouplabel",
+        "roadfork",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "roadfork",
+        "text.block",
+        "bullets"
+      ],
+      "slots": [
+        "title",
+        "lead",
+        "owner"
+      ],
+      "budget": {
+        "words": 118,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road-fork/decision-criteria",
+      "name": "Branching roadmap with decision criteria",
+      "family": "roadmaps",
+      "section": "Branching roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The decision fork with two options and a compact criteria table under it comparing cost, time, risk and fit with status chips.",
+      "nodes": [
+        "roadfork",
+        "status",
+        "table"
+      ],
+      "uses": [
+        "roadfork",
+        "table",
+        "status"
+      ],
+      "slots": [
+        "title",
+        "criterion",
+        "option"
+      ],
+      "budget": {
+        "words": 106,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road-fork/parallel-detail",
+      "name": "Branching roadmap with track detail",
+      "family": "roadmaps",
+      "section": "Branching roadmaps",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The forked road with two tracks and a dense detail strip under each: outcomes, owner and dependencies.",
+      "nodes": [
+        "bullets",
+        "grouplabel",
+        "roadfork",
+        "rule"
+      ],
+      "uses": [
+        "roadfork",
+        "grouplabel",
+        "bullets"
+      ],
+      "slots": [
+        "title",
+        "track detail"
+      ],
+      "budget": {
+        "words": 150,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "road-fork/foundation-then-waves",
+      "name": "Branching roadmap, foundation then waves",
+      "family": "roadmaps",
+      "section": "Branching roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A foundation trunk of three steps, then three parallel tracks labelled as waves, with a we-are-here marker on the trunk.",
+      "nodes": [
+        "roadfork"
+      ],
+      "uses": [
+        "roadfork",
+        "block"
+      ],
+      "slots": [
+        "title",
+        "wave"
+      ],
+      "budget": {
+        "words": 100,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-narrative/horizon-table",
+      "name": "Narrative roadmap, horizon table",
+      "family": "roadmaps",
+      "section": "Narrative roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A dense three-horizon table: objective, key initiatives, outcomes and KPIs, dependencies and investment for each horizon, at 12 pt.",
+      "nodes": [
+        "bullets",
+        "table"
+      ],
+      "uses": [
+        "table",
+        "bullets",
+        "priority"
+      ],
+      "slots": [
+        "title",
+        "horizon",
+        "initiative",
+        "KPI"
+      ],
+      "budget": {
+        "words": 205,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-narrative/memo",
+      "name": "Narrative roadmap, memo with horizon cards",
+      "family": "roadmaps",
+      "section": "Narrative roadmaps",
+      "tier": "core",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A split frame: the story and the logic of sequencing in the short column, and three stacked horizon cards in the tall column, each with what, why now and what it unlocks.",
+      "nodes": [
+        "block",
+        "bullets",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "text.block",
+        "bullets"
+      ],
+      "slots": [
+        "title",
+        "lead",
+        "horizon card",
+        "card cell"
+      ],
+      "budget": {
+        "words": 196,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-narrative/waves-criteria",
+      "name": "Narrative roadmap, waves with criteria and gates",
+      "family": "roadmaps",
+      "section": "Narrative roadmaps",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "On the nav rail: four delivery waves with scope, entry criteria, exit criteria and the decision gate that releases the next wave.",
+      "nodes": [
+        "bullets",
+        "table"
+      ],
+      "uses": [
+        "table",
+        "bullets",
+        "nav.rail"
+      ],
+      "slots": [
+        "title",
+        "wave",
+        "criterion"
+      ],
+      "budget": {
+        "words": 214,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-narrative/objectives-tree",
+      "name": "Narrative roadmap, objectives to initiatives to quarter",
+      "family": "roadmaps",
+      "section": "Narrative roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Strategic objectives as vertical group cells, each with its initiatives, what they deliver, owner, start and live quarter, and horizon chip.",
+      "nodes": [
+        "priority",
+        "table"
+      ],
+      "uses": [
+        "table",
+        "rowGroups",
+        "priority"
+      ],
+      "slots": [
+        "title",
+        "objective",
+        "initiative"
+      ],
+      "budget": {
+        "words": 170,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-narrative/decisions-roadmap",
+      "name": "Narrative roadmap as decisions required",
+      "family": "roadmaps",
+      "section": "Narrative roadmaps",
+      "tier": "working",
+      "frame": "split tall-left · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "The roadmap expressed as the decisions required and when: each decision with its date, owner and what it unlocks, plus how decisions are made in the short column.",
+      "nodes": [
+        "bullets",
+        "grouplabel",
+        "priority",
+        "rule",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table",
+        "text.block",
+        "bullets"
+      ],
+      "slots": [
+        "title",
+        "decision",
+        "owner"
+      ],
+      "budget": {
+        "words": 192,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-narrative/kpi-roadmap",
+      "name": "Narrative roadmap, KPIs by horizon",
+      "family": "roadmaps",
+      "section": "Narrative roadmaps",
+      "tier": "core",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "A left panel with the north-star target, and a table of horizons grouped as vertical cells, each with target KPIs (baseline to target) and the initiatives that move them.",
+      "nodes": [
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table",
+        "rowGroups",
+        "left.panel"
+      ],
+      "slots": [
+        "title",
+        "north star",
+        "KPI"
+      ],
+      "budget": {
+        "words": 170,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-06",
+      "rev": 1,
+      "added": "2026-10-06",
       "revised": null,
       "status": "active",
       "replacedBy": null

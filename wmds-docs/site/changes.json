@@ -152,14 +152,22 @@
     "frames-docs-2026-10-05": {
       "summary": "frames/v0/frames.json gained descriptive text, grouped board examples and two documentation-only geometry tables (title-zone rules for 3 and 4 title lines, and a body-bottom table for compact/tall/slim footers with 0/1/2 source lines). The renderer's constants are unchanged.",
       "pptx": "No change needed: values match the renderer and authoring-reference (titleLines 3 → rule 180, 4 → rule 216; body bottoms compact 468/450/432, tall 450/432, slim 486/468/450)."
+    },
+    "roadfork": {
+      "summary": "New node `roadfork`: a road that forks. Trunk milestones (foundation) run to a fork, then 2-3 branch roads curve into lanes with their own milestones and titles. mode parallel (split marker, solid roads, 'Run in parallel') or decision (Magenta '?' diamond, 'Decision', dashed option roads; chosen draws one solid and greys the rest). Also: fork.tag overrides the fork eyebrow; with chosen set the diamond shows ✓ and the eyebrow reads 'Decided'; milestones may set here: true (hereLabel) for a Magenta pin with a 'You are here' tag. Branch title row: the Track/Option tag and the title sit on one line. Three branches default to 12 pt milestone labels (small).",
+      "pptx": "Draw roads as thick rounded Grounded polylines/beziers (stroke ~18 pt) with a 1.5 pt White dashed centre line (7/7; 3/5 for unchosen options). Trunk from x+14 to fork x (w*at); each branch: cubic from fork point to lane y over ~22% of remaining width (max 108 pt), then straight to x+w-14. Lane i centre y = y + h/n*i + h/n*0.42. Pins: 24 pt circles, White fill, 1.5 pt ring, mono 10 pt labels (1..n on trunk, A1.. on branches); greyed options use #97A4BA ring and text, road #CED7E6. Fork: decision = 26 pt square rotated 45 deg, Magenta fill, '?'; parallel = 22 pt Grounded square with White inner ring. Labels: trunk alternate above/below; branch milestone labels below pins; branch eyebrow 'Track/Option A' plus subhead title above the lane start. here: Magenta pin fill plus a small Grounded label box (mono 9 pt White caps, 'You are here') centred 22 pt above the pin."
+    },
+    "family-roadmaps-2026-10-06": {
+      "summary": "New family roadmaps (Roadmaps). Moved without content changes: diagrams road/* and timeline/* (diagrams is renamed 'Funnels and pyramids'), software roadmap/* (now/next/later, structures, dense grids, confidence and status), approach roadmap/staggered-phases(-nav). Approach section 'Plans and roadmaps' renamed 'Plans and cutover'.",
+      "pptx": "Template keys are unchanged; only family and gallery section change. Update any family-based lookups."
     }
   },
   "summary": {
-    "added": 534,
+    "added": 547,
     "revised": 18,
     "deprecated": 1,
     "removed": 0,
-    "moved": 21
+    "moved": 22
   },
   "templates": [
     {
@@ -286,15 +294,6 @@
       "rev": 1,
       "summary": "Four-phase approach in a 558 pt main area with the engagement commitment (8 weeks, what we can be held to) on a right panel; title shortened to one line.",
       "pptx": "Add a right-panel layout: phases columns at w 558 on x 57; inverse-ink panel text at x 705-903."
-    },
-    {
-      "key": "roadmap/staggered-phases-nav",
-      "family": "approach",
-      "change": "added",
-      "date": "2026-10-02",
-      "rev": 1,
-      "summary": "Staggered roadmap with the nav rail, compact footer.",
-      "pptx": "Same as roadmap/staggered-phases plus four rotated tab labels at x 21-39."
     },
     {
       "key": "roles/dot-scores",
@@ -2286,87 +2285,6 @@
       "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
     },
     {
-      "key": "road/cards",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A shorter road across the top with four milestones, and one detail card per milestone in a row below.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "road/here",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A winding road with the current milestone filled Magenta and tagged 'We are here', completed milestones dated Done and future ones dated.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "road/left",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A winding road that runs from the right edge to the left, for a journey that starts at today on the right and ends at a destination on the left.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "road/narrative-split",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A tall road in the tall column with five milestones, and the story in the short column: a lead line and two supporting points.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "road/phases",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A road with its milestones grouped into three phases by brackets above the road, each bracket named for the phase.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "road/right",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A winding road that rises to the right across the full width, with numbered pins and a date, name and line of detail at each milestone.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "timeline/milestones",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A horizontal timeline built from a line, numbered markers and text: dates above, a name and a line of detail below, phases bracketed above and an exit test per phase below.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "timeline/swimlanes",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A quarterly timeline with three swimlanes (access, operations, data): bars span the quarters they run, and dark bars mark go-live milestones.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
-      "key": "timeline/vertical",
-      "family": "diagrams",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "A vertical timeline of six dated milestones down the main area, with the decisions the executive group must take in a right panel.",
-      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
-    },
-    {
       "key": "chart/column-full-split",
       "family": "evidence",
       "change": "added",
@@ -3870,6 +3788,327 @@
       "pptx": "Four thumbnails, numbered headings and a banner block."
     },
     {
+      "key": "road-fork/decision",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Two steps then a Magenta decision diamond and three dashed option roads.",
+      "pptx": "Roadfork in decision mode with 3 options; the diamond is the slide's one Magenta point."
+    },
+    {
+      "key": "road-fork/decision-chosen",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Decision fork after the choice, with the chosen road solid and a why-we-chose note.",
+      "pptx": "Roadfork decision mode with chosen=0 and 2 options, a grouplabel and a one-line rationale under it."
+    },
+    {
+      "key": "road-fork/decision-criteria",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Decision fork with two options and a compact status-chip criteria table.",
+      "pptx": "Roadfork (decision, small, 204 pt) over a dense table of 4 criteria x 2 options with status chips and relabelled statuses."
+    },
+    {
+      "key": "road-fork/foundation-then-waves",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Three-step foundation trunk, then three wave-labelled tracks with a We are here marker.",
+      "pptx": "Roadfork parallel with wave titles; a callout block (Magenta) labelled We are here placed under trunk milestone 2."
+    },
+    {
+      "key": "road-fork/parallel",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Foundation of two steps, then three parallel tracks (roadfork, parallel mode).",
+      "pptx": "One roadfork: 2 trunk milestones, a split marker, 3 solid branches with 2 milestones each."
+    },
+    {
+      "key": "road-fork/parallel-detail",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Forked road with two tracks and a detail strip under each: outcomes, owner, dependencies.",
+      "pptx": "Roadfork small over two grouplabel + bullets columns."
+    },
+    {
+      "key": "road-fork/parallel-split",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Split frame (tall-right): narrative, track owners and dependency in the short column, forked road in the tall column.",
+      "pptx": "Roadfork small with a narrow fork width in the 558 pt tall column; bullets and text in the 270 pt column."
+    },
+    {
+      "key": "road/cards",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A shorter road across the top with four milestones, and one detail card per milestone in a row below.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "road/here",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A winding road with the current milestone filled Magenta and tagged 'We are here', completed milestones dated Done and future ones dated.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "road/left",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A winding road that runs from the right edge to the left, for a journey that starts at today on the right and ends at a destination on the left.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "road/narrative-split",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A tall road in the tall column with five milestones, and the story in the short column: a lead line and two supporting points.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "road/phases",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A road with its milestones grouped into three phases by brackets above the road, each bracket named for the phase.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "road/right",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A winding road that rises to the right across the full width, with numbered pins and a date, name and line of detail at each milestone.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "roadmap-narrative/decisions-roadmap",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Split (tall-left): six decisions with by-when chip, owner and what each unlocks; decision rules in the short column.",
+      "pptx": "Table with priority chips in the 558 pt column, text and bullets in the 270 pt column."
+    },
+    {
+      "key": "roadmap-narrative/horizon-table",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Dense horizon table: objective, initiatives, KPIs, dependencies, investment.",
+      "pptx": "Table with 6 columns, 3 rows with explicit heights, bullets columns at 12 pt."
+    },
+    {
+      "key": "roadmap-narrative/kpi-roadmap",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Left panel with the north-star target; KPI table grouped by horizon (baseline, target, moved by).",
+      "pptx": "Left inverse panel with label, heading and note; table with rowGroups Now, Next, Later."
+    },
+    {
+      "key": "roadmap-narrative/memo",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Split frame: the story and sequencing logic beside three stacked horizon cards with what, why now, unlocks.",
+      "pptx": "Three subtle blocks 558 x 126 with 18 pt inset label and three text columns each; short column text and bullets."
+    },
+    {
+      "key": "roadmap-narrative/objectives-tree",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Objectives as vertical group cells over initiatives, deliverables, owner, start, live and horizon chip.",
+      "pptx": "Table with rowGroups (3 fills), priority now/next/later chips, 6 rows at 48 pt."
+    },
+    {
+      "key": "roadmap-narrative/waves-criteria",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-06",
+      "rev": 1,
+      "summary": "Nav rail: four waves with scope, entry and exit criteria and decision gate.",
+      "pptx": "Dense table with bullets columns and a two-line row header; nav rail with Roadmap active."
+    },
+    {
+      "key": "roadmap/compact-narrative-right",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Compact 3x5 release grid in 162-wide columns beside a right inverse panel with a three-line story.",
+      "pptx": "New slide: right panel, 15 release blocks, Now header Magenta, panel with heading and Now/Next/Later lines."
+    },
+    {
+      "key": "roadmap/confidence-levels",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Three horizon columns headed by confidence stance with a table of releases and 4-dot confidence scores per column.",
+      "pptx": "New slide: three 270-wide dots tables (Release 150, Confidence 120, max 4), Now header Magenta."
+    },
+    {
+      "key": "roadmap/dependencies",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Three horizon columns with solid and dashed arrows between dependent releases; one Magenta critical-path block and notes.",
+      "pptx": "New slide: 234-wide columns with 72pt gaps, six straight connectors (solid or dashed), two note text blocks."
+    },
+    {
+      "key": "roadmap/grid-columns",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Dense transposed roadmap: horizons as rows, four capability groups as columns, three releases per cell.",
+      "pptx": "Group headings with rules; row label blocks (h54) with timeframe labels; 4x3 cards of 162x72 with three bullets."
+    },
+    {
+      "key": "roadmap/grid-rows",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Dense roadmap with horizons as columns and capability groups as rows (table, Now column highlighted).",
+      "pptx": "Table with row header, bullets cells, dark header, highlight on the Now column, rowH 62."
+    },
+    {
+      "key": "roadmap/now-next-later",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Simple three-column now/next/later overview with theme line and four capability tiles per column. Round 12: Now header block changed from inverse to callout (Magenta) as the sparing emphasis; purpose updated.",
+      "pptx": "Three 270-wide columns: header block, timeframe label, theme line, four h45 blocks at pitch 54. Round 12: Set the Now header block fill to Magenta (callout surface, Grounded text)."
+    },
+    {
+      "key": "roadmap/now-next-later-nav",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Nav-rail roadmap with chevron horizons, an outcome line and squad-labelled release cards.",
+      "pptx": "rail nav (Strategy, Capabilities, Roadmap, Delivery, Governance; active 2); three chevrons with sub text; cards with mono label and body-size title."
+    },
+    {
+      "key": "roadmap/now-next-later-split",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Split (tall-right) roadmap: three tall lanes each with six releases and an outcome, with reading guidance in the short column.",
+      "pptx": "split tall-right, titleLines 3; lane label blocks 108x126, lane cards 432x126 with two bullet columns, rule and outcome line."
+    },
+    {
+      "key": "roadmap/outcomes-left",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Left inverse panel narrative; three horizon rows (Now Magenta, Next inverse, Later strong) each with problem, measure, ships.",
+      "pptx": "New slide: left panel layout, 3 horizon blocks 108x90 with timeframe label, subtle cards 432x90 with 3 text lines."
+    },
+    {
+      "key": "roadmap/staggered-phases",
+      "change": "moved",
+      "family": "roadmaps",
+      "movedFrom": "approach"
+    },
+    {
+      "key": "roadmap/staggered-phases-nav",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-02",
+      "rev": 1,
+      "summary": "Staggered roadmap with the nav rail, compact footer.",
+      "pptx": "Same as roadmap/staggered-phases plus four rotated tab labels at x 21-39."
+    },
+    {
+      "key": "roadmap/status-markers",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Three columns of releases with 18pt status squares (shipped, on track, at risk Magenta, not started outline), owner line and legend row.",
+      "pptx": "New slide: 18x18 marker blocks, name plus owner lines, legend at y 432."
+    },
+    {
+      "key": "roadmap/swimlane-bars",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Four product-area swimlanes across three contiguous horizon columns; bars by commitment level; one Magenta bar.",
+      "pptx": "New slide: lane label blocks, 234-wide horizon header blocks, 27pt bars at lattice x, thin lane rules, legend note line."
+    },
+    {
+      "key": "roadmap/themes-bets",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "Three themes, each with a rule, one-line statement and two horizon-tagged bet cards; key bet marked by a Magenta left edge.",
+      "pptx": "New slide: theme headings, 108pt cards with label and body, one card with 6pt Magenta left edge."
+    },
+    {
+      "key": "timeline/milestones",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A horizontal timeline built from a line, numbered markers and text: dates above, a name and a line of detail below, phases bracketed above and an exit test per phase below.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "timeline/swimlanes",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A quarterly timeline with three swimlanes (access, operations, data): bars span the quarters they run, and dark bars mark go-live milestones.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
+      "key": "timeline/vertical",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-03",
+      "rev": 1,
+      "summary": "A vertical timeline of six dated milestones down the main area, with the decisions the executive group must take in a right panel.",
+      "pptx": "New template: build from the slide JSON. Funnel and pyramid bands are trapezoid/triangle shapes on a light-to-dark blue ramp with side text and dotted leaders; road is a freeform curve with numbered pins; brackets, blocks, cards and text are native shapes."
+    },
+    {
       "key": "runbook/cutover-comms-checkpoints",
       "family": "runbooks",
       "change": "added",
@@ -4219,114 +4458,6 @@
       "rev": 1,
       "summary": "Four platform layers of three cards each plus a cross-cutting column; card surface shows who builds.",
       "pptx": "Layer label block plus three cards (title, status line) of 180x63; cross-cutting card 108 wide; owner legend."
-    },
-    {
-      "key": "roadmap/compact-narrative-right",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Compact 3x5 release grid in 162-wide columns beside a right inverse panel with a three-line story.",
-      "pptx": "New slide: right panel, 15 release blocks, Now header Magenta, panel with heading and Now/Next/Later lines."
-    },
-    {
-      "key": "roadmap/confidence-levels",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Three horizon columns headed by confidence stance with a table of releases and 4-dot confidence scores per column.",
-      "pptx": "New slide: three 270-wide dots tables (Release 150, Confidence 120, max 4), Now header Magenta."
-    },
-    {
-      "key": "roadmap/dependencies",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Three horizon columns with solid and dashed arrows between dependent releases; one Magenta critical-path block and notes.",
-      "pptx": "New slide: 234-wide columns with 72pt gaps, six straight connectors (solid or dashed), two note text blocks."
-    },
-    {
-      "key": "roadmap/grid-columns",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Dense transposed roadmap: horizons as rows, four capability groups as columns, three releases per cell.",
-      "pptx": "Group headings with rules; row label blocks (h54) with timeframe labels; 4x3 cards of 162x72 with three bullets."
-    },
-    {
-      "key": "roadmap/grid-rows",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Dense roadmap with horizons as columns and capability groups as rows (table, Now column highlighted).",
-      "pptx": "Table with row header, bullets cells, dark header, highlight on the Now column, rowH 62."
-    },
-    {
-      "key": "roadmap/now-next-later",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Simple three-column now/next/later overview with theme line and four capability tiles per column. Round 12: Now header block changed from inverse to callout (Magenta) as the sparing emphasis; purpose updated.",
-      "pptx": "Three 270-wide columns: header block, timeframe label, theme line, four h45 blocks at pitch 54. Round 12: Set the Now header block fill to Magenta (callout surface, Grounded text)."
-    },
-    {
-      "key": "roadmap/now-next-later-nav",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Nav-rail roadmap with chevron horizons, an outcome line and squad-labelled release cards.",
-      "pptx": "rail nav (Strategy, Capabilities, Roadmap, Delivery, Governance; active 2); three chevrons with sub text; cards with mono label and body-size title."
-    },
-    {
-      "key": "roadmap/now-next-later-split",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Split (tall-right) roadmap: three tall lanes each with six releases and an outcome, with reading guidance in the short column.",
-      "pptx": "split tall-right, titleLines 3; lane label blocks 108x126, lane cards 432x126 with two bullet columns, rule and outcome line."
-    },
-    {
-      "key": "roadmap/outcomes-left",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Left inverse panel narrative; three horizon rows (Now Magenta, Next inverse, Later strong) each with problem, measure, ships.",
-      "pptx": "New slide: left panel layout, 3 horizon blocks 108x90 with timeframe label, subtle cards 432x90 with 3 text lines."
-    },
-    {
-      "key": "roadmap/status-markers",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Three columns of releases with 18pt status squares (shipped, on track, at risk Magenta, not started outline), owner line and legend row.",
-      "pptx": "New slide: 18x18 marker blocks, name plus owner lines, legend at y 432."
-    },
-    {
-      "key": "roadmap/swimlane-bars",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Four product-area swimlanes across three contiguous horizon columns; bars by commitment level; one Magenta bar.",
-      "pptx": "New slide: lane label blocks, 234-wide horizon header blocks, 27pt bars at lattice x, thin lane rules, legend note line."
-    },
-    {
-      "key": "roadmap/themes-bets",
-      "family": "software",
-      "change": "added",
-      "date": "2026-10-03",
-      "rev": 1,
-      "summary": "Three themes, each with a rule, one-line statement and two horizon-tagged bet cards; key bet marked by a Magenta left edge.",
-      "pptx": "New slide: theme headings, 108pt cards with label and body, one card with 6pt Magenta left edge."
     },
     {
       "key": "process/current-future",

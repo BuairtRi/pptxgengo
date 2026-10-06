@@ -5,6 +5,10 @@ composites, frames and the template library (with family, section, frame, tier a
 and changelogs.
 
 ```sh
+pptxgengo docs                      # installed package, http://localhost:8787
+pptxgengo paths                     # design_docs and design_docs_source
+
+# From a source checkout:
 go run ./cmd/wmdsdocs                 # http://localhost:8787
 go run ./cmd/wmdsdocs -addr :8787     # share on your network
 ```
@@ -30,3 +34,9 @@ stages. Today the library reaches pptxgengo through the pinned, qualified intake
 `planning/wm-design-contracts/` and the published `library/wm-design-system/` version. Publish these docs together
 with each intake so the docs and the native library describe the same upstream commit (compare
 `site/SOURCE.json` with the intake README's pinned commit).
+
+## Package integrity
+
+The global package includes the docs server and the static documentation. Installation verifies the clean source commit, embedded tokens, components, frames and catalog against the selected frozen native bundle, as well as catalog counts, changelogs and every content-hashed asset. A documentation publish alone does not qualify a new template for native PowerPoint; intake and native specimen review remain required.
+
+The documentation board may render many examples at once. During browser review, Chrome reported high memory use; lazy rendering is a follow-up performance improvement.

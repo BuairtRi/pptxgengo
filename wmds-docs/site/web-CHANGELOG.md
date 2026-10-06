@@ -3,6 +3,13 @@
 What changed in this repo that the wmds-web registry must implement. Newest first. Keep it current as work
 happens, as with `templates/CHANGELOG.md` for pptxgengo.
 
+## 2026-10-06 · roadmaps family
+
+- Slide sections moved: diagrams Graphic roadmaps and Timelines, software Now, next, later / Roadmap structures /
+  Dense roadmap grids / Confidence and status, and approach roadmap/* now live in the new `roadmaps` family; approach
+  "Plans and roadmaps" is renamed "Plans and cutover". The `approach` content type now maps roadmaps: Graphic
+  roadmaps, Timelines, Phased plans. A `roadmap` content type (now/next/later, branching roads) is still to come.
+
 ## 2026-10-04 · heat map row notes
 
 - `heatmap` gains `rowNotes?` (2-4 bullets per row), `rowRefs?` (reference badges such as A1) and `min?` (scale
