@@ -5,6 +5,10 @@ library, SQLite search index, visual gallery, documentation, and current West
 Monroe presentations skill. Go/Python are not needed to use it. No administrator
 rights are required for the user installation.
 
+Open **`guides/00-start.html`** in your browser for the illustrated installation,
+existing-deck and agent revision guides. Every HTML file runs offline without a
+server or external assets; keep them together for navigation.
+
 ## Install
 
 1. Extract the ZIP completely to a local folder. Do not run from inside the ZIP.

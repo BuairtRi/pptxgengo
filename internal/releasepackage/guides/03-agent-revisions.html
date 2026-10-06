@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prompt an agent to revise your deck · West Monroe presentations</title>
+  <style>
+    :root{--ink:#070154;--accent:#F900D3;--blue:#1B3BF0;--muted:#565777;--bg:#F5F6FA;--line:#DADCE8;--white:#fff}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+    a{color:var(--blue);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}button,input{font:inherit}button,a,input{touch-action:manipulation}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+    .wrap{max-width:1100px;margin:auto;padding:0 28px}header{background:var(--ink);color:#fff;border-top:6px solid var(--accent);padding:28px 0 38px}.brand{font-size:12px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:#DDDDF2}
+    nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 30px}nav a{color:#fff;border:1px solid #595580;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:14px}nav a[aria-current=page]{background:#fff;color:var(--ink);border-color:#fff}
+    h1{font-size:clamp(30px,4vw,44px);line-height:1.16;letter-spacing:-.03em;max-width:850px;margin:0 0 18px}header p{max-width:740px;margin:0;color:#E7E6F5}main{padding:30px 0 40px}h2{font-size:25px;line-height:1.25;margin:0 0 16px}h3{font-size:21px;line-height:1.3;margin:0}p{margin:12px 0}ul,ol{padding-left:24px}li+li{margin-top:8px}
+    .panel,.prompt{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px;margin-bottom:22px}.panel{border-top:4px solid var(--accent)}.kicker{color:var(--blue);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:750;margin:0 0 8px}.hint{color:var(--muted);font-size:14px}.notice{border-left:4px solid var(--blue);background:#EFF2FF;padding:14px 18px;margin:18px 0;border-radius:0 6px 6px 0}.notice p{margin:0}
+    .recipe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.recipe div{background:var(--bg);padding:14px;border-radius:6px}.recipe strong{display:block}.recipe span{font-size:14px;color:var(--muted)}
+    .search{margin:26px 0}.search label{display:block;font-weight:700;margin-bottom:8px}.search input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}.search p{margin:5px 0 0;color:var(--muted);font-size:14px}.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}.copy{background:var(--ink);border:0;color:#fff;border-radius:6px;padding:8px 14px;font-size:14px;font-weight:650;cursor:pointer;white-space:nowrap}.copy:hover{background:var(--blue)}
+    pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,"Cascadia Code",Consolas,monospace;background:#F3F4F9;color:var(--ink);padding:18px;border-radius:6px;margin:18px 0 12px;border:1px solid #E5E6EE}code{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.92em}.prompt>p:first-of-type{color:var(--muted)}.prompt[hidden]{display:none}#copy-status{min-height:25px;margin:0;color:var(--blue);font-size:14px}footer{border-top:1px solid var(--line);padding:24px 0 32px;color:var(--muted);font-size:14px}.footer-nav{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    @media(max-width:650px){.wrap{padding:0 18px}.panel,.prompt{padding:20px}.recipe{grid-template-columns:1fr}.card-head{flex-direction:column;gap:10px}nav{gap:6px}nav a{padding:7px 9px}pre{padding:14px;font-size:13px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{header{background:#fff;color:var(--ink)}header p,.brand{color:var(--ink)}nav,.search,.copy,#copy-status{display:none}.prompt,.panel{break-inside:avoid}body{background:#fff}.wrap{max-width:none}a{color:var(--ink)}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">West Monroe presentations · Windows preview</div>
+    <nav aria-label="Guide navigation">
+      <a href="00-start.html">Start here</a><a href="01-install.html">Install</a><a href="02-existing-deck.html">Existing decks</a><a href="03-agent-revisions.html" aria-current="page">Agent revisions</a>
+    </nav>
+    <h1>Give your agent a clear slide revision brief.</h1>
+    <p>Copy a prompt, replace the bracketed details, and ask your agent to work in the deck’s YAML project. Keep the slide’s purpose, facts and visual structure together.</p>
+  </div>
+</header>
+<main class="wrap">
+  <section class="panel" aria-labelledby="recipe-title">
+    <p class="kicker">The prompt recipe</p>
+    <h2 id="recipe-title">Seven details make revisions easier.</h2>
+    <div class="recipe">
+      <div><strong>1. Project path</strong><span>The folder containing the deck source and lock, for example <code>C:\Work\Client deck</code>.</span></div>
+      <div><strong>2. Stable slide ID</strong><span>Use an ID such as <code>next-phase</code>. Slide numbers change when you reorder the deck.</span></div>
+      <div><strong>3. Intent</strong><span>What should the reader understand or decide after seeing this page?</span></div>
+      <div><strong>4. Exact copy</strong><span>Provide replacement words, or say which wording the agent may rewrite.</span></div>
+      <div><strong>5. Evidence</strong><span>Name the source file and page, cell or section supporting the claim.</span></div>
+      <div><strong>6. Constraints</strong><span>Keep the template, preserve dates, stay at a density tier, or compare alternatives.</span></div>
+      <div><strong>7. Definition of done</strong><span>Source changed, checks passed, new build made, visuals reviewed, unresolved issues named.</span></div>
+    </div>
+    <div class="notice"><p><strong>Give the agent access to the project folder.</strong> These prompts assume a file-capable coding agent with the installed <code>west-monroe-presentations</code> skill and <code>pptxgengo</code> CLI. This HTML page documents the workflow; it does not run the CLI or connect to an agent.</p></div>
+    <p><strong>Agree on material decisions.</strong> The agent can make routine copy and layout repairs under your instruction. Changes to the argument, commercial commitments, material claims or required evidence need your decision. Missing facts should become questions or visible placeholders.</p>
+    <p class="hint">Only have a PowerPoint file? Start with the <a href="02-existing-deck.html">existing-deck guide</a>. A standalone PPTX is inventoried and rebuilt into a source project; migration does not automatically convert it to YAML.</p>
+  </section>
+
+  <div class="search">
+    <label for="filter">Find a revision prompt</label>
+    <input id="filter" type="search" placeholder="Try: copy, template, density, sections, notes, PowerPoint, review" autocomplete="off">
+    <p id="filter-count" aria-live="polite">10 prompts</p>
+  </div>
+  <p id="copy-status" role="status" aria-live="polite"></p>
+
+  <article class="prompt" data-tags="start resume list IDs status project" id="resume">
+    <div class="card-head"><div><p class="kicker">01 · Resume</p><h3>Find the slide you want to change.</h3></div><button class="copy" type="button" data-target="prompt-resume">Copy prompt</button></div>
+    <p>Use this when you are returning to a project or are unsure which slide ID matches the page you see.</p>
+    <pre id="prompt-resume">Use the west-monroe-presentations skill to resume this deck project:
+[C:\Work\Client deck]
+
+Run project status before drafting. List slides in order with their stable IDs, titles, templates, hidden state and review status. Tell me the current build and any toolchain drift, stale reviews or unresolved blockers.
+
+I want to work on the page about [topic / current slide number]. Identify its stable ID and source file. Summarize its purpose, visible copy and evidence. Keep the existing deck unchanged while making this inventory. Give me a short recommendation for the next edit.</pre>
+    <p class="hint">Use the ID from this inventory in the prompts below. PowerPoint page numbers are useful for locating a page, but are not durable identifiers.</p>
+  </article>
+
+  <article class="prompt" data-tags="copy content text headline facts bullets stable ID" id="copy">
+    <div class="card-head"><div><p class="kicker">02 · Copy revision</p><h3>Revise one slide while preserving its facts.</h3></div><button class="copy" type="button" data-target="prompt-copy">Copy prompt</button></div>
+    <p>For a bounded edit to an existing stock layout.</p>
+    <pre id="prompt-copy">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+Revise stable slide ID: [next-phase].
+
+Reader and intent: [The sponsor should understand why we recommend this next phase.]
+Replacement headline: [Exact wording here.]
+Replacement body / bullets: [Exact wording, grouped by the existing content fields.]
+Evidence: [File path and page / cell / section.]
+
+Preserve the stock template, facts, numbers, dates, sources, owners, caveats and commitments. Keep each existing content key and array item count unless we explicitly agree to a different layout. Write in the West Monroe voice. If a claim is unsupported, flag it instead of inventing support.
+
+Edit the slide source, update its composition-log entry, check and build the project, and measure the changed slide from the new layout report. Review its new appearance; report what was visually reviewed and what remains pending. If exact copy will not fit, explain the bounded options before dropping content.</pre>
+    <p class="hint">A patch replaces each supplied field completely; arrays do not merge. Changing the number of bullets or cards may require another template contract.</p>
+  </article>
+
+  <article class="prompt" data-tags="template stock semantic mapping candidates gallery layout remap alternatives" id="template">
+    <div class="card-head"><div><p class="kicker">03 · Template selection</p><h3>Find a layout that matches the slide’s job.</h3></div><button class="copy" type="button" data-target="prompt-template">Copy prompt</button></div>
+    <p>Ask the agent to reason about relationships—comparison, sequence, heat map, interview list or economics—not simply text length.</p>
+    <pre id="prompt-template">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+Reconsider the layout for stable slide ID [modernization-economics].
+Its job is [show the economics of modernization and the mechanisms behind lower costs].
+Preserve these content relationships and facts: [list them].
+Source: [original deck path and source slide number].
+
+Search the installed template index semantically for the content's purpose and structure. Inspect template contracts and open verified specimen screenshots. Bring me 2–3 plausible stock candidates, explaining what each preserves and what content reshaping it needs. Compare them with our actual copy; stock previews alone do not prove fit.
+
+Build variations when useful, and log candidates, chosen template, reasons and source-slide mapping in composition-log.yaml. Preserve the original narrative unit: do not split one slide into multiple generic slides simply to make text fit. Aim for stock-template reuse; report a genuine library gap before using a custom composition.
+
+Do not silently drop unmapped fields during a swap. Show me any material content tradeoff. Check, build, measure and visually review the selected result.</pre>
+    <p class="hint">The skill aims for roughly 80% stock reuse on substantive pages. A template match is a starting point, not approval of new copy.</p>
+  </article>
+
+  <article class="prompt" data-tags="density comfortable compact dense typography fonts wordy title overflow" id="density">
+    <div class="card-head"><div><p class="kicker">04 · Wordier copy</p><h3>Use a consistent slide density.</h3></div><button class="copy" type="button" data-target="prompt-density">Copy prompt</button></div>
+    <p>Density changes typography across the slide body. It does not resize cards or move the boundary under the title.</p>
+    <pre id="prompt-density">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+The copy on stable slide ID [four-pillars] needs more room.
+Required copy and evidence: [provide both].
+
+Inspect the pinned source, template contract and source-owned density ceiling. If the project needs an upgrade, propose and dry-run the migration before applying it.
+
+Try slide-level density: compact, with header_density: comfortable. For this slide set auto_density: false so the chosen tier is deliberate. Keep corresponding body roles consistent across every card, list and table. Follow the source role scales; do not shrink one card independently, override the ceiling, change geometry, or remove essential facts to suppress an error.
+
+If Compact does not fit, show me the options: tighten wording, use Dense if the template permits it, or choose a better stock layout. Explain readability tradeoffs. Keep the header Comfortable unless we explicitly choose another header tier, and respect the frame's title-line allowance.
+
+Edit density metadata directly in the slide YAML, rebuild, inspect the layout report and visually review the changed page. Report the requested and effective tiers and any warnings.</pre>
+    <p class="hint">V11 automatic fitting is enabled by default and can step the whole body down to Compact or Dense without rewriting YAML. To allow it, replace the prompt’s <code>auto_density: false</code> instruction with “keep automatic fitting enabled and report every adjustment.” Some agenda and lead-question templates permit Comfortable only.</p>
+  </article>
+
+  <article class="prompt" data-tags="sections divider chapter reorder move" id="sections">
+    <div class="card-head"><div><p class="kicker">05 · Sections</p><h3>Add a section and a visible divider.</h3></div><button class="copy" type="button" data-target="prompt-sections">Copy prompt</button></div>
+    <p>A PowerPoint section groups pages; a divider is a separate visible slide. Ask for both if you want both.</p>
+    <pre id="prompt-sections">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+
+List the current sections. Add a section with ID [recommendations], title [Recommendations], beginning before stable slide ID [next-phase]. Also insert a stock divider slide at that boundary.
+
+Inspect suitable divider templates and use [preferred stock divider key, or choose one that fits]. Use [approved image / registered photo ID] only if that divider requires an image. If the tester package lacks its original photo, report that and use an approved available asset or another stock divider.
+
+Preserve existing slide order and content. Log the divider's composition choice, check and build the project, and review the divider plus the adjoining pages. Tell me the new section and divider IDs. Do not rename existing slide IDs.</pre>
+    <p class="hint">Renaming a section changes its name; it does not rewrite the visible divider copy. Removing a section keeps its slides.</p>
+  </article>
+
+  <article class="prompt" data-tags="draft review notes status color text owner internal pasteboard" id="notes">
+    <div class="card-head"><div><p class="kicker">06 · Internal coordination</p><h3>Add draft notes without rebuilding the template.</h3></div><button class="copy" type="button" data-target="prompt-notes">Copy prompt</button></div>
+    <p>The workflow status, displayed label and tab color are independent. These notes belong to the slide source, outside content bindings and speaker notes.</p>
+    <pre id="prompt-notes">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+Add or update draft_review for stable slide ID [next-phase]:
+  status: wip
+  status_text: Work in progress
+  status_color: brand.blue
+  owner: [colleague name]
+  due: '[authored date text]'
+  updated: '[authored date text]'
+  notes: |
+    [Specific internal review task.]
+    [Evidence or decision still needed.]
+  placement: edge
+
+Keep the shared template unchanged. Use the slide-owned Draft Review Note support. Rebuild and inspect the note in PowerPoint's editing view: the status tab is on the top-right slide edge, while the rest of the card sits off-slide. PDFs and PNGs crop away the off-slide card and are insufficient to review its text.
+
+Keep these notes internal. For eventual client delivery, use the client export so the complete review group and its private metadata are removed from the packaged PowerPoint.</pre>
+    <p class="hint">Use <code>placement: pasteboard</code> to put the entire card off-slide. Allowed workflow statuses: <code>notstarted</code>, <code>wip</code>, <code>complete</code>, <code>qa</code>. Colors: <code>kpi.off</code>, <code>kpi.risk</code>, <code>kpi.on</code>, <code>brand.blue</code>. Custom labels/colors survive status changes until explicitly cleared.</p>
+  </article>
+
+  <article class="prompt" data-tags="manual edited powerpoint reconcile round trip source inventory preserve" id="manual-edits">
+    <div class="card-head"><div><p class="kicker">07 · Hand-edited PowerPoint</p><h3>Bring manual changes back into the source.</h3></div><button class="copy" type="button" data-target="prompt-manual">Copy prompt</button></div>
+    <p>There is no automatic round trip from an edited PPTX into the YAML project.</p>
+    <pre id="prompt-manual">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+Someone manually edited this PowerPoint: [C:\Work\Client deck edited by colleague.pptx].
+The generated baseline it came from is [build ID / file path].
+
+Preserve both files and do not overwrite the hand-edited deck. Inventory the edited PPTX, compare it with the source and baseline, and identify copy, structure and visual changes. Record who changed what in project.md. Ask me about ambiguous differences or changes to claims and commitments.
+
+Manually reconcile the approved changes into the slide YAML and composition log. This is not an automatic import or lossless round trip. If someone modified the immutable build baseline itself, report the integrity blocker and resolve it through the supported workflow; do not bypass it or delete the lock.
+
+Create a new build from reconciled source, compare it visually with the edited deck, and report any manual styling that cannot be reproduced by the selected stock template.</pre>
+  </article>
+
+  <article class="prompt" data-tags="native windows render visual review repair doctor PDF PNG" id="visual-review">
+    <div class="card-head"><div><p class="kicker">08 · Visual repair</p><h3>Review the actual output and iterate.</h3></div><button class="copy" type="button" data-target="prompt-visual">Copy prompt</button></div>
+    <p>Passing a layout check and looking at a source specimen are separate from reviewing the built slide.</p>
+    <pre id="prompt-visual">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+Review changed slide IDs [list IDs] and any neighboring pages affected by the change.
+
+Finish source edits, then run project check, build and measure against the new layout-report.json. Use the current build's deck for review. Windows native rendering is experimental and has not been qualified on this machine: run render-doctor and attempt PDF/PNG export through installed desktop PowerPoint in the signed-in user session.
+
+Inspect each changed page at full size for title wrapping, clipped bullets, vertical centering, overlapping labels, diagram relationships, font substitution and readability. Repair the source, rebuild, rerender and repeat until issues are resolved or clearly reported.
+
+If native render fails, read render-error.txt and the PowerPoint window. Report the specific blocker; do not change global security policy or retry repeatedly. Use manual PowerPoint visual review/export as a fallback and label it honestly. Manual export does not create a signed CLI render receipt.
+
+Attach valid CLI renders with genuine review decisions. Record agent checks as reviewed or issues_found; accepted is reserved for my actual acceptance. Report compiler checks, native rendering, visual review and unresolved issues separately.</pre>
+    <p class="hint">Source or context changes make existing review stale. Do the final build, render and review after finishing the composition log. Windows needs desktop PowerPoint and the bundled IBM Plex fonts; reopen PowerPoint after font installation.</p>
+  </article>
+
+  <article class="prompt" data-tags="independent reviewer audience packet clarity evidence source claims review" id="independent-review">
+    <div class="card-head"><div><p class="kicker">09 · Independent review</p><h3>Check what the audience can understand.</h3></div><button class="copy" type="button" data-target="prompt-independent">Copy prompt</button></div>
+    <p>A fresh reviewer gets an audience-safe packet, not the author’s hidden rationale.</p>
+    <pre id="prompt-independent">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+Audience: [role, prior knowledge, priorities].
+Delivery: [emailed deck / live presentation].
+
+Create a current content or finished-deck reviewer packet with --audience, whichever stage is ready. For a finished-deck packet, use the current rendered pages; if signed native rendering is blocked, assemble audience context and manually exported pages and disclose that fallback.
+
+Ask a fresh agent with no authoring conversation to use only this packet. Have it state the argument and requested action, then identify unclear relationships, unsupported jumps, confusing visuals and excessive reading effort by slide ID / page. An emailed deck must explain itself without hidden notes.
+
+Run source verification separately using the sources and claim ledger. Assess every finding, record the decision, make bounded repairs, and bring material argument or commitment changes to me. If an independent agent is unavailable, clearly label the exercise self-review.</pre>
+  </article>
+
+  <article class="prompt" data-tags="final delivery client maintainer export package handoff notes" id="delivery">
+    <div class="card-head"><div><p class="kicker">10 · Handoff</p><h3>Produce clean client and maintainer packages.</h3></div><button class="copy" type="button" data-target="prompt-delivery">Copy prompt</button></div>
+    <p>Deliver the cleaned client package and keep a source package for future edits.</p>
+    <pre id="prompt-delivery">Use the west-monroe-presentations skill. Project: [C:\Work\Client deck].
+Prepare final handoff from the current build after all agreed edits.
+
+Check the project, source accuracy and review state. Tell me which slides are rendered, reviewed, accepted or still pending. Do not mark pages accepted on my behalf. Confirm facts, commitments, caveats and sources are preserved.
+
+Create separate new exports using project export: one --mode client ZIP and one --mode maintainer ZIP. Client export must remove the entire Draft Review Note group, including its visible status tab and private metadata. A cropped PDF alone does not sanitize the draft PPTX. Keep the source project and its immutable builds intact.
+
+Give me the paths to both packages, the final deck's build ID, a short change summary and any unresolved review or Windows qualification limitations. If something blocks an export, name it and provide only the artifacts that are actually ready.</pre>
+  </article>
+
+  <section class="panel" aria-labelledby="done-title">
+    <h2 id="done-title">Ask for evidence of completion.</h2>
+    <ul>
+      <li><strong>What changed?</strong> Stable slide IDs, source files and the reason for each material change.</li>
+      <li><strong>What passed?</strong> Project validation, build and fit measurements, with the new build ID.</li>
+      <li><strong>What was seen?</strong> Native or manual PowerPoint review, actual pages inspected and repairs made.</li>
+      <li><strong>What remains?</strong> Missing evidence, operator decisions, render blockers and pending acceptance.</li>
+    </ul>
+    <p class="hint">These guides are standalone and work offline. Copy buttons use the browser clipboard when available and a local selection fallback otherwise. If copying is blocked, select the prompt text and press Ctrl+C.</p>
+  </section>
+</main>
+<footer><div class="wrap footer-nav"><a href="02-existing-deck.html">← Working on an existing deck</a><a href="00-start.html">Back to the guide overview</a></div></footer>
+<script>
+  (function(){
+    'use strict';
+    var status=document.getElementById('copy-status');
+    document.querySelectorAll('.copy').forEach(function(button){
+      button.addEventListener('click',async function(){
+        var target=document.getElementById(button.getAttribute('data-target'));
+        var text=target.textContent;var copied=false;
+        if(navigator.clipboard&&navigator.clipboard.writeText){try{await navigator.clipboard.writeText(text);copied=true;}catch(error){}}
+        if(!copied){var area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.left='-10000px';document.body.appendChild(area);area.select();try{copied=document.execCommand('copy');}catch(error){}area.remove();button.focus();}
+        if(copied){status.textContent='Prompt copied. Replace the bracketed details before sending it to your agent.';button.textContent='Copied';setTimeout(function(){button.textContent='Copy prompt';},1800);}
+        else{var range=document.createRange();range.selectNodeContents(target);var selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);status.textContent='Prompt selected. Press Ctrl+C to copy it.';}
+      });
+    });
+    var cards=Array.from(document.querySelectorAll('.prompt'));
+    document.getElementById('filter').addEventListener('input',function(){
+      var terms=this.value.toLowerCase().trim().split(/\s+/).filter(Boolean);var visible=0;
+      cards.forEach(function(card){var haystack=(card.textContent+' '+card.getAttribute('data-tags')).toLowerCase();var match=terms.every(function(term){return haystack.indexOf(term)!==-1;});card.hidden=!match;if(match)visible++;});
+      document.getElementById('filter-count').textContent=visible+' prompt'+(visible===1?'':'s')+(visible===0?' — try another search term.':'');
+    });
+  })();
+</script>
+</body>
+</html>

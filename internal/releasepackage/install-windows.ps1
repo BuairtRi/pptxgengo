@@ -68,4 +68,5 @@ public static class PptxgengoFontInstall {
 & (Join-Path $bin 'pptxgengo.exe') --version
 if ($LASTEXITCODE -ne 0) { throw 'Installed CLI did not start. Confirm the PC architecture and enterprise application policy.' }
 Write-Host 'Installation complete. Restart Codex to load the skill; use a new terminal to pick up PATH.'
+Write-Host ('Getting started: open "' + (Join-Path $Destination 'guides\00-start.html') + '" in your browser.')
 Write-Host ('Smoke test: powershell -NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $Destination 'smoke-test-windows.ps1') + '"')

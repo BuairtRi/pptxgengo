@@ -147,6 +147,9 @@ release. `--out` must be new. The existing SQLite file is portable; the wrapper
 supplies the relocated bundle and gallery paths to discovery commands.
 
 Recipient instructions: [Windows tester guide](../internal/releasepackage/WINDOWS.md).
+The package also includes self-contained HTML guides under `guides/`; open
+`00-start.html` for installation, working from an existing deck, and revision
+prompts. The maintained source is [the start page](../internal/releasepackage/guides/00-start.html).
 
 The [local.20 qualification](qualification-local20.json) records density checks, source/bound sweeps, native review, documentation integrity, package verification and the global installation.
 

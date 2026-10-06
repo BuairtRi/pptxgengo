@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Work on an existing deck · West Monroe presentation toolkit</title>
+<style>
+:root{--ink:#070154;--accent:#F900D3;--blue:#1B3BF0;--muted:#55566e;--line:#dfe1ee;--bg:#f5f6fb}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--blue);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}header,main,footer{max-width:1100px;margin:auto;padding:28px}header{padding-top:34px}nav{display:flex;flex-wrap:wrap;gap:10px 24px;margin-bottom:34px}nav a{font-weight:650}nav [aria-current]{color:var(--ink)}.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:12px;font-weight:750;color:var(--blue)}h1{font-size:clamp(32px,5vw,48px);line-height:1.12;margin:10px 0 18px;max-width:820px}h2{font-size:26px;line-height:1.25;margin:0 0 16px}h3{font-size:19px;line-height:1.35;margin:20px 0 10px}.lead{font-size:19px;max-width:780px;color:var(--muted)}.rule{height:5px;background:var(--accent);width:70px;margin-top:24px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card,section.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:26px;margin-bottom:24px}.card{margin:0;padding:22px}.card h2{font-size:21px}.card p:last-child{margin-bottom:0}.tag{display:inline-block;background:#e9edff;color:var(--ink);font-size:12px;font-weight:750;padding:3px 9px;border-radius:6px;margin-bottom:12px}.notice{background:#eef1ff;border-left:4px solid var(--blue);padding:15px 18px;margin:20px 0}.muted{color:var(--muted)}ol,ul{padding-left:23px}li+li{margin-top:8px}code{font:14px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}p code,li code,td code{background:#f0f1f8;padding:2px 4px;border-radius:3px}.snippet{position:relative;margin:16px 0}pre{overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#070154;color:#fff;border-radius:9px;padding:48px 18px 18px;margin:0}.copy{position:absolute;right:10px;top:10px;background:#fff;color:var(--ink);border:1px solid #d3d6ec;border-radius:5px;padding:5px 12px;cursor:pointer;font-weight:650}.copy:hover{background:#e9edff}.copy:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:3px}.prompt pre{background:#f0f2fb;color:var(--ink)}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{text-align:left;border-bottom:1px solid var(--line);padding:12px;vertical-align:top}th{font-size:14px}details{border-top:1px solid var(--line);margin-top:20px;padding-top:16px}summary{cursor:pointer;font-weight:700}footer{font-size:14px;color:var(--muted);padding-bottom:45px}.jump{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.step{color:var(--blue);font-weight:750}#copy-status{position:fixed;bottom:18px;right:18px;max-width:300px;background:var(--ink);color:white;border-radius:8px;padding:10px 16px;display:none}@media(max-width:760px){.grid{grid-template-columns:1fr}header,main,footer{padding:22px}section.panel{padding:22px}table{font-size:14px}th,td{padding:9px}.lead{font-size:17px}}@media print{body{background:white}.copy,nav,#copy-status{display:none}header,main,footer{padding:16px}pre{color:var(--ink);background:#f0f2fb}.card,section.panel{break-inside:avoid}details>*{display:block!important}}
+</style>
+</head>
+<body>
+<header>
+<nav aria-label="Guide navigation"><a href="00-start.html">Start here</a><a href="01-install.html">Install</a><a href="02-existing-deck.html" aria-current="page">Existing decks</a><a href="03-agent-revisions.html">Agent revisions</a></nav>
+<div class="eyebrow">Guide 02 · Windows preview</div>
+<h1>Start with the deck you already have.</h1>
+<p class="lead">Choose the right entry point, find the editable slide copy, then build a new PowerPoint and review it. Keep the original presentation and its project history.</p>
+<div class="rule"></div>
+</header>
+<main>
+<div class="grid" aria-label="Choose your starting point">
+<article class="card"><span class="tag">A · Editable source</span><h2>I have a project folder</h2><p>It contains <code>deck.yaml</code>, often with <code>slides/</code> and a toolchain lock.</p><p><a href="#project">Inspect and resume the project →</a></p></article>
+<article class="card"><span class="tag">B · Author handoff</span><h2>I have a maintainer ZIP</h2><p>Extract the private source package, locate its project folder, then use the same project workflow.</p><p><a href="#maintainer">Unpack the handoff →</a></p></article>
+<article class="card"><span class="tag">C · PowerPoint only</span><h2>I only have a .pptx</h2><p>Inventory its content, then have an agent map and rebuild it with stock templates. This takes editorial judgment.</p><p><a href="#pptx">Rebuild from the original →</a></p></article>
+</div>
+<div class="notice"><strong>The editable source is YAML.</strong> A generated PowerPoint is an output, not a live connection to the project. There is no automatic roundtrip that reconciles PowerPoint edits into slide YAML.</div>
+<section class="panel" id="project">
+<h2>A. Resume an editable YAML project</h2>
+<ol>
+<li><strong>Make a working copy of the whole folder.</strong> Retain the original, including <code>builds/</code>, <code>state.json</code>, locks, assets and decision history. The examples below assume your copy is at <code>C:\Work\Client deck</code>.</li>
+<li>Read the project context file referenced by <code>deck.yaml</code> (often <code>project.md</code> or <code>context/project.md</code>) and the composition log. Ask the CLI for slide IDs and the current review state:</li>
+</ol>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project status --project 'C:\Work\Client deck'
+pptxgengo design project titles --project 'C:\Work\Client deck'</code></pre></div>
+<p><strong>If this project came from a Mac or an older release:</strong> inspect the upgrade before changing its lock. Migration validates compatibility and fit; it does not rewrite the copy or redesign local templates.</p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project migrate --project 'C:\Work\Client deck' --dry-run</code></pre></div>
+<p>Read the result. If you intend to move the working copy to this installed release and the dry run succeeds, run:</p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project migrate --project 'C:\Work\Client deck'
+pptxgengo design project check --project 'C:\Work\Client deck'</code></pre></div>
+<p>The old lock is preserved. Report compatibility errors to your agent; do not delete the lock to bypass them. Rebuild and review after migration because prior approvals and native review coverage become stale.</p>
+<details><summary>My deck.yaml is one enormous file</summary><p>Ask your agent to split the project using the bundle matching its lock. After migration to V11, this command moves slides, notes and local templates into separate files:</p><div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project split --project 'C:\Work\Client deck' --bundle v11</code></pre></div><p>Splitting reorganizes the source without intentionally changing the deck. Do it once, early, then work on individual slide files.</p></details>
+<details><summary>The generated PowerPoint was edited by hand</summary><p>Keep that edited PowerPoint separately. Ask the agent to inventory it, identify the operator's changes and port the intended changes into the YAML. A changed build baseline can block build and export. Do not overwrite it or pretend its edits are already in the source.</p></details>
+<h3>Prompt: take over an existing project</h3>
+<div class="snippet prompt"><button class="copy" type="button">Copy prompt</button><pre><code>Use the west-monroe-presentations skill. Work on the project at C:\Work\Client deck. Locate and read its project context and composition log using deck.yaml, then run project status and project titles. Tell me the stable slide IDs, current build and unresolved review issues. Check whether migration is needed; run only the dry run first. Keep the original and all build history. Do not rewrite the deck until you understand its current state.</code></pre></div>
+</section>
+<section class="panel" id="maintainer">
+<h2>B. Open a maintainer ZIP</h2>
+<ol><li>In File Explorer, right-click the ZIP and choose <strong>Extract All</strong>. Use a new folder you can write to.</li><li>Find <code>deck.yaml</code> inside the extracted contents. Its containing folder is the project path for CLI commands; do not point the CLI at the ZIP itself.</li><li>Keep all extracted source, evidence, assets, history and builds together. Follow <a href="#project">entry point A</a>, including the migration dry run for a Mac handoff.</li></ol>
+<p>A <strong>client ZIP</strong> contains the delivered PowerPoint, not editable YAML. If there is no <code>deck.yaml</code>, request a maintainer export from the author or use the PowerPoint-only path below.</p>
+<div class="notice"><strong>Internal material:</strong> maintainer packages include private project context and evidence. Share them with the next author, not the client.</div>
+</section>
+<section class="panel" id="files">
+<h2>Where do I edit the words?</h2>
+<p>In a split project, open <code>slides/&lt;slide-id&gt;.yaml</code>. The <code>content</code> section holds readable copy such as headlines, card titles and body text. <code>bindings</code> connects those fields to template slots. Some slides instead use <code>values</code> in the template's own shape.</p>
+<div class="snippet"><button class="copy" type="button">Copy example</button><pre><code>id: situation
+template:
+  scope: shared
+  id: cards/3
+content_kind: supplied_content
+notes_file: notes/situation.md
+content:
+  eyebrow: What we heard
+  headline: Three changes can reduce delivery friction
+  # The complete slide file also contains its cards and bindings.</code></pre></div>
+<p class="muted">This is a location example, not a complete buildable slide. Keep the existing required fields, bindings and fixed item counts. Ask the agent to scaffold a complete slide when adding one.</p>
+<table><thead><tr><th>File or folder</th><th>What it controls</th><th>When you touch it</th></tr></thead><tbody>
+<tr><td><code>deck.yaml</code></td><td>Deck order, sections, asset and context links, local template references.</td><td>Reordering, adding slides or changing deck metadata.</td></tr>
+<tr><td><code>slides/</code></td><td>Each slide's copy, template selection, image references and slide settings.</td><td>Most everyday revisions.</td></tr>
+<tr><td><code>notes/</code></td><td>Speaker notes linked by <code>notes_file</code>.</td><td>Presenter guidance. These are separate from visible body copy.</td></tr>
+<tr><td><code>templates/</code></td><td>Project-local layout definitions.</td><td>Intentional custom design. A change affects every slide using that definition.</td></tr>
+<tr><td><code>composition-log.yaml</code></td><td>Each slide's purpose, selected template and mapping rationale.</td><td>Update alongside slide additions, removals and layout changes; retain meaningful prior decisions.</td></tr>
+<tr><td><code>builds/</code></td><td>Generated PowerPoint, layout report, object map and receipts for each build.</td><td>Read and review. Keep history; do not use outputs as the editable source.</td></tr>
+</tbody></table>
+<p><strong>Stock versus local:</strong> <code>scope: shared</code> selects a library template without copying its design into your slide. <code>scope: local</code> selects a project definition, often a deliberate derivative. A name such as “semantic-001” alone does not tell you how customized a slide is; inspect its scope and composition log.</p>
+<p><strong>Windows paths:</strong> quote filesystem paths in PowerShell. Inside YAML, keep project-relative references with forward slashes, such as <code>notes/situation.md</code>; no absolute paths or <code>..</code>.</p>
+<details><summary>More text without redesigning the layout</summary><p>The slide can use Comfortable, Compact or Dense body typography. The header stays Comfortable unless explicitly changed. Automatic fitting can step the whole body down and report a warning; it does not enlarge geometry or change fixed item counts. Put these settings beside <code>template</code>, outside <code>content</code>:</p><div class="snippet"><button class="copy" type="button">Copy example</button><pre><code>density: compact
+header_density: comfortable
+auto_density: false</code></pre></div><p>Template limits still apply. Review small text at presentation size; a successful build does not establish readability.</p></details>
+</section>
+<section class="panel" id="pptx">
+<h2>C. Rebuild from a PowerPoint-only source</h2>
+<p>Preserve the original. The inventory command extracts slide text, positions, tables, charts, images and notes into reports; <strong>it does not convert PowerPoint into an editable YAML project or map slides automatically.</strong></p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design source-inventory --in 'C:\Work\Original deck.pptx' --out 'C:\Work\Original inventory-1'</code></pre></div>
+<p>Use a new output folder. Read <code>source_inventory.md</code> with the agent and visually inspect the original in PowerPoint. Text extraction cannot replace understanding the diagram or the argument.</p>
+<ol><li><strong>State each slide's job.</strong> Is it a comparison, roadmap, interview list, heat map, commercial proposal or another relationship?</li><li><strong>Search the stock library by purpose and structure.</strong> Inspect candidate screenshots and authoring slots before selecting one.</li><li><strong>Fit the content deliberately.</strong> Retain related story units, rewrite only as agreed and record every mapping against the original slide number. Avoid splitting solely because an easy layout has little room.</li><li><strong>Build a new project and PowerPoint.</strong> Start from the bundled project example; replace its synthetic content. <code>project init</code> pins an existing project—it does not create all source files or convert a PPTX.</li><li><strong>Review the original and rebuilt deck side by side.</strong> Account for content and meaning, not merely the slide count.</li></ol>
+<h3>Find a template, then inspect its copy fields</h3>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design library-find --query 'phase roadmap' --kinds template --limit 10 --summary
+pptxgengo design library-find --structures sequence --items 4 --kinds template --summary
+pptxgengo design library-preview --id lifecycle/three-phases
+pptxgengo design library-authoring --template lifecycle/three-phases</code></pre></div>
+<p>The discovery output supplies verified screenshot paths. Open those images; <code>library-preview</code> reports preview information, not a new custom render. Authoring information explains aliases, required fields and approximate capacities. Choose keys from actual search results rather than inventing them.</p>
+<details><summary>Agent setup: copy the packaged starter</summary><p>This PowerShell example creates a new project directory from the bundled example. Choose a path that does not already exist:</p><div class="snippet"><button class="copy" type="button">Copy</button><pre><code>$paths = pptxgengo paths | ConvertFrom-Json
+Copy-Item -LiteralPath $paths.project_example -Destination 'C:\Work\Rebuilt deck' -Recurse
+pptxgengo design project init --project 'C:\Work\Rebuilt deck'
+pptxgengo design project split --project 'C:\Work\Rebuilt deck' --bundle v11</code></pre></div><p>The copied example is not your deck. The agent must replace its slides, context, template and assets with your content, update the composition log and validate the complete result.</p></details>
+<h3>Prompt: map the original with a designer's judgment</h3>
+<div class="snippet prompt"><button class="copy" type="button">Copy prompt</button><pre><code>Use the west-monroe-presentations skill to rebuild C:\Work\Original deck.pptx in a new project at C:\Work\Rebuilt deck. Preserve the original. Inventory and visually inspect each source slide, identify its purpose and content relationships, and search the stock library for a suitable template. Aim for at least 80% stock templates. Show two candidates where the choice is meaningful. Do not automatically split a source slide or create a custom layout to avoid searching. Report genuine library gaps. Log source slide numbers, selected templates and content changes, then build and visually review the new version.</code></pre></div>
+<div class="notice"><strong>Photography in the small tester ZIP:</strong> photo metadata and thumbnails are included, but original photo bytes are omitted. A slide that embeds those photos needs the full ZIP or the matching original branding collection. Icons, logos and core art remain bundled.</div>
+</section>
+<section class="panel" id="build">
+<h2>Build, inspect, then deliver</h2>
+<p><span class="step">1.</span> Make the source edit and update the slide's composition-log entry to reflect the revision. Validate and build:</p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project check --project 'C:\Work\Client deck'
+pptxgengo design project build --project 'C:\Work\Client deck'</code></pre></div>
+<p>Each build creates a new <code>builds/&lt;build-id&gt;/</code> directory. Use the path printed by that command. Replace <code>BUILD-ID</code> below with that actual folder name; do not type the placeholder literally.</p>
+<p><span class="step">2.</span> Read density warnings and measure the report. Measurement takes a report path, not <code>--project</code>:</p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project measure --report 'C:\Work\Client deck\builds\BUILD-ID\layout-report.json'</code></pre></div>
+<p><span class="step">3.</span> Review the generated PowerPoint. Windows native export is <strong>experimental and awaiting a real Windows smoke test</strong>. It needs desktop PowerPoint in your signed-in session and the installed IBM Plex fonts.</p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design render-doctor --json --timeout 60s
+pptxgengo design render --pptx 'C:\Work\Client deck\builds\BUILD-ID\deck.pptx' --out 'C:\Work\Client review-1' --pdf --png --contact-sheet</code></pre></div>
+<p>Use a fresh review directory. Inspect full-size slide images for clipping, wrapping, spacing, font substitution and content loss. A contact sheet helps compare the deck but is too small for detailed text checks.</p>
+<details><summary>Native export failed—how do I continue?</summary><p>Read <code>render-error.txt</code> in the output folder and look at the PowerPoint window for a reported setup, activation, Protected View or policy issue. Resolve the actual issue, then retry once into a fresh folder. Do not change global security policy or retry repeatedly.</p><p>As a fallback, open the new build in PowerPoint and export a PDF or slide images manually for visual review. Keep the generated PPTX unchanged. Manual export does not create the signed CLI receipt required by <code>project attach-render</code>; record that native CLI coverage remains pending.</p></details>
+<p>After successful CLI rendering, attach its signed evidence to the current build. This records render coverage; actual visual approval needs real review decisions.</p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project attach-render --project 'C:\Work\Client deck' --render 'C:\Work\Client review-1'</code></pre></div>
+<p><span class="step">4.</span> Export to a new ZIP path:</p>
+<div class="snippet"><button class="copy" type="button">Copy</button><pre><code>pptxgengo design project export --project 'C:\Work\Client deck' --mode client --out 'C:\Work\Client delivery-1.zip'
+pptxgengo design project export --project 'C:\Work\Client deck' --mode maintainer --out 'C:\Work\Author handoff-1.zip'</code></pre></div>
+<ul><li><strong>Client:</strong> current PowerPoint and export manifest; no editable source or internal project material.</li><li><strong>Maintainer:</strong> source, context, evidence, assets, decisions, approval history and current build for the next author. Treat it as private.</li></ul>
+<p>Exports require a current build and an unchanged build baseline. They create local archives, not emails or uploads. A PDF is a separate render output.</p>
+<h3>Prompt: revise one slide and review it</h3>
+<div class="snippet prompt"><button class="copy" type="button">Copy prompt</button><pre><code>In C:\Work\Client deck, find the stable slide ID for the roadmap. Update its visible copy to reflect the attached milestones, preserving the selected stock template and the meaning of the original. Identify any mismatch with the template's fixed item count before changing it. Update the composition log if needed, run check and build, inspect density warnings and measure the build report, then visually review the changed slide at full size. Give me the new build path and any unresolved issues. Do not claim approval on my behalf.</code></pre></div>
+</section>
+<div class="jump"><a href="01-install.html">← Install the toolkit</a><a href="03-agent-revisions.html">Next: prompt agents for revisions →</a></div>
+</main>
+<footer>This guide is self-contained and works offline. Commands describe the Windows preview workflow; the current release's CLI, skill references and reported diagnostics remain authoritative.</footer>
+<div id="copy-status" role="status" aria-live="polite"></div>
+<script>
+(function(){var timer;function announce(text){var el=document.getElementById('copy-status');el.textContent=text;el.style.display='block';clearTimeout(timer);timer=setTimeout(function(){el.style.display='none'},3500)}function fallback(text){var field=document.createElement('textarea');field.value=text;field.style.position='fixed';field.style.left='-9999px';document.body.appendChild(field);field.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(field);return ok}document.querySelectorAll('.copy').forEach(function(button){button.addEventListener('click',function(){var code=button.parentNode.querySelector('code'),text=code.textContent;function done(){announce('Copied. Replace example paths before running.')}function fail(){if(fallback(text)){done()}else{var range=document.createRange();range.selectNodeContents(code);var selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);announce('Text selected. Press Ctrl+C to copy.')}}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fail)}else{fail()}})})})();
+</script>
+</body>
+</html>

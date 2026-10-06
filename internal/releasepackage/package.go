@@ -7,7 +7,7 @@ import (
 	"compress/flate"
 	"crypto/sha256"
 	"debug/pe"
-	_ "embed"
+	"embed"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -29,6 +29,9 @@ var readme []byte
 
 //go:embed THIRD-PARTY-NOTICES.txt
 var thirdPartyNotices []byte
+
+//go:embed guides/*.html
+var colleagueGuides embed.FS
 
 type Options struct {
 	Release, Binaries, Skill, Out, Architecture, Version string
@@ -161,6 +164,17 @@ func Create(o Options) (_ Report, err error) {
 	files["smoke-test-windows.ps1"] = inputFile{data: smokeTest, mode: 0644}
 	files["WINDOWS.md"] = inputFile{data: readme, mode: 0644}
 	files["THIRD-PARTY-NOTICES.txt"] = inputFile{data: thirdPartyNotices, mode: 0644}
+	guides, err := colleagueGuides.ReadDir("guides")
+	if err != nil {
+		return report, err
+	}
+	for _, guide := range guides {
+		data, err := colleagueGuides.ReadFile("guides/" + guide.Name())
+		if err != nil {
+			return report, err
+		}
+		files["guides/"+guide.Name()] = inputFile{data: data, mode: 0644}
+	}
 	keys := make([]string, 0, len(files))
 	casePaths := map[string]string{}
 	for rel := range files {
