@@ -229,6 +229,12 @@ New family roadmaps (Roadmaps). Moved without content changes: diagrams road/* a
 
 **PowerPoint:** Template keys are unchanged; only family and gallery section change. Update any family-based lookups.
 
+### typography-density
+
+Typography density, three levels: comfortable (today's standard, default), compact, dense. Slide field density sets the body; headerDensity sets eyebrow and title. Values per role are in tokens/v0/tokens.json → density (header: title, heading, eyebrow; body: heading, subhead, lead, body, small, label, eyebrow, number, stat, stat-sm, cell-body, cell-small, list gaps). Only type size, leading and bullet spacing change; box geometry, padding, table row heights and title-zone rules do not. No per-component density. Floor 8 pt (source and legal unchanged). 'standard' is an alias of comfortable; 'appendix' keeps its older meaning.
+
+**PowerPoint:** Resolve each text run's style through tokens.density[level][role] instead of the fixed type scale: header runs (eyebrow, slide title) use headerDensity, all other runs the slide's density; table cell text uses cell-body / cell-small (and anything nested in a cell follows the cell scale). Keep shape geometry identical. For dynamic fit: try the authored level, then step down one level at a time (comfortable → compact → dense), never below dense and never continuous scaling; if dense still overflows, flag the slide for a split. Header density only changes if a title needs a third line on a template that allows it.
+
 Changed keys in `frames/v0/frames.json`: chrome, examples, features, footers, rails, splits, summary, zones.
 
 ## Revised templates (18)

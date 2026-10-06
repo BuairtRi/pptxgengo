@@ -3,6 +3,12 @@
 What changed in this repo that the wmds-web registry must implement. Newest first. Keep it current as work
 happens, as with `templates/CHANGELOG.md` for pptxgengo.
 
+## 2026-10-06 · typography density (slides)
+
+- `tokens/v0/tokens.json` gains `density` (comfortable / compact / dense per type role). Slides use it now; the web
+  export does not yet. Next: map it to `data-density` scopes in `web/tokens/tokens.css` so wmds-web tables, cards and
+  lists get the same three levels (type and leading only).
+
 ## 2026-10-06 · roadmaps family
 
 - Slide sections moved: diagrams Graphic roadmaps and Timelines, software Now, next, later / Roadmap structures /
