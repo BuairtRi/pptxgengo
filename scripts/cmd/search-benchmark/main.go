@@ -50,6 +50,8 @@ type measurement struct {
 	Created                string               `json:"created"`
 	Scope                  string               `json:"scope"`
 	FilesystemCache        string               `json:"filesystem_cache"`
+	ElapsedClockMethod     string               `json:"elapsed_clock_method"`
+	ElapsedCounterUnits    int64                `json:"elapsed_counter_units_per_second"`
 	Mode                   string               `json:"mode"`
 	Query                  string               `json:"query"`
 	Kinds                  []string             `json:"kinds"`
@@ -163,7 +165,6 @@ func heapMemory() goMemory {
 	runtime.ReadMemStats(&s)
 	return goMemory{s.HeapAlloc, s.HeapSys, s.Sys}
 }
-func milliseconds(d time.Duration) float64 { return float64(d) / float64(time.Millisecond) }
 func quantile(values []float64, q float64) float64 {
 	v := append([]float64(nil), values...)
 	sort.Float64s(v)
@@ -186,6 +187,11 @@ func measure(o options) (measurement, error) {
 	m.GCPercent = gc[0].Value.Uint64()
 	m.GoMemoryLimit = strconv.FormatUint(gc[1].Value.Uint64(), 10)
 	var err error
+	clock, err := newElapsedClock()
+	if err != nil {
+		return m, err
+	}
+	m.ElapsedClockMethod, m.ElapsedCounterUnits = clock.method, clock.frequency
 	m.Index, err = fileHash(o.index, 512<<20)
 	if err != nil {
 		return m, err
@@ -204,13 +210,19 @@ func measure(o options) (measurement, error) {
 		}
 	}
 	m.GoMemoryBefore = heapMemory()
-	start := time.Now()
+	start, err := clock.sample()
+	if err != nil {
+		return m, err
+	}
 	index, err := wmdesign.OpenLibraryIndex(o.index, wmdesign.LibraryIndexOptions{})
-	m.OpenMS = milliseconds(time.Since(start))
 	if err != nil {
 		return m, err
 	}
 	defer index.Close()
+	m.OpenMS, err = clock.since(start)
+	if err != nil {
+		return m, err
+	}
 	m.EntityCounts = index.Report.Counts
 	m.ProjectionSHA256 = index.Report.ProjectionSHA256
 	m.RetrievalSHA256 = index.Report.RetrievalSHA256
@@ -218,9 +230,15 @@ func measure(o options) (measurement, error) {
 	opts := wmdesign.LibraryIndexFindOptions{Retrieval: o.mode, Embeddings: o.embeddings, ModelDir: o.model, Kinds: m.Kinds, Shape: wmdesign.LibrarySearchOptions{Query: o.query, Limit: 10}}
 	var first wmdesign.LibraryIndexFindResult
 	for i := 0; i <= o.warm; i++ {
-		start = time.Now()
+		start, err = clock.sample()
+		if err != nil {
+			return m, err
+		}
 		result, err := index.Find(opts)
-		elapsed := milliseconds(time.Since(start))
+		if err != nil {
+			return m, err
+		}
+		elapsed, err := clock.since(start)
 		if err != nil {
 			return m, err
 		}
