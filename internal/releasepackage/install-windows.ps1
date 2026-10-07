@@ -85,11 +85,15 @@ if (-not $Destination) { $Destination = Join-Path $env:LOCALAPPDATA ('pptxgengo\
 $Destination = [IO.Path]::GetFullPath($Destination)
 # A destination below the source would recursively copy the stage into itself.
 if ($Destination.StartsWith($source.TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Destination must be outside the extracted package.' }
-if (Test-Path -LiteralPath $Destination) { throw 'Destination already exists. Choose a new -Destination; existing releases are never overwritten.' }
+$existingDestination = Test-Path -LiteralPath $Destination
 $parent = Split-Path -Parent $Destination
 [void][IO.Directory]::CreateDirectory($parent)
 $stage = Join-Path $parent ('.pptxgengo-stage-' + [Guid]::NewGuid().ToString('N'))
-try {
+if ($existingDestination) {
+    $existing = Assert-Package $Destination
+    if ($existing.version -ne $manifest.version -or (Get-FileHash -LiteralPath (Join-Path $Destination 'release-manifest.json') -Algorithm SHA256).Hash -ne $sourceManifestHash) { throw 'Destination contains a different package; choose a new -Destination. Existing releases are never overwritten.' }
+    Assert-ToolsStart $Destination $manifest.version
+} else { try {
     Write-Host ('Staging verified package for ' + $Destination)
     Copy-Item -LiteralPath $source -Destination $stage -Recurse -Force
     $stagedManifest = Assert-Package $stage
@@ -101,29 +105,17 @@ try {
 } finally {
     if (Test-Path -LiteralPath $stage) { Remove-Item -LiteralPath $stage -Recurse -Force }
 }
+}
 if ($StageOnly) {
     Write-Host ('Verified release staged at ' + $Destination + '. PATH, skill and fonts have not been activated.')
     return
 }
 $bin = Join-Path $Destination 'bin'
-if (-not $NoPath) {
-    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
-    $parts = @($userPath -split ';' | Where-Object { $_ })
-    if ($bin -notin $parts) { [Environment]::SetEnvironmentVariable('Path', (($parts + $bin) -join ';'), 'User') }
-    $env:PATH = $bin + ';' + $env:PATH
-}
-if (-not $SkipSkill) {
-    $codexRoot = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $env:USERPROFILE '.codex' }
-    $skillRoot = Join-Path $codexRoot 'skills'
-    [void][IO.Directory]::CreateDirectory($skillRoot)
-    $skill = Join-Path $skillRoot 'west-monroe-presentations'
-    if (Test-Path -LiteralPath $skill) {
-        $backup = $skill + '.backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff')
-        Move-Item -LiteralPath $skill -Destination $backup
-        Write-Host ('Previous skill preserved at ' + $backup)
-    }
-    Copy-Item -LiteralPath (Join-Path $Destination 'skills\west-monroe-presentations') -Destination $skill -Recurse
-}
+$activationArguments = @('installation', 'install', '--from', $Destination)
+if ($SkipSkill) { $activationArguments += '--skip-skill' }
+if ($NoPath) { $activationArguments += '--no-path' }
+& (Join-Path $bin 'pptxgengo.exe') @activationArguments
+if ($LASTEXITCODE -ne 0) { throw 'Activation failed; the previous selection was restored or an actionable recovery receipt remains. Run installation doctor, then installation recover.' }
 if (-not $SkipFonts) {
     try {
         $fontFolder = Join-Path $env:LOCALAPPDATA 'Microsoft\Windows\Fonts'

@@ -52,44 +52,34 @@ Draft implemented in `internal/releasepackage/install-windows.ps1`:
   leave an unactivated stage; no prior release is overwritten.
 - Implement `-StageOnly` for verified installation without PATH/skill/font changes.
 
-This draft has not been executed on Windows. Existing PATH and skill activation
-is still sequential; automatic recovery after promotion is not implemented.
-The source installer now embeds the selected release version in all three tools
-(previously only the wrapper was versioned), matching the executable checks.
-The source Mac installer already stages resources, but its launcher and skill
-activation are separate operations and it has no rollback command.
+### Shared activation implementation
 
-### Next slice: activation and recovery contract
+Implemented `pptxgengo installation install|rollback|recover|doctor|uninstall` in
+Go. Both source installers call this engine. Packages live in immutable release
+directories; one recorded selection drives all three stable dispatchers. Windows
+uses a stable user PATH entry, including exact registry type restoration. Unix
+uses owned symlinks. Every activation has a durable predecessor receipt and
+normal failures recover it. Recovery refuses conflicting user edits. Original
+skills and skill symlinks are backed up without changing linked targets.
 
-Use immutable release directories plus one recorded active selection. The
-selection must identify CLI version, OS/architecture, library/source revision,
-skill location/version and the package manifest digest. Keep font outcome
-separate because font registration can fail independently.
+Repeated identical installation is idempotent; repair retains the prior-version
+rollback target. Uninstall restores unchanged original skills, preserves edits,
+removes owned activation bindings and retains releases/backups and all authored
+projects. Fonts remain a separate step. Doctor reports resource/skill drift,
+selection, competing executable locations and pending recovery.
 
-Before changing settings, record the previous selection, exact owned PATH entries
-and skill backup in a durable transaction receipt. Stage skill replacement before
-moving the existing skill. Activation must either complete or restore the prior
-owned settings; interruption must be diagnosable and recoverable on a later run.
-Do not prune unrelated PATH entries, user skills, fonts or authored decks.
+Verification: bounded Go regression checks and race checks on macOS; the actual
+signed stable/RC CLI downloads installed into temporary paths with spaces,
+all three dispatchers selected each version correctly, rollback restored the
+stable version and read-only diagnostics passed. That check changed no user's
+active installation. Windows/Linux cross-compilation passed during development.
+The source installer now embeds the release version in all three tools.
 
-A rollback selects a retained, verified release and restores matching CLI and
-skill selection. It must not infer the prior release from folder sorting or
-silently restore unrelated PATH settings. New terminal resolution and existing
-session resolution need distinct diagnostics. Read-only diagnostics should show
-resolved executable, active selection, library, skill, fonts and native readiness.
-Command names for activation, rollback and repair remain proposed until specified
-and implemented.
-
-### Qualification backlog
-
-Before submitting the installer as complete, authorize and run bounded checks for
-paths with spaces, clean/repeated installation, wrong architecture, omitted or
-corrupted resources, unlisted files, junctions, interrupted/failed copying,
-blocked executables and concurrent destination creation. Then exercise upgrade,
-rollback and interrupted activation after that slice exists. Use the real Windows
-runner for Windows execution and an interactive desktop for Office; source tests
-or cross-compilation cannot replace either result. Keep Mac/Linux activation
-coverage separate. No new tests were added or run for this draft.
+Remaining qualification: full private resources, Windows PATH/PowerShell execution,
+actual Windows upgrade/rollback, and Office/font qualification on the desktop
+runner. These remain incomplete despite core implementation. Detailed operator
+workflow: [installation](../installation.md). Search and the remaining product
+features below are still independent work to undertake.
 
 ## 2a. Hybrid template search — implementation contract next
 

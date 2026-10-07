@@ -18,7 +18,7 @@ install_skill=true
 stage_destination=""
 release_parent="${HOME}/.local/share/pptxgengo/releases"
 launcher="${HOME}/.local/bin/pptxgengo"
-skill_link="${HOME}/.codex/skills/west-monroe-presentations"
+skill_link="${CODEX_HOME:-${HOME}/.codex}/skills/west-monroe-presentations"
 usage() { echo "usage: scripts/install-local-release.sh [--cli-only] [--stage-only NEW_DIRECTORY] [--bundle $published_bundle] [--catalog DIRECTORY] [--version VERSION] [--verification RECEIPT]" >&2; }
 while [[ $# -gt 0 ]]; do
   if [[ "$1" == --cli-only ]]; then install_skill=false; shift; continue; fi
@@ -47,7 +47,6 @@ if [[ "$stage_only" == true ]]; then
 fi
 if [[ -e "$release_dir" || -L "$release_dir" ]]; then echo "release already exists: $release_dir" >&2; exit 1; fi
 if [[ "$stage_only" == false && -e "$launcher" && ! -L "$launcher" ]]; then echo "launcher exists and is not a symlink: $launcher" >&2; exit 1; fi
-if [[ "$stage_only" == false && "$install_skill" == true && -e "$skill_link" && ! -L "$skill_link" ]]; then echo "skill path exists and is not a symlink: $skill_link" >&2; exit 1; fi
 
 # Gallery labels identify the original export; source pins identify the library.
 python3 - "$bundle_input" "$catalog_input" "$verification_input" "$bundle_revision" "$repo_root" "$documentation_input" <<'PY'
@@ -124,7 +123,7 @@ shutil.copy2(src / 'wmds-docs/README.md', dst / 'wmds-docs/README.md')
 for path in ('release/README.md', 'release/VERSION', 'release/package_files.py', 'library/README.md', 'cmd/pptxdesign/README.md',
              'internal/deckproject/README.md', 'docs/semantic-template-discovery.md',
              'docs/engineering-cli.md', 'docs/engineering-waves.md', 'docs/engineering-new-templates.md',
-             'docs/engineering-followups.md', 'docs/testing.md', 'docs/local-agent-macos-recovery.md',
+             'docs/engineering-followups.md', 'docs/testing.md', 'docs/installation.md', 'docs/local-agent-macos-recovery.md',
              'docs/skill-planning/deck-source-contract.md', 'docs/skill-planning/catalog-discovery-contract.md',
              'scripts/export-powerpoint.applescript',
              'scripts/render-pdf.swift', 'scripts/render-contact-sheet.swift'):
@@ -171,6 +170,7 @@ if [[ ! -d "$stage/library/wm-design-system/$bundle_revision/catalog/assets" ]];
   WMDS_BRANDING_ROOT="$stage/branding" "$stage/bin/pptxdesign" asset-gallery --out "$stage/library/wm-design-system/$bundle_revision/catalog/assets" >/dev/null
 fi
 python3 - "$stage" "$version" "$release_dir" "$bundle_revision" <<'PY'
+import platform
 from collections import Counter
 import json, sqlite3, subprocess, sys
 from pathlib import Path
@@ -210,6 +210,8 @@ docs_source = validate_design_docs(root / 'wmds-docs/site', bundle)
 files = {str(p.relative_to(root)): file_digest(p) for p in sorted(root.rglob('*')) if p.is_file()}
 (root / 'release-manifest.json').write_text(json.dumps({
     'schema': 'pptxgengo.local-release-manifest.v1', 'version': version, 'selected_bundle': sys.argv[4],
+    'target_os': {'Darwin': 'darwin', 'Linux': 'linux'}.get(platform.system(), platform.system().lower()),
+    'target_arch': {'aarch64': 'arm64', 'x86_64': 'amd64'}.get(platform.machine(), platform.machine()),
     'source_revision': source['source_revision'], 'source_commit': source['source_commit'],
     'template_count': source['template_count'], 'active_template_count': gallery['active'],
     'native_reviewed_source_specimens': gallery['qualification']['reviewed_source_specimens'],
@@ -222,12 +224,7 @@ PY
 mv "$stage" "$release_dir"
 trap - EXIT
 if [[ "$stage_only" == true ]]; then echo "staged $version at $release_dir"; exit 0; fi
-mkdir -p "$(dirname "$launcher")"
-ln -s "$release_dir/bin/pptxgengo" "${launcher}.tmp.$$"
-mv -f "${launcher}.tmp.$$" "$launcher"
-if [[ "$install_skill" == true ]]; then
-  mkdir -p "$(dirname "$skill_link")"
-  ln -s "$release_dir/skills/west-monroe-presentations" "${skill_link}.tmp.$$"
-  mv -fh "${skill_link}.tmp.$$" "$skill_link"
-fi
-echo "installed $version at $release_dir"
+activation_args=(installation install --from "$release_dir" --root "$(dirname "$release_parent")" --bin-dir "$(dirname "$launcher")" --skill-dir "$skill_link")
+if [[ "$install_skill" == false ]]; then activation_args+=(--skip-skill); fi
+"$release_dir/bin/pptxgengo" "${activation_args[@]}"
+echo "installed $version at $release_dir; open a new terminal and run pptxgengo installation doctor"

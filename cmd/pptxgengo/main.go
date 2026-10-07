@@ -39,6 +39,7 @@ func usage() {
 	fmt.Fprintln(os.Stderr, "       pptxgengo paths")
 	fmt.Fprintln(os.Stderr, "       pptxgengo docs [--addr localhost:8787]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo package --binaries DIR --version VERSION --out NEW.zip [--arch amd64|arm64] [--without-photos]")
+	fmt.Fprintln(os.Stderr, "       pptxgengo installation install|rollback|recover|doctor|uninstall [flags]")
 	fmt.Fprintln(os.Stderr, "       pptxgengo --version")
 }
 
@@ -203,6 +204,19 @@ func toolFilename(tool, platform string) string {
 }
 
 func run() error {
+	if len(os.Args) > 1 && os.Args[1] == "--installation-api" {
+		fmt.Println("pptxgengo.installation-api/v1")
+		return nil
+	}
+	if len(os.Args) > 1 && os.Args[1] == "installation" {
+		if handled, err := runManagedInstallation(os.Args[1:]); handled || err != nil {
+			return err
+		}
+		return runInstallation(os.Args[2:])
+	}
+	if handled, err := runManagedLauncher(os.Args[1:]); handled || err != nil {
+		return err
+	}
 	if len(os.Args) < 2 {
 		usage()
 		return fmt.Errorf("missing command")
