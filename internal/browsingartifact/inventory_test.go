@@ -30,9 +30,12 @@ func TestBrowsingInventoryMutualReleasePins(t *testing.T) {
 		"bundle":          func(m map[string]any) { m["bundle_sha256"] = strings.Repeat("c", 64) },
 		"source_revision": func(m map[string]any) { m["source_revision"] = "another-source" },
 		"source_commit":   func(m map[string]any) { m["source_commit"] = strings.Repeat("c", 40) },
-		"release":         func(m map[string]any) { m["release_identity"] = "another-release" },
-		"compiler":        func(m map[string]any) { m["compiler"] = "another-compiler" },
-		"as_of":           func(m map[string]any) { m["as_of"] = "2026-10-08" },
+		"source_file_pin": func(m map[string]any) {
+			m["source_files"].([]any)[0].(map[string]any)["sha256"] = strings.Repeat("c", 64)
+		},
+		"release":  func(m map[string]any) { m["release_identity"] = "another-release" },
+		"compiler": func(m map[string]any) { m["compiler"] = "another-compiler" },
+		"as_of":    func(m map[string]any) { m["as_of"] = "2026-10-08" },
 		"branding_input": func(m map[string]any) {
 			m["release_inputs"].(map[string]any)["branding_archive_sha256"] = strings.Repeat("c", 64)
 		},

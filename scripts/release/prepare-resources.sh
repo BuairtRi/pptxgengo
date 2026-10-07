@@ -51,7 +51,7 @@ common=None
 for name in ('template-library.manifest.json','reusable-slides.manifest.json'):
     path=root/'browsing'/name
     data=json.loads(path.read_text());data['release_inputs']=inputs
-    pins={key:data[key] for key in ('bundle_sha256','source_revision','source_commit','compiler','release_identity')}
+    pins={key:data[key] for key in ('bundle_sha256','source_revision','source_commit','source_files','compiler','release_identity')}
     if common is not None and common != pins: raise SystemExit('Generated browsing decks disagree on exact tagged bundle/source/compiler/release pins')
     common=pins
     path.write_text(json.dumps(data,separators=(',',':'))+'\n')

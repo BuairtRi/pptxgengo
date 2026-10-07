@@ -69,7 +69,8 @@ func Inputs() browsingartifact.ReleaseInputs {
 
 func Inventory(t testing.TB, files map[string]string) []byte {
 	t.Helper()
-	raw, e := json.Marshal(browsingartifact.Inventory{ReleaseInputs: Inputs(), Schema: "pptxgengo.release-browsing-files.v1", Files: files, BundleSHA256: strings.Repeat("a", 64), SourceRevision: "fixture-v1", SourceCommit: strings.Repeat("a", 40), Compiler: "unit-test-only", ReleaseIdentity: "unit-test-only"})
+	pin := strings.Repeat("a", 64)
+	raw, e := json.Marshal(browsingartifact.Inventory{ReleaseInputs: Inputs(), Schema: "pptxgengo.release-browsing-files.v1", Files: files, BundleSHA256: pin, SourceRevision: "fixture-v1", SourceCommit: strings.Repeat("a", 40), SourceFiles: []browsingartifact.FilePin{{Path: "templates/fixture.json", SHA256: pin}, {Path: "frames/v0/frames.json", SHA256: pin}}, Compiler: "unit-test-only", ReleaseIdentity: "unit-test-only"})
 	if e != nil {
 		t.Fatal(e)
 	}

@@ -24,6 +24,7 @@ type Inventory struct {
 	BundleSHA256    string            `json:"bundle_sha256"`
 	SourceRevision  string            `json:"source_revision"`
 	SourceCommit    string            `json:"source_commit"`
+	SourceFiles     []FilePin         `json:"source_files"`
 	Compiler        string            `json:"compiler"`
 	ReleaseIdentity string            `json:"release_identity"`
 }
@@ -44,7 +45,7 @@ func ReadInventory(raw []byte) (Inventory, error) {
 		return inventory, e
 	}
 	pipeline, e := time.Parse(time.RFC3339Nano, inventory.PipelineCreatedAt)
-	if e != nil || pipeline.UTC().Format(time.DateOnly) != inventory.AsOf || !hash(inventory.BrandingArchiveSHA256) || !hash(inventory.FinishedLibraryArchiveSHA256) || inventory.Schema != "pptxgengo.release-browsing-files.v1" || !hash(inventory.BundleSHA256) || inventory.SourceRevision == "" || inventory.SourceCommit == "" || inventory.Compiler == "" || inventory.ReleaseIdentity == "" || len(inventory.Files) != len(inventoryFiles) {
+	if e != nil || pipeline.UTC().Format(time.DateOnly) != inventory.AsOf || !hash(inventory.BrandingArchiveSHA256) || !hash(inventory.FinishedLibraryArchiveSHA256) || inventory.Schema != "pptxgengo.release-browsing-files.v1" || !hash(inventory.BundleSHA256) || inventory.SourceRevision == "" || inventory.SourceCommit == "" || !pins(inventory.SourceFiles) || inventory.Compiler == "" || inventory.ReleaseIdentity == "" || len(inventory.Files) != len(inventoryFiles) {
 		return inventory, fmt.Errorf("browsing.release_inventory_pins_invalid")
 	}
 	for _, file := range inventoryFiles {
@@ -74,7 +75,7 @@ func ValidateInventory(inventory Inventory, manifests map[string][]byte, expecte
 		if e := json.Unmarshal(raw, &m); e != nil {
 			return e
 		}
-		if m.Kind != kind || m.BundleSHA256 != inventory.BundleSHA256 || m.SourceRevision != inventory.SourceRevision || m.SourceCommit != inventory.SourceCommit || m.Compiler != inventory.Compiler || m.ReleaseIdentity != inventory.ReleaseIdentity || m.AsOf != inventory.AsOf || !reflect.DeepEqual(m.ReleaseInputs, inventory.ReleaseInputs) {
+		if m.Kind != kind || m.BundleSHA256 != inventory.BundleSHA256 || m.SourceRevision != inventory.SourceRevision || m.SourceCommit != inventory.SourceCommit || !reflect.DeepEqual(m.SourceFiles, inventory.SourceFiles) || m.Compiler != inventory.Compiler || m.ReleaseIdentity != inventory.ReleaseIdentity || m.AsOf != inventory.AsOf || !reflect.DeepEqual(m.ReleaseInputs, inventory.ReleaseInputs) {
 			return fmt.Errorf("browsing.release_inventory_cross_deck_pins_mismatch: %s", kind)
 		}
 	}
