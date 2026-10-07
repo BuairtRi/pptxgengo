@@ -5,6 +5,7 @@ FAST_TEST_TIMEOUT ?= 5m
 INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
+HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT=
 
 .PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows
 
@@ -13,35 +14,35 @@ build:
 
 # Everyday checks omit only explicitly marked exhaustive/private-asset tests.
 test:
-	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -short -count=1 -timeout=$(FAST_TEST_TIMEOUT) ./...
+	$(HEADLESS_TEST_ENV) $(GO) test -short -count=1 -timeout=$(FAST_TEST_TIMEOUT) ./...
 
 # Race the source-mutation guard, native-worker cleanup paths, library cache,
 # and the library's concurrent presentation serialization regressions.
 test-race:
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/installstate
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/modelpackage ./scripts/cmd/release-ci
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/finishedslide
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestNativeRoundTrip|TestFinishedSlideClaims)' ./internal/deckproject
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestFinishedSlideClaims' ./internal/deckproject
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestReconcile' ./internal/deckproject
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditability' ./internal/deckproject
-	$(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeRoundTrip' ./internal/deckproject
-	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/nativeexport
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace|TestNativeConnector' ./pptx
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditing' ./internal/wmdesign
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/installstate
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/modelpackage ./scripts/cmd/release-ci
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/finishedslide
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestNativeRoundTrip|TestFinishedSlideClaims)' ./internal/deckproject
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestFinishedSlideClaims' ./internal/deckproject
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestReconcile' ./internal/deckproject
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditability' ./internal/deckproject
+	$(HEADLESS_TEST_ENV) $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeRoundTrip' ./internal/deckproject
+	$(HEADLESS_TEST_ENV) $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/nativeexport
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace|TestNativeConnector' ./pptx
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditing' ./internal/wmdesign
 	@for check in ConcurrentColdAndWarm CloneIsolation FingerprintDependencies BoundedEvictionAndErrors DriftAfterWarm; do \
-		$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run "^TestLibraryCatalogCache$$check$$" ./internal/wmdesign || exit $$?; \
+		$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run "^TestLibraryCatalogCache$$check$$" ./internal/wmdesign || exit $$?; \
 	done
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestKeywordConcurrentReadOnlyQueries$$' ./internal/wmdesign
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestKeywordConcurrentReadOnlyQueries$$' ./internal/wmdesign
 
 # Includes catalog-wide and relocated-deck checks. Requires registered private
 # branding assets at WMDS_BRANDING_ROOT (or ~/Documents/branding).
 test-integration:
-	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -count=1 -timeout=$(INTEGRATION_TEST_TIMEOUT) ./...
+	$(HEADLESS_TEST_ENV) $(GO) test -count=1 -timeout=$(INTEGRATION_TEST_TIMEOUT) ./...
 
 # Opt-in exhaustive race pass. The per-package timeout is a hard ceiling.
 test-race-full:
-	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -race -count=1 -timeout=$(FULL_RACE_TEST_TIMEOUT) ./...
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(FULL_RACE_TEST_TIMEOUT) ./...
 
 # Live PowerPoint is separate from hermetic tests and requires a new output path.
 test-native:
