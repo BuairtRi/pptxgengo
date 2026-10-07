@@ -23,7 +23,7 @@ slots with unsupported claims.
 5. Build actual-content alternatives when consequential. Review measurements
    and every native PowerPoint page; repair both geometry and meaning.
 
-Discovery offers two ranking methods in the next source build:
+Discovery offers four ranking methods in the next source build:
 
 - `--retrieval metadata` is the existing default: scenario and structural hints
   contribute separate deterministic metadata scores.
@@ -32,10 +32,54 @@ Discovery offers two ranking methods in the next source build:
   content groups and authoring aliases/descriptions. It excludes synthetic
   example copy. Exact eligible IDs or unique canonical keys rank first; other
   matches use ascending BM25 with field weights name/purpose/discovery 5/2/1.
+- `--retrieval semantic` uses an optional pinned offline MiniLM model and exact
+  normalized cosine ranking over a complete source-bound embedding snapshot.
+- `--retrieval hybrid` combines eligible keyword and vector ranks by reciprocal
+  rank fusion: `1/(60+keyword_rank) + 1/(60+vector_rank)`, counting only available
+  signals. Exact eligible IDs or unique canonical keys rank first. Raw BM25,
+  cosine and structural scores are never added together.
 
-This is a lexical baseline. Local model-backed semantic and hybrid ranking are
-not implemented in this build; requesting them fails explicitly. Existing stable
-`v4.1.0` binaries do not yet have these new flags.
+Existing stable `v4.1.0` binaries do not yet have these new flags. Metadata stays
+the default. Semantic ranking scans all eligible vectors; a high position is
+relative relevance, not a qualification or measured content-fit claim.
+
+## Optional offline search package
+
+The explicit maintenance command downloads only the pinned public
+`sentence-transformers/all-MiniLM-L6-v2` revision
+`1110a243fdf4706b3f48f1d95db1a4f5529b4d41` over TLS, verifies all three artifact
+hashes and sizes, and publishes a new directory with its manifest, license and
+source attribution. The Go runtime uses 384 dimensions, uncased BERT WordPiece,
+at most 256 tokens, attention-mask mean pooling and L2 normalization. It needs no
+Python, native ONNX library, GPU or hosted embedding service. Weights are optional
+and exceed 90 MB; they are not included in Git or the CLI archives.
+
+```sh
+pptxdesign library-model --download --out /tmp/offline-search-model
+# On an offline machine, copy a previously verified package instead:
+pptxdesign library-model --from /media/offline-search-model --out /tmp/model-copy
+pptxdesign library-embed --index /tmp/library-keyword.sqlite \
+  --model-dir /tmp/offline-search-model --out /tmp/library-embeddings.json
+pptxdesign library-find --index /tmp/library-keyword.sqlite --retrieval hybrid \
+  --model-dir /tmp/offline-search-model --embeddings /tmp/library-embeddings.json \
+  --query 'make or buy technology investment tradeoffs' --kinds template --summary
+```
+
+Normal queries never download files. An unavailable model/snapshot causes
+hybrid mode to report `requested: hybrid`, `actual: keyword` and an explicit
+fallback notice. Semantic mode requires both resources. Corrupt or incompatible
+resources fail explicitly in either mode. Snapshots bind the model revision,
+runtime, tokenizer, pooling, dimensions, semantic text recipe, full source/index/
+asset projection, complete entity coverage and each entity's revision/source/
+prepared-text hash. Rebuild after any drift. Their checksum detects accidental
+changes; it is not a signature or proof of human review. Keep generated packages
+and snapshots in private GitLab when distributing them.
+
+Preparation prioritizes names, purposes and intended uses, then deterministic
+relationship/group/authoring metadata. It excludes synthetic example prose and
+source scene definitions. Truncation remains a limitation for long metadata.
+Results retain raw cosine, eligible vector/keyword ranks, fusion score, model
+identity and source shape/fit caveats. No supplied-content capacity is measured.
 
 Build a **new** index with the matching bundle and optional gallery; existing
 indexes remain usable for metadata discovery. Keyword mode rejects old indexes
@@ -70,7 +114,7 @@ Input is bounded literal natural language, not the FTS expression language.
 Source/entity and retrieval-text hashes detect stale projections, while FTS
 schema and corpus checks detect altered rows. Rebuild instead of silently using
 stale metadata. Asset registry `--kinds asset --summary` keeps its separate metadata
-path and rejects the keyword flag; omit `--summary` for indexed asset search.
+path and rejects non-metadata retrieval; omit `--summary` for indexed asset search.
 
 ## Screenshots and SQLite
 
@@ -191,3 +235,15 @@ Reproduce the bounded measurements with:
 go test -run '^$' -bench '^BenchmarkKeyword' -benchtime=3x -benchmem \
   -timeout=3m ./internal/wmdesign
 ```
+
+## Optional model runtime checks
+
+Linux, macOS and Windows CI explicitly download the pinned optional model,
+compare tokenizer/inference golden cases, then generate a complete snapshot for
+a bounded corpus of original pinned entities spanning every indexed kind.
+These checks cover offline query, snapshot completeness and deterministic ranks.
+They do not establish catalog-wide timing or native PowerPoint acceptance.
+Full V5 qualification is opt-in with `PPTXGENGO_EMBED_MODEL_DIR` and
+`PPTXGENGO_EMBED_FULL_LIBRARY=1` when running
+`TestPinnedLibraryEmbeddingsEndToEnd`; see the runtime evaluation for the
+command and measured V5/V11 catalog evidence.

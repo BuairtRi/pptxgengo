@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/buairtri/pptxgengo/internal/localembed"
 )
 
 // Text preparation is versioned separately from the entity projection. Changing
@@ -13,17 +15,24 @@ const LibraryRetrievalTextVersion = "pptxgengo.discovery-text.v1"
 const libraryFTSSchema = "CREATE VIRTUAL TABLE entity_fts USING fts5(id UNINDEXED,name,purpose,body,tokenize='porter unicode61')"
 
 type LibraryRetrievalReport struct {
-	Requested       string `json:"requested"`
-	Actual          string `json:"actual"`
-	TextPreparation string `json:"text_preparation,omitempty"`
-	Ranking         string `json:"ranking"`
-	Notice          string `json:"notice,omitempty"`
+	Requested       string               `json:"requested"`
+	Actual          string               `json:"actual"`
+	TextPreparation string               `json:"text_preparation,omitempty"`
+	Ranking         string               `json:"ranking"`
+	Notice          string               `json:"notice,omitempty"`
+	Model           *localembed.Identity `json:"model,omitempty"`
+	VectorCoverage  int                  `json:"vector_coverage,omitempty"`
+	FusionK         int                  `json:"fusion_k,omitempty"`
 }
 
 type LibraryRetrievalHit struct {
-	Method string  `json:"method"`
-	Rank   int     `json:"rank"`
-	BM25   float64 `json:"bm25"`
+	Method      string   `json:"method"`
+	Rank        int      `json:"rank"`
+	BM25        float64  `json:"bm25,omitempty"`
+	Cosine      *float64 `json:"cosine,omitempty"`
+	KeywordRank int      `json:"keyword_rank,omitempty"`
+	VectorRank  int      `json:"vector_rank,omitempty"`
+	RRF         float64  `json:"rrf,omitempty"`
 }
 
 func libraryRetrievalBody(entity LibraryEntity) string {
@@ -163,7 +172,9 @@ func (index *LibraryIndex) keywordRanks(query string, eligible map[string]bool, 
 		}
 		if eligible[id] {
 			method := "sqlite_fts5_bm25"
-			if id == exactID { method = "exact_entity_identity" }
+			if id == exactID {
+				method = "exact_entity_identity"
+			}
 			ranks[id] = LibraryRetrievalHit{Method: method, Rank: len(ranks) + 1, BM25: score}
 		}
 	}

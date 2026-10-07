@@ -114,17 +114,30 @@ from discovery reads. Verified open remains about 511 ms. These are local
 cached-filesystem samples; source definitions remain available for inspect/fit.
 See [discovery interface and measurement limits](../semantic-template-discovery.md).
 
-Model-backed semantic queries, persisted vectors and reciprocal-rank fusion remain
-pending. An isolated pinned MiniLM experiment executed through the pure Go GoMLX
-backend on Mac ARM64 and cross-built without CGO for all six release targets.
-Its hashes, footprint, measurements and follow-up contract are recorded in
-[the runtime evaluation](local-search-runtime-evaluation-20261006.md). No new model
-dependencies or model bytes are shipped in this lexical change. Prefer a separate
-optional offline model package; normal queries must not download files.
+The `pptx-local-vectors` slot implements pinned MiniLM queries through the pure Go
+backend, explicit optional package maintenance, complete source-bound persisted
+vectors, exact cosine scan and reciprocal rank fusion (`k=60`). The tokenizer and
+mean-mask/L2 pooling passed independent golden comparisons. Model bytes stay out
+of Git and CLI archives. Normal queries are offline. Missing hybrid resources
+produce visible keyword fallback; stale/corrupt resources fail with rebuild
+guidance. Metadata remains the default, with source shape and measured-fit status
+separate from relevance.
 
-Next: validate the Go tokenizer and mask pooling, bind embeddings to model/source/
-text hashes and dimensions, compare keyword/vector/hybrid on judged synonyms,
-implement explicit missing-model fallback, and collect supported-platform latency.
+The V11 engineering set covered 6/6 baseline queries and 4/6 synonyms in hybrid's
+first ten results, versus 6/6 and 2/6 for keyword. Two synonym queries still missed;
+no universal improvement or native/operator acceptance is claimed. A complete
+1,969-entity snapshot and query/startup measurements are recorded in
+[the runtime evaluation](local-search-runtime-evaluation-20261006.md). New model
+dependencies have refreshed notices and zero locally reachable vulnerabilities;
+all six no-CGO targets compiled. New Linux/macOS/Windows CI model gates still need
+to pass before merge, and optional signed package publication remains separate.
+
+Keyword PR #5 merged as `b6e933ca` after exact-head Linux security/developer,
+Windows portable and macOS normal/race checks passed. GitLab main and the primary
+checkout were aligned through `slot merge`.
+
+Next: finish model CI integration, collect actual target-runtime
+evidence, and continue the finished-slide identity contract.
 
 ## 2b. Reusable finished slides — identity contract next
 
@@ -173,18 +186,17 @@ survival evidence on both platforms before expanding supported mappings.
 
 ## Working order
 
-Hosted CI follow-up: exact head `8567e908` passed GitLab pipeline 21125
-(including secret scanning, three OS vulnerability scans and both developer
-checks) and Windows portable/installstate/retrieval tests. One macOS PR run hit
-the 150-second package-wide ceiling while running the existing V6 intake test;
-the push run of the same head passed. The short-suite package ceiling is now
-five minutes to accommodate complete pinned catalog verification on slower
-hosted Macs. Selected race workloads retain their 150-second ceilings. No
-assertion failure was suppressed and these checks must pass before merge.
+Hosted lexical CI follow-up: head `8567e908` passed GitLab pipeline 21125,
+but one hosted Mac normal job hit the original 150-second package ceiling.
+The short-suite package ceiling is now five minutes; selected race workloads
+retain their 150-second ceilings. Updated head `42c7c2a0` passed GitLab pipeline
+21130 and both Mac normal/race and Windows portable runs before PR #5 merged.
+The slowest hosted race job took 9m58s; the next source build raises its job
+ceiling to 15 minutes while retaining the per-package bounds.
 
 Installer activation/recovery core is merged; desktop qualification follows when
-the runner and private resources arrive. Finish lexical CI integration and build
-the local embedding/RRF path, then the shared finished-slide identity contract.
+the runner and private resources arrive. Finish model CI integration,
+then the shared finished-slide identity contract.
 Agree native field-address mappings before the editing pilot, then implement
 bounded reconciliation. Model choice, curated content and native acceptance
 remain explicit decisions rather than silently selected defaults.

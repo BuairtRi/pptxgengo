@@ -2,10 +2,12 @@
 
 ## State
 
-BM25 and structural constraints are implemented separately. Model-backed query
-embedding, persisted corpus vectors and reciprocal rank fusion are not yet in
-the product. This record captures a real isolated runtime experiment so the
-next implementation can proceed without an operator model choice.
+BM25 and structural constraints are implemented separately. The managed
+`pptx-local-vectors` slot now implements the optional offline query model,
+source-bound vector snapshots, exact cosine scan and reciprocal rank fusion.
+Metadata remains the default. The candidate is explicit and optional; hosted
+CI and engineering relevance evidence are required before merge, with operator
+and native review still required for content selection.
 
 ## Candidate and distribution decision
 
@@ -59,6 +61,9 @@ used a local script and curl; production offline loading must be implemented in 
 
 ## Next implementation contract
 
+The six items below describe the implemented contract; release qualification
+and actual target-platform evidence must still be recorded before distribution.
+
 1. Implement pinned uncased BERT WordPiece tokenization in Go, with golden token
    IDs covering punctuation, accents, Chinese segmentation, unknown words and
    maximum length. Mean-pool by attention mask and L2-normalize, rejecting invalid
@@ -76,3 +81,93 @@ used a local script and curl; production offline loading must be implemented in 
    exact IDs and synonyms, then collect real supported-platform latency/memory.
 6. Update dependency/license notices and run the existing security and six-target
    build/signing gates before distributing the runtime or optional model package.
+
+## Integrated source implementation evidence
+
+The pinned Go tokenizer matched 15 independent `tokenizers 0.23.2` cases
+(including accents, CJK, Unicode separators, special tokens, unknown words and
+256-token truncation). Ten mean-pooled normalized vectors agreed with
+`onnxruntime 1.30.0` within `2e-5` maximum absolute error and cosine at least
+`0.99999`. The small checked-in oracle fixture contains token IDs/vectors only;
+the development Python oracle is not a product dependency.
+
+Explicit TLS maintenance download, offline package copy, non-replacing
+publication, pinned load and complete V5 generation/query passed on macOS ARM64.
+The V5 fixture contained 1,897 entities; the final V11 projection contained
+1,969. V11 vector generation took 106.36 seconds and reached 1,245,364,224 bytes
+maximum RSS while another full-model test and builds shared the machine. These
+are development measurements, not an isolated latency target. Snapshot size was
+9775374 bytes.
+
+Engineering/source-purpose judgments, acceptable candidate position in first ten:
+
+| Query | Keyword | Semantic | Hybrid |
+| --- | ---: | ---: | ---: |
+| cards/3 | 1 | miss | 1 |
+| interview lists | 2 | miss | 9 |
+| practices heat maps | 2 | 1 | 1 |
+| modernization economics | 1 | 1 | 1 |
+| roadmap | 2 | 1 | 1 |
+| pillars | 1 | 2 | 1 |
+| make or buy technology investment tradeoffs | 1 | 10 | 3 |
+| stakeholder conversations summarized in bullet points | miss | miss | 8 |
+| sequence of delivery stages over time | miss | 7 | miss |
+| three independent messages side by side | miss | 6 | 4 |
+| compare business capability strengths in a color coded matrix | miss | miss | miss |
+| organize strategic priorities into pillars | 2 | 3 | 2 |
+
+Baseline coverage was 6/6 keyword, 4/6 semantic and 6/6 hybrid; synonym
+coverage was 2/6, 4/6 and 4/6 respectively. Pure semantic ranking does not
+prioritize canonical keys; hybrid retains exact-identity precedence. Do not
+claim universal improvement: hybrid missed the delivery-stage and capability
+matrix judgments. This small set is engineering evidence, not operator approval,
+visual review or measured content fit. No ranking weights were tuned on it.
+
+Each query ran in a fresh process with cached filesystem pages, including full
+index verification, snapshot verification and model load where applicable.
+Median elapsed seconds were keyword 0.768, semantic 1.157, hybrid 1.161. These include startup, not just inference.
+
+A separate fresh hybrid process took 1.42 seconds and reached 463,667,200 bytes
+maximum RSS (`time -l`). The benchmark query was modernization economics with
+templates only. Cache, hardware, corpus size and model load affect these figures.
+
+All six OS/architecture distribution builds compiled with `CGO_ENABLED=0`.
+The new dependency inventory was refreshed from linked checksum-verified module
+license/notice texts; local reachable-symbol vulnerability findings were zero.
+Linux/Mac/Windows CI now includes explicit pinned download, golden inference
+and source-bound snapshot/query checks on a bounded corpus of 26 original pinned
+entities spanning every kind. The snapshot covers every entity in that corpus. Release resource/build jobs
+require the Linux offline-model gate. Hosted qualification remains pending
+until those new jobs pass; native PowerPoint review and signed distribution of
+the optional model package remain outstanding.
+
+CI follow-up: Linux pipeline 21134 executed the pinned model golden cases and
+full V5 source-bound snapshot/query test successfully. GitHub rejected the first
+model workflow because `runner.temp` was used in job-level `env`. The directory
+now uses the allowed workspace context. Pinned actionlint v1.7.12, with declared
+self-hosted runner labels, is a slot preflight and private GitLab release gate.
+Authoring metadata is loaded only for semantic preparation/verification, keeping
+ordinary keyword/metadata queries on the smaller discovery projection. Semantic
+prepared text and the existing V11 snapshot hashes are unchanged by this split.
+
+Hosted follow-up: all independent golden cases passed on macOS and Windows.
+The full V5 snapshot exceeded eight minutes on a hosted Mac; one full-catalog
+concurrency race run also exceeded 150 seconds without an assertion or race
+finding. CI now uses verified, complete original rows from a bounded corpus,
+retaining source pins, FTS rows and recomputed subset coverage/projection hashes.
+This exercises the production snapshot/query and concurrency paths without
+claiming full-catalog qualification on those hosts. Linux pipeline 21138 passed
+all eight gates before this fixture adjustment. Local bounded actual-model
+snapshot/query passed in 2.97 seconds and concurrency under race in 43.53 seconds.
+
+Full-catalog qualification remains available explicitly:
+
+```sh
+PPTXGENGO_EMBED_MODEL_DIR=/path/to/verified/model-package \
+PPTXGENGO_EMBED_FULL_LIBRARY=1 CGO_ENABLED=0 \
+go test -count=1 -timeout=20m -v \
+  -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
+```
+
+This larger run is separate from bounded PR checks; the prior M5 and Linux full
+V5 evidence and full V11 development measurements remain the catalog evidence.

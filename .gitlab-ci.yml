@@ -30,6 +30,34 @@ developer:
   script:
     - make "$TEST_TARGET"
 
+workflow-lint:
+  stage: test
+  image: golang:1.27.1
+  timeout: 5 minutes
+  interruptible: true
+  script:
+    - go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 -shellcheck=
+
+offline-model:
+  stage: test
+  image: golang:1.27.1
+  timeout: 15 minutes
+  interruptible: true
+  variables:
+    CGO_ENABLED: '0'
+    GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
+    GOCACHE: $CI_PROJECT_DIR/.cache/go-build
+    PPTXGENGO_EMBED_MODEL_DIR: $CI_PROJECT_DIR/.cache/offline-model
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux
+    paths: [.cache/go-mod, .cache/go-build]
+  script:
+    - go run ./cmd/pptxdesign library-model --download --out "$PPTXGENGO_EMBED_MODEL_DIR"
+    - go test -count=1 -timeout=5m ./internal/localembed
+    - go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
+
 exhaustive:
   stage: test
   tags: [pptxgengo-integration]

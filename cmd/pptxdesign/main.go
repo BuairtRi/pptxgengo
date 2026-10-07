@@ -27,7 +27,7 @@ func run() error {
 		return nil
 	}
 	if len(os.Args) < 2 {
-		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|photo-register|library-publish|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-catalog|library-search|templates|template|build|inspect|measure-style|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
+		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|photo-register|library-publish|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-model|library-embed|library-catalog|library-search|templates|template|build|inspect|measure-style|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
 	}
 	command := os.Args[1]
 	if command == "photo-register" {
@@ -63,7 +63,10 @@ func run() error {
 	if command == "project" {
 		return runProject(os.Args[2:])
 	}
-	if command == "library-index" || command == "library-find" || command == "library-inspect" || command == "library-preview" || command == "library-fit" {
+	if command == "library-model" {
+		return runLibraryModel(os.Args[2:])
+	}
+	if command == "library-embed" || command == "library-index" || command == "library-find" || command == "library-inspect" || command == "library-preview" || command == "library-fit" {
 		return runLibraryIndex(command, os.Args[2:])
 	}
 	if command == "library-search" {
