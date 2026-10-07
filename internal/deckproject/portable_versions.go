@@ -63,6 +63,9 @@ func readOptionalLimit(path string, limit uint64) ([]byte, error) {
 	if os.IsNotExist(e) {
 		return nil, nil
 	}
+	if e == nil && b == nil {
+		b = []byte{}
+	}
 	return b, e
 }
 func readProjectFile(root, relative string) ([]byte, error) {

@@ -506,6 +506,13 @@ func TestPortableOptionalAndPointerReadsAreBounded(t *testing.T) {
 	if b, e := readOptional(filepath.Join(root, "missing")); e != nil || b != nil {
 		t.Fatalf("optional absent read changed: %v", e)
 	}
+	empty := filepath.Join(root, "empty")
+	if e := os.WriteFile(empty, nil, 0600); e != nil {
+		t.Fatal(e)
+	}
+	if b, e := readOptional(empty); e != nil || b == nil || len(b) != 0 {
+		t.Fatalf("existing empty predecessor treated as absent: %v", e)
+	}
 	if _, e := readOptional(root); e == nil {
 		t.Fatal("optional directory accepted")
 	}
