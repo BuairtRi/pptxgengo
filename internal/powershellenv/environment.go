@@ -18,3 +18,11 @@ func ForWindowsPowerShell(base []string) []string {
 	}
 	return out
 }
+
+// NativeModuleImports is kept identical to the standalone native/installer scripts.
+// These absolute built-in paths bypass unrelated global module discovery.
+const NativeModuleImports = `# Load only the required Windows PowerShell modules from this host's PSHOME.
+# Explicit paths avoid global module discovery and PowerShell 7/user modules.
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Management\Microsoft.PowerShell.Management.psd1')) -ErrorAction Stop
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Utility\Microsoft.PowerShell.Utility.psd1')) -ErrorAction Stop
+`

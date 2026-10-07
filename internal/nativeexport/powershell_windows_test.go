@@ -17,45 +17,58 @@ import (
 )
 
 func TestWindowsPowerShellCommandsUseNativeModules(t *testing.T) {
-	// Deliberately inherit an unusable module path through Go. Both production
-	// PowerShell launchers must remove it for the child, without touching Office.
+	// Both production launchers must remove this unusable inherited module
+	// path. The standalone scripts use this exact native import block, too.
 	t.Setenv("PSModulePath", filepath.Join(t.TempDir(), "foreign PowerShell modules"))
 	path := filepath.Join(t.TempDir(), "hash input with spaces.txt")
 	if err := os.WriteFile(path, []byte("native module hash fixture"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	marker := filepath.Join(t.TempDir(), "startup stage.txt")
-	quotedMarker := "'" + strings.ReplaceAll(marker, "'", "''") + "'"
-	script := "[System.IO.File]::WriteAllText(" + quotedMarker + ", 'started'); $h = Get-FileHash -Algorithm SHA256 -LiteralPath '" + strings.ReplaceAll(path, "'", "''") + "'; [System.IO.File]::WriteAllText(" + quotedMarker + ", 'hashed'); @{hash=$h.Hash;major=$PSVersionTable.PSVersion.Major} | ConvertTo-Json -Compress"
-	for _, run := range []runner{command, roundTripCommand} {
-		ctx, cancel := context.WithTimeout(t.Context(), 30*time.Second)
-		data, err := run(ctx, "powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-Command", script)
-		cancel()
-		if err != nil {
-			resolved, lookupErr := exec.LookPath("powershell.exe")
-			stage, stageErr := os.ReadFile(marker)
-			t.Logf("Windows PowerShell diagnostic: Go architecture=%s resolved=%q lookup=%v stage=%q stage_error=%v", runtime.GOARCH, resolved, lookupErr, stage, stageErr)
-			// Compare the file entry point used by production helpers, with the
-			// same child-only environment cleanup and original 30-second bound.
-			probe := filepath.Join(t.TempDir(), "bounded startup probe.ps1")
-			if writeErr := os.WriteFile(probe, []byte("[Console]::WriteLine($PSVersionTable.PSVersion.ToString()); [Console]::WriteLine([Environment]::Is64BitProcess)"), 0600); writeErr == nil {
-				probeCtx, stop := context.WithTimeout(t.Context(), 30*time.Second)
-				cmd := exec.CommandContext(probeCtx, "powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", probe)
-				cmd.Env = powershellenv.ForWindowsPowerShell(os.Environ())
-				cmd.WaitDelay = 2 * time.Second
+	for _, helper := range []struct {
+		name string
+		run  runner
+	}{{"export", command}, {"roundtrip", roundTripCommand}} {
+		for _, entry := range []string{"Command", "File"} {
+			t.Run(helper.name+"/"+entry, func(t *testing.T) {
+				marker := filepath.Join(t.TempDir(), "script stage.txt")
+				quotedMarker := "'" + strings.ReplaceAll(marker, "'", "''") + "'"
+				script := "$ErrorActionPreference = 'Stop'; [IO.File]::WriteAllText(" + quotedMarker + ", 'started')\n" + powershellenv.NativeModuleImports +
+					"[IO.File]::WriteAllText(" + quotedMarker + ", 'imported'); $h = Get-FileHash -Algorithm SHA256 -LiteralPath '" + strings.ReplaceAll(path, "'", "''") + "'; [IO.File]::WriteAllText(" + quotedMarker + ", 'hashed'); " +
+					"$json = @{hash=$h.Hash;major=$PSVersionTable.PSVersion.Major;home=$PSHOME;utility=(Get-Module Microsoft.PowerShell.Utility).Path;management=(Get-Module Microsoft.PowerShell.Management).Path} | ConvertTo-Json -Compress; [IO.File]::WriteAllText(" + quotedMarker + ", 'serialized'); [Console]::WriteLine($json)"
+				args := []string{"-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass"}
+				if entry == "File" {
+					file := filepath.Join(t.TempDir(), "native modules with spaces.ps1")
+					if err := os.WriteFile(file, []byte(script), 0600); err != nil {
+						t.Fatal(err)
+					}
+					args = append(args, "-File", file)
+				} else {
+					args = append(args, "-Command", script)
+				}
+				ctx, cancel := context.WithTimeout(t.Context(), 30*time.Second)
 				started := time.Now()
-				probeData, probeErr := cmd.CombinedOutput()
-				stop()
-				t.Logf("bounded -File startup: elapsed=%s error=%v output=%q", time.Since(started), probeErr, probeData)
-			}
-			t.Fatalf("native PowerShell modules: %v: %s", err, data)
-		}
-		var result struct {
-			Hash  string
-			Major int
-		}
-		if err := json.Unmarshal(data, &result); err != nil || strings.ToLower(result.Hash) != fmt.Sprintf("%x", sha256.Sum256([]byte("native module hash fixture"))) || result.Major != 5 {
-			t.Fatal("wrong Windows PowerShell/hash evidence", string(data), err)
+				data, err := helper.run(ctx, "powershell.exe", args...)
+				cancel()
+				t.Logf("native modules: architecture=%s entry=%s elapsed=%s", runtime.GOARCH, entry, time.Since(started))
+				if err != nil {
+					resolved, lookupErr := exec.LookPath("powershell.exe")
+					stage, stageErr := os.ReadFile(marker)
+					t.Fatalf("native PowerShell modules: %v: %s; resolved=%q lookup=%v stage=%q stage_error=%v", err, data, resolved, lookupErr, stage, stageErr)
+				}
+				var result struct {
+					Hash, Home, Utility, Management string
+					Major                           int
+				}
+				if err := json.Unmarshal(data, &result); err != nil || strings.ToLower(result.Hash) != fmt.Sprintf("%x", sha256.Sum256([]byte("native module hash fixture"))) || result.Major != 5 {
+					t.Fatal("wrong Windows PowerShell/hash evidence", string(data), err)
+				}
+				for module, got := range map[string]string{"Microsoft.PowerShell.Utility": result.Utility, "Microsoft.PowerShell.Management": result.Management} {
+					want := filepath.Join(result.Home, "Modules", module, module+".psd1")
+					if !filepath.IsAbs(result.Home) || !strings.EqualFold(filepath.Clean(got), want) {
+						t.Fatalf("module %s loaded outside native PSHOME: got=%q want=%q", module, got, want)
+					}
+				}
+			})
 		}
 	}
 }

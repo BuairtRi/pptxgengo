@@ -165,8 +165,30 @@ The parent and registry environment remain untouched, following
 Preliminary `b3adbc57` passed all ten GitLab pipeline 21227 jobs and Windows
 run 37607310782. Its independently downloaded Windows amd64 report confirms all
 eleven prescribed CLI/script scenarios and unchanged user PATH. The earlier
-Mac and Linux reports confirm eight core scenarios. Intel/ARM additions and
-final source integration still require their own gates.
+Mac and Linux reports confirm eight core scenarios. Native Linux ARM64 also
+passed all eight at `c302b474` in GitLab job 282938. Windows ARM64 passed all
+eleven at `a8e117b3` in GitHub run 37611230623; both qualification reports were
+independently downloaded and verified against their exact source, architecture
+and opt-outs. Its parallel same-head hosted run timed out during the Windows
+PowerShell hashing/JSON regression under the unchanged 30-second bound. Diagnostics
+retain an owned script-stage marker. At `d9641533`, two failures reached script
+execution: one stopped before hashing and one before JSON serialization; a basic
+file-entry probe completed in 235/242 ms. These results locate the issue beyond
+host startup, without establishing the underlying cache/module cause.
+
+The helpers, installer and smoke script now explicitly import required
+Management/Utility modules by absolute paths under their own `$PSHOME`, avoiding
+unrelated module discovery. The regression uses the identical import block for
+both production launchers and command/file entry points, verifies actual native
+module paths, and retains every 30-second deadline. Parent environment, registry
+and production deadlines remain unchanged. Actual hosted verification of that
+change is required; the earlier failures are retained.
+
+The Intel Mac actual-process check initially refused an output whose parent did
+not exist. Its output now uses the existing runner temporary directory, scoped
+at the step where that context is available. The corrected Intel Mac check passed
+at `d9641533`; its downloaded native amd64 report confirms all eight scenarios.
+All final exact-head checks and full slot preflight are required before integration.
 
 The bounded regression lane covers hashes/inventory, staging, repeated install,
 upgrade, rollback, interrupted activation, conflicting edits, skill symlinks,
@@ -175,7 +197,9 @@ execution check installed the actual signed `v4.1.0` and `v4.1.0-rc.2` CLI
 packages, exercised all three dispatchers, rolled back and checked diagnostics.
 No user's active installation was changed for that check.
 
-Windows and Linux cross-compilation is available. Windows PATH registration,
-PowerShell installer execution, full private resource packages and interactive
-PowerPoint qualification still need their respective native evidence. Headless
-Go checks and source scans do not replace desktop Office review.
+Native execution above supplements the existing six-target cross-compilation.
+Windows PATH registration, signed package execution, full private resource
+packages and interactive PowerPoint qualification still need their respective
+native evidence. The unsigned synthetic PowerShell script evidence above does
+not qualify those outcomes. Headless Go checks and source scans do not replace
+desktop Office review.

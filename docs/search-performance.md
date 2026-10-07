@@ -146,14 +146,30 @@ For that 26-entity workload:
 | Hosted macOS arm64 | 225.2 | 242.3 | 672.7 |
 | Hosted Windows amd64 | 277.6 | 264.3 | 701.4 |
 
-The installer qualification work also adds pinned model/performance lanes on
-Intel Mac and Windows ARM64 hosted runners and the home lab's tagged ARM64
-Kubernetes pool. Each requires the declared Go host architecture. Those new
-native lanes must pass and their reports must be inspected before qualification;
-the original source release's six-target cross-build is separate evidence.
+The installer qualification work adds native Intel Mac and Windows ARM64 hosted
+lanes and the home lab's tagged ARM64 Kubernetes pool. At exact preliminary
+head `c302b47419c49e37ffd520910d398ea2fa68af61`, GitHub run 37610005988
+passed all four pinned model lanes and GitLab pipeline 21233 passed both Linux
+model lanes. Eighteen independently downloaded platform/mode JSON reports
+verified actual architecture, source SHA, 26 entity counts, complete vectors,
+model pins/91,102,969-byte footprint, GC settings, sample statistics and raw
+first/last memory with their observed maximum. Every lane requires its declared
+native Go host architecture. This is native execution evidence beyond the
+release's separate six-target cross-build.
 
-Cross-compilation is not actual performance qualification of macOS amd64,
-Windows arm64 or Linux arm64. Full-library Windows timings, controlled cache
+For that same 26-entity workload, with uncontrolled OS file cache:
+
+| Native platform | Hybrid first ms | Repeated median ms | Observed peak MiB |
+| --- | ---: | ---: | ---: |
+| Kubernetes Linux amd64 | 224.4 | 202.2 | 658.0 |
+| Kubernetes Linux arm64 | 636.6 | 605.3 | 657.4 |
+| Hosted macOS amd64 | 544.3 | 457.4 | 701.2 |
+| Hosted macOS arm64 | 157.7 | 116.7 | 709.3 |
+| Hosted Windows amd64 | 237.3 | 214.4 | 699.0 |
+| Hosted Windows arm64 | 176.4 | 146.8 | 657.2 |
+
+These small-corpus samples do not establish full-catalog performance or an SLO.
+Full-library Windows timings, controlled cache
 experiments, measured process-launch costs, agreed performance/memory budgets,
 operator relevance judgments and native content-fit/visual acceptance remain
 open. Retrieval reports explicitly declare performance targets and relevance

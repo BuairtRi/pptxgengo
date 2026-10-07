@@ -1,6 +1,10 @@
 param([string]$Out, [switch]$Native)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+# Load only the required Windows PowerShell modules from this host's PSHOME.
+# Explicit paths avoid global module discovery and PowerShell 7/user modules.
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Management\Microsoft.PowerShell.Management.psd1')) -ErrorAction Stop
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Utility\Microsoft.PowerShell.Utility.psd1')) -ErrorAction Stop
 $cli = Join-Path $PSScriptRoot 'bin\pptxgengo.exe'
 if (-not $Out) { $Out = Join-Path $env:TEMP ('pptxgengo Windows smoke ' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff')) }
 if (Test-Path -LiteralPath $Out) { throw 'Smoke-test -Out must be a new directory.' }

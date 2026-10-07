@@ -494,3 +494,26 @@ These additions and final full preflight/hosted gates are pending.
 Real font/skill registration, inherited desktop PATH, signed Windows package
 execution, private full resources, Office/visual review and operator curation
 remain outstanding; no new release tag was cut.
+
+Native architecture evidence follow-up: exact preliminary `c302b474` passed all
+four GitHub model/performance lanes in run 37610005988 and all twelve GitLab
+pipeline 21233 jobs, including native ARM64 installer/model execution. Eighteen
+actual platform/mode reports were downloaded and verified; timings and scope
+are retained in `docs/search-performance.md`. Windows ARM64 subsequently passed
+all eleven actual CLI/script scenarios at `a8e117b3` in run 37611230623. Its
+parallel same-head run timed out during the Windows PowerShell cmdlet regression, so bounded
+startup diagnostics were added instead of discarding that result. Intel Mac's
+missing output-parent setup was corrected. Exact `d9641533` passed the full
+five-step slot submission preflight; final exact-head hosted qualification and
+integration remain required. No further release tag was cut.
+
+Windows module follow-up: both `d9641533` ARM64 failures reached the script,
+with stages before hashing/before JSON serialization; a separate native Windows
+PowerShell 5.1 file-entry probe completed in 235/242 ms. Explicit imports now
+select native PSHOME Management/Utility manifests in export, round-trip,
+installer and smoke scripts. Both helper launchers are checked through command
+and file entry points, with native module-path evidence and unchanged 30-second
+limits. Focused portable checks and Windows ARM64 compilation passed; hosted
+execution remains required. Intel Mac's corrected actual-tool lane passed at
+`d9641533`, with its downloaded eight-scenario qualification independently
+verified. The source adds no desktop Office or operator acceptance claim.
