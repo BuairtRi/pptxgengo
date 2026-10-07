@@ -19,7 +19,9 @@ test-race:
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity' ./internal/deckproject
 	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/nativeexport
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace' ./pptx
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestLibraryCatalogCache' ./internal/wmdesign
+	@for check in ConcurrentColdAndWarm CloneIsolation FingerprintDependencies BoundedEvictionAndErrors DriftAfterWarm; do \
+		$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run "^TestLibraryCatalogCache$$check$$" ./internal/wmdesign || exit $$?; \
+	done
 
 # Includes catalog-wide and relocated-deck checks. Requires registered private
 # branding assets at WMDS_BRANDING_ROOT (or ~/Documents/branding).

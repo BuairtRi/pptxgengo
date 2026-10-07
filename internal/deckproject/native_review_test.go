@@ -23,6 +23,7 @@ func nativeAttachmentFixture(t *testing.T) (*Project, string) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("XDG_CONFIG_HOME", filepath.Join(home, "config"))
+	t.Setenv("APPDATA", filepath.Join(home, "config"))
 	p := example(t)
 	pin(t, p)
 	r, err := Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine})
@@ -73,6 +74,8 @@ func writeTestSignedReceipt(t *testing.T, root string, receipt nativeexport.Rece
 			t.Fatal(err)
 		}
 	}
+	protectTestIssuer(t, dir)
+	protectTestIssuer(t, path)
 	seed, err := base64.StdEncoding.DecodeString(stored.Seed)
 	if err != nil {
 		t.Fatal(err)
