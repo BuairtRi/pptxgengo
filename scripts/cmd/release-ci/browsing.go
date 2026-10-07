@@ -2,9 +2,8 @@ package main
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
-	"os"
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 	"path/filepath"
 	"strings"
 )
@@ -35,17 +34,9 @@ func addBrowsingFiles(files map[string]Input, root string) error {
 			return fmt.Errorf("browsing file drift: %s", rel)
 		}
 		if strings.HasSuffix(rel, ".manifest.json") {
-			var m struct {
-				Schema     string `json:"schema"`
-				Kind       string `json:"kind"`
-				DeckSHA256 string `json:"deck_sha256"`
-				Slides     int    `json:"slides"`
-			}
-			raw, e := os.ReadFile(path)
+
+			raw, e := browsingartifact.ReadManifest(path)
 			if e != nil {
-				return e
-			}
-			if e = json.Unmarshal(raw, &m); e != nil {
 				return e
 			}
 			kind := "templates"
@@ -54,8 +45,9 @@ func addBrowsingFiles(files map[string]Input, root string) error {
 				kind = "reusable"
 				deck = "browsing/reusable-slides.pptx"
 			}
-			if m.Schema != "pptxgengo.browsing-library.v1" || m.Kind != kind || m.Slides < 2 || m.DeckSHA256 != inventory.Files[deck] {
-				return fmt.Errorf("browsing coverage manifest does not pin its generated deck: %s", rel)
+
+			if e = browsingartifact.ValidateFile(raw, kind, inventory.Files[deck], filepath.Join(root, filepath.FromSlash(deck))); e != nil {
+				return e
 			}
 		}
 		files[rel] = Input{Path: path}

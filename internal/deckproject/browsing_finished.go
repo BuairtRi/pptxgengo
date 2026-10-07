@@ -91,3 +91,13 @@ func CompileBrowsingRevision(root, bundle, engine, id string, m finishedslide.Ma
 	s.Notes = strings.TrimSpace(s.Notes) + fmt.Sprintf("\nReusable identity: %s\nRevision: %d\nRevision SHA-256: %s\nApproved by: %s on %s\nReuse scope: %s\nReviewed: %s\nValid until: %s\nOwner: %s\nDestination content/evidence/layout review remains required.", m.ID, m.Revision, m.RevisionSHA256, m.Approval.By, m.Approval.Date, m.Approval.ReuseScope, m.ReviewedAt, m.ValidUntil, m.Owner)
 	return c, nil
 }
+
+// BrowsingBundleSHA256 identifies the exact authoring bundle independently of
+// the original approved revision's compiler/OS. It does not grant approval.
+func BrowsingBundleSHA256(bundle, engine string) (string, error) {
+	lock, err := makeLock(bundle, engine)
+	if err != nil {
+		return "", err
+	}
+	return lock.BundleSHA256, nil
+}

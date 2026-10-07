@@ -226,6 +226,9 @@ func Verify(root string) (Package, error) {
 		for name := range ev.Hashes {
 			allowed[name] = true
 		}
+		if e := allowBrowsingFiles(root, files, allowed); e != nil {
+			return p, e
+		}
 		for name := range files {
 			if !allowed[name] {
 				return p, fmt.Errorf("unlisted CLI file: %s", name)

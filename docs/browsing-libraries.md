@@ -107,3 +107,27 @@ All 649 current catalog templates bind successfully, including retained deprecat
 entries. Complete branded template rendering still requires the registered private
 branding originals. Real approved reusable content has not been supplied; generic
 fixtures exercise selection and native generation without claiming content approval.
+
+## Installation integrity
+
+Legacy v4.1.0 CLI packages remain supported. Browsing-inclusive packages require
+both PPTX documents, both typed coverage manifests and the exact five-file
+browsing inventory. Activation, repair and rollback use the installer package
+verifier, including the complete browsing hashes and manifests. Unlisted CLI
+files remain rejected. Release assembly uses the same artifact verifier.
+
+The verifier follows the actual presentation slide order and internal
+relationships, verifies native slide identities against the serialized whole-page
+inventory (including guides, dividers and notices), and rejects missing,
+duplicate, external or orphan slide parts. Source/bundle/font/asset pins, exact
+catalog counts, frame candidate/alias/exclusion accounting and immutable approved
+revision selection are checked. Bounds are 16 MiB for coverage metadata, 512 MiB
+for PPTX archives, 100,000 members, 64 MiB per member, 4 GiB total uncompressed,
+8 MiB per inspected XML document and 20,000 actual presentation slides. The
+current exhaustive developer matrix fits those bounds; ordinary installation
+archives default to the convenient 717-page catalog deck.
+
+These checks prove integrity and metadata coherence. Verify the private signed
+release manifest before trusting the archive. They do not replace publisher
+signature verification, an operator's content approval or native PowerPoint
+visual/copy-paste acceptance.

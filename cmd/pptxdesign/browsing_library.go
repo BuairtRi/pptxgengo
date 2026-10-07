@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 	"github.com/buairtri/pptxgengo/internal/deckproject"
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
 )
@@ -107,8 +108,44 @@ func runBrowsingLibrary(args []string) (err error) {
 		return e
 	}
 	defer os.RemoveAll(stage)
+	bundleHash, e := deckproject.BrowsingBundleSHA256(*bundle, wmdesign.CandidateEngine)
+	if e != nil {
+		return e
+	}
 	sum := sha256.Sum256(deck)
+	for i := range layout.Fonts {
+		layout.Fonts[i].File = filepath.Base(layout.Fonts[i].File)
+	}
+	pages := make([]browsingartifact.Page, 0, len(doc.Slides))
+	for _, slide := range doc.Slides {
+		role := ""
+		switch {
+		case slide.ID == "how-to-use":
+			role = "guide"
+		case *kind == "reusable" && strings.HasSuffix(slide.ID, "-metadata"):
+			role = "reuse_metadata"
+		case *kind == "reusable":
+			role = "reusable_slide"
+		case strings.HasPrefix(slide.ID, "family-"):
+			role = "family_divider"
+		case strings.HasSuffix(slide.ID, "-deprecated"):
+			role = "deprecation_notice"
+		case slide.ID == "frame-divider":
+			role = "frame_divider"
+		case strings.HasPrefix(slide.ID, "template-"):
+			role = "template"
+		case strings.HasPrefix(slide.ID, "frame-"):
+			role = "frame"
+		default:
+			return fmt.Errorf("browsing.page_role_missing: %s", slide.ID)
+		}
+		pages = append(pages, browsingartifact.Page{ID: slide.ID, Kind: role})
+	}
 	output := struct {
+		Pages           []browsingartifact.Page `json:"pages"`
+		BundleSHA256    string                  `json:"bundle_sha256"`
+		SourceRevision  string                  `json:"source_revision"`
+		SourceCommit    string                  `json:"source_commit"`
 		Schema          string                  `json:"schema"`
 		Kind            string                  `json:"kind"`
 		AsOf            string                  `json:"as_of"`
@@ -121,16 +158,29 @@ func runBrowsingLibrary(args []string) (err error) {
 		Fonts           []wmdesign.FontIdentity `json:"fonts"`
 		Assets          []wmdesign.SourceFile   `json:"assets"`
 		Qualification   string                  `json:"qualification"`
-	}{"pptxgengo.browsing-library.v1", *kind, *asOf, fmt.Sprintf("%x", sum), wmdesign.CandidateEngine, releaseIdentity, len(doc.Slides), manifest, layout.SourceFiles, layout.Fonts, layout.Assets, "native_visual_copy_paste_qualification_pending"}
+	}{Pages: pages, BundleSHA256: bundleHash, SourceRevision: layout.SourceRevision, SourceCommit: layout.SourceCommit, Schema: "pptxgengo.browsing-library.v1", Kind: *kind, AsOf: *asOf, DeckSHA256: fmt.Sprintf("%x", sum), Compiler: wmdesign.CandidateEngine, ReleaseIdentity: releaseIdentity, Slides: len(doc.Slides), Coverage: manifest, SourceFiles: layout.SourceFiles, Fonts: layout.Fonts, Assets: layout.Assets, Qualification: "native_visual_copy_paste_qualification_pending"}
 	for _, a := range []struct {
 		name  string
 		value any
-	}{{"browsing-manifest.json", output}, {"compiled-document.json", doc}, {"layout-report.json", layout}} {
+	}{{"compiled-document.json", doc}, {"layout-report.json", layout}} {
 		if e = wmdesign.WriteJSON(filepath.Join(stage, a.name), a.value); e != nil {
 			return e
 		}
 	}
 	if e = os.WriteFile(filepath.Join(stage, name), deck, 0644); e != nil {
+		return e
+	}
+	manifestBytes, e := json.Marshal(output)
+	if e != nil {
+		return e
+	}
+	if len(manifestBytes) > browsingartifact.MaxManifestBytes {
+		return fmt.Errorf("browsing manifest exceeds bounded16MiB contract")
+	}
+	if e = browsingartifact.ValidateFile(manifestBytes, *kind, fmt.Sprintf("%x", sum), filepath.Join(stage, name)); e != nil {
+		return e
+	}
+	if e = os.WriteFile(filepath.Join(stage, "browsing-manifest.json"), append(manifestBytes, '\n'), 0644); e != nil {
 		return e
 	}
 	if _, e = os.Lstat(*out); !os.IsNotExist(e) {

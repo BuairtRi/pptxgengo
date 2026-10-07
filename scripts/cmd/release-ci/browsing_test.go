@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/buairtri/pptxgengo/internal/browsingfixture"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -18,7 +20,12 @@ func TestBrowsingArchiveRequiresBothDecksAndHashes(t *testing.T) {
 	names := []string{"template-library.pptx", "template-library.manifest.json", "reusable-slides.pptx", "reusable-slides.manifest.json"}
 	for _, name := range names {
 		path := filepath.Join(root, "browsing", name)
-		if e := os.WriteFile(path, []byte("generic fixture: "+name), 0644); e != nil {
+		if e := os.WriteFile(path, browsingfixture.Deck(t, func() string {
+			if strings.HasPrefix(name, "template-") {
+				return "templates"
+			}
+			return "reusable"
+		}()), 0644); e != nil {
 			t.Fatal(e)
 		}
 		hash, e := digest(path)
@@ -29,7 +36,7 @@ func TestBrowsingArchiveRequiresBothDecksAndHashes(t *testing.T) {
 	}
 	for _, pair := range []struct{ manifest, deck, kind string }{{"template-library.manifest.json", "template-library.pptx", "templates"}, {"reusable-slides.manifest.json", "reusable-slides.pptx", "reusable"}} {
 		path := filepath.Join(root, "browsing", pair.manifest)
-		data, _ := json.Marshal(map[string]any{"schema": "pptxgengo.browsing-library.v1", "kind": pair.kind, "deck_sha256": hashes["browsing/"+pair.deck], "slides": 3})
+		data := browsingfixture.Manifest(t, pair.kind, hashes["browsing/"+pair.deck])
 		if e := os.WriteFile(path, data, 0644); e != nil {
 			t.Fatal(e)
 		}

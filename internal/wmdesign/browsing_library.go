@@ -9,16 +9,18 @@ import (
 
 // BrowsingCoverage is a complete inventory, not a visual qualification claim.
 type BrowsingCoverage struct {
-	FrameMode       string                   `json:"frame_mode"`
-	Schema          string                   `json:"schema"`
-	SourceRevision  string                   `json:"source_revision"`
-	SourceCommit    string                   `json:"source_commit"`
-	SourceFiles     []SourceFile             `json:"source_files"`
-	Entries         []BrowsingEntry          `json:"entries"`
-	FrameAliases    []BrowsingFrameAlias     `json:"frame_aliases"`
-	FrameCandidates int                      `json:"frame_candidates"`
-	FrameExclusions []BrowsingFrameExclusion `json:"frame_exclusions"`
-	Policy          string                   `json:"policy"`
+	ExpectedTemplates     int                      `json:"expected_templates"`
+	ExpectedFrameRequests int                      `json:"expected_frame_requests"`
+	FrameMode             string                   `json:"frame_mode"`
+	Schema                string                   `json:"schema"`
+	SourceRevision        string                   `json:"source_revision"`
+	SourceCommit          string                   `json:"source_commit"`
+	SourceFiles           []SourceFile             `json:"source_files"`
+	Entries               []BrowsingEntry          `json:"entries"`
+	FrameAliases          []BrowsingFrameAlias     `json:"frame_aliases"`
+	FrameCandidates       int                      `json:"frame_candidates"`
+	FrameExclusions       []BrowsingFrameExclusion `json:"frame_exclusions"`
+	Policy                string                   `json:"policy"`
 }
 type BrowsingEntry struct {
 	SlideID      string        `json:"slide_id"`
@@ -65,7 +67,7 @@ func TemplateBrowsingDocumentWithFrames(bundle, override string, year int, mode 
 	if e != nil {
 		return Document{}, BrowsingCoverage{}, e
 	}
-	coverage := BrowsingCoverage{FrameMode: mode, Schema: "pptxgengo.browsing-coverage.v1", SourceRevision: s.Revision, SourceCommit: s.Commit, SourceFiles: s.Files, Policy: "All retained catalog entries, including visibly labeled deprecated entries. Declared template variants appear once each; independent frame specimens enumerate valid geometry combinations, not arbitrary unqualified template/frame recombinations. Native PowerPoint visual/copy-paste qualification pending."}
+	coverage := BrowsingCoverage{ExpectedTemplates: len(catalog), FrameMode: mode, Schema: "pptxgengo.browsing-coverage.v1", SourceRevision: s.Revision, SourceCommit: s.Commit, SourceFiles: s.Files, Policy: "All retained catalog entries, including visibly labeled deprecated entries. Declared template variants appear once each; independent frame specimens enumerate valid geometry combinations, not arbitrary unqualified template/frame recombinations. Native PowerPoint visual/copy-paste qualification pending."}
 	doc := Document{Schema: "pptxgengo.wmds-foundation.v1", Year: year, Title: "Complete template library", BuildIdentity: &BuildIdentity{Timestamp: "2000-01-01T00:00:00Z", Seed: s.Revision}}
 	doc.Sections = []SectionSpec{{ID: "guide", Title: "How to use", BeforeSlideID: "how-to-use"}}
 	doc.Slides = append(doc.Slides, BrowsingInformationSlide("how-to-use", "How to use this deck", "Browse family dividers or PowerPoint sections. Copy an entire slide into your presentation with Keep Source Formatting. Replace the illustrative placeholder copy; review layout, evidence, fonts and brand assets in your destination deck. Deprecated templates are retained for reference and labeled: choose active alternatives for new work. Frame examples show valid geometry combinations independently; they do not authorize every template in every frame. Library identifiers and input pins are in slide notes and the coverage manifest."))
@@ -141,6 +143,7 @@ func TemplateBrowsingDocumentWithFrames(bundle, override string, year int, mode 
 		return Document{}, coverage, e
 	}
 	coverage.FrameCandidates = candidates
+	coverage.ExpectedFrameRequests = len(frames)
 	coverage.FrameExclusions = exclusions
 	divider := BrowsingInformationSlide("frame-divider", "Frames and rails", "Independent editable frame placeholders: rail, footer, split, title allocation, source allocation, density, surface and navigation combinations (coverage mode: "+mode+"). These pages are geometry building blocks, not a qualification of arbitrary template/frame combinations.")
 	doc.Slides = append(doc.Slides, divider)
@@ -188,6 +191,15 @@ func TemplateBrowsingDocumentWithFrames(bundle, override string, year int, mode 
 		raw, _ := json.Marshal(q)
 		slide.Notes = "Independent frame: " + string(raw)
 		doc.Slides = append(doc.Slides, slide)
+		frameSHA := ""
+		for _, file := range s.Files {
+			if file.Path == "frames/v0/frames.json" {
+				frameSHA = file.SHA256
+			}
+		}
+		if frameSHA == "" {
+			return Document{}, coverage, fmt.Errorf("browsing.frame_source_pin_missing")
+		}
 		copy := q
 		keyID := id
 		if mode == "catalog" {
@@ -196,7 +208,7 @@ func TemplateBrowsingDocumentWithFrames(bundle, override string, year int, mode 
 				keyID += "/split/" + q.Split
 			}
 		}
-		coverage.Entries = append(coverage.Entries, BrowsingEntry{SlideID: id, Kind: "frame", Key: keyID, Frame: &copy})
+		coverage.Entries = append(coverage.Entries, BrowsingEntry{SlideID: id, Kind: "frame", Key: keyID, SourceSHA256: frameSHA, Frame: &copy})
 	}
 	return doc, coverage, nil
 }
@@ -314,4 +326,35 @@ func browsingCatalogFrames(source *Source) ([]FrameRequest, error) {
 		return nil, fmt.Errorf("browsing.catalog_frame_coverage_empty")
 	}
 	return frames, nil
+}
+
+// MarshalJSON omits only inactive false page/header flags from frame requests.
+// Decoding preserves their explicit default semantics; this keeps exhaustive
+// coverage, including aliases and every exclusion, within bounded metadata.
+func (c BrowsingCoverage) MarshalJSON() ([]byte, error) {
+	type plain BrowsingCoverage
+	raw, e := json.Marshal(plain(c))
+	if e != nil {
+		return nil, e
+	}
+	var tree map[string]any
+	if e = json.Unmarshal(raw, &tree); e != nil {
+		return nil, e
+	}
+	for _, name := range []string{"entries", "frame_aliases", "frame_exclusions"} {
+		rows, _ := tree[name].([]any)
+		for _, row := range rows {
+			object, _ := row.(map[string]any)
+			frame, _ := object["frame"].(map[string]any)
+			if frame == nil {
+				continue
+			}
+			for _, key := range []string{"no_page", "no_header"} {
+				if value, ok := frame[key].(bool); ok && !value {
+					delete(frame, key)
+				}
+			}
+		}
+	}
+	return json.Marshal(tree)
 }
