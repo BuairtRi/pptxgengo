@@ -19,6 +19,7 @@ test:
 # and the library's concurrent presentation serialization regressions.
 test-race:
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/installstate
+	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/modelpackage ./scripts/cmd/release-ci
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/finishedslide
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestNativeRoundTrip|TestFinishedSlideClaims)' ./internal/deckproject
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestFinishedSlideClaims' ./internal/deckproject

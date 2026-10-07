@@ -30,6 +30,10 @@ for target in darwin-amd64 darwin-arm64 linux-amd64 linux-arm64 windows-amd64 wi
   # Suppressions, missing/stale DBs and scanner errors cannot become a pass.
   if ! jq -e '(.descriptor.db.status.valid == true) and ([.matches[] | select(.vulnerability.severity == "Critical")] | length == 0)' "$archive.vulnerabilities.json" >/dev/null; then passed=false; fi
 done
+if [[ "$PPTXGENGO_OFFLINE_MODEL" == true ]]; then
+  bash scripts/release/scan-model.sh dist/final "$release_version" "$release_commit"
+fi
+
 jq -n --argjson passed "$passed" --arg evaluated "$evaluated" --arg version "$release_version" --arg commit "$release_commit" --slurpfile db "$tmp/db.json" \
   '{schema:"pptxgengo.security-policy/v1",passed:$passed,version:$version,commit:$commit,evaluated_at:$evaluated,blocking_severity:"Critical",suppressions:[],maximum_db_age_hours:120,database:$db[0]}' > dist/final/security-policy.json
 [[ "$passed" == true ]] || { echo 'Release security policy failed; retained reports explain findings' >&2; exit 1; }

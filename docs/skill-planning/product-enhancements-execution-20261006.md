@@ -353,3 +353,44 @@ Full submission preflight and exact-head hosted CI remain pending. The initial
 10–20 approved real pages, broader typed/local dependencies, branding assets and
 Mac/Windows desktop qualification are still outstanding. This work is not in
 released v4.1.0; no new release tag has been cut.
+
+
+Stewardship hosted CI follow-up: exact head `72e64638` passed full local
+submission preflight, all eight GitLab pipeline 21187 jobs and all ten
+applicable GitHub macOS/Windows checks. PR #12 merged as `0882e4c3` and
+slotctl aligned private GitLab/main and the clean primary. Its approved content
+set and actual desktop qualification remain outstanding.
+
+
+## Separate offline model release automation — managed source work
+
+The `pptx-offline-model-release` slot shares dependency-free compiled model pins
+and complete package verification with the inference maintenance command.
+Release tooling creates a deterministic, relocatable platform-independent ZIP
+from exact weights/tokenizer/license/attribution; real pinned local tests verify
+reproducibility, extraction, copied evidence, wrong tag and tamper refusal.
+
+Branch CI prepares/scans an unpublished package fixture after pinned inference
+checks. Tag CI uses the actual release identity, copies the separate model ZIP,
+rechecks/rescans final bytes and includes model evidence/SBOM/vulnerabilities in
+the signed private release manifest. Linux/macOS/Windows model lanes exercise
+real package regressions. The model remains optional and separate from CLI
+archives; data file scans/signature coverage do not establish model safety or
+relevance. No new release tag has been cut. Full preflight, hosted CI and the
+actual branch security scan remain pending.
+
+
+Model package validation follow-up: GitLab pipeline 21190 at `57fbcf3c`
+passed the Kubernetes `security:offline-model` job. Its actual extracted archive
+received a CycloneDX file inventory and Grype report with zero matches or
+suppressions and a valid database built 2026-10-07T06:31:48Z. An independent
+private download passed complete package/identity/file-hash verification and
+matched the locally prepared ZIP byte-for-byte (`51034ad7…`). A simulation of
+the complete local tag CI configuration validated all 25 jobs with no warnings.
+
+Hosted Windows model checks exposed an existing archive regression test's Unix
+filesystem permission assumption when first enabling release-tool tests there.
+The test now checks encoded TAR/ZIP executable modes on every OS, extracted
+payloads everywhere and Unix filesystem permissions on Unix. Model package
+regressions themselves passed on Windows. The final-head full preflight and
+hosted rerun remain due; no new release publication has been performed.

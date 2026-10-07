@@ -6,6 +6,7 @@ include:
 variables:
   GOTOOLCHAIN: local
   PPTXGENGO_PACKAGE_KIND: cli-only
+  PPTXGENGO_OFFLINE_MODEL: 'true'
 
 developer:
   stage: test
@@ -55,8 +56,14 @@ offline-model:
     paths: [.cache/go-mod, .cache/go-build]
   script:
     - go run ./cmd/pptxdesign library-model --download --out "$PPTXGENGO_EMBED_MODEL_DIR"
-    - go test -count=1 -timeout=5m ./internal/localembed
+    - go test -count=1 -timeout=5m ./internal/localembed ./internal/modelpackage ./scripts/cmd/release-ci
     - go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
+
+  artifacts:
+    when: on_success
+    access: maintainer
+    expire_in: 14 days
+    paths: [.cache/offline-model/]
 
 exhaustive:
   stage: test
@@ -142,3 +149,28 @@ security:secrets:
     access: maintainer
     expire_in: 14 days
     paths: [.cache/security/gitleaks.json]
+
+
+# Scan the separate optional model archive on branches before cutting tags.
+# v0.0.0 identifies an unpublished validation fixture on untagged branches.
+security:offline-model:
+  stage: security
+  needs: [offline-model]
+  image:
+    name: gitlab-registry.samcott.com/riscott/ci-images/vault-tools-release-security:v2-pinned-dad226a5c05106a33c5b5b79d9d2cca0798a46ca@sha256:3fbf2f78efe3e3c2bab885d9e15d21e769e92f8e53d47908c3532888c356752a
+    entrypoint: [""]
+  timeout: 15 minutes
+  interruptible: true
+  variables:
+    PPTXGENGO_RELEASE_VERSION: v0.0.0
+  before_script:
+    - source scripts/release/use-linux-go.sh
+  script:
+    - source scripts/release/common.sh
+    - release_ci model-package .cache/offline-model dist/model "$release_version" "$release_commit"
+    - bash scripts/release/scan-model.sh dist/model "$release_version" "$release_commit"
+  artifacts:
+    when: always
+    access: maintainer
+    expire_in: 3 days
+    paths: [dist/model/]

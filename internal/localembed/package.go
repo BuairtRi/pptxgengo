@@ -2,7 +2,6 @@ package localembed
 
 import (
 	"context"
-	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,18 +10,11 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/buairtri/pptxgengo/internal/modelpackage"
 )
 
-//go:embed LICENSE.model.txt
-var modelLicense []byte
-
-type PackageReport struct {
-	Schema    string   `json:"schema"`
-	Directory string   `json:"directory"`
-	Identity  Identity `json:"identity"`
-	Source    string   `json:"source"`
-	License   string   `json:"license"`
-}
+type PackageReport = modelpackage.Report
 
 // PreparePackage is an explicit maintenance operation. It either downloads the
 // pinned public model with TLS or copies an already verified offline directory.
@@ -81,7 +73,7 @@ func PreparePackage(ctx context.Context, out, from string, download bool) (Packa
 	if err != nil {
 		return report, err
 	}
-	for name, data := range map[string][]byte{"manifest.json": append(b, '\n'), "LICENSE": modelLicense, "README.txt": []byte("Offline sentence-transformers/all-MiniLM-L6-v2\nModel source: " + report.Source + "\nLicense: Apache-2.0 (see LICENSE).\nCreated by explicit pptxdesign library-model maintenance.\nWeights/tokenizer hashes, runtime, pooling and revision are in manifest.json.\nNormal library searches never download files.\n")} {
+	for name, data := range map[string][]byte{"manifest.json": append(b, '\n'), "LICENSE": modelpackage.License(), "README.txt": modelpackage.Readme()} {
 		if err = writeSynced(filepath.Join(stage, name), data); err != nil {
 			return report, err
 		}
