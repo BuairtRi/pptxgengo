@@ -356,3 +356,61 @@ func mustRead(t *testing.T, path string) []byte {
 	}
 	return raw
 }
+
+func TestObservedDependencyWritePreparationFailure(t *testing.T) {
+	p := reuseProject(t)
+	original := mustRead(t, p.SourcePath)
+	logPath := filepath.Join(p.Root, "composition-log.yaml")
+	observed := map[string][]byte{"composition-log.yaml": mustRead(t, logPath)}
+	if err := os.WriteFile(filepath.Join(p.Root, "blocked-parent"), []byte("owned file remains"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	main, err := sourceYAML(p.Raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	title, err := editYAMLNode("Candidate title that must not activate")
+	if err != nil {
+		t.Fatal(err)
+	}
+	replaceMappingField(main.Content[0], "title", title)
+	raw, err := encodeSourceYAML(main)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = commitSourceChangesObserved(p, map[string][]byte{filepath.Base(p.SourcePath): raw, "blocked-parent/new.json": []byte("must not activate")}, observed, nil)
+	if err == nil {
+		t.Fatal("invalid destination activated")
+	}
+	if !bytes.Equal(mustRead(t, p.SourcePath), original) || !bytes.Equal(mustRead(t, logPath), observed["composition-log.yaml"]) {
+		t.Fatal("write preparation failure changed predecessors")
+	}
+	if matches, _ := filepath.Glob(filepath.Join(p.Root, ".source-write-*.tmp")); len(matches) != 0 {
+		t.Fatal("temporary source file leaked", matches)
+	}
+	if _, err := os.Stat(filepath.Join(p.Root, ".deck-source-mutation.lock")); !os.IsNotExist(err) {
+		t.Fatal("mutation guard leaked")
+	}
+}
+
+func TestFinishedSlideRejectsResealedPinMismatch(t *testing.T) {
+	p := reuseProject(t)
+	library, m := publishReuse(t, p, 1)
+	m.Pins.ToolchainLockSHA256 = strings.Repeat("c", 64)
+	if err := m.Seal(); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(m)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(library, "manifest.json"), raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := InsertFinishedSlide(p, FinishedSlideInsertOptions{Package: library, ID: "fresh-message", Rationale: "Fixture insertion", AllowDraft: true, Bundle: bundle(t), Engine: wmdesign.CandidateEngine}); err == nil || !strings.Contains(err.Error(), "incompatible_pins") {
+		t.Fatal("mismatched lock pin accepted", err)
+	}
+	if !bytes.Equal(mustRead(t, p.SourcePath), p.Raw) {
+		t.Fatal("pin mismatch mutated source")
+	}
+}
