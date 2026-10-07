@@ -33,11 +33,11 @@ branding originals. Those originals are absent on this Mac. Windows runtime and
 native PowerPoint qualification remain pending; signing does not establish them.
 Read template counts and source pins from bundle metadata when resources arrive.
 
-## 1. Installer hardening — active
+## 1. Installer hardening — core merged, desktop qualification pending
 
 ### First slice: verify before activation
 
-Draft implemented in `internal/releasepackage/install-windows.ps1`:
+Implemented in `internal/releasepackage/install-windows.ps1`:
 
 - Require the package architecture to match the native Windows architecture.
 - Reject package reparse points, unsafe paths, duplicate hash entries, missing
@@ -47,7 +47,8 @@ Draft implemented in `internal/releasepackage/install-windows.ps1`:
 - Copy into a unique sibling stage, validate copied bytes against the original
   manifest, then check all three executable versions with a 30-second limit per tool before
   promoting by rename.
-- Refuse destination replacement, including a destination created concurrently.
+- Reuse an identical verified destination for repeated installation; refuse
+  differing bytes and concurrent destination replacement.
 - Clean a failed stage during normal exception handling. A killed process may
   leave an unactivated stage; no prior release is overwritten.
 - Implement `-StageOnly` for verified installation without PATH/skill/font changes.
@@ -75,35 +76,55 @@ stable version and read-only diagnostics passed. That check changed no user's
 active installation. Windows/Linux cross-compilation passed during development.
 The source installer now embeds the release version in all three tools.
 
-Remaining qualification: full private resources, Windows PATH/PowerShell execution,
-actual Windows upgrade/rollback, and Office/font qualification on the desktop
-runner. These remain incomplete despite core implementation. Detailed operator
+Merged through [PR #4](https://github.com/BuairtRi/pptxgengo/pull/4), main commit
+`0c62fcab66ecddfbc6ebfbf070baed343562d5a0`, synchronized to GitLab and the primary
+checkout. Exact head `de51f4c0f8c8d5e4910da29c9a8438b3eca05483` passed Mac normal/race
+checks, hosted Windows portable checks and installer staging/rollback/recovery
+regressions (16.5 seconds in the Windows step). The Windows fixtures use temporary
+roots and no user PATH mutation. [GitLab pipeline 21114](https://gitlab.samcott.com/riscott/pptxgengo/-/pipelines/21114)
+passed all six developer/security jobs.
+
+Remaining qualification: full private resources, real package activation in Windows
+user PATH, fonts and interactive Office qualification on the desktop runner.
+These remain incomplete despite core implementation and hosted core execution. Detailed operator
 workflow: [installation](../installation.md). Search and the remaining product
 features below are still independent work to undertake.
 
-## 2a. Hybrid template search — implementation contract next
+## 2a. Hybrid template search — lexical baseline implemented
 
-Extend `LibraryIndex.Find` and `library-find`; keep existing calls compatible.
-Proposed `--search-mode keyword|semantic|hybrid` is not implemented. Keyword uses
-FTS5 BM25; semantic uses an optional pinned local model and a direct vector scan.
-Fuse ranks with an explicit reciprocal-rank policy, deterministic identity ties
-and recorded policy parameters; do not add BM25 and cosine scores directly.
+Implemented in slot `pptx-library-retrieval`, [PR #5](https://github.com/BuairtRi/pptxgengo/pull/5):
+`library-find --retrieval keyword` uses SQLite FTS5 BM25 with Porter English
+stemming. Existing metadata ranking remains the default. The rich text recipe
+indexes names, purposes, exact identities, relationships, groups, component terms
+and authoring aliases/descriptions; synthetic example copy is excluded. Text
+recipe/corpus hashes and FTS schema/row checks reject stale or altered snapshots.
+Older indexes retain metadata discovery and need a new index for keyword mode.
 
-Preserve entity ID, namespace, kind, revision, source SHA and artifact hash
-contracts already represented by the unified index. Apply explicit filters before
-ranking and report structural fit separately from retrieval relevance. Keep the
-current structural hints visible rather than treating them as proven content fit.
+Kinds, namespace, lifecycle and adapter capabilities are filters. `--require-shape`
+requires all supplied structural/count hints. Ranking shows a separate BM25/rank,
+source structure/count agreement and fit-not-measured status; lexical relevance
+cannot hide a count caveat. Exact eligible IDs/unique keys rank first. Preview
+links, revisions and source pins stay in the existing discovery interface.
 
-An embedding record must bind entity/revision, retrieval text hash, source hash,
-model digest, runtime version, dimensions and normalization. Missing/stale model
-inputs must produce an explicit lexical fallback or semantic-mode error. Select
-the runtime/model only after licensing, size, CPU relevance and cross-platform
-integration evaluation. No Python or hosted service in normal operation.
+Bounded tests cover real V11 engineering relevance judgments, literal-query
+safety, repeated/concurrent read-only searches, corpus drift, old indexes and
+compact discovery equivalence. Warm query microbenchmarks improved from about
+214 ms/201 MB allocations to 113 ms/16 MB after omitting full source definitions
+from discovery reads. Verified open remains about 511 ms. These are local
+cached-filesystem samples; source definitions remain available for inspect/fit.
+See [discovery interface and measurement limits](../semantic-template-discovery.md).
 
-First evaluation set: interview lists, practices heat maps, modernization
-economics, roadmaps, pillars, exact IDs and synonyms. Judge acceptable candidates
-before comparing rank modes. Record cold/warm latency and memory before setting
-performance targets. A model package decision is still open.
+Model-backed semantic queries, persisted vectors and reciprocal-rank fusion remain
+pending. An isolated pinned MiniLM experiment executed through the pure Go GoMLX
+backend on Mac ARM64 and cross-built without CGO for all six release targets.
+Its hashes, footprint, measurements and follow-up contract are recorded in
+[the runtime evaluation](local-search-runtime-evaluation-20261006.md). No new model
+dependencies or model bytes are shipped in this lexical change. Prefer a separate
+optional offline model package; normal queries must not download files.
+
+Next: validate the Go tokenizer and mask pooling, bind embeddings to model/source/
+text hashes and dimensions, compare keyword/vector/hybrid on judged synonyms,
+implement explicit missing-model fallback, and collect supported-platform latency.
 
 ## 2b. Reusable finished slides — identity contract next
 
@@ -152,9 +173,9 @@ survival evidence on both platforms before expanding supported mappings.
 
 ## Working order
 
-Finish the installer activation/recovery contract and first Windows execution
-when the runner arrives. Next implement the lexical search mode and shared
-finished-slide identity contract while evaluating the optional local model.
+Installer activation/recovery core is merged; desktop qualification follows when
+the runner and private resources arrive. Finish lexical CI integration and build
+the local embedding/RRF path, then the shared finished-slide identity contract.
 Agree native field-address mappings before the editing pilot, then implement
 bounded reconciliation. Model choice, curated content and native acceptance
 remain explicit decisions rather than silently selected defaults.

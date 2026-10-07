@@ -14,8 +14,8 @@ Use the pure Go GoMLX backend as the first runtime candidate, with
 `compute v0.1.14`. Import only the Go backend explicitly; avoid default XLA/ONNX
 Runtime imports, automatic plugins and hosted embedding services. The actual
 experiment compiled with `CGO_ENABLED=0`, executed on macOS ARM64, and
-cross-built for Windows ARM64. Other target builds and actual Windows execution
-remain required before adoption.
+cross-built for Darwin/Linux/Windows on AMD64 and ARM64. Actual Windows execution
+and supported-platform latency remain required before adoption.
 
 Evaluate `sentence-transformers/all-MiniLM-L6-v2`, 384 dimensions, at immutable
 Hugging Face revision `1110a243fdf4706b3f48f1d95db1a4f5529b4d41`.
@@ -51,7 +51,7 @@ produced `Float32[1,256,384]` in about 547–549 ms. The process that exercised 
 shapes reached approximately 477 MB maximum resident memory (`time -l`).
 
 This proves model parsing, graph execution, repeated execution and a no-CGO
-Windows ARM64 build. It does not prove sentence pooling, tokenizer equivalence,
+six-target build matrix. It does not prove sentence pooling, tokenizer equivalence,
 retrieval relevance, embedding snapshot freshness, target-system latency or
 Windows native execution. Input tokens were hardcoded from the upstream example.
 No Python or hosted service was involved in inference. The development download
