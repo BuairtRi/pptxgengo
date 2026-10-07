@@ -226,13 +226,16 @@ func TestInstallationRealToolProcesses(t *testing.T) {
 	if err != nil || beforePath != afterPath {
 		t.Fatal("qualification changed user PATH", err)
 	}
+	if runtime.GOOS == "windows" {
+		steps = append(steps, qualifyWindowsInstallerScript(t, root, dir, one)...)
+	}
 	if err := atomicJSON(filepath.Join(out, "qualification.json"), map[string]any{
 		"schema": "pptxgengo.installation-process-qualification/v1",
 		"os":     runtime.GOOS, "architecture": runtime.GOARCH, "go_version": runtime.Version(),
 		"source_commit": os.Getenv("PPTXGENGO_INSTALL_PROCESS_COMMIT"),
 		"created":       time.Now().UTC().Format(time.RFC3339Nano), "steps": steps,
 		"packages": packages, "user_path": "unchanged; --no-path", "fonts": "not_changed",
-		"scope":               "actual unsigned source tools; synthetic CLI-only metadata; owned paths only",
+		"scope":               "actual unsigned source tools; synthetic CLI-only metadata; Windows also exercises synthetic full-format resources; owned paths only",
 		"publisher_signature": "not_qualified", "full_presentation_package": "not_qualified",
 		"native_office": "not_exercised",
 	}); err != nil {

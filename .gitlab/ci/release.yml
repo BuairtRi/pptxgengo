@@ -48,6 +48,7 @@ release:resources:
   stage: build
   needs:
     - {job: developer, artifacts: false}
+    - {job: installation-process, artifacts: false}
     - {job: offline-model, artifacts: false}
     - {job: workflow-lint, artifacts: false}
     - {job: security:go, artifacts: false}
@@ -64,6 +65,7 @@ release:build:
   stage: build
   needs:
     - {job: developer, artifacts: false}
+    - {job: installation-process, artifacts: false}
     - {job: offline-model, artifacts: false}
     - {job: workflow-lint, artifacts: false}
     - {job: security:go, artifacts: false}

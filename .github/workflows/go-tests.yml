@@ -39,6 +39,18 @@ jobs:
           cache-dependency-path: go.sum
       - run: mkdir -p "$WMDS_BRANDING_ROOT"
       - run: make ${{ matrix.target }}
+      - name: Actual CLI install, upgrade, dispatch and rollback processes
+        if: matrix.target == 'test'
+        env:
+          PPTXGENGO_INSTALL_PROCESS_OUT: ${{ runner.temp }}/installation-process
+          PPTXGENGO_INSTALL_PROCESS_COMMIT: ${{ github.sha }}
+        run: go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
+      - uses: actions/upload-artifact@v7
+        if: always() && matrix.target == 'test'
+        with:
+          name: installation-process-macos
+          path: ${{ runner.temp }}/installation-process/qualification.json
+          retention-days: 14
 
   exhaustive:
     name: Exhaustive checks (${{ matrix.target }})

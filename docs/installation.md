@@ -118,6 +118,38 @@ the single recorded location explicitly. No purge operation is implemented.
 
 ## Evidence and remaining qualification
 
+The opt-in `TestInstallationRealToolProcesses` harness builds and executes
+the actual three source tools with synthetic CLI package versions. It exercises
+stage-only behavior, install/upgrade, repeated installation, all three immutable
+dispatchers, rollback, a missing-dispatcher repair, false-version startup refusal,
+recovery and uninstall. Owned paths contain spaces. The source tools are unsigned;
+fixture metadata is not a publisher signature.
+
+Every activation uses `--no-path`, explicit managed/bin/skill directories and
+a fresh controlled child-process PATH. The harness checks the user registry PATH
+is unchanged, preserves an existing user skill, retains releases after uninstall
+and records a JSON scenario list with actual OS/architecture and package hashes.
+It does not qualify a newly opened desktop terminal's inherited registry PATH.
+
+On Windows, the same opt-in also executes the actual
+`install-windows.ps1` with `-StageOnly`, then repeated activation using
+`-NoPath -SkipSkill -SkipFonts`. Its full-format resources are synthetic
+placeholders in an isolated app-data directory. No fake font is registered,
+private branding is included or PowerPoint opened. This covers the script and
+opt-outs, not a usable full presentation package.
+
+Run from the repository root with a new directory in an existing parent:
+
+```sh
+PPTXGENGO_INSTALL_PROCESS_OUT=/path/new-qualification-directory \
+  go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
+```
+
+CI adds this on Kubernetes Linux, hosted macOS and hosted Windows. Only the
+generic `qualification.json` is retained for 14 days; unsigned executable
+fixtures are not uploaded. The Linux result also gates future protected release
+build/resource jobs. Actual hosted results must pass before source integration.
+
 The bounded regression lane covers hashes/inventory, staging, repeated install,
 upgrade, rollback, interrupted activation, conflicting edits, skill symlinks,
 uninstall preservation and launcher setup recovery. An isolated macOS arm64
