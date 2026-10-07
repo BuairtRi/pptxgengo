@@ -186,6 +186,14 @@ survival evidence on both platforms before expanding supported mappings.
 
 ## Working order
 
+Hosted lexical CI follow-up: head `8567e908` passed GitLab pipeline 21125,
+but one hosted Mac normal job hit the original 150-second package ceiling.
+The short-suite package ceiling is now five minutes; selected race workloads
+retain their 150-second ceilings. Updated head `42c7c2a0` passed GitLab pipeline
+21130 and both Mac normal/race and Windows portable runs before PR #5 merged.
+The slowest hosted race job took 9m58s; the next source build raises its job
+ceiling to 15 minutes while retaining the per-package bounds.
+
 Installer activation/recovery core is merged; desktop qualification follows when
 the runner and private resources arrive. Finish model CI integration,
 then the shared finished-slide identity contract.
