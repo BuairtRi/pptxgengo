@@ -16,8 +16,7 @@ import (
 )
 
 type FilePin struct {
-	Path string `json:"path"
- "reflect"`
+	Path   string `json:"path"`
 	SHA256 string `json:"sha256"`
 }
 type Frame struct {
@@ -55,8 +54,7 @@ type TemplateCoverage struct {
 	} `json:"frame_exclusions"`
 }
 type Revision struct {
-	Path string `json:"path"
- "reflect"`
+	Path     string                 `json:"path"`
 	Manifest finishedslide.Manifest `json:"manifest"`
 	Included bool                   `json:"included"`
 	Reason   string                 `json:"reason"`
