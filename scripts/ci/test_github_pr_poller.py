@@ -1,0 +1,279 @@
+"""Hermetic tests: no network, credentials, deployments or pipeline creation."""
+import base64
+import copy
+import hashlib
+import json
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+import github_pr_poller as p
+
+S = "a" * 40
+REF = "slot/pptxgengo/a/b"
+ROOT = b'pr-unit:\n PPTXGENGO_CI_TIER: pr\n PPTXGENGO_PR_HEAD: required\n script: make test-pr\n'
+FILES = {name: ROOT if name == ".gitlab-ci.yml" else name.encode() for name in p.CI_FILES}
+PROFILE = {name: hashlib.sha256(data).hexdigest() for name, data in FILES.items()}
+
+
+def pr(number=7, sha=S):
+    repo = {"id": p.REPO_ID, "full_name": p.REPO}
+    return {"state": "open", "number": number, "head": {"repo": repo, "sha": sha, "ref": REF}, "base": {"repo": repo, "ref": "main"}}
+
+
+class Store:
+    def __init__(self):
+        self.value = {"schema": 1, "records": {}}
+        self.saves = []
+
+    def load(self):
+        return copy.deepcopy(self.value)
+
+    def save(self, value):
+        self.value = copy.deepcopy(value)
+        self.saves.append(copy.deepcopy(value))
+
+
+class GitHub:
+    def __init__(self, prs=None):
+        self.prs = [pr()] if prs is None else prs
+
+    def request(self, *args, **kwargs):
+        return copy.deepcopy(self.prs), {}
+
+
+class GitLab:
+    def __init__(self, store):
+        self.store = store
+        self.calls = []
+        self.protected = False
+        self.mirror_sha = S
+        self.files = copy.deepcopy(FILES)
+        self.pipelines = []
+        self.pipeline_variables = {}
+        self.lose_response = False
+        self.result_sha = S
+        self.result_source = "api"
+        self.refused_create = False
+
+    def request(self, method, path, query=None, body=None):
+        self.calls.append((method, path, copy.deepcopy(query), copy.deepcopy(body)))
+        if method == "GET" and "/repository/branches/" in path:
+            return {"name": REF, "protected": self.protected, "commit": {"id": self.mirror_sha}}, {}
+        if method == "GET" and "/repository/files/" in path:
+            name = p.urllib.parse.unquote(path.split("/repository/files/")[1])
+            return {"file_path": name, "encoding": "base64", "content": base64.b64encode(self.files[name]).decode()}, {}
+        if method == "GET" and path == "projects/17/pipelines":
+            return copy.deepcopy(self.pipelines), {}
+        if method == "GET" and path.endswith("/variables"):
+            return copy.deepcopy(self.pipeline_variables[int(path.split("/")[-2])]), {}
+        if method == "POST" and path.endswith("/cancel"):
+            return {}, {}
+        if method == "POST" and path == "projects/17/pipeline":
+            # Durable intent must already exist before mutating the API.
+            assert any(r["state"] == "pending" for r in self.store.value["records"].values())
+            if self.refused_create:
+                raise p.HTTPFailure(400)
+            result = {"id": 123, "sha": self.result_sha, "ref": REF, "source": self.result_source, "tag": False}
+            self.pipelines.append(result)
+            self.pipeline_variables[123] = body["variables"]
+            if self.lose_response:
+                raise p.Uncertain("creation-response-uncertain")
+            return result, {}
+        raise AssertionError((method, path))
+
+
+class PollerTests(unittest.TestCase):
+    def setUp(self):
+        self.store = Store()
+        self.gh = GitHub()
+        self.gl = GitLab(self.store)
+        self.logs = []
+        self.clock = 1000
+        self.poller = p.Poller(self.gh, self.gl, self.store, [PROFILE], self.logs.append, lambda: self.clock)
+
+    def creations(self):
+        return [x for x in self.gl.calls if x[:2] == ("POST", "projects/17/pipeline")]
+
+    def test_exact_head_encoded_ref_and_dedup(self):
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+        self.assertEqual(self.store.value["records"][f"{p.REPO_ID}/7/{S}"]["pipeline"], 123)
+        self.assertTrue(any("slot%2Fpptxgengo%2Fa%2Fb" in x[1] for x in self.gl.calls))
+        self.assertEqual({v["key"]: v["value"] for v in self.creations()[0][3]["variables"]}, p.Poller.variables(7, S, f"{p.REPO_ID}/7/{S}"))
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+
+    def test_fork_closed_wrong_base_bad_sha_and_protected_are_refused(self):
+        changes = [lambda x: x["head"].update(repo={"id": 1, "full_name": "other/fork"}), lambda x: x.update(state="closed"), lambda x: x["base"].update(ref="master"), lambda x: x["head"].update(sha="not-a-sha"), lambda x: x["head"].update(ref="main"), lambda x: x.update(head=[])]
+        for change in changes:
+            item = pr()
+            change(item)
+            with self.assertRaises(p.Refused):
+                self.poller.identity(item)
+        for ref in ("../main", "a//b", "a/../b", "x?token=y", "refs/a.lock", "x\\y"):
+            item = pr()
+            item["head"]["ref"] = ref
+            with self.assertRaises(p.Refused):
+                self.poller.identity(item)
+        self.gl.protected = True
+        self.poller.run()
+        self.assertEqual(self.creations(), [])
+        self.gl.protected = False
+        self.gl.mirror_sha = "b" * 40
+        self.poller.run()
+        self.assertEqual(self.creations(), [])
+
+    def test_old_heavy_or_changed_included_ci_is_never_triggered(self):
+        for name in p.CI_FILES:
+            with self.subTest(file=name):
+                self.gl.files = dict(FILES)
+                self.gl.files[name] += b"\nchanged rules"
+                self.poller.run()
+                self.assertEqual(self.creations(), [])
+        self.assertTrue(any("unsupported-ci-config" in x for x in self.logs))
+
+    def test_lost_creation_response_recovers_by_exact_variables(self):
+        self.gl.lose_response = True
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "pending")
+        self.gl.lose_response = False
+        self.clock += 180
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "scheduled")
+        self.assertTrue(any('"event": "recovered"' in x for x in self.logs))
+
+    def test_unrelated_api_pipeline_is_not_recovery_evidence(self):
+        self.gl.pipelines = [{"id": 9, "sha": S, "ref": REF, "source": "api"}]
+        self.gl.pipeline_variables[9] = [{"key": "PPTXGENGO_CI_TIER", "value": "full"}]
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+
+    def test_ref_move_response_is_cancelled_and_never_accepted(self):
+        self.gl.result_sha = "b" * 40
+        self.poller.run()
+        self.assertTrue(any(x[:2] == ("POST", "projects/17/pipelines/123/cancel") for x in self.gl.calls))
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "refused")
+
+    def test_known_failure_creation_attempts_are_bounded(self):
+        self.gl.refused_create = True
+        for _ in range(5):
+            self.poller.run()
+            self.clock += 180
+        self.assertEqual(len(self.creations()), 3)
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "refused")
+
+    def test_pending_response_waits_before_retry(self):
+        self.gl.lose_response = True
+        self.poller.run()
+        self.gl.pipelines = []
+        self.clock += 30
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+
+    def test_github_rate_backoff_is_durable(self):
+        self.gh.request = lambda *a, **k: (_ for _ in ()).throw(p.Backoff(self.clock + 180))
+        self.poller.run()
+        self.assertEqual(self.store.value["not_before"], self.clock + 180)
+        self.gh.request = lambda *a, **k: self.fail("request during backoff")
+        self.poller.run()
+
+    def test_request_budget_stops_and_discovery_cursor_advances(self):
+        self.gh.prs = [pr(7), pr(8)]
+        self.gl.request = lambda *a, **k: (_ for _ in ()).throw(p.Refused("request-budget-exhausted"))
+        self.poller.run()
+        self.assertEqual(self.store.value["cursor"], 7)
+        self.poller.run()
+        self.assertEqual(self.store.value["cursor"], 8)
+
+    def test_invalid_journal_refuses_before_any_api_creation(self):
+        self.store.value = {"schema": 1, "records": {"wrong": {"state": "pending"}}}
+        with self.assertRaises(p.Refused):
+            self.poller.run()
+        self.assertEqual(self.creations(), [])
+
+    def test_duplicate_variable_does_not_recover(self):
+        self.gl.pipelines = [{"id": 9, "sha": S, "ref": REF, "source": "api"}]
+        self.gl.pipeline_variables[9] = [{"key": "PPTXGENGO_CI_TIER", "value": "pr"}] * 2
+        self.poller.run()
+        self.assertEqual(self.creations(), [])
+
+
+class BoundaryTests(unittest.TestCase):
+    def test_pagination_follows_headers_without_following_untrusted_urls(self):
+        class Pages:
+            def request(self, method, path, query):
+                return ([pr(query["page"])], {"link": '<https://evil.invalid>; rel="next"'} if query["page"] < 2 else {})
+        self.assertEqual([x["number"] for x in p.paged(Pages(), "fixed", {})], [1, 2])
+        with self.assertRaises(p.Refused):
+            p.paged(Pages(), "fixed", {}, max_pages=1)
+
+    def test_payload_and_secret_bounds(self):
+        with self.assertRaises(p.Refused):
+            p.bounded_json(b" " * (p.MAX_BODY + 1))
+        with tempfile.TemporaryDirectory() as directory:
+            file = Path(directory) / "secret"
+            file.write_text("do-not-log-this-token-value")
+            self.assertEqual(p.mounted_secret(file), "do-not-log-this-token-value")
+            file.write_text("x" * 4097)
+            with self.assertRaisesRegex(p.Refused, "secret-file-too-large"):
+                p.mounted_secret(file)
+
+    def test_empty_capability_is_suspended_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            file = Path(directory) / "capabilities.json"
+            file.write_text('{"profiles":[]}')
+            with self.assertRaises(p.Refused):
+                p.load_capabilities(file)
+
+    def test_redirects_and_url_paths_cannot_forward_token(self):
+        self.assertIsNone(p.NoRedirect().redirect_request(None, None, 302, "", {}, "https://evil.invalid"))
+        client = p.Client("https://gitlab.samcott.com/api/v4", p.Budget(), "secret-marker-value")
+        for path in ("https://evil.invalid", "//evil.invalid", "pipeline?token=secret", "x#y"):
+            with self.assertRaises(p.Refused):
+                client.request("GET", path)
+
+    def test_create_transport_is_not_retried_and_errors_are_sanitized(self):
+        client = p.Client("https://gitlab.samcott.com/api/v4", p.Budget(), "credential-must-not-appear")
+        with patch.object(client.opener, "open", side_effect=p.urllib.error.URLError("credential-must-not-appear")) as call:
+            with self.assertRaises(p.Uncertain) as caught:
+                client.request("POST", "projects/17/pipeline", body={"ref": REF})
+        self.assertEqual(call.call_count, 1)
+        self.assertNotIn("credential-must-not-appear", str(caught.exception))
+
+    def test_get_retries_are_bounded(self):
+        client = p.Client("https://api.github.com", p.Budget())
+        with patch.object(client.opener, "open", side_effect=p.urllib.error.URLError("offline")) as call, patch.object(p.time, "sleep"):
+            with self.assertRaises(p.Uncertain):
+                client.request("GET", "repos/BuairtRi/pptxgengo/pulls")
+        self.assertEqual(call.call_count, 3)
+
+    def test_rate_limit_delay_is_bounded_without_logging_body_or_token(self):
+        client = p.Client("https://api.github.com", p.Budget())
+        error = p.urllib.error.HTTPError("https://api.github.com", 429, "do-not-log", {"Retry-After": "999999999"}, None)
+        with patch.object(client.opener, "open", side_effect=error) as call:
+            with self.assertRaises(p.Backoff) as caught:
+                client.request("GET", "repos/BuairtRi/pptxgengo/pulls")
+        self.assertEqual(call.call_count, 1)
+        self.assertLessEqual(caught.exception.until, p.time.time() + 21600)
+        self.assertEqual(str(caught.exception), "rate-backoff")
+
+    def test_configmap_uses_resource_version_compare_and_swap(self):
+        document = {"metadata": {"resourceVersion": "11"}, "data": {"journal.json": '{"schema":1,"records":{}}'}}
+        class Kube:
+            def request(self, method, path, query=None, body=None):
+                if method == "GET":
+                    return copy.deepcopy(document), {}
+                assert body["metadata"]["resourceVersion"] == "11"
+                raise p.HTTPFailure(409)
+        store = p.ConfigMapJournal(Kube(), "gitlab-runner", "pptxgengo-pr-poller-journal")
+        journal = store.load()
+        with self.assertRaises(p.HTTPFailure):
+            store.save(journal)
+
+
+if __name__ == "__main__":
+    unittest.main()

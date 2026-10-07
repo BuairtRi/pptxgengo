@@ -1,0 +1,130 @@
+# Token-free template. Keep suspended until the cadence source is merged,
+# exact approved CI hashes are configured, and code/image/token are provisioned.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pptxgengo-pr-poller
+  namespace: gitlab-runner
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pptxgengo-pr-poller
+  namespace: gitlab-runner
+rules:
+  - apiGroups: ['']
+    resources: [configmaps]
+    resourceNames: [pptxgengo-pr-poller-journal]
+    verbs: [get, update]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pptxgengo-pr-poller
+  namespace: gitlab-runner
+subjects:
+  - kind: ServiceAccount
+    name: pptxgengo-pr-poller
+    namespace: gitlab-runner
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pptxgengo-pr-poller
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pptxgengo-pr-poller-capabilities
+  namespace: gitlab-runner
+data:
+  # Empty profiles are intentionally refused. Populate approved full config
+  # profiles after merge; this is not a marker-only or branch-name trust check.
+  capabilities.json: '{"profiles":[]}'
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pptxgengo-pr-poller
+  namespace: gitlab-runner
+spec:
+  suspend: true
+  schedule: '*/3 * * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 60
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 120
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: pptxgengo-pr-poller
+        spec:
+          serviceAccountName: pptxgengo-pr-poller
+          automountServiceAccountToken: false
+          dnsConfig:
+            options:
+              - {name: ndots, value: "1"}
+          hostAliases:
+            - ip: 192.168.20.63
+              hostnames: [gitlab.samcott.com]
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            fsGroup: 10001
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: poller
+              # Resolve/pin the reviewed multi-architecture digest before activation.
+              image: python:3.13.8-alpine@sha256:3a77fbbb5bc88c0f63cc2692a13b011547f25ee93536e991544c452801856226
+              command: [python3, -B, /code/github_pr_poller.py]
+              args: [--namespace, gitlab-runner, --gitlab-ca, /etc/pptxgengo-ca/ca.crt]
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: [ALL]
+              resources:
+                requests: {cpu: 50m, memory: 32Mi}
+                limits: {cpu: 500m, memory: 128Mi}
+              volumeMounts:
+                - {name: code, mountPath: /code, readOnly: true}
+                - {name: config, mountPath: /config, readOnly: true}
+                - {name: gitlab-ca, mountPath: /etc/pptxgengo-ca, readOnly: true}
+                - {name: token, mountPath: /var/run/secrets/pptxgengo-poller, readOnly: true}
+                - {name: kube-api, mountPath: /var/run/secrets/kubernetes.io/serviceaccount, readOnly: true}
+          volumes:
+            - name: code
+              configMap:
+                # Generate from the reviewed source file; no runtime Git clone.
+                name: pptxgengo-pr-poller-code
+            - name: config
+              configMap:
+                name: pptxgengo-pr-poller-capabilities
+            - name: gitlab-ca
+              configMap:
+                name: runner-ca-bundle
+            - name: token
+              secret:
+                secretName: pptxgengo-pr-poller-token
+                defaultMode: 0440
+                items:
+                  - {key: token, path: token}
+            - name: kube-api
+              projected:
+                defaultMode: 0440
+                sources:
+                  - serviceAccountToken:
+                      path: token
+                      expirationSeconds: 600
+                  - configMap:
+                      name: kube-root-ca.crt
+                      items:
+                        - {key: ca.crt, path: ca.crt}

@@ -9,8 +9,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// This is a structural policy check, not a substitute for GitLab's rule evaluator.
-// Server lint and actual pipelines also exercise the selected job graphs.
+// Structural policy regression checks complement GitLab's authoritative rules
+// simulations and actual pipeline runs; they do not reimplement its evaluator.
 func TestRepositoryQualificationCadenceAndReleaseGates(t *testing.T) {
 	read := func(path string) map[string]any {
 		t.Helper()
@@ -19,7 +19,7 @@ func TestRepositoryQualificationCadenceAndReleaseGates(t *testing.T) {
 			t.Fatal(err)
 		}
 		var config map[string]any
-		if err := yaml.Unmarshal(raw, &config); err != nil {
+		if err = yaml.Unmarshal(raw, &config); err != nil {
 			t.Fatal(err)
 		}
 		return config
@@ -27,83 +27,127 @@ func TestRepositoryQualificationCadenceAndReleaseGates(t *testing.T) {
 	root, native, release := read(".gitlab-ci.yml"), read(".gitlab/ci/native-cli.yml"), read(".gitlab/ci/release.yml")
 	job := func(config map[string]any, name string) map[string]any {
 		t.Helper()
-		value, ok := config[name].(map[string]any)
+		j, ok := config[name].(map[string]any)
 		if !ok {
 			t.Fatalf("missing job %s", name)
 		}
-		return value
+		return j
+	}
+	rules := func(j map[string]any) []any {
+		t.Helper()
+		r, ok := j["rules"].([]any)
+		if !ok || len(r) == 0 {
+			t.Fatal("explicit rules required")
+		}
+		if !reflect.DeepEqual(r[len(r)-1], map[string]any{"when": "never"}) {
+			t.Fatal("rules must end with exclusion")
+		}
+		return r
+	}
+	has := func(j map[string]any, condition string) bool {
+		for _, v := range rules(j) {
+			if v.(map[string]any)["if"] == condition {
+				return true
+			}
+		}
+		return false
+	}
+	tag := rules(job(release, ".release-rules"))[0].(map[string]any)["if"].(string)
+	main := `$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH`
+	night := `$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"`
+	pr := `$CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE =~ /^(api|web)$/ && $PPTXGENGO_CI_TIER == "pr")`
+	workflow := job(root, "workflow")
+	for _, condition := range []string{main, night, tag, pr} {
+		if !has(workflow, condition) {
+			t.Fatalf("workflow missing %s", condition)
+		}
+	}
+	for _, value := range rules(workflow) {
+		m := value.(map[string]any)
+		if m["if"] == `$CI_COMMIT_BRANCH` || m["if"] == `$CI_PIPELINE_SOURCE == "push"` {
+			t.Fatal("ordinary branch pushes must not create pipelines")
+		}
 	}
 	developer := job(root, "developer")
-	if developer["parallel"] != nil || developer["rules"] != nil || !reflect.DeepEqual(developer["script"], []any{"make test"}) {
-		t.Fatal("ordinary developer job must run only the short suite, once")
+	if developer["parallel"] != nil || !reflect.DeepEqual(developer["script"], []any{"make test"}) || !has(developer, main) || !has(developer, tag) || has(developer, pr) {
+		t.Fatal("main/tag require one full hermetic unit suite; PRs use their separate focused suite")
 	}
-	qualification := job(root, ".qualification-rules")["rules"].([]any)
-	if len(qualification) != 4 {
-		t.Fatal("unexpected full qualification rules")
+	pj := job(root, "pr-unit")
+	if !has(pj, pr) || has(pj, main) || !reflect.DeepEqual(pj["script"], []any{`test -z "${PPTXGENGO_PR_HEAD:-}" || test "$CI_COMMIT_SHA" = "$PPTXGENGO_PR_HEAD"`, "make test-pr"}) {
+		t.Fatal("PR tier must guard exact head and run focused units")
 	}
-	first := qualification[0].(map[string]any)["if"].(string)
-	for _, required := range []string{`$CI_PIPELINE_SOURCE == "schedule"`, `$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH`, `$CI_COMMIT_REF_PROTECTED == "true"`} {
-		if !strings.Contains(first, required) {
-			t.Fatalf("nightly must be protected default branch: %s", first)
+	for _, pair := range []struct {
+		config map[string]any
+		name   string
+	}{{root, "developer-race"}, {root, "search-performance"}, {root, "search-performance-arm64"}, {root, "offline-model-arm64"}, {native, "cross-platform-build"}, {native, "macos-race"}, {native, "macos-model"}} {
+		j := job(pair.config, pair.name)
+		if !has(j, night) || has(j, tag) || has(j, main) || has(j, pr) {
+			t.Fatalf("%s must be nightly/on-demand only", pair.name)
+		}
+		for _, value := range rules(j) {
+			c, _ := value.(map[string]any)["if"].(string)
+			if strings.Contains(c, "CI_COMMIT_TAG") || strings.Contains(c, `== "push"`) {
+				t.Fatalf("%s contains a routine/tag rule", pair.name)
+			}
 		}
 	}
-	if !reflect.DeepEqual(qualification[1], job(release, ".release-rules")["rules"].([]any)[0]) {
-		t.Fatal("full qualification must cover every supported protected release tag")
-	}
-	if qualification[2].(map[string]any)["if"] != `$CI_PIPELINE_SOURCE == "web" && $PPTXGENGO_QUALIFICATION == "true"` || !reflect.DeepEqual(qualification[3], map[string]any{"when": "never"}) {
-		t.Fatal("full qualification needs explicit web opt-in and terminal exclusion")
-	}
-	for _, name := range []string{"installation-process", "offline-model", "security:offline-model"} {
-		if job(root, name)["extends"] != ".qualification-rules" {
-			t.Fatalf("%s must use full qualification rules", name)
+	for _, name := range []string{"exhaustive", "windows-native"} {
+		for _, value := range rules(job(root, name)) {
+			condition, _ := value.(map[string]any)["if"].(string)
+			if condition != "" && (!strings.Contains(condition, "PPTXGENGO_") || strings.Contains(condition, "CI_COMMIT_TAG") || strings.Contains(condition, `== "push"`)) {
+				t.Fatalf("%s requires an explicit opt-in", name)
+			}
 		}
 	}
-	for name, parent := range map[string]string{"installation-process-arm64": "installation-process", "offline-model-arm64": "offline-model"} {
+	for _, name := range []string{"installation-process", "installation-process-arm64", "offline-model", "security:go", "security:offline-model"} {
 		j := job(root, name)
-		if j["extends"] != parent || j["rules"] != nil {
-			t.Fatalf("%s must retain its parent's qualification rules", name)
+		if !has(j, tag) || !has(j, night) || has(j, main) || has(j, pr) {
+			t.Fatalf("%s belongs to tag/night/on-demand", name)
 		}
 	}
-	race := job(root, "developer-race")
-	if !reflect.DeepEqual(race["extends"], []any{"developer", ".qualification-rules"}) || !reflect.DeepEqual(race["script"], []any{"make test-race"}) || race["parallel"] != nil {
-		t.Fatal("race suite must be one explicit full-qualification job")
-	}
-	if job(native, "cross-platform-build")["extends"] != ".qualification-rules" {
-		t.Fatal("cross-builds must use full qualification rules")
-	}
-	macRules := job(native, ".native-macos")["rules"].([]any)
-	if len(macRules) != 4 || !reflect.DeepEqual(macRules[3], map[string]any{"when": "never"}) {
-		t.Fatal("unexpected native Mac rules")
-	}
-	for i, source := range []string{"schedule", "web"} {
-		condition := macRules[i].(map[string]any)["if"].(string)
-		for _, part := range []string{`$CI_COMMIT_REF_PROTECTED == "true"`, `$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH`, `$CI_PIPELINE_SOURCE == "` + source + `"`} {
-			if !strings.Contains(condition, part) {
-				t.Fatalf("Mac qualification must require protected main and explicit source: %s", condition)
-			}
-		}
-		if source == "web" && !strings.Contains(condition, `$PPTXGENGO_QUALIFICATION == "true"`) {
-			t.Fatal("Mac web qualification must be opt-in")
+	for _, name := range []string{"installation-process-arm64", "offline-model-arm64", "search-performance-arm64"} {
+		if !reflect.DeepEqual(job(root, name)["tags"], []any{"linux", "arm64", "macmini-linux"}) {
+			t.Fatalf("%s must never use the Pi pool", name)
 		}
 	}
-	macTag := macRules[2].(map[string]any)["if"].(string)
-	if !strings.Contains(macTag, `$CI_COMMIT_REF_PROTECTED == "true"`) || !strings.Contains(macTag, `$CI_COMMIT_TAG =~ /^v`) {
-		t.Fatal("Mac tag qualification must remain protected")
+	for _, name := range []string{"installation-process", "installation-process-arm64", "offline-model", "search-performance-arm64"} {
+		if job(root, name)["cache"].(map[string]any)["policy"] != "pull" {
+			t.Fatalf("%s must not re-upload shared cache", name)
+		}
 	}
-	required := []string{"developer", "developer-race", "installation-process", "installation-process-arm64", "offline-model", "offline-model-arm64", "workflow-lint", "cross-platform-build", "macos-cli", "macos-model", "security:go", "security:secrets", "security:offline-model"}
+	if job(native, "cross-platform-build")["cache"].(map[string]any)["policy"] != "pull" {
+		t.Fatal("cross-target cache must not bloat routine jobs")
+	}
+	prefix := func(j map[string]any) any { return j["cache"].(map[string]any)["key"].(map[string]any)["prefix"] }
+	if prefix(developer) == prefix(job(root, "developer-race")) {
+		t.Fatal("short/race caches must be separate")
+	}
+	if job(root, "offline-model-arm64")["cache"].(map[string]any)["policy"] != "pull-push" || prefix(job(root, "offline-model-arm64")) != prefix(job(root, "installation-process-arm64")) {
+		t.Fatal("ARM cache writer/reader mismatch")
+	}
+	for _, line := range job(native, "macos-cli")["script"].([]any) {
+		if strings.Contains(line.(string), "test-race") {
+			t.Fatal("Mac release qualification cannot include races")
+		}
+	}
+	required := []string{"developer", "pr-relay-unit", "installation-process", "installation-process-arm64", "offline-model", "workflow-lint", "macos-cli", "security:go", "security:secrets", "security:offline-model"}
 	for _, name := range []string{"release:resources", "release:build"} {
-		needs := job(release, name)["needs"].([]any)
 		found := map[string]bool{}
-		for _, value := range needs {
-			need := value.(map[string]any)
-			if need["optional"] == true {
-				t.Fatalf("release %s cannot skip qualification", name)
+		for _, v := range job(release, name)["needs"].([]any) {
+			n := v.(map[string]any)
+			if n["optional"] == true {
+				t.Fatalf("%s cannot skip its release gates", name)
 			}
-			found[need["job"].(string)] = true
+			found[n["job"].(string)] = true
 		}
 		for _, gate := range required {
 			if !found[gate] {
-				t.Fatalf("release %s missing mandatory %s", name, gate)
+				t.Fatalf("%s missing mandatory %s", name, gate)
+			}
+		}
+		for _, gate := range []string{"developer-race", "macos-race", "macos-model", "search-performance", "cross-platform-build", "offline-model-arm64"} {
+			if found[gate] {
+				t.Fatalf("%s waits for night-only %s", name, gate)
 			}
 		}
 	}

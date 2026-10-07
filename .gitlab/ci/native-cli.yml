@@ -1,8 +1,5 @@
-# Every check and artifact runs in private GitLab. Protected Mac execution uses
-# the existing signing runner; no protected runner/secret access is added to
-# ordinary source branches.
+# Private native execution; no ordinary branch/main push uses a scarce desktop runner.
 cross-platform-build:
-  extends: .qualification-rules
   stage: test
   image: golang:1.27.1
   timeout: 15 minutes
@@ -12,12 +9,17 @@ cross-platform-build:
     GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
     GOCACHE: $CI_PROJECT_DIR/.cache/go-build
   cache:
+    policy: pull
     key:
       files: [go.mod, go.sum]
-      prefix: go-linux
+      prefix: go-linux-fast-v1
     paths: [.cache/go-mod, .cache/go-build]
   script:
     - bash scripts/ci/cross-platform-build.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "cross-platform-build")'
+    - when: never
 
 .native-macos:
   stage: test
@@ -33,11 +35,6 @@ cross-platform-build:
     GOCACHE: /Users/admin/.gocache-ci/pptxgengo/build
     WMDS_BRANDING_ROOT: $CI_PROJECT_DIR/.cache/empty-branding
     PPTXGENGO_NATIVE_LIVE_OUT: ''
-  rules:
-    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web" && $PPTXGENGO_QUALIFICATION == "true"'
-    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/'
-    - when: never
   before_script:
     - source scripts/release/use-macos-go.sh
     - test "$(go env GOHOSTOS)/$(go env GOHOSTARCH)" = darwin/arm64
@@ -46,6 +43,11 @@ cross-platform-build:
     when: on_success
     access: maintainer
     expire_in: 14 days
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "macos-cli") && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - when: never
 
 macos-cli:
   extends: .native-macos
@@ -54,10 +56,18 @@ macos-cli:
     PPTXGENGO_INSTALL_PROCESS_COMMIT: $CI_COMMIT_SHA
   script:
     - make test
-    - make test-race
     - go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
   artifacts:
     paths: [.cache/installation-process/qualification.json]
+
+macos-race:
+  extends: .native-macos
+  script:
+    - make test-race
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "macos-race") && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - when: never
 
 macos-model:
   extends: .native-macos
@@ -73,6 +83,11 @@ macos-model:
     - go test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$' -v ./internal/wmdesign
   artifacts:
     paths: [.cache/search-performance/]
+
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "macos-model") && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - when: never
 
 # Native Windows execution needs the forthcoming home-lab shell runner.
 # Build/sign Windows releases on Linux; do not enqueue an unavailable runner.
