@@ -15,6 +15,18 @@ The operator selected `v4.1.0` as the stable tag after the signed CLI prerelease
 and signs binaries with the stable version embedded; it does not relabel the RC
 archives. Downloads and release evidence remain private in GitLab project 17.
 
+Stable release published privately:
+[GitLab v4.1.0](https://gitlab.samcott.com/riscott/pptxgengo/-/releases/v4.1.0).
+[Pipeline 21092](https://gitlab.samcott.com/riscott/pptxgengo/-/pipelines/21092)
+passed all 22 jobs. Apple accepted notarization submission
+`648adb9f-74d9-45bf-a7c3-f6a4fbda50ce`. Windows Authenticode verification and
+private Sigstore manifest attestation passed. All 30 package files were downloaded
+outside CI; all 27 manifest file hashes matched, and the downloaded manifest was
+byte-identical to the CI-attested manifest. The three downloaded macOS arm64 tools
+passed strict signature verification and ran `--version` as `v4.1.0` locally.
+The GitLab description was corrected from the publisher's hardcoded prerelease
+wording; a source fix for future stable tags is committed in this slot.
+
 These releases are CLI-only. The handoff's `0.1.0-local.21` presentation installation
 is a different package baseline, with V11 resources and registered private
 branding originals. Those originals are absent on this Mac. Windows runtime and
