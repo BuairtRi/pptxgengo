@@ -32,7 +32,12 @@ func sqlite(path, script string, readonly bool) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	u := url.URL{Scheme: "file", Path: filepath.ToSlash(abs)}
+	uriPath := filepath.ToSlash(abs)
+	// A drive-letter path must be a URI path, not the file URI authority.
+	if !strings.HasPrefix(uriPath, "/") {
+		uriPath = "/" + uriPath
+	}
+	u := url.URL{Scheme: "file", Path: uriPath}
 	q := url.Values{}
 	if readonly {
 		q.Set("mode", "ro")

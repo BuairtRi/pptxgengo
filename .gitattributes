@@ -1,3 +1,7 @@
+# Preserve release inputs and golden fixtures byte for byte on every OS.
+# Windows newline conversion invalidates pinned hashes and authored fixtures.
+* -text
+
 # Frozen calibration evidence is hashed byte-for-byte, including CRLF records.
 library/dynamic-components/font-reference/comparison-final.csv -text whitespace=cr-at-eol
 # Font evidence and pinned design resources must retain their captured bytes.
