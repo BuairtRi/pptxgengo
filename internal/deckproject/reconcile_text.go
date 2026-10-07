@@ -153,28 +153,34 @@ func ReconcileText(p *Project, b *TextBaseline, edited []byte) (TextReconciliati
 			if field.Status != "plain_text_baseline" && text == object.NativeText {
 				continue
 			}
-			entry := TextReconciliationField{FieldIdentity: field.Identity, ShapeToken: object.ShapeToken, SlideID: object.SlideID, LogicalID: object.LogicalID, SourceSlot: field.SourceSlot, Baseline: object.NativeText, EditedNative: text, Status: "manual_review"}
+			baselineText, baselineAddressOK := nativeObjectFieldText(object, field, object.Paragraphs)
+			editedText, editedAddressOK := nativeObjectFieldText(object, field, paragraphs)
+			entry := TextReconciliationField{FieldIdentity: field.Identity, ShapeToken: object.ShapeToken, SlideID: object.SlideID, LogicalID: object.LogicalID, SourceSlot: field.SourceSlot, Baseline: baselineText, EditedNative: editedText, Status: "manual_review"}
 			pointer, yamlText, resolveErr := ResolveNativeSourceField(p, object, field)
 			entry.SourcePointer = pointer
 			entry.CurrentYAML = yamlText
 			switch {
 			case field.Status != "plain_text_baseline":
 				entry.Reason = field.Reason
-			case len(object.Fields) != 1 || sourceUses[object.SlideID+"\x00"+field.SourceSlot] != 1:
+			case (len(object.Fields) != 1 && !editableCardFieldContractValid(object)) || sourceUses[object.SlideID+"\x00"+field.SourceSlot] != 1:
 				entry.Reason = "One maintained source field maps to multiple native fields or objects; correspondence requires review."
+			case !baselineAddressOK || !editedAddressOK:
+				entry.Reason = "Recorded native paragraph addresses are missing or ambiguous."
+			case object.TextMappingContract != "" && !editableCardEditedParagraphsSupported(object, paragraphs):
+				entry.Reason = "Editable card paragraph count, title/body role formatting or plain copy contract changed."
 			case resolveErr != nil:
 				entry.Reason = resolveErr.Error()
 			case !supportedEditedPlainText(current.Kind, paragraphs):
 				entry.Reason = "Native field includes unsupported rich text, bullets, dynamic fields, cells or missing text body."
-			case !utf8.ValidString(text) || len(text) > 64<<10:
+			case !utf8.ValidString(editedText) || len(editedText) > 64<<10:
 				entry.Reason = "Edited field exceeds the 64 KiB UTF-8 plain-text proposal bound."
 			default:
 				switch {
-				case yamlText == entry.Baseline && text == entry.Baseline:
+				case yamlText == entry.Baseline && editedText == entry.Baseline:
 					entry.Status = "no_op"
-				case text == entry.Baseline:
+				case editedText == entry.Baseline:
 					entry.Status = "yaml_only"
-				case yamlText == text:
+				case yamlText == editedText:
 					entry.Status = "matching_changes"
 				case yamlText == entry.Baseline:
 					entry.Status = "native_only"

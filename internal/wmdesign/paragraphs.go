@@ -139,6 +139,8 @@ func candidateParagraphs(raw []byte, records map[int][]TextRecord) ([]byte, erro
 					text := richParagraphXML(r, pp)
 					if r.NativeParagraphContract == EditableListContract {
 						text = editableListParagraphXML(r)
+					} else if r.NativeShape != nil && r.NativeShape.ParagraphContract == EditableCardContract {
+						text = editableCardParagraphXML(r)
 					}
 					first, last := bytes.Index(sp, old[0]), bytes.LastIndex(sp, old[len(old)-1])+len(old[len(old)-1])
 					updated := append([]byte{}, sp[:first]...)

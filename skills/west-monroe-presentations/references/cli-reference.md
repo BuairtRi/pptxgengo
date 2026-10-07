@@ -191,6 +191,18 @@ This operates on YAML projects; it does not convert a standalone PPTX to YAML.
 - Single slides outside a project: [design-system one-slide routes](design-system-authoring.md).
 - Library-maintenance commands (`library-index`, `library-search`, `library-sweep`, `library-bound-sweep`, `inspect`, `templates`, the `*-reference` commands, `typography-probes`) are not for deck work.
 
+## Explicit native card pilot in later source builds
+
+`wmds/component/editable-card` places two plain title/body paragraphs in one
+filled native rectangle. Use explicit distinct bindings in a local template;
+the source `subhead` and `body` roles remain separate. Stock cards are unchanged.
+`project editability` inventories both paragraph fields, and bounded text
+reconciliation can review/adopt each role independently. Markup, explicit line
+breaks, changed role formatting/topology and ambiguous bindings require review.
+Geometry remains manual. The component is an opt-in measured design with pending
+Mac/Windows selection, move/resize and visual qualification; stable v4.1.0
+does not include it. Authoring and limits are in `docs/native-editable-card.md`.
+
 ## Reuse authored finished slides in the next source build
 
 `project slide publish --id SOURCE --library-id curated/slide/KEY --revision N

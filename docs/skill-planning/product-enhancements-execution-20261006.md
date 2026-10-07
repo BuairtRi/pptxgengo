@@ -663,3 +663,25 @@ qualified: a child-only nudge was detected and reverted. Windows desktop,
 multiple-density family coverage, human ergonomics, table-cell source adoption
 and broad geometry adoption remain open. Private decks/screenshots remain in
 owned Documents folders rather than the public source repository.
+
+
+## Explicit editable-card follow-up — 2026-10-07
+
+The bounded Mac evidence and supplied-file diagram verifier merged in PR #24,
+source `aaf077f2b75143b73c5e429e41c392e3f1f85391`, after successful full
+managed preflight and exact-head private GitLab pipeline 21318 (four jobs,
+37 seconds). Publication interrupted by a session permission change was
+recovered through normal slot publication, preserving the candidate and both
+remote histories.
+
+An explicit single-shape editable-card pilot is implemented in the following
+source candidate. It places separately mapped plain title/body paragraphs in
+one filled native rectangle with declared role typography and measured fitting.
+Stock cards remain unchanged. Actual native paragraph metadata is verified
+before per-role reconciliation; old single-field objects retain whole-object
+comparison. Focused real-build fixtures cover role-only adoption, replay,
+rebuild, baseline retention, conflicts, repeated/duplicate bindings, exact
+insets, role-format/topology guards and three density plans. Full managed
+submission and private CI gates remain required before integration. No desktop
+card acceptance or new release tag is claimed. See
+[single-shape card contract](../native-editable-card.md).

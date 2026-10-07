@@ -90,6 +90,10 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 		p, e := r.planEditableList(id, raw, ctx)
 		return p, true, e
 	}
+	if tag.Type == "editable-card" {
+		p, err := r.planEditableCard(id, raw, ctx)
+		return p, true, err
+	}
 	if tag.Type != "editable-block" && tag.Type != "attached-connector" {
 		return nil, false, nil
 	}
