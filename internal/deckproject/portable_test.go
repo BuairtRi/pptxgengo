@@ -367,3 +367,54 @@ func TestPortableFailedAssetMutationRetainsDeduplicatedObject(t *testing.T) {
 		t.Fatal(e)
 	}
 }
+
+func TestPortableLegacyAssetOutsideAssetsStillReconstructs(t *testing.T) {
+	p := example(t)
+	old := p.Document.Assets["sample-image"].Path
+	data, e := readProjectFile(p.Root, old)
+	if e != nil {
+		t.Fatal(e)
+	}
+	legacy := "legacy-photos/reference.png"
+	if e = writeExclusive(filepath.Join(p.Root, filepath.FromSlash(legacy)), data, 0644); e != nil {
+		t.Fatal(e)
+	}
+	raw := bytes.Replace(p.Raw, []byte(old), []byte(legacy), 1)
+	if e = os.WriteFile(p.SourcePath, raw, 0644); e != nil {
+		t.Fatal(e)
+	}
+	p, e = Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	pin(t, p)
+	if _, e = Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine}); e != nil {
+		t.Fatal(e)
+	}
+	v, e := SaveVersion(p, "Operator", "legacy source path")
+	if e != nil {
+		t.Fatal(e)
+	}
+	if v.Files[legacy] != "" || v.Assets[legacy].SHA256 != digest(data) {
+		t.Fatal("legacy asset not shared independently")
+	}
+	zipPath := filepath.Join(t.TempDir(), "share.zip")
+	if _, e = ShareProject(p, zipPath); e != nil {
+		t.Fatal(e)
+	}
+	extracted := filepath.Join(t.TempDir(), "extracted")
+	if _, e = ExtractShare(zipPath, extracted); e != nil {
+		t.Fatal(e)
+	}
+	restored := filepath.Join(t.TempDir(), "restored")
+	if _, e = MaterializeVersion(extracted, "000001", restored); e != nil {
+		t.Fatal(e)
+	}
+	out, e := Load(restored)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = Check(out, bundle(t), wmdesign.CandidateEngine); e != nil {
+		t.Fatal(e)
+	}
+}

@@ -560,7 +560,7 @@ func MaterializeVersion(root, number, out string) (DeckVersion, error) {
 	if e != nil {
 		return v, e
 	}
-	if abs == rootAbs || strings.HasPrefix(abs, rootAbs+string(filepath.Separator)) {
+	if strings.EqualFold(abs, rootAbs) || strings.HasPrefix(strings.ToLower(abs), strings.ToLower(rootAbs)+string(filepath.Separator)) {
 		return v, fmt.Errorf("materialize requires a new directory outside the source project")
 	}
 	if e = os.Mkdir(abs, 0755); e != nil {

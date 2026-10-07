@@ -82,7 +82,7 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 	}
 	abs = filepath.Join(parent, filepath.Base(abs))
 	rootAbs, _ := filepath.EvalSymlinks(p.Root)
-	if abs == rootAbs || strings.HasPrefix(abs, rootAbs+string(filepath.Separator)) {
+	if strings.EqualFold(abs, rootAbs) || strings.HasPrefix(strings.ToLower(abs), strings.ToLower(rootAbs)+string(filepath.Separator)) {
 		return r, fmt.Errorf("share output must be outside project")
 	}
 	f, e := os.OpenFile(abs, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
