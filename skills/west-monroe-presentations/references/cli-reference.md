@@ -243,3 +243,20 @@ manifest. Locks, conflicting OneDrive copies, placeholders, changed predecessors
 and nonportable names are diagnosed rather than silently resolved. Sharing
 retains executable/OS/architecture pins and branding/font requirements; explicit
 toolchain migration and offline runtime export remain separate commands.
+
+### Native unordered lists
+
+For new flat unordered lists whose readers will edit in PowerPoint, use
+`wmds/component/editable-list`: one text box containing native bullet paragraphs.
+It keeps the source's typeface, body/small density metrics, square marker,
+hanging indent and paragraph spacing. Supply plain nonempty `items` and stable
+`keys.items`; the placement's height is a fixed allocation validated at build.
+PowerPoint can reflow the paragraphs within that box; added copy may require
+resizing the one box. Do not rebuild a plain list as separate marker/text shapes.
+
+This is an explicit candidate component. Existing stock `bullets` templates,
+ordered lists and `{lead, text}` decorative/rich lists retain their current
+renderer until separately qualified. Native list changes require manual source
+review; item order and keys are not guessed from edited paragraphs. macOS and
+Windows native editing acceptance remains pending. See
+`docs/native-editable-list.md`. The promoted v4.1.0 predates this component.

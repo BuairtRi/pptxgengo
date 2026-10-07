@@ -97,7 +97,9 @@ func (r *renderer) planEditableList(id string, raw json.RawMessage, ctx SceneCon
 		paragraph.FirstLine = len(layout.Lines)
 		paragraph.LineCount = len(part.Layout.Lines)
 		if i < len(n.Items)-1 {
-			paragraph.ParagraphGapAfter = gap
+			// Reserve measured terminal ink in the actual native paragraph gap,
+			// so the next paragraph advances by the same amount as this report.
+			paragraph.ParagraphGapAfter = gap + math.Max(0, part.Layout.OccupiedTop+part.Layout.EstimatedOccupiedHeight-part.Layout.AllocationHeight)
 		} else {
 			paragraph.ParagraphGapAfter = 0
 		}
@@ -106,11 +108,11 @@ func (r *renderer) planEditableList(id string, raw json.RawMessage, ctx SceneCon
 			layout.Lines = append(layout.Lines, line)
 		}
 		lastOccupied = offset + part.Layout.OccupiedTop + part.Layout.EstimatedOccupiedHeight
-		offset += math.Max(part.Layout.AllocationHeight, part.Layout.OccupiedTop+part.Layout.EstimatedOccupiedHeight) + paragraph.ParagraphGapAfter
+		offset += part.Layout.AllocationHeight + paragraph.ParagraphGapAfter
 		rich.Paragraphs = append(rich.Paragraphs, paragraph)
 	}
 	if math.Max(offset, lastOccupied) > b.H+.02 {
-		return nil, fmt.Errorf("scene.editable_list_initial_overflow: %s needs%.3fpt capacity%.3fpt", id, math.Max(offset, lastOccupied), b.H)
+		return nil, fmt.Errorf("scene.editable_list_initial_overflow: %s requires %.3f pt; allocation is %.3f pt", id, math.Max(offset, lastOccupied), b.H)
 	}
 	layout.Original = strings.Join(n.Items, "\n")
 	layout.Displayed = layout.Original

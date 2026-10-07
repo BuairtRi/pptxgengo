@@ -90,3 +90,47 @@ func TestNativeEditingEditableListRefusesUnsupportedAndOverflow(t *testing.T) {
 		t.Fatal("duplicate keys accepted")
 	}
 }
+
+func TestNativeEditingEditableListTerminalInkMatchesNativeGap(t *testing.T) {
+	r := intakeTestRenderer(t)
+	r.source = densityTestSource(t)
+	var e error
+	r.typeEngine, e = NewSourceTypographyEngine(r.source, filepath.Join(densityTestBundle(), "fonts"), CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	st, e := r.sceneStyle("body")
+	if e != nil {
+		t.Fatal(e)
+	}
+	font, e := r.typeEngine.Resolve(st)
+	if e != nil {
+		t.Fatal(e)
+	}
+	key := anchorKey(font.SHA256, st.Size, st.Leading)
+	anchor, ok := r.typeEngine.anchors[key]
+	if !ok {
+		t.Fatal("fixture needs a calibrated body anchor")
+	}
+	anchor.TerminalHeight = st.Leading + 30
+	r.typeEngine.anchors[key] = anchor
+	p, e := r.planEditableList("list", json.RawMessage(`{"type":"editable-list","w":300,"h":230,"items":["First item","Second item"]}`), SceneContext{Surface: "light"})
+	if e != nil {
+		t.Fatal(e)
+	}
+	tr := p.Items[0].Text
+	first, second := tr.Rich.Paragraphs[0], tr.Rich.Paragraphs[1]
+	if first.LineCount != 1 || second.LineCount != 1 || first.ParagraphGapAfter < 30 {
+		t.Fatal("terminal reserve missing", tr.Rich)
+	}
+	want := tr.Layout.Style.Leading + first.ParagraphGapAfter
+	got := tr.Layout.Lines[second.FirstLine].Baseline - tr.Layout.Lines[first.FirstLine].Baseline
+	if math.Abs(got-want) > .02 {
+		t.Fatal("planner advance differs from native paragraph advance", got, want)
+	}
+	x := string(editableListParagraphXML(*tr))
+	property := fmt.Sprintf(`<a:spcAft><a:spcPts val="%d"/></a:spcAft>`, int(math.Round(first.ParagraphGapAfter*100)))
+	if !strings.Contains(x, property) || second.ParagraphGapAfter != 0 {
+		t.Fatal("reserve not serialized exactly once", property, x)
+	}
+}
