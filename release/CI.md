@@ -93,6 +93,35 @@ Rekor evidence and signed timestamp. Its bundle verification is offline after
 initializing trust. Then compare archive SHA-256 with the signed manifest.
 `SHA256SUMS` is a convenience inventory; verify the signed manifest first.
 
+## Optional offline search model
+
+Source CI after v4.1.0 adds `security:offline-model` on ordinary branches and
+protected tags. It verifies the pinned complete package from the offline model
+runtime gate, creates one deterministic ZIP and scans its actual extracted files.
+Compiled-in identity, artifact hashes/sizes, license and source attribution must
+match; caller-provided manifest hashes cannot override pins. File/count/size
+bounds and closed inventory apply before archive extraction.
+
+`PPTXGENGO_OFFLINE_MODEL=true` (default) attaches this ZIP separately from all six
+CLI archives. Set it to `false` to omit that release attachment. Assemble copies
+verified bytes/evidence; final scan rechecks and rescans the final ZIP. Seal
+requires its file evidence, SBOM and vulnerability report. The private Sigstore
+manifest and private Generic Package publication cover all four files. No model
+weights enter Git, GitHub release assets or platform executable archives.
+
+Model weights/tokenizers are platform-independent data files; Authenticode and
+Developer ID/notarization remain for executables. Model scans record explicit
+hashed file components, Apache-2.0 license and source attribution, and enforce
+the same fresh-database/Critical/no-suppression policy. They do not prove model
+safety, retrieval quality or native qualification. The `v0.0.0` branch fixture
+is never a release and expires as a private CI artifact after three days.
+
+Download the signed release manifest, signature bundle and model ZIP from the
+same private release, verify the signature/ZIP hash, then extract to a separate
+model directory. Normal searches remain offline and never fetch weights. Build
+source-bound embeddings for the exact selected library. This change adds future
+CI automation; it does not modify released v4.1.0 or cut a new tag.
+
 ## Bring private branding into CI
 
 The branding files are deliberately external inputs. On the machine containing

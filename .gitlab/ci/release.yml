@@ -46,7 +46,13 @@
 release:resources:
   extends: .release-linux
   stage: build
-  needs: [developer, offline-model, workflow-lint, security:go, security:secrets]
+  needs:
+    - {job: developer, artifacts: false}
+    - {job: offline-model, artifacts: false}
+    - {job: workflow-lint, artifacts: false}
+    - {job: security:go, artifacts: false}
+    - {job: security:secrets, artifacts: false}
+    - {job: security:offline-model, artifacts: false}
   script:
     - if [ "$PPTXGENGO_PACKAGE_KIND" = full ]; then apt-get update && apt-get install -y --no-install-recommends python3; fi
     - bash scripts/release/prepare-resources.sh
@@ -56,7 +62,13 @@ release:resources:
 release:build:
   extends: .release-linux
   stage: build
-  needs: [developer, offline-model, workflow-lint, security:go, security:secrets]
+  needs:
+    - {job: developer, artifacts: false}
+    - {job: offline-model, artifacts: false}
+    - {job: workflow-lint, artifacts: false}
+    - {job: security:go, artifacts: false}
+    - {job: security:secrets, artifacts: false}
+    - {job: security:offline-model, artifacts: false}
   parallel:
     matrix:
       - RELEASE_TARGET: [linux-amd64, linux-arm64, windows-amd64, windows-arm64, darwin-amd64, darwin-arm64]
@@ -93,7 +105,7 @@ release:macos-sign:
 release:assemble:
   extends: .release-linux
   stage: assemble
-  needs: [release:build, release:resources, release:windows-sign, release:macos-sign]
+  needs: [release:build, release:resources, security:offline-model, release:windows-sign, release:macos-sign]
   script:
     - source scripts/release/common.sh
     - require_release_identity
