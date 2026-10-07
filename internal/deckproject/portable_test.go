@@ -581,3 +581,16 @@ func TestPortableVersionsRetainApprovalHistoryWithoutReapprovingChanges(t *testi
 		}
 	}
 }
+
+func TestPortableRetainedModesKeepBaselinesAndObjectsImmutable(t *testing.T) {
+	for _, path := range []string{"builds/build-id/deck.pptx", "assets/objects/sha256/abc", "versions/000001/source/deck.yaml", "versions/000001/deck.pptx", "decisions/sources/abc/deck.yaml"} {
+		if portableFileMode(path) != 0444 {
+			t.Fatal(path)
+		}
+	}
+	for _, path := range []string{"deck.yaml", "slides/stable-id.yaml", "versions/current.json", "assets/legacy.png"} {
+		if portableFileMode(path) != 0644 {
+			t.Fatal(path)
+		}
+	}
+}

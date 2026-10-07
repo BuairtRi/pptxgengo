@@ -687,7 +687,7 @@ func MaterializeVersion(root, number, out string) (DeckVersion, error) {
 		if e != nil {
 			return e
 		}
-		return writeExclusive(path, b, 0644)
+		return writeExclusive(path, b, portableFileMode(to))
 	}
 	for rel := range v.Files {
 		if e = copy("versions/"+number+"/source/"+rel, rel); e != nil {
@@ -849,4 +849,12 @@ func writeVersionFile(root, number, relative string, b []byte) error {
 		return e
 	}
 	return writeExclusive(path, b, 0444)
+}
+
+func portableFileMode(relative string) os.FileMode {
+	parts := strings.Split(relative, "/")
+	if strings.HasPrefix(relative, "assets/objects/sha256/") || strings.HasPrefix(relative, "builds/") || strings.HasPrefix(relative, "decisions/sources/") || (len(parts) >= 3 && parts[0] == "versions" && versionName.MatchString(parts[1])) {
+		return 0444
+	}
+	return 0644
 }

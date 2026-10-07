@@ -115,7 +115,7 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 		}
 		h := &zip.FileHeader{Name: name, Method: zip.Deflate}
 		h.SetModTime(time.Date(1980, 1, 1, 0, 0, 0, 0, time.UTC))
-		h.SetMode(0644)
+		h.SetMode(portableFileMode(name))
 		w, e := z.CreateHeader(h)
 		if e != nil {
 			return r, e
@@ -336,7 +336,7 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 		if e != nil {
 			return r, e
 		}
-		if e = writeExclusive(path, b, 0644); e != nil {
+		if e = writeExclusive(path, b, portableFileMode(name)); e != nil {
 			return r, e
 		}
 	}
@@ -352,7 +352,7 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 		if e != nil {
 			return r, e
 		}
-		if e = writeExclusive(path, b, 0644); e != nil {
+		if e = writeExclusive(path, b, portableFileMode(rel)); e != nil {
 			return r, e
 		}
 	}
