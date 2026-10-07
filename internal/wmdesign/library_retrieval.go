@@ -2,6 +2,7 @@ package wmdesign
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -37,6 +38,14 @@ type LibraryRetrievalHit struct {
 
 func libraryRetrievalBody(entity LibraryEntity) string {
 	parts := []string{entity.ID, entity.Key, entity.Family}
+	if entity.Kind == "finished-slide" {
+		var metadata struct {
+			Keywords []string `json:"keywords"`
+		}
+		if json.Unmarshal(entity.Capacity, &metadata) == nil {
+			parts = append(parts, metadata.Keywords...)
+		}
+	}
 	parts = append(parts, entity.Discovery.ContentRoles...)
 	parts = append(parts, entity.Discovery.Structures...)
 	parts = append(parts, entity.Discovery.VisualForms...)

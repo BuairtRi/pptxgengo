@@ -37,6 +37,19 @@ type SlideOperationReceipt struct {
 // OperateSlide changes ordering or visibility without rewriting unselected slide
 // files. Removed sources remain recoverable and are explicitly listed in receipts.
 func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
+	return operateSlide(p, o, nil)
+}
+
+type reuseAddition struct {
+	Assets          map[string]Asset
+	Files           map[string][]byte
+	Observed        map[string][]byte
+	CompositionPath string
+	Composition     []byte
+	Validate        func(*Project) error
+}
+
+func operateSlide(p *Project, o SlideOperation, reuse *reuseAddition) (SlideOperationReceipt, error) {
 	if o.As != "" && o.Action == "add" {
 		o.ID = o.As
 	}
@@ -86,6 +99,37 @@ func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
 	if err != nil {
 		return r, err
 	}
+	if reuse != nil {
+		if o.Action != "add" {
+			return r, fmt.Errorf("reuse requires add")
+		}
+		assets := mappingNode(main.Content[0], "assets")
+		if assets == nil {
+			assets = &yaml.Node{Kind: yaml.MappingNode, Tag: "!!map"}
+			replaceMappingField(main.Content[0], "assets", assets)
+		}
+		keys := []string{}
+		for key := range reuse.Assets {
+			if _, exists := p.Document.Assets[key]; !exists {
+				keys = append(keys, key)
+			}
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			value, err := editYAMLNode(reuse.Assets[key])
+			if err != nil {
+				return r, err
+			}
+			replaceMappingField(assets, key, value)
+		}
+		context := mappingNode(main.Content[0], "context")
+		if context == nil {
+			context = &yaml.Node{Kind: yaml.MappingNode, Tag: "!!map"}
+			replaceMappingField(main.Content[0], "context", context)
+		}
+		replaceMappingField(context, "composition_log", &yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: reuse.CompositionPath})
+		r.EditorialAction = "Library lineage and authored reuse rationale recorded in " + reuse.CompositionPath
+	}
 	nodes, documents, err := authoredSlides(p, main)
 	if err != nil {
 		return r, err
@@ -99,6 +143,14 @@ func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
 	}
 	sections := append([]wmdesign.SectionSpec(nil), p.Document.Sections...)
 	changes := map[string][]byte{}
+	observed := map[string][]byte{}
+	if reuse != nil {
+		for k, v := range reuse.Files {
+			changes[k] = v
+		}
+		changes[reuse.CompositionPath] = reuse.Composition
+		observed = reuse.Observed
+	}
 	order := make([]string, len(p.Document.Slides))
 	for i, s := range p.Document.Slides {
 		order[i] = s.ID
@@ -318,7 +370,7 @@ func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
 	if err != nil {
 		return r, err
 	}
-	_, err = commitSourceChanges(p, changes, func(candidate *Project) error {
+	_, err = commitSourceChangesObserved(p, changes, observed, func(candidate *Project) error {
 		if o.Action == "add" {
 			if o.Bundle == "" {
 				return fmt.Errorf("adding a slide requires the pinned bundle")
@@ -330,6 +382,11 @@ func OperateSlide(p *Project, o SlideOperation) (SlideOperationReceipt, error) {
 				if e := CheckSlideFit(candidate, []string{o.ID}, o.Bundle, o.Engine); e != nil {
 					return e
 				}
+			}
+		}
+		if reuse != nil && reuse.Validate != nil {
+			if e := reuse.Validate(candidate); e != nil {
+				return e
 			}
 		}
 		r.AfterSHA256 = candidate.SourceHash()

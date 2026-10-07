@@ -60,7 +60,7 @@ jobs:
         run: |
           # These fixtures use temporary roots and --no-path; HKCU PATH and
           # font registrations are reserved for the desktop qualification lane.
-          go test -count=1 -timeout=150s ./internal/installstate
+          go test -count=1 -timeout=150s ./internal/installstate ./internal/finishedslide
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Relocated package-style smoke test without PowerPoint
         shell: pwsh

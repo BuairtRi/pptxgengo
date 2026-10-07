@@ -18,11 +18,12 @@ import (
 const UnifiedLibrarySchema = "pptxgengo.unified-library-index.v1"
 
 type LibraryIndexOptions struct {
-	Bundle      string `json:"bundle"`
-	Source      string `json:"source,omitempty"`
-	LegacyIndex string `json:"legacy_index,omitempty"`
-	LegacyRoot  string `json:"legacy_root,omitempty"`
-	Gallery     string `json:"gallery,omitempty"`
+	Bundle       string `json:"bundle"`
+	Source       string `json:"source,omitempty"`
+	LegacyIndex  string `json:"legacy_index,omitempty"`
+	LegacyRoot   string `json:"legacy_root,omitempty"`
+	Gallery      string `json:"gallery,omitempty"`
+	SlideLibrary string `json:"slide_library,omitempty"`
 }
 
 type LibraryIndexPin struct {
@@ -67,17 +68,18 @@ type LibraryEntity struct {
 }
 
 type LibraryIndexReport struct {
-	Schema              string              `json:"schema"`
-	Path                string              `json:"path"`
-	SourceRevision      string              `json:"source_revision"`
-	Counts              map[string]int      `json:"counts"`
-	ProjectionSHA256    string              `json:"projection_sha256"`
-	RetrievalText       string              `json:"retrieval_text,omitempty"`
-	RetrievalSHA256     string              `json:"retrieval_sha256,omitempty"`
-	AssetRegistrySHA256 string              `json:"asset_registry_sha256"`
-	Pins                []LibraryIndexPin   `json:"pins"`
-	Options             LibraryIndexOptions `json:"options"`
-	Warnings            []string            `json:"warnings"`
+	Schema                  string              `json:"schema"`
+	FinishedSlideTreeSHA256 string              `json:"finished_slide_tree_sha256,omitempty"`
+	Path                    string              `json:"path"`
+	SourceRevision          string              `json:"source_revision"`
+	Counts                  map[string]int      `json:"counts"`
+	ProjectionSHA256        string              `json:"projection_sha256"`
+	RetrievalText           string              `json:"retrieval_text,omitempty"`
+	RetrievalSHA256         string              `json:"retrieval_sha256,omitempty"`
+	AssetRegistrySHA256     string              `json:"asset_registry_sha256"`
+	Pins                    []LibraryIndexPin   `json:"pins"`
+	Options                 LibraryIndexOptions `json:"options"`
+	Warnings                []string            `json:"warnings"`
 }
 
 func indexJSON(v any) []byte      { b, _ := json.Marshal(v); return b }
@@ -137,7 +139,7 @@ func BuildLibraryIndex(path string, options LibraryIndexOptions) (LibraryIndexRe
 	if path == "" {
 		return report, fmt.Errorf("index.output_required")
 	}
-	for _, target := range []*string{&options.Bundle, &options.Source, &options.LegacyIndex, &options.LegacyRoot, &options.Gallery} {
+	for _, target := range []*string{&options.Bundle, &options.Source, &options.LegacyIndex, &options.LegacyRoot, &options.Gallery, &options.SlideLibrary} {
 		if *target != "" {
 			absolute, e := filepath.Abs(*target)
 			if e != nil {
@@ -157,6 +159,15 @@ func BuildLibraryIndex(path string, options LibraryIndexOptions) (LibraryIndexRe
 	entities, e := collectLibraryEntities(s, options)
 	if e != nil {
 		return report, e
+	}
+	if options.SlideLibrary != "" {
+		extra, pins, fingerprint, err := collectFinishedSlides(s, options)
+		if err != nil {
+			return report, err
+		}
+		entities = append(entities, extra...)
+		report.Pins = append(report.Pins, pins...)
+		report.FinishedSlideTreeSHA256 = fingerprint
 	}
 	if options.LegacyIndex != "" {
 		legacy, e := collectLegacyEntities(options.LegacyIndex, options.LegacyRoot)
@@ -342,6 +353,20 @@ func OpenLibraryIndex(path string, overrides LibraryIndexOptions) (*LibraryIndex
 	if overrides.Gallery != "" {
 		options.Gallery = overrides.Gallery
 	}
+	if overrides.SlideLibrary != "" {
+		options.SlideLibrary = overrides.SlideLibrary
+	}
+	if options.SlideLibrary != "" {
+		_, fingerprint, err := readFinishedLibrary(options.SlideLibrary)
+		if err != nil {
+			return fail(err)
+		}
+		if report.FinishedSlideTreeSHA256 == "" || report.FinishedSlideTreeSHA256 != fingerprint {
+			return fail(fmt.Errorf("index.finished_slide_library_changed: rebuild the library index"))
+		}
+	} else if report.FinishedSlideTreeSHA256 != "" {
+		return fail(fmt.Errorf("index.finished_slide_library_missing"))
+	}
 	s, e := Load(options.Bundle, options.Source)
 	if e != nil {
 		return fail(e)
@@ -363,6 +388,8 @@ func OpenLibraryIndex(path string, overrides LibraryIndexOptions) (*LibraryIndex
 			path, e = indexRelative(options.LegacyRoot, pin.Path)
 		case "gallery":
 			path, e = indexRelative(options.Gallery, pin.Path)
+		case "finished-slide":
+			path, e = indexRelative(options.SlideLibrary, pin.Path)
 		default:
 			return fail(fmt.Errorf("index.unknown_pin_scope"))
 		}
