@@ -267,3 +267,14 @@ each snapshot, predecessor/pointer drift, busy locks, sync conflicts/placeholder
 asset tampering, occupied output paths, reserved Windows paths and unsafe ZIP
 traversal. Human OneDrive collaboration and PowerPoint copy/paste remain separate
 qualification.
+
+Portable producer and extractor limits are explicit: at most 100,000 logical
+files/aliases, 512 MiB per ordinary file, 16 MiB per JSON manifest, and 8 GiB
+for a complete logical inventory including every expanded legacy alias. Reads
+are bounded before allocation/accumulation, and ZIP transport limits do not
+replace expansion limits. All logical case and file/directory prefix collisions
+are rejected before creating an extraction directory. Immutable version folders
+are closed inventories; extra files, including unlisted synchronized copies,
+are drift rather than silently ignored content. Large handoffs that exceed a
+limit are refused with evidence retained; no files/versions are dropped to make
+them fit.

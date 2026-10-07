@@ -3,6 +3,7 @@ package deckproject
 import (
 	"archive/zip"
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -416,5 +417,73 @@ func TestPortableLegacyAssetOutsideAssetsStillReconstructs(t *testing.T) {
 	}
 	if _, e = Check(out, bundle(t), wmdesign.CandidateEngine); e != nil {
 		t.Fatal(e)
+	}
+}
+
+func TestPortableShareLogicalExpansionIsBoundedAndClosed(t *testing.T) {
+	sha := strings.Repeat("a", 64)
+	object := "assets/objects/sha256/" + sha
+	r := ShareReceipt{Files: map[string]string{object: sha}, AssetAliases: map[string]VersionAsset{}}
+	sizes := map[string]uint64{object: uint64(portableFileLimit)}
+	for i := 0; i < 16; i++ {
+		name := fmt.Sprintf("assets/legacy-%02d.png", i)
+		r.Files[name] = sha
+		r.AssetAliases[name] = VersionAsset{Object: object, SHA256: sha}
+	}
+	if e := validateShareInventory(r, sizes); e == nil {
+		t.Fatal("asset aliases exceeded expanded-byte budget")
+	}
+	for _, paths := range [][]string{{"a", "a-other", "a/file"}, {"FILE", "file"}, {"share-manifest.json/hidden"}} {
+		r := ShareReceipt{Files: map[string]string{}}
+		sizes := map[string]uint64{}
+		for _, p := range paths {
+			r.Files[p] = sha
+			sizes[p] = 1
+		}
+		if e := validateShareInventory(r, sizes); e == nil {
+			t.Fatalf("logical path collision accepted: %v", paths)
+		}
+	}
+}
+func TestPortableVersionRejectsUnlistedSnapshotFiles(t *testing.T) {
+	p := example(t)
+	pin(t, p)
+	if _, e := Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine}); e != nil {
+		t.Fatal(e)
+	}
+	if _, e := SaveVersion(p, "Operator", "first"); e != nil {
+		t.Fatal(e)
+	}
+	for _, relative := range []string{"versions/000001/source/unlisted.txt", "versions/000001/unlisted.txt"} {
+		path := filepath.Join(p.Root, filepath.FromSlash(relative))
+		if e := os.WriteFile(path, []byte("sync conflict"), 0644); e != nil {
+			t.Fatal(e)
+		}
+		if _, e := VerifyVersion(p.Root, "000001"); e == nil {
+			t.Fatal("unlisted immutable snapshot file accepted")
+		}
+		os.Remove(path)
+	}
+}
+func TestPortableProducerRefusesOversizedFilesBeforeReading(t *testing.T) {
+	root := t.TempDir()
+	path := filepath.Join(root, "oversized.bin")
+	f, e := os.Create(path)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if e = f.Truncate(portableFileLimit + 1); e != nil {
+		f.Close()
+		t.Skipf("sparse oversized fixture unsupported: %v", e)
+	}
+	f.Close()
+	if _, e := projectInventory(root, nil); e == nil {
+		t.Fatal("oversized producer file accepted")
+	}
+	if _, e := readProjectFile(root, "oversized.bin"); e == nil {
+		t.Fatal("unbounded direct project read accepted")
+	}
+	if _, e := readProjectFileLimit(root, "oversized.bin", portableManifestLimit); e == nil {
+		t.Fatal("oversized manifest read accepted")
 	}
 }

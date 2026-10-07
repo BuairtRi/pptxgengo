@@ -71,7 +71,18 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 			}
 		}
 	}
-	files["share-manifest.json"] = canonical(r)
+	sizes := map[string]uint64{}
+	for relative, b := range files {
+		sizes[relative] = uint64(len(b))
+	}
+	if e = validateShareInventory(r, sizes); e != nil {
+		return r, e
+	}
+	manifest := canonical(r)
+	if uint64(len(manifest)) > portableManifestLimit {
+		return r, fmt.Errorf("share manifest exceeds16MiB")
+	}
+	files["share-manifest.json"] = manifest
 	abs, e := filepath.Abs(out)
 	if e != nil {
 		return r, e
@@ -145,7 +156,7 @@ func VerifyShare(root string) (ShareReceipt, error) {
 	if e := refuseSyncConflicts(root); e != nil {
 		return r, e
 	}
-	raw, e := readProjectFile(root, "share-manifest.json")
+	raw, e := readProjectFileLimit(root, "share-manifest.json", portableManifestLimit)
 	if e != nil {
 		return r, e
 	}
@@ -200,7 +211,7 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 		return r, e
 	}
 	defer z.Close()
-	if len(z.File) > 100000 {
+	if len(z.File) > portableFileCountLimit {
 		return r, fmt.Errorf("share archive has too many files")
 	}
 	entries := map[string]*zip.File{}
@@ -219,7 +230,7 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 		}
 		folded[key] = true
 		total += f.UncompressedSize64
-		if f.UncompressedSize64 > 512<<20 || total > 8<<30 {
+		if f.UncompressedSize64 > uint64(portableFileLimit) || total > portableTotalLimit {
 			return r, fmt.Errorf("share archive exceeds extraction limits")
 		}
 		entries[f.Name] = f
@@ -243,6 +254,10 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 		}
 		return b, nil
 	}
+	manifestEntry, exists := entries["share-manifest.json"]
+	if !exists || manifestEntry.UncompressedSize64 > portableManifestLimit {
+		return r, fmt.Errorf("share manifest missing or exceeds 16MiB")
+	}
 	manifest, e := read("share-manifest.json")
 	if e != nil {
 		return r, e
@@ -252,6 +267,13 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 	}
 	if r.Schema != "pptxgengo.project-share.v1" || !r.ContainsPrivateMaterial {
 		return r, fmt.Errorf("invalid private share archive manifest")
+	}
+	sizes := map[string]uint64{}
+	for name, f := range entries {
+		sizes[name] = f.UncompressedSize64
+	}
+	if e = validateShareInventory(r, sizes); e != nil {
+		return r, e
 	}
 	for rel, a := range r.AssetAliases {
 		if e = portableName(rel); e != nil {
@@ -337,4 +359,62 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 	}
 	success = true
 	return r, nil
+}
+
+// validateShareInventory checks the LOGICAL expansion, not just compressed or
+// physical ZIP entries. Run before any output creation or asset expansion.
+func validateShareInventory(r ShareReceipt, sizes map[string]uint64) error {
+	if len(r.Files) > portableFileCountLimit || len(r.AssetAliases) > portableFileCountLimit {
+		return fmt.Errorf("share logical inventory exceeds100000 files/aliases")
+	}
+	names := make([]string, 0, len(r.Files))
+	folded := map[string]string{}
+	var total uint64
+	for relative, want := range r.Files {
+		if e := portableName(relative); e != nil {
+			return e
+		}
+		if !shaPattern.MatchString(want) || relative == "share-manifest.json" {
+			return fmt.Errorf("invalid logical share file %s", relative)
+		}
+		key := strings.ToLower(relative)
+		if prior, exists := folded[key]; exists {
+			return fmt.Errorf("logical share path/case collision: %s and %s", prior, relative)
+		}
+		folded[key] = relative
+		names = append(names, key)
+		source := relative
+		if alias, exists := r.AssetAliases[relative]; exists {
+			source = alias.Object
+			if alias.Object != "assets/objects/sha256/"+alias.SHA256 || alias.SHA256 != want || r.Files[source] != want {
+				return fmt.Errorf("invalid asset alias %s", relative)
+			}
+			if _, exists = sizes[relative]; exists {
+				return fmt.Errorf("duplicate aliased asset storage %s", relative)
+			}
+		}
+		size, exists := sizes[source]
+		if !exists || size > uint64(portableFileLimit) {
+			return fmt.Errorf("missing/oversized logical share file %s", relative)
+		}
+		if total > portableTotalLimit-size {
+			return fmt.Errorf("expanded share exceeds8GiB")
+		}
+		total += size
+	}
+	folded["share-manifest.json"] = "share-manifest.json"
+	for _, name := range names {
+		parts := strings.Split(name, "/")
+		for i := 1; i < len(parts); i++ {
+			if _, exists := folded[strings.Join(parts[:i], "/")]; exists {
+				return fmt.Errorf("logical share file/directory prefix collision")
+			}
+		}
+	}
+	for alias := range r.AssetAliases {
+		if _, exists := r.Files[alias]; !exists {
+			return fmt.Errorf("unmanifested asset alias %s", alias)
+		}
+	}
+	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -15,6 +16,10 @@ import (
 )
 
 const versionSchema = "pptxgengo.deck-version.v1"
+const portableFileLimit int64 = 512 << 20
+const portableTotalLimit uint64 = 8 << 30
+const portableFileCountLimit = 100000
+const portableManifestLimit uint64 = 16 << 20
 
 var versionName = regexp.MustCompile(`^[0-9]{6}$`)
 
@@ -58,18 +63,33 @@ func readOptional(path string) ([]byte, error) {
 	return b, e
 }
 func readProjectFile(root, relative string) ([]byte, error) {
-	p, e := SafePath(root, relative)
+	return readProjectFileLimit(root, relative, uint64(portableFileLimit))
+}
+func readProjectFileLimit(root, relative string, limit uint64) ([]byte, error) {
+	path, e := SafePath(root, relative)
 	if e != nil {
 		return nil, e
 	}
-	st, e := os.Stat(p)
+	file, e := os.Open(path)
 	if e != nil {
 		return nil, e
 	}
-	if !st.Mode().IsRegular() {
-		return nil, fmt.Errorf("nonregular project file %s", relative)
+	defer file.Close()
+	info, e := file.Stat()
+	if e != nil {
+		return nil, e
 	}
-	return os.ReadFile(p)
+	if !info.Mode().IsRegular() || info.Size() < 0 || uint64(info.Size()) > limit {
+		return nil, fmt.Errorf("nonregular/oversized project file %s", relative)
+	}
+	bytes, e := io.ReadAll(io.LimitReader(file, int64(limit)+1))
+	if e != nil {
+		return nil, e
+	}
+	if uint64(len(bytes)) > limit {
+		return nil, fmt.Errorf("project file grew beyond size limit: %s", relative)
+	}
+	return bytes, nil
 }
 func portableName(relative string) error {
 	for _, part := range strings.Split(relative, "/") {
@@ -91,6 +111,7 @@ func portableName(relative string) error {
 func projectInventory(root string, exclude func(string, bool) bool) (map[string][]byte, error) {
 	m := map[string][]byte{}
 	names := map[string]string{}
+	var total uint64
 	e := filepath.WalkDir(root, func(path string, d fs.DirEntry, e error) error {
 		if e != nil {
 			return e
@@ -123,10 +144,25 @@ func projectInventory(root string, exclude func(string, bool) bool) (map[string]
 		if d.IsDir() {
 			return nil
 		}
-		b, e := readProjectFile(root, rel)
+		info, e := d.Info()
 		if e != nil {
 			return e
 		}
+		if !info.Mode().IsRegular() || info.Size() > portableFileLimit {
+			return fmt.Errorf("nonregular/oversized project file %s (limit512MiB)", rel)
+		}
+		if uint64(info.Size()) > portableTotalLimit-total || len(m) >= portableFileCountLimit {
+			return fmt.Errorf("portable project inventory exceeds 8GiB or100000 files")
+		}
+		limit := portableTotalLimit - total
+		if limit > uint64(portableFileLimit) {
+			limit = uint64(portableFileLimit)
+		}
+		b, e := readProjectFileLimit(root, rel, limit)
+		if e != nil {
+			return e
+		}
+		total += uint64(len(b))
 		m[rel] = b
 		return nil
 	})
@@ -168,9 +204,12 @@ func versionManifest(root, number string) (DeckVersion, []byte, error) {
 	if !versionName.MatchString(number) {
 		return v, nil, fmt.Errorf("version must be six digits")
 	}
-	raw, e := readProjectFile(root, "versions/"+number+"/manifest.json")
+	raw, e := readProjectFileLimit(root, "versions/"+number+"/manifest.json", portableManifestLimit)
 	if e != nil {
 		return v, nil, e
+	}
+	if uint64(len(raw)) > portableManifestLimit {
+		return v, nil, fmt.Errorf("version manifest exceeds 16MiB")
 	}
 	if e = strictInto(json.RawMessage(raw), &v); e != nil {
 		return v, nil, e
@@ -184,6 +223,37 @@ func VerifyVersion(root, number string) (DeckVersion, error) {
 	v, _, e := versionManifest(root, number)
 	if e != nil {
 		return v, e
+	}
+	sourceRoot, e := SafePath(root, "versions/"+number+"/source")
+	if e != nil {
+		return v, e
+	}
+	sourceFiles, e := projectInventory(sourceRoot, nil)
+	if e != nil {
+		return v, e
+	}
+	if !reflectEqual(hashBytes(sourceFiles), v.Files) {
+		return v, fmt.Errorf("immutable version source inventory changed: %s", number)
+	}
+	snapshotRoot, e := SafePath(root, "versions/"+number)
+	if e != nil {
+		return v, e
+	}
+	snapshotFiles, e := projectInventory(snapshotRoot, nil)
+	if e != nil {
+		return v, e
+	}
+	wantSnapshot := map[string]string{"deck.pptx": v.DeckSHA256}
+	_, manifestBytes, e := versionManifest(root, number)
+	if e != nil {
+		return v, e
+	}
+	wantSnapshot["manifest.json"] = digest(manifestBytes)
+	for relative, want := range v.Files {
+		wantSnapshot["source/"+relative] = want
+	}
+	if !reflectEqual(hashBytes(snapshotFiles), wantSnapshot) {
+		return v, fmt.Errorf("immutable version directory inventory changed: %s", number)
 	}
 	check := func(rel, want string) error {
 		if !shaPattern.MatchString(want) {
@@ -394,6 +464,15 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 	if e != nil {
 		return v, e
 	}
+	var captureBytes uint64
+	for _, group := range []map[string][]byte{files, assets, builds} {
+		for _, b := range group {
+			captureBytes += uint64(len(b))
+		}
+	}
+	if captureBytes > portableTotalLimit {
+		return v, fmt.Errorf("complete snapshot input exceeds 8GiB")
+	}
 	number := 1
 	if list.Current.Number != "" {
 		n, _ := strconv.Atoi(list.Current.Number)
@@ -474,6 +553,9 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 		return v, e
 	}
 	manifest := canonical(v)
+	if uint64(len(manifest)) > portableManifestLimit {
+		return v, fmt.Errorf("version manifest exceeds 16MiB; snapshot retained")
+	}
 	if e = writeVersionFile(p.Root, v.Number, "manifest.json", manifest); e != nil {
 		return v, e
 	} // Retain any interrupted snapshot for explicit diagnosis.
