@@ -58,7 +58,7 @@ release:resources:
     - {job: security:secrets, artifacts: false}
     - {job: security:offline-model, artifacts: false}
   script:
-    - if [ "$PPTXGENGO_PACKAGE_KIND" = full ]; then apt-get update && apt-get install -y --no-install-recommends python3; fi
+    - apt-get update && apt-get install -y --no-install-recommends python3
     - bash scripts/release/prepare-resources.sh
   artifacts:
     paths: [dist/resources/]

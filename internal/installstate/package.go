@@ -189,6 +189,9 @@ func Verify(root string) (Package, error) {
 			}
 		}
 		p.Files = raw.Hashes
+		if e = allowBrowsingFiles(root, files, map[string]bool{}); e != nil {
+			return p, e
+		}
 		if !regexp.MustCompile(`^v[1-9][0-9]*$`).MatchString(p.Bundle) {
 			return p, fmt.Errorf("invalid selected bundle")
 		}
@@ -225,6 +228,9 @@ func Verify(root string) (Package, error) {
 		allowed := map[string]bool{"VERSION": true, "README.txt": true, "LICENSE": true, "THIRD-PARTY-NOTICES.txt": true, manifest: true}
 		for name := range ev.Hashes {
 			allowed[name] = true
+		}
+		if e := allowBrowsingFiles(root, files, allowed); e != nil {
+			return p, e
 		}
 		for name := range files {
 			if !allowed[name] {

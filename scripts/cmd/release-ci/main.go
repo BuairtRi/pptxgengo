@@ -280,12 +280,15 @@ func archive(dir, target, version, commit, out string) error {
 	} else if packageKind() != "cli-only" {
 		return fmt.Errorf("unknown package kind")
 	}
+	if e := addBrowsingFiles(files, "dist/resources"); e != nil {
+		return e
+	}
 	for _, tool := range tools {
 		p := "bin/" + name(tool, target)
 		files[p] = Input{Path: filepath.Join(dir, filepath.FromSlash(p))}
 	}
 	files["VERSION"] = Input{Data: []byte(version + "\n")}
-	files["README.txt"] = Input{Data: []byte("pptxgengo " + version + " (" + target + ")\nPackage kind: " + packageKind() + "\nExtract and add bin to PATH. Run pptxgengo --version.\nCLI-only archives omit the presentation library and branding originals; full archives contain verified private resources.\nWindows runtime and native PowerPoint validation remain pending.\nBare macOS CLIs cannot be stapled; Apple online ticket lookup is required on first use.\nVerify manifest.sigstore.json before trusting checksums and installing.\n")}
+	files["README.txt"] = Input{Data: []byte("pptxgengo " + version + " (" + target + ")\nPackage kind: " + packageKind() + "\nExtract and add bin to PATH. Run pptxgengo --version.\nEvery installation archive includes two private generated browsing PowerPoint libraries and their coverage manifests. CLI-only archives omit branding originals and authoring resources; full archives additionally contain verified private resources.\nWindows runtime and native PowerPoint validation remain pending.\nBare macOS CLIs cannot be stapled; Apple online ticket lookup is required on first use.\nVerify manifest.sigstore.json before trusting checksums and installing.\n")}
 	for _, p := range []string{"LICENSE", "internal/releasepackage/THIRD-PARTY-NOTICES.txt"} {
 		files[filepath.Base(p)] = Input{Path: p}
 	}
@@ -547,7 +550,7 @@ func seal(dir, version, commit string) error {
 	if !policy.Passed {
 		return fmt.Errorf("security policy failed")
 	}
-	m := Manifest{Schema: "pptxgengo.release-manifest/v1", Project: "riscott/pptxgengo", Version: version, Commit: commit, Pipeline: os.Getenv("CI_PIPELINE_URL"), PackageKind: packageKind(), Branding: "not-included", Files: map[string]string{}, Targets: targets}
+	m := Manifest{Schema: "pptxgengo.release-manifest/v1", Project: "riscott/pptxgengo", Version: version, Commit: commit, Pipeline: os.Getenv("CI_PIPELINE_URL"), PackageKind: packageKind(), Branding: "verified-private-browsing-decks", Files: map[string]string{}, Targets: targets}
 	if offlineModelEnabled() {
 		m.OfflineModelArchive = modelArchiveName(version)
 		if e := verifyModelRelease(dir, version, commit); e != nil {
@@ -821,7 +824,7 @@ func publish(dir, version, commit string) error {
 	if strings.Contains(version, "-rc.") {
 		releaseKind = "prerelease"
 	}
-	description := "Signed CLI " + releaseKind + " for macOS, Linux and Windows (amd64 and arm64).\n\nPackage kind: " + packageKind() + ". CLI-only archives contain three executables; full archives additionally contain checksum-verified private presentation resources.\n\nWindows runtime and native PowerPoint validation are pending the interactive desktop runner. macOS notarization uses online Apple ticket lookup.\n\nFinal archives have CycloneDX SBOMs and vulnerability scans. manifest.json is signed with the private Sigstore service; verify its bundle against release/sigstore-policy.json before trusting checksums.\n\nSource: `" + commit + "`\nPipeline: " + os.Getenv("CI_PIPELINE_URL")
+	description := "Signed CLI " + releaseKind + " for macOS, Linux and Windows (amd64 and arm64).\n\nPackage kind: " + packageKind() + ". Every installation archive contains three executables and two generated private browsing PowerPoint libraries with coverage manifests. Full archives additionally contain checksum-verified private authoring resources and branding originals.\n\nWindows runtime and native PowerPoint validation are pending the interactive desktop runner. macOS notarization uses online Apple ticket lookup.\n\nFinal archives have CycloneDX SBOMs and vulnerability scans. manifest.json is signed with the private Sigstore service; verify its bundle against release/sigstore-policy.json before trusting checksums.\n\nSource: `" + commit + "`\nPipeline: " + os.Getenv("CI_PIPELINE_URL")
 	var publishedManifest Manifest
 	if e := readJSON(filepath.Join(dir, "manifest.json"), &publishedManifest); e != nil {
 		return e

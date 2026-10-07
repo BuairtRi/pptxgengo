@@ -262,3 +262,11 @@ assets, source lineage, approvals and portable exports. The retained
 [typography calculation contract](../../library/wm-design-system/v7/typography/README.md)
 describes calibrated measurements and their limits; the engine identifier remains
 `wmds-go-foundation.v2`.
+
+## PowerPoint browsing libraries
+
+`pptxdesign browsing-library --kind templates|reusable` generates editable
+copy-and-paste PowerPoint libraries. It requires `--as-of YYYY-MM-DD` and a new
+`--out` directory; reusable libraries additionally require `--finished-library`
+with real approved immutable revisions. See [the input, coverage and private CI
+contract](../../docs/browsing-libraries.md).
