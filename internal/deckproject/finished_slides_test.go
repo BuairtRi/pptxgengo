@@ -207,7 +207,7 @@ func TestFinishedSlideLineageRoundTrip(t *testing.T) {
 	}
 }
 
-func TestFinishedSlideAssetsCopyAndSlotIdentities(t *testing.T) {
+func reuseMediaProject(t *testing.T) *Project {
 	source := reuseProject(t)
 	catalog, err := wmdesign.LibraryCatalog(bundle(t), "")
 	if err != nil {
@@ -268,6 +268,11 @@ func TestFinishedSlideAssetsCopyAndSlotIdentities(t *testing.T) {
 	if !found {
 		t.Fatal("no cover with real image slot")
 	}
+	return source
+}
+
+func TestFinishedSlideAssetsCopyAndSlotIdentities(t *testing.T) {
+	source := reuseMediaProject(t)
 	library, m := publishReuse(t, source, 1)
 	_, deps, _, err := readFinishedSource(library, m)
 	if err != nil {
@@ -306,7 +311,11 @@ func TestFinishedSlideAssetsCopyAndSlotIdentities(t *testing.T) {
 			t.Fatal("asset insertion cannot build", err)
 		}
 		inserted := p.Document.Slides[len(p.Document.Slides)-1]
-		media, err := finishedMediaSlots(inserted, defs[inserted.Template.ID])
+		def, err := finishedTemplate(bundle(t), inserted.Template.ID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		media, err := finishedMediaSlots(inserted, def)
 		if err != nil {
 			t.Fatal(err)
 		}

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -26,16 +25,17 @@ type FinishedSlideDependencies struct {
 }
 
 type LibraryLineage struct {
-	ID             string            `json:"id"`
-	Revision       int               `json:"revision"`
-	RevisionSHA256 string            `json:"revision_sha256"`
-	SourceProject  string            `json:"source_project"`
-	SourceSlide    string            `json:"source_slide"`
-	SourceSHA256   string            `json:"source_sha256"`
-	AssetRemaps    map[string]string `json:"asset_remaps"`
-	ItemRemaps     map[string]string `json:"item_remaps"`
-	EvidenceRemaps map[string]string `json:"evidence_remaps,omitempty"`
-	ContentPolicy  string            `json:"content_policy"`
+	ID             string                             `json:"id"`
+	Revision       int                                `json:"revision"`
+	RevisionSHA256 string                             `json:"revision_sha256"`
+	SourceProject  string                             `json:"source_project"`
+	SourceSlide    string                             `json:"source_slide"`
+	SourceSHA256   string                             `json:"source_sha256"`
+	AssetRemaps    map[string]string                  `json:"asset_remaps"`
+	ItemRemaps     map[string]string                  `json:"item_remaps"`
+	EvidenceRemaps map[string]string                  `json:"evidence_remaps,omitempty"`
+	Derivations    map[string]FinishedAssetDerivation `json:"derivations,omitempty"`
+	ContentPolicy  string                             `json:"content_policy"`
 }
 
 type FinishedSlidePublishOptions struct {
@@ -173,56 +173,9 @@ func PublishFinishedSlide(p *Project, o FinishedSlidePublishOptions) (finishedsl
 	if err != nil {
 		return m, err
 	}
-	registry := map[string]wmdesign.PrimitiveAssetReference{}
-	for _, a := range wmdesign.PrimitiveAssetCatalog() {
-		registry[a.Key] = a
-	}
-	names := []string{}
-	for name := range media {
-		names = append(names, name)
-	}
-	sort.Strings(names)
-	for _, name := range names {
-		value := media[name]
-		if _, ok := registry[value]; ok {
-			continue
-		}
-		id := strings.TrimPrefix(value, "project:")
-		a, ok := p.Document.Assets[id]
-		if !ok {
-			return m, fmt.Errorf("finished-slide.asset_missing: %s", value)
-		}
-		if _, copied := deps.Assets[id]; copied {
-			continue
-		}
-		if a.DerivedFrom != "" || a.DerivationReceipt != "" {
-			return m, fmt.Errorf("finished-slide.derived_asset_dependency_unsupported: %s", id)
-		}
-		if a.RegistryID != "" {
-			r, ok := registry[a.RegistryID]
-			if !ok || (a.SHA256 != "" && a.SHA256 != r.SHA256) {
-				return m, fmt.Errorf("finished-slide.registry_asset_pin_mismatch: %s", id)
-			}
-			a.SHA256 = r.SHA256
-		} else {
-			raw, err := projectDependency(p, a.Path, 64<<20)
-			if err != nil {
-				return m, err
-			}
-			if a.SHA256 != "" && a.SHA256 != digest(raw) {
-				return m, fmt.Errorf("finished-slide.asset_pin_mismatch: %s", id)
-			}
-			mime, err := assetMIME(raw)
-			if err != nil {
-				return m, err
-			}
-			ext := map[string]string{"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg"}[mime]
-			a.Path = "assets/" + digest([]byte(id))[:16] + "-" + digest(raw)[:16] + ext
-			a.SHA256 = digest(raw)
-			files[a.Path] = raw
-			roles[a.Path] = "asset"
-		}
-		deps.Assets[id] = a
+	deps.Assets, err = closeFinishedAssets(p, media, files, roles)
+	if err != nil {
+		return m, err
 	}
 	slide.Template.Revision = strconv.Itoa(def.Revision)
 	var source map[string]any
@@ -387,39 +340,8 @@ func InsertFinishedSlide(p *Project, o FinishedSlideInsertOptions) (FinishedSlid
 	if err != nil {
 		return r, err
 	}
-	ids := []string{}
-	for id := range deps.Assets {
-		ids = append(ids, id)
-	}
-	sort.Strings(ids)
-	for _, id := range ids {
-		a := deps.Assets[id]
-		if !stableID.MatchString(id) || !shaPattern.MatchString(a.SHA256) || a.DerivedFrom != "" || a.DerivationReceipt != "" {
-			return r, fmt.Errorf("finished-slide.asset_dependency_invalid: %s", id)
-		}
-		newID := "reuse-" + nonce()
-		if _, ok := assets[newID]; ok {
-			return r, fmt.Errorf("finished-slide.asset_id_collision")
-		}
-		lineage.AssetRemaps[id] = newID
-		if a.RegistryID != "" {
-			if a.Path != "" {
-				return r, fmt.Errorf("finished-slide.asset_dependency_invalid: %s", id)
-			}
-		} else {
-			raw, ok := packageFiles[a.Path]
-			if !ok || digest(raw) != a.SHA256 {
-				return r, fmt.Errorf("finished-slide.asset_bytes_missing: %s", id)
-			}
-			mime, err := assetMIME(raw)
-			if err != nil {
-				return r, err
-			}
-			ext := map[string]string{"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg"}[mime]
-			a.Path = "assets/originals/" + newID + "-" + a.SHA256[:16] + ext
-			files[a.Path] = raw
-		}
-		assets[newID] = a
+	if err := insertFinishedAssets(media, deps.Assets, packageFiles, claimRoles, assets, files, &lineage); err != nil {
+		return r, err
 	}
 	for name, value := range media {
 		id := strings.TrimPrefix(value, "project:")

@@ -517,3 +517,41 @@ limits. Focused portable checks and Windows ARM64 compilation passed; hosted
 execution remains required. Intel Mac's corrected actual-tool lane passed at
 `d9641533`, with its downloaded eight-scenario qualification independently
 verified. The source adds no desktop Office or operator acceptance claim.
+
+## Derived-image closure and additional product scope
+
+Managed slot `pptx-slide-assets` extends finished-slide publication/insertion
+to selected image ancestry. It preserves original/intermediate/result bytes,
+verifies exact derivation receipts and remaps every asset identity. Destination
+receipts change only parent identity; the original bytes and both receipt hashes
+remain in lineage and portable maintainer exports. Candidate compilation reads
+bounded pending receipt bytes through the existing source guard.
+
+Focused tests pass for two independent projects, native headless builds,
+unchanged image/focus/operation/parameters, exact original receipts, maintainer
+export, cycles/missing parents/unpaired metadata and false resealed packages.
+Selected race checks pass. Full submission and hosted gates remain required;
+real operator content and broad typed/local dependencies remain outstanding.
+
+Ri added packaged browsing libraries and consistent portable projects on
+2026-10-07. The linked portable-projects/browsing-decks scope retains the
+requirements for both private CI-generated PowerPoints, full supported
+template/frame/rail coverage, split source/assets/local templates, numbered
+versions and colleague ZIP handoff. These are additional requirements, not
+implemented commands.
+
+Mac native evidence follow-up: a bounded Documents-folder attempt exposed a
+visible PowerPoint Grant File Access prompt for the owned synthetic folder.
+Access was granted to that folder through the native UI. A fresh fixture from
+the current lineage contract then opened and saved through PowerPoint
+16.113.4 (16.113.26100421). Independent on-disk verification passed all forty
+native objects with zero lineage issues after Save As. Baseline SHA256
+`8739f94533e397e4a4e44b66daf5e7bb293f7a942cfc6ca3370ee535a187a34c`;
+saved SHA256
+`6d5954171b63fa56891c2ace70c20e12e62540755cd8e38bab92485bd0e96dbc`.
+Evidence remains under
+`~/Documents/pptxgengo-qualification/save-as-_tqvwxdy/`; both owned task
+presentations were closed. The older retained fixture is incompatible with the
+new baseline generation contract and its failed verification is retained.
+This proves this Mac Save As identity case only; three-field editing/reorder,
+human ergonomics/visual review and Windows desktop qualification remain open.
