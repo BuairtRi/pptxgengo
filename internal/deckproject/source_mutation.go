@@ -111,6 +111,12 @@ func commitSourceChanges(p *Project, changes map[string][]byte, validate func(*P
 // observed authorizes updates to explicitly read editorial dependencies, and
 // checks their predecessors under the same guard as the authored source tree.
 func commitSourceChangesObserved(p *Project, changes, observed map[string][]byte, validate func(*Project) error) (*Project, error) {
+	return commitSourceChangesChecked(p, changes, observed, nil, validate)
+}
+
+// guarded inputs are verified under the mutation lock but are immutable build
+// artifacts, not authorized write destinations or redundant source preimages.
+func commitSourceChangesChecked(p *Project, changes, observed, guarded map[string][]byte, validate func(*Project) error) (*Project, error) {
 	candidate, err := loadProject(p.SourcePath, changes)
 	if err != nil {
 		return nil, err
@@ -165,6 +171,19 @@ func commitSourceChangesObserved(p *Project, changes, observed map[string][]byte
 		actual, err := os.ReadFile(path)
 		if err != nil || !bytes.Equal(actual, expected) {
 			return nil, fmt.Errorf("project dependency changed during mutation: %s", relative)
+		}
+	}
+	for relative, expected := range guarded {
+		path, err := SafePath(p.Root, relative)
+		if err != nil {
+			return nil, err
+		}
+		actual, err := os.ReadFile(path)
+		if err != nil || !bytes.Equal(actual, expected) {
+			return nil, fmt.Errorf("immutable build input changed during mutation: %s", relative)
+		}
+		if _, written := changes[relative]; written {
+			return nil, fmt.Errorf("immutable guarded input cannot be a source destination")
 		}
 	}
 	type preparedFile struct {

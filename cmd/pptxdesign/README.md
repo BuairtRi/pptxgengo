@@ -13,6 +13,15 @@ Upgrade an existing YAML project with `pptxgengo design project migrate --projec
 checks compatibility and compiler fit first, backs up the old lock, and changes
 only the pin. Follow with `project build` and native visual review.
 
+### Review an edited PowerPoint copy
+
+The source commands `project reconcile propose --project PATH --edited FILE
+--out NEW_DIRECTORY` and `project reconcile adopt --project PATH --packet DIR
+--decisions FILE` compare a lineage-enabled immutable build with current YAML
+and edited native copy, then adopt explicitly reviewed named text fields. Read
+[the decision format and limits](../../docs/text-reconciliation.md). Stable
+v4.1.0 predates these commands; desktop identity survival remains unqualified.
+
 ### Local native rendering (macOS)
 
 ```sh

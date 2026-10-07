@@ -252,6 +252,39 @@ Bounded package/XML validation and headless mutation fixtures passed locally.
 
 A separate owned synthetic Mac PowerPoint 16.113.4 Save As trial timed out with
 AppleEvent `-1712` and produced no saved output; its copy was closed without
-saving. Desktop survival remains unqualified. Full preflight and exact-head CI
-for this source change are pending. Three-way proposals, guarded adoption and
-native editing family pilots remain next. See [the lineage contract](../native-lineage.md).
+saving. Desktop survival remains unqualified. Full preflight, exact-head GitLab pipeline
+21163 (all eight gates), hosted Mac normal/race/model and Windows portable/model
+checks passed before PR #9 merged as `38e2b5fa`. Three-way proposals, guarded
+adoption and native editing family pilots follow. See [the lineage contract](../native-lineage.md).
+
+## Three-way text proposals and reviewed adoption — managed source implementation
+
+The `pptx-text-reconcile` slot exposes `project reconcile propose` and `adopt`.
+Receipt-pinned immutable native/source baselines are compared with current YAML
+and an edited copy through generation/slide/shape tags and keyed source slots.
+Reports distinguish no-op, YAML-only, matching changes, native-only changes,
+conflicts and manual review. Supported proposals retain exact plain text;
+ambiguous fields, rich/bullet/dynamic/cell content, object changes, geometry,
+format and other package payloads remain visible for review.
+
+Closed review packets retain all comparison inputs. Explicit named review
+choices are bound to the report hash and replayed against verified inputs before
+source mutation. Adoption updates only reviewed authored scalars, preserves
+comments/split files and parallel-copy predecessors, validates source and changed
+slide fit under the existing mutation guard, and retains edited deck/report/raw
+choices plus a receipt. Repeating an adoption does not duplicate mutations;
+empty/no-op choices write nothing. Unsupported changes remain in receipts.
+
+Headless fixtures and CLI workflows cover three selected fields and rebuild,
+conflicts, repeat/no-op, split readable copy, packet tampering, immutable guards
+and stale source refusal. Full slot preflight and exact-head hosted CI are pending.
+Actual Mac/Windows PowerPoint Save As and colleague editing acceptance remain
+unqualified. This capability is not included in released v4.1.0. See
+[commands, decision format and scope](../text-reconciliation.md).
+
+Reconciliation hosted CI follow-up: local full preflight and GitLab pipeline
+21169 passed at `7c424009`. The hosted Mac race batch reached its retained
+150-second package ceiling while adding all reconciliation fixtures to the
+previous selected workload. Reconciliation now runs as a separate bounded race
+command with the same ceiling; exact-head full preflight and hosted gates will
+be rerun. No tests or race checking are removed.
