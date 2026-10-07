@@ -11,7 +11,9 @@ variables:
 developer:
   stage: test
   image: golang:1.27.1
-  timeout: 10 minutes
+  # The complete sequential short race lane can exceed ten minutes on the
+  # Kubernetes pool. Preserve the Makefile's 150-second per-package ceilings.
+  timeout: 20 minutes
   interruptible: true
   parallel:
     matrix:
@@ -72,6 +74,11 @@ workflow-lint:
   image: golang:1.27.1
   timeout: 5 minutes
   interruptible: true
+  # A pod startup failure does not execute actionlint. Retry infrastructure
+  # failures only; lint/script failures remain terminal.
+  retry:
+    max: 2
+    when: [runner_system_failure]
   script:
     - go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 -shellcheck=
 

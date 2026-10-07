@@ -517,3 +517,77 @@ limits. Focused portable checks and Windows ARM64 compilation passed; hosted
 execution remains required. Intel Mac's corrected actual-tool lane passed at
 `d9641533`, with its downloaded eight-scenario qualification independently
 verified. The source adds no desktop Office or operator acceptance claim.
+
+Installer integration follow-up: PR #16 passed full five-step slot preflight,
+all eighteen applicable GitHub checks and all twelve private GitLab pipeline
+21240 jobs at exact `b7289d76`; it merged as `8a60f59d`. Six independently
+downloaded exact-source installer reports verified all native OS/architecture
+pairs, eight/eleven unique scenarios, manager API/native target, both package
+version/content/manifest hashes and unchanged PATH/opt-outs. The two Windows
+ARM64 runs passed unchanged 30-second limits: first native module/hash/JSON
+1.92/1.69 seconds, later command/file calls 0.42–0.45 seconds. No retries or
+deadline relaxation were used for that candidate. Source/private mirror/clean
+primary were synchronized normally; no release tag was cut.
+
+## Windows ARM64 elapsed timing — managed measurement correction
+
+Slot `pptx-benchmark-clock` independently found exact `b7289d76` keyword
+observations of zero first/median milliseconds. Go 1.27.1's Windows ARM64
+interrupt-time counter can quantize fast operations. These observations are
+retained and excluded from latency qualification. Source now selects native
+Windows performance counter/frequency, records counter method/units, subtracts
+integer samples before conversion, and refuses unavailable/non-advancing/
+backward timing without changing system timer resolution. Unix retains Go's
+monotonic counter. Local focused keyword/report/unit checks, vet and all six
+target test compilations passed. The clean slot update incorporated merged
+PR #16 and its six native model/installer CI lanes. Final preflight and exact
+hosted reports remain required; performance budgets remain unagreed.
+
+Preliminary exact `a9803e4b` Windows AMD64/ARM64 reports independently
+verified all three search modes, positive first/repeated durations and native
+performance-counter frequency of 10,000,000 units per second. The prior ARM64
+zero observations remain retained. Pipeline 21247's race job hit its overall
+ten-minute limit after passing the executed packages; its lint job failed at
+Kubernetes pod startup before executing lint. Developer jobs now have twenty
+minutes, matching the hosted Go lane, with every 150-second package ceiling
+retained. Only workflow lint retries runner-system failures, at most twice;
+script/assertion failures and signing/publication jobs gain no retry policy.
+Final full preflight and exact-head hosted gates remain required.
+
+## Derived-image closure and additional product scope
+
+Managed slot `pptx-slide-assets` extends finished-slide publication/insertion
+to selected image ancestry. It preserves original/intermediate/result bytes,
+verifies exact derivation receipts and remaps every asset identity. Destination
+receipts change only parent identity; the original bytes and both receipt hashes
+remain in lineage and portable maintainer exports. Candidate compilation reads
+bounded pending receipt bytes through the existing source guard.
+
+Focused tests pass for two independent projects, native headless builds,
+unchanged image/focus/operation/parameters, exact original receipts, maintainer
+export, cycles/missing parents/unpaired metadata and false resealed packages.
+Selected race checks pass. Full submission and hosted gates remain required;
+real operator content and broad typed/local dependencies remain outstanding.
+
+Ri added packaged browsing libraries and consistent portable projects on
+2026-10-07. The linked portable-projects/browsing-decks scope retains the
+requirements for both private CI-generated PowerPoints, full supported
+template/frame/rail coverage, split source/assets/local templates, numbered
+versions and colleague ZIP handoff. These are additional requirements, not
+implemented commands.
+
+Mac native evidence follow-up: a bounded Documents-folder attempt exposed a
+visible PowerPoint Grant File Access prompt for the owned synthetic folder.
+Access was granted to that folder through the native UI. A fresh fixture from
+the current lineage contract then opened and saved through PowerPoint
+16.113.4 (16.113.26100421). Independent on-disk verification passed all forty
+native objects with zero lineage issues after Save As. Baseline SHA256
+`8739f94533e397e4a4e44b66daf5e7bb293f7a942cfc6ca3370ee535a187a34c`;
+saved SHA256
+`6d5954171b63fa56891c2ace70c20e12e62540755cd8e38bab92485bd0e96dbc`.
+Evidence remains under
+`~/Documents/pptxgengo-qualification/save-as-_tqvwxdy/`; both owned task
+presentations were closed. The older retained fixture is incompatible with the
+new baseline generation contract and its failed verification is retained.
+This proves this Mac Save As identity case only; three-field editing/reorder,
+human ergonomics/visual review and Windows desktop qualification remain open.

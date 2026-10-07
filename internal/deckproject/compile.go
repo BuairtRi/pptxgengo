@@ -112,15 +112,6 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 		if a.SHA256 != "" && a.SHA256 != hash {
 			return c, p.fail("/assets/"+escape(id), "asset hash mismatch")
 		}
-		if a.DerivationReceipt != "" {
-			rp, e := SafePath(p.Root, a.DerivationReceipt)
-			if e != nil {
-				return c, e
-			}
-			if _, e = os.ReadFile(rp); e != nil {
-				return c, e
-			}
-		}
 		key := "project:" + id
 		assetKeys[id] = key
 		c.AssetHashes[id] = hash
@@ -134,11 +125,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 		if a.DerivationReceipt == "" {
 			continue
 		}
-		path, e := SafePath(p.Root, a.DerivationReceipt)
-		if e != nil {
-			return c, e
-		}
-		raw, e := os.ReadFile(path)
+		raw, e := projectDependency(p, a.DerivationReceipt, 1<<20)
 		if e != nil {
 			return c, e
 		}

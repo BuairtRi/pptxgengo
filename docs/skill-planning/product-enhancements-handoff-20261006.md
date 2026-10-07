@@ -281,6 +281,13 @@ adoption. General lossless PPTX reverse compilation is outside the first release
 
 ## Execution record
 
+Additional scope requested on 2026-10-07: two CI-generated packaged PowerPoint
+browsing libraries (all templates/valid frame and rail variants, and versioned
+reusable authored slides), consistent portable project folders, numbered
+source/deck versions and complete colleague ZIP handoff. See
+[portable projects and browsing decks](portable-projects-and-browsing-decks-20261007.md)
+for the requirements and acceptance evidence.
+
 Implementation work begun after this handoff is tracked in the
 [execution record](product-enhancements-execution-20261006.md). The original
 planning scope and completion criteria below remain the baseline.
