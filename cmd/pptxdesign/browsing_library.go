@@ -16,6 +16,7 @@ import (
 
 func runBrowsingLibrary(args []string) (err error) {
 	f := flag.NewFlagSet("browsing-library", flag.ContinueOnError)
+	engine := f.String("engine", wmdesign.CandidateEngine, "required source-pinned candidate engine")
 	frames := f.String("frames", "catalog", "templates: catalog frame variants or exhaustive valid request combinations")
 	kind := f.String("kind", "", "templates or reusable")
 	bundle := f.String("bundle", currentDesignBundle, "pinned bundle")
@@ -28,6 +29,9 @@ func runBrowsingLibrary(args []string) (err error) {
 	}
 	if f.NArg() != 0 || *out == "" || (*kind != "templates" && *kind != "reusable") {
 		return fmt.Errorf("browsing-library requires --kind templates|reusable --as-of YYYY-MM-DD --out NEW-DIR")
+	}
+	if *engine != wmdesign.CandidateEngine {
+		return fmt.Errorf("browsing-library requires --engine %s", wmdesign.CandidateEngine)
 	}
 	date, e := time.Parse(time.DateOnly, *asOf)
 	if e != nil {

@@ -41,7 +41,7 @@ func TestBrowsingCLIReusableNativeDeck(t *testing.T) {
 		t.Fatal(e)
 	}
 	out := filepath.Join(t.TempDir(), "browsing with spaces")
-	args := []string{"--kind", "reusable", "--bundle", bundle, "--as-of", "2026-10-07", "--finished-library", library, "--out", out}
+	args := []string{"--kind", "reusable", "--engine", wmdesign.CandidateEngine, "--bundle", bundle, "--as-of", "2026-10-07", "--finished-library", library, "--out", out}
 	if e = runBrowsingLibrary(args); e != nil {
 		t.Fatal(e)
 	}
