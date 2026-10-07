@@ -706,6 +706,10 @@ func Build(p *Project, opts BuildOptions) (Receipt, error) {
 	if e != nil {
 		return r, e
 	}
+	pptxBytes, objects, e = StampNativeLineage(pptxBytes, objects, digest(lockBytes))
+	if e != nil {
+		return r, e
+	}
 	outputs := map[string][]byte{"deck.pptx": pptxBytes, "deck.yaml": p.Raw, "source.canonical.json": p.Canonical, "scene.json": canonical(c.Document), "layout-report.json": canonical(report), "object-map.json": canonical(objects), "toolchain.lock.json": lockBytes}
 	for relative, raw := range p.SourceFiles {
 		if p.hasExternalSources() {

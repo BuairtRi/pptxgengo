@@ -14,20 +14,23 @@ import (
 )
 
 type ObjectRecord struct {
-	LogicalID      string         `json:"logical_id"`
-	SlideID        string         `json:"slide_id"`
-	NodeID         string         `json:"node_id"`
-	ItemKey        string         `json:"item_key,omitempty"`
-	PartRole       string         `json:"part_role"`
-	NativePart     string         `json:"native_part"`
-	NativeID       string         `json:"native_id"`
-	NativeName     string         `json:"native_name"`
-	NativeText     string         `json:"baseline_native_text,omitempty"`
-	SourcePointers []string       `json:"source_pointers"`
-	BaselineValues map[string]any `json:"baseline_values,omitempty"`
-	Mapping        string         `json:"mapping"`
+	NativeParentToken string         `json:"native_parent_token,omitempty"`
+	ShapeToken        string         `json:"shape_token,omitempty"`
+	LogicalID         string         `json:"logical_id"`
+	SlideID           string         `json:"slide_id"`
+	NodeID            string         `json:"node_id"`
+	ItemKey           string         `json:"item_key,omitempty"`
+	PartRole          string         `json:"part_role"`
+	NativePart        string         `json:"native_part"`
+	NativeID          string         `json:"native_id"`
+	NativeName        string         `json:"native_name"`
+	NativeText        string         `json:"baseline_native_text,omitempty"`
+	SourcePointers    []string       `json:"source_pointers"`
+	BaselineValues    map[string]any `json:"baseline_values,omitempty"`
+	Mapping           string         `json:"mapping"`
 }
 type Objects struct {
+	Lineage        *NativeLineage `json:"native_lineage,omitempty"`
 	Schema         string         `json:"schema"`
 	DeckID         string         `json:"deck_id"`
 	SourceSHA256   string         `json:"source_semantic_sha256"`
