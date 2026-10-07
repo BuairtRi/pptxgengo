@@ -296,3 +296,10 @@ No serializer changes or whole-library/native editing acceptance are claimed.
 The family task matrix covers copy, selection, move/align/resize, table cells,
 diagram adjustment and Save As/identity tasks on both desktop platforms. Full
 preflight and hosted checks are pending. See [the maintained pilot](../native-editing-pilot.md).
+
+Reconciliation hosted CI follow-up: local full preflight and GitLab pipeline
+21169 passed at `7c424009`. The hosted Mac race batch reached its retained
+150-second package ceiling while adding all reconciliation fixtures to the
+previous selected workload. Reconciliation now runs as a separate bounded race
+command with the same ceiling; exact-head full preflight and hosted gates will
+be rerun. No tests or race checking are removed.
