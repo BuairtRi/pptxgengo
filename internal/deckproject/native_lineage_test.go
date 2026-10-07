@@ -465,3 +465,57 @@ func TestNativeLineageRejectsWrongTagContentType(t *testing.T) {
 		t.Fatal("incorrect tag content type accepted")
 	}
 }
+
+func TestNativeLineageRelationshipParsingIsPerPart(t *testing.T) {
+	data, _ := lineageFixture(t)
+	p, e := openLineagePackage(data)
+	if e != nil {
+		t.Fatal(e)
+	}
+	first, e := p.relationships("ppt/presentation.xml")
+	if e != nil {
+		t.Fatal(e)
+	}
+	if len(first) == 0 || len(p.relationshipCache) != 1 {
+		t.Fatal("missing parsed relationships")
+	}
+	// The closed input never changes in production. Poisoning the byte cache here
+	// proves a second owner on this part uses the already-validated relationship map.
+	p.cache["ppt/_rels/presentation.xml.rels"] = []byte("invalid XML")
+	second, e := p.relationships("ppt/presentation.xml")
+	if e != nil || len(second) != len(first) {
+		t.Fatalf("part reparsed per owner: %v", e)
+	}
+}
+func TestNativeLineageRejectsAmbiguousOwnProperties(t *testing.T) {
+	data, o := lineageFixture(t)
+	part := o.Objects[0].NativePart
+	for _, element := range []string{"cNvPr", "nvPr"} {
+		t.Run(element, func(t *testing.T) {
+			changed := lineageEdit(t, data, part, func(b []byte) []byte {
+				shape := firstLineageShape(t, b)
+				var selected *lineageSpan
+				for _, nv := range shape.children {
+					if nv.node.Name.Local == "nvSpPr" {
+						for _, child := range nv.children {
+							if child.node.Name.Local == element {
+								selected = child
+							}
+						}
+					}
+				}
+				if selected == nil {
+					t.Fatal("fixture missing own properties")
+				}
+				raw, e := lineageApply(b, []lineagePatch{{selected.end, selected.end, string(b[selected.start:selected.end])}})
+				if e != nil {
+					t.Fatal(e)
+				}
+				return raw
+			})
+			if _, e := InspectNativeLineage(changed, o); e == nil {
+				t.Fatal("ambiguous own nonvisual properties accepted")
+			}
+		})
+	}
+}

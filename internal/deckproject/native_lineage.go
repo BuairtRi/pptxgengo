@@ -73,12 +73,13 @@ func validLineageToken(s string) bool {
 // A bounded, non-extracting package reader. Reject duplicate/unsafe entries and
 // enforce actual decompressed limits, including parts unrelated to our tags.
 type lineagePackage struct {
-	files           map[string]*zip.File
-	order           []*zip.File
-	total           int64
-	cache           map[string][]byte
-	contentTypes    map[string]string
-	contentDefaults map[string]string
+	files             map[string]*zip.File
+	order             []*zip.File
+	total             int64
+	cache             map[string][]byte
+	contentTypes      map[string]string
+	contentDefaults   map[string]string
+	relationshipCache map[string]map[string]lineageRelationship
 }
 
 func openLineagePackage(data []byte) (*lineagePackage, error) {
@@ -92,7 +93,7 @@ func openLineagePackage(data []byte) (*lineagePackage, error) {
 	if len(z.File) > 40000 {
 		return nil, fmt.Errorf("native package has too many entries")
 	}
-	p := &lineagePackage{files: map[string]*zip.File{}, order: z.File, cache: map[string][]byte{}}
+	p := &lineagePackage{files: map[string]*zip.File{}, order: z.File, cache: map[string][]byte{}, relationshipCache: map[string]map[string]lineageRelationship{}}
 	var size uint64
 	for _, f := range z.File {
 		n := f.Name
@@ -200,12 +201,16 @@ func lineageAttr(n *xmlNode, space, local string) string {
 	return ""
 }
 func lineageChild(n *xmlNode, space, local string) *xmlNode {
+	var found *xmlNode
 	for _, c := range n.Children {
 		if c.Name.Space == space && c.Name.Local == local {
-			return c
+			if found != nil {
+				return nil
+			}
+			found = c
 		}
 	}
-	return nil
+	return found
 }
 func lineageRelPart(part string) string {
 	return path.Join(path.Dir(part), "_rels", path.Base(part)+".rels")
@@ -228,6 +233,11 @@ func (p *lineagePackage) relationships(part string) (map[string]lineageRelations
 	if part == "" {
 		relpart = "_rels/.rels"
 	}
+	// Every shape on a slide shares this immutable relationship part. Parse
+	// once per package, rather than once per shape (quadratic work on big slides).
+	if cached, ok := p.relationshipCache[relpart]; ok {
+		return cached, nil
+	}
 	tree, e := p.tree(relpart)
 	if e != nil {
 		return nil, e
@@ -246,6 +256,7 @@ func (p *lineagePackage) relationships(part string) (map[string]lineageRelations
 		}
 		out[r.ID] = r
 	}
+	p.relationshipCache[relpart] = out
 	return out, nil
 }
 func (p *lineagePackage) tags(part string, owner *xmlNode) (map[string]string, error) {
