@@ -137,10 +137,16 @@ func candidateParagraphs(raw []byte, records map[int][]TextRecord) ([]byte, erro
 				}
 				if r.Rich != nil {
 					text := richParagraphXML(r, pp)
+					if r.NativeParagraphContract == EditableListContract {
+						text = editableListParagraphXML(r)
+					}
 					first, last := bytes.Index(sp, old[0]), bytes.LastIndex(sp, old[len(old)-1])+len(old[len(old)-1])
 					updated := append([]byte{}, sp[:first]...)
 					updated = append(updated, text...)
 					updated = append(updated, sp[last:]...)
+					if r.NativeParagraphContract == EditableListContract {
+						updated = bytes.Replace(updated, []byte("</a:bodyPr>"), []byte("<a:noAutofit/></a:bodyPr>"), 1)
+					}
 					return updated
 				}
 				s, id := r.Layout.Style, r.Layout.Font

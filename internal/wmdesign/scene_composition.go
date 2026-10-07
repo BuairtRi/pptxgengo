@@ -15,7 +15,7 @@ func ComposeSceneNode(kind string, arguments map[string]any, allocation Rect) (j
 		noHeight[k] = true
 	}
 	known := map[string]bool{}
-	for _, k := range strings.Fields("editable-block attached-connector text textblock bullets ol list schedule grouplabel numhead colhead strongnum pullquote imageframe logo art square mark thumbnail table chart card cardrow metric callout feesummary block frame chevron textarrow connector container cylinder node layerrow matrix beforeafter stepper vstepper phasehead phases timeaxis pyramid funnel cycle road roadfork gauge bracket scorelegend gantt swimlane legend pod role person orgchart governance logoslot device plane dotmap teamcurve venn maturity") {
+	for _, k := range strings.Fields("editable-list editable-block attached-connector text textblock bullets ol list schedule grouplabel numhead colhead strongnum pullquote imageframe logo art square mark thumbnail table chart card cardrow metric callout feesummary block frame chevron textarrow connector container cylinder node layerrow matrix beforeafter stepper vstepper phasehead phases timeaxis pyramid funnel cycle road roadfork gauge bracket scorelegend gantt swimlane legend pod role person orgchart governance logoslot device plane dotmap teamcurve venn maturity") {
 		known[k] = true
 	}
 	if !known[kind] {
