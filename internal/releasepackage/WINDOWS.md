@@ -18,15 +18,31 @@ server or external assets; keep them together for navigation.
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install-windows.ps1
 ```
 
-The installer verifies every packaged file, installs to
+The installer rejects unlisted files and reparse points, checks the native PC
+architecture and required resources, then copies to a temporary sibling directory.
+It verifies the copied hashes and runs all three tools with `--version` before
+renaming the complete directory to
 `%LOCALAPPDATA%\pptxgengo\releases\VERSION`, adds its `bin` directory to your user
 PATH, installs the skill into `%USERPROFILE%\.codex\skills` (or `CODEX_HOME`), and
 installs the bundled IBM Plex fonts for this user. It preserves an existing skill
 in a timestamped backup. Existing release folders are never overwritten.
+A copy, hash or executable
+check failure leaves PATH, skill, fonts and the previous release untouched.
+An interrupted copy can leave a temporary `.pptxgengo-stage-*` directory; it is never
+added to PATH. Do not remove a stage belonging to an active installation.
 Restart Codex, PowerPoint, and your terminal afterward. `-SkipSkill`, `-SkipFonts`,
 and `-NoPath` opt out of those installation steps. A custom `-Destination` must be
-a new directory. Enterprise policy may require IT approval for unsigned binaries
+a new directory. `-StageOnly` verifies and promotes the package into that directory
+without changing PATH, skill or fonts. x64 packages require an x64 PC; ARM64
+packages require an ARM64 PC. This installer intentionally uses the native
+architecture rather than relying on emulation. Enterprise policy may require
+IT approval for unsigned binaries
 or PowerShell; the command does not change machine execution policy.
+
+PATH/skill activation is still sequential. Failure after directory promotion can
+leave those settings partially updated; automatic activation recovery and rollback
+are pending. Font installation remains a separately reported best-effort step.
+The new staging path still needs execution on the upcoming Windows runner.
 
 For portable use, skip installation and invoke `bin\pptxgengo.exe` directly.
 Copy `skills\west-monroe-presentations` into your own skill directory and install

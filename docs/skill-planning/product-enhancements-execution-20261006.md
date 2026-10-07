@@ -1,0 +1,156 @@
+# Product enhancements execution record
+
+Started 2026-10-06 in slot `pptx-installer-hardening`, targeting `main` at
+`fe1331e36db4eb4bf5438ecad11d8d4ceacee28e`.
+
+Source: [product enhancements handoff](product-enhancements-handoff-20261006.md).
+This record describes the next work slices and their acceptance criteria. It
+separates implemented drafts from qualification; it does not declare the five
+handoff enhancements complete.
+
+## Release baseline
+
+The operator selected `v4.1.0` as the stable tag after the signed CLI prerelease
+`v4.1.0-rc.2`. Both tags use the same source commit. The stable pipeline rebuilds
+and signs binaries with the stable version embedded; it does not relabel the RC
+archives. Downloads and release evidence remain private in GitLab project 17.
+
+These releases are CLI-only. The handoff's `0.1.0-local.21` presentation installation
+is a different package baseline, with V11 resources and registered private
+branding originals. Those originals are absent on this Mac. Windows runtime and
+native PowerPoint qualification remain pending; signing does not establish them.
+Read template counts and source pins from bundle metadata when resources arrive.
+
+## 1. Installer hardening — active
+
+### First slice: verify before activation
+
+Draft implemented in `internal/releasepackage/install-windows.ps1`:
+
+- Require the package architecture to match the native Windows architecture.
+- Reject package reparse points, unsafe paths, duplicate hash entries, missing
+  files and files absent from the manifest; validate the complete inventory.
+- Require the three tools, both version files, library bundle/index/gallery and
+  documentation source metadata. Skill and fonts retain their explicit opt-outs.
+- Copy into a unique sibling stage, validate copied bytes against the original
+  manifest, then check all three executable versions with a 30-second limit per tool before
+  promoting by rename.
+- Refuse destination replacement, including a destination created concurrently.
+- Clean a failed stage during normal exception handling. A killed process may
+  leave an unactivated stage; no prior release is overwritten.
+- Implement `-StageOnly` for verified installation without PATH/skill/font changes.
+
+This draft has not been executed on Windows. Existing PATH and skill activation
+is still sequential; automatic recovery after promotion is not implemented.
+The source Mac installer already stages resources, but its launcher and skill
+activation are separate operations and it has no rollback command.
+
+### Next slice: activation and recovery contract
+
+Use immutable release directories plus one recorded active selection. The
+selection must identify CLI version, OS/architecture, library/source revision,
+skill location/version and the package manifest digest. Keep font outcome
+separate because font registration can fail independently.
+
+Before changing settings, record the previous selection, exact owned PATH entries
+and skill backup in a durable transaction receipt. Stage skill replacement before
+moving the existing skill. Activation must either complete or restore the prior
+owned settings; interruption must be diagnosable and recoverable on a later run.
+Do not prune unrelated PATH entries, user skills, fonts or authored decks.
+
+A rollback selects a retained, verified release and restores matching CLI and
+skill selection. It must not infer the prior release from folder sorting or
+silently restore unrelated PATH settings. New terminal resolution and existing
+session resolution need distinct diagnostics. Read-only diagnostics should show
+resolved executable, active selection, library, skill, fonts and native readiness.
+Command names for activation, rollback and repair remain proposed until specified
+and implemented.
+
+### Qualification backlog
+
+Before submitting the installer as complete, authorize and run bounded checks for
+paths with spaces, clean/repeated installation, wrong architecture, omitted or
+corrupted resources, unlisted files, junctions, interrupted/failed copying,
+blocked executables and concurrent destination creation. Then exercise upgrade,
+rollback and interrupted activation after that slice exists. Use the real Windows
+runner for Windows execution and an interactive desktop for Office; source tests
+or cross-compilation cannot replace either result. Keep Mac/Linux activation
+coverage separate. No new tests were added or run for this draft.
+
+## 2a. Hybrid template search — implementation contract next
+
+Extend `LibraryIndex.Find` and `library-find`; keep existing calls compatible.
+Proposed `--search-mode keyword|semantic|hybrid` is not implemented. Keyword uses
+FTS5 BM25; semantic uses an optional pinned local model and a direct vector scan.
+Fuse ranks with an explicit reciprocal-rank policy, deterministic identity ties
+and recorded policy parameters; do not add BM25 and cosine scores directly.
+
+Preserve entity ID, namespace, kind, revision, source SHA and artifact hash
+contracts already represented by the unified index. Apply explicit filters before
+ranking and report structural fit separately from retrieval relevance. Keep the
+current structural hints visible rather than treating them as proven content fit.
+
+An embedding record must bind entity/revision, retrieval text hash, source hash,
+model digest, runtime version, dimensions and normalization. Missing/stale model
+inputs must produce an explicit lexical fallback or semantic-mode error. Select
+the runtime/model only after licensing, size, CPU relevance and cross-platform
+integration evaluation. No Python or hosted service in normal operation.
+
+First evaluation set: interview lists, practices heat maps, modernization
+economics, roadmaps, pillars, exact IDs and synonyms. Judge acceptable candidates
+before comparing rank modes. Record cold/warm latency and memory before setting
+performance targets. A model package decision is still open.
+
+## 2b. Reusable finished slides — identity contract next
+
+Add a distinct finished-slide entity kind to the same discovery system. Reuse the
+index identity/revision/source hash/artifact contracts above; do not expose a
+finished slide as an empty template. Initial curation of 10–20 approved slides
+requires operator selection, an owner, reuse scope and freshness policy.
+
+Each revision closes over maintained YAML, template/compiler/source pins, assets,
+preview and evidence. Insertion copies the revision independently, assigns fresh
+slide/item identities, registers assets and writes lineage to the composition
+record. Validate collisions and dependencies before any project write. Later
+library revisions never mutate inserted copies. Proposed insertion commands and
+YAML representation require a small contract before implementation.
+
+Acceptance: insert one curated revision into two projects; both build; editing
+either copy leaves the other and the library unchanged; provenance survives
+split, reorder, export and handoff. Curation and implementation are separate.
+
+## 3. Native editing — mapping contract before serialization changes
+
+Keep deck/slide/item/logical identities stable. Extend the existing object map
+rather than inventing a second mapping system. Where one native object contains
+multiple source fields, mappings need paragraph/run or table-cell addresses and
+immutable baseline text with explicit supported/ambiguous classifications.
+
+Inventory cards/pillars, lists, tables and one diagram. Pilot meaningful grouping,
+selection names, native text roles and predictable movement without changing
+visual design, source-field ownership or z-order. Review actual Mac and Windows
+editing tasks and before/after renderings at representative density tiers.
+Existing native groups do not establish that this work is complete.
+
+## 4. Reconciliation — bounded text proposals after mapping contract
+
+Compare immutable native/source baseline, current YAML and edited PPTX using
+proven lineage and stable identities. A supported field with only a PPTX change
+produces a reviewable proposal; different YAML and PPTX changes produce a
+three-way conflict; matching changes and no-ops produce no duplicate mutation.
+
+Missing/duplicated objects and unsupported geometry, shape structure or formatting
+remain explicit manual-review items. Preserve edited files and baselines; apply
+approved proposals with backups/receipts, then rebuild and review. Never infer
+deletion from a missing native shape or rewrite shared template geometry.
+Save As, reordering, duplication, deletion and ungrouping need native identity
+survival evidence on both platforms before expanding supported mappings.
+
+## Working order
+
+Finish the installer activation/recovery contract and first Windows execution
+when the runner arrives. Next implement the lexical search mode and shared
+finished-slide identity contract while evaluating the optional local model.
+Agree native field-address mappings before the editing pilot, then implement
+bounded reconciliation. Model choice, curated content and native acceptance
+remain explicit decisions rather than silently selected defaults.
