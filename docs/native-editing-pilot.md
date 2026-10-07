@@ -256,3 +256,12 @@ it is not a new version observation for this task. No native table-cell source
 adoption, Windows execution, density-wide coverage or human ergonomics verdict
 is claimed. The owned edited presentation was left open when the native menu
 state became unavailable; no unowned document was closed.
+
+
+## Explicit single-shape card follow-up
+
+The [editable-card component](native-editable-card.md) adds an opt-in single
+filled rectangle with separate native title/body paragraphs and explicit source
+field addresses. It addresses the containing-unit design in the observed card
+selection pilot; actual Mac/Windows whole-card editing, movement and resizing
+remain qualification tasks. Existing stock card groups are unchanged.
