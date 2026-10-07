@@ -15,9 +15,8 @@ Future small graphics may be packaged; a large photo dataset needs a separate
 distribution design. No S3 upload or URL policy is established here.
 
 Release packaging must explicitly record these deferrals while retaining the
-existing build, signing/notarization, security, model and installer gates. The
-current unconditional browsing-resource release requirement still needs that
-scoping change before a new tag. No release is cut as part of this demo.
+existing build, signing/notarization, security, model and installer gates. The scoped resource policy now records that deferral in signed release
+evidence. The demo itself does not publish a release.
 
 ## Comparison
 
@@ -59,9 +58,12 @@ the card's size/X position, all candidate top-level object structures, and the
 immutable baseline receipt. Reconciliation exposes native edits for review; it
 does not silently infer bullet identities or alter the source.
 
-Windows, resizing/alignment, decorated tables, rich/nested lists and general
-stock-template migration remain open. User demo review precedes migration and
-release packaging. Do not represent these observations as release approval.
+The operator approved these demos on 2026-10-07. Windows, resizing/alignment,
+decorated tables, rich/nested lists and exhaustive stock-template equivalence
+remain open. The bounded opt-in [editing profile](native-editing-profile.md)
+preserves resolved source styles for eligible stock scenes; its build warnings
+identify conversions and exclusions. Demo approval does not confer exhaustive
+catalog or Windows qualification.
 
 ## Repeat the fixture
 

@@ -124,3 +124,12 @@ Component `<type>` is the scene node type, not the catalog name (`stepper`, not 
 - The planned output must fit the allocation, or the build fails.
 - Images: PNG, JPEG or simple self-contained SVG, with `cover` or `contain`.
 - For working examples, see `examples/local-composition` (`venn`, `maturity`, `road`) under the release `root`. For each component's arguments, look at a shared template that uses it (`library-inspect`) or the design system's `source/components/v0/components.json` under `design_system_default` from `pptxgengo paths`.
+
+## Persisted editing profile
+
+Optional top-level `editing_profile` is `stock` (also the absent default) or
+`native-v1`. It changes native structure for eligible simple source scenes using
+the v2 engine, while retaining pinned source styles. The profile is part of the
+authored source hash, compiled scene, layout report and build receipt. Preserve
+existing baselines and review converted builds. It does not alter shared bundle
+bytes or qualify every template. Complex variants remain in their stock form.

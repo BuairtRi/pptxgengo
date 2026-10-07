@@ -129,6 +129,7 @@ func runProjectCreate(args []string) error {
 	bundle := f.String("bundle", currentDesignBundle, "shared bundle revision or path")
 	template := f.String("template", "", "initial shared template key")
 	engine := f.String("engine", wmdesign.CandidateEngine, "pinned compiler engine")
+	editing := f.String("editing-profile", "", "persisted editing profile: stock (default) or native-v1")
 	if e := f.Parse(args); e != nil {
 		return e
 	}
@@ -139,7 +140,7 @@ func runProjectCreate(args []string) error {
 	if validLockedBundle(*bundle) {
 		b = designBundlePath(*bundle)
 	}
-	p, e := deckproject.CreateProject(deckproject.CreateOptions{Out: *out, ID: *id, Title: *title, Year: *year, Bundle: b, Template: *template, Engine: *engine})
+	p, e := deckproject.CreateProject(deckproject.CreateOptions{Out: *out, ID: *id, Title: *title, Year: *year, Bundle: b, Template: *template, Engine: *engine, EditingProfile: *editing})
 	if e != nil {
 		return e
 	}

@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
-# Browsing decks are private presentation inputs in every installation archive.
+# Resource inclusion is explicit and recorded in the signed release manifest.
 set -euo pipefail
 source "$(dirname "$0")/common.sh"
 require_release_identity
+policy="${PPTXGENGO_BROWSING_POLICY:-required}"
+case "$policy" in required|deferred) ;; *) echo 'Unknown browsing policy' >&2; exit 1 ;; esac
+case "${PPTXGENGO_PACKAGE_KIND:-cli-only}" in full|cli-only) ;; *) echo 'Unknown package kind' >&2; exit 1 ;; esac
+if [[ "$policy" == deferred ]]; then
+  [[ "${PPTXGENGO_PACKAGE_KIND:-cli-only}" == cli-only ]] || { echo 'Deferred browsing is allowed only for CLI-only releases' >&2; exit 1; }
+  release_ci prepare-resource-policy dist/resources "$release_version" "$release_commit"
+  exit 0
+fi
 [[ "${WMDS_BRANDING_ARCHIVE_SHA256:-}" =~ ^[a-f0-9]{64}$ ]] || { echo 'Browsing-inclusive releases require immutable WMDS_BRANDING_ARCHIVE_SHA256' >&2; exit 1; }
 [[ "${WMDS_BRANDING_ARCHIVE_URL:-}" == https://* ]] || { echo 'Private branding input requires WMDS_BRANDING_ARCHIVE_URL using HTTPS' >&2; exit 1; }
 [[ "${WMDS_FINISHED_LIBRARY_ARCHIVE_SHA256:-}" =~ ^[a-f0-9]{64}$ ]] || { echo 'Reusable browsing deck requires immutable WMDS_FINISHED_LIBRARY_ARCHIVE_SHA256 and real operator-approved slide revisions' >&2; exit 1; }
@@ -61,3 +69,4 @@ local=root/'release-manifest.json'
 if local.exists():
     data=json.loads(local.read_text());data['files_sha256'].update(files);data['files_sha256']['browsing-manifest.json']=hashlib.sha256((root/'browsing-manifest.json').read_bytes()).hexdigest();data['file_count']=len(data['files_sha256']);local.write_text(json.dumps(data,indent=2)+'\n')
 PY
+release_ci prepare-resource-policy dist/resources "$release_version" "$release_commit"

@@ -124,3 +124,17 @@ force progress. A complete interrupted snapshot can be recovered only with
 (or `absent` for the initial unpublished pointer). Incomplete snapshots remain
 retained for explicit resolution. See the maintained portable-project contract
 in `docs/portable-projects.md` in the source repository for schema and limits.
+
+### Native editing profile
+
+Source builds after v4.1.0 accept `project create --editing-profile native-v1`.
+The setting persists as `editing_profile: native-v1` in `deck.yaml` and build
+receipts; absent or `stock` retains existing rendering. It adapts eligible flat
+plain lists, simple title/body cards and plain tables after resolving their
+source styles. Read conversion/exclusion warnings in each layout-report scene.
+Do not rewrite frozen shared templates or assume their gallery previews qualify
+a changed native structure. Preserve old builds and review the new PowerPoint.
+Rich/decorated variants retain source structure; stock card and bullet source
+adoption remains manual. Prefer the explicit editable components for new local
+plain compositions with declared bounds. See the repository's
+`docs/native-editing-profile.md` for scope and font prerequisites.

@@ -25,7 +25,7 @@ func strictInto(v any, out any) error {
 	return d.Decode(out)
 }
 func Compile(p *Project, bundle, engine string) (Compilation, error) {
-	c := Compilation{Document: wmdesign.Document{BuildIdentity: &wmdesign.BuildIdentity{Timestamp: "2000-01-01T00:00:00Z", Seed: digest(p.Canonical)}, Title: p.Document.Title, Schema: "pptxgengo.wmds-foundation.v1", Year: p.Document.Year, MediaOptimization: p.Document.MediaOptimization}, Assets: map[string]wmdesign.AssetData{}, AssetHashes: map[string]string{}}
+	c := Compilation{Document: wmdesign.Document{EditingProfile: p.Document.EditingProfile, BuildIdentity: &wmdesign.BuildIdentity{Timestamp: "2000-01-01T00:00:00Z", Seed: digest(p.Canonical)}, Title: p.Document.Title, Schema: "pptxgengo.wmds-foundation.v1", Year: p.Document.Year, MediaOptimization: p.Document.MediaOptimization}, Assets: map[string]wmdesign.AssetData{}, AssetHashes: map[string]string{}}
 	c.Document.Sections = append([]wmdesign.SectionSpec(nil), p.Document.Sections...)
 	source, e := wmdesign.Load(bundle, "")
 	if e != nil {

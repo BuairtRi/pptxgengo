@@ -56,6 +56,7 @@ type SlideSpec struct {
 	LibraryChrome   *LibraryChrome       `json:"library_chrome,omitempty"`
 }
 type Document struct {
+	EditingProfile    string                         `json:"editing_profile,omitempty"`
 	Title             string                         `json:"title,omitempty"`
 	BuildIdentity     *BuildIdentity                 `json:"build_identity,omitempty"`
 	Schema            string                         `json:"schema"`
@@ -107,6 +108,7 @@ type SlideReport struct {
 	TemplateBinding *TemplateSlideRecord `json:"template_binding,omitempty"`
 }
 type Report struct {
+	EditingProfile     string                        `json:"editing_profile,omitempty"`
 	DensityAdjustments []SlideDensityAdjustment      `json:"density_adjustments,omitempty"`
 	Schema             string                        `json:"schema"`
 	Profile            string                        `json:"profile"`
@@ -127,6 +129,7 @@ type Report struct {
 	MediaOptimization  *pptx.MediaOptimizationReport `json:"media_optimization,omitempty"`
 }
 type renderer struct {
+	editingProfile  string
 	contrastProbe   *contrastProbe
 	bodyDensity     string
 	headerDensity   string
@@ -465,6 +468,12 @@ func buildWithTypography(bundle string, s *Source, t *Typography, doc Document, 
 	if doc.Schema != "pptxgengo.wmds-foundation.v1" || doc.Year < 2000 || doc.Year > 9999 || len(doc.Slides) == 0 {
 		return nil, report, fmt.Errorf("document.invalid_schema_year_or_slides")
 	}
+	if err := ValidateEditingProfile(doc.EditingProfile); err != nil {
+		return nil, report, err
+	}
+	if doc.EditingProfile == NativeEditingProfile && engine != CandidateEngine {
+		return nil, report, fmt.Errorf("native editing profile requires v2")
+	}
 	slideIDs := make([]string, len(doc.Slides))
 	for i, slide := range doc.Slides {
 		if err := ValidateDraftReviewNote(slide.DraftReview); err != nil {
@@ -498,7 +507,7 @@ func buildWithTypography(bundle string, s *Source, t *Typography, doc Document, 
 	}
 	p.Author = "West Monroe"
 	p.Theme = pptx.ThemeProps{HeadFontFace: "IBM Plex Sans SemiBold", BodyFontFace: "IBM Plex Sans"}
-	report = Report{Schema: "pptxgengo.wmds-layout.v1", Profile: ProfileForEngine(engine), Engine: engine, Qualification: "implemented_unqualified", SourceFiles: s.Files, Fonts: t.Fonts(), Warnings: []string{"Go first-baseline/occupied-height predictions require native calibration for the new exact-leading profile.", "Native font identity, wrapping, visual quality and overflow remain unqualified until PowerPoint capture/review.", "Whiteboard variant: editable dots with center-sampled radial opacity; no browser pixel identity claim.", "Source scene components and closed template content bindings require v2. Catalog availability does not establish successful source rendering or native visual qualification."}}
+	report = Report{EditingProfile: doc.EditingProfile, Schema: "pptxgengo.wmds-layout.v1", Profile: ProfileForEngine(engine), Engine: engine, Qualification: "implemented_unqualified", SourceFiles: s.Files, Fonts: t.Fonts(), Warnings: []string{"Go first-baseline/occupied-height predictions require native calibration for the new exact-leading profile.", "Native font identity, wrapping, visual quality and overflow remain unqualified until PowerPoint capture/review.", "Whiteboard variant: editable dots with center-sampled radial opacity; no browser pixel identity claim.", "Source scene components and closed template content bindings require v2. Catalog availability does not establish successful source rendering or native visual qualification."}}
 	report.SourceRevision, report.SourceCommit = s.Revision, s.Commit
 	report.MeasurementPolicy = map[string]string{"leading": "exact authored points between predicted baselines", "first_baseline": "provisional 0.9 em; native calibration pending", "occupied_height": "provisional 1.2 em plus leading between lines; native calibration pending", "advance": "Harfbuzz shaped at 64x then quantized to 1/64 pt; no legacy 1/8 pt correction", "tracking": "serialized 0.01 pt then applied per cluster; terminal cluster tracking excluded from line width", "ligatures": "liga/clig enabled at zero tracking, disabled at nonzero tracking; native feature parity pending", "paragraphs": "CRLF/CR normalized to LF; hard breaks and empty paragraphs preserved"}
 	if engine == CandidateEngine {
@@ -530,7 +539,7 @@ func buildWithTypography(bundle string, s *Source, t *Typography, doc Document, 
 		}
 		report.Assets = append(report.Assets, SourceFile{"assets/" + f.Name(), fmt.Sprintf("%x", sha256.Sum256(b))})
 	}
-	r := renderer{source: s, typeEngine: t, bundle: bundle, pres: p, projectAssets: assets}
+	r := renderer{editingProfile: doc.EditingProfile, source: s, typeEngine: t, bundle: bundle, pres: p, projectAssets: assets}
 	type sharedFrame struct {
 		name  string
 		texts []TextRecord

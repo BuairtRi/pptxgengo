@@ -356,5 +356,7 @@ Windows/Intel Mac runners.
 Ri deferred reusable-slide inventory/revision metadata and production branding,
 graphics and photo distribution to the following release. The immediate release
 focus is already implemented enhancements and native editing. A concrete
-PowerPoint comparison demo must be reviewed before packaging. See the
+PowerPoint comparison demo was approved on 2026-10-07. The scoped resource
+policy and bounded opt-in editing profile preserve deferred content and native
+qualification limits. See the
 [component demo and remaining qualification](../native-component-demo.md).

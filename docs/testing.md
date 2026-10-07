@@ -45,7 +45,8 @@ scanning. Neither tier runs races, actual installers, downloaded models, or
 native desktop qualification.
 
 Protected release tags add actual installation, model closure/goldens, source
-security, generated resources/decks, six-platform release builds, signing,
+security, resources/decks according to the signed release scope, six-platform
+release builds, signing,
 notarization, archive scanning, signature verification, attestation and private
 publication. Tags never run races or performance diagnostics. Nightly protected
 main runs long races, retrieval/performance, installer and cross-platform/native

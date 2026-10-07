@@ -110,11 +110,12 @@ type Node struct {
 	Keys       map[string][]string `json:"keys,omitempty"`
 }
 type Document struct {
-	Schema    string `json:"schema"`
-	ID        string `json:"id"`
-	Title     string `json:"title"`
-	Year      int    `json:"year"`
-	Toolchain struct {
+	EditingProfile string `json:"editing_profile,omitempty"`
+	Schema         string `json:"schema"`
+	ID             string `json:"id"`
+	Title          string `json:"title"`
+	Year           int    `json:"year"`
+	Toolchain      struct {
 		Lockfile string `json:"lockfile"`
 	} `json:"toolchain"`
 	Context           map[string]string              `json:"context,omitempty"`
