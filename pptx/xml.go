@@ -221,8 +221,13 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 			}
 
 			// A: Start SHAPE
-			strSlideXml += "<p:sp>"
-			strSlideXml += `<p:nvSpPr><p:cNvPr id="` + itoa(idx+2) + `" name="` + opts.ObjectName + `">`
+			nativeConnector := opts.NativeConnection != nil
+			if nativeConnector {
+				strSlideXml += "<p:cxnSp><p:nvCxnSpPr>"
+			} else {
+				strSlideXml += "<p:sp><p:nvSpPr>"
+			}
+			strSlideXml += `<p:cNvPr id="` + itoa(idx+2) + `" name="` + opts.ObjectName + `">`
 			if opts.Hyperlink != nil && opts.Hyperlink.URL != "" {
 				strSlideXml += `<a:hlinkClick r:id="rId` + itoa(opts.Hyperlink.RID) + `" tooltip="` + tooltipVal(opts.Hyperlink) + `"/>`
 			}
@@ -230,7 +235,10 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 				strSlideXml += `<a:hlinkClick r:id="rId` + itoa(opts.Hyperlink.RID) + `" tooltip="` + tooltipVal(opts.Hyperlink) + `" action="ppaction://hlinksldjump"/>`
 			}
 			strSlideXml += "</p:cNvPr>"
-			if boolDeref(opts.IsTextBox) {
+			if nativeConnector {
+				connection := opts.NativeConnection
+				strSlideXml += `<p:cNvCxnSpPr><a:stCxn id="` + itoa(connectorTargetID(slide, connection.Begin)) + `" idx="` + itoa(connection.Begin.Site) + `"/><a:endCxn id="` + itoa(connectorTargetID(slide, connection.End)) + `" idx="` + itoa(connection.End.Site) + `"/></p:cNvCxnSpPr>`
+			} else if boolDeref(opts.IsTextBox) {
 				strSlideXml += `<p:cNvSpPr txBox="1"/>`
 			} else {
 				strSlideXml += `<p:cNvSpPr/>`
@@ -240,7 +248,11 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 			} else {
 				strSlideXml += `<p:nvPr>` + genXmlPlaceholder(placeholderObj) + `</p:nvPr>`
 			}
-			strSlideXml += "</p:nvSpPr><p:spPr>"
+			if nativeConnector {
+				strSlideXml += "</p:nvCxnSpPr><p:spPr>"
+			} else {
+				strSlideXml += "</p:nvSpPr><p:spPr>"
+			}
 			strSlideXml += `<a:xfrm` + locationAttr + `>`
 			strSlideXml += `<a:off x="` + itoa(x) + `" y="` + itoa(y) + `"/>`
 			strSlideXml += `<a:ext cx="` + itoa(cx) + `" cy="` + itoa(cy) + `"/></a:xfrm>`
@@ -358,9 +370,12 @@ func slideObjectToXml(slide *SlideBaseProps, slideLayout *SlideLayout) string {
 			strSlideXml += "</p:spPr>"
 
 			// Text body
-			strSlideXml += genXmlTextBody(slideItemObj)
-
-			strSlideXml += "</p:sp>"
+			if nativeConnector {
+				strSlideXml += "</p:cxnSp>"
+			} else {
+				strSlideXml += genXmlTextBody(slideItemObj)
+				strSlideXml += "</p:sp>"
+			}
 
 		case SlideObjectTypeImage:
 			strSlideXml += slideObjectImageToXml(slideItemObj, slide, placeholderObj, x, y, cx, cy, imgWidth, imgHeight, sizing, rounding, locationAttr)

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strconv"
 
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
 )
@@ -12,22 +13,32 @@ import (
 const NativeEditabilitySchema = "pptxgengo.native-editability.v1"
 
 type NativeEditabilityUnit struct {
-	ShapeToken     string              `json:"shape_token"`
-	SlideID        string              `json:"slide_id"`
-	LogicalID      string              `json:"logical_id"`
-	SelectionName  string              `json:"selection_name"`
-	NativeKind     string              `json:"native_kind"`
-	Family         string              `json:"family"`
-	Definition     string              `json:"definition,omitempty"`
-	ParentToken    string              `json:"parent_token,omitempty"`
-	TopLevelToken  string              `json:"top_level_token"`
-	GroupDepth     int                 `json:"group_depth"`
-	ChildTokens    []string            `json:"child_tokens"`
-	ParagraphCount int                 `json:"paragraph_count"`
-	TableCells     int                 `json:"table_cells"`
-	TextAndPaint   bool                `json:"text_and_paint_in_same_shape"`
-	Fields         []NativeSourceField `json:"source_fields"`
-	Caveats        []string            `json:"caveats"`
+	ShapeToken     string                       `json:"shape_token"`
+	SlideID        string                       `json:"slide_id"`
+	LogicalID      string                       `json:"logical_id"`
+	SelectionName  string                       `json:"selection_name"`
+	NativeKind     string                       `json:"native_kind"`
+	Family         string                       `json:"family"`
+	Definition     string                       `json:"definition,omitempty"`
+	ParentToken    string                       `json:"parent_token,omitempty"`
+	TopLevelToken  string                       `json:"top_level_token"`
+	GroupDepth     int                          `json:"group_depth"`
+	ChildTokens    []string                     `json:"child_tokens"`
+	ParagraphCount int                          `json:"paragraph_count"`
+	TableCells     int                          `json:"table_cells"`
+	TextAndPaint   bool                         `json:"text_and_paint_in_same_shape"`
+	Fields         []NativeSourceField          `json:"source_fields"`
+	Caveats        []string                     `json:"caveats"`
+	Connection     *NativeEditabilityConnection `json:"connection,omitempty"`
+}
+type NativeEditabilityEndpoint struct {
+	ShapeToken string `json:"shape_token,omitempty"`
+	Site       int    `json:"site"`
+	Status     string `json:"status"`
+}
+type NativeEditabilityConnection struct {
+	Begin NativeEditabilityEndpoint `json:"begin"`
+	End   NativeEditabilityEndpoint `json:"end"`
 }
 type NativeEditabilityReport struct {
 	Schema               string                  `json:"schema"`
@@ -78,6 +89,9 @@ func NativeEditability(b *TextBaseline) (NativeEditabilityReport, error) {
 			definitions[slide.ID+"\x00"+row.ID] = row.Definition
 		}
 		for _, scene := range slide.Scenes {
+			if scene.Definition != "" {
+				definitions[slide.ID+"\x00"+scene.ID] = scene.Definition
+			}
 			for _, group := range scene.Groups {
 				definitions[slide.ID+"\x00"+group.ID] = group.Definition
 			}
@@ -86,8 +100,11 @@ func NativeEditability(b *TextBaseline) (NativeEditabilityReport, error) {
 	records := map[string]ObjectRecord{}
 	children := map[string][]string{}
 	native := map[string]NativeLineageObject{}
+	nativeIDs := map[string][]NativeLineageObject{}
 	for _, object := range b.inspection.Objects {
 		native[object.ShapeToken] = object
+		key := object.NativePart + "\x00" + object.NativeID
+		nativeIDs[key] = append(nativeIDs[key], object)
 	}
 	for _, object := range b.Objects.Objects {
 		if object.ShapeToken == "" || records[object.ShapeToken].ShapeToken != "" {
@@ -131,6 +148,36 @@ func NativeEditability(b *TextBaseline) (NativeEditabilityReport, error) {
 		shape := native[object.ShapeToken].shape
 		if shape == nil {
 			return out, fmt.Errorf("editability.missing_native_object")
+		}
+		if object.NativeKind == "cxnSp" {
+			props := directXML(directXML(shape, lineagePML, "nvCxnSpPr"), lineagePML, "cNvCxnSpPr")
+			endpoint := func(name string) NativeEditabilityEndpoint {
+				out := NativeEditabilityEndpoint{Site: -1, Status: "missing_or_ambiguous"}
+				if props == nil {
+					return out
+				}
+				var matches []*xmlNode
+				for _, child := range props.Children {
+					if child.Name.Space == drawingML && child.Name.Local == name {
+						matches = append(matches, child)
+					}
+				}
+				if len(matches) != 1 {
+					return out
+				}
+				site, e := strconv.Atoi(attr(matches[0], "idx"))
+				if e != nil || site < 0 {
+					return out
+				}
+				out.Site = site
+				targets := nativeIDs[object.NativePart+"\x00"+attr(matches[0], "id")]
+				if len(targets) != 1 || targets[0].ShapeToken == "" {
+					return out
+				}
+				out.ShapeToken, out.Status = targets[0].ShapeToken, "declared_native_reference"
+				return out
+			}
+			unit.Connection = &NativeEditabilityConnection{Begin: endpoint("stCxn"), End: endpoint("endCxn")}
 		}
 		if object.NativeKind == "graphicFrame" {
 			unit.Family = "graphic_frame"

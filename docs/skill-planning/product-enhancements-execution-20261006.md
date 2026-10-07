@@ -292,7 +292,7 @@ body fields; representative list, native table and diagram fixtures establish
 structural coverage. Reports retain source/receipt/native pins and explicitly
 state desktop qualification is not recorded.
 
-No serializer changes or whole-library/native editing acceptance are claimed.
+Inventory alone does not establish whole-library/native editing acceptance.
 The family task matrix covers copy, selection, move/align/resize, table cells,
 diagram adjustment and Save As/identity tasks on both desktop platforms. Full
 preflight and hosted checks are pending. See [the maintained pilot](../native-editing-pilot.md).
@@ -301,5 +301,22 @@ Reconciliation hosted CI follow-up: local full preflight and GitLab pipeline
 21169 passed at `7c424009`. The hosted Mac race batch reached its retained
 150-second package ceiling while adding all reconciliation fixtures to the
 previous selected workload. Reconciliation now runs as a separate bounded race
-command with the same ceiling; exact-head full preflight and hosted gates will
-be rerun. No tests or race checking are removed.
+command with the same ceiling. Exact head `c78eea29` passed full preflight,
+GitLab pipeline 21174 and all ten applicable GitHub gates, then PR #10 merged
+as `d464f158`. No tests or race checking were removed.
+
+### Explicit native diagram authoring pilot
+
+The editing slot adds `editable-block` and `attached-connector` as explicit local
+authoring choices. A combined block keeps the original measured text envelope,
+font/style/alignment/fill in one native rectangle, without an additional surface
+and text group. A straight native connector references declared rectangle node
+IDs/sites, permits forward endpoints, and rejects missing/ambiguous/unsupported
+targets. Existing stock blocks/static connector serialization is retained.
+
+Structural fixtures verify native endpoints, source-field/generation continuity,
+inner text insets and three-field reviewed adoption/rebuild; unsupported connector
+changes remain manual. Plan comparisons preserve three style roles across all
+three V11 density tiers. A separately retained synthetic desktop fixture enables
+future move/resize/Save As tasks. Mac/Windows desktop visual and behavior evidence,
+actual density acceptance and shared-library rollout are still pending.

@@ -32,7 +32,7 @@ Headless generated fixtures include a keyed card row with title/body fields,
 a list, a native two-column table and a two-node diagram with a connector. They
 establish actual package ownership, source-field visibility and cell counts.
 No frozen template or shared library definition is rewritten by the inventory.
-This is the starting baseline before selecting serialization changes. Prepare
+This is the original baseline for comparison with the explicit components below. Prepare
 an owned standalone synthetic fixture for later desktop tasks:
 
 ```sh
@@ -83,7 +83,81 @@ not be assumed to move or reconnect this arrow. These counts describe this exact
 fixture, not the library.
 
 The earlier Mac PowerPoint Save As trial timed out without a saved output.
-Mac and Windows task/visual evidence, density coverage, meaningful serializer
-changes and family rollout decisions remain pending. The report states
+Mac and Windows task/visual evidence, native density qualification
+and family rollout decisions remain pending. The report states
 `desktop_qualification: not_recorded`. Stable v4.1.0 contains neither this
 inventory nor the newer reconciliation commands.
+
+## Explicit combined blocks and attached connectors
+
+Maintained source adds two authoring components:
+
+- `wmds/component/editable-block`: one filled native rectangle containing one
+  plain text field. It keeps the original `block` text measurement, inner text
+  allocation, font/style, alignment and fill. It has no extra surface/text group.
+- `wmds/component/attached-connector`: a native straight `p:cxnSp` with declared
+  same-slide rectangle endpoints. Endpoint references use the compiled authored
+  node IDs; no endpoint is inferred from positions, names in an edited deck or copy.
+
+For example, a local template can bind `input_copy` and `output_copy` string zones
+and add these nodes (the connector allocation must contain both endpoint sites):
+
+```yaml
+nodes:
+  - id: input-output
+    kind: component
+    placement: {zone: body, span: {start: 1, count: 12, y: 36, h: 144}}
+    definition: {scope: shared, id: wmds/component/attached-connector}
+    arguments:
+      from: {node: input, site: right}
+      to: {node: output, site: left}
+      head: end
+  - id: input
+    kind: component
+    placement: {zone: body, span: {start: 1, count: 6, y: 36, h: 144}}
+    definition: {scope: shared, id: wmds/component/editable-block}
+    arguments: {surface: subtle, text: {binding: input_copy}, style: body}
+  - id: output
+    kind: component
+    placement: {zone: body, span: {start: 7, count: 6, y: 36, h: 144}}
+    definition: {scope: shared, id: wmds/component/editable-block}
+    arguments: {surface: subtle, text: {binding: output_copy}, style: body}
+```
+
+Forward references are supported. Sites are `top`, `left`, `bottom`, `right`
+(DrawingML zero-based 0, 1, 2, 3). Connector `style` accepts `solid`, `dashed`,
+`dotted`; `head` accepts `none`, `start`, `end`, `both` (default `end`). `ink`
+uses the existing scene color references (default `strong`). Missing, ambiguous,
+coincident, same-object and unsupported endpoints fail the build. Only declared
+`editable-block` targets are accepted by this component; rotated/flipped targets,
+custom routes, other shape kinds and cross-slide links are outside this pilot.
+
+Combined blocks require positive dimensions, width greater than 24 points,
+measured fitting plain copy and a simple fill without a separate border.
+Interpreted rich/footnote markup and outlined surfaces are refused. Existing
+shared `block` definitions and static `connector` paths retain their original
+serialization. This authoring choice does not migrate stock templates.
+
+`project editability` records declared endpoint tokens/sites from the actual
+native package and the explicit pilot definitions. This establishes the written
+attachment references. It does not establish PowerPoint rerouting or move/resize
+behavior. The standard [native connector contract](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.connectionshape?view=openxml-3.0.1)
+and [PowerPoint connection API](https://learn.microsoft.com/en-us/office/vba/api/powerpoint.connectorformat.beginconnect)
+describe the intended native relationship; both desktop platforms still require
+the tasks above.
+
+Prepare the separate synthetic combined-shape/attached-connector fixture:
+
+```sh
+PPTXGENGO_NATIVE_DIAGRAM_PILOT_OUT=/absolute/NEW-native-diagram \
+  go test ./internal/deckproject \
+  -run '^TestNativeEditabilityCombinedBlocksAndAttachedConnector$' -v -count=1 -timeout=3m
+```
+
+Headless tests verify one filled/text object per node, exact source fields,
+serialized inner text insets, endpoint IDs/sites, forward/reversed geometry and
+bounded refusal paths. Original versus combined block plans match at three
+V11 density tiers for body, small and label roles. Three reviewed fields can be
+adopted and rebuilt while retaining the connector and combined native units;
+connector/geometry changes remain manual review. This is limited structural and
+source round-trip evidence, with no desktop visual or whole-library verdict.

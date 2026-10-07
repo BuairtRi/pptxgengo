@@ -23,7 +23,8 @@ test-race:
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestReconcile' ./internal/deckproject
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditability' ./internal/deckproject
 	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/nativeexport
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace' ./pptx
+	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace|TestNativeConnector' ./pptx
+	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditing' ./internal/wmdesign
 	@for check in ConcurrentColdAndWarm CloneIsolation FingerprintDependencies BoundedEvictionAndErrors DriftAfterWarm; do \
 		$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run "^TestLibraryCatalogCache$$check$$" ./internal/wmdesign || exit $$?; \
 	done

@@ -318,6 +318,26 @@ type ShapeProps struct {
 	ShapeName string
 }
 
+// ConnectorEndpoint selects a named rectangle in the same slide collection.
+// Site is the zero-based DrawingML site: top=0, left=1, bottom=2, right=3.
+// ObjectName is resolved after all slide objects have been added.
+type ConnectorEndpoint struct {
+	ObjectName string
+	Site       int
+}
+
+type ConnectorConnection struct {
+	Begin ConnectorEndpoint
+	End   ConnectorEndpoint
+}
+
+// ConnectorProps creates a native connection shape. Endpoints are explicit;
+// arbitrary geometry, grouped targets and automatic routing are not inferred.
+type ConnectorProps struct {
+	ShapeProps
+	Connection ConnectorConnection
+}
+
 // ---------------------------------------------------------------------------
 // Tables
 // ---------------------------------------------------------------------------
@@ -903,6 +923,7 @@ type ObjectOptions struct {
 	LineHead          string
 	LineTail          string
 	ShapeName         string
+	NativeConnection  *ConnectorConnection
 
 	// table cell:
 	AutoPageCharWeight float64
