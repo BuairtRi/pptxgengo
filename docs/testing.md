@@ -15,6 +15,8 @@ focused regression coverage still runs.
 | `make test-integration` | Full normal suite, including exhaustive catalogs and final relocated projects | Registered private branding assets; see below |
 | `make test-race-full` | Full suite under the race detector, including tests skipped by `-short` | Opt-in; CGO-enabled Go; 10-minute per-package ceiling |
 | `make test-native` | Opt-in live PowerPoint smoke test | macOS desktop session, Microsoft PowerPoint, Swift/PDFKit, and a new `PPTXGENGO_NATIVE_LIVE_OUT` path |
+| `make test-roundtrip-prepare` / `make test-roundtrip-verify` | Retained synthetic three-field/Save As/reorder fixture and independent verification/adoption/rebuild | Explicit fixture/saved-file/new-output paths; preparation and verification do not open Office |
+| `make test-roundtrip-windows` | Live COM actions followed by saved-file verification | Interactive Windows desktop with PowerPoint; new `PPTXGENGO_ROUNDTRIP_WINDOWS_OUT` |
 
 The timeout passed to `go test` applies to each package test process, not to the
 entire Make target. `make test-integration` and `make test-race-full` are bounded
@@ -68,6 +70,15 @@ tagged `windows` and `pptxgengo-windows-native`. Enable
 `PPTXGENGO_WINDOWS_NATIVE=true` and run its manual job in a web pipeline on the
 protected default branch. It also requires an interactive desktop runner and
 retains the smoke-test output as an artifact.
+
+Both desktop lanes also run the retained synthetic native round-trip harness
+after export smoke. It verifies Save As tag survival, three exact supported text
+changes, slide reordering and bounded adoption/rebuild. See
+[native round-trip](native-roundtrip.md) for macOS/Windows supplied-file commands,
+Windows automation, retained failure evidence and the separate human acceptance
+boundary. Hosted short tests and simulated COM helpers do not establish desktop
+qualification. Explicit round-trip entry points skip in short mode; hermetic
+verifier and failure regressions still run normally and under selected race.
 
 The tester ZIP includes `smoke-test-windows.ps1`; use `-Native` only on a real
 Windows desktop with PowerPoint. Its manifest explicitly reports that a

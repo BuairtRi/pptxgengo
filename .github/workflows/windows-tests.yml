@@ -29,7 +29,7 @@ jobs:
       - name: Parse PowerShell scripts without executing installers or COM
         shell: pwsh
         run: |
-          $scripts = @('internal/nativeexport/powerpoint.ps1', 'internal/releasepackage/install-windows.ps1', 'internal/releasepackage/smoke-test-windows.ps1')
+          $scripts = @('internal/nativeexport/powerpoint.ps1', 'internal/nativeexport/roundtrip.ps1', 'internal/releasepackage/install-windows.ps1', 'internal/releasepackage/smoke-test-windows.ps1')
           foreach ($script in $scripts) {
             $tokens = $null; $errors = $null
             [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $script), [ref]$tokens, [ref]$errors)
@@ -96,8 +96,16 @@ jobs:
           Copy-Item internal/releasepackage/smoke-test-windows.ps1 .
           powershell -NoProfile -ExecutionPolicy Bypass -File .\smoke-test-windows.ps1 -Native -Out "$env:RUNNER_TEMP\pptxgengo native smoke"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Save As, edit three fields, reorder and verify the synthetic fixture
+        shell: powershell
+        run: |
+          $env:PPTXGENGO_ROUNDTRIP_WINDOWS_OUT = "$env:RUNNER_TEMP\pptxgengo roundtrip $env:GITHUB_RUN_ID $env:GITHUB_RUN_ATTEMPT"
+          go test -count=1 -timeout=3m -run '^TestNativeRoundTripLiveWindows$' ./internal/deckproject
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: windows-native-results
-          path: ${{ runner.temp }}\pptxgengo native smoke
+          path: |
+            ${{ runner.temp }}\pptxgengo native smoke
+            ${{ runner.temp }}\pptxgengo roundtrip*
