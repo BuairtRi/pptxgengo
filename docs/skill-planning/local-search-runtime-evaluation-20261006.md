@@ -135,16 +135,39 @@ All six OS/architecture distribution builds compiled with `CGO_ENABLED=0`.
 The new dependency inventory was refreshed from linked checksum-verified module
 license/notice texts; local reachable-symbol vulnerability findings were zero.
 Linux/Mac/Windows CI now includes explicit pinned download, golden inference
-and complete source-bound snapshot/query checks. Release resource/build jobs
+and source-bound snapshot/query checks on a bounded corpus of 26 original pinned
+entities spanning every kind. The snapshot covers every entity in that corpus. Release resource/build jobs
 require the Linux offline-model gate. Hosted qualification remains pending
 until those new jobs pass; native PowerPoint review and signed distribution of
 the optional model package remain outstanding.
 
 CI follow-up: Linux pipeline 21134 executed the pinned model golden cases and
-complete source-bound snapshot/query test successfully. GitHub rejected the first
+full V5 source-bound snapshot/query test successfully. GitHub rejected the first
 model workflow because `runner.temp` was used in job-level `env`. The directory
 now uses the allowed workspace context. Pinned actionlint v1.7.12, with declared
 self-hosted runner labels, is a slot preflight and private GitLab release gate.
 Authoring metadata is loaded only for semantic preparation/verification, keeping
 ordinary keyword/metadata queries on the smaller discovery projection. Semantic
 prepared text and the existing V11 snapshot hashes are unchanged by this split.
+
+Hosted follow-up: all independent golden cases passed on macOS and Windows.
+The full V5 snapshot exceeded eight minutes on a hosted Mac; one full-catalog
+concurrency race run also exceeded 150 seconds without an assertion or race
+finding. CI now uses verified, complete original rows from a bounded corpus,
+retaining source pins, FTS rows and recomputed subset coverage/projection hashes.
+This exercises the production snapshot/query and concurrency paths without
+claiming full-catalog qualification on those hosts. Linux pipeline 21138 passed
+all eight gates before this fixture adjustment. Local bounded actual-model
+snapshot/query passed in 2.97 seconds and concurrency under race in 43.53 seconds.
+
+Full-catalog qualification remains available explicitly:
+
+```sh
+PPTXGENGO_EMBED_MODEL_DIR=/path/to/verified/model-package \
+PPTXGENGO_EMBED_FULL_LIBRARY=1 CGO_ENABLED=0 \
+go test -count=1 -timeout=20m -v \
+  -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
+```
+
+This larger run is separate from bounded PR checks; the prior M5 and Linux full
+V5 evidence and full V11 development measurements remain the catalog evidence.

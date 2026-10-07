@@ -7,7 +7,7 @@ import (
 )
 
 func TestKeywordConcurrentReadOnlyQueries(t *testing.T) {
-	path, _ := indexFixture(t)
+	path, _ := indexFixtureSubset(t, 2)
 	index, err := OpenLibraryIndex(path, LibraryIndexOptions{})
 	if err != nil {
 		t.Fatal(err)

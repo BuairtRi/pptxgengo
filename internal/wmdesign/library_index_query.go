@@ -66,7 +66,7 @@ type LibraryIndexFindResult struct {
 }
 
 func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFindResult, error) {
-	result := LibraryIndexFindResult{Engine: LibrarySearchEngine{Requested: options.Shape.EngineHint, Compatibility: "not_evaluated_search_only"}, Schema: "pptxgengo.unified-library-search.v1", Query: options, Vocabulary: DiscoveryVocabulary(), Matches: []LibraryIndexHit{}, Policy: []string{"Kinds and namespace are explicit filters; scenario and content-shape fields are ranking hints.", "Deprecated entries are hidden unless requested; discovery does not impose a qualification gate.", "Primary/source example counts and source-advisory budgets are not measured fit for supplied content.", "Modern entities precede legacy entities only on equal score; canonical identity breaks remaining ties."}}
+	result := LibraryIndexFindResult{Engine: LibrarySearchEngine{Requested: options.Shape.EngineHint, Compatibility: "not_evaluated_search_only"}, Schema: "pptxgengo.unified-library-search.v1", Query: options, Vocabulary: DiscoveryVocabulary(), Matches: []LibraryIndexHit{}, Policy: []string{"Kinds and namespace are explicit filters; scenario and content-shape fields are ranking hints.", "Deprecated entries are hidden unless requested; discovery does not impose a qualification gate.", "Primary/source example counts and source-advisory budgets are not measured fit for supplied content.", "Metadata ties prefer modern entities, then canonical identity. Text rankings use their declared retrieval ranks and canonical identity ties."}}
 	if _, e := SearchLibrary(nil, options.Shape); e != nil {
 		return result, e
 	}

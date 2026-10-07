@@ -140,12 +140,17 @@ func TestPinnedLibraryEmbeddingsEndToEnd(t *testing.T) {
 	if modelDir == "" {
 		t.Skip("optional pinned weights")
 	}
-	path, _ := indexFixture(t)
+	path, _ := indexFixtureSubset(t, 4)
+	if os.Getenv("PPTXGENGO_EMBED_FULL_LIBRARY") == "1" {
+		path, _ = indexFixture(t)
+		t.Log("opt-in complete V5 catalog qualification")
+	}
 	index, err := OpenLibraryIndex(path, LibraryIndexOptions{})
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer index.Close()
+	t.Logf("snapshot coverage: %v", index.Report.Counts)
 	out := filepath.Join(t.TempDir(), "embeddings.json")
 	snapshot, err := index.BuildEmbeddings(context.Background(), modelDir, out)
 	if err != nil {

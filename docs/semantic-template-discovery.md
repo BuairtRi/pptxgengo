@@ -235,3 +235,15 @@ Reproduce the bounded measurements with:
 go test -run '^$' -bench '^BenchmarkKeyword' -benchtime=3x -benchmem \
   -timeout=3m ./internal/wmdesign
 ```
+
+## Optional model runtime checks
+
+Linux, macOS and Windows CI explicitly download the pinned optional model,
+compare tokenizer/inference golden cases, then generate a complete snapshot for
+a bounded corpus of original pinned entities spanning every indexed kind.
+These checks cover offline query, snapshot completeness and deterministic ranks.
+They do not establish catalog-wide timing or native PowerPoint acceptance.
+Full V5 qualification is opt-in with `PPTXGENGO_EMBED_MODEL_DIR` and
+`PPTXGENGO_EMBED_FULL_LIBRARY=1` when running
+`TestPinnedLibraryEmbeddingsEndToEnd`; see the runtime evaluation for the
+command and measured V5/V11 catalog evidence.
