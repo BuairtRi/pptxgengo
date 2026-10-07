@@ -2,6 +2,7 @@ package wmdesign
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -28,6 +29,14 @@ type LibraryRetrievalHit struct {
 
 func libraryRetrievalBody(entity LibraryEntity) string {
 	parts := []string{entity.ID, entity.Key, entity.Family}
+	if entity.Kind == "finished-slide" {
+		var metadata struct {
+			Keywords []string `json:"keywords"`
+		}
+		if json.Unmarshal(entity.Capacity, &metadata) == nil {
+			parts = append(parts, metadata.Keywords...)
+		}
+	}
 	parts = append(parts, entity.Discovery.ContentRoles...)
 	parts = append(parts, entity.Discovery.Structures...)
 	parts = append(parts, entity.Discovery.VisualForms...)
@@ -163,7 +172,9 @@ func (index *LibraryIndex) keywordRanks(query string, eligible map[string]bool, 
 		}
 		if eligible[id] {
 			method := "sqlite_fts5_bm25"
-			if id == exactID { method = "exact_entity_identity" }
+			if id == exactID {
+				method = "exact_entity_identity"
+			}
 			ranks[id] = LibraryRetrievalHit{Method: method, Rank: len(ranks) + 1, BM25: score}
 		}
 	}

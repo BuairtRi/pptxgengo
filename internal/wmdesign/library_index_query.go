@@ -19,6 +19,7 @@ type LibraryIndexFindOptions struct {
 }
 
 type LibraryEntitySummary struct {
+	ReuseStatus          string           `json:"reuse_status,omitempty"`
 	ID                   string           `json:"id"`
 	Namespace            string           `json:"namespace"`
 	Kind                 string           `json:"kind"`
@@ -146,7 +147,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 		queryCoverage[entity.ID] = libraryScenarioQueryCoverage(def, options.Shape.Query)
 		discovery := entity.Discovery
 		discovery.Zones = nil
-		summary := LibraryEntitySummary{ID: entity.ID, Namespace: entity.Namespace, Kind: entity.Kind, Key: entity.Key, Name: entity.Name, Purpose: entity.Purpose, Lifecycle: entity.Lifecycle, Revision: entity.Revision, SourceRevision: entity.SourceRevision, SourceSHA256: entity.SourceSHA256, Discovery: discovery, Capacity: entity.Capacity, SupportedAdaptations: entity.SupportedAdaptations, PreviewCount: len(entity.Artifacts)}
+		summary := LibraryEntitySummary{ReuseStatus: finishedReuseStatus(entity), ID: entity.ID, Namespace: entity.Namespace, Kind: entity.Kind, Key: entity.Key, Name: entity.Name, Purpose: entity.Purpose, Lifecycle: entity.Lifecycle, Revision: entity.Revision, SourceRevision: entity.SourceRevision, SourceSHA256: entity.SourceSHA256, Discovery: discovery, Capacity: entity.Capacity, SupportedAdaptations: entity.SupportedAdaptations, PreviewCount: len(entity.Artifacts)}
 		result.Matches = append(result.Matches, LibraryIndexHit{Entity: summary, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, CountMatch: hit.CountMatch, FitStatus: hit.FitStatus, StructuralStatus: structuralStatus})
 	}
 	if keyword {
@@ -271,7 +272,11 @@ func (index *LibraryIndex) Preview(id string) (LibraryPreviewResult, error) {
 	}
 	result := LibraryPreviewResult{Schema: "pptxgengo.unified-library-preview.v1", EntityID: entity.ID, Artifacts: []LibraryArtifactLink{}, Paths: []string{}, Capability: entity.Discovery.Capability}
 	for _, artifact := range entity.Artifacts {
-		path, e := indexRelative(index.Options.Gallery, artifact.Path)
+		root := index.Options.Gallery
+		if entity.Kind == "finished-slide" {
+			root = index.Options.SlideLibrary
+		}
+		path, e := indexRelative(root, artifact.Path)
 		if e != nil {
 			return result, e
 		}

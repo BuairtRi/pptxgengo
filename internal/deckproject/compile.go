@@ -104,11 +104,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 			c.AssetHashes[id] = r.SHA256
 			continue
 		}
-		path, e := SafePath(p.Root, a.Path)
-		if e != nil {
-			return c, e
-		}
-		data, e := os.ReadFile(path)
+		data, e := projectDependency(p, a.Path, 64<<20)
 		if e != nil {
 			return c, e
 		}

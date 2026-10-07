@@ -26,6 +26,12 @@ type LibrarySelectionZone struct {
 }
 
 type LibrarySelectionCard struct {
+	Kind            string                 `json:"kind"`
+	Namespace       string                 `json:"namespace"`
+	Lifecycle       string                 `json:"lifecycle"`
+	Revision        int                    `json:"revision,omitempty"`
+	Capacity        json.RawMessage        `json:"capacity,omitempty"`
+	ReuseStatus     string                 `json:"reuse_status,omitempty"`
 	Schema          string                 `json:"schema"`
 	ID              string                 `json:"id"`
 	Key             string                 `json:"key"`
@@ -53,7 +59,7 @@ func (index *LibraryIndex) SelectionCard(id string) (LibrarySelectionCard, error
 	if err != nil {
 		return LibrarySelectionCard{}, err
 	}
-	card := LibrarySelectionCard{Schema: "pptxgengo.library-selection.v1", ID: entity.ID, Key: entity.Key, Name: entity.Name, Purpose: entity.Purpose, SourceRevision: entity.SourceRevision, SourceSHA256: entity.SourceSHA256, Discovery: entity.Discovery, ScreenshotPaths: []string{}, Zones: []LibrarySelectionZone{}, Slots: []LibrarySelectionSlot{}, Preparation: preview.Preparation, Policy: []string{"Screenshot paths are verified against their pinned hashes.", "Zone bounds are source scene coordinates in points; they are not measured fit for supplied content.", "Preserve the slide argument, inspect the screenshot and map content to named bindings before building."}}
+	card := LibrarySelectionCard{Kind: entity.Kind, Namespace: entity.Namespace, Lifecycle: entity.Lifecycle, Revision: entity.Revision, Capacity: entity.Capacity, ReuseStatus: finishedReuseStatus(entity), Schema: "pptxgengo.library-selection.v1", ID: entity.ID, Key: entity.Key, Name: entity.Name, Purpose: entity.Purpose, SourceRevision: entity.SourceRevision, SourceSHA256: entity.SourceSHA256, Discovery: entity.Discovery, ScreenshotPaths: []string{}, Zones: []LibrarySelectionZone{}, Slots: []LibrarySelectionSlot{}, Preparation: preview.Preparation, Policy: []string{"Screenshot paths are verified against their pinned hashes.", "Zone bounds are source scene coordinates in points; they are not measured fit for supplied content.", "Preserve the slide argument, inspect the screenshot and map content to named bindings before building."}}
 	card.Discovery.Zones = nil
 	for i, artifact := range preview.Artifacts {
 		if artifact.Role == "source_preview" || artifact.Role == "alternate_preview" {
@@ -130,6 +136,12 @@ func (index *LibraryIndex) entityAuthoringMetadata(entity LibraryEntity) (Librar
 }
 
 type LibraryFindSummaryHit struct {
+	Kind             string                `json:"kind"`
+	Namespace        string                `json:"namespace"`
+	Lifecycle        string                `json:"lifecycle"`
+	Revision         int                   `json:"revision,omitempty"`
+	ReuseStatus      string                `json:"reuse_status,omitempty"`
+	Capacity         json.RawMessage       `json:"capacity,omitempty"`
 	ID               string                `json:"id"`
 	GroupID          string                `json:"group_id,omitempty"`
 	VariantIDs       []string              `json:"variant_ids,omitempty"`
@@ -167,7 +179,7 @@ func (index *LibraryIndex) FindSummary(options LibraryIndexFindOptions) (Library
 		if err != nil {
 			return out, err
 		}
-		out.Matches = append(out.Matches, LibraryFindSummaryHit{ID: card.ID, GroupID: hit.GroupID, VariantIDs: hit.VariantIDs, Key: hit.Entity.Key, Name: card.Name, Purpose: card.Purpose, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, Structures: card.Discovery.Structures, Groups: card.Discovery.Groups, ScreenshotPaths: card.ScreenshotPaths, FitStatus: hit.FitStatus, StructuralStatus: hit.StructuralStatus, Retrieval: hit.Retrieval})
+		out.Matches = append(out.Matches, LibraryFindSummaryHit{Kind: card.Kind, Namespace: card.Namespace, Lifecycle: card.Lifecycle, Revision: card.Revision, ReuseStatus: card.ReuseStatus, Capacity: card.Capacity, ID: card.ID, GroupID: hit.GroupID, VariantIDs: hit.VariantIDs, Key: hit.Entity.Key, Name: card.Name, Purpose: card.Purpose, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, Structures: card.Discovery.Structures, Groups: card.Discovery.Groups, ScreenshotPaths: card.ScreenshotPaths, FitStatus: hit.FitStatus, StructuralStatus: hit.StructuralStatus, Retrieval: hit.Retrieval})
 	}
 	return out, nil
 }

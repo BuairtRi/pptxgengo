@@ -1,71 +1,118 @@
-# Finished-slide contract — initial implementation
+# Reusable finished slides
 
-Status: implementation contract in managed slot `pptx-slide-reuse`. This is not
-a curated content library or evidence of native qualification. It implements
-the next independent part of the product-enhancements handoff.
+Implemented in the `pptx-slide-reuse` source branch. Stable v4.1.0 does not
+contain these commands. A finished slide is authored, content-complete material,
+with a distinct `finished-slide` kind and `curated/slide/<key>` identity.
+Production curation and desktop qualification remain pending.
 
-Implemented foundation: `internal/finishedslide` defines and seals manifests,
-verifies complete file closure, detects missing/tampered/unlisted/linked files,
-checks portable paths and source/compiler pins, reports UTC date freshness and
-creates new directories with kernel-enforced non-replacement. Normal/race tests
-cover immutable revisions and caller-byte independence. Project publication,
-insertion, SQLite discovery and the acceptance work below are still pending;
-the command names below are proposals, not available CLI commands.
+## Publish a closed revision
 
-## Identity and revision
+```sh
+pptxdesign project slide publish --project /path/to/source-deck \
+  --id maintained-message --library-id curated/slide/delivery-message \
+  --revision 1 --name 'Delivery message' --purpose 'Explain the delivery plan' \
+  --owner 'Named steward' --out /private/library/delivery-message/1
+```
 
-A finished slide is a distinct `finished-slide` discovery entity, with stable
-`curated/slide/<key>` identity and a positive immutable revision. It contains
-authored content, never a renamed synthetic specimen. Each revision is a closed
-directory with a manifest, maintained slide YAML, assets, claim/evidence context,
-preview and review evidence. Every file has a portable relative path, size and
-SHA256. No symlink, traversal, case-insensitive collision or missing dependency
-is accepted. Manifest identity and discovery metadata are hashed with the file
-inventory into a revision digest. Existing revisions cannot be overwritten.
+Publication validates the project's exact toolchain and shared template pins.
+It preserves the expanded slide values, notes, density and review annotations
+in `slide.yaml`, and records source identity/hash and required asset metadata in
+`dependencies.json`. Every local asset is copied with its exact bytes and hash;
+registry references retain verified identities. Aliased source is published as
+canonical values; comments and alias spelling remain in the original project.
+The source project is never modified.
 
-The manifest records owner, purpose, approved reuse scope, review status and
-approval/freshness dates. `approved` requires explicit approval metadata; neither
-compilation nor publication creates approval. Expired content remains visibly
-stale and requires reviewed refresh. Initial 10–20 approved pages still need
-operator selection and ownership.
+The first scope supports declared shared slot/array bindings and typed cards/3
+and cards/4. Source must already be `supplied_content`; synthetic specimens and
+local templates are rejected. Claims/evidence references, derived-asset chains,
+navigation and other typed identity families currently return explicit errors.
+These dependencies must be supported explicitly before those slides can publish.
 
-## Dependencies and insertion
+`--preview FILE.png` and `--review FILE.json` optionally retain supplied artifacts.
+They do not grant approval. CLI publication always creates a **draft**. The
+manifest API supports explicit approval actor/date/reuse scope and requires
+preview/review files for approved revisions; reviewed approval maintenance in
+the CLI remains pending. Neither hashing nor compilation establishes human
+approval, native acceptance or rights to publish supplied material.
 
-The first implementation supports one content-complete shared-template slide
-with exact template revision/source/definition hashes and project lock/compiler
-pins. Unsupported deck-local dependencies fail before writes. The package
-contains every required local asset's bytes and registration facts; shared
-registry assets need verified identities and hashes. Evidence is copied with
-explicit origin and collision-safe references. Internal review annotations
-retain existing maintainer/client export behavior.
+Each revision has a sorted closed inventory with file roles, sizes and SHA256,
+plus a digest covering identity, revision, metadata and inventory. Reads reject
+missing, changed, unlisted and linked files. Paths reject traversal and portable
+name collisions. Existing revisions cannot be overwritten; create a new revision
+when metadata or content changes. Approval/freshness dates are explicit metadata,
+and expiry is evaluated by UTC date. Content stewardship and the initial 10–20
+approved useful pages still require operator selection.
 
-Insertion is an independent copy with fresh slide and item identities. The
-maintained YAML references project assets and shared templates without embedding
-another template tree. Library identity, revision/digest, original identity,
-asset remaps and content/adaptation decisions remain in provenance and the
-composition log. Updating a library revision never changes inserted copies.
+## Find and preview
 
-Validation completes before writes: project/source/lock compatibility, IDs,
-dependency closure, assets, evidence references, position/section rules and
-compilation. Use the existing source-mutation guard and validated atomic source
-change machinery; retain preimages and a receipt. A failed insertion restores
-the previous authored tree and reports any retained staging files.
+```sh
+pptxdesign library-index --bundle /path/to/pinned/bundle \
+  --slide-library /private/library --out /tmp/library-with-slides.sqlite
+pptxdesign library-find --index /tmp/library-with-slides.sqlite \
+  --kinds finished-slide --retrieval keyword --query 'delivery plan' --summary
+pptxdesign library-inspect --index /tmp/library-with-slides.sqlite \
+  --id curated/slide/delivery-message
+pptxdesign library-preview --index /tmp/library-with-slides.sqlite \
+  --id curated/slide/delivery-message
+```
 
-## CLI and discovery
+The library root contains closed revision directories and grouping directories;
+loose files and links are rejected. One current entity per stable identity uses
+the highest revision, including its explicit draft/approved/deprecated lifecycle.
+Use lifecycle filters deliberately; a newer draft does not become approved
+because an older revision was approved. Duplicate identity/revision pairs fail.
+All revisions contribute to the root fingerprint. Adding or changing a revision
+requires rebuilding the index. `--slide-library` can relocate the exact library
+when opening an index; bytes and fingerprint must still match.
 
-Proposed commands are `project slide-publish` (explicit revision maintenance)
-and `project slide-insert` (package revision, fresh ID, before/after position and
-authored rationale). `library-index --slide-library DIR` adds closed revisions
-to the existing SQLite projection. `library-find --kinds finished-slide` and
-inspect/preview expose their identity, revision, content purpose, reuse/freshness
-status, hashes and artifacts. Search and preview never modify a project.
+Search returns kind, revision, purpose, structural hints, owner, approval/review
+metadata, dates, package path and current `reuse_status`. Exact template source
+and definition pins are verified at indexing. Indexing validates authored source
+identity/kind; insertion additionally validates its values, assets and compiler.
+Preview files are checked against pinned hashes when opened. Retrieval and source
+shape agreement do not establish measured fit or native acceptance for a new deck.
 
-## Acceptance work
+## Insert an independent editable copy
 
-Publish a synthetic, explicitly unapproved test revision; insert it into two
-temporary projects and build both. Modify either copy and verify the other and
-library bytes remain unchanged. Publish a new revision and verify prior copies
-and lineage remain unchanged. Cover collisions, missing/tampered files, pin
-mismatches, unsupported dependencies, concurrent mutations and write failures.
-Verify split/reorder/export/provenance and client review-group removal. Actual
-content curation and Mac/Windows native review remain separate acceptance work.
+Author composition entries for the existing deck first. Then:
+
+```sh
+pptxdesign project slide insert --project /path/to/destination-deck \
+  --package /private/library/delivery-message/1 --id delivery-message-copy \
+  --after opening --rationale 'This plan explains the proposed delivery sequence' \
+  --allow-draft
+```
+
+`--allow-draft` is an explicit opt-in for unapproved draft work. Deprecated or
+expired revisions are refused. Choose a new stable slide ID; `--before`, `--after`
+and `--into-section` follow the project's existing position/section rules.
+Toolchain lock bytes, compiler, template and source pins must match exactly.
+Year-bound content must match the destination year. Cross-platform re-pinning
+and migration need reviewed publication; compatibility is not inferred.
+
+Insertion creates fresh item and asset IDs, remaps only declared media slots,
+and preserves business strings. The slide, owned assets, composition rationale,
+lineage and decision receipt use one guarded source commit. The validator reads
+exact pending bytes; observed composition/lock predecessors are checked under
+the guard. Existing authored comments and unrelated slide files are preserved.
+Preimages are retained under `decisions/sources/`; errors roll back source writes.
+A process crash during a multi-file commit still needs recovery from these
+preimages: this is an I/O rollback contract, not a crash-proof filesystem transaction.
+
+The composition entry records library ID/revision/digest, source project/slide/hash,
+asset and item remaps, and the preserved-copy/review policy. Later library
+revisions do not alter inserted copies. Copy adaptations require the destination
+project's evidence, build and review process. Existing maintainer/client review
+annotation rules continue to apply; insertion grants no deck approval.
+
+## Evidence and remaining work
+
+Bounded fixtures insert the same authored revision into two projects, including
+split source and a real declared image slot. Both headless PowerPoints build.
+Fresh slide/item/asset identity, byte independence, later-revision independence,
+business-string preservation, collisions, missing/changed files, source guard,
+editorial drift, index relocation and preview drift have targeted checks.
+
+Claims migration, more typed/local dependencies, approval maintenance, actual
+curation, and Mac/Windows interactive PowerPoint review remain incomplete.
+These fixtures do not establish production content or native qualification.

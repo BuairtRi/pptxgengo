@@ -126,23 +126,44 @@ Next: validate the Go tokenizer and mask pooling, bind embeddings to model/sourc
 text hashes and dimensions, compare keyword/vector/hybrid on judged synonyms,
 implement explicit missing-model fallback, and collect supported-platform latency.
 
-## 2b. Reusable finished slides — identity contract next
+## 2b. Reusable finished slides — core in managed slot
 
-Add a distinct finished-slide entity kind to the same discovery system. Reuse the
-index identity/revision/source hash/artifact contracts above; do not expose a
-finished slide as an empty template. Initial curation of 10–20 approved slides
-requires operator selection, an owner, reuse scope and freshness policy.
+The `pptx-slide-reuse` slot implements closed immutable revisions, project
+publication/insertion and the existing SQLite discovery/preview interface.
+`project slide publish` starts draft revisions from supplied-content shared
+slot/array templates or typed cards. `project slide insert` validates exact
+source/template/toolchain/year pins, assigns fresh slide/item/asset identities,
+and commits the slide, assets, composition lineage and receipt together.
+Only declared media slots are remapped; business strings remain copy. Existing
+source/comments and observed editorial predecessors use the mutation guard and
+recoverable preimages. This provides I/O rollback, not crash-proof transactions.
 
-Each revision closes over maintained YAML, template/compiler/source pins, assets,
-preview and evidence. Insertion copies the revision independently, assigns fresh
-slide/item identities, registers assets and writes lineage to the composition
-record. Validate collisions and dependencies before any project write. Later
-library revisions never mutate inserted copies. Proposed insertion commands and
-YAML representation require a small contract before implementation.
+The index keeps the highest explicit revision per identity, distinct
+`finished-slide` kinds, owner/lifecycle/date metadata and current freshness
+status. The complete library fingerprint and selected file pins detect library
+changes; preview hashes and relocated roots are verified. Keyword search shares
+the template index. Model snapshots must be regenerated when entities change.
 
-Acceptance: insert one curated revision into two projects; both build; editing
-either copy leaves the other and the library unchanged; provenance survives
-split, reorder, export and handoff. Curation and implementation are separate.
+Targeted tests published explicitly authored fixtures, inserted each into two
+projects including split files and local images, and built both headless decks.
+They checked fresh identity, exact byte independence, unchanged earlier copies
+across revisions, ordinary-string preservation, collisions, unsupported
+sources, file/preview drift, relocation and concurrent-source/editorial guards.
+Targeted source/reuse race checks passed in 27.32 seconds on this M5 Max.
+CLI publish/insert also passed. Full preflight and exact-head hosted gates still
+need to pass before landing the slot.
+
+Remaining: closed claim/evidence migration, navigation/derived/local-template
+and wider typed identity contracts, reviewed CLI approval maintenance, initial
+operator-selected 10–20 approved slides, export/handoff qualification and actual
+Mac/Windows native review. No curated production content or native qualification
+is claimed. See [commands and scope](../finished-slides.md).
+
+Local vector PR #6 merged as `220fba93` after exact-head GitLab pipeline 21141
+(all eight gates), Windows runtime/portable and macOS runtime/normal/race checks
+passed. CI snapshot/query uses 26 original pinned entities spanning every kind;
+full V5/V11 catalog evidence is recorded separately in the runtime evaluation.
+Stable v4.1.0 remains unchanged by these source merges.
 
 ## 3. Native editing — mapping contract before serialization changes
 
