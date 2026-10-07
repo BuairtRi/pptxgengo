@@ -21,6 +21,9 @@ type contrastSpecimen struct {
 }
 
 func TestLibraryDensityAllTierContrastAudit(t *testing.T) {
+	if testing.Short() {
+		t.Skip("source specimen rendering requires registered private branding; run make test-integration")
+	}
 	source := densityTestSource(t)
 	typography, err := NewTypographyEngine(filepath.Join(densityTestBundle(), "fonts"), CandidateEngine)
 	if err != nil {

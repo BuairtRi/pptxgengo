@@ -1,7 +1,11 @@
-stages: [test]
+stages: [test, security, build, sign, assemble, scan, verify, attest, publish]
+
+include:
+  - local: .gitlab/ci/release.yml
 
 variables:
   GOTOOLCHAIN: local
+  PPTXGENGO_PACKAGE_KIND: cli-only
 
 developer:
   stage: test
@@ -66,3 +70,45 @@ windows-native:
     when: always
     expire_in: 14 days
     paths: [windows-native-results/]
+
+# These gates also run on ordinary branches, before a release tag is cut.
+security:go:
+  stage: security
+  needs: []
+  image:
+    name: gitlab-registry.samcott.com/riscott/ci-images/vault-tools-release-security:v2-pinned-dad226a5c05106a33c5b5b79d9d2cca0798a46ca@sha256:3fbf2f78efe3e3c2bab885d9e15d21e769e92f8e53d47908c3532888c356752a
+    entrypoint: [""]
+  timeout: 15 minutes
+  interruptible: true
+  parallel:
+    matrix:
+      - GOOS: [linux, darwin, windows]
+  variables:
+    CGO_ENABLED: '0'
+  before_script:
+    - source scripts/release/use-linux-go.sh
+  script:
+    - bash scripts/release/scan-source.sh vulnerabilities
+  artifacts:
+    when: always
+    access: maintainer
+    expire_in: 14 days
+    paths: [.cache/security/govulncheck-*.json]
+
+security:secrets:
+  stage: security
+  needs: []
+  image:
+    name: gitlab-registry.samcott.com/riscott/ci-images/vault-tools-release-security:v2-pinned-dad226a5c05106a33c5b5b79d9d2cca0798a46ca@sha256:3fbf2f78efe3e3c2bab885d9e15d21e769e92f8e53d47908c3532888c356752a
+    entrypoint: [""]
+  timeout: 15 minutes
+  interruptible: true
+  before_script:
+    - source scripts/release/use-linux-go.sh
+  script:
+    - bash scripts/release/scan-source.sh secrets
+  artifacts:
+    when: always
+    access: maintainer
+    expire_in: 14 days
+    paths: [.cache/security/gitleaks.json]

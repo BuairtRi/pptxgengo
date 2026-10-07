@@ -49,6 +49,11 @@ func TestLibraryV11ChangedTemplatesRoundTripAndBuild(t *testing.T) {
 			t.Fatalf("source/bound composition differs: %s", keys[i])
 		}
 	}
+	// The source/binding assertions above remain hermetic. Rendering the
+	// source specimens needs original private artwork in the integration lane.
+	if testing.Short() {
+		return
+	}
 	for _, entry := range []struct {
 		name string
 		doc  Document

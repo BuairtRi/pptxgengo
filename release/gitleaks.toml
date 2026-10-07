@@ -1,0 +1,15 @@
+title = "pptxgengo source secret scan"
+[extend]
+useDefault = true
+
+# Gitleaks 8.24 uses one global allowlist. These exceptions match specific
+# reviewed non-secret values, rather than excluding source/resource trees.
+[allowlist]
+description = "Generated output, six reviewed template IDs, and SHA-256 inventory fields"
+regexTarget = "match"
+paths = ['''(^|/)\.git/''', '''(^|/)\.cache/''', '''(^|/)dist/''', '''(^|/)node_modules/''']
+regexes = [
+  '''"?key"?\s*:\s*"deliverables/annotated ''',
+  '''"?key"?\s*:\s*"(?:deliverables/annotated|deliverables/walkthrough|funnel/compare|pdlc/observations|quadrant/subtle|stakeholders/quadrant)"''',
+  '''(?:tokens\.json|page_keys_sha256|native-access-(?:diagnose\.sh|diagnosis\.(?:md|json)|after-restart\.(?:md|json)))"\s*:\s*"[a-f0-9]{64}"'''
+]

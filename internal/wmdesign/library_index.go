@@ -92,7 +92,12 @@ func indexDB(path string, readonly bool) (*sql.DB, error) {
 	if e != nil {
 		return nil, e
 	}
-	u := url.URL{Scheme: "file", Path: filepath.ToSlash(abs)}
+	uriPath := filepath.ToSlash(abs)
+	// A drive-letter path must be a URI path, not the file URI authority.
+	if !strings.HasPrefix(uriPath, "/") {
+		uriPath = "/" + uriPath
+	}
+	u := url.URL{Scheme: "file", Path: uriPath}
 	q := url.Values{}
 	if readonly {
 		q.Set("mode", "ro")

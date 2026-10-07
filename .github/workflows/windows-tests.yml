@@ -20,7 +20,7 @@ jobs:
     env:
       CGO_ENABLED: '0'
       PPTXGENGO_NATIVE_LIVE_OUT: ''
-      WMDS_BRANDING_ROOT: ${{ runner.temp }}\pptxgengo-empty-branding
+      WMDS_BRANDING_ROOT: ${{ github.workspace }}/.cache/empty-branding
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
@@ -46,7 +46,7 @@ jobs:
         shell: pwsh
         run: |
           [void](New-Item -ItemType Directory -Path $env:WMDS_BRANDING_ROOT -Force)
-          go test -short -count=1 -timeout=150s ./cmd/pptxgengo ./cmd/pptxdesign ./internal/deckproject ./internal/releasepackage ./internal/textlayout ./pptx
+          go test -short -count=1 -timeout=150s ./cmd/pptxgengo ./cmd/pptxdesign ./internal/deckproject ./internal/library ./internal/releasepackage ./internal/textlayout ./pptx
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           go test -short -count=1 -timeout=150s -run '^(TestWindows|TestSignedNativeReceiptRejectsHandmadeAndTamperedEvidence|TestConcurrentNative)' ./internal/nativeexport
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

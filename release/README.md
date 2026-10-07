@@ -1,5 +1,8 @@
 # Current West Monroe presentation release
 
+For protected-tag CI releases, platform signing, scans and private branding inputs,
+see [the CI release runbook](CI.md).
+
 The current source package is **0.1.0-local.21/v11**. Its production gallery and
 SQLite discovery index cover all 649 source templates (648 active, one deprecated).
 The gallery includes 352 freshly reviewed PowerPoint specimens and 297 inherited

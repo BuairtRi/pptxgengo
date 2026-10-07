@@ -13,6 +13,7 @@ import (
 )
 
 var version = "dev"
+var releaseIdentity = "dev"
 
 const currentBundle = "v11"
 
@@ -207,6 +208,10 @@ func run() error {
 		return fmt.Errorf("missing command")
 	}
 	name := os.Args[1]
+	if name == "--build-info" {
+		fmt.Println(releaseIdentity)
+		return nil
+	}
 	if next, retired := retiredRoutes[name]; retired {
 		return fmt.Errorf("pptxgengo %s was removed; %s", name, next)
 	}

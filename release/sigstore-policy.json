@@ -1,0 +1,29 @@
+{
+  "schema": "pptxgengo.release-sigstore-policy/v1",
+  "cosign": {
+    "version": "v3.1.1"
+  },
+  "tuf": {
+    "mirror": "https://tuf.samcott.com",
+    "root_url": "https://tuf.samcott.com/1.root.json",
+    "root_sha256": "4e838bf6eff06f6ec6e3bd87a5b219e3e5157808e1c9183ff86f84899c74ddaa"
+  },
+  "identity": {
+    "oidc_issuer": "https://gitlab.samcott.com",
+    "audience": "sigstore",
+    "project_id": "17",
+    "project_path": "riscott/pptxgengo",
+    "certificate_identity_template": "https://gitlab.samcott.com/riscott/pptxgengo//.gitlab-ci.yml@refs/tags/{{version}}"
+  },
+  "signing": {
+    "fulcio": "https://fulcio.samcott.com",
+    "rekor": "https://rekor.samcott.com",
+    "tsa": "http://tsa-server.sigstore-system.svc.cluster.local/api/v1/timestamp"
+  },
+  "requirements": {
+    "certificate_transparency_sct": true,
+    "rekor_inclusion_proof": true,
+    "rfc3161_timestamp": true,
+    "offline_bundle_verification": true
+  }
+}

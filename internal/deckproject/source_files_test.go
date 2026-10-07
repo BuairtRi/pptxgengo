@@ -99,7 +99,7 @@ func TestExternalReferencesRejectUnsafeAndMalformedSources(t *testing.T) {
 				t.Fatal(err)
 			}
 			_, err := Load(p.Root)
-			if err == nil || !strings.Contains(err.Error(), test.message) || !strings.Contains(err.Error(), relative) {
+			if err == nil || !strings.Contains(err.Error(), test.message) || !strings.Contains(filepath.ToSlash(err.Error()), filepath.ToSlash(relative)) {
 				t.Fatalf("external diagnostic: %v", err)
 			}
 		})

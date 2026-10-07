@@ -153,6 +153,9 @@ func TestAutoDensityStopsAtSourceLimitWithoutMutation(t *testing.T) {
 }
 
 func TestDensityGanttKeyGateInkMatchesSourceAndPreservesLegacy(t *testing.T) {
+	if testing.Short() {
+		t.Skip("source specimen rendering requires registered private branding; run make test-integration")
+	}
 	doc, err := LibrarySourceReference(densityTestBundle(), "", "", 2026)
 	if err != nil {
 		t.Fatal(err)

@@ -216,7 +216,10 @@ func TestIndexedContractInstantiateBoundedArray(t *testing.T) {
 	narr := Narrative{Schema: NarrativeSchema, Brief: NarrativeBrief{Name: "Synthetic process", Synthetic: true, Audience: "Leaders", Decision: "Review", SourcePacket: []Artifact{{Path: "source.txt", SHA256: hashBytes(source)}}}, Slides: []NarrativeSlide{{ID: "story", Audience: "Leaders", Role: "Process", Takeaway: "Three steps", AssertionTitle: "A governed process", RequiredDetail: []string{"Capture"}, VisualRelationship: "flow"}}}
 	narrBytes, _ := json.Marshal(narr)
 	put(t, filepath.Join(root, "narrative.json"), narrBytes)
-	values = []byte(`{"slots":{"steps":["Capture","Review","Publish"]},"narrative_path":"` + filepath.Join(root, "narrative.json") + `","narrative_slide_id":"story"}`)
+	values, err = json.Marshal(map[string]any{"slots": map[string]any{"steps": []string{"Capture", "Review", "Publish"}}, "narrative_path": filepath.Join(root, "narrative.json"), "narrative_slide_id": "story"})
+	if err != nil {
+		t.Fatal(err)
+	}
 	put(t, filepath.Join(root, "narrative-values.json"), values)
 	trace, err = s.Instantiate(idx, "process", filepath.Join(root, "narrative-values.json"), filepath.Join(root, "narrative-output"), true)
 	if err != nil {

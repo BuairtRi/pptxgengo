@@ -8,8 +8,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
-	"rsc.io/pdf"
+	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 )
 
 //go:embed powerpoint.ps1
@@ -67,11 +69,15 @@ func windowsPDFPageCount(data []byte) (pages int, err error) {
 			pages, err = 0, fmt.Errorf("invalid native PDF: %v", r)
 		}
 	}()
-	reader, err := pdf.NewReader(bytes.NewReader(data), int64(len(data)))
+	// Use built-in configuration without reading or creating user config/font
+	// directories. This reader also bounds recursive object parsing and accepts
+	// cancellation; the former rsc.io/pdf reader had an uncatchable stack overflow.
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	pages, err = api.PageCount(ctx, bytes.NewReader(data), model.NewStatelessConfiguration())
 	if err != nil {
 		return 0, fmt.Errorf("cannot inspect native PDF: %w", err)
 	}
-	pages = reader.NumPage()
 	if pages < 1 {
 		return 0, fmt.Errorf("native PDF has no readable pages")
 	}

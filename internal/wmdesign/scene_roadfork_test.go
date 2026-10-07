@@ -10,6 +10,9 @@ import (
 )
 
 func TestV10AddedTemplateIndividualBuilds(t *testing.T) {
+	if testing.Short() {
+		t.Skip("source specimen rendering requires registered private branding; run make test-integration")
+	}
 	source, err := LibrarySourceReference(v10IntakeBundle(), "", "", 2026)
 	if err != nil {
 		t.Fatal(err)
