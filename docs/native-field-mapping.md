@@ -29,6 +29,13 @@ Serialization changes during Save As may require manual review until qualified.
 
 ## Supported baseline field mapping
 
+The explicit [single-shape editable-card pilot](native-editable-card.md) adds
+two role-bound plain paragraphs in one filled rectangle. Its title/body source
+slots and ordinal addresses are declared and verified against actual native
+paragraph metadata. Each role can be reviewed independently; changed role
+formatting/topology and ambiguous bindings remain manual. Existing objects use
+the single-field contract below and retain whole-object comparison.
+
 A plain-text baseline requires exactly one explicit string source field, a stable
 source slot, exact source/native text equality, a text shape and no unsupported
 paragraph features or multiple rich runs. It records a stable field identity,

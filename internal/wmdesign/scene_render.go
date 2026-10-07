@@ -78,7 +78,7 @@ func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 			opts := &pptx.TextPropsOptions{PositionProps: pos(tr.Rect), ObjectNameProps: pptx.ObjectNameProps{ObjectName: tr.ID}, TextBaseProps: pptx.TextBaseProps{FontFace: id.Typeface, FontSize: s.Size, Bold: &id.Bold, Italic: &id.NativeItalic, Color: tr.Color, Align: pptx.HAlign(tr.Align)}, CharSpacing: s.TrackingPt, LineSpacing: s.Leading, ParaSpaceBefore: zero(), ParaSpaceAfter: zero(), Margin: pptx.Margin{0}, Fit: "none", Valign: valign, Rotate: tr.Rotation}
 			if tr.NativeShape != nil {
 				outer := tr.NativeShape.Rect
-				if !inside(tr.Rect, outer) || tr.Rich != nil || tr.Rotation != 0 {
+				if !inside(tr.Rect, outer) || (tr.Rich != nil && tr.NativeShape.ParagraphContract != EditableCardContract) || tr.Rotation != 0 {
 					return fmt.Errorf("scene.invalid_combined_text_shape: %s", tr.ID)
 				}
 				opts.PositionProps = pos(outer)

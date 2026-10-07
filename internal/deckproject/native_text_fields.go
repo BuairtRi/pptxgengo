@@ -5,6 +5,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/buairtri/pptxgengo/internal/wmdesign"
 )
 
 const NativeTextModelSchema = "pptxgengo.native-text-model.v1"
@@ -153,6 +155,9 @@ func nativeParagraphText(paragraphs []NativeParagraph) string {
 }
 
 func attachNativeSourceFields(p *Project, r ObjectRecord) ObjectRecord {
+	if r.TextMappingContract == wmdesign.EditableCardContract {
+		return attachEditableCardFields(p, r)
+	}
 	if len(r.Paragraphs) == 0 {
 		return r
 	}

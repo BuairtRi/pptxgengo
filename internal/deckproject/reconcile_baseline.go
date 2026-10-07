@@ -153,6 +153,9 @@ func ReadTextBaseline(p *Project, buildID, receiptSHA string) (*TextBaseline, er
 		if shape == nil || nativeParagraphText(nativeParagraphs(shape)) != object.NativeText {
 			return nil, fmt.Errorf("reconcile.baseline_native_text_mismatch")
 		}
+		if object.TextMappingContract != "" && !editableCardBaselineParagraphsValid(object, nativeParagraphs(shape)) {
+			return nil, fmt.Errorf("reconcile.baseline_paragraph_contract_invalid")
+		}
 		for _, field := range object.Fields {
 			if field.Status != "plain_text_baseline" {
 				continue
@@ -162,10 +165,11 @@ func ReadTextBaseline(p *Project, buildID, receiptSHA string) (*TextBaseline, er
 				return nil, e
 			}
 			text, ok := value.(string)
-			if !ok || digest([]byte(text)) != field.SourceValueSHA256 || digest([]byte(object.NativeText)) != field.BaselineNativeSHA256 || text != object.NativeText {
+			nativeText, addressOK := nativeObjectFieldText(object, field, object.Paragraphs)
+			if !ok || !addressOK || digest([]byte(text)) != field.SourceValueSHA256 || digest([]byte(nativeText)) != field.BaselineNativeSHA256 || text != nativeText {
 				return nil, fmt.Errorf("reconcile.baseline_field_text_mismatch")
 			}
-			if field.Identity != object.LogicalID+"/text" || field.SourceSlot == "" || object.SourceSlots[field.SourcePointer] != field.SourceSlot {
+			if !nativeFieldIdentityValid(object, field) || field.SourceSlot == "" || object.SourceSlots[field.SourcePointer] != field.SourceSlot {
 				return nil, fmt.Errorf("reconcile.baseline_field_identity_mismatch")
 			}
 		}
