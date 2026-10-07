@@ -296,3 +296,12 @@ property; `show` emits its current JSON value. Mutations preserve source comment
 and unrelated slide metadata, use the same atomic mutation guard and preimage
 backup as other slide operations, and invalidate the affected build/review inputs.
 Both inline and split source projects are supported. No template fork is needed.
+
+### Native text model
+
+New object maps declare `pptxgengo.native-text-model.v1` and retain paragraph/run/
+cell addresses, exact text, source-slot identities and formatting/structure
+hashes. Typed card title/body mappings select the specific field; ambiguous or
+unsupported text remains manual review. This is baseline infrastructure, not an
+edited-PPTX adoption engine or desktop qualification. See
+[native field mapping](../../docs/native-field-mapping.md).
