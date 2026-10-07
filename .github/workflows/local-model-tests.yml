@@ -20,7 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
+        include:
+          - {os: macos-latest, arch: arm64}
+          - {os: macos-15-intel, arch: amd64}
+          - {os: windows-latest, arch: amd64}
+          - {os: windows-11-arm, arch: arm64}
     env:
       CGO_ENABLED: '0'
       PPTXGENGO_EMBED_MODEL_DIR: ${{ github.workspace }}/.cache/offline-model
@@ -33,6 +37,10 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
+          architecture: ${{ matrix.arch }}
+      - name: Require the declared native Go architecture
+        shell: bash
+        run: test "$(go env GOHOSTARCH)" = "${{ matrix.arch }}"
       - name: Explicit pinned model maintenance download
         shell: bash
         run: go run ./cmd/pptxdesign library-model --download --out "$PPTXGENGO_EMBED_MODEL_DIR"

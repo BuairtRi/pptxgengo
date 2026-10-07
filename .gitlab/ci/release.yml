@@ -49,7 +49,9 @@ release:resources:
   needs:
     - {job: developer, artifacts: false}
     - {job: installation-process, artifacts: false}
+    - {job: installation-process-arm64, artifacts: false}
     - {job: offline-model, artifacts: false}
+    - {job: offline-model-arm64, artifacts: false}
     - {job: workflow-lint, artifacts: false}
     - {job: security:go, artifacts: false}
     - {job: security:secrets, artifacts: false}
@@ -66,7 +68,9 @@ release:build:
   needs:
     - {job: developer, artifacts: false}
     - {job: installation-process, artifacts: false}
+    - {job: installation-process-arm64, artifacts: false}
     - {job: offline-model, artifacts: false}
+    - {job: offline-model-arm64, artifacts: false}
     - {job: workflow-lint, artifacts: false}
     - {job: security:go, artifacts: false}
     - {job: security:secrets, artifacts: false}

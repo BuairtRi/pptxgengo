@@ -5,9 +5,9 @@ FAST_TEST_TIMEOUT ?= 5m
 INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
-HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT= PPTXGENGO_SEARCH_BENCH_OUT=
+HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT= PPTXGENGO_SEARCH_BENCH_OUT= PPTXGENGO_INSTALL_PROCESS_OUT=
 
-.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows test-search-performance
+.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows test-search-performance test-installation-process
 
 build:
 	CGO_ENABLED=0 $(GO) build -trimpath -o bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs
@@ -69,3 +69,8 @@ test-search-performance:
 	test -n "$$PPTXGENGO_EMBED_MODEL_DIR" -a -n "$$PPTXGENGO_SEARCH_BENCH_OUT" || (echo 'set existing model directory and new benchmark output directory; see docs/search-performance.md' >&2; exit 1)
 	test ! -e "$$PPTXGENGO_SEARCH_BENCH_OUT" || (echo 'benchmark output must not already exist' >&2; exit 1)
 	$(GO) test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$$' -v ./internal/wmdesign
+
+test-installation-process:
+	test -n "$$PPTXGENGO_INSTALL_PROCESS_OUT" || (echo 'set PPTXGENGO_INSTALL_PROCESS_OUT to a new qualification directory; see docs/installation.md' >&2; exit 1)
+	test ! -e "$$PPTXGENGO_INSTALL_PROCESS_OUT" || (echo 'qualification output must not already exist' >&2; exit 1)
+	$(GO) test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$$' -v ./internal/installstate

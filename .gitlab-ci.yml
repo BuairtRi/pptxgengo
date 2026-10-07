@@ -55,6 +55,18 @@ installation-process:
     expire_in: 14 days
     paths: [.cache/installation-process/qualification.json]
 
+installation-process-arm64:
+  extends: installation-process
+  tags: [arm64]
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-arm64
+    paths: [.cache/go-mod, .cache/go-build]
+  before_script:
+    - test "$(go env GOHOSTARCH)" = arm64
+    - go test -short -count=1 -timeout=150s ./scripts/cmd/search-benchmark ./internal/powershellenv
+
 workflow-lint:
   stage: test
   image: golang:1.27.1
@@ -91,6 +103,17 @@ offline-model:
     access: maintainer
     expire_in: 14 days
     paths: [.cache/offline-model/, .cache/search-performance/]
+
+offline-model-arm64:
+  extends: offline-model
+  tags: [arm64]
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-arm64
+    paths: [.cache/go-mod, .cache/go-build]
+  before_script:
+    - test "$(go env GOHOSTARCH)" = arm64
 
 exhaustive:
   stage: test

@@ -52,6 +52,34 @@ jobs:
           path: ${{ runner.temp }}/installation-process/qualification.json
           retention-days: 14
 
+  intel-installation:
+    name: Intel Mac CLI installation and memory qualification
+    runs-on: macos-15-intel
+    timeout-minutes: 12
+    env:
+      CGO_ENABLED: '0'
+      PPTXGENGO_INSTALL_PROCESS_OUT: ${{ github.workspace }}/.cache/installation-process
+      PPTXGENGO_INSTALL_PROCESS_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          architecture: amd64
+      - run: test "$(go env GOHOSTARCH)" = amd64
+      - name: Native memory counter and installer regressions
+        run: go test -short -count=1 -timeout=150s ./internal/installstate ./scripts/cmd/search-benchmark ./internal/powershellenv
+      - name: Actual CLI lifecycle
+        run: go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: installation-process-macos-intel
+          path: .cache/installation-process/qualification.json
+          retention-days: 14
+
   exhaustive:
     name: Exhaustive checks (${{ matrix.target }})
     # The full fixtures need pinned private artwork. Enable this only after
