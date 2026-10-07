@@ -42,6 +42,8 @@ Draft implemented in `internal/releasepackage/install-windows.ps1`:
 
 This draft has not been executed on Windows. Existing PATH and skill activation
 is still sequential; automatic recovery after promotion is not implemented.
+The source installer now embeds the selected release version in all three tools
+(previously only the wrapper was versioned), matching the executable checks.
 The source Mac installer already stages resources, but its launcher and skill
 activation are separate operations and it has no rollback command.
 

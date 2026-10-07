@@ -103,11 +103,7 @@ mkdir -p "$stage/bin"
 cd "$repo_root"
 for tool in pptxgengo pptxdesign wmdsdocs; do
   echo "building $tool" >&2
-  if [[ "$tool" == pptxgengo ]]; then
-    go build -buildvcs=false -trimpath -ldflags "-s -w -X main.version=$version" -o "$stage/bin/$tool" "./cmd/$tool"
-  else
-    go build -buildvcs=false -trimpath -ldflags '-s -w' -o "$stage/bin/$tool" "./cmd/$tool"
-  fi
+  go build -buildvcs=false -trimpath -ldflags "-s -w -X main.version=$version" -o "$stage/bin/$tool" "./cmd/$tool"
 done
 python3 - "$repo_root" "$stage" "$version" "$catalog_input" "$verification_input" "$bundle_revision" "$documentation_input" <<'PY'
 import json, os, shutil, subprocess, sys
