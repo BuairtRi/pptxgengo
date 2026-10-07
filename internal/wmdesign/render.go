@@ -69,15 +69,16 @@ type BuildIdentity struct {
 	Seed      string `json:"seed"`
 }
 type TextRecord struct {
-	NativeShape   *NativeTextShape `json:"native_shape,omitempty"`
-	ID            string           `json:"id"`
-	Rect          Rect             `json:"rect"`
-	Color         string           `json:"color"`
-	Align         string           `json:"align"`
-	VerticalAlign string           `json:"vertical_align,omitempty"`
-	Layout        TextLayout       `json:"layout"`
-	Rich          *RichTextLayout  `json:"rich,omitempty"`
-	Rotation      float64          `json:"rotation_deg,omitempty"`
+	NativeParagraphContract string           `json:"native_paragraph_contract,omitempty"`
+	NativeShape             *NativeTextShape `json:"native_shape,omitempty"`
+	ID                      string           `json:"id"`
+	Rect                    Rect             `json:"rect"`
+	Color                   string           `json:"color"`
+	Align                   string           `json:"align"`
+	VerticalAlign           string           `json:"vertical_align,omitempty"`
+	Layout                  TextLayout       `json:"layout"`
+	Rich                    *RichTextLayout  `json:"rich,omitempty"`
+	Rotation                float64          `json:"rotation_deg,omitempty"`
 }
 
 // NativeTextShape records the containing rectangle of the editable-block pilot.

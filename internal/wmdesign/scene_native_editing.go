@@ -86,6 +86,10 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 	if e := json.Unmarshal(raw, &tag); e != nil {
 		return nil, false, e
 	}
+	if tag.Type == "editable-list" {
+		p, e := r.planEditableList(id, raw, ctx)
+		return p, true, e
+	}
 	if tag.Type == "editable-card" {
 		p, err := r.planEditableCard(id, raw, ctx)
 		return p, true, err

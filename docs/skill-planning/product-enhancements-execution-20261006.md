@@ -674,14 +674,41 @@ managed preflight and exact-head private GitLab pipeline 21318 (four jobs,
 recovered through normal slot publication, preserving the candidate and both
 remote histories.
 
-An explicit single-shape editable-card pilot is implemented in the following
-source candidate. It places separately mapped plain title/body paragraphs in
+The explicit single-shape editable-card pilot merged in PR #25, source
+`99d75f9c3dc19f62dbb123d8bd7f079c62e415a2`, after full managed preflight
+and automatic private GitLab PR pipeline 21330 (four successful jobs). It places
+separately mapped plain title/body paragraphs in
 one filled native rectangle with declared role typography and measured fitting.
 Stock cards remain unchanged. Actual native paragraph metadata is verified
 before per-role reconciliation; old single-field objects retain whole-object
 comparison. Focused real-build fixtures cover role-only adoption, replay,
 rebuild, baseline retention, conflicts, repeated/duplicate bindings, exact
-insets, role-format/topology guards and three density plans. Full managed
-submission and private CI gates remain required before integration. No desktop
-card acceptance or new release tag is claimed. See
+insets, role-format/topology guards and three density plans. The managed card
+slot retired normally after integration. No desktop card acceptance or new
+release tag is claimed. See
 [single-shape card contract](../native-editable-card.md).
+
+## Native unordered-list follow-up — 2026-10-07
+
+The user's Mac pilot feedback identifies a concrete editing gap: separate
+marker and text shapes cannot reflow as a list when a bullet wraps or is added.
+The explicit `editable-list` candidate writes one top-level text box with native
+unordered paragraphs, source body/small typography, density-specific square
+markers, hanging indents, paragraph gaps, zero box insets and fixed font sizes.
+No measured wrap is serialized as a hard line break. Initial fit is enforced;
+added copy may require resizing the one text box.
+
+Actual generated-package fixtures verify one shape, no companion markers or
+wrapper group, native bullet properties and tags. Synthetic edited-package
+cases for longer copy, adding/removing/reordering bullets and marker changes
+remain manual source review. This does not establish desktop visual or native
+reflow acceptance. See [native list contract](../native-editable-list.md).
+
+The table selection issue is explained by `sceneDataGroup` in the table planner:
+one native `graphicFrame` is wrapped by a generated component group. Removing
+that wrapper needs a bounded identity/selection qualification; the user's open
+edited file is retained. No stock template migration or release tag is claimed.
+
+A synthetic list fixture was retained under the user Documents qualification
+directory. Computer Use rejected access to Microsoft PowerPoint during this
+follow-up, so no live list editing or visual acceptance is recorded.
