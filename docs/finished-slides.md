@@ -25,9 +25,16 @@ The source project is never modified.
 The first scope supports declared shared slot/array bindings and typed cards/3
 and cards/4. Source must already be `supplied_content`; synthetic specimens and
 local templates are rejected. Selected claims/evidence references are preserved
-through the closed dependency contract below. Derived-asset chains,
-navigation and other typed identity families currently return explicit errors.
-These dependencies must be supported explicitly before those slides can publish.
+through the closed dependency contract below. Navigation and other typed
+identity families currently return explicit errors and must be supported
+explicitly before those slides can publish.
+
+Derived images retain a closed ancestry graph: publication copies each selected
+image, its original/intermediate images and exact derivation receipts. Each
+receipt must pin its declared parent and result bytes. Missing parents, cycles,
+unpaired derivation metadata and mismatched receipts are refused. Graphs are
+limited to 256 assets and receipts to 1 MiB each; the existing payload limits
+still apply. This records declared derivation, not human approval of the image.
 
 `--preview FILE.png` and `--review FILE.json` optionally retain supplied artifacts.
 They do not grant approval. CLI publication always creates a **draft**. The
@@ -185,6 +192,13 @@ the guard. Existing authored comments and unrelated slide files are preserved.
 Preimages are retained under `decisions/sources/`; errors roll back source writes.
 A process crash during a multi-file commit still needs recovery from these
 preimages: this is an I/O rollback contract, not a crash-proof filesystem transaction.
+
+Derived images receive fresh identities for the entire ancestry. Insertion
+retains every source receipt verbatim and writes a separate receipt changing
+only its parent asset identity. Image bytes, operation, parameters, descriptions
+and focus metadata remain unchanged. Composition lineage records both receipt
+paths/hashes, and maintainer exports carry both. Unreferenced packaged asset
+dependencies and false receipt graphs are refused before writing source.
 
 The composition entry records library ID/revision/digest, source project/slide/hash,
 asset, item and evidence remaps, and the preserved-copy/review policy. Later library
