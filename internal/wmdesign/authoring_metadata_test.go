@@ -141,6 +141,10 @@ func TestSelectionHydratesPreAuthoringProjection(t *testing.T) {
 		t.Fatal(e)
 	}
 	report.ProjectionSHA256 = projectionHash(entities)
+	// A pre-authoring index predates the versioned retrieval-text projection.
+	// Keep the legacy fixture honest instead of retaining new alias/FTS pins.
+	report.RetrievalText = ""
+	report.RetrievalSHA256 = ""
 	if _, e = fixture.Exec("UPDATE meta SET value=? WHERE key='report'", string(indexJSON(report))); e != nil {
 		t.Fatal(e)
 	}

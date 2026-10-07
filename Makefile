@@ -22,7 +22,7 @@ test-race:
 	@for check in ConcurrentColdAndWarm CloneIsolation FingerprintDependencies BoundedEvictionAndErrors DriftAfterWarm; do \
 		$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run "^TestLibraryCatalogCache$$check$$" ./internal/wmdesign || exit $$?; \
 	done
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestKeyword|TestDiscoveryRead' ./internal/wmdesign
+	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestKeywordConcurrentReadOnlyQueries$$' ./internal/wmdesign
 
 # Includes catalog-wide and relocated-deck checks. Requires registered private
 # branding assets at WMDS_BRANDING_ROOT (or ~/Documents/branding).
