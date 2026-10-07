@@ -1,5 +1,7 @@
 GO ?= go
-FAST_TEST_TIMEOUT ?= 150s
+# The full short suite includes pinned catalog/index verification; slower hosted
+# Macs need a separate package ceiling from the small, selected race workloads.
+FAST_TEST_TIMEOUT ?= 5m
 INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m

@@ -173,6 +173,15 @@ survival evidence on both platforms before expanding supported mappings.
 
 ## Working order
 
+Hosted CI follow-up: exact head `8567e908` passed GitLab pipeline 21125
+(including secret scanning, three OS vulnerability scans and both developer
+checks) and Windows portable/installstate/retrieval tests. One macOS PR run hit
+the 150-second package-wide ceiling while running the existing V6 intake test;
+the push run of the same head passed. The short-suite package ceiling is now
+five minutes to accommodate complete pinned catalog verification on slower
+hosted Macs. Selected race workloads retain their 150-second ceilings. No
+assertion failure was suppressed and these checks must pass before merge.
+
 Installer activation/recovery core is merged; desktop qualification follows when
 the runner and private resources arrive. Finish lexical CI integration and build
 the local embedding/RRF path, then the shared finished-slide identity contract.
