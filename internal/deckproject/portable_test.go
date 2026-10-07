@@ -624,3 +624,29 @@ func TestPortableLayoutRejectsWindowsReservedSlideFilenameBeforeMutation(t *test
 		t.Fatal("failed portable path check changed authored source")
 	}
 }
+
+func TestPortableMaterializationReadRejectsChangedEditorialEvidence(t *testing.T) {
+	p := example(t)
+	pin(t, p)
+	if _, e := Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine}); e != nil {
+		t.Fatal(e)
+	}
+	v, e := SaveVersion(p, "Operator", "retained source and evidence")
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = VerifyVersion(p.Root, v.Number); e != nil {
+		t.Fatal(e)
+	}
+	relative := "versions/" + v.Number + "/source/context/project.md"
+	path := filepath.Join(p.Root, filepath.FromSlash(relative))
+	if e = os.Chmod(path, 0644); e != nil {
+		t.Fatal(e)
+	}
+	if e = os.WriteFile(path, []byte("concurrent changed editorial evidence"), 0644); e != nil {
+		t.Fatal(e)
+	}
+	if _, e = readVersionInput(p.Root, relative, v.Files["context/project.md"]); e == nil {
+		t.Fatal("changed editorial evidence accepted after verification")
+	}
+}

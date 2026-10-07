@@ -680,12 +680,9 @@ func MaterializeVersion(root, number, out string) (DeckVersion, error) {
 	}()
 	expected := map[string]string{}
 	copy := func(from, to, want string) error {
-		b, e := readProjectFile(root, from)
+		b, e := readVersionInput(root, from, want)
 		if e != nil {
 			return e
-		}
-		if digest(b) != want {
-			return fmt.Errorf("immutable input changed during materialization: %s", from)
 		}
 		path, e := SafePath(abs, to)
 		if e != nil {
@@ -875,4 +872,15 @@ func portableFileMode(relative string) os.FileMode {
 		return 0444
 	}
 	return 0644
+}
+
+func readVersionInput(root, relative, want string) ([]byte, error) {
+	bytes, e := readProjectFile(root, relative)
+	if e != nil {
+		return nil, e
+	}
+	if digest(bytes) != want {
+		return nil, fmt.Errorf("immutable input changed during materialization: %s", relative)
+	}
+	return bytes, nil
 }
