@@ -10,7 +10,7 @@ import (
 var performanceCounter = windows.NewLazySystemDLL("kernel32.dll").NewProc("QueryPerformanceCounter")
 var performanceFrequency = windows.NewLazySystemDLL("kernel32.dll").NewProc("QueryPerformanceFrequency")
 
-// Go's Windows ARM64 time.Now reads interrupt time, which can quantize a fast
+// Go 1.27.1's Windows ARM64 time.Now reads interrupt time, quantizing a fast
 // query to zero. Use the supported monotonic interval counter on both Windows
 // architectures, without changing system timer resolution or requesting sleep.
 // https://learn.microsoft.com/windows/win32/sysinfo/acquiring-high-resolution-time-stamps

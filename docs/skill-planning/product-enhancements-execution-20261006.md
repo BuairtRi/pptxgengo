@@ -517,3 +517,28 @@ limits. Focused portable checks and Windows ARM64 compilation passed; hosted
 execution remains required. Intel Mac's corrected actual-tool lane passed at
 `d9641533`, with its downloaded eight-scenario qualification independently
 verified. The source adds no desktop Office or operator acceptance claim.
+
+Installer integration follow-up: PR #16 passed full five-step slot preflight,
+all eighteen applicable GitHub checks and all twelve private GitLab pipeline
+21240 jobs at exact `b7289d76`; it merged as `8a60f59d`. Six independently
+downloaded exact-source installer reports verified all native OS/architecture
+pairs, eight/eleven unique scenarios, manager API/native target, both package
+version/content/manifest hashes and unchanged PATH/opt-outs. The two Windows
+ARM64 runs passed unchanged 30-second limits: first native module/hash/JSON
+1.92/1.69 seconds, later command/file calls 0.42–0.45 seconds. No retries or
+deadline relaxation were used for that candidate. Source/private mirror/clean
+primary were synchronized normally; no release tag was cut.
+
+## Windows ARM64 elapsed timing — managed measurement correction
+
+Slot `pptx-benchmark-clock` independently found exact `b7289d76` keyword
+observations of zero first/median milliseconds. Go 1.27.1's Windows ARM64
+interrupt-time counter can quantize fast operations. These observations are
+retained and excluded from latency qualification. Source now selects native
+Windows performance counter/frequency, records counter method/units, subtracts
+integer samples before conversion, and refuses unavailable/non-advancing/
+backward timing without changing system timer resolution. Unix retains Go's
+monotonic counter. Local focused keyword/report/unit checks, vet and all six
+target test compilations passed. The clean slot update incorporated merged
+PR #16 and its six native model/installer CI lanes. Final preflight and exact
+hosted reports remain required; performance budgets remain unagreed.
