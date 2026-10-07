@@ -12,7 +12,7 @@ Run from a source checkout with Go 1.27.1+. No private branding or Office is
 needed for preparation. Use a new directory; existing output is refused.
 
 ```sh
-PPTXGENGO_ROUNDTRIP_PREPARE_OUT='/tmp/pptx roundtrip fixture' \
+PPTXGENGO_ROUNDTRIP_PREPARE_OUT="$HOME/Documents/pptxgengo-qualification/roundtrip-new" \
   make test-roundtrip-prepare
 ```
 
@@ -23,6 +23,21 @@ $env:PPTXGENGO_ROUNDTRIP_PREPARE_OUT = "$env:TEMP\pptx roundtrip fixture"
 go test -count=1 -timeout=2m -run '^TestNativeRoundTripPrepare$' ./internal/deckproject
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 ```
+
+On macOS, use an owned folder under Documents and resolve PowerPoint’s folder
+access prompt for that exact folder. A blocked permission prompt can appear as
+a Save As timeout. Preserve the fixture until the native work is complete;
+avoid changing source or the qualification binary between preparation and
+verification because the project pins its toolchain. For a long qualification,
+compile once:
+
+```sh
+go test -c -o /absolute/path/qualification.test ./internal/deckproject
+```
+
+Run that binary from `internal/deckproject` for both entry points, using
+`-test.run`, `-test.timeout` and the same environment variables instead of
+recompiling with `go test`.
 
 The folder retains `baseline.pptx`, `plan.json`, `instructions.md` and a complete
 maintained project with receipt-pinned immutable build outputs. Keep those files
@@ -41,10 +56,10 @@ correspondence with source.
 ## Verify supplied saved files
 
 ```sh
-PPTXGENGO_ROUNDTRIP_FIXTURE='/tmp/pptx roundtrip fixture' \
-PPTXGENGO_ROUNDTRIP_SAVED_AS='/tmp/pptx roundtrip fixture/saved-as.pptx' \
-PPTXGENGO_ROUNDTRIP_EDITED='/tmp/pptx roundtrip fixture/edited.pptx' \
-PPTXGENGO_ROUNDTRIP_VERIFY_OUT='/tmp/pptx roundtrip evidence' \
+PPTXGENGO_ROUNDTRIP_FIXTURE="$HOME/Documents/pptxgengo-qualification/roundtrip-new" \
+PPTXGENGO_ROUNDTRIP_SAVED_AS="$HOME/Documents/pptxgengo-qualification/roundtrip-new/saved-as.pptx" \
+PPTXGENGO_ROUNDTRIP_EDITED="$HOME/Documents/pptxgengo-qualification/roundtrip-new/edited.pptx" \
+PPTXGENGO_ROUNDTRIP_VERIFY_OUT="$HOME/Documents/pptxgengo-qualification/roundtrip-evidence-new" \
   make test-roundtrip-verify
 ```
 
@@ -59,6 +74,12 @@ The verifier reads regular bounded files, checks the fixture plan against the
 receipt-pinned baseline, checks full deck/slide/shape tag survival in both saves,
 checks unchanged text/order in the first save, checks the exact three changes
 and reordered slide tokens, and requires three unambiguous native-only proposals.
+An existing single DrawingML `slidenum` field may refresh its cached text to
+the verified new ordinal. Both field IDs, tagged identities and the original
+ordinal must match the receipt-pinned baseline. Changes are listed separately
+in `automatic_slide_numbers`; wrong numbers, other dynamic fields, ordinary
+text, replaced fields and additional text still fail. Automatic numbering is
+not adopted into YAML.
 It preserves all reported package/format/geometry differences as manual review
 items. A mismatch fails without source adoption. Existing evidence directories
 are never overwritten.
@@ -118,9 +139,32 @@ race coverage still exercises the complete hermetic verifier.
 ## Qualification status and remaining tasks
 
 No real Windows desktop execution is claimed until the interactive runner
-produces passing retained evidence. macOS currently uses the supplied-file
-workflow: the earlier automated Save As attempt timed out without an output.
-No Mac automation success is implied by hermetic package edits.
+produces passing retained evidence. On 2026-10-07, native UI automation on
+macOS ARM64 with PowerPoint 16.113.4 (16.113.26100421) completed the owned
+Documents-folder workflow. Independent supplied-file verification passed all
+forty native identities, initial Save As, the three prescribed plain-text
+changes, actual slide reorder, bounded adoption, repeated reconciliation and
+headless rebuild. PowerPoint refreshed two existing automatic slide-number
+fields after the reorder; these are recorded separately, with other native
+package/format changes retained for manual review.
+
+Evidence remains private under
+`~/Documents/pptxgengo-qualification/save-as-_tqvwxdy/`:
+`roundtrip-fixture-number-fields`, `roundtrip-number-saved-as.pptx`,
+`roundtrip-number-edited-corrected.pptx` and
+`roundtrip-evidence-number-fields-corrected`. SHA256 pins:
+
+- Baseline: `988844c7a5866ae27a29b6b704c86e1c231688044c46832289d2c16271985083`.
+- Initial native save: `c31b31ab7cb41cd823500a8f6d7833279da7b0c3737031bf97373da15bf28de3`.
+- Edited native save: `511444ca4d1e987b16d3987fd4bed3c89fda34bb9492d2a844b6691ff23b85fb`.
+
+Earlier failed attempts remain retained: blocked folder access; a stale lineage
+fixture; rejection of refreshed number caches; a toolchain change between
+preparation and verification; and an accidentally appended body edit. The
+incorrect body edit was corrected through PowerPoint into another new file,
+then independently verified. Only owned task presentations were closed.
+These observations document UI execution separately from the verifier’s
+supplied-file provenance statement; no human acceptance is recorded.
 
 Even a passing real COM run leaves human acceptance `not_recorded`. Complete
 the [editing pilot](native-editing-pilot.md) move/align/resize/table/diagram tasks
