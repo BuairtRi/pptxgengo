@@ -98,23 +98,23 @@ func TestInstallUpgradeAndRollbackPreserveUserSkill(t *testing.T) {
 	os.WriteFile(filepath.Join(c.SkillDir, "SKILL.md"), []byte("user skill"), 0600)
 	one := fixture(t, "v1.0.0")
 	two := fixture(t, "v1.1.0")
-	if _, e := c.Install(context.Background(), one, Options{NoPath: true}); e != nil {
+	if _, e := c.Install(context.Background(), one, Options{NoPath: runtime.GOOS == "windows"}); e != nil {
 		t.Fatal(e)
 	}
-	if _, e := c.Install(context.Background(), two, Options{NoPath: true}); e != nil {
+	if _, e := c.Install(context.Background(), two, Options{NoPath: runtime.GOOS == "windows"}); e != nil {
 		t.Fatal(e)
 	}
 	// Reinstalling the same version must retain the rollback target and avoid
 	// creating another skill backup when the owned settings already match.
 	priorBackups, _ := filepath.Glob(c.SkillDir + ".backup-*")
-	if _, e := c.Install(context.Background(), two, Options{NoPath: true}); e != nil {
+	if _, e := c.Install(context.Background(), two, Options{NoPath: runtime.GOOS == "windows"}); e != nil {
 		t.Fatal(e)
 	}
 	afterBackups, _ := filepath.Glob(c.SkillDir + ".backup-*")
 	if len(priorBackups) != len(afterBackups) {
 		t.Fatal("idempotent install created a backup")
 	}
-	selected, e := c.Rollback(context.Background(), Options{NoPath: true})
+	selected, e := c.Rollback(context.Background(), Options{NoPath: runtime.GOOS == "windows"})
 	if e != nil {
 		t.Fatal(e)
 	}
