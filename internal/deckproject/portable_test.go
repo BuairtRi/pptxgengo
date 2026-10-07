@@ -517,3 +517,67 @@ func TestPortableOptionalAndPointerReadsAreBounded(t *testing.T) {
 		t.Fatal("optional directory accepted")
 	}
 }
+
+func TestPortableVersionsRetainApprovalHistoryWithoutReapprovingChanges(t *testing.T) {
+	p := example(t)
+	pin(t, p)
+	build := func() {
+		t.Helper()
+		if _, e := Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine}); e != nil {
+			t.Fatal(e)
+		}
+	}
+	build()
+	approval, e := Approve(p, "review", "Synthetic fixture reviewer", nil)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = SaveVersion(p, "Snapshot author", "approved fixture history"); e != nil {
+		t.Fatal(e)
+	}
+	original, e := readProjectFile(p.Root, p.Document.Assets["sample-image"].Path)
+	if e != nil {
+		t.Fatal(e)
+	}
+	changed := append(append([]byte{}, original...), []byte("changed fixture revision")...)
+	if _, e = RegisterAsset(p, AssetRegistration{ID: "sample-image", Data: changed, Description: "changed fixture", ReplaceSHA256: digest(original)}); e != nil {
+		t.Fatal(e)
+	}
+	p, e = Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	build()
+	if _, e = SaveVersion(p, "Snapshot author", "changed image is not reapproved"); e != nil {
+		t.Fatal(e)
+	}
+	for _, tc := range []struct {
+		number string
+		valid  bool
+	}{{"000001", true}, {"000002", false}} {
+		out := filepath.Join(t.TempDir(), "version")
+		if _, e = MaterializeVersion(p.Root, tc.number, out); e != nil {
+			t.Fatal(e)
+		}
+		restored, e := Load(out)
+		if e != nil {
+			t.Fatal(e)
+		}
+		state, e := Status(restored)
+		if e != nil {
+			t.Fatal(e)
+		}
+		found := false
+		for _, a := range state.Approvals {
+			if a.ID == approval.ID {
+				found = true
+				if a.Valid != tc.valid {
+					t.Fatalf("version%s approval valid=%v, expected%v", tc.number, a.Valid, tc.valid)
+				}
+			}
+		}
+		if !found {
+			t.Fatal("approval history lost")
+		}
+	}
+}
