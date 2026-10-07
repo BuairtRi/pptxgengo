@@ -65,6 +65,13 @@ Azure signing variables were copied as protected variables from ATV2; Azure has
 its own federation constrained to project 17 and `v*` tags. Values remain outside
 Git. The macOS keychain/notary profile stays on the existing protected runner.
 
+The final privacy guard uses `RELEASE_PRIVACY_READ_TOKEN`, a project 17 token
+with Guest access and only `read_api`. GitLab's project metadata endpoint does
+not accept CI job tokens. This protected, masked, hidden variable is scoped to
+the `release-publication` environment and expires on 2027-10-06; rotate it before
+then. It cannot write packages or releases. Publication writes still use the
+ephemeral `CI_JOB_TOKEN`. Both project and package registry privacy must pass.
+
 ## Verify a download
 
 Download `manifest.json`, `manifest.sigstore.json`, and the desired archive and
@@ -143,15 +150,13 @@ all 32 daemon allocations were occupied and capacity cleanup was being handled
 elsewhere. The release implementation used an isolated ordinary worktree while
 waiting. No daemon restart, registry editing or retirement of other work was done.
 
-The pending create operation can resume after capacity is available using its
-original immutable intent:
-
-```sh
-/Users/rscott/.local/share/slotctl-bootstrap/bin/slotctl \
-  --config /Users/rscott/.config/slotctl/config.yaml --repository pptxgengo \
-  slot create --resume slot-create/d800a961c03c481d0962291749384319 \
-  --name pptx-release-packaging --target master --stopped
-```
+Capacity cleanup and the shared daemon's upgrade to 0.0.50 allowed the original
+operation `slot-create/d800a961c03c481d0962291749384319` to resume successfully.
+The prepared managed slot `pptx-release-packaging` is intentionally stopped
+(there are no service claims). Its immutable identity is
+`bc7d977e-dc1d-413e-a898-117b82119e9e`, machine index 2. Preparation completed
+dependency download and the three-command build; diagnosis confirmed its
+worktree and canonical identity match. Future slots should target `main`.
 
 References: [GitLab releases](https://docs.gitlab.com/user/project/releases/),
 [GitLab Azure OIDC](https://docs.gitlab.com/ci/cloud_services/azure/),
