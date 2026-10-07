@@ -261,6 +261,10 @@ compare tokenizer/inference golden cases, then generate a complete snapshot for
 a bounded corpus of original pinned entities spanning every indexed kind.
 These checks cover offline query, snapshot completeness and deterministic ranks.
 They do not establish catalog-wide timing or native PowerPoint acceptance.
+The same lanes now retain fresh-process/repeated API timing, actual corpus
+counts, model footprint and OS peak resident memory reports. See
+[search performance](search-performance.md) for the measurement scope,
+commands and full V11 Mac sample.
 Full V5 qualification is opt-in with `PPTXGENGO_EMBED_MODEL_DIR` and
 `PPTXGENGO_EMBED_FULL_LIBRARY=1` when running
 `TestPinnedLibraryEmbeddingsEndToEnd`; see the runtime evaluation for the

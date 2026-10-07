@@ -417,7 +417,42 @@ workflow while automated Save As remains unqualified after the earlier timeout.
 
 Focused hermetic and selected race checks passed locally, including tampered
 plans/baselines/tags, wrong text/order, cleanup failures, repeated output refusal,
-Unicode/spaced paths and exact rebuilt copy. Full submission/hosted gates are
-pending. No live Windows desktop pass, new Mac Save As evidence, human editing/
+Unicode/spaced paths and exact rebuilt copy. PR #14 passed full slot preflight,
+all ten GitHub checks and all nine GitLab pipeline 21205 jobs at exact head
+`b8bbf04d`; it merged as `69f64cd3`. One GitHub race job reached its overall
+15-minute deadline during the last keyword-concurrency test; a same-head rerun
+passed with every assertion retained. No live Windows desktop pass, new Mac Save As evidence, human editing/
 visual acceptance or family-wide rollout is claimed. This source work is not in
 stable v4.1.0, and no further release tag has been cut.
+
+## Offline search timing and memory — managed source work
+
+Slot `pptx-search-performance` adds a source-only benchmark using production
+verified index/open/find APIs. Reports retain fresh-process first-query and
+same-index repeated durations, exact dataset/source/model/file pins and sizes,
+first/final OS peak resident memory, Go heap reservations and GC settings.
+Invalid/stale/fallback/drifting inputs or results and overwritten reports fail.
+OS cache is uncontrolled and hashing/preparation/CLI startup are not timed;
+model loading still happens on each find. No performance budget is invented.
+
+Pinned model CI adds separate child-process measurements on Kubernetes Linux,
+macOS and Windows. Preliminary exact head `54851875` passed the model lanes
+and all nine GitLab pipeline 21215 jobs; actual three-platform JSON was
+downloaded and checked. Linux's initial getrusage evidence exposed inherited
+pre-exec parent memory. The final source uses current-address-space VmHWM and
+a touched-parent/subprocess regression instead. Portable Windows tests also
+exercise its actual memory API. The Go hosted job budget becomes 20 minutes
+while preserving every 150-second package race ceiling and assertion.
+
+The current full 1,969-entity V11 Mac sample measured hybrid first 475.4 ms,
+repeated median 468.7 ms, first peak 368.3 MiB and final peak 772.3 MiB, with
+91,102,969 bytes of pinned inference artifacts. Complete scope, input hashes
+and keyword/semantic comparisons are in `docs/search-performance.md`.
+Focused tests passed; final submission/hosted gates are pending.
+GitLab's race run at `334da317` exposed asynchronous Linux RSS accounting:
+the raw last VmHWM sample was 241,664 bytes below the first sample. The report
+now retains both raw samples and their observed maximum, with explicit kernel
+approximation documented; no assertion or qualified memory precision is hidden.
+Actual full-library Windows/other architecture performance, agreed budgets,
+operator relevance/native fit and desktop editing acceptance remain open.
+No further release tag was cut.
