@@ -122,6 +122,12 @@ both PPTX documents, both typed coverage manifests and the exact five-file
 browsing inventory. Activation, repair and rollback use the installer package
 verifier, including the complete browsing hashes and manifests. Unlisted CLI
 files remain rejected. Release assembly uses the same artifact verifier.
+Both decks must agree with the top inventory's exact bundle, source revision,
+source commit, compiler, release identity, freshness date and immutable private
+input archive hashes. Their recorded pipeline time must have that UTC date.
+CI additionally compares the inventory with protected input hashes and its
+authoritative pipeline time and commit; independently coherent documents from
+different releases cannot be combined into an installation archive.
 
 The verifier follows the actual presentation slide order and internal
 relationships, verifies native slide identities against the serialized whole-page

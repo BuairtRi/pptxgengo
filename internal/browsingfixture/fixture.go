@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 	"github.com/buairtri/pptxgengo/internal/finishedslide"
 	"github.com/buairtri/pptxgengo/pptx"
 )
@@ -55,7 +56,20 @@ func Manifest(t testing.TB, kind, deckHash string) []byte {
 	if kind == "templates" {
 		pages = []map[string]any{{"id": "page-1", "kind": "guide"}, {"id": "page-2", "kind": "family_divider"}, {"id": "page-3", "kind": "template"}, {"id": "page-4", "kind": "frame_divider"}, {"id": "page-5", "kind": "frame"}}
 	}
-	raw, e := json.Marshal(map[string]any{"schema": "pptxgengo.browsing-library.v1", "kind": kind, "as_of": "2026-10-07", "deck_sha256": deckHash, "bundle_sha256": pin, "source_revision": "fixture-v1", "source_commit": strings.Repeat("a", 40), "slides": len(pages), "pages": pages, "compiler": "unit-test-only", "release_identity": "unit-test-only", "qualification": "native_visual_copy_paste_qualification_pending", "coverage": coverage, "source_files": source, "fonts": []map[string]any{{"file": "fixture.ttf", "sha256": pin, "postscript_name": "Fixture"}}})
+	raw, e := json.Marshal(map[string]any{"release_inputs": Inputs(), "schema": "pptxgengo.browsing-library.v1", "kind": kind, "as_of": "2026-10-07", "deck_sha256": deckHash, "bundle_sha256": pin, "source_revision": "fixture-v1", "source_commit": strings.Repeat("a", 40), "slides": len(pages), "pages": pages, "compiler": "unit-test-only", "release_identity": "unit-test-only", "qualification": "native_visual_copy_paste_qualification_pending", "coverage": coverage, "source_files": source, "fonts": []map[string]any{{"file": "fixture.ttf", "sha256": pin, "postscript_name": "Fixture"}}})
+	if e != nil {
+		t.Fatal(e)
+	}
+	return raw
+}
+
+func Inputs() browsingartifact.ReleaseInputs {
+	return browsingartifact.ReleaseInputs{BrandingArchiveSHA256: strings.Repeat("a", 64), FinishedLibraryArchiveSHA256: strings.Repeat("b", 64), AsOf: "2026-10-07", PipelineCreatedAt: "2026-10-07T12:00:00Z"}
+}
+
+func Inventory(t testing.TB, files map[string]string) []byte {
+	t.Helper()
+	raw, e := json.Marshal(browsingartifact.Inventory{ReleaseInputs: Inputs(), Schema: "pptxgengo.release-browsing-files.v1", Files: files, BundleSHA256: strings.Repeat("a", 64), SourceRevision: "fixture-v1", SourceCommit: strings.Repeat("a", 40), Compiler: "unit-test-only", ReleaseIdentity: "unit-test-only"})
 	if e != nil {
 		t.Fatal(e)
 	}

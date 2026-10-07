@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/buairtri/pptxgengo/internal/browsingfixture"
 	"os"
 	"path/filepath"
@@ -10,6 +9,7 @@ import (
 )
 
 func TestBrowsingArchiveRequiresBothDecksAndHashes(t *testing.T) {
+	t.Setenv("CI_PIPELINE_CREATED_AT", "")
 	root := t.TempDir()
 	files := map[string]Input{}
 	if e := addBrowsingFiles(files, root); e == nil {
@@ -42,7 +42,7 @@ func TestBrowsingArchiveRequiresBothDecksAndHashes(t *testing.T) {
 		}
 		hashes["browsing/"+pair.manifest], _ = digest(path)
 	}
-	raw, _ := json.Marshal(map[string]any{"schema": "pptxgengo.release-browsing-files.v1", "files_sha256": hashes})
+	raw := browsingfixture.Inventory(t, hashes)
 	os.WriteFile(filepath.Join(root, "browsing-manifest.json"), raw, 0644)
 	if e := addBrowsingFiles(files, root); e != nil || len(files) != 5 {
 		t.Fatal(files, e)

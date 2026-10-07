@@ -83,6 +83,7 @@ type Page struct {
 	Kind string `json:"kind"`
 }
 type Manifest struct {
+	ReleaseInputs   ReleaseInputs   `json:"release_inputs"`
 	Pages           []Page          `json:"pages"`
 	BundleSHA256    string          `json:"bundle_sha256"`
 	SourceRevision  string          `json:"source_revision"`

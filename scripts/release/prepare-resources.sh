@@ -46,8 +46,17 @@ python3 - <<'PY'
 import hashlib, json, os
 from pathlib import Path
 root=Path('dist/resources')
+inputs={'branding_archive_sha256':os.environ['WMDS_BRANDING_ARCHIVE_SHA256'],'finished_library_archive_sha256':os.environ['WMDS_FINISHED_LIBRARY_ARCHIVE_SHA256'],'as_of':os.environ['WMDS_BROWSING_AS_OF'],'pipeline_created_at':os.environ['CI_PIPELINE_CREATED_AT']}
+common=None
+for name in ('template-library.manifest.json','reusable-slides.manifest.json'):
+    path=root/'browsing'/name
+    data=json.loads(path.read_text());data['release_inputs']=inputs
+    pins={key:data[key] for key in ('bundle_sha256','source_revision','source_commit','compiler','release_identity')}
+    if common is not None and common != pins: raise SystemExit('Generated browsing decks disagree on exact tagged bundle/source/compiler/release pins')
+    common=pins
+    path.write_text(json.dumps(data,separators=(',',':'))+'\n')
 files={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root/'browsing').iterdir()) if p.is_file()}
-(root/'browsing-manifest.json').write_text(json.dumps({'schema':'pptxgengo.release-browsing-files.v1','files_sha256':files,'branding_archive_sha256':os.environ['WMDS_BRANDING_ARCHIVE_SHA256'],'finished_library_archive_sha256':os.environ['WMDS_FINISHED_LIBRARY_ARCHIVE_SHA256'],'as_of':os.environ['WMDS_BROWSING_AS_OF']},indent=2)+'\n')
+(root/'browsing-manifest.json').write_text(json.dumps({'schema':'pptxgengo.release-browsing-files.v1','files_sha256':files,**common,**inputs},indent=2)+'\n')
 local=root/'release-manifest.json'
 if local.exists():
     data=json.loads(local.read_text());data['files_sha256'].update(files);data['files_sha256']['browsing-manifest.json']=hashlib.sha256((root/'browsing-manifest.json').read_bytes()).hexdigest();data['file_count']=len(data['files_sha256']);local.write_text(json.dumps(data,indent=2)+'\n')

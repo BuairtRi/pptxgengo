@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -18,21 +17,16 @@ func addBrowsingFiles(files map[string]Input, root string) error {
 			return fmt.Errorf("browsing resource directories must be real directories: %s", dir)
 		}
 	}
-	var inventory struct {
-		Schema string            `json:"schema"`
-		Files  map[string]string `json:"files_sha256"`
-	}
 	raw, e := browsingartifact.ReadManifest(filepath.Join(root, "browsing-manifest.json"))
 	if e != nil {
 		return fmt.Errorf("installation archive requires generated private template-library.pptx and reusable-slides.pptx: %w", e)
 	}
-	if e = json.Unmarshal(raw, &inventory); e != nil {
+	inventory, e := browsingartifact.ReadInventory(raw)
+	if e != nil {
 		return e
 	}
 	required := []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/reusable-slides.pptx", "browsing/reusable-slides.manifest.json"}
-	if inventory.Schema != "pptxgengo.release-browsing-files.v1" || len(inventory.Files) != len(required) {
-		return fmt.Errorf("browsing inventory incomplete or unsupported")
-	}
+	manifests := map[string][]byte{}
 	for _, rel := range required {
 		expected, ok := inventory.Files[rel]
 		if !ok || !browsingHash(expected) {
@@ -62,8 +56,20 @@ func addBrowsingFiles(files map[string]Input, root string) error {
 			if e = browsingartifact.ValidateFile(raw, kind, inventory.Files[deck], filepath.Join(root, filepath.FromSlash(deck))); e != nil {
 				return e
 			}
+			manifests[kind] = raw
 		}
 		files[rel] = Input{Path: path}
+	}
+	var expected *browsingartifact.InventoryExpectations
+	if pipeline := os.Getenv("CI_PIPELINE_CREATED_AT"); pipeline != "" {
+		asOf := pipeline
+		if len(asOf) >= 10 {
+			asOf = asOf[:10]
+		}
+		expected = &browsingartifact.InventoryExpectations{Inputs: browsingartifact.ReleaseInputs{BrandingArchiveSHA256: os.Getenv("WMDS_BRANDING_ARCHIVE_SHA256"), FinishedLibraryArchiveSHA256: os.Getenv("WMDS_FINISHED_LIBRARY_ARCHIVE_SHA256"), AsOf: asOf, PipelineCreatedAt: pipeline}, ReleaseIdentity: os.Getenv("CI_COMMIT_SHA")}
+	}
+	if e = browsingartifact.ValidateInventory(inventory, manifests, expected); e != nil {
+		return e
 	}
 	files["browsing-manifest.json"] = Input{Path: filepath.Join(root, "browsing-manifest.json")}
 	return nil

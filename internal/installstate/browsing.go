@@ -1,7 +1,6 @@
 package installstate
 
 import (
-	"encoding/json"
 	"fmt"
 	"path/filepath"
 
@@ -15,27 +14,22 @@ func allowBrowsingFiles(root string, files map[string]string, allowed map[string
 	if _, exists := files["browsing-manifest.json"]; !exists {
 		return nil
 	}
-	var inventory struct {
-		Schema string            `json:"schema"`
-		Files  map[string]string `json:"files_sha256"`
-	}
 	raw, e := browsingartifact.ReadManifest(filepath.Join(root, "browsing-manifest.json"))
 	if e != nil {
 		return e
 	}
-	if e := json.Unmarshal(raw, &inventory); e != nil {
+	inventory, e := browsingartifact.ReadInventory(raw)
+	if e != nil {
 		return e
 	}
 	names := []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/reusable-slides.pptx", "browsing/reusable-slides.manifest.json"}
-	if inventory.Schema != "pptxgengo.release-browsing-files.v1" || len(inventory.Files) != len(names) {
-		return fmt.Errorf("browsing installation inventory incomplete")
-	}
 	for _, name := range names {
 		expected, ok := inventory.Files[name]
 		if !ok || !digestPattern.MatchString(expected) || files[name] != expected {
 			return fmt.Errorf("browsing installation hash mismatch: %s", name)
 		}
 	}
+	manifests := map[string][]byte{}
 	for _, pair := range []struct{ manifest, deck, kind string }{{names[1], names[0], "templates"}, {names[3], names[2], "reusable"}} {
 		raw, e := browsingartifact.ReadManifest(filepath.Join(root, filepath.FromSlash(pair.manifest)))
 		if e != nil {
@@ -45,6 +39,10 @@ func allowBrowsingFiles(root string, files map[string]string, allowed map[string
 		if e = browsingartifact.ValidateFile(raw, pair.kind, files[pair.deck], filepath.Join(root, filepath.FromSlash(pair.deck))); e != nil {
 			return e
 		}
+		manifests[pair.kind] = raw
+	}
+	if e = browsingartifact.ValidateInventory(inventory, manifests, nil); e != nil {
+		return e
 	}
 	for _, name := range names {
 		allowed[name] = true

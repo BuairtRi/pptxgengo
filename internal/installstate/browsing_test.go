@@ -44,7 +44,7 @@ func TestBrowsingInstallationClosure(t *testing.T) {
 	for name, hash := range files {
 		hashes[name] = hash
 	}
-	put("browsing-manifest.json", map[string]any{"schema": "pptxgengo.release-browsing-files.v1", "files_sha256": hashes})
+	put("browsing-manifest.json", browsingfixture.Inventory(t, hashes))
 	if e := allowBrowsingFiles(root, files, allowed); e != nil || len(allowed) != 5 {
 		t.Fatal(e, allowed)
 	}
@@ -92,7 +92,7 @@ func TestBrowsingFullInstallationChecksTypedClosure(t *testing.T) {
 	for name, hash := range files {
 		browsingHashes[name] = hash
 	}
-	raw, _ := json.Marshal(map[string]any{"schema": "pptxgengo.release-browsing-files.v1", "files_sha256": browsingHashes})
+	raw := browsingfixture.Inventory(t, browsingHashes)
 	put("browsing-manifest.json", raw)
 	raw, _ = json.Marshal(map[string]any{"schema": "pptxgengo.local-release-manifest.v1", "version": "4.2.0", "selected_bundle": "v11", "file_count": len(files), "files_sha256": files})
 	put("release-manifest.json", raw)
