@@ -306,3 +306,12 @@ lineage with the source. Existing composition entries and exact toolchain pins
 are required. See [finished-slide commands and scope](../../docs/finished-slides.md).
 Stable v4.1.0 lacks these commands; claims/local-template migration, content
 curation and native desktop qualification remain pending.
+
+### Native text model
+
+New object maps declare `pptxgengo.native-text-model.v1` and retain paragraph/run/
+cell addresses, exact text, source-slot identities and formatting/structure
+hashes. Typed card title/body mappings select the specific field; ambiguous or
+unsupported text remains manual review. This is baseline infrastructure, not an
+edited-PPTX adoption engine or desktop qualification. See
+[native field mapping](../../docs/native-field-mapping.md).

@@ -14,28 +14,37 @@ import (
 )
 
 type ObjectRecord struct {
-	NativeParentToken string         `json:"native_parent_token,omitempty"`
-	ShapeToken        string         `json:"shape_token,omitempty"`
-	LogicalID         string         `json:"logical_id"`
-	SlideID           string         `json:"slide_id"`
-	NodeID            string         `json:"node_id"`
-	ItemKey           string         `json:"item_key,omitempty"`
-	PartRole          string         `json:"part_role"`
-	NativePart        string         `json:"native_part"`
-	NativeID          string         `json:"native_id"`
-	NativeName        string         `json:"native_name"`
-	NativeText        string         `json:"baseline_native_text,omitempty"`
-	SourcePointers    []string       `json:"source_pointers"`
-	BaselineValues    map[string]any `json:"baseline_values,omitempty"`
-	Mapping           string         `json:"mapping"`
+	NativeParentToken     string              `json:"native_parent_token,omitempty"`
+	ShapeToken            string              `json:"shape_token,omitempty"`
+	SourceTemplate        Reference           `json:"source_template"`
+	SourceSlots           map[string]string   `json:"source_slots,omitempty"`
+	NativeStructureSHA256 string              `json:"native_structure_sha256,omitempty"`
+	NativeKind            string              `json:"native_kind"`
+	Paragraphs            []NativeParagraph   `json:"native_paragraphs,omitempty"`
+	Fields                []NativeSourceField `json:"source_fields,omitempty"`
+	TextMapping           string              `json:"text_mapping,omitempty"`
+	TextMappingReason     string              `json:"text_mapping_reason,omitempty"`
+	LogicalID             string              `json:"logical_id"`
+	SlideID               string              `json:"slide_id"`
+	NodeID                string              `json:"node_id"`
+	ItemKey               string              `json:"item_key,omitempty"`
+	PartRole              string              `json:"part_role"`
+	NativePart            string              `json:"native_part"`
+	NativeID              string              `json:"native_id"`
+	NativeName            string              `json:"native_name"`
+	NativeText            string              `json:"baseline_native_text,omitempty"`
+	SourcePointers        []string            `json:"source_pointers"`
+	BaselineValues        map[string]any      `json:"baseline_values,omitempty"`
+	Mapping               string              `json:"mapping"`
 }
 type Objects struct {
-	Lineage        *NativeLineage `json:"native_lineage,omitempty"`
-	Schema         string         `json:"schema"`
-	DeckID         string         `json:"deck_id"`
-	SourceSHA256   string         `json:"source_semantic_sha256"`
-	Objects        []ObjectRecord `json:"objects"`
-	Reconciliation string         `json:"reconciliation"`
+	Lineage         *NativeLineage `json:"native_lineage,omitempty"`
+	TextModelSchema string         `json:"text_model_schema,omitempty"`
+	Schema          string         `json:"schema"`
+	DeckID          string         `json:"deck_id"`
+	SourceSHA256    string         `json:"source_semantic_sha256"`
+	Objects         []ObjectRecord `json:"objects"`
+	Reconciliation  string         `json:"reconciliation"`
 }
 type xmlNode struct {
 	Name     xml.Name
@@ -88,7 +97,7 @@ func descendants(n *xmlNode, key string) []*xmlNode {
 	return out
 }
 func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) {
-	out := Objects{Schema: "pptxgengo.deck-object-map.v1", DeckID: p.Document.ID, SourceSHA256: digest(p.Canonical), Objects: []ObjectRecord{}, Reconciliation: "baseline plus stable IDs available; edited-PPTX three-way reconciliation is not implemented"}
+	out := Objects{TextModelSchema: NativeTextModelSchema, Schema: "pptxgengo.deck-object-map.v1", DeckID: p.Document.ID, SourceSHA256: digest(p.Canonical), Objects: []ObjectRecord{}, Reconciliation: "baseline plus stable IDs available; edited-PPTX three-way reconciliation is not implemented"}
 	z, e := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if e != nil {
 		return out, e
@@ -112,23 +121,23 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 		if e != nil {
 			return out, e
 		}
+		var identityError error
 		var walk func(*xmlNode)
 		walk = func(n *xmlNode) {
 			switch n.Name.Local {
 			case "sp", "pic", "graphicFrame", "grpSp":
-				ids := descendants(n, "cNvPr")
-				if len(ids) > 0 {
-					id := ids[0]
+				id, identityErr := nativeObjectIdentity(n)
+				if identityErr != nil {
+					identityError = identityErr
+					return
+				}
+				if id != nil {
 					name := attr(id, "name")
-					rec := ObjectRecord{LogicalID: s.ID + "/" + name, SlideID: s.ID, NodeID: name, PartRole: "native-object", NativePart: part, NativeID: attr(id, "id"), NativeName: name, SourcePointers: []string{}, BaselineValues: map[string]any{}, Mapping: "generated-unbound"}
-					if n.Name.Local != "grpSp" {
-						texts := []string{}
-						for _, t := range descendants(n, "t") {
-							texts = append(texts, t.Text)
-						}
-						rec.NativeText = strings.Join(texts, "\n")
-					}
-					rec = bindObject(p, i, s, rec)
+					rec := ObjectRecord{NativeKind: n.Name.Local, LogicalID: s.ID + "/" + name, SlideID: s.ID, NodeID: name, PartRole: "native-object", NativePart: part, NativeID: attr(id, "id"), NativeName: name, SourcePointers: []string{}, BaselineValues: map[string]any{}, Mapping: "generated-unbound"}
+					rec.NativeStructureSHA256 = nativeStructureHash(n)
+					rec.Paragraphs = nativeParagraphs(n)
+					rec.NativeText = nativeParagraphText(rec.Paragraphs)
+					rec = attachNativeSourceFields(p, bindObject(p, i, s, rec))
 					out.Objects = append(out.Objects, rec)
 				}
 			}
@@ -137,6 +146,9 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 			}
 		}
 		walk(tree)
+		if identityError != nil {
+			return out, identityError
+		}
 	}
 	sort.Slice(out.Objects, func(i, j int) bool {
 		a, b := out.Objects[i], out.Objects[j]
@@ -149,6 +161,8 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 }
 func bindObject(p *Project, index int, s wmdesign.SlideSpec, r ObjectRecord) ObjectRecord {
 	ptr := "/slides/" + strconv.Itoa(index) + "/values"
+	r.SourceTemplate = p.Document.Slides[index].Template
+	r.SourceSlots = map[string]string{}
 	longest := ""
 	for _, n := range s.Nodes {
 		if (r.NativeName == n.ID || strings.HasPrefix(r.NativeName, n.ID+".")) && len(n.ID) > len(longest) {
@@ -164,8 +178,10 @@ func bindObject(p *Project, index int, s wmdesign.SlideSpec, r ObjectRecord) Obj
 	}
 	if s.TemplateBinding != nil {
 		for _, a := range s.TemplateBinding.Assignments {
-			if r.NativeName == a.TargetID || strings.HasPrefix(r.NativeName, a.TargetID+".") {
-				r.SourcePointers = append(r.SourcePointers, slotPointer(p.Document.Slides[index].Values, ptr, a.Slot))
+			if typedCardAssignmentMatches(r.NativeName, a.TargetID, a.Property) {
+				pointer := slotPointer(p.Document.Slides[index].Values, ptr, a.Slot)
+				r.SourcePointers = append(r.SourcePointers, pointer)
+				r.SourceSlots[pointer] = a.Slot
 				var val any
 				_ = json.Unmarshal(a.Value, &val)
 				r.BaselineValues[a.Slot] = val
@@ -195,6 +211,7 @@ func bindObject(p *Project, index int, s wmdesign.SlideSpec, r ObjectRecord) Obj
 				for _, v := range []any{n.Text, n.Asset, n.Arguments} {
 					collectBindings(v, func(key string) {
 						r.SourcePointers = append(r.SourcePointers, ptr+"/"+escape(key))
+						r.SourceSlots[ptr+"/"+escape(key)] = key
 						r.BaselineValues[key] = p.Document.Slides[index].Values[key]
 					})
 				}
@@ -219,13 +236,28 @@ func bindObject(p *Project, index int, s wmdesign.SlideSpec, r ObjectRecord) Obj
 				}
 			}
 		}
-		r.SourcePointers = append(r.SourcePointers, ptr+"/"+escape(field))
+		pointer := slotPointer(p.Document.Slides[index].Values, ptr, field)
+		if value, err := lookupPointer(p.tree, pointer); err == nil {
+			r.SourcePointers = append(r.SourcePointers, pointer)
+			r.SourceSlots[pointer] = field
+			r.BaselineValues[field] = value
+		}
+	}
+	if r.NodeID == "" {
+		r.NodeID = "native-" + r.NativeID
 	}
 	r.LogicalID = r.SlideID + "/" + r.NodeID + "/" + r.PartRole
 	if r.ItemKey != "" {
 		r.LogicalID += "/" + r.ItemKey
 	}
 	sort.Strings(r.SourcePointers)
+	unique := []string{}
+	for _, pointer := range r.SourcePointers {
+		if len(unique) == 0 || unique[len(unique)-1] != pointer {
+			unique = append(unique, pointer)
+		}
+	}
+	r.SourcePointers = unique
 	return r
 }
 func collectBindings(v any, found func(string)) {
