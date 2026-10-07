@@ -594,3 +594,26 @@ func TestPortableRetainedModesKeepBaselinesAndObjectsImmutable(t *testing.T) {
 		}
 	}
 }
+
+func TestPortableLayoutRejectsWindowsReservedSlideFilenameBeforeMutation(t *testing.T) {
+	p := example(t)
+	raw := bytes.Replace(p.Raw, []byte("id: maintain-the-source"), []byte("id: CON"), 1)
+	if e := os.WriteFile(p.SourcePath, raw, 0644); e != nil {
+		t.Fatal(e)
+	}
+	p, e := Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	before := p.SourceHash()
+	if _, e := PortableLayout(p, false); e == nil {
+		t.Fatal("reserved destination accepted by dry run")
+	}
+	if _, e := Split(p, SplitOptions{}); e == nil {
+		t.Fatal("reserved source filename emitted")
+	}
+	current, e := Load(p.Root)
+	if e != nil || current.SourceHash() != before {
+		t.Fatal("failed portable path check changed authored source")
+	}
+}

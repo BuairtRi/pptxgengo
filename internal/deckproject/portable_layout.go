@@ -38,6 +38,9 @@ func PortableLayout(p *Project, apply bool) (LayoutPlan, error) {
 	slides := mappingNode(main.Content[0], "slides")
 	for i, s := range p.Document.Slides {
 		relative := "slides/" + s.ID + ".yaml"
+		if e := portableName(relative); e != nil {
+			return r, e
+		}
 		node := objects[s.ID]
 		document := docs[p.SlideFiles[s.ID]]
 		if document == nil {
@@ -68,6 +71,9 @@ func PortableLayout(p *Project, apply bool) (LayoutPlan, error) {
 				document = &yaml.Node{Kind: yaml.DocumentNode, Content: []*yaml.Node{node}}
 			}
 			relative := "slides/templates/" + id + ".yaml"
+			if e := portableName(relative); e != nil {
+				return r, e
+			}
 			useBlockCollections(document)
 			raw, e := encodeSourceYAML(document)
 			if e != nil {
