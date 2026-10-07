@@ -25,7 +25,18 @@ import (
 	"time"
 )
 
+var version = "dev"
+var releaseIdentity = "dev"
+
 func main() {
+	if len(os.Args) == 2 && os.Args[1] == "--version" {
+		fmt.Println(version)
+		return
+	}
+	if len(os.Args) == 2 && os.Args[1] == "--build-info" {
+		fmt.Println(releaseIdentity)
+		return
+	}
 	dir := flag.String("dir", defaultDir(), "folder with the built docs site (index.html, assets/, SOURCE.json)")
 	addr := flag.String("addr", "localhost:8787", "listen address; use :8787 to share on your network")
 	flag.Parse()

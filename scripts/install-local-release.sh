@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
 done
 if [[ ! "$published_bundle" =~ ^v[1-9][0-9]*$ || "$bundle_revision" != "$published_bundle" ]]; then echo "only the current published library is packaged" >&2; exit 1; fi
 bundle_input="$repo_root/library/wm-design-system/$bundle_revision"
-if [[ ! "$version" =~ ^0\.1\.0-local\.[0-9]+(-candidate)?$ ]]; then echo "invalid package version: $version" >&2; exit 1; fi
+if [[ ! "$version" =~ ^0\.1\.0-local\.[0-9]+(-candidate)?$ && ! "$version" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$ ]]; then echo "invalid package version: $version" >&2; exit 1; fi
 catalog_input="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$catalog_input")"
 if [[ "$stage_only" == false && ( "$version" != "$published_version" || "$catalog_input" != "$bundle_input/catalog" || -n "$verification_input" ) ]]; then
   echo "version/catalog/verification overrides require --stage-only" >&2; exit 1
