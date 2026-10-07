@@ -162,7 +162,7 @@ The generated baseline it came from is [build ID / file path].
 
 Preserve both files and do not overwrite the hand-edited deck. Inventory the edited PPTX, compare it with the source and baseline, and identify copy, structure and visual changes. Record who changed what in project.md. Ask me about ambiguous differences or changes to claims and commitments.
 
-Manually reconcile the approved changes into the slide YAML and composition log. This is not an automatic import or lossless round trip. If someone modified the immutable build baseline itself, report the integrity blocker and resolve it through the supported workflow; do not bypass it or delete the lock.
+If this installation includes project reconcile, read docs/text-reconciliation.md and create a new review packet with project reconcile propose --project PATH --edited FILE --out NEW_DIRECTORY. Review baseline/current YAML/edited native copy, conflicts and every manual item. Adopt only explicit decisions naming the real reviewer, report hash, supported proposal IDs and reasons via project reconcile adopt --project PATH --packet DIRECTORY --decisions FILE. Stable v4.1.0 lacks these commands and older baselines lack the required lineage. For those or unsupported fields, manually reconcile approved changes into the slide YAML and composition log. Preserve unsupported styling and structure as unresolved review items. If someone modified the immutable build baseline itself, report the integrity blocker and resolve it through the supported workflow; do not bypass it or delete the lock.
 
 Create a new build from reconciled source, compare it visually with the edited deck, and report any manual styling that cannot be reproduced by the selected stock template.</pre>
   </article>

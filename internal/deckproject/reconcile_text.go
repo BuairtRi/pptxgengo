@@ -86,8 +86,23 @@ func ReconcileText(p *Project, b *TextBaseline, edited []byte) (TextReconciliati
 	out.CurrentSemanticSHA256 = digest(p.Canonical)
 	out.EditedPPTXSHA256 = digest(edited)
 	out.LockSHA256 = digest(lock)
+	// Charge each record's exact serialized bytes as it is collected. Refuse
+	// oversized context rather than truncate baseline/copy or publish a partial
+	// report. Reserve room for top-level metadata below the packet's 64 MiB cap.
+	reportBytes, reportTooLarge := 0, false
+	charge := func(record any) bool {
+		reportBytes += len(canonical(record)) + 1
+		if reportBytes > 60<<20 {
+			reportTooLarge = true
+			return false
+		}
+		return true
+	}
 	addIssue := func(kind, token, slide, part, detail string) {
-		out.ManualReview = append(out.ManualReview, TextReconciliationIssue{kind, token, slide, part, detail})
+		issue := TextReconciliationIssue{kind, token, slide, part, detail}
+		if charge(issue) {
+			out.ManualReview = append(out.ManualReview, issue)
+		}
 	}
 	blockedShapes, blockedSlides := map[string]bool{}, map[string]bool{}
 	for _, i := range native.Issues {
@@ -171,11 +186,17 @@ func ReconcileText(p *Project, b *TextBaseline, edited []byte) (TextReconciliati
 			if entry.Status == "manual_review" {
 				addIssue("source_field_requires_review", object.ShapeToken, object.SlideID, current.NativePart, entry.Reason)
 			}
+			if !charge(entry) {
+				return out, fmt.Errorf("reconcile.report_context_too_large")
+			}
 			out.Fields = append(out.Fields, entry)
 		}
 	}
 	if e = reconcilePackageChanges(b.files["deck.pptx"], edited, b.inspection, native, addIssue); e != nil {
 		return out, e
+	}
+	if reportTooLarge {
+		return out, fmt.Errorf("reconcile.report_context_too_large")
 	}
 	sort.Slice(out.Fields, func(i, j int) bool {
 		a, z := out.Fields[i], out.Fields[j]
@@ -267,7 +288,20 @@ func reconcilePackageChanges(before, after []byte, baseline, edited NativeLineag
 	// payloads (masters, media, charts, notes, settings, new/orphan parts) are
 	// explicitly reported so supported text cannot hide unsupported native work.
 	for _, p := range []*lineagePackage{a, b} {
-		owners := map[string]bool{"ppt/presentation.xml": true}
+		owners := map[string]bool{}
+		rootRels, e := p.relationships("")
+		if e != nil {
+			return e
+		}
+		for _, r := range rootRels {
+			if r.Type == lineageRML+"/officeDocument" {
+				owner, e := lineageTarget("", r.Target)
+				if e != nil {
+					return e
+				}
+				owners[owner] = true
+			}
+		}
 		for _, view := range []NativeLineageInspection{baseline, edited} {
 			for _, o := range view.Objects {
 				owners[o.NativePart] = true

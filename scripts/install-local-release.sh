@@ -124,6 +124,7 @@ for path in ('release/README.md', 'release/VERSION', 'release/package_files.py',
              'internal/deckproject/README.md', 'docs/semantic-template-discovery.md',
              'docs/engineering-cli.md', 'docs/engineering-waves.md', 'docs/engineering-new-templates.md',
              'docs/engineering-followups.md', 'docs/testing.md', 'docs/installation.md', 'docs/local-agent-macos-recovery.md',
+             'docs/finished-slides.md', 'docs/native-field-mapping.md', 'docs/native-lineage.md', 'docs/text-reconciliation.md',
              'docs/skill-planning/deck-source-contract.md', 'docs/skill-planning/catalog-discovery-contract.md',
              'scripts/export-powerpoint.applescript',
              'scripts/render-pdf.swift', 'scripts/render-contact-sheet.swift'):

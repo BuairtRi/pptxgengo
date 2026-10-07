@@ -2,6 +2,7 @@ package deckproject
 
 import (
 	"bytes"
+	"encoding/json"
 	"encoding/xml"
 	"os"
 	"path/filepath"
@@ -351,7 +352,7 @@ func TestReconcileAdoptThreeFieldsRebuildAndRepeat(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	rebuilt, e := ReadTextBaseline(after, built.BuildID, built.Outputs["receipt.json"])
+	rebuilt, e := ReadTextBaseline(after, built.BuildID, "")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -453,5 +454,230 @@ func TestReconcileDecisionsRejectDuplicateAndWrongIdentity(t *testing.T) {
 	}
 	if _, e = DecodeTextReviewDecisions([]byte(`{"schema":"one","schema":"two"}`), "duplicate"); e == nil {
 		t.Fatal("duplicate JSON key accepted")
+	}
+}
+
+func TestReconcileSplitReadableCopyCommentsAndUnchangedFiles(t *testing.T) {
+	p, b := reconcileFixture(t)
+	if _, e := Split(p, SplitOptions{Bundle: bundle(t), StockEditor: StockEditableSlide}); e != nil {
+		t.Fatal(e)
+	}
+	p, e := Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	selected := p.SlideFiles["maintain-the-source"]
+	if selected == "" {
+		t.Fatal("fixture did not split")
+	}
+	authored := append([]byte("# Reviewer source comment\n"), p.SourceFiles[selected]...)
+	if e = os.WriteFile(filepath.Join(p.Root, selected), authored, 0600); e != nil {
+		t.Fatal(e)
+	}
+	p, e = Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	before := p.SourceFiles
+	edited := reconcileEditFields(t, b, map[string]string{"cards.items.source.body.copy": "Readable adopted copy."})
+	packet, e := WriteTextReviewPacket(p, b, edited, filepath.Join(t.TempDir(), "review"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	f := reportField(t, packet.Report, "cards.source.body")
+	if f.Status != "native_only" {
+		t.Fatal(f)
+	}
+	if _, e = AdoptTextReviewPacket(p, packet, reconciliationDecisions(t, packet, "use_native"), bundle(t), wmdesign.CandidateEngine); e != nil {
+		t.Fatal(e)
+	}
+	after, e := Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if !bytes.Contains(after.SourceFiles[selected], []byte("# Reviewer source comment")) || !bytes.Contains(after.SourceFiles[selected], []byte("Readable adopted copy.")) {
+		t.Fatal("authored comment or alias copy lost")
+	}
+	for name, raw := range before {
+		if name != selected && !bytes.Equal(raw, after.SourceFiles[name]) {
+			t.Fatalf("unselected source changed: %s", name)
+		}
+	}
+}
+
+func TestReconcileForgedReportWithRecomputedManifestRefused(t *testing.T) {
+	p, b := reconcileFixture(t)
+	packet, e := WriteTextReviewPacket(p, b, reconcileEditFields(t, b, map[string]string{"cards.items.source.title": "Real native copy"}), filepath.Join(t.TempDir(), "review"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	for i := range packet.Report.Fields {
+		if packet.Report.Fields[i].Status == "native_only" {
+			packet.Report.Fields[i].EditedNative = "Forged source injection"
+		}
+	}
+	reportRaw := canonical(packet.Report)
+	var manifest TextReviewPacketManifest
+	manifestPath := filepath.Join(packet.Root, "manifest.json")
+	raw, e := os.ReadFile(manifestPath)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if e = strictInto(json.RawMessage(raw), &manifest); e != nil {
+		t.Fatal(e)
+	}
+	manifest.Files["report.json"] = TextReviewPacketFile{digest(reportRaw), int64(len(reportRaw))}
+	for name, raw := range map[string][]byte{"report.json": reportRaw, "manifest.json": canonical(manifest)} {
+		path := filepath.Join(packet.Root, name)
+		if e = os.Chmod(path, 0600); e != nil {
+			t.Fatal(e)
+		}
+		if e = os.WriteFile(path, raw, 0600); e != nil {
+			t.Fatal(e)
+		}
+	}
+	packet, e = ReadTextReviewPacket(packet.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = AdoptTextReviewPacket(p, packet, reconciliationDecisions(t, packet, "use_native"), bundle(t), wmdesign.CandidateEngine); e == nil || !strings.Contains(e.Error(), "report_does_not_match_verified_inputs") {
+		t.Fatalf("forged report accepted: %v", e)
+	}
+	raw, e = os.ReadFile(p.SourcePath)
+	if e != nil || !bytes.Equal(raw, p.Raw) {
+		t.Fatal("forgery refusal modified source")
+	}
+}
+
+func TestReconcileNoopDecisionsLeaveProjectUnchanged(t *testing.T) {
+	p, b := reconcileFixture(t)
+	packet, e := WriteTextReviewPacket(p, b, b.files["deck.pptx"], filepath.Join(t.TempDir(), "review"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	raw := reconciliationDecisions(t, packet, "use_native")
+	receipt, e := AdoptTextReviewPacket(p, packet, raw, bundle(t), wmdesign.CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if len(receipt.Changed) != 0 || receipt.DecisionPath != "" || receipt.BeforeSourceSHA256 != receipt.AfterSourceSHA256 {
+		t.Fatal("no-op created mutation", receipt)
+	}
+	if _, e = os.Stat(filepath.Join(p.Root, "decisions", receipt.ID+".json")); !os.IsNotExist(e) {
+		t.Fatal("no-op wrote a receipt")
+	}
+}
+
+func TestReconcileManualPackageChangesRemainAfterTextAdoption(t *testing.T) {
+	p, b := reconcileFixture(t)
+	edited := reconcileEditFields(t, b, map[string]string{"cards.items.source.title": "Reviewed title"})
+	pkg, e := openLineagePackage(edited)
+	if e != nil {
+		t.Fatal(e)
+	}
+	raw, e := pkg.read("docProps/core.xml")
+	if e != nil {
+		t.Fatal(e)
+	}
+	edited, e = lineageRewrite(pkg, map[string][]byte{"docProps/core.xml": append(raw, []byte("<!-- retained unsupported metadata change -->")...)})
+	if e != nil {
+		t.Fatal(e)
+	}
+	packet, e := WriteTextReviewPacket(p, b, edited, filepath.Join(t.TempDir(), "review"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	receipt, e := AdoptTextReviewPacket(p, packet, reconciliationDecisions(t, packet, "use_native"), bundle(t), wmdesign.CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if len(receipt.Changed) != 1 || !bytes.Equal(canonical(receipt.ManualReview), canonical(packet.Report.ManualReview)) || !hasReconcileIssue(packet.Report, "native_package_part_changed") {
+		t.Fatal("manual differences hidden after text adoption")
+	}
+}
+
+func TestReconcileImmutableGuardRejectsDriftAndWrites(t *testing.T) {
+	p, b := reconcileFixture(t)
+	rel := "builds/" + b.Receipt.BuildID + "/deck.pptx"
+	guarded := map[string][]byte{rel: b.files["deck.pptx"]}
+	if _, e := commitSourceChangesChecked(p, map[string][]byte{rel: []byte("replace baseline")}, nil, guarded, nil); e == nil || !strings.Contains(e.Error(), "guarded input") {
+		t.Fatalf("immutable baseline write accepted: %v", e)
+	}
+	if e := os.Chmod(filepath.Join(p.Root, rel), 0600); e != nil {
+		t.Fatal(e)
+	}
+	if e := os.WriteFile(filepath.Join(p.Root, rel), []byte("drift"), 0600); e != nil {
+		t.Fatal(e)
+	}
+	if _, e := commitSourceChangesChecked(p, map[string][]byte{filepath.Base(p.SourcePath): p.Raw}, nil, guarded, nil); e == nil || !strings.Contains(e.Error(), "immutable build input changed") {
+		t.Fatalf("baseline drift accepted: %v", e)
+	}
+	raw, e := os.ReadFile(p.SourcePath)
+	if e != nil || !bytes.Equal(raw, p.Raw) {
+		t.Fatal("guard refusal changed source")
+	}
+}
+
+func TestReconcileRichBulletDynamicAndHardBreakPolicy(t *testing.T) {
+	for _, tc := range []struct {
+		name, body string
+		supported  bool
+		text       string
+	}{
+		{"ordinary runs", `<a:p><a:r><a:rPr b="1"/><a:t>one </a:t></a:r><a:r><a:rPr b="1"/><a:t>two</a:t></a:r></a:p>`, true, "one two"},
+		{"mixed rich", `<a:p><a:r><a:rPr b="1"/><a:t>one </a:t></a:r><a:r><a:rPr b="0"/><a:t>two</a:t></a:r></a:p>`, false, "one two"},
+		{"bullet", `<a:p><a:pPr><a:buChar char="•"/></a:pPr><a:r><a:t>copy</a:t></a:r></a:p>`, false, "copy"},
+		{"dynamic", `<a:p><a:fld id="f"><a:t>copy</a:t></a:fld></a:p>`, false, "copy"},
+		{"break", `<a:p><a:r><a:t>one</a:t></a:r><a:br/><a:r><a:t>two</a:t></a:r></a:p><a:p><a:r><a:t>three</a:t></a:r></a:p>`, true, "one\ntwo\nthree"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			shape := xmlShape(t, `<p:sp xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><p:txBody>`+tc.body+`</p:txBody></p:sp>`)
+			paragraphs := nativeParagraphs(shape)
+			if supportedEditedPlainText("sp", paragraphs) != tc.supported || nativeParagraphText(paragraphs) != tc.text {
+				t.Fatal("native meaning policy mismatch", paragraphs)
+			}
+		})
+	}
+}
+
+func TestReconcileReorderedSourceUsesSlideAndItemKeys(t *testing.T) {
+	p, b := reconcileFixture(t)
+	edited := reconcileEditFields(t, b, map[string]string{"cards.items.source.title": "Stable keyed source"})
+	cards := p.Document.Slides[0].Values["cards"].([]any)
+	cards[0], cards[2] = cards[2], cards[0]
+	p.Document.Slides[0], p.Document.Slides[1] = p.Document.Slides[1], p.Document.Slides[0]
+	node, e := editYAMLNode(p.Document)
+	if e != nil {
+		t.Fatal(e)
+	}
+	raw, e := encodeSourceYAML(node)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if e = os.WriteFile(p.SourcePath, raw, 0600); e != nil {
+		t.Fatal(e)
+	}
+	p, e = Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	packet, e := WriteTextReviewPacket(p, b, edited, filepath.Join(t.TempDir(), "review"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	f := reportField(t, packet.Report, "cards.source.title")
+	if f.Status != "native_only" || f.SourcePointer != "/slides/1/values/cards/2/title" {
+		t.Fatal("source positions guessed", f)
+	}
+	if _, e = AdoptTextReviewPacket(p, packet, reconciliationDecisions(t, packet, "use_native"), bundle(t), wmdesign.CandidateEngine); e != nil {
+		t.Fatal(e)
+	}
+	after, e := Load(p.Root)
+	if e != nil {
+		t.Fatal(e)
+	}
+	card := after.Document.Slides[1].Values["cards"].([]any)[2].(map[string]any)
+	if card["title"] != "Stable keyed source" {
+		t.Fatal("wrong keyed source changed", card)
 	}
 }

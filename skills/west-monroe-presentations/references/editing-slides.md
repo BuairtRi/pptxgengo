@@ -175,4 +175,28 @@ Look at every changed page at full size, then record the review with `project at
 
 ## If someone edited the PowerPoint
 
-Never overwrite a hand-edited deck. Keep the edited file separately, run `source-inventory` on it to read its text, record who changed what in `project.md`, and copy the changes into the slide files. A modified build baseline blocks the next build and export until resolved.
+Never overwrite a hand-edited deck or an immutable build. Keep the edited copy
+separately and record who changed what in `project.md`.
+
+A source build after v4.1.0 provides bounded reviewed text reconciliation:
+
+```sh
+pptxgengo design project reconcile propose --project ./deck \
+  --edited './colleague edited.pptx' --out ./new-text-review
+pptxgengo design project reconcile adopt --project ./deck \
+  --packet ./new-text-review --decisions ./review-decisions.yaml
+```
+
+Read `report.json`, review baseline/current YAML/native values and all manual
+items, and create explicit decisions with the actual actor, report hash,
+proposal IDs, `use_native` or `keep_yaml`, and reasons. Only supported
+`native_only` and `conflict` proposals are selectable. Do not invent decisions
+or operator acceptance. Adoption retains the edited deck and predecessor source,
+preserves unsupported changes for review, and requires a new build and visual
+review. See `docs/text-reconciliation.md` for the complete format and scope.
+Mac/Windows Save As qualification remains pending.
+
+For stable v4.1.0, older baselines without lineage, or unsupported fields, use
+`source-inventory`, inspect the edited deck and reconcile reviewed changes into
+source manually. A modified build baseline is an integrity blocker; do not
+bypass its receipt or remove its lock.
