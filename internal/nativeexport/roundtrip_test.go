@@ -44,10 +44,15 @@ func TestWindowsRoundTripOwnedPathsAndJSON(t *testing.T) {
 		if _, ok := ctx.Deadline(); !ok {
 			t.Fatal("unbounded helper")
 		}
-		return json.Marshal(RoundTripExecution{Schema: "pptxgengo.windows-roundtrip-execution.v1", PowerPointVersion: "simulated; not native qualification", SavedAs: req.SavedAs, Edited: req.Edited, Closed: true})
+		for _, path := range []string{req.SavedAs, req.Edited} {
+			if err := os.WriteFile(path, []byte("simulated saved bytes"), 0600); err != nil {
+				t.Fatal(err)
+			}
+		}
+		return json.Marshal(RoundTripExecution{Schema: "pptxgengo.windows-roundtrip-execution.v1", PowerPointVersion: "simulated; not native qualification", OSVersion: "simulated OS", SavedAs: req.SavedAs, Edited: req.Edited, Closed: true})
 	}
 	out, err := windowsRoundTrip(context.Background(), dir, []byte("synthetic helper input"), testRoundTripPlan(), run)
-	if err != nil || calls != 1 || !out.Closed || out.Started == "" || out.Finished == "" {
+	if err != nil || calls != 1 || !out.Closed || out.Started == "" || out.Finished == "" || len(out.InputSHA256) != 64 || len(out.SavedAsSHA256) != 64 || len(out.EditedSHA256) != 64 {
 		t.Fatal(out, err, calls)
 	}
 	if _, err = windowsRoundTrip(context.Background(), dir, []byte("new"), testRoundTripPlan(), run); err == nil || calls != 1 {
@@ -56,7 +61,7 @@ func TestWindowsRoundTripOwnedPathsAndJSON(t *testing.T) {
 }
 
 func TestWindowsRoundTripFailureCleanupRetainsFixture(t *testing.T) {
-	for _, failure := range []string{"helper", "wrong-output", "trailing", "not-closed"} {
+	for _, failure := range []string{"helper", "wrong-output", "trailing", "not-closed", "missing-save", "input-changed"} {
 		t.Run(failure, func(t *testing.T) {
 			dir := filepath.Join(t.TempDir(), "fixture")
 			calls := 0
@@ -82,7 +87,12 @@ func TestWindowsRoundTripFailureCleanupRetainsFixture(t *testing.T) {
 				if failure == "helper" {
 					return nil, fmt.Errorf("simulated helper failure")
 				}
-				out := RoundTripExecution{Schema: "pptxgengo.windows-roundtrip-execution.v1", PowerPointVersion: "fake", SavedAs: req.SavedAs, Edited: req.Edited, Closed: true}
+				out := RoundTripExecution{Schema: "pptxgengo.windows-roundtrip-execution.v1", PowerPointVersion: "fake", OSVersion: "simulated OS", SavedAs: req.SavedAs, Edited: req.Edited, Closed: true}
+				if failure == "input-changed" {
+					if err := os.WriteFile(req.Input, []byte("changed input"), 0600); err != nil {
+						t.Fatal(err)
+					}
+				}
 				if failure == "wrong-output" {
 					out.Edited = filepath.Join(t.TempDir(), "personal-deck.pptx")
 				}
@@ -100,7 +110,7 @@ func TestWindowsRoundTripFailureCleanupRetainsFixture(t *testing.T) {
 				t.Fatal(err, calls)
 			}
 			data, err := os.ReadFile(filepath.Join(dir, "input.pptx"))
-			if err != nil || string(data) != "retained input" {
+			if err != nil || (failure != "input-changed" && string(data) != "retained input") {
 				t.Fatal("fixture removed after failure", err)
 			}
 			if _, err = os.Stat(filepath.Join(dir, "execution.json")); !os.IsNotExist(err) {

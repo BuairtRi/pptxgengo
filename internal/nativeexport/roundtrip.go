@@ -3,6 +3,7 @@ package nativeexport
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -37,6 +38,10 @@ type RoundTripExecution struct {
 	Schema            string `json:"schema"`
 	Platform          string `json:"platform"`
 	PowerPointVersion string `json:"powerpoint_version"`
+	OSVersion         string `json:"os_version"`
+	InputSHA256       string `json:"input_sha256"`
+	SavedAsSHA256     string `json:"saved_as_sha256"`
+	EditedSHA256      string `json:"edited_sha256"`
 	Started           string `json:"started"`
 	Finished          string `json:"finished"`
 	SavedAs           string `json:"saved_as"`
@@ -141,8 +146,20 @@ func windowsRoundTrip(ctx context.Context, destination string, fixture []byte, p
 				err = fmt.Errorf("trailing round-trip execution metadata")
 			}
 		}
-		if err == nil && (result.Schema != "pptxgengo.windows-roundtrip-execution.v1" || result.PowerPointVersion == "" || !result.Closed || result.SavedAs != req.SavedAs || result.Edited != req.Edited) {
+		if err == nil && (result.Schema != "pptxgengo.windows-roundtrip-execution.v1" || result.PowerPointVersion == "" || result.OSVersion == "" || !result.Closed || result.SavedAs != req.SavedAs || result.Edited != req.Edited) {
 			err = fmt.Errorf("incomplete round-trip execution metadata")
+		}
+		if err == nil {
+			result.InputSHA256, err = roundTripFileHash(req.Input)
+		}
+		if err == nil && result.InputSHA256 != fmt.Sprintf("%x", sha256.Sum256(fixture)) {
+			err = fmt.Errorf("owned fixture input changed")
+		}
+		if err == nil {
+			result.SavedAsSHA256, err = roundTripFileHash(req.SavedAs)
+		}
+		if err == nil {
+			result.EditedSHA256, err = roundTripFileHash(req.Edited)
 		}
 	}
 	if err != nil {
@@ -166,4 +183,43 @@ func windowsRoundTrip(ctx context.Context, destination string, fixture []byte, p
 		return result, err
 	}
 	return result, nil
+}
+
+func roundTripFileHash(path string) (string, error) {
+	before, err := os.Lstat(path)
+	if err != nil {
+		return "", err
+	}
+	if !before.Mode().IsRegular() || before.Size() == 0 || before.Size() > 512<<20 {
+		return "", fmt.Errorf("invalid owned round-trip output: %s", filepath.Base(path))
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	opened, err := f.Stat()
+	if err != nil {
+		return "", err
+	}
+	if !os.SameFile(before, opened) {
+		return "", fmt.Errorf("owned round-trip output identity changed")
+	}
+	h := sha256.New()
+	size, err := io.Copy(h, io.LimitReader(f, (512<<20)+1))
+	if err != nil {
+		return "", err
+	}
+	after, err := f.Stat()
+	if err != nil {
+		return "", err
+	}
+	current, err := os.Lstat(path)
+	if err != nil {
+		return "", err
+	}
+	if size != before.Size() || size > 512<<20 || !os.SameFile(before, current) || after.Size() != before.Size() || !after.ModTime().Equal(before.ModTime()) {
+		return "", fmt.Errorf("owned round-trip output changed during verification")
+	}
+	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }

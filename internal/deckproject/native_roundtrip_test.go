@@ -280,6 +280,9 @@ func verifyRoundTripFixture(t *testing.T, root, savedPath, editedPath, destinati
 	out.BaselineSHA256 = f.BaselineSHA256
 	out.SavedAsSHA256 = digest(saved)
 	out.EditedSHA256 = digest(edited)
+	if desktop != nil && (desktop.InputSHA256 != out.BaselineSHA256 || desktop.SavedAsSHA256 != out.SavedAsSHA256 || desktop.EditedSHA256 != out.EditedSHA256 || desktop.OSVersion == "" || !desktop.Closed) {
+		out.Failures = append(out.Failures, "desktop execution hashes/metadata differ from actual retained fixture bytes")
+	}
 	if err = roundTripWrite(filepath.Join(destination, "saved-as.pptx"), saved); err != nil {
 		return out, err
 	}
@@ -525,7 +528,7 @@ func TestNativeRoundTripCore(t *testing.T) {
 }
 
 func TestNativeRoundTripRejectsWrongEditsOrderAndPlan(t *testing.T) {
-	for _, mutation := range []string{"no-reorder", "wrong-text", "plan-drift", "baseline-drift", "missing-tags"} {
+	for _, mutation := range []string{"no-reorder", "wrong-text", "plan-drift", "baseline-drift", "missing-tags", "metadata-drift"} {
 		t.Run(mutation, func(t *testing.T) {
 			root := filepath.Join(t.TempDir(), "fixture")
 			_, b, f := prepareRoundTripFixture(t, root)
@@ -560,7 +563,11 @@ func TestNativeRoundTripRejectsWrongEditsOrderAndPlan(t *testing.T) {
 			if err := roundTripWrite(path, edited); err != nil {
 				t.Fatal(err)
 			}
-			out, err := verifyRoundTripFixture(t, root, filepath.Join(root, "baseline.pptx"), path, filepath.Join(root, "verification"), "hermetic rejection fixture", nil)
+			var desktop *nativeexport.RoundTripExecution
+			if mutation == "metadata-drift" {
+				desktop = &nativeexport.RoundTripExecution{Closed: true, OSVersion: "simulated OS; mismatched hashes"}
+			}
+			out, err := verifyRoundTripFixture(t, root, filepath.Join(root, "baseline.pptx"), path, filepath.Join(root, "verification"), "hermetic rejection fixture", desktop)
 			if err == nil || out.Status == "pass" {
 				t.Fatalf("%s accepted: %+v", mutation, out)
 			}

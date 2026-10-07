@@ -108,7 +108,7 @@ try {
         } finally { Release-Com $move }
         $deck.SaveAs($request.Edited,24)
         if (-not (Same-Path $deck.FullName $request.Edited)) { throw 'Edited Save As did not select the requested filename.' }
-        $result = @{ schema = 'pptxgengo.windows-roundtrip-execution.v1'; powerpoint_version = [string]$app.Version; saved_as = [string]$request.SavedAs; edited = [string]$request.Edited; closed = $true }
+        $result = @{ schema = 'pptxgengo.windows-roundtrip-execution.v1'; powerpoint_version = [string]$app.Version; os_version = [Environment]::OSVersion.VersionString; saved_as = [string]$request.SavedAs; edited = [string]$request.Edited; closed = $true }
     } else { throw 'Unknown fixture action.' }
 } catch { $failure = $_ }
 finally {
