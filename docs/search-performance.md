@@ -131,7 +131,26 @@ Windows amd64 (GitHub run 37602299427). Independently downloaded reports confirm
 median were 188.0/158.0 ms on Linux, 135.1/139.4 ms on hosted Mac and
 233.1/207.5 ms on Windows. That preliminary Linux memory result used the
 pre-exec-sensitive counter and is excluded from memory conclusions.
-Final source CI results must be checked before integration.
+PR #15's corrected exact head `8cec1d7b` passed full slot preflight, all ten
+GitHub checks and all nine GitLab pipeline 21225 jobs. It merged as `bd63c193`.
+Nine independently downloaded reports verified counts/source SHA, full vectors,
+actual GC settings and retained raw first/last memory samples with their observed
+maximum. Both complete hosted race runs passed in 17m27s/16m24s under the
+20-minute job ceiling; per-package ceilings/assertions were preserved.
+
+For that 26-entity workload:
+
+| Native platform | Hybrid first ms | Repeated median ms | Observed peak MiB |
+| --- | ---: | ---: | ---: |
+| Kubernetes Linux amd64 | 221.8 | 216.4 | 659.3 |
+| Hosted macOS arm64 | 225.2 | 242.3 | 672.7 |
+| Hosted Windows amd64 | 277.6 | 264.3 | 701.4 |
+
+The installer qualification work also adds pinned model/performance lanes on
+Intel Mac and Windows ARM64 hosted runners and the home lab's tagged ARM64
+Kubernetes pool. Each requires the declared Go host architecture. Those new
+native lanes must pass and their reports must be inspected before qualification;
+the original source release's six-target cross-build is separate evidence.
 
 Cross-compilation is not actual performance qualification of macOS amd64,
 Windows arm64 or Linux arm64. Full-library Windows timings, controlled cache

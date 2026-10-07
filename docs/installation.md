@@ -145,10 +145,28 @@ PPTXGENGO_INSTALL_PROCESS_OUT=/path/new-qualification-directory \
   go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
 ```
 
-CI adds this on Kubernetes Linux, hosted macOS and hosted Windows. Only the
+CI adds this on native amd64/arm64 Kubernetes Linux, hosted macOS and hosted
+Windows, including Intel Mac and Windows ARM64. The workflow requires each
+declared Go host architecture; public hosted runner availability and the home
+lab's online `arm64` pool are checked independently. Only the
 generic `qualification.json` is retained for 14 days; unsigned executable
 fixtures are not uploaded. The Linux result also gates future protected release
 build/resource jobs. Actual hosted results must pass before source integration.
+
+The first Windows script run caught PowerShell 7 module paths inherited through
+the Go process: Windows PowerShell could not autoload `Get-FileHash`. The child
+environment now removes only `PSModulePath`, allowing Windows PowerShell to
+construct its native module search path. This also applies to production export
+and round-trip helpers. Actual Windows regressions load hashing/JSON cmdlets
+from a deliberately unusable inherited module path without opening Office.
+The parent and registry environment remain untouched, following
+[Microsoft's documented launch behavior](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_psmodulepath).
+
+Preliminary `b3adbc57` passed all ten GitLab pipeline 21227 jobs and Windows
+run 37607310782. Its independently downloaded Windows amd64 report confirms all
+eleven prescribed CLI/script scenarios and unchanged user PATH. The earlier
+Mac and Linux reports confirm eight core scenarios. Intel/ARM additions and
+final source integration still require their own gates.
 
 The bounded regression lane covers hashes/inventory, staging, repeated install,
 upgrade, rollback, interrupted activation, conflicting edits, skill symlinks,

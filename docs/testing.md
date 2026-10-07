@@ -170,3 +170,19 @@ semantic and hybrid timing/memory JSON. This opens no Office application.
 Pinned model CI runs it on Linux/macOS/Windows and retains generic diagnostics
 for 14 days. See [measurement scope and commands](search-performance.md).
 Ordinary headless Make targets clear this opt-in output variable.
+
+## Actual installer process qualification
+
+`make test-installation-process` requires a new
+`PPTXGENGO_INSTALL_PROCESS_OUT` directory. It builds both fixture versions of
+the actual three tools and exercises their installation lifecycle through new
+processes in owned paths. Windows also executes the actual installer with
+PATH/skill/font opt-outs and synthetic full-format resources. Ordinary headless
+Make targets clear this opt-in; private originals and Office are not required.
+
+Linux amd64/arm64 run in Kubernetes, macOS arm64/amd64 on separate hosted
+machines and Windows amd64/arm64 in the portable matrix. Pinned model/performance
+checks use those same native architectures. Passing cross-builds are not used
+as native execution evidence. CI retains only generic qualification JSON for
+14 days, excluding unsigned executable fixtures and any customer content.
+See [installation evidence and scope](installation.md).
