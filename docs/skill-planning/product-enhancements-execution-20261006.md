@@ -281,3 +281,10 @@ and stale source refusal. Full slot preflight and exact-head hosted CI are pendi
 Actual Mac/Windows PowerPoint Save As and colleague editing acceptance remain
 unqualified. This capability is not included in released v4.1.0. See
 [commands, decision format and scope](../text-reconciliation.md).
+
+Reconciliation hosted CI follow-up: local full preflight and GitLab pipeline
+21169 passed at `7c424009`. The hosted Mac race batch reached its retained
+150-second package ceiling while adding all reconciliation fixtures to the
+previous selected workload. Reconciliation now runs as a separate bounded race
+command with the same ceiling; exact-head full preflight and hosted gates will
+be rerun. No tests or race checking are removed.
