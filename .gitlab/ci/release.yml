@@ -48,6 +48,7 @@ release:resources:
   stage: build
   needs:
     - {job: developer, artifacts: false}
+    - {job: developer-race, artifacts: false}
     - {job: installation-process, artifacts: false}
     - {job: installation-process-arm64, artifacts: false}
     - {job: offline-model, artifacts: false}
@@ -70,6 +71,7 @@ release:build:
   stage: build
   needs:
     - {job: developer, artifacts: false}
+    - {job: developer-race, artifacts: false}
     - {job: installation-process, artifacts: false}
     - {job: installation-process-arm64, artifacts: false}
     - {job: offline-model, artifacts: false}

@@ -9,16 +9,21 @@ variables:
   PPTXGENGO_PACKAGE_KIND: cli-only
   PPTXGENGO_OFFLINE_MODEL: 'true'
 
+# Full qualification is expensive: nightly protected main, protected release tags,
+# or an explicitly requested web pipeline (PPTXGENGO_QUALIFICATION=true).
+# The Linux-only web path allows exact-head qualification before merging a slot.
+.qualification-rules:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "web" && $PPTXGENGO_QUALIFICATION == "true"'
+    - when: never
+
 developer:
   stage: test
   image: golang:1.27.1
-  # The complete sequential short race lane can exceed ten minutes on the
-  # Kubernetes pool. Preserve the Makefile's separate short/race package ceilings.
-  timeout: 20 minutes
+  timeout: 10 minutes
   interruptible: true
-  parallel:
-    matrix:
-      - TEST_TARGET: [test, test-race]
   variables:
     GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
     GOCACHE: $CI_PROJECT_DIR/.cache/go-build
@@ -32,9 +37,17 @@ developer:
   before_script:
     - mkdir -p "$WMDS_BRANDING_ROOT"
   script:
-    - make "$TEST_TARGET"
+    - make test
+
+developer-race:
+  extends: [developer, .qualification-rules]
+  # Retain separate per-package ceilings; do not increase them to hide a stall.
+  timeout: 20 minutes
+  script:
+    - make test-race
 
 installation-process:
+  extends: .qualification-rules
   stage: test
   image: golang:1.27.1
   timeout: 10 minutes
@@ -84,6 +97,7 @@ workflow-lint:
     - go run ./scripts/cmd/ci-lint
 
 offline-model:
+  extends: .qualification-rules
   stage: test
   image: golang:1.27.1
   timeout: 15 minutes
@@ -102,7 +116,8 @@ offline-model:
     paths: [.cache/go-mod, .cache/go-build]
   script:
     - go run ./cmd/pptxdesign library-model --download --out "$PPTXGENGO_EMBED_MODEL_DIR"
-    - go test -count=1 -timeout=5m ./internal/localembed ./internal/modelpackage ./scripts/cmd/release-ci
+    # Ordinary unit cases run once in developer; these require actual weights.
+    - go test -count=1 -timeout=5m -run '^TestPinned(ModelGolden|PackageOfflineCopy|ModelPackageClosure|OfflineModelReleaseReproducibleAndRelocatable)$' ./internal/localembed ./internal/modelpackage ./scripts/cmd/release-ci
     - go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
     - go test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$' -v ./internal/wmdesign
 
@@ -209,9 +224,10 @@ security:secrets:
     paths: [.cache/security/gitleaks.json]
 
 
-# Scan the separate optional model archive on branches before cutting tags.
+# Scan the separate optional model archive during full qualification.
 # v0.0.0 identifies an unpublished validation fixture on untagged branches.
 security:offline-model:
+  extends: .qualification-rules
   stage: security
   needs: [offline-model]
   image:

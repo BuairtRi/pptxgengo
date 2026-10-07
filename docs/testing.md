@@ -36,19 +36,25 @@ merge authority used by slotctl; it does not execute CLI operations or retain
 CI artifacts. Slot preflight validates the local GitLab job graph with
 `go run ./scripts/cmd/ci-lint`; GitLab server lint validates rules and matrices.
 
-Ordinary source branches run headless Linux developer tests/race checks,
-installer process qualification, pinned model/performance checks on amd64 and
-arm64 Kubernetes runners, security scans, and six-target cross-builds. An empty
-branding root and cleared live-output variables keep ordinary checks independent
-of private artwork and PowerPoint. Cross-builds prove compilation, not native
-execution.
+Ordinary source branches and main pushes run six fast jobs: the Linux short
+suite, local workflow validation, three target-OS vulnerability scans, and
+secret scanning. Race, actual installer processes, pinned model/performance,
+model archive scanning, and six-target cross-builds run on nightly protected
+main and protected release tags. Use a web pipeline with
+`PPTXGENGO_QUALIFICATION=true` for full Linux qualification of a candidate branch.
+An empty branding root and cleared live-output variables keep these checks
+independent of private artwork and PowerPoint. Cross-builds prove compilation,
+not native execution.
 
-Protected main and protected release tags additionally run `macos-cli` and
-`macos-model` on the existing private runner tagged `macos` and `darwin-arm64`.
-The CLI lane runs short/race tests and actual installation processes; the model
-lane verifies pinned downloads, retrieval and performance. Both lanes must pass
-before release resources or binaries can be built. Protected runners and signing
-credentials are never made available to ordinary slot branches.
+Nightly protected main and protected release tags additionally run `macos-cli`
+and `macos-model` on the private `macos`/`darwin-arm64` runner. A protected-main
+web pipeline with `PPTXGENGO_QUALIFICATION=true` also runs them. Mac short/race
+checks provide separate OS execution coverage; they do not run on ordinary
+merges. Every full qualification gate remains a required dependency before
+release resources or binaries can be built, including `developer-race`.
+Protected runners and signing credentials are never available to slot branches.
+See [CI cadence and notifications](ci-cadence.md) for schedule setup, gate
+inventory, duplicate-test rationale, and retained evidence.
 
 Full `test-integration` and `test-race-full` jobs remain isolated to a runner
 with tag `pptxgengo-integration`, enabled on protected main with
