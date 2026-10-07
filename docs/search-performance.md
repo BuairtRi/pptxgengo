@@ -118,6 +118,36 @@ Do not extrapolate its timings to the full catalog.
 
 ## Cross-platform CI and remaining qualification
 
+### Elapsed clock and Windows ARM64 measurement correction
+
+Independent inspection of PR #16's exact `b7289d76` reports found Windows
+ARM64 keyword intervals of zero: first find `0`, repeated `[7.1763, 0, 0]` ms.
+These are below the old timer's granularity, not instantaneous searches. The
+installed Go 1.27.1 Windows ARM64 runtime reads interrupt time for `time.Now`;
+sub-tick observations are excluded from latency qualification. Historical
+reports retain their original values; do not silently reinterpret them.
+
+The source benchmark now uses Windows `QueryPerformanceCounter` with
+`QueryPerformanceFrequency` on both native Windows architectures. Unix uses
+Go's monotonic `time.Since` nanosecond counter. Every report records
+`elapsed_clock_method` and `elapsed_counter_units_per_second`. Units describe
+counter representation, not measured physical accuracy or an agreed SLO.
+Created timestamps still use wall-clock UTC and are not used for durations.
+
+Integer samples are subtracted before converting to milliseconds, preserving
+small intervals at large system uptimes. Counter initialization/read failure,
+negative values, non-advancing and backward intervals refuse a report; there is
+no fallback to a coarser clock. No system timer resolution is changed. Both
+index opening and every find use the selected counter; input hashing and
+preparation remain outside timings. Native counter progression, conversion,
+fault handling and positive keyword/report intervals are checked, with pinned
+model CI requiring clock evidence and positive first/repeated intervals.
+Actual six-architecture hosted verification of this correction is required
+before integration.
+
+This follows [Microsoft's interval timing guidance](https://learn.microsoft.com/en-us/windows/win32/sysinfo/acquiring-high-resolution-time-stamps)
+and [performance counter API](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter).
+
 GitLab Kubernetes Linux and GitHub macOS/Windows pinned model lanes retain
 `keyword.json`, `semantic.json` and `hybrid.json`. They check actual mode,
 platform, source fingerprints, counts, complete vector coverage, repeated
