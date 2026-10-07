@@ -67,7 +67,7 @@ func Split(p *Project, options SplitOptions) (SplitReceipt, error) {
 		node := objects[slide.ID]
 		relative := p.SlideFiles[slide.ID]
 		if relative == "" {
-			relative = fmt.Sprintf("slides/%03d-%s.yaml", i+1, slide.ID)
+			relative = "slides/" + slide.ID + ".yaml"
 		}
 		if options.StockEditor != nil && slide.Template.Scope == "shared" && mappingNode(node, "content") == nil {
 			def, exists := defs[slide.Template.ID]
@@ -115,7 +115,7 @@ func Split(p *Project, options SplitOptions) (SplitReceipt, error) {
 				continue
 			}
 			id, node := templates.Content[i].Value, templates.Content[i+1]
-			relative := "templates/" + id + ".yaml"
+			relative := "slides/templates/" + id + ".yaml"
 			useBlockCollections(node)
 			raw, err := encodeSourceYAML(&yaml.Node{Kind: yaml.DocumentNode, Content: []*yaml.Node{node}})
 			if err != nil {

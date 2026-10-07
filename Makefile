@@ -24,6 +24,7 @@ test-race:
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/finishedslide
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestNativeRoundTrip|TestFinishedSlideClaims)' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestFinishedSlideClaims' ./internal/deckproject
+	$(HEADLESS_TEST_ENV) $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestPortable' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestReconcile' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditability' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeRoundTrip' ./internal/deckproject

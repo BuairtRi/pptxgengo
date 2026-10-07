@@ -422,7 +422,7 @@ func TestSplitNormalizesReferencedJSONTemplateWithoutChangingCanonical(t *testin
 func TestSplitRefusesOccupiedDestinationsWithoutChangingSource(t *testing.T) {
 	p := example(t)
 	before := append([]byte(nil), p.Raw...)
-	path := filepath.Join(p.Root, "slides", "001-"+p.Document.Slides[0].ID+".yaml")
+	path := filepath.Join(p.Root, "slides", p.Document.Slides[0].ID+".yaml")
 	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
 		t.Fatal(err)
 	}
