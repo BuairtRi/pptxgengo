@@ -147,9 +147,6 @@ func TestDiscoveryReadKeepsVerifiedMetadataWithoutSourceDefinitions(t *testing.T
 		if a.ID != b.ID || a.Name != b.Name || a.Purpose != b.Purpose || a.Family != b.Family || a.Lifecycle != b.Lifecycle || a.SourceSHA256 != b.SourceSHA256 || string(indexJSON(a.Template.Uses)) != string(indexJSON(b.Template.Uses)) {
 			t.Fatal("compact discovery changed identity/scenario", a.ID)
 		}
-		if string(indexJSON(a.Template.Authoring)) != string(indexJSON(b.Template.Authoring)) {
-			t.Fatal("compact discovery lost semantic authoring metadata", a.ID)
-		}
 		a.Discovery.Zones = nil
 		if string(indexJSON(a.Discovery)) != string(indexJSON(b.Discovery)) || string(a.Capacity) != string(b.Capacity) || string(indexJSON(a.Artifacts)) != string(indexJSON(b.Artifacts)) {
 			t.Fatal("compact discovery changed source affordances", a.ID)

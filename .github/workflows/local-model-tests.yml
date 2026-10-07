@@ -23,7 +23,7 @@ jobs:
         os: [macos-latest, windows-latest]
     env:
       CGO_ENABLED: '0'
-      PPTXGENGO_EMBED_MODEL_DIR: ${{ runner.temp }}/pptxgengo-offline-model
+      PPTXGENGO_EMBED_MODEL_DIR: ${{ github.workspace }}/.cache/offline-model
     steps:
       - uses: actions/checkout@v7
         with:

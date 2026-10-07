@@ -49,6 +49,29 @@ func TestEmbeddingPinsCoverageAndNormalization(t *testing.T) {
 	}
 }
 
+func TestEmbeddingProjectionRetainsAuthoringWithoutSceneDefinitions(t *testing.T) {
+	path, _ := indexFixture(t)
+	index, err := OpenLibraryIndex(path, LibraryIndexOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer index.Close()
+	full, err := index.entities("kind='template'", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	prepared, err := index.embeddingEntities("kind='template'", nil)
+	if err != nil || len(full) != len(prepared) {
+		t.Fatal(err)
+	}
+	for i, e := range full {
+		p := prepared[i]
+		if len(p.Definition) != 0 || len(p.Discovery.Zones) != 0 || string(indexJSON(e.Template.Authoring)) != string(indexJSON(p.Template.Authoring)) || libraryEmbeddingText(e) != libraryEmbeddingText(p) {
+			t.Fatal("embedding projection changed discovery text or loaded scene", e.ID)
+		}
+	}
+}
+
 func TestVectorAndHybridRanksSeparateSignals(t *testing.T) {
 	s, _, _ := embeddingFixture()
 	query := make([]float32, localembed.Dimensions)

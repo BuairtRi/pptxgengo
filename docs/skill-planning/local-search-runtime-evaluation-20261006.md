@@ -139,3 +139,12 @@ and complete source-bound snapshot/query checks. Release resource/build jobs
 require the Linux offline-model gate. Hosted qualification remains pending
 until those new jobs pass; native PowerPoint review and signed distribution of
 the optional model package remain outstanding.
+
+CI follow-up: Linux pipeline 21134 executed the pinned model golden cases and
+complete source-bound snapshot/query test successfully. GitHub rejected the first
+model workflow because `runner.temp` was used in job-level `env`. The directory
+now uses the allowed workspace context. Pinned actionlint v1.7.12, with declared
+self-hosted runner labels, is a slot preflight and private GitLab release gate.
+Authoring metadata is loaded only for semantic preparation/verification, keeping
+ordinary keyword/metadata queries on the smaller discovery projection. Semantic
+prepared text and the existing V11 snapshot hashes are unchanged by this split.

@@ -62,7 +62,7 @@ func (index *LibraryIndex) BuildEmbeddings(ctx context.Context, modelDir, out st
 	if _, err := os.Lstat(out); !os.IsNotExist(err) {
 		return snapshot, fmt.Errorf("embedding.output_exists: %s", out)
 	}
-	entities, err := index.discoveryEntities("1=1", nil)
+	entities, err := index.embeddingEntities("1=1", nil)
 	if err != nil {
 		return snapshot, err
 	}
@@ -114,7 +114,7 @@ func (index *LibraryIndex) readEmbeddings(path string) (*LibraryEmbeddingSnapsho
 	if err = json.Unmarshal(data, &snapshot); err != nil {
 		return nil, fmt.Errorf("embedding.snapshot_invalid: %w", err)
 	}
-	entities, err := index.discoveryEntities("1=1", nil)
+	entities, err := index.embeddingEntities("1=1", nil)
 	if err != nil {
 		return nil, err
 	}

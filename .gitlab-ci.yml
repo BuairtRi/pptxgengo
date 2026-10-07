@@ -30,6 +30,14 @@ developer:
   script:
     - make "$TEST_TARGET"
 
+workflow-lint:
+  stage: test
+  image: golang:1.27.1
+  timeout: 5 minutes
+  interruptible: true
+  script:
+    - go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 -shellcheck=
+
 offline-model:
   stage: test
   image: golang:1.27.1
