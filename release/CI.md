@@ -157,3 +157,6 @@ References: [GitLab releases](https://docs.gitlab.com/user/project/releases/),
 [GitLab Azure OIDC](https://docs.gitlab.com/ci/cloud_services/azure/),
 [Go vulnerability checker](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck),
 and [Sigstore blob signing](https://docs.sigstore.dev/cosign/signing/signing_with_blobs/).
+
+The legacy library index now uses the same pure Go SQLite driver as the unified
+index; distribution binaries do not require a separate system sqlite3 CLI.

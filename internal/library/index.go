@@ -1,14 +1,18 @@
 package library
 
 import (
-	"bytes"
+	"context"
+	dbsql "database/sql"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
+
+	_ "modernc.org/sqlite"
 )
 
 type IndexReport struct {
@@ -20,25 +24,70 @@ type IndexReport struct {
 }
 
 func sql(s string) string { return "'" + strings.ReplaceAll(s, "'", "''") + "'" }
+
+// Use the same CGO-free SQLite driver as the unified design index. A bundled
+// CLI must not depend on a macOS-specific /usr/bin/sqlite3 executable.
 func sqlite(path, script string, readonly bool) ([]byte, error) {
-	args := []string{}
-	if readonly {
-		args = append(args, "-readonly", "-json")
-	}
-	args = append(args, path)
-	cmd := exec.Command("/usr/bin/sqlite3", args...)
-	cmd.Stdin = strings.NewReader(script)
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
-	b, err := cmd.Output()
+	abs, err := filepath.Abs(path)
 	if err != nil {
-		return nil, fmt.Errorf("sqlite3: %w: %s", err, stderr.String())
+		return nil, err
 	}
-	if readonly && len(bytes.TrimSpace(b)) == 0 {
-		return []byte("[]"), nil
+	u := url.URL{Scheme: "file", Path: filepath.ToSlash(abs)}
+	q := url.Values{}
+	if readonly {
+		q.Set("mode", "ro")
+		q.Add("_pragma", "query_only(1)")
+	} else {
+		q.Set("mode", "rwc")
 	}
-	return b, nil
+	u.RawQuery = q.Encode()
+	db, err := dbsql.Open("sqlite", u.String())
+	if err != nil {
+		return nil, fmt.Errorf("sqlite: %w", err)
+	}
+	defer db.Close()
+	db.SetMaxOpenConns(1)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	if !readonly {
+		_, err = db.ExecContext(ctx, script)
+		return nil, err
+	}
+	rows, err := db.QueryContext(ctx, script)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	result := []map[string]any{}
+	for rows.Next() {
+		values := make([]any, len(columns))
+		dest := make([]any, len(columns))
+		for i := range values {
+			dest[i] = &values[i]
+		}
+		if err = rows.Scan(dest...); err != nil {
+			return nil, err
+		}
+		row := map[string]any{}
+		for i, column := range columns {
+			if b, ok := values[i].([]byte); ok {
+				row[column] = string(b)
+			} else {
+				row[column] = values[i]
+			}
+		}
+		result = append(result, row)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return json.Marshal(result)
 }
+
 func (s Store) catalogHash() (string, error) {
 	b, err := os.ReadFile(filepath.Join(s.Root, "library/catalog-manifest.json"))
 	if err != nil {

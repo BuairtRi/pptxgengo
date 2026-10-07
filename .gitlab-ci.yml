@@ -74,6 +74,7 @@ windows-native:
 # These gates also run on ordinary branches, before a release tag is cut.
 security:go:
   stage: security
+  needs: []
   image:
     name: gitlab-registry.samcott.com/riscott/ci-images/vault-tools-release-security:v2-pinned-dad226a5c05106a33c5b5b79d9d2cca0798a46ca@sha256:3fbf2f78efe3e3c2bab885d9e15d21e769e92f8e53d47908c3532888c356752a
     entrypoint: [""]
@@ -94,6 +95,7 @@ security:go:
 
 security:secrets:
   stage: security
+  needs: []
   image:
     name: gitlab-registry.samcott.com/riscott/ci-images/vault-tools-release-security:v2-pinned-dad226a5c05106a33c5b5b79d9d2cca0798a46ca@sha256:3fbf2f78efe3e3c2bab885d9e15d21e769e92f8e53d47908c3532888c356752a
     entrypoint: [""]
