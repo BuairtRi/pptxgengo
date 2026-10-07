@@ -210,6 +210,14 @@ when choosing native editing pilots. Native groups, table cells and text counts
 are structural observations; record actual Mac/Windows editing tasks separately.
 Read `docs/native-editing-pilot.md` for the family/density task matrix.
 
+The source-only `docs/native-roundtrip.md` harness prepares a disposable synthetic
+project and verifies Save As, three exact supported text edits and slide reorder
+against receipt-pinned baseline tags. macOS uses supplied saved files; an opt-in
+Windows desktop COM lane automates the same fixture and retains execution/review/
+rebuild evidence. Its automated synthetic adoption is not an approval to adopt
+customer changes. Keep human editing/visual acceptance and package-format manual
+items explicit; a headless fixture pass does not qualify desktop PowerPoint.
+
 
 ## Reuse maintained authored slides
 

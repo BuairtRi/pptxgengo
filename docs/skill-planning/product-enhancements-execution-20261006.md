@@ -349,7 +349,7 @@ Focused tests passed for six source/destination claim-format combinations and
 real headless builds, preserved bytes/copy, lifecycle history, CLI approval and
 insertion, false resealed graphs, dependency drift, approval invalidation,
 split/reorder, clean client export and relocated maintainer handoff/rebuild.
-Full submission preflight and exact-head hosted CI remain pending. The initial
+PR #12 passed full slot preflight, all ten GitHub checks and all eight GitLab pipeline 21187 jobs at exact head `72e64638`; it merged as `0882e4c3`. The initial
 10–20 approved real pages, broader typed/local dependencies, branding assets and
 Mac/Windows desktop qualification are still outstanding. This work is not in
 released v4.1.0; no new release tag has been cut.
@@ -376,8 +376,8 @@ rechecks/rescans final bytes and includes model evidence/SBOM/vulnerabilities in
 the signed private release manifest. Linux/macOS/Windows model lanes exercise
 real package regressions. The model remains optional and separate from CLI
 archives; data file scans/signature coverage do not establish model safety or
-relevance. No new release tag has been cut. Full preflight, hosted CI and the
-actual branch security scan remain pending.
+relevance. No new release tag has been cut. The final integration evidence is
+recorded below.
 
 
 Model package validation follow-up: GitLab pipeline 21190 at `57fbcf3c`
@@ -392,5 +392,32 @@ Hosted Windows model checks exposed an existing archive regression test's Unix
 filesystem permission assumption when first enabling release-tool tests there.
 The test now checks encoded TAR/ZIP executable modes on every OS, extracted
 payloads everywhere and Unix filesystem permissions on Unix. Model package
-regressions themselves passed on Windows. The final-head full preflight and
-hosted rerun remain due; no new release publication has been performed.
+regressions themselves passed on Windows. PR #13 passed full slot preflight, all
+ten GitHub checks and all nine GitLab pipeline 21194 jobs at exact head
+`838fbcc5`; it merged as `0ca5f0cf`. No new release publication was performed.
+
+
+## Native round-trip qualification harness — managed source work
+
+Slot `pptx-native-roundtrip` adds a retained synthetic two-slide fixture for
+initial Save As, three prescribed supported text edits and native slide reorder.
+The independent verifier binds plans to immutable receipt outputs, reads actual
+saved tag/text/order graphs, retains package/format manual items, refuses wrong
+text/order/tags or baseline drift, and adopts/rebuilds only exact prescribed
+changes in the disposable fixture. Repeated adoption/reconciliation and retained
+original edited bytes/baselines are checked. Decisions explicitly identify
+fixture automation and do not invent human acceptance.
+
+An opt-in Windows COM helper creates only new owned paths, validates lineage
+before actions, records app version/timestamps, bounds helper execution and
+exact-path cleanup, and never quits/kills PowerPoint. Both desktop CI lanes run
+it after native export smoke; portable Windows CI parses it and tests simulated
+failure behavior. Mac uses the same preparation/supplied-file verification
+workflow while automated Save As remains unqualified after the earlier timeout.
+
+Focused hermetic and selected race checks passed locally, including tampered
+plans/baselines/tags, wrong text/order, cleanup failures, repeated output refusal,
+Unicode/spaced paths and exact rebuilt copy. Full submission/hosted gates are
+pending. No live Windows desktop pass, new Mac Save As evidence, human editing/
+visual acceptance or family-wide rollout is claimed. This source work is not in
+stable v4.1.0, and no further release tag has been cut.
