@@ -51,7 +51,7 @@ jobs:
         shell: pwsh
         run: |
           [void](New-Item -ItemType Directory -Path $env:WMDS_BRANDING_ROOT -Force)
-          go test -short -count=1 -timeout=150s ./cmd/pptxgengo ./cmd/pptxdesign ./internal/deckproject ./internal/library ./internal/releasepackage ./internal/textlayout ./pptx
+          go test -short -count=1 -timeout=150s ./cmd/pptxgengo ./cmd/pptxdesign ./internal/deckproject ./internal/library ./internal/releasepackage ./internal/textlayout ./pptx ./scripts/cmd/search-benchmark
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           go test -short -count=1 -timeout=150s -run '^(TestWindows|TestSignedNativeReceiptRejectsHandmadeAndTamperedEvidence|TestConcurrentNative)' ./internal/nativeexport
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
