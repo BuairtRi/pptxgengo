@@ -542,3 +542,14 @@ monotonic counter. Local focused keyword/report/unit checks, vet and all six
 target test compilations passed. The clean slot update incorporated merged
 PR #16 and its six native model/installer CI lanes. Final preflight and exact
 hosted reports remain required; performance budgets remain unagreed.
+
+Preliminary exact `a9803e4b` Windows AMD64/ARM64 reports independently
+verified all three search modes, positive first/repeated durations and native
+performance-counter frequency of 10,000,000 units per second. The prior ARM64
+zero observations remain retained. Pipeline 21247's race job hit its overall
+ten-minute limit after passing the executed packages; its lint job failed at
+Kubernetes pod startup before executing lint. Developer jobs now have twenty
+minutes, matching the hosted Go lane, with every 150-second package ceiling
+retained. Only workflow lint retries runner-system failures, at most twice;
+script/assertion failures and signing/publication jobs gain no retry policy.
+Final full preflight and exact-head hosted gates remain required.
