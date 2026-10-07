@@ -278,7 +278,7 @@ func ResolveNativeSourceField(p *Project, object ObjectRecord, field NativeSourc
 }
 
 func nativeObjectIdentity(shape *xmlNode) (*xmlNode, error) {
-	container := map[string]string{"sp": "nvSpPr", "pic": "nvPicPr", "graphicFrame": "nvGraphicFramePr", "grpSp": "nvGrpSpPr"}[shape.Name.Local]
+	container := map[string]string{"sp": "nvSpPr", "pic": "nvPicPr", "graphicFrame": "nvGraphicFramePr", "grpSp": "nvGrpSpPr", "cxnSp": "nvCxnSpPr"}[shape.Name.Local]
 	if container == "" {
 		return nil, fmt.Errorf("native_mapping.object_kind_invalid")
 	}

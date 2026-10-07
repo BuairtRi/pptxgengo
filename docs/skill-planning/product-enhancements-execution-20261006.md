@@ -234,5 +234,24 @@ slots. Exact unique plain fields retain stable source-slot identity and hashes;
 rich, dynamic, bullet, cell and ambiguous fields remain explicit manual review.
 Native structure hashes separate text-leaf changes from geometry/format/shape
 changes conservatively. Targeted XML and generated-card tests passed locally.
-Full preflight/CI, native identity survival, editing pilot and three-way adoption
-remain pending. See [the maintained mapping contract](../native-field-mapping.md).
+Full slot preflight and exact-head GitLab pipeline 21153 (all eight gates),
+hosted Mac normal/race/model and Windows portable/model checks passed before
+PR #8 merged as `be2ed696`. Native identity survival, editing pilot and three-way
+adoption remain pending. See [the maintained mapping contract](../native-field-mapping.md).
+
+
+## Native generation/shape lineage implementation follow-up
+
+The `pptx-native-lineage` slot adds standard PowerPoint presentation/slide/shape
+Tags, deterministic source/lock/native generation pins, and baseline group
+ownership. Project builds retain identical native bytes across repeated builds
+of one generation. Edited-file inspection follows live relationships and tag
+identity, with explicit missing/duplicate/unmatched/ownership-change reports.
+Names, numbers, order, current text and geometry are not matching heuristics.
+Bounded package/XML validation and headless mutation fixtures passed locally.
+
+A separate owned synthetic Mac PowerPoint 16.113.4 Save As trial timed out with
+AppleEvent `-1712` and produced no saved output; its copy was closed without
+saving. Desktop survival remains unqualified. Full preflight and exact-head CI
+for this source change are pending. Three-way proposals, guarded adoption and
+native editing family pilots remain next. See [the lineage contract](../native-lineage.md).

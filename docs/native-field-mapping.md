@@ -53,7 +53,9 @@ body bindings and separate text/geometry fingerprints. A headless generated
 PowerPoint supplies the actual representative card objects. Desktop behavior is
 still pending.
 
-Next: tie edited objects to proven deck/build lineage, implement three-way text
+Project builds now record generation, slide and shape tags; see the
+[native lineage contract](native-lineage.md). Desktop identity survival is pending.
+Next: implement three-way text
 proposals and explicit conflicts, preserve unsupported structure/format reports,
 and adopt reviewed proposals through guarded source mutation. Evaluate Save As,
 reorder, duplicate/delete/ungroup and editing on Mac and Windows before extending

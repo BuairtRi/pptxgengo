@@ -14,6 +14,8 @@ import (
 )
 
 type ObjectRecord struct {
+	NativeParentToken     string              `json:"native_parent_token,omitempty"`
+	ShapeToken            string              `json:"shape_token,omitempty"`
 	SourceTemplate        Reference           `json:"source_template"`
 	SourceSlots           map[string]string   `json:"source_slots,omitempty"`
 	NativeStructureSHA256 string              `json:"native_structure_sha256,omitempty"`
@@ -36,6 +38,7 @@ type ObjectRecord struct {
 	Mapping               string              `json:"mapping"`
 }
 type Objects struct {
+	Lineage         *NativeLineage `json:"native_lineage,omitempty"`
 	TextModelSchema string         `json:"text_model_schema,omitempty"`
 	Schema          string         `json:"schema"`
 	DeckID          string         `json:"deck_id"`
@@ -122,7 +125,7 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 		var walk func(*xmlNode)
 		walk = func(n *xmlNode) {
 			switch n.Name.Local {
-			case "sp", "pic", "graphicFrame", "grpSp":
+			case "sp", "pic", "graphicFrame", "grpSp", "cxnSp":
 				id, identityErr := nativeObjectIdentity(n)
 				if identityErr != nil {
 					identityError = identityErr
