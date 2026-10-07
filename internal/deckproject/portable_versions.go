@@ -610,6 +610,20 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 	if !reflectEqual(hashBytes(nowBuilds), hashBytes(builds)) {
 		return v, fmt.Errorf("build inventory changed during publication; snapshot retained")
 	}
+	currentProject, e = Load(p.SourcePath)
+	if e != nil {
+		return v, e
+	}
+	if currentProject.SourceHash() != p.SourceHash() {
+		return v, fmt.Errorf("authored source changed during capture; snapshot retained")
+	}
+	currentDeps, e := dependencies(currentProject)
+	if e != nil {
+		return v, e
+	}
+	if !reflectEqual(currentDeps, state.Dependencies) {
+		return v, fmt.Errorf("build dependencies changed during capture; snapshot retained")
+	}
 	pointer := VersionPointer{Schema: "pptxgengo.deck-version-pointer.v1", Number: v.Number, ManifestSHA256: digest(manifest)}
 	dest := filepath.Join(p.Root, "versions/current.json")
 	before, e := readOptionalLimit(dest, portableManifestLimit)
