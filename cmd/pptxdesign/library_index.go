@@ -22,9 +22,13 @@ func runLibraryIndex(command string, args []string) error {
 	out := f.String("out", "", "new SQLite file for library-index, or new directory for library-fit")
 	id := f.String("id", "", "exact entity ID or unique modern canonical key")
 	query := f.String("query", "", "soft scenario query")
+	retrieval := f.String("retrieval", "metadata", "ranking method: metadata or keyword (SQLite FTS5 BM25)")
+	requireShape := f.Bool("require-shape", false, "require all supplied structural hints and an exact source item-count group; does not establish measured fit")
 	kinds := f.String("kinds", "", "explicit comma-separated entity-kind filter")
 	assetKind := f.String("asset-kind", "all", "asset summary filter: all, icon, photo, graphic, logo")
 	namespace := f.String("namespace", "", "explicit wmds or legacy namespace filter")
+	lifecycles := f.String("lifecycles", "", "explicit comma-separated lifecycle filter; deprecated still requires --include-deprecated")
+	contentAdapter := f.String("content-adapter", "", "exact declared content-adapter capability filter; does not establish measured fit")
 	roles := f.String("roles", "", "comma-separated soft content-role hints")
 	structures := f.String("structures", "", "comma-separated soft structural hints")
 	forms := f.String("visual-forms", "", "comma-separated optional visual-form hints")
@@ -41,7 +45,7 @@ func runLibraryIndex(command string, args []string) error {
 	}
 	allowed := map[string]map[string]bool{
 		"library-index":   {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "out": true},
-		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "query": true, "kinds": true, "asset-kind": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "include-weak": true, "engine": true, "summary": true},
+		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "query": true, "retrieval": true, "require-shape": true, "lifecycles": true, "content-adapter": true, "kinds": true, "asset-kind": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "include-weak": true, "engine": true, "summary": true},
 		"library-inspect": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true, "summary": true},
 		"library-preview": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true},
 		"library-fit":     {"bundle": true, "source": true, "engine": true, "spec": true, "out": true},
@@ -58,7 +62,13 @@ func runLibraryIndex(command string, args []string) error {
 	if f.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
 	}
+	if command == "library-find" && *retrieval != "metadata" && *retrieval != "keyword" {
+		return fmt.Errorf("--retrieval must be metadata or keyword; model-backed semantic/hybrid retrieval is not available in this build")
+	}
 	if command == "library-find" && *summary && *kinds == "asset" {
+		if *retrieval != "metadata" || *requireShape || *lifecycles != "" || *contentAdapter != "" {
+			return fmt.Errorf("asset registry summaries do not support keyword ranking, require-shape, lifecycle or content-adapter filters; omit --summary for indexed asset discovery")
+		}
 		if *limit < 1 || *limit > 100 {
 			return fmt.Errorf("--limit must be 1..100")
 		}
@@ -149,7 +159,7 @@ func runLibraryIndex(command string, args []string) error {
 		if *limit < 1 || *limit > 100 {
 			return fmt.Errorf("--limit must be 1..100")
 		}
-		options := wmdesign.LibraryIndexFindOptions{Shape: wmdesign.LibrarySearchOptions{EngineHint: *engine, Query: *query, ContentRoles: split(*roles), Structures: split(*structures), VisualForms: split(*forms), Items: *items, ItemRole: *itemRole, Limit: *limit, IncludeDeprecated: *deprecated}, Kinds: split(*kinds), Namespace: *namespace, IncludeWeak: *includeWeak}
+		options := wmdesign.LibraryIndexFindOptions{Shape: wmdesign.LibrarySearchOptions{EngineHint: *engine, Query: *query, ContentRoles: split(*roles), Structures: split(*structures), VisualForms: split(*forms), Items: *items, ItemRole: *itemRole, Limit: *limit, IncludeDeprecated: *deprecated}, Kinds: split(*kinds), Namespace: *namespace, IncludeWeak: *includeWeak, Retrieval: *retrieval, RequireShape: *requireShape, Lifecycles: split(*lifecycles), ContentAdapter: *contentAdapter}
 		if *summary {
 			result, e := index.FindSummary(options)
 			if e != nil {

@@ -72,6 +72,8 @@ type LibraryIndexReport struct {
 	SourceRevision      string              `json:"source_revision"`
 	Counts              map[string]int      `json:"counts"`
 	ProjectionSHA256    string              `json:"projection_sha256"`
+	RetrievalText       string              `json:"retrieval_text,omitempty"`
+	RetrievalSHA256     string              `json:"retrieval_sha256,omitempty"`
 	AssetRegistrySHA256 string              `json:"asset_registry_sha256"`
 	Pins                []LibraryIndexPin   `json:"pins"`
 	Options             LibraryIndexOptions `json:"options"`
@@ -176,6 +178,8 @@ func BuildLibraryIndex(path string, options LibraryIndexOptions) (LibraryIndexRe
 	}
 	report.SourceRevision = s.Revision
 	report.ProjectionSHA256 = projectionHash(entities)
+	report.RetrievalText = LibraryRetrievalTextVersion
+	report.RetrievalSHA256 = retrievalProjectionHash(entities)
 	report.AssetRegistrySHA256 = AssetRegistryFingerprint()
 	for _, file := range s.Files {
 		report.Pins = append(report.Pins, LibraryIndexPin{Scope: "source", Path: file.Path, SHA256: file.SHA256})
@@ -250,7 +254,7 @@ CREATE TABLE dependencies(entity_id TEXT NOT NULL,target_id TEXT NOT NULL,role T
 CREATE VIEW artifacts AS SELECT e.id AS entity_id,json_extract(a.value,'$.role') AS role,json_extract(a.value,'$.path') AS path,json_extract(a.value,'$.sha256') AS sha256 FROM entities e,json_each(e.json,'$.artifacts') a;
 CREATE VIEW content_zones AS SELECT e.id AS entity_id,json_extract(z.value,'$.source_pointer') AS pointer,json_extract(z.value,'$.component_type') AS component_type,json_extract(z.value,'$.role') AS role,json_extract(z.value,'$.source_bounds') AS bounds_json FROM entities e,json_each(e.json,'$.discovery.zones') z;
 CREATE VIEW content_slots AS SELECT e.id AS entity_id,json_extract(s.value,'$.name') AS name,json_extract(s.value,'$.source_pointer') AS pointer,json_extract(s.value,'$.kind') AS kind,coalesce(json_extract(s.value,'$.allow_empty'),0) AS allow_empty FROM entities e,json_each(e.json,'$.template.slots') s;
-CREATE VIRTUAL TABLE entity_fts USING fts5(id UNINDEXED,name,purpose,body,tokenize='unicode61');`)
+` + libraryFTSSchema)
 	if e != nil {
 		return report, e
 	}
@@ -263,7 +267,7 @@ CREATE VIRTUAL TABLE entity_fts USING fts5(id UNINDEXED,name,purpose,body,tokeni
 		if _, e = insert.Exec(entity.ID, entity.Namespace, entity.Kind, entity.Key, entity.Name, entity.Purpose, entity.Family, entity.Lifecycle, string(indexJSON(entity))); e != nil {
 			return report, e
 		}
-		if _, e = tx.Exec("INSERT INTO entity_fts VALUES(?,?,?,?)", entity.ID, entity.Name, entity.Purpose, strings.Join(append(append([]string{entity.Key, entity.Family}, entity.Discovery.ComponentTypes...), entity.SupportedAdaptations...), " ")); e != nil {
+		if _, e = tx.Exec("INSERT INTO entity_fts VALUES(?,?,?,?)", entity.ID, entity.Name, entity.Purpose, libraryRetrievalBody(entity)); e != nil {
 			return report, e
 		}
 		for dimension, values := range map[string][]string{"role": entity.Discovery.ContentRoles, "structure": entity.Discovery.Structures, "visual-form": entity.Discovery.VisualForms} {
@@ -384,6 +388,14 @@ func OpenLibraryIndex(path string, overrides LibraryIndexOptions) (*LibraryIndex
 	if projectionHash(entities) != report.ProjectionSHA256 {
 		return fail(fmt.Errorf("index.projection_integrity_failed"))
 	}
+	if report.RetrievalText != "" {
+		if report.RetrievalText != LibraryRetrievalTextVersion || report.RetrievalSHA256 != retrievalProjectionHash(entities) {
+			return fail(fmt.Errorf("index.stale_retrieval_projection: rebuild the library index"))
+		}
+		if e = index.verifyRetrievalProjection(entities); e != nil {
+			return fail(e)
+		}
+	}
 	return index, nil
 }
 
@@ -414,6 +426,35 @@ func (index *LibraryIndex) entities(where string, args []any) ([]LibraryEntity, 
 		out = append(out, entity)
 	}
 	return out, rows.Err()
+}
+
+// Discovery does not need source examples, binding contracts or text zones.
+// Leave those in the verified SQLite projection for Inspect/fit, rather than
+// decoding tens of megabytes of source scene objects on every query.
+func (index *LibraryIndex) discoveryEntities(where string, args []any) ([]LibraryEntity, error) {
+	query := `SELECT json_set(json_remove(json,'$.definition','$.template','$.discovery.zones'),'$.template',json_object('uses',json_extract(json,'$.template.uses'))) FROM entities`
+	if where != "" {
+		query += " WHERE " + where
+	}
+	query += " ORDER BY id"
+	rows, err := index.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	entities := []LibraryEntity{}
+	for rows.Next() {
+		var raw string
+		if err = rows.Scan(&raw); err != nil {
+			return nil, err
+		}
+		var entity LibraryEntity
+		if err = json.Unmarshal([]byte(raw), &entity); err != nil {
+			return nil, err
+		}
+		entities = append(entities, entity)
+	}
+	return entities, rows.Err()
 }
 
 func (index *LibraryIndex) Inspect(id string) (LibraryEntity, error) {
