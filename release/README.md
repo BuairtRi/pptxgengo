@@ -157,3 +157,11 @@ prompts. The maintained source is [the start page](../internal/releasepackage/gu
 The [local.20 qualification](qualification-local20.json) records density checks, source/bound sweeps, native review, documentation integrity, package verification and the global installation.
 
 [Local.21 migration qualification](qualification-local21.json) records the focused migration tests and installed command checks.
+
+## Installation manager
+
+Source builds containing the new manager support verified staging, upgrade,
+rollback, interrupted activation recovery and read-only diagnostics. See
+[installation and recovery](../docs/installation.md). The signed `v4.1.0` CLI
+predates these commands. Windows/Office qualification and full private resources
+remain separate requirements.

@@ -17,8 +17,9 @@ branding originals are currently on another machine.
    release bytes beyond the 14-day diagnostic CI artifacts.
 
 ```sh
-git tag -a v4.1.0-rc.1 -m 'First signed CLI prerelease'
-git push origin refs/tags/v4.1.0-rc.1
+# Example for the next new stable version; never recreate an existing tag.
+git tag -a v4.1.1 -m 'Release v4.1.1'
+git push origin refs/tags/v4.1.1
 ```
 
 Never move or reuse a release tag. A retry can reuse already-uploaded identical
@@ -84,7 +85,7 @@ export PATH="/tmp/pptx-release-tools:$PATH"
 bash scripts/release/sigstore.sh initialize --home /tmp/pptx-release-trust
 bash scripts/release/sigstore.sh verify --home /tmp/pptx-release-trust \
   --blob downloads/manifest.json --bundle downloads/manifest.sigstore.json \
-  --version v4.1.0-rc.1
+  --version v4.1.0
 ```
 
 The signature verifier requires the exact project/tag certificate identity, issuer,

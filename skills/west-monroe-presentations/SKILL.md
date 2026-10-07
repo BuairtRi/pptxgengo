@@ -40,6 +40,7 @@ In short: sentence-case titles that state the conclusion as a full sentence; per
 | Run an outline, content, deck or source review | [Review packets](references/review-packets.md) |
 | Create project files (project, sources, audience, claims, composition log) | [Project templates](references/project-templates.md) |
 | Look up a command, flag or render through PowerPoint | [CLI reference](references/cli-reference.md) |
+| Diagnose an installation or select a retained release | [Installation and recovery](references/installation.md) |
 | Work on a Windows PC or troubleshoot its preview package | [Windows workflows](references/windows.md) |
 | Browse design-system foundations, components, frames and template patterns | [Design-system documentation](references/design-system-documentation.md) |
 | Build one slide outside a project | [Design-system one-slide routes](references/design-system-authoring.md) |

@@ -50,6 +50,13 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           go test -short -count=1 -timeout=150s -run '^(TestWindows|TestSignedNativeReceiptRejectsHandmadeAndTamperedEvidence|TestConcurrentNative)' ./internal/nativeexport
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Installer staging, rollback and recovery regressions
+        shell: pwsh
+        run: |
+          # These fixtures use temporary roots and --no-path; HKCU PATH and
+          # font registrations are reserved for the desktop qualification lane.
+          go test -count=1 -timeout=150s ./internal/installstate
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Relocated package-style smoke test without PowerPoint
         shell: pwsh
         run: |
