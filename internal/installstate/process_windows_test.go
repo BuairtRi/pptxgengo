@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/buairtri/pptxgengo/internal/powershellenv"
 )
 
 // Script execution uses full-format synthetic resources with real unsigned tools.
@@ -75,7 +77,7 @@ func qualifyWindowsInstallerScript(t *testing.T, repo, work, binaries string) []
 		}
 		cmd := exec.CommandContext(ctx, "powershell.exe", args...)
 		cmd.Dir = work
-		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+appdata, "PPTXGENGO_INSTALLATION_ROOT=")
+		cmd.Env = powershellenv.ForWindowsPowerShell(append(os.Environ(), "LOCALAPPDATA="+appdata, "PPTXGENGO_INSTALLATION_ROOT="))
 		cmd.WaitDelay = 2 * time.Second
 		if data, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("actual PowerShell installer stage=%v: %v: %s", stage, err, data)
