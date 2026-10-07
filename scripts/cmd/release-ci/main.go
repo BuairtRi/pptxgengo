@@ -630,11 +630,15 @@ func verify(dir, version, commit string) error {
 	return nil
 }
 func request(method, endpoint string, body io.Reader) ([]byte, int, error) {
+	return requestWithCredential(method, endpoint, body, "JOB-TOKEN", os.Getenv("CI_JOB_TOKEN"))
+}
+
+func requestWithCredential(method, endpoint string, body io.Reader, header, credential string) ([]byte, int, error) {
 	req, e := http.NewRequest(method, endpoint, body)
 	if e != nil {
 		return nil, 0, e
 	}
-	req.Header.Set("JOB-TOKEN", os.Getenv("CI_JOB_TOKEN"))
+	req.Header.Set(header, credential)
 	if method == "POST" {
 		req.Header.Set("Content-Type", "application/json")
 	}
@@ -684,13 +688,20 @@ func publish(dir, version, commit string) error {
 	}
 	base := "https://gitlab.samcott.com/api/v4/projects/17"
 	// The publication lane verifies privacy again; changing project visibility
-	// cannot accidentally expose a new release.
-	b, status, e := request("GET", base, nil)
+	// cannot accidentally expose a new release. This endpoint does not accept
+	// CI_JOB_TOKEN; a protected, environment-scoped Guest/read_api project token
+	// is used only for this read. Uploads and release creation use the job token.
+	privacyToken := os.Getenv("RELEASE_PRIVACY_READ_TOKEN")
+	if privacyToken == "" {
+		return fmt.Errorf("publication requires the protected project privacy read token")
+	}
+	b, status, e := requestWithCredential("GET", base, nil, "PRIVATE-TOKEN", privacyToken)
 	if e != nil {
 		return e
 	}
 	var project struct {
-		Visibility string `json:"visibility"`
+		Visibility                 string `json:"visibility"`
+		PackageRegistryAccessLevel string `json:"package_registry_access_level"`
 	}
 	if status != 200 {
 		return fmt.Errorf("cannot inspect publication project: HTTP %d", status)
@@ -698,8 +709,8 @@ func publish(dir, version, commit string) error {
 	if e = json.Unmarshal(b, &project); e != nil {
 		return e
 	}
-	if project.Visibility != "private" {
-		return fmt.Errorf("release project must remain private")
+	if project.Visibility != "private" || project.PackageRegistryAccessLevel != "private" {
+		return fmt.Errorf("release project and package registry must remain private")
 	}
 	entries, e := os.ReadDir(dir)
 	if e != nil {

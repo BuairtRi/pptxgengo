@@ -147,6 +147,9 @@ release:attest:
 release:publish:
   extends: .release-linux
   stage: publish
+  environment:
+    name: release-publication
+    action: prepare
   needs: [release:attest]
   resource_group: pptxgengo-release-publication
   script:
