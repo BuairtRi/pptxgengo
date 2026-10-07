@@ -169,3 +169,15 @@ func TestNativeSourceFieldResolutionSurvivesKeyedReorder(t *testing.T) {
 		t.Fatal("unsupported field selected")
 	}
 }
+
+func TestNativeGroupIdentityDoesNotBorrowChildIdentity(t *testing.T) {
+	group := xmlShape(t, `<p:grpSp xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:sp><p:nvSpPr><p:cNvPr id="2" name="child"/></p:nvSpPr></p:sp></p:grpSp>`)
+	if _, err := nativeObjectIdentity(group); err == nil {
+		t.Fatal("parent borrowed a child's identity")
+	}
+	owned := xmlShape(t, `<p:grpSp xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:nvGrpSpPr><p:cNvPr id="1" name="parent"/></p:nvGrpSpPr><p:sp><p:nvSpPr><p:cNvPr id="2" name="child"/></p:nvSpPr></p:sp></p:grpSp>`)
+	identity, err := nativeObjectIdentity(owned)
+	if err != nil || attr(identity, "id") != "1" {
+		t.Fatal(identity, err)
+	}
+}

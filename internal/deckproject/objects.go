@@ -118,13 +118,17 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 		if e != nil {
 			return out, e
 		}
+		var identityError error
 		var walk func(*xmlNode)
 		walk = func(n *xmlNode) {
 			switch n.Name.Local {
 			case "sp", "pic", "graphicFrame", "grpSp":
-				ids := descendants(n, "cNvPr")
-				if len(ids) > 0 {
-					id := ids[0]
+				id, identityErr := nativeObjectIdentity(n)
+				if identityErr != nil {
+					identityError = identityErr
+					return
+				}
+				if id != nil {
 					name := attr(id, "name")
 					rec := ObjectRecord{NativeKind: n.Name.Local, LogicalID: s.ID + "/" + name, SlideID: s.ID, NodeID: name, PartRole: "native-object", NativePart: part, NativeID: attr(id, "id"), NativeName: name, SourcePointers: []string{}, BaselineValues: map[string]any{}, Mapping: "generated-unbound"}
 					rec.NativeStructureSHA256 = nativeStructureHash(n)
@@ -139,6 +143,9 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 			}
 		}
 		walk(tree)
+		if identityError != nil {
+			return out, identityError
+		}
 	}
 	sort.Slice(out.Objects, func(i, j int) bool {
 		a, b := out.Objects[i], out.Objects[j]
@@ -232,6 +239,9 @@ func bindObject(p *Project, index int, s wmdesign.SlideSpec, r ObjectRecord) Obj
 			r.SourceSlots[pointer] = field
 			r.BaselineValues[field] = value
 		}
+	}
+	if r.NodeID == "" {
+		r.NodeID = "native-" + r.NativeID
 	}
 	r.LogicalID = r.SlideID + "/" + r.NodeID + "/" + r.PartRole
 	if r.ItemKey != "" {

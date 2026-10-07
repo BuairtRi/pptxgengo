@@ -276,3 +276,27 @@ func ResolveNativeSourceField(p *Project, object ObjectRecord, field NativeSourc
 	}
 	return pointer, text, nil
 }
+
+func nativeObjectIdentity(shape *xmlNode) (*xmlNode, error) {
+	container := map[string]string{"sp": "nvSpPr", "pic": "nvPicPr", "graphicFrame": "nvGraphicFramePr", "grpSp": "nvGrpSpPr"}[shape.Name.Local]
+	if container == "" {
+		return nil, fmt.Errorf("native_mapping.object_kind_invalid")
+	}
+	properties := directXML(shape, "http://schemas.openxmlformats.org/presentationml/2006/main", container)
+	if properties == nil {
+		return nil, fmt.Errorf("native_mapping.own_nonvisual_properties_missing")
+	}
+	var identity *xmlNode
+	for _, child := range properties.Children {
+		if child.Name.Space == "http://schemas.openxmlformats.org/presentationml/2006/main" && child.Name.Local == "cNvPr" {
+			if identity != nil {
+				return nil, fmt.Errorf("native_mapping.own_identity_ambiguous")
+			}
+			identity = child
+		}
+	}
+	if identity == nil || attr(identity, "id") == "" {
+		return nil, fmt.Errorf("native_mapping.own_identity_missing")
+	}
+	return identity, nil
+}
