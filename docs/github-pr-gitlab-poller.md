@@ -61,7 +61,10 @@ searches exact `name/sha/ref/source=api` pipelines. The name must equal
 so partial names or unrelated qualification pipelines are insufficient evidence.
 Recovery never reads private pipeline variables, which can require Maintainer
 access even when listing pipelines is permitted for the Developer poller token.
-The creation response must have the same name before it is accepted. Creation
+The full pipeline representation must have the same name before it is accepted.
+GitLab omits the name in its POST response, so the poller reads the full GET
+representation first. A lost/unavailable detail response retains the pending
+intent for exact-name recovery. Creation
 has no immediate transport retry;
 an unresolved intent waits at least 120 seconds before a later retry, and has at
 most three attempts. Failed scheduled tests are not automatically re-created.

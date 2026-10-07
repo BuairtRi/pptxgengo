@@ -331,13 +331,22 @@ class Poller:
         result, _ = self.gitlab.request("POST", "projects/17/pipeline", body=body)
         if not isinstance(result, dict) or not isinstance(result.get("id"), int) or isinstance(result.get("id"), bool) or result["id"] <= 0:
             raise Uncertain("invalid-creation-response")
-        if result.get("sha") != sha or result.get("ref") != ref or result.get("source") != "api" or result.get("tag") is not False or result.get("name") != "pr:" + key:
+        created_id = result["id"]
+        # GitLab's POST representation omits name even when workflow:name is
+        # already assigned. Read the full representation before judging it.
+        if result.get("sha") == sha and result.get("ref") == ref and result.get("source") == "api" and result.get("tag") is False and result.get("name") is None:
+            result, _ = self.gitlab.request("GET", "projects/17/pipelines/%s" % created_id)
+            if not isinstance(result, dict):
+                raise Uncertain("invalid-pipeline-detail")
+            if result.get("id") == created_id and result.get("name") is None:
+                raise Uncertain("pipeline-name-not-yet-visible")
+        if result.get("id") != created_id or result.get("sha") != sha or result.get("ref") != ref or result.get("source") != "api" or result.get("tag") is not False or result.get("name") != "pr:" + key:
             record["state"] = "refused"
-            record["pipeline"] = result["id"]
+            record["pipeline"] = created_id
             self.store.save(journal)
             # Persist refusal before cancellation: denied/uncertain cancellation
             # must never turn a mismatched pipeline into accepted evidence.
-            self.gitlab.request("POST", "projects/17/pipelines/%s/cancel" % result["id"])
+            self.gitlab.request("POST", "projects/17/pipelines/%s/cancel" % created_id)
             raise Refused("created-pipeline-identity-mismatch")
         record.update(state="scheduled", pipeline=result["id"])
         self.store.save(journal)

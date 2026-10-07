@@ -57,6 +57,9 @@ class GitLab:
         self.result_name = None
         self.cancel_status = None
         self.refused_create = False
+        self.omit_create_name = False
+        self.detail_error = False
+        self.detail_id = 123
 
     def request(self, method, path, query=None, body=None):
         self.calls.append((method, path, copy.deepcopy(query), copy.deepcopy(body)))
@@ -67,6 +70,12 @@ class GitLab:
             return {"file_path": name, "encoding": "base64", "content": base64.b64encode(self.files[name]).decode()}, {}
         if method == "GET" and path == "projects/17/pipelines":
             return copy.deepcopy(self.pipelines), {}
+        if method == "GET" and path == "projects/17/pipelines/123":
+            if self.detail_error:
+                raise p.Uncertain("detail-transport-response-uncertain")
+            detail = copy.deepcopy(self.pipelines[-1])
+            detail["id"] = self.detail_id
+            return detail, {}
         if method == "GET" and path.endswith("/variables"):
             raise AssertionError("private variables endpoint must never be requested")
         if method == "POST" and path.endswith("/cancel"):
@@ -84,7 +93,10 @@ class GitLab:
             self.pipelines.append(result)
             if self.lose_response:
                 raise p.Uncertain("creation-response-uncertain")
-            return result, {}
+            response = dict(result)
+            if self.omit_create_name:
+                response.pop("name")
+            return response, {}
         raise AssertionError((method, path))
 
 
@@ -108,6 +120,31 @@ class PollerTests(unittest.TestCase):
         self.assertEqual({v["key"]: v["value"] for v in self.creations()[0][3]["variables"]}, p.Poller.variables(7, S, f"{p.REPO_ID}/7/{S}"))
         self.poller.run()
         self.assertEqual(len(self.creations()), 1)
+
+    def test_real_creation_representation_omits_name_but_detail_confirms_it(self):
+        self.gl.omit_create_name = True
+        self.poller.run()
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "scheduled")
+        self.assertTrue(any(c[:2] == ("GET", "projects/17/pipelines/123") for c in self.gl.calls))
+        self.assertFalse(any(c[1].endswith("/cancel") for c in self.gl.calls))
+
+    def test_lost_detail_response_recovers_without_recreating_pipeline(self):
+        self.gl.omit_create_name = self.gl.detail_error = True
+        self.poller.run()
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "pending")
+        self.gl.detail_error = False
+        self.clock += 180
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "scheduled")
+
+    def test_wrong_detail_id_cancels_original_creation_only(self):
+        self.gl.omit_create_name = True
+        self.gl.detail_id = 999
+        self.poller.run()
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "refused")
+        self.assertTrue(any(c[:2] == ("POST", "projects/17/pipelines/123/cancel") for c in self.gl.calls))
+        self.assertFalse(any(c[:2] == ("POST", "projects/17/pipelines/999/cancel") for c in self.gl.calls))
 
     def test_fork_closed_wrong_base_bad_sha_and_protected_are_refused(self):
         changes = [lambda x: x["head"].update(repo={"id": 1, "full_name": "other/fork"}), lambda x: x.update(state="closed"), lambda x: x["base"].update(ref="master"), lambda x: x["head"].update(sha="not-a-sha"), lambda x: x["head"].update(ref="main"), lambda x: x.update(head=[])]
