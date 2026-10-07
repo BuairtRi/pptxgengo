@@ -2,19 +2,32 @@ package main
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
-	"github.com/buairtri/pptxgengo/internal/browsingartifact"
+	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 )
 
 func addBrowsingFiles(files map[string]Input, root string) error {
+	for _, dir := range []string{root, filepath.Join(root, "browsing")} {
+		info, e := os.Lstat(dir)
+		if e != nil || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+			return fmt.Errorf("browsing resource directories must be real directories: %s", dir)
+		}
+	}
 	var inventory struct {
 		Schema string            `json:"schema"`
 		Files  map[string]string `json:"files_sha256"`
 	}
-	if e := readJSON(filepath.Join(root, "browsing-manifest.json"), &inventory); e != nil {
+	raw, e := browsingartifact.ReadManifest(filepath.Join(root, "browsing-manifest.json"))
+	if e != nil {
 		return fmt.Errorf("installation archive requires generated private template-library.pptx and reusable-slides.pptx: %w", e)
+	}
+	if e = json.Unmarshal(raw, &inventory); e != nil {
+		return e
 	}
 	required := []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/reusable-slides.pptx", "browsing/reusable-slides.manifest.json"}
 	if inventory.Schema != "pptxgengo.release-browsing-files.v1" || len(inventory.Files) != len(required) {

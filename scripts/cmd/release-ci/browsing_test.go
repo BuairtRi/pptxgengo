@@ -52,3 +52,13 @@ func TestBrowsingArchiveRequiresBothDecksAndHashes(t *testing.T) {
 		t.Fatal("tampered deck accepted")
 	}
 }
+
+func TestBrowsingArchiveRejectsLinkedDirectory(t *testing.T) {
+	root := t.TempDir()
+	if e := os.Symlink(t.TempDir(), filepath.Join(root, "browsing")); e != nil {
+		t.Fatal(e)
+	}
+	if e := addBrowsingFiles(map[string]Input{}, root); e == nil || !strings.Contains(e.Error(), "real directories") {
+		t.Fatal("linked browsing directory accepted", e)
+	}
+}

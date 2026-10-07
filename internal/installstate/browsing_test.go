@@ -7,6 +7,7 @@ import (
 	"github.com/buairtri/pptxgengo/internal/browsingfixture"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -55,5 +56,47 @@ func TestBrowsingInstallationClosure(t *testing.T) {
 	delete(files, "browsing/reusable-slides.pptx")
 	if e := allowBrowsingFiles(root, files, map[string]bool{}); e == nil {
 		t.Fatal("missing second deck accepted")
+	}
+}
+
+func TestBrowsingFullInstallationChecksTypedClosure(t *testing.T) {
+	// Only the closed browsing inputs and full manifest are needed to exercise
+	// rejection before the later runtime/authoring resource checks.
+	root := t.TempDir()
+	if e := os.Mkdir(filepath.Join(root, "browsing"), 0755); e != nil {
+		t.Fatal(e)
+	}
+	files := map[string]string{}
+	put := func(name string, raw []byte) {
+		t.Helper()
+		if e := os.WriteFile(filepath.Join(root, filepath.FromSlash(name)), raw, 0644); e != nil {
+			t.Fatal(e)
+		}
+		files[name] = browsingfixture.Hash(raw)
+	}
+	for _, pair := range []struct{ name, kind string }{{"template-library", "templates"}, {"reusable-slides", "reusable"}} {
+		deck := "browsing/" + pair.name + ".pptx"
+		put(deck, browsingfixture.Deck(t, pair.kind))
+		raw := browsingfixture.Manifest(t, pair.kind, files[deck])
+		if pair.kind == "templates" {
+			var m map[string]any
+			if e := json.Unmarshal(raw, &m); e != nil {
+				t.Fatal(e)
+			}
+			m["coverage"].(map[string]any)["expected_templates"] = 2
+			raw, _ = json.Marshal(m)
+		}
+		put("browsing/"+pair.name+".manifest.json", raw)
+	}
+	browsingHashes := map[string]string{}
+	for name, hash := range files {
+		browsingHashes[name] = hash
+	}
+	raw, _ := json.Marshal(map[string]any{"schema": "pptxgengo.release-browsing-files.v1", "files_sha256": browsingHashes})
+	put("browsing-manifest.json", raw)
+	raw, _ = json.Marshal(map[string]any{"schema": "pptxgengo.local-release-manifest.v1", "version": "4.2.0", "selected_bundle": "v11", "file_count": len(files), "files_sha256": files})
+	put("release-manifest.json", raw)
+	if _, e := Verify(root); e == nil || !strings.Contains(e.Error(), "browsing.coverage_omission") {
+		t.Fatal("full installation skipped typed browsing closure", e)
 	}
 }

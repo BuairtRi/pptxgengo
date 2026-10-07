@@ -1,9 +1,11 @@
 package installstate
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 	"path/filepath"
+
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 )
 
 // Browsing is optional for legacy CLI packages. When supplied its exact closure
@@ -17,7 +19,11 @@ func allowBrowsingFiles(root string, files map[string]string, allowed map[string
 		Schema string            `json:"schema"`
 		Files  map[string]string `json:"files_sha256"`
 	}
-	if e := readJSON(filepath.Join(root, "browsing-manifest.json"), &inventory); e != nil {
+	raw, e := browsingartifact.ReadManifest(filepath.Join(root, "browsing-manifest.json"))
+	if e != nil {
+		return e
+	}
+	if e := json.Unmarshal(raw, &inventory); e != nil {
 		return e
 	}
 	names := []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/reusable-slides.pptx", "browsing/reusable-slides.manifest.json"}

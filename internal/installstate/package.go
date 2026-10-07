@@ -189,6 +189,9 @@ func Verify(root string) (Package, error) {
 			}
 		}
 		p.Files = raw.Hashes
+		if e = allowBrowsingFiles(root, files, map[string]bool{}); e != nil {
+			return p, e
+		}
 		if !regexp.MustCompile(`^v[1-9][0-9]*$`).MatchString(p.Bundle) {
 			return p, fmt.Errorf("invalid selected bundle")
 		}
