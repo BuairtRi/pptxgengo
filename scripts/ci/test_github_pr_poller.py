@@ -203,6 +203,37 @@ class PollerTests(unittest.TestCase):
 
 
 class BoundaryTests(unittest.TestCase):
+    def test_private_gitlab_root_supplements_default_store(self):
+        with patch.object(p.ssl, "create_default_context") as create:
+            context = p.gitlab_tls_context("/mounted/private-root.pem")
+            create.assert_called_once_with()
+            context.load_verify_locations.assert_called_once_with(cafile="/mounted/private-root.pem")
+        # Default capath stores can be loaded lazily (and cert enumeration can be
+        # empty before a handshake). Check verification policy without requiring
+        # this hermetic test to perform a network request or enumerate all roots.
+        context = p.gitlab_tls_context(None)
+        self.assertEqual(context.verify_mode, p.ssl.CERT_REQUIRED)
+        self.assertTrue(context.check_hostname)
+
+    def test_optional_gitlab_root_and_main_full_kubernetes_dns(self):
+        with patch.object(p.ssl, "create_default_context") as create:
+            context = p.gitlab_tls_context(None)
+            create.assert_called_once_with()
+            context.load_verify_locations.assert_not_called()
+        with patch.object(p.sys, "argv", ["poller", "--gitlab-ca", "/mounted/root.pem"]), patch.object(p, "load_capabilities", return_value=[PROFILE]), patch.object(p, "mounted_secret", return_value="credential-must-not-appear"), patch.object(p, "gitlab_tls_context") as gitlab_context, patch.object(p.ssl, "create_default_context"), patch.object(p, "Client") as client, patch.object(p, "ConfigMapJournal"), patch.object(p, "Poller"):
+            self.assertEqual(p.main(), 0)
+        gitlab_context.assert_called_once_with("/mounted/root.pem")
+        self.assertEqual(client.call_args_list[2].args[0], "https://kubernetes.default.svc.cluster.local")
+        self.assertEqual(client.call_args_list[2].kwargs["header"], "Authorization")
+        self.assertEqual(client.call_args_list[2].args[1].remaining, 32)
+
+    def test_tls_setup_failure_does_not_log_certificate_error_or_secret(self):
+        import io
+        diagnostics = io.StringIO()
+        with patch.object(p.sys, "argv", ["poller"]), patch.object(p, "load_capabilities", return_value=[PROFILE]), patch.object(p, "mounted_secret", return_value="credential-must-not-appear"), patch.object(p, "gitlab_tls_context", side_effect=OSError("credential-must-not-appear")), patch.object(p.sys, "stderr", diagnostics):
+            self.assertEqual(p.main(), 1)
+        self.assertEqual(diagnostics.getvalue(), '{"event":"poller-refused-or-unavailable"}\n')
+
     def test_pagination_follows_headers_without_following_untrusted_urls(self):
         class Pages:
             def request(self, method, path, query):

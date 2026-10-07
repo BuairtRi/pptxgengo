@@ -79,6 +79,15 @@ def mounted_secret(path):
     return value
 
 
+def gitlab_tls_context(cafile):
+    # Private GitLab roots supplement the system store: ingress can present a
+    # publicly trusted certificate, and hostname/certificate checks stay enabled.
+    context = ssl.create_default_context()
+    if cafile:
+        context.load_verify_locations(cafile=cafile)
+    return context
+
+
 class Budget:
     def __init__(self, seconds=110, requests=96):
         self.end = time.monotonic() + seconds
@@ -398,11 +407,11 @@ def main():
         profiles = load_capabilities(args.capabilities)
         budget = Budget()
         github = Client("https://api.github.com", budget)
-        gitlab = Client("https://gitlab.samcott.com/api/v4", budget, mounted_secret("/var/run/secrets/pptxgengo-poller/token"), context=ssl.create_default_context(cafile=args.gitlab_ca))
+        gitlab = Client("https://gitlab.samcott.com/api/v4", budget, mounted_secret("/var/run/secrets/pptxgengo-poller/token"), context=gitlab_tls_context(args.gitlab_ca))
         sa = "/var/run/secrets/kubernetes.io/serviceaccount/"
         # Reserve a separate bounded journal budget so discovery exhaustion can
         # still persist the cursor/backoff before this invocation exits.
-        kube = Client("https://kubernetes.default.svc", Budget(requests=32), mounted_secret(sa + "token"), header="Authorization", context=ssl.create_default_context(cafile=sa + "ca.crt"))
+        kube = Client("https://kubernetes.default.svc.cluster.local", Budget(requests=32), mounted_secret(sa + "token"), header="Authorization", context=ssl.create_default_context(cafile=sa + "ca.crt"))
         Poller(github, gitlab, ConfigMapJournal(kube, args.namespace, args.journal), profiles).run()
     except Backoff:
         print('{"event":"rate-backoff-before-discovery"}', file=sys.stderr)
