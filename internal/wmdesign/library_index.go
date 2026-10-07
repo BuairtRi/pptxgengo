@@ -459,7 +459,19 @@ func (index *LibraryIndex) entities(where string, args []any) ([]LibraryEntity, 
 // Leave those in the verified SQLite projection for Inspect/fit, rather than
 // decoding tens of megabytes of source scene objects on every query.
 func (index *LibraryIndex) discoveryEntities(where string, args []any) ([]LibraryEntity, error) {
-	query := `SELECT json_set(json_remove(json,'$.definition','$.template','$.discovery.zones'),'$.template',json_object('uses',json_extract(json,'$.template.uses'))) FROM entities`
+	return index.discoveryProjection(where, args, false)
+}
+
+func (index *LibraryIndex) embeddingEntities(where string, args []any) ([]LibraryEntity, error) {
+	return index.discoveryProjection(where, args, true)
+}
+
+func (index *LibraryIndex) discoveryProjection(where string, args []any, authoring bool) ([]LibraryEntity, error) {
+	template := `json_object('uses',json_extract(json,'$.template.uses'))`
+	if authoring {
+		template = `json_object('uses',json_extract(json,'$.template.uses'),'authoring',json_extract(json,'$.template.authoring'))`
+	}
+	query := `SELECT json_set(json_remove(json,'$.definition','$.template','$.discovery.zones'),'$.template',` + template + `) FROM entities`
 	if where != "" {
 		query += " WHERE " + where
 	}

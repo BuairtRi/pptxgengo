@@ -18,7 +18,9 @@ jobs:
   developer:
     name: Developer checks (${{ matrix.target }})
     runs-on: macos-latest
-    timeout-minutes: 10
+    # Complete pinned catalog/race checks reached 9m58s on a hosted Mac before
+    # adding the model's Go dependency compilation. Per-package ceilings remain.
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:

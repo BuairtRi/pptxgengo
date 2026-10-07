@@ -99,7 +99,7 @@ func designArgs(root string, input []string) ([]string, error) {
 		return args, nil
 	}
 	command := args[0]
-	if command == "render" || command == "render-doctor" || command == "render-native-worker" || command == "source-inventory" || command == "asset-gallery" {
+	if command == "library-model" || command == "render" || command == "render-doctor" || command == "render-native-worker" || command == "source-inventory" || command == "asset-gallery" {
 		return args, nil
 	}
 	if command != "project" && !hasFlag(args, "--bundle") {
@@ -109,7 +109,7 @@ func designArgs(root string, input []string) ([]string, error) {
 		}
 		args = append(args, "--bundle", filepath.Join(root, "library", "wm-design-system", bundle))
 	}
-	indexRead := command == "library-find" || command == "library-inspect" || command == "library-preview"
+	indexRead := command == "library-embed" || command == "library-find" || command == "library-inspect" || command == "library-preview"
 	if indexRead && !hasFlag(args, "--index") {
 		bundlePath := ""
 		for i, arg := range args {
@@ -124,7 +124,7 @@ func designArgs(root string, input []string) ([]string, error) {
 			args = append(args, "--gallery", filepath.Join(bundlePath, "catalog"))
 		}
 	}
-	engineAllowed := command != "library-index" && command != "library-inspect" && command != "library-preview" && command != "project" && command != "library-authoring"
+	engineAllowed := command != "library-embed" && command != "library-index" && command != "library-inspect" && command != "library-preview" && command != "project" && command != "library-authoring"
 	if engineAllowed && !hasFlag(args, "--engine") {
 		args = append(args, "--engine", "wmds-go-foundation.v2")
 	}

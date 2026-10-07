@@ -7,7 +7,7 @@ import (
 )
 
 func TestKeywordConcurrentReadOnlyQueries(t *testing.T) {
-	path, _ := indexFixture(t)
+	path, _ := indexFixtureSubset(t, 2)
 	index, err := OpenLibraryIndex(path, LibraryIndexOptions{})
 	if err != nil {
 		t.Fatal(err)
@@ -102,8 +102,8 @@ func TestKeywordLiteralQuerySafetyAndDeterminism(t *testing.T) {
 			t.Fatal("unmatched query returned strong results", a.Matches)
 		}
 	}
-	if _, err := index.Find(LibraryIndexFindOptions{Retrieval: "semantic"}); err == nil {
-		t.Fatal("unimplemented semantic ranking silently accepted")
+	if _, err := index.Find(LibraryIndexFindOptions{Retrieval: "semantic", Shape: LibrarySearchOptions{Query: "cards"}}); err == nil {
+		t.Fatal("semantic ranking silently accepted missing offline resources")
 	}
 	r, err := index.Find(LibraryIndexFindOptions{Retrieval: "keyword", Shape: LibrarySearchOptions{Items: 3}})
 	if err != nil || r.Retrieval.Actual != "metadata" || r.Retrieval.Notice == "" {

@@ -1,10 +1,14 @@
 package wmdesign
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
+
+	"github.com/buairtri/pptxgengo/internal/localembed"
 )
 
 type LibraryIndexFindOptions struct {
@@ -13,6 +17,8 @@ type LibraryIndexFindOptions struct {
 	Namespace      string               `json:"namespace,omitempty"`
 	IncludeWeak    bool                 `json:"include_weak,omitempty"`
 	Retrieval      string               `json:"retrieval,omitempty"`
+	Embeddings     string               `json:"embeddings,omitempty"`
+	ModelDir       string               `json:"model_dir,omitempty"`
 	RequireShape   bool                 `json:"require_shape,omitempty"`
 	Lifecycles     []string             `json:"lifecycles,omitempty"`
 	ContentAdapter string               `json:"content_adapter,omitempty"`
@@ -61,7 +67,7 @@ type LibraryIndexFindResult struct {
 }
 
 func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFindResult, error) {
-	result := LibraryIndexFindResult{Engine: LibrarySearchEngine{Requested: options.Shape.EngineHint, Compatibility: "not_evaluated_search_only"}, Schema: "pptxgengo.unified-library-search.v1", Query: options, Vocabulary: DiscoveryVocabulary(), Matches: []LibraryIndexHit{}, Policy: []string{"Kinds and namespace are explicit filters; scenario and content-shape fields are ranking hints.", "Deprecated entries are hidden unless requested; discovery does not impose a qualification gate.", "Primary/source example counts and source-advisory budgets are not measured fit for supplied content.", "Modern entities precede legacy entities only on equal score; canonical identity breaks remaining ties."}}
+	result := LibraryIndexFindResult{Engine: LibrarySearchEngine{Requested: options.Shape.EngineHint, Compatibility: "not_evaluated_search_only"}, Schema: "pptxgengo.unified-library-search.v1", Query: options, Vocabulary: DiscoveryVocabulary(), Matches: []LibraryIndexHit{}, Policy: []string{"Kinds and namespace are explicit filters; scenario and content-shape fields are ranking hints.", "Deprecated entries are hidden unless requested; discovery does not impose a qualification gate.", "Primary/source example counts and source-advisory budgets are not measured fit for supplied content.", "Metadata ties prefer modern entities, then canonical identity. Text rankings use their declared retrieval ranks and canonical identity ties."}}
 	if _, e := SearchLibrary(nil, options.Shape); e != nil {
 		return result, e
 	}
@@ -69,19 +75,75 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 	if mode == "" {
 		mode = "metadata"
 	}
-	if mode != "metadata" && mode != "keyword" {
-		return result, fmt.Errorf("library.retrieval_invalid: choose metadata or keyword; model-backed semantic/hybrid retrieval is not available in this build")
+	if mode != "metadata" && mode != "keyword" && mode != "semantic" && mode != "hybrid" {
+		return result, fmt.Errorf("library.retrieval_invalid: choose metadata, keyword, semantic or hybrid")
 	}
-	result.Retrieval = LibraryRetrievalReport{Requested: mode, Actual: mode, Ranking: "metadata_and_structural_hints"}
-	keyword := mode == "keyword" && strings.TrimSpace(options.Shape.Query) != ""
-	if mode == "keyword" {
+	requested := mode
+	notice := ""
+	var snapshot *LibraryEmbeddingSnapshot
+	var queryVector []float32
+	textQuery := strings.TrimSpace(options.Shape.Query) != ""
+	if (mode == "metadata" || mode == "keyword") && (options.Embeddings != "" || options.ModelDir != "") {
+		return result, fmt.Errorf("library.model_options: --embeddings and --model-dir require semantic or hybrid retrieval")
+	}
+	if (mode == "semantic" || mode == "hybrid") && textQuery {
+		missing := options.Embeddings == "" || options.ModelDir == ""
+		if !missing {
+			var err error
+			snapshot, err = index.readEmbeddings(options.Embeddings)
+			if err != nil {
+				if os.IsNotExist(err) && mode == "hybrid" {
+					missing = true
+				} else {
+					return result, err
+				}
+			}
+			if !missing {
+				m, err := localembed.Load(options.ModelDir)
+				if err != nil {
+					if os.IsNotExist(err) && mode == "hybrid" {
+						missing = true
+					} else {
+						return result, err
+					}
+				} else {
+					queryVector, err = m.Embed(context.Background(), options.Shape.Query)
+					m.Close()
+					if err != nil {
+						return result, err
+					}
+				}
+			}
+		}
+		if missing {
+			if mode == "semantic" {
+				return result, fmt.Errorf("embedding.resources_missing: semantic retrieval requires compatible --embeddings FILE and offline --model-dir DIR")
+			}
+			mode = "keyword"
+			snapshot = nil
+			notice = "Offline model or embedding snapshot unavailable; hybrid retrieval explicitly fell back to keyword. No network request was made."
+		}
+	}
+	ranked := mode != "metadata" && textQuery
+	result.Retrieval = LibraryRetrievalReport{Requested: requested, Actual: mode, Ranking: "metadata_and_structural_hints", Notice: notice}
+	if mode != "metadata" {
 		result.Retrieval.TextPreparation = index.Report.RetrievalText
 		result.Retrieval.Ranking = "exact_identity_then_sqlite_fts5_bm25_ascending_then_canonical_id"
-		result.Policy = append(result.Policy, "Exact eligible entity IDs or unique canonical keys rank first. Other keyword ranks use FTS5 BM25 across the pinned library, with name/purpose/discovery weights 5/2/1 and Porter English stemming over Unicode tokens. Structural scores are separate and are not added to BM25.")
-		if !keyword {
+		if snapshot != nil {
+			result.Retrieval.Model = &snapshot.Model
+			result.Retrieval.VectorCoverage = len(snapshot.Rows)
+			result.Retrieval.TextPreparation = snapshot.TextPreparation
+			result.Retrieval.Ranking = "normalized_cosine_descending_then_canonical_id"
+			if mode == "hybrid" {
+				result.Retrieval.Ranking = "exact_identity_then_reciprocal_rank_fusion_descending_then_canonical_id"
+				result.Retrieval.FusionK = LibraryRRFK
+			}
+		}
+		result.Policy = append(result.Policy, "Lexical relevance, normalized cosine and reciprocal rank fusion are separate from structural scores and measured content fit. Hybrid uses the sum of 1/(60+eligible rank) for each available retriever, never an addition of raw BM25 and cosine values.")
+		if !ranked {
 			result.Retrieval.Actual = "metadata"
 			result.Retrieval.Ranking = "metadata_and_structural_hints"
-			result.Retrieval.Notice = "An empty text query browses structural metadata; no lexical retrieval was performed."
+			result.Retrieval.Notice = "An empty text query browses structural metadata; no text retrieval was performed."
 		}
 	}
 	result.Policy = append(result.Policy, "--require-shape promotes every supplied role, structure, visual-form and exact source item-count hint to an eligibility constraint. Source agreement is not measured fit for new content.")
@@ -125,7 +187,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 			def.Uses = entity.Template.Uses
 		}
 		shape := options.Shape
-		if keyword {
+		if ranked {
 			shape.Query = ""
 		}
 		part, e := SearchLibrary([]LibraryTemplate{def}, shape)
@@ -140,7 +202,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 		if options.RequireShape && structuralStatus == "source_hints_mismatch" {
 			continue
 		}
-		if !keyword && strings.TrimSpace(options.Shape.Query) != "" && hit.Score == 0 && !options.IncludeWeak {
+		if !ranked && strings.TrimSpace(options.Shape.Query) != "" && hit.Score == 0 && !options.IncludeWeak {
 			continue
 		}
 		eligible[entity.ID] = true
@@ -150,7 +212,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 		summary := LibraryEntitySummary{ReuseStatus: finishedReuseStatus(entity), ID: entity.ID, Namespace: entity.Namespace, Kind: entity.Kind, Key: entity.Key, Name: entity.Name, Purpose: entity.Purpose, Lifecycle: entity.Lifecycle, Revision: entity.Revision, SourceRevision: entity.SourceRevision, SourceSHA256: entity.SourceSHA256, Discovery: discovery, Capacity: entity.Capacity, SupportedAdaptations: entity.SupportedAdaptations, PreviewCount: len(entity.Artifacts)}
 		result.Matches = append(result.Matches, LibraryIndexHit{Entity: summary, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, CountMatch: hit.CountMatch, FitStatus: hit.FitStatus, StructuralStatus: structuralStatus})
 	}
-	if keyword {
+	if ranked {
 		exactID, uniqueKeyID := "", ""
 		keyMatches := 0
 		for _, entity := range entities {
@@ -168,9 +230,19 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 		if exactID == "" && keyMatches == 1 {
 			exactID = uniqueKeyID
 		}
-		ranks, err := index.keywordRanks(options.Shape.Query, eligible, exactID)
-		if err != nil {
-			return result, err
+		var ranks map[string]LibraryRetrievalHit
+		if mode == "keyword" || mode == "hybrid" {
+			var err error
+			ranks, err = index.keywordRanks(options.Shape.Query, eligible, exactID)
+			if err != nil {
+				return result, err
+			}
+		}
+		if mode == "semantic" {
+			ranks = libraryVectorRanks(snapshot, queryVector, eligible)
+		}
+		if mode == "hybrid" {
+			ranks = libraryHybridRanks(ranks, libraryVectorRanks(snapshot, queryVector, eligible), exactID)
 		}
 		matches := []LibraryIndexHit{}
 		for _, hit := range result.Matches {
@@ -178,8 +250,10 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 				hit.Retrieval = &rank
 				if rank.Method == "exact_entity_identity" {
 					hit.Reasons = append(hit.Reasons, "Exact eligible entity ID or unique canonical key matches the query.")
-				} else {
+				} else if mode == "keyword" {
 					hit.Reasons = append(hit.Reasons, fmt.Sprintf("FTS5 BM25 lexical rank %d; smaller raw BM25 values rank first", rank.Rank))
+				} else {
+					hit.Reasons = append(hit.Reasons, fmt.Sprintf("%s retrieval rank %d; source constraints remain separate from relevance", mode, rank.Rank))
 				}
 			} else if !options.IncludeWeak {
 				continue
@@ -192,7 +266,7 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 	}
 	sort.Slice(result.Matches, func(i, j int) bool {
 		a, b := result.Matches[i], result.Matches[j]
-		if keyword {
+		if ranked {
 			if (a.Retrieval == nil) != (b.Retrieval == nil) {
 				return a.Retrieval != nil
 			}
