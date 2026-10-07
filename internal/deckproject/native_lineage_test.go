@@ -384,3 +384,84 @@ func TestNativeLineageDesktopEdited(t *testing.T) {
 	}
 	t.Logf("desktop identity evidence: %s", evidencePath)
 }
+
+func TestNativeLineageUngroupReportsOwnership(t *testing.T) {
+	data, o := lineageFixture(t)
+	pkg, e := openLineagePackage(data)
+	if e != nil {
+		t.Fatal(e)
+	}
+	part := ""
+	var group *lineageSpan
+	var original []byte
+	for _, r := range o.Objects {
+		if r.NativeKind != "grpSp" {
+			continue
+		}
+		b, e := pkg.read(r.NativePart)
+		if e != nil {
+			t.Fatal(e)
+		}
+		root, e := lineageSpans(b)
+		if e != nil {
+			t.Fatal(e)
+		}
+		var walk func(*lineageSpan)
+		walk = func(s *lineageSpan) {
+			if s.node.Name.Space == lineagePML && s.node.Name.Local == "grpSp" {
+				for _, c := range s.children {
+					if c.node.Name.Local == "nvGrpSpPr" {
+						for _, id := range c.children {
+							if id.node.Name.Local == "cNvPr" && lineageAttr(id.node, "", "id") == r.NativeID {
+								group = s
+								part = r.NativePart
+								original = b
+							}
+						}
+					}
+				}
+			}
+			for _, c := range s.children {
+				walk(c)
+			}
+		}
+		walk(root)
+		if group != nil {
+			break
+		}
+	}
+	if group == nil {
+		t.Fatal("fixture lacks a native group")
+	}
+	var children strings.Builder
+	for _, c := range group.children {
+		if c.node.Name.Local != "nvGrpSpPr" && c.node.Name.Local != "grpSpPr" {
+			children.Write(original[c.start:c.end])
+		}
+	}
+	raw, e := lineageApply(original, []lineagePatch{{group.start, group.end, children.String()}})
+	if e != nil {
+		t.Fatal(e)
+	}
+	changed, e := lineageRewrite(pkg, map[string][]byte{part: raw})
+	if e != nil {
+		t.Fatal(e)
+	}
+	out, e := InspectNativeLineage(changed, o)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if !lineageIssue(out, "shape_missing") || !lineageIssue(out, "shape_parent_changed") {
+		t.Fatalf("ungroup not explicitly reported: %+v", out.Issues)
+	}
+}
+
+func TestNativeLineageRejectsWrongTagContentType(t *testing.T) {
+	data, o := lineageFixture(t)
+	changed := lineageEdit(t, data, "[Content_Types].xml", func(b []byte) []byte {
+		return bytes.ReplaceAll(b, []byte(lineageTagContent), []byte("application/xml"))
+	})
+	if _, e := InspectNativeLineage(changed, o); e == nil {
+		t.Fatal("incorrect tag content type accepted")
+	}
+}

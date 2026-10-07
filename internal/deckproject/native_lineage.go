@@ -73,10 +73,12 @@ func validLineageToken(s string) bool {
 // A bounded, non-extracting package reader. Reject duplicate/unsafe entries and
 // enforce actual decompressed limits, including parts unrelated to our tags.
 type lineagePackage struct {
-	files map[string]*zip.File
-	order []*zip.File
-	total int64
-	cache map[string][]byte
+	files           map[string]*zip.File
+	order           []*zip.File
+	total           int64
+	cache           map[string][]byte
+	contentTypes    map[string]string
+	contentDefaults map[string]string
 }
 
 func openLineagePackage(data []byte) (*lineagePackage, error) {
@@ -286,6 +288,13 @@ func (p *lineagePackage) tags(part string, owner *xmlNode) (map[string]string, e
 	if e != nil {
 		return nil, e
 	}
+	contentType, e := p.contentType(target)
+	if e != nil {
+		return nil, e
+	}
+	if contentType != lineageTagContent {
+		return nil, fmt.Errorf("invalid native tag part content type")
+	}
 	t, e := p.tree(target)
 	if e != nil {
 		return nil, e
@@ -460,6 +469,7 @@ func StampNativeLineage(data []byte, objects Objects, lockSHA string) ([]byte, O
 		byPart[r.NativePart][r.NativeID] = token
 	}
 	objects.Lineage = l
+	objects.Reconciliation = "generation and native object tags recorded; edited-PPTX three-way proposals and source adoption remain pending"
 	changed := map[string][]byte{}
 	counter := 0
 	var contentOverrides strings.Builder
@@ -640,7 +650,7 @@ func StampNativeLineage(data []byte, objects Objects, lockSHA string) ([]byte, O
 	if e != nil {
 		return nil, objects, e
 	}
-	inspection, e := InspectNativeLineage(stamped, objects)
+	inspection, e := inspectNativeLineage(stamped, objects, false)
 	if e != nil {
 		return nil, objects, e
 	}
@@ -711,6 +721,9 @@ func lineageRewrite(p *lineagePackage, changed map[string][]byte) ([]byte, error
 // they never authorize deletion or a guessed source match. The caller must first
 // authenticate the baseline sidecar against its immutable build receipt.
 func InspectNativeLineage(data []byte, baseline Objects) (NativeLineageInspection, error) {
+	return inspectNativeLineage(data, baseline, true)
+}
+func inspectNativeLineage(data []byte, baseline Objects, compareParents bool) (NativeLineageInspection, error) {
 	out := NativeLineageInspection{Schema: NativeLineageSchema, Objects: []NativeLineageObject{}, Issues: []NativeLineageIssue{}}
 	l := baseline.Lineage
 	if l == nil || l.Schema != NativeLineageSchema || !validLineageToken(l.DeckToken) || !validLineageToken(l.BuildToken) || l.DeckToken != lineageToken([]string{"deck", baseline.DeckID}) || l.SourceSemanticSHA256 != baseline.SourceSHA256 {
@@ -728,7 +741,7 @@ func InspectNativeLineage(data []byte, baseline Objects) (NativeLineageInspectio
 		expectedSlides[id] = token
 	}
 	for _, r := range baseline.Objects {
-		if !validLineageToken(r.ShapeToken) || expected[r.ShapeToken].ShapeToken != "" || expectedSlides[r.SlideID] == "" {
+		if !validLineageToken(r.ShapeToken) || r.ShapeToken != lineageToken([]string{"shape", l.BuildToken, r.SlideID, r.LogicalID, r.NativeID}) || expected[r.ShapeToken].ShapeToken != "" || expectedSlides[r.SlideID] == "" {
 			return out, fmt.Errorf("invalid or duplicate baseline shape token")
 		}
 		expected[r.ShapeToken] = r
@@ -858,6 +871,12 @@ func InspectNativeLineage(data []byte, baseline Objects) (NativeLineageInspectio
 					issue("shape_unmatched", part, token, slideToken, "shape tag does not belong to baseline")
 				} else {
 					countShapes[token]++
+					if compareParents && expected[token].NativeParentToken != parentToken {
+						issue("shape_parent_changed", part, token, slideToken, "group ownership changed; requires manual review")
+					}
+					if expected[token].NativeKind != "" && expected[token].NativeKind != n.Name.Local {
+						issue("shape_kind_changed", part, token, slideToken, "native object kind differs from baseline")
+					}
 					if expectedSlides[expected[token].SlideID] != slideToken {
 						issue("shape_moved_between_slides", part, token, slideToken, "tagged shape is on a different authored slide")
 					}
@@ -914,4 +933,51 @@ func lineageNV(shape *xmlNode) *xmlNode {
 		}
 	}
 	return out
+}
+
+func (p *lineagePackage) contentType(part string) (string, error) {
+	if p.contentTypes == nil {
+		tree, e := p.tree("[Content_Types].xml")
+		if e != nil {
+			return "", e
+		}
+		if tree.Name != (xml.Name{Space: lineageCT, Local: "Types"}) {
+			return "", fmt.Errorf("invalid native content types root")
+		}
+		overrides, defaults := map[string]string{}, map[string]string{}
+		for _, c := range tree.Children {
+			if c.Name.Space != lineageCT {
+				return "", fmt.Errorf("foreign native content type entry")
+			}
+			mime := lineageAttr(c, "", "ContentType")
+			if mime == "" || len(mime) > 256 {
+				return "", fmt.Errorf("invalid native content type")
+			}
+			switch c.Name.Local {
+			case "Override":
+				name := lineageAttr(c, "", "PartName")
+				if !strings.HasPrefix(name, "/") || path.Clean(name) != name || strings.ContainsAny(name, "\\\x00?#:") {
+					return "", fmt.Errorf("invalid native content type part name")
+				}
+				name = strings.TrimPrefix(name, "/")
+				if overrides[name] != "" {
+					return "", fmt.Errorf("duplicate native content type override")
+				}
+				overrides[name] = mime
+			case "Default":
+				ext := strings.ToLower(lineageAttr(c, "", "Extension"))
+				if ext == "" || strings.ContainsAny(ext, "./\\\x00?#:") || defaults[ext] != "" {
+					return "", fmt.Errorf("invalid/duplicate native content type extension")
+				}
+				defaults[ext] = mime
+			default:
+				return "", fmt.Errorf("invalid native content type entry")
+			}
+		}
+		p.contentTypes, p.contentDefaults = overrides, defaults
+	}
+	if mime := p.contentTypes[part]; mime != "" {
+		return mime, nil
+	}
+	return p.contentDefaults[strings.TrimPrefix(strings.ToLower(path.Ext(part)), ".")], nil
 }

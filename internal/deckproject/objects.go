@@ -125,7 +125,7 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 		var walk func(*xmlNode)
 		walk = func(n *xmlNode) {
 			switch n.Name.Local {
-			case "sp", "pic", "graphicFrame", "grpSp":
+			case "sp", "pic", "graphicFrame", "grpSp", "cxnSp":
 				id, identityErr := nativeObjectIdentity(n)
 				if identityErr != nil {
 					identityError = identityErr
