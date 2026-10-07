@@ -208,7 +208,11 @@ func attachNativeSourceFields(p *Project, r ObjectRecord) ObjectRecord {
 
 func typedCardAssignmentMatches(name string, assignmentTarget, property string) bool {
 	if strings.HasPrefix(property, "items.") {
-		target := assignmentTarget + "." + strings.ReplaceAll(property, ".card.", ".")
+		container := strings.LastIndex(property, ".card.")
+		if container < 0 {
+			return false
+		}
+		target := assignmentTarget + "." + property[:container] + property[container+len(".card"):]
 		return name == target
 	}
 	return name == assignmentTarget || strings.HasPrefix(name, assignmentTarget+".")

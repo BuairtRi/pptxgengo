@@ -128,3 +128,12 @@ func TestNativeStructureHashSeparatesTextAndGeometry(t *testing.T) {
 		t.Fatal("geometry change was hidden")
 	}
 }
+
+func TestTypedCardFieldPreservesDottedItemKeys(t *testing.T) {
+	if !typedCardAssignmentMatches("cards.items.foo.card.bar.title", "cards", "items.foo.card.bar.card.title") {
+		t.Fatal("item key was treated as a structural container")
+	}
+	if typedCardAssignmentMatches("cards.items.other.title", "cards", "items.foo.card.bar.card.title") {
+		t.Fatal("different item field matched")
+	}
+}
