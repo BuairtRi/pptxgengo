@@ -1,6 +1,7 @@
 package deckproject
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -135,5 +136,36 @@ func TestTypedCardFieldPreservesDottedItemKeys(t *testing.T) {
 	}
 	if typedCardAssignmentMatches("cards.items.other.title", "cards", "items.foo.card.bar.card.title") {
 		t.Fatal("different item field matched")
+	}
+}
+
+func TestNativeSourceFieldResolutionSurvivesKeyedReorder(t *testing.T) {
+	p := example(t)
+	object := ObjectRecord{SlideID: "maintain-the-source", SourceTemplate: p.Document.Slides[0].Template}
+	field := NativeSourceField{Identity: "maintain-the-source/cards/title/source", SourceSlot: "cards.source.title", Status: "plain_text_baseline"}
+	pointer, value, err := ResolveNativeSourceField(p, object, field)
+	if err != nil || pointer != "/slides/0/values/cards/0/title" || value != "Author" {
+		t.Fatal(pointer, value, err)
+	}
+	cards := p.Document.Slides[0].Values["cards"].([]any)
+	cards[0], cards[2] = cards[2], cards[0]
+	if err := os.WriteFile(p.SourcePath, canonical(p.Document), 0644); err != nil {
+		t.Fatal(err)
+	}
+	current, err := Load(p.Root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, value, err = ResolveNativeSourceField(current, object, field)
+	if err != nil || pointer != "/slides/0/values/cards/2/title" || value != "Author" {
+		t.Fatal("old array index guessed", pointer, value, err)
+	}
+	current.Document.Slides[0].Template.ID = "cards/4"
+	if _, _, err := ResolveNativeSourceField(current, object, field); err == nil {
+		t.Fatal("template drift ignored")
+	}
+	field.Status = "manual_review"
+	if _, _, err := ResolveNativeSourceField(p, object, field); err == nil {
+		t.Fatal("unsupported field selected")
 	}
 }

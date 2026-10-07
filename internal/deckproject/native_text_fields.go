@@ -1,7 +1,9 @@
 package deckproject
 
 import (
+	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -234,4 +236,43 @@ func nativeStructureHash(n *xmlNode) string {
 		return &clone
 	}
 	return digest(canonical(copyNode(n)))
+}
+
+// ResolveNativeSourceField follows the recorded slide ID and keyed source slot,
+// rather than an old array index, current text or native geometry. It is a read
+// operation; a reconciliation caller must also verify baseline/native lineage.
+func ResolveNativeSourceField(p *Project, object ObjectRecord, field NativeSourceField) (string, string, error) {
+	if field.Status != "plain_text_baseline" || field.Identity == "" || field.SourceSlot == "" {
+		return "", "", fmt.Errorf("native_mapping.field_not_supported")
+	}
+	index := -1
+	for i, slide := range p.Document.Slides {
+		if slide.ID == object.SlideID {
+			if index >= 0 {
+				return "", "", fmt.Errorf("native_mapping.slide_ambiguous")
+			}
+			index = i
+		}
+	}
+	if index < 0 {
+		return "", "", fmt.Errorf("native_mapping.slide_missing")
+	}
+	slide := p.Document.Slides[index]
+	if slide.Template != object.SourceTemplate {
+		return "", "", fmt.Errorf("native_mapping.template_changed")
+	}
+	base := "/slides/" + strconv.Itoa(index) + "/values"
+	pointer := slotPointer(slide.Values, base, field.SourceSlot)
+	if pointer == base {
+		return "", "", fmt.Errorf("native_mapping.source_slot_missing")
+	}
+	value, err := lookupPointer(p.tree, pointer)
+	if err != nil {
+		return "", "", err
+	}
+	text, ok := value.(string)
+	if !ok {
+		return "", "", fmt.Errorf("native_mapping.source_type_changed")
+	}
+	return pointer, text, nil
 }

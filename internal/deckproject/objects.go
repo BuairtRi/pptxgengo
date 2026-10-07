@@ -14,6 +14,7 @@ import (
 )
 
 type ObjectRecord struct {
+	SourceTemplate        Reference           `json:"source_template"`
 	SourceSlots           map[string]string   `json:"source_slots,omitempty"`
 	NativeStructureSHA256 string              `json:"native_structure_sha256,omitempty"`
 	NativeKind            string              `json:"native_kind"`
@@ -150,6 +151,7 @@ func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) 
 }
 func bindObject(p *Project, index int, s wmdesign.SlideSpec, r ObjectRecord) ObjectRecord {
 	ptr := "/slides/" + strconv.Itoa(index) + "/values"
+	r.SourceTemplate = p.Document.Slides[index].Template
 	r.SourceSlots = map[string]string{}
 	longest := ""
 	for _, n := range s.Nodes {

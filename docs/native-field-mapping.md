@@ -37,7 +37,9 @@ support does not establish edited-file identity survival or update permission.
 
 Typed card title and body objects now select their specific assignment, rather
 than inheriting every card field from the containing row. The keyed slot retains
-item identity when an authored array is reordered. Frame fields use the actual
+item identity when an authored array is reordered. A read-only resolver follows
+the recorded slide ID and keyed slot in current source, and rejects missing fields
+or changed template references; it does not reuse a stale baseline array index. Frame fields use the actual
 source slot, including raw `values.slots`, instead of guessing a direct value.
 Ambiguous objects, rich text, cells, source/native break differences and missing
 stable bindings remain `manual_review`; source text is never guessed by similarity.
