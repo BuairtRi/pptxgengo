@@ -599,6 +599,22 @@ func verify(dir, version, commit string) error {
 	if m.Schema != "pptxgengo.release-manifest/v1" || m.Project != "riscott/pptxgengo" || m.Version != version || m.Commit != commit || len(m.Targets) != 6 || (m.PackageKind != "cli-only" && m.PackageKind != "full") {
 		return fmt.Errorf("manifest identity mismatch")
 	}
+	for i, target := range targets {
+		if m.Targets[i] != target {
+			return fmt.Errorf("manifest target inventory mismatch")
+		}
+		for _, name := range []string{archiveName(target, version), archiveName(target, version) + ".sbom.json", archiveName(target, version) + ".vulnerabilities.json", target + ".build-evidence.json"} {
+			if m.Files[name] == "" {
+				return fmt.Errorf("required release evidence missing: %s", name)
+			}
+		}
+		if strings.HasPrefix(target, "darwin-") && m.Files[target+".notarization.json"] == "" {
+			return fmt.Errorf("notarization evidence missing")
+		}
+	}
+	if m.Files["security-policy.json"] == "" {
+		return fmt.Errorf("security policy missing")
+	}
 	for p, h := range m.Files {
 		if !safePath(p) {
 			return fmt.Errorf("unsafe manifest path")
@@ -622,14 +638,42 @@ func request(method, endpoint string, body io.Reader) ([]byte, int, error) {
 	if method == "POST" {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	client := &http.Client{Timeout: 10 * time.Minute, CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse }}
+	if file, ok := body.(*os.File); ok {
+		info, err := file.Stat()
+		if err != nil {
+			return nil, 0, err
+		}
+		req.ContentLength = info.Size()
+	}
+	client := &http.Client{Timeout: 30 * time.Minute, CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse }}
 	resp, e := client.Do(req)
 	if e != nil {
 		return nil, 0, e
 	}
 	defer resp.Body.Close()
-	b, e := io.ReadAll(resp.Body)
+	b, e := io.ReadAll(io.LimitReader(resp.Body, 1024*1024))
 	return b, resp.StatusCode, e
+}
+
+// Hash package downloads as a stream: full resource archives can be large.
+func downloadDigest(endpoint string) (string, int, error) {
+	req, e := http.NewRequest("GET", endpoint, nil)
+	if e != nil {
+		return "", 0, e
+	}
+	req.Header.Set("JOB-TOKEN", os.Getenv("CI_JOB_TOKEN"))
+	client := &http.Client{Timeout: 30 * time.Minute, CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse }}
+	resp, e := client.Do(req)
+	if e != nil {
+		return "", 0, e
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return "", resp.StatusCode, nil
+	}
+	h := sha256.New()
+	_, e = io.Copy(h, resp.Body)
+	return hex.EncodeToString(h.Sum(nil)), resp.StatusCode, e
 }
 func publish(dir, version, commit string) error {
 	if e := verify(dir, version, commit); e != nil {
@@ -668,20 +712,25 @@ func publish(dir, version, commit string) error {
 		}
 		p := entry.Name()
 		endpoint := base + "/packages/generic/pptxgengo-release/" + url.PathEscape(version) + "/" + url.PathEscape(p)
-		existing, status, e := request("GET", endpoint, nil)
+		existing, status, e := downloadDigest(endpoint)
 		if e != nil {
 			return e
 		}
-		payload, e := os.ReadFile(filepath.Join(dir, p))
+		localHash, e := digest(filepath.Join(dir, p))
 		if e != nil {
 			return e
 		}
 		if status == 200 {
-			if sha256.Sum256(existing) != sha256.Sum256(payload) {
+			if existing != localHash {
 				return fmt.Errorf("refusing to replace published artifact %s", p)
 			}
 		} else if status == 404 {
-			_, status, e = request("PUT", endpoint, strings.NewReader(string(payload)))
+			payload, err := os.Open(filepath.Join(dir, p))
+			if err != nil {
+				return err
+			}
+			_, status, e = request("PUT", endpoint, payload)
+			payload.Close()
 			if e != nil {
 				return e
 			}
@@ -691,11 +740,11 @@ func publish(dir, version, commit string) error {
 		} else {
 			return fmt.Errorf("artifact check failed: HTTP %d", status)
 		}
-		downloaded, status, e := request("GET", endpoint, nil)
+		downloaded, status, e := downloadDigest(endpoint)
 		if e != nil {
 			return e
 		}
-		if status != 200 || sha256.Sum256(downloaded) != sha256.Sum256(payload) {
+		if status != 200 || downloaded != localHash {
 			return fmt.Errorf("published bytes differ for %s", p)
 		}
 		links = append(links, map[string]string{"name": p, "url": endpoint, "link_type": "package"})

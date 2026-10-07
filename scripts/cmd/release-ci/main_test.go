@@ -72,14 +72,29 @@ func TestArchivesReproducibleAndPreserveExecutableMode(t *testing.T) {
 }
 func TestManifestTamperingIsRejected(t *testing.T) {
 	root := t.TempDir()
-	path := filepath.Join(root, "artifact.zip")
-	os.WriteFile(path, []byte("original"), 0644)
-	hash, _ := digest(path)
-	m := Manifest{Schema: "pptxgengo.release-manifest/v1", Project: "riscott/pptxgengo", Version: "v4.1.0-rc.1", Commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", PackageKind: "cli-only", Targets: targets, Files: map[string]string{"artifact.zip": hash}}
+	m := Manifest{Schema: "pptxgengo.release-manifest/v1", Project: "riscott/pptxgengo", Version: "v4.1.0-rc.1", Commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", PackageKind: "cli-only", Targets: targets, Files: map[string]string{}}
+	for _, target := range targets {
+		for _, name := range []string{archiveName(target, m.Version), archiveName(target, m.Version) + ".sbom.json", archiveName(target, m.Version) + ".vulnerabilities.json", target + ".build-evidence.json", "security-policy.json"} {
+			path := filepath.Join(root, name)
+			os.WriteFile(path, []byte("original"), 0644)
+			hash, _ := digest(path)
+			m.Files[name] = hash
+		}
+		if target[:6] == "darwin" {
+			name := target + ".notarization.json"
+			path := filepath.Join(root, name)
+			os.WriteFile(path, []byte("original"), 0644)
+			hash, _ := digest(path)
+			m.Files[name] = hash
+		}
+	}
 	if err := writeJSON(filepath.Join(root, "manifest.json"), m); err != nil {
 		t.Fatal(err)
 	}
-	os.WriteFile(path, []byte("changed"), 0644)
+	if err := verify(root, m.Version, m.Commit); err != nil {
+		t.Fatal("valid manifest rejected", err)
+	}
+	os.WriteFile(filepath.Join(root, archiveName(targets[0], m.Version)), []byte("changed"), 0644)
 	if err := verify(root, m.Version, m.Commit); err == nil {
 		t.Fatal("modified artifact was accepted")
 	}
