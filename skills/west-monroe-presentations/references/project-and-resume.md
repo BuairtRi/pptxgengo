@@ -32,7 +32,7 @@ Create each file when its stage needs it. Formats are in [project templates](pro
 | `briefs/<slide-id>.md` | Each page's job, required content, evidence and open choices | Per slide, via the slide's `brief` field |
 | `composition-log.yaml` | Required. Each slide's purpose, candidates, chosen template and rationale; checked by `project check` | `composition_log` (optional; the root file is found automatically) |
 | `reviews/` | Reviewer findings and operator decisions | Not tracked |
-| `deck.yaml`, `slides/`, `templates/`, `notes/` | Visible copy, order, templates, notes | Tracked automatically |
+| `deck.yaml`, `slides/`, `slides/templates/`, `notes/` | Visible copy, order, templates, notes | Tracked automatically |
 
 `context` accepts only `project`, `audience`, `outline`, `sources`, `claims`, `composition_log`, `decisions`, `win_strategy` and `state`. Linked files invalidate dependent approvals when they change. Put internal win logic in a file linked as `win_strategy`; it is never copied into any review packet. Link `decisions` to a decision-log file, not the `decisions/` folder where the CLI writes its receipts. Once the deck source exists, generate review drafts from it and mark older drafts as superseded.
 
@@ -76,3 +76,51 @@ Exports need a current build of the current source, an unedited baseline and a n
 ## Keep history
 
 Build experiments in temporary directories. Never prune `builds/`, locks, state, original assets, `decisions/` or review findings; they are the baseline for reconciling later edits.
+
+## Portable numbered projects and colleague handoff
+
+New projects can be created directly from an actual shared template:
+
+```sh
+pptxgengo design project create --out ./client-deck --id client-deck --title 'Client deck' --bundle v11 --template cards/3
+```
+
+Replace scaffold example copy before approval or delivery. New/split sources use
+`slides/<stable-id>.yaml`, local definitions use `slides/templates/`, and owned
+asset revisions share `assets/objects/sha256/`. Deck.yaml remains the authoritative
+slide order. Preview existing paths with `project layout --project PATH --dry-run`
+and apply with `--apply`; historical receipts/source preimages are retained,
+and changed dependency approvals must be reviewed. Rebuild after migration.
+
+```sh
+pptxgengo design project version save --project ./client-deck --actor 'Named author' --message 'Reviewed source and generated deck'
+pptxgengo design project version list --project ./client-deck
+pptxgengo design project version verify --project ./client-deck --number 000001
+pptxgengo design project share --project ./client-deck --out ./private-colleague.zip
+pptxgengo design project share-extract --archive ./private-colleague.zip --out ./colleague-deck
+pptxgengo design project share-verify --project ./colleague-deck
+pptxgengo design project version materialize --project ./colleague-deck --number 000001 --out ./restored-version
+```
+
+Numbered versions retain complete source, generated PowerPoint, exact asset
+revisions, pins and receipt/history references. The visible current pointer is
+`versions/current.json`. Store stable images once for the entire deck; use
+`project asset revise --expect-sha256 OLD_HASH` for an intentional changed asset.
+A snapshot author is not an approval actor unless a separate actual approval is
+recorded. Source/deck edits remain subject to normal approval invalidation and
+native reconciliation.
+
+A complete share is **private** source/evidence handoff, distinct from client
+export. ZIP transport deduplicates asset bytes and safely expands legacy path
+aliases during `share-extract`; it uses ordinary files and no links. Toolchain
+and private branding/font requirements remain pinned. Offline runtime export
+is separate. Read the included SHARE.md before resuming in another directory.
+
+OneDrive is synchronization, not a transaction/lock service. Wait for sync and
+run share verification after extraction. Preserve both conflicting source/native
+copies; never pick an arbitrary winner or remove a build/source/version lock to
+force progress. A complete interrupted snapshot can be recovered only with
+`version recover --number NUMBER --expect-current-sha256 EXACT_POINTER_HASH`
+(or `absent` for the initial unpublished pointer). Incomplete snapshots remain
+retained for explicit resolution. See the maintained portable-project contract
+in `docs/portable-projects.md` in the source repository for schema and limits.

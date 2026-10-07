@@ -1,0 +1,276 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "gitlab-runner-pptxgengo-macmini",
+        "namespace": "gitlab-runner",
+        "labels": {
+          "app": "gitlab-runner-pptxgengo-macmini"
+        }
+      },
+      "data": {
+        "check-live": "#!/bin/bash\nset -eou pipefail\n\nVERIFY_TIMEOUT=${1:-${VERIFY_TIMEOUT:-3}}\n\nif ! /usr/bin/pgrep -f \".*register-the-runner\"  > /dev/null && ! /usr/bin/pgrep -f \"gitlab.*runner\"  > /dev/null ; then\n  exit 1\nfi\n\nstatus=0\nverify_output=$(timeout \"${VERIFY_TIMEOUT}\" gitlab-runner verify --url= 2>&1) || status=$?\n\nif (( status == 143 )) || (( status == 124 )) ; then\n  echo \"'gitlab-runner verify' terminated by timeout, not a conclusive failure\" >&2\n  exit 0\nfi\n\nif grep -qiE \"connection refused|no such host|name resolution|temporary failure|i/o timeout|dial tcp|no route to host|server misbehaving|could not resolve host|network is unreachable\" <<<\"${verify_output}\" ; then\n  echo \"'gitlab-runner verify' could not reach the GitLab server; treating as inconclusive, not a runner failure\" >&2\n  exit 0\nfi\n\nif (( status > 0 )) ; then\n  exit ${status}\nfi\n\ngrep -qE \"is (alive|valid)\" <<<\"${verify_output}\"\n",
+        "config.template.toml": "[[runners]]\n  output_limit = 4194304\n  request_concurrency = 3\n\n  [runners.cache]\n    Type = \"s3\"\n    Shared = true\n    [runners.cache.s3]\n      ServerAddress = \"rook-ceph-rgw-objectstore.rook-ceph.svc.cluster.local:80\"\n      BucketName = \"gitlab-runner-cache\"\n      BucketLocation = \"us-east-1\"\n      Insecure = true\n\n  [runners.kubernetes]\n    namespace = \"gitlab-runner\"\n    image = \"alpine\"\n    privileged = true\n    service_account = \"gitlab-runner\"\n    helper_image = \"gitlab-registry.samcott.com/riscott/ci-images/gitlab-runner-helper:v19.4.1-ca1@sha256:7b6b57c009aa354def5c0bc5effb72f1fdc4123e3f7f616ef3a3bae60a27690c\"\n\n    cleanup_grace_period_seconds = 30\n    poll_timeout = 180\n    pod_termination_grace_period_seconds = 60\n    poll_interval = 3\n    terminate_pod_grace_period_override = \"10m\"\n\n    cpu_request = \"1\"\n    memory_request = \"1.5Gi\"\n    ephemeral_storage_request = \"4Gi\"\n    helper_cpu_request = \"100m\"\n    helper_memory_request = \"128Mi\"\n    helper_ephemeral_storage_request = \"2Gi\"\n    service_cpu_request = \"100m\"\n    service_memory_request = \"256Mi\"\n    service_ephemeral_storage_request = \"1Gi\"\n\n    image_pull_secrets = [\"gitlab-registry-secret\"]\n\n    pull_policy = [\"if-not-present\"]\n    allowed_pull_policies = [\"always\", \"if-not-present\"]\n\n    [runners.kubernetes.dns_config]\n      [[runners.kubernetes.dns_config.options]]\n        name = \"ndots\"\n        value = \"1\"\n\n    [runners.kubernetes.node_tolerations]\n          \"builder-validation=true\" = \"NoSchedule\"\n\n        [runners.kubernetes.node_selector]\n      \"kubernetes.io/arch\" = \"arm64\"\n          \"kubernetes.io/os\" = \"linux\"\n          \"kubernetes.io/hostname\" = \"macmini-builder\"\n\n    [runners.kubernetes.pod_labels]\n      \"app.kubernetes.io/part-of\" = \"pptxgengo-macmini-jobs\"\n\n    [runners.kubernetes.affinity]\n      [runners.kubernetes.affinity.node_affinity]\n        [[runners.kubernetes.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms]]\n          [[runners.kubernetes.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms.match_expressions]]\n            key = \"kubernetes.io/hostname\"\n            operator = \"In\"\n            values = [\"macmini-builder\"]\n      [runners.kubernetes.affinity.pod_anti_affinity]\n        [[runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution]]\n          weight = 100\n          [runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term]\n            topology_key = \"kubernetes.io/hostname\"\n            [runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term.label_selector]\n              [[runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term.label_selector.match_expressions]]\n                key = \"app.kubernetes.io/part-of\"\n                operator = \"In\"\n                values = [\"pptxgengo-macmini-jobs\"]\n\n    [[runners.kubernetes.host_aliases]]\n      ip = \"192.168.20.69\"\n      hostnames = [\"buildkit-lb.gitlab-runner.svc.cluster.local\"]\n    [[runners.kubernetes.host_aliases]]\n      ip = \"192.168.20.70\"\n      hostnames = [\"buildkit-arm64-lb.gitlab-runner.svc.cluster.local\"]\n    [[runners.kubernetes.host_aliases]]\n      ip = \"192.168.20.71\"\n      hostnames = [\"buildkit-pi4-lb.gitlab-runner.svc.cluster.local\"]\n    [[runners.kubernetes.host_aliases]]\n      ip = \"10.43.67.38\"\n      hostnames = [\"gitlab2-webservice-default.gitlabv2.svc.cluster.local\"]\n    [[runners.kubernetes.host_aliases]]\n      ip = \"192.168.20.63\"\n      hostnames = [\"gitlab.samcott.com\"]\n    [[runners.kubernetes.host_aliases]]\n      ip = \"192.168.20.63\"\n      hostnames = [\"gitlab-registry.samcott.com\"]\n    [[runners.kubernetes.host_aliases]]\n      ip = \"192.168.20.139\"\n      hostnames = [\"nexus.scottwebworks.net\"]\n\n    [[runners.kubernetes.volumes.config_map]]\n      name = \"buildkit-config\"\n      mount_path = \"/etc/buildkit\"\n      [runners.kubernetes.volumes.config_map.items]\n        \"buildkitd.toml\" = \"buildkitd.toml\"\n\n    [[runners.kubernetes.volumes.config_map]]\n      name = \"buildx-config\"\n      mount_path = \"/etc/buildx\"\n      [runners.kubernetes.volumes.config_map.items]\n        \"buildkitd.toml\" = \"buildkitd.toml\"\n\n    [[runners.kubernetes.volumes.config_map]]\n      name = \"runner-ca-bundle\"\n      mount_path = \"/usr/local/share/ca-certificates\"\n      [runners.kubernetes.volumes.config_map.items]\n        \"ca.crt\" = \"ca.crt\"\n\n    [[runners.kubernetes.volumes.secret]]\n      name = \"internal-ca-secret\"\n      mount_path = \"/internal-ca\"\n      read_only = true\n      [runners.kubernetes.volumes.secret.items]\n        \"ca.crt\" = \"ca.crt\"\n\n    [runners.kubernetes.container_security_context]\n      privileged = true\n\n    [runners.kubernetes.service_container_security_context]\n      privileged = true\n\n  [runners.feature_flags]\n    FF_USE_DUMB_INIT_WITH_KUBERNETES_EXECUTOR = false\n    FF_WAIT_FOR_POD_TO_BE_REACHABLE = true\n    FF_USE_ADAPTIVE_REQUEST_CONCURRENCY = true\n    FF_POSIXLY_CORRECT_ESCAPES = false\n    FF_USE_IMPROVED_URL_MASKING = false\n    FF_SCRIPT_SECTIONS = true\n    FF_USE_POD_ACTIVE_DEADLINE_SECONDS = false\n    FF_PRINT_POD_EVENTS = true\n    FF_RETRIEVE_POD_WARNING_EVENTS = true\n    FF_SET_PERMISSIONS_BEFORE_CLEANUP = true\n    FF_USE_LEGACY_KUBERNETES_EXECUTION_STRATEGY = false\n",
+        "config.toml": "concurrent = 2\ncheck_interval = 3\nshutdown_timeout = 0\nlog_level = \"info\"\n",
+        "entrypoint": "#!/bin/bash\nset -e\n\nexport CONFIG_PATH_FOR_INIT=\"/home/gitlab-runner/.gitlab-runner/\"\nmkdir -p ${CONFIG_PATH_FOR_INIT}\ncp /configmaps/config.toml ${CONFIG_PATH_FOR_INIT}\n\nif [[ -f /secrets/accesskey && -f /secrets/secretkey ]]; then\n  export CACHE_S3_ACCESS_KEY=$(cat /secrets/accesskey)\n  export CACHE_S3_SECRET_KEY=$(cat /secrets/secretkey)\nfi\n\nif [[ -f /secrets/runner-registration-token ]]; then\n  export REGISTRATION_TOKEN=$(cat /secrets/runner-registration-token)\nfi\n\nif [[ -f /secrets/runner-token ]]; then\n  export CI_SERVER_TOKEN=$(cat /secrets/runner-token)\nfi\n\nif ! sh /configmaps/register-the-runner; then\n  exit 1\nfi\n\nif ! bash /configmaps/pre-entrypoint-script; then\n  exit 1\nfi\n\nexec /entrypoint run \\\n  --working-directory=/home/gitlab-runner\n",
+        "pre-entrypoint-script": "",
+        "register-the-runner": "#!/bin/sh\nsignal_handler() {\n  if [ ! -d \"/proc/$register_pid\" ]; then\n    wait $register_pid\n  fi\n  exit\n}\ntrap 'signal_handler' QUIT INT\n\nMAX_REGISTER_ATTEMPTS=30\n\nRUN_UNTAGGED=\"\"\nACCESS_LEVEL=\"\"\n\nif [ -n \"$CI_SERVER_TOKEN\" ] && [ \"${CI_SERVER_TOKEN#glrt-}\" != \"$CI_SERVER_TOKEN\" ]; then\n  RUN_UNTAGGED=\"\"\n  ACCESS_LEVEL=\"\"\n  unset REGISTER_LOCKED\n  unset RUNNER_TAG_LIST\nfi\n\nfor i in $(seq 1 \"${MAX_REGISTER_ATTEMPTS}\"); do\n  echo \"Registration attempt ${i} of ${MAX_REGISTER_ATTEMPTS}\"\n  /entrypoint register \\\n    ${RUN_UNTAGGED} \\\n    ${ACCESS_LEVEL} \\\n    --template-config /configmaps/config.template.toml \\\n    --clone-url \"http://gitlab2-webservice-default.gitlabv2.svc.cluster.local:8181/\" \\\n    --non-interactive &\n\n  register_pid=$!\n  wait $register_pid\n  retval=$?\n\n  if [ ${retval} = 0 ]; then\n    break\n  elif [ ${i} = ${MAX_REGISTER_ATTEMPTS} ]; then\n    exit 1\n  fi\n\n  sleep 5\ndone\n"
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "gitlab-runner-pptxgengo-macmini",
+        "namespace": "gitlab-runner",
+        "labels": {
+          "app": "gitlab-runner-pptxgengo-macmini"
+        }
+      },
+      "spec": {
+        "progressDeadlineSeconds": 600,
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app": "gitlab-runner-pptxgengo-macmini"
+          }
+        },
+        "strategy": {
+          "rollingUpdate": {
+            "maxSurge": "25%",
+            "maxUnavailable": "25%"
+          },
+          "type": "RollingUpdate"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "gitlab-runner-pptxgengo-macmini"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "/usr/bin/dumb-init",
+                  "--",
+                  "/bin/bash",
+                  "/configmaps/entrypoint"
+                ],
+                "env": [
+                  {
+                    "name": "CI_SERVER_URL",
+                    "value": "http://gitlab2-webservice-default.gitlabv2.svc.cluster.local:8181/"
+                  },
+                  {
+                    "name": "RUNNER_EXECUTOR",
+                    "value": "kubernetes"
+                  },
+                  {
+                    "name": "REGISTER_LOCKED",
+                    "value": "true"
+                  },
+                  {
+                    "name": "RUNNER_TAG_LIST",
+                    "value": "linux,arm64,macmini-linux"
+                  },
+                  {
+                    "name": "SESSION_SERVER_ADDRESS"
+                  }
+                ],
+                "image": "registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v19.4.1",
+                "imagePullPolicy": "IfNotPresent",
+                "lifecycle": {
+                  "preStop": {
+                    "exec": {
+                      "command": [
+                        "/entrypoint",
+                        "unregister",
+                        "--all-runners"
+                      ]
+                    }
+                  }
+                },
+                "livenessProbe": {
+                  "exec": {
+                    "command": [
+                      "/bin/bash",
+                      "/configmaps/check-live",
+                      "8"
+                    ]
+                  },
+                  "failureThreshold": 5,
+                  "initialDelaySeconds": 30,
+                  "periodSeconds": 60,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 12
+                },
+                "name": "gitlab-runner",
+                "ports": [
+                  {
+                    "containerPort": 9252,
+                    "name": "metrics",
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "exec": {
+                    "command": [
+                      "/usr/bin/pgrep",
+                      "gitlab.*runner"
+                    ]
+                  },
+                  "failureThreshold": 3,
+                  "initialDelaySeconds": 10,
+                  "periodSeconds": 10,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 4
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "100m",
+                    "memory": "128Mi"
+                  },
+                  "limits": {
+                    "memory": "256Mi"
+                  }
+                },
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "privileged": false,
+                  "readOnlyRootFilesystem": false,
+                  "runAsNonRoot": true
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/secrets",
+                    "name": "projected-secrets"
+                  },
+                  {
+                    "mountPath": "/home/gitlab-runner/.gitlab-runner",
+                    "name": "etc-gitlab-runner"
+                  },
+                  {
+                    "mountPath": "/configmaps",
+                    "name": "configmaps"
+                  }
+                ]
+              }
+            ],
+            "dnsConfig": {
+              "options": [
+                {
+                  "name": "ndots",
+                  "value": "1"
+                }
+              ]
+            },
+            "dnsPolicy": "ClusterFirst",
+            "hostAliases": [
+              {
+                "hostnames": [
+                  "gitlab.samcott.com",
+                  "gitlab-registry.samcott.com"
+                ],
+                "ip": "192.168.20.63"
+              }
+            ],
+            "nodeSelector": {
+              "kubernetes.io/arch": "arm64",
+              "kubernetes.io/os": "linux",
+              "kubernetes.io/hostname": "macmini-builder"
+            },
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {
+              "fsGroup": 65533,
+              "runAsUser": 100
+            },
+            "serviceAccount": "gitlab-runner",
+            "serviceAccountName": "gitlab-runner",
+            "terminationGracePeriodSeconds": 120,
+            "volumes": [
+              {
+                "emptyDir": {
+                  "medium": "Memory"
+                },
+                "name": "runner-secrets"
+              },
+              {
+                "emptyDir": {
+                  "medium": "Memory"
+                },
+                "name": "etc-gitlab-runner"
+              },
+              {
+                "name": "projected-secrets",
+                "projected": {
+                  "defaultMode": 420,
+                  "sources": [
+                    {
+                      "secret": {
+                        "items": [
+                          {
+                            "key": "runner-registration-token",
+                            "path": "runner-registration-token"
+                          },
+                          {
+                            "key": "runner-token",
+                            "path": "runner-token"
+                          }
+                        ],
+                        "name": "gitlab-runner-pptxgengo-macmini"
+                      }
+                    },
+                    {
+                      "secret": {
+                        "items": [
+                          {
+                            "key": "AccessKey",
+                            "path": "accesskey"
+                          },
+                          {
+                            "key": "SecretKey",
+                            "path": "secretkey"
+                          }
+                        ],
+                        "name": "rook-ceph-object-user-objectstore-gitlab-runner-cache"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "gitlab-runner-pptxgengo-macmini"
+                },
+                "name": "configmaps"
+              }
+            ],
+            "tolerations": [
+              {
+                "key": "builder-validation",
+                "operator": "Equal",
+                "value": "true",
+                "effect": "NoSchedule"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

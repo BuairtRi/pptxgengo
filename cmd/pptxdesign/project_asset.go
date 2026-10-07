@@ -12,20 +12,24 @@ import (
 )
 
 func runProjectAsset(args []string) error {
-	if len(args) == 0 || args[0] != "add" {
-		return fmt.Errorf("usage: project asset add --project PATH --id ID --file IMAGE --description TEXT [--focus 0.5,0.5]")
+	if len(args) == 0 || (args[0] != "add" && args[0] != "revise") {
+		return fmt.Errorf("usage: project asset <add|revise> --project PATH --id ID --file IMAGE --description TEXT [--focus 0.5,0.5]")
 	}
-	f := flag.NewFlagSet("project asset add", flag.ContinueOnError)
+	f := flag.NewFlagSet("project asset "+args[0], flag.ContinueOnError)
 	project := f.String("project", ".", "project path")
 	id := f.String("id", "", "stable asset ID")
 	file := f.String("file", "", "approved or client-supplied image original")
 	description := f.String("description", "", "human-readable subject/source description")
+	expect := f.String("expect-sha256", "", "revise: exact predecessor asset SHA256")
 	focus := f.String("focus", "", "optional normalized focus x,y; advisory composition metadata")
 	if err := f.Parse(args[1:]); err != nil {
 		return err
 	}
 	if f.NArg() != 0 || *file == "" {
 		return fmt.Errorf("asset add requires --file")
+	}
+	if (args[0] == "revise" && *expect == "") || (args[0] == "add" && *expect != "") {
+		return fmt.Errorf("--expect-sha256 is required only for asset revise")
 	}
 	p, err := deckproject.Load(*project)
 	if err != nil {
@@ -42,7 +46,7 @@ func runProjectAsset(args []string) error {
 	if err != nil {
 		return err
 	}
-	o := deckproject.AssetRegistration{ID: *id, Data: data, Description: *description}
+	o := deckproject.AssetRegistration{ID: *id, Data: data, Description: *description, ReplaceSHA256: *expect}
 	if *focus != "" {
 		parts := strings.Split(*focus, ",")
 		if len(parts) != 2 {

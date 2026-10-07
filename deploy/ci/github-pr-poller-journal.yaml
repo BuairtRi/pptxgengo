@@ -1,0 +1,11 @@
+# Bootstrap with `kubectl create -f` ONCE. Do not apply/reset this data during
+# code/config updates: it is the durable API creation-intent/dedup journal.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pptxgengo-pr-poller-journal
+  namespace: gitlab-runner
+  labels:
+    app.kubernetes.io/name: pptxgengo-pr-poller
+data:
+  journal.json: '{"schema":1,"records":{},"cursor":0,"not_before":0}'

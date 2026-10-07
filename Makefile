@@ -7,7 +7,7 @@ RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
 HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT= PPTXGENGO_SEARCH_BENCH_OUT= PPTXGENGO_INSTALL_PROCESS_OUT= PPTXGENGO_NATIVE_DIAGRAM_FIXTURE= PPTXGENGO_NATIVE_DIAGRAM_EDITED= PPTXGENGO_NATIVE_DIAGRAM_VERIFY_OUT=
 
-.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows test-search-performance test-installation-process test-diagram-verify
+.PHONY: build test test-pr test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows test-search-performance test-installation-process test-diagram-verify
 
 build:
 	CGO_ENABLED=0 $(GO) build -trimpath -o bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs
@@ -15,6 +15,12 @@ build:
 # Everyday checks omit only explicitly marked exhaustive/private-asset tests.
 test:
 	$(HEADLESS_TEST_ENV) $(GO) test -short -count=1 -timeout=$(FAST_TEST_TIMEOUT) ./...
+
+# Focused PR units plus compilation of all packages. No race detector, model
+# download, source-deck rendering, actual installers, or Office qualification.
+test-pr:
+	$(HEADLESS_TEST_ENV) $(GO) test -short -run '^$$' -timeout=$(FAST_TEST_TIMEOUT) ./...
+	$(HEADLESS_TEST_ENV) $(GO) test -short -count=1 -timeout=150s ./pptx ./internal/installstate ./internal/modelpackage ./internal/localembed ./internal/finishedslide ./internal/powershellenv ./scripts/cmd/ci-lint
 
 # Race the source-mutation guard, native-worker cleanup paths, library cache,
 # and the library's concurrent presentation serialization regressions.
@@ -24,6 +30,7 @@ test-race:
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/finishedslide
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestNativeRoundTrip|TestFinishedSlideClaims)' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestFinishedSlideClaims' ./internal/deckproject
+	$(HEADLESS_TEST_ENV) $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestPortable' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestReconcile' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditability' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeRoundTrip' ./internal/deckproject

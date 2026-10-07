@@ -206,3 +206,28 @@ and `--into-section`. Exact pins and existing authored composition are required.
 owner, approval/freshness metadata and previews before reuse. Claims and local
 or unsupported typed dependencies currently fail explicitly. Stable v4.1.0
 lacks these commands; full scope is documented in `docs/finished-slides.md`.
+
+## Portable projects, numbered versions and complete shares
+
+| Command | Purpose |
+| --- | --- |
+| `project create --out NEW_DIR --id ID --title TITLE --bundle v11 --template KEY` | New pinned project using stable slide filenames; replace scaffold examples. |
+| `project layout --project PATH --dry-run` / `--apply` | Preserve expanded source while migrating referenced paths to slides/ and slides/templates/. |
+| `project asset revise --project PATH --id ID --file IMAGE --description TEXT --expect-sha256 HASH` | Select a new immutable deck-owned asset revision; retain old objects. |
+| `project version save --project PATH --actor NAME --message TEXT` | Commit complete source/generated deck snapshot, exact shared asset revisions and receipts. |
+| `project version list --project PATH` | Show verified contiguous history and current version. |
+| `project version verify --project PATH --number 000001` | Check snapshot, asset objects and shared build history hashes. |
+| `project version materialize --project PATH --number 000001 --out NEW_DIR` | Restore a standalone working root without changing the original or its pins. |
+| `project version recover --project PATH --number 000002 --expect-current-sha256 HASH` | Explicitly publish a verified interrupted child snapshot; never force a lock. |
+| `project share --project PATH --out NEW_ZIP` | Complete private colleague handoff with all versions/history and one stored object per asset hash. |
+| `project share-extract --archive ZIP --out NEW_DIR` | Validate ZIP and safely expand legacy asset aliases to ordinary relative paths. |
+| `project share-verify --project PATH` | Verify extraction inventory and numbered version history before deliberate edits. |
+
+Complete shares contain private context/evidence, unlike client exports.
+Keep generated baselines immutable; reconcile native working copies separately.
+Numbered source snapshots use a shared deck-owned asset store, not filesystem
+links or a machine-wide cache. `versions/current.json` binds the latest immutable
+manifest. Locks, conflicting OneDrive copies, placeholders, changed predecessors
+and nonportable names are diagnosed rather than silently resolved. Sharing
+retains executable/OS/architecture pins and branding/font requirements; explicit
+toolchain migration and offline runtime export remain separate commands.

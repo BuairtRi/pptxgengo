@@ -185,3 +185,13 @@ compiler/template pins are required; expired/deprecated content is refused.
 Adapted copy needs the destination deck's evidence and review process.
 Stable v4.1.0 lacks this feature. See `docs/finished-slides.md` for the implemented
 source commands, supported dependencies and remaining curation/native work.
+
+## Browse without the CLI
+
+Installation archives include `browsing/template-library.pptx` and
+`browsing/reusable-slides.pptx` when their required private release inputs are
+available. Read the How to use page and family dividers. Copy with Keep Source
+Formatting and review the destination deck. Deprecated templates are visibly
+labeled; reusable content includes only the latest approved, nonexpired revisions
+and retains approval scope and revision metadata. Browsing does not grant
+permission for a different reuse scope or qualify adapted content.
