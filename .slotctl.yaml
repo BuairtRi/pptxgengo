@@ -8,7 +8,7 @@ toolchains:
 # Private branding and interactive PowerPoint checks are separate opt-in lanes.
 tasks:
   workflow-lint:
-    command: [go, run, github.com/rhysd/actionlint/cmd/actionlint@v1.7.12, -shellcheck=]
+    command: [go, run, ./scripts/cmd/ci-lint]
   dependencies:
     command: [go, mod, download]
   build:

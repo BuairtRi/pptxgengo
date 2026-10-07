@@ -108,9 +108,9 @@ Inspect PowerPoint for policy/Protected View prompts after a failure; resolve
 the prompt and use a new fixture output path. Do not repeatedly automate a
 blocked desktop session.
 
-GitLab's protected-default-branch manual `windows-native` lane and GitHub's
-opt-in desktop lane run this fixture after native export smoke. Portable Windows
-CI parses the script and exercises simulated/helper/verifier failures without
+GitLab's protected-default-branch manual `windows-native` lane runs this
+fixture after native export smoke. GitHub Actions is disabled. The opt-in private
+GitLab Windows CLI lane parses the script and exercises simulated/helper/verifier failures without
 opening Office. Headless Make lanes clear all opt-in fixture variables; short
 tests skip explicit live/prepare/verify entry points. Normal short and selected
 race coverage still exercises the complete hermetic verifier.
