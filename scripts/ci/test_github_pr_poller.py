@@ -12,7 +12,7 @@ import github_pr_poller as p
 
 S = "a" * 40
 REF = "slot/pptxgengo/a/b"
-ROOT = b'pr-unit:\n PPTXGENGO_CI_TIER: pr\n PPTXGENGO_PR_HEAD: required\n script: make test-pr\n'
+ROOT = b'pr-unit:\n PPTXGENGO_CI_TIER: pr\n PPTXGENGO_PR_HEAD: required\n PPTXGENGO_PR_PIPELINE_NAME: pr:$PPTXGENGO_PR_KEY\n script: make test-pr\n'
 FILES = {name: ROOT if name == ".gitlab-ci.yml" else name.encode() for name in p.CI_FILES}
 PROFILE = {name: hashlib.sha256(data).hexdigest() for name, data in FILES.items()}
 
@@ -51,10 +51,11 @@ class GitLab:
         self.mirror_sha = S
         self.files = copy.deepcopy(FILES)
         self.pipelines = []
-        self.pipeline_variables = {}
         self.lose_response = False
         self.result_sha = S
         self.result_source = "api"
+        self.result_name = None
+        self.cancel_status = None
         self.refused_create = False
 
     def request(self, method, path, query=None, body=None):
@@ -67,17 +68,20 @@ class GitLab:
         if method == "GET" and path == "projects/17/pipelines":
             return copy.deepcopy(self.pipelines), {}
         if method == "GET" and path.endswith("/variables"):
-            return copy.deepcopy(self.pipeline_variables[int(path.split("/")[-2])]), {}
+            raise AssertionError("private variables endpoint must never be requested")
         if method == "POST" and path.endswith("/cancel"):
+            if self.cancel_status:
+                raise p.HTTPFailure(self.cancel_status)
             return {}, {}
         if method == "POST" and path == "projects/17/pipeline":
             # Durable intent must already exist before mutating the API.
             assert any(r["state"] == "pending" for r in self.store.value["records"].values())
             if self.refused_create:
                 raise p.HTTPFailure(400)
-            result = {"id": 123, "sha": self.result_sha, "ref": REF, "source": self.result_source, "tag": False}
+            values = {v["key"]: v["value"] for v in body["variables"]}
+            name = self.result_name if self.result_name is not None else "pr:" + values["PPTXGENGO_PR_KEY"]
+            result = {"id": 123, "sha": self.result_sha, "ref": REF, "source": self.result_source, "tag": False, "name": name}
             self.pipelines.append(result)
-            self.pipeline_variables[123] = body["variables"]
             if self.lose_response:
                 raise p.Uncertain("creation-response-uncertain")
             return result, {}
@@ -134,7 +138,7 @@ class PollerTests(unittest.TestCase):
                 self.assertEqual(self.creations(), [])
         self.assertTrue(any("unsupported-ci-config" in x for x in self.logs))
 
-    def test_lost_creation_response_recovers_by_exact_variables(self):
+    def test_lost_creation_response_recovers_by_exact_public_name(self):
         self.gl.lose_response = True
         self.poller.run()
         self.assertEqual(len(self.creations()), 1)
@@ -145,10 +149,12 @@ class PollerTests(unittest.TestCase):
         self.assertEqual(len(self.creations()), 1)
         self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "scheduled")
         self.assertTrue(any('"event": "recovered"' in x for x in self.logs))
+        lists = [call for call in self.gl.calls if call[:2] == ("GET", "projects/17/pipelines")]
+        self.assertTrue(all(call[2]["name"] == f"pr:{p.REPO_ID}/7/{S}" for call in lists))
+        self.assertFalse(any(call[1].endswith("/variables") for call in self.gl.calls))
 
     def test_unrelated_api_pipeline_is_not_recovery_evidence(self):
-        self.gl.pipelines = [{"id": 9, "sha": S, "ref": REF, "source": "api"}]
-        self.gl.pipeline_variables[9] = [{"key": "PPTXGENGO_CI_TIER", "value": "full"}]
+        self.gl.pipelines = [{"id": 9, "sha": S, "ref": REF, "source": "api", "name": "ARM qualification"}]
         self.poller.run()
         self.assertEqual(len(self.creations()), 1)
 
@@ -195,9 +201,42 @@ class PollerTests(unittest.TestCase):
             self.poller.run()
         self.assertEqual(self.creations(), [])
 
-    def test_duplicate_variable_does_not_recover(self):
-        self.gl.pipelines = [{"id": 9, "sha": S, "ref": REF, "source": "api"}]
-        self.gl.pipeline_variables[9] = [{"key": "PPTXGENGO_CI_TIER", "value": "pr"}] * 2
+    def test_partial_wrong_pr_and_missing_name_do_not_recover(self):
+        for name in (f"pr:{p.REPO_ID}/7/{S[:-1]}", f"pr:{p.REPO_ID}/8/{S}", None):
+            with self.subTest(name=name):
+                self.gl.pipelines = [{"id": 9, "sha": S, "ref": REF, "source": "api", "name": name}]
+                self.assertIsNone(self.poller.recover(7, S, REF, f"{p.REPO_ID}/7/{S}"))
+
+    def test_correct_name_wrong_sha_ref_source_is_refused(self):
+        for field, value in (("sha", "b" * 40), ("ref", "different"), ("source", "web")):
+            item = {"id": 9, "sha": S, "ref": REF, "source": "api", "name": f"pr:{p.REPO_ID}/7/{S}"}
+            item[field] = value
+            self.gl.pipelines = [item]
+            with self.assertRaises(p.Refused):
+                self.poller.recover(7, S, REF, f"{p.REPO_ID}/7/{S}")
+
+    def test_mismatched_creation_name_is_cancelled(self):
+        self.gl.result_name = f"pr:{p.REPO_ID}/8/{S}"
+        self.poller.run()
+        self.assertTrue(any(x[:2] == ("POST", "projects/17/pipelines/123/cancel") for x in self.gl.calls))
+        self.assertEqual(next(iter(self.store.value["records"].values()))["state"], "refused")
+
+    def test_cancel_permission_denial_keeps_mismatch_refused(self):
+        self.gl.result_name = "unexpected-name"
+        self.gl.cancel_status = 403
+        with self.assertRaises(p.HTTPFailure):
+            self.poller.run()
+        record = next(iter(self.store.value["records"].values()))
+        self.assertEqual(record["state"], "refused")
+        self.assertEqual(record["pipeline"], 123)
+        self.poller.run()
+        self.assertEqual(len(self.creations()), 1)
+
+    def test_ci_without_name_contract_is_refused_even_if_hash_is_approved(self):
+        root = ROOT.replace(b" PPTXGENGO_PR_PIPELINE_NAME: pr:$PPTXGENGO_PR_KEY\n", b"")
+        self.gl.files[".gitlab-ci.yml"] = root
+        profile = dict(PROFILE, **{".gitlab-ci.yml": hashlib.sha256(root).hexdigest()})
+        self.poller.profiles = [profile]
         self.poller.run()
         self.assertEqual(self.creations(), [])
 

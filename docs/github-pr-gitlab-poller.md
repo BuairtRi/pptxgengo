@@ -15,6 +15,9 @@ cadence source merges, an operator:
 1. Reviews the exact merged workflow/job graph. Confirms `source=api` and
    `PPTXGENGO_CI_TIER=pr` select only `pr-unit`, `pr-relay-unit`, `workflow-lint`, and secrets.
    `pr-unit` must verify `PPTXGENGO_PR_HEAD` against `CI_COMMIT_SHA` before tests.
+   The workflow name is `$PPTXGENGO_PR_PIPELINE_NAME` (default empty); only its
+   PR rule sets it to `pr:$PPTXGENGO_PR_KEY`. Both naming markers are required by
+   the poller's trusted capability check. Existing four PR variables are retained.
 2. Pins the reviewed Python image digest. Generates `pptxgengo-pr-poller-code`
    from `scripts/ci/github_pr_poller.py`; the CronJob never pulls source at runtime.
 3. Provisions a dedicated **project 17 Developer/api** token in the externally
@@ -53,18 +56,27 @@ characters are encoded in API path segments. Each accepted creation saves a
 attempt timestamp. Scheduled records retain the returned pipeline ID.
 
 If a POST response or subsequent journal save is lost, the next invocation
-searches exact `sha/ref/source=api` pipelines and checks all four dedicated
-pipeline variables, including the full correlation key. An unrelated API
-pipeline is insufficient evidence. Creation has no immediate transport retry;
+searches exact `name/sha/ref/source=api` pipelines. The name must equal
+`pr:<repositoryID>/<PRnumber>/<40hexHeadSHA>`; returned names are checked again,
+so partial names or unrelated qualification pipelines are insufficient evidence.
+Recovery never reads private pipeline variables, which can require Maintainer
+access even when listing pipelines is permitted for the Developer poller token.
+The creation response must have the same name before it is accepted. Creation
+has no immediate transport retry;
 an unresolved intent waits at least 120 seconds before a later retry, and has at
 most three attempts. Failed scheduled tests are not automatically re-created.
 Manual reruns remain GitLab operations, not journal deletion.
 
 GitLab's documented pipeline API accepts a branch/tag ref, not an atomic source
 SHA pin. The poller checks branch protection/SHA twice before POST, verifies the
-returned SHA/ref/source and cancels mismatches, and the PR job checks the expected
+returned name/SHA/ref/source and cancels mismatches, and the PR job checks the expected
 SHA. A concurrent ref move can briefly create a wrong-head pipeline before
 cancellation; these controls do not claim a transaction across GitHub/GitLab.
+Mismatches are recorded as refused with their pipeline ID before the documented
+pipeline-cancel API is called. Cancellation denial/failure cannot be accepted
+as evidence or cause automatic re-creation; an operator must inspect that ID.
+Developer cancellation is the GitLab default; this deployment does not widen
+the token role or change project visibility/cancellation settings.
 Creation and journal writes also have an unavoidable crash boundary: recovery
 reduces duplicate runs but does not claim server-side exactly-once creation.
 
@@ -104,5 +116,5 @@ python3 -B -m unittest discover -s scripts/ci -p 'test_github_pr_poller.py'
 
 These tests use fake APIs/journals only and never provision infrastructure or
 create pipelines. They cover pins/ref encoding/protection/forks, old CI refusal,
-creation intent, lost-response recovery, correlation variables, cancellation,
+creation intent, lost-response recovery, exact public correlation names, cancellation,
 deduplication, request/pagination/secret bounds, rate backoff and journal conflicts.

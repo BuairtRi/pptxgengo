@@ -57,6 +57,9 @@ func TestRepositoryQualificationCadenceAndReleaseGates(t *testing.T) {
 	night := `$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"`
 	pr := `$CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE =~ /^(api|web)$/ && $PPTXGENGO_CI_TIER == "pr")`
 	workflow := job(root, "workflow")
+	if workflow["name"] != "$PPTXGENGO_PR_PIPELINE_NAME" || root["variables"].(map[string]any)["PPTXGENGO_PR_PIPELINE_NAME"] != "" {
+		t.Fatal("PR recovery requires an exact named pipeline; other tiers retain an empty default")
+	}
 	for _, condition := range []string{main, night, tag, pr} {
 		if !has(workflow, condition) {
 			t.Fatalf("workflow missing %s", condition)

@@ -3,7 +3,7 @@
 
 No GitHub writes. Tokens come only from mounted files, never CLI arguments.
 The journal records creation intent before the API request; uncertain responses
-are recovered by checking pipeline variables before another creation attempt.
+are recovered by exact pipeline name/SHA/ref/source before another attempt.
 """
 import argparse
 import base64
@@ -28,7 +28,6 @@ MAX_RECORDS = 1500
 MAX_PRS = 300
 MAX_PAGES = 3
 MAX_ATTEMPTS = 3
-EXPECTED_KEYS = {"PPTXGENGO_CI_TIER", "PPTXGENGO_PR_HEAD", "PPTXGENGO_PR_NUMBER", "PPTXGENGO_PR_KEY"}
 
 
 class Refused(Exception):
@@ -273,29 +272,22 @@ class Poller:
                 raise Refused("unsupported-ci-config")
             if path == ".gitlab-ci.yml":
                 root = content.decode("utf-8")
-        if actual not in self.profiles or not all(x in root for x in ("pr-unit:", "PPTXGENGO_CI_TIER", "PPTXGENGO_PR_HEAD", "make test-pr")):
+        if actual not in self.profiles or not all(x in root for x in ("pr-unit:", "PPTXGENGO_CI_TIER", "PPTXGENGO_PR_HEAD", "make test-pr", "PPTXGENGO_PR_PIPELINE_NAME", "pr:$PPTXGENGO_PR_KEY")):
             raise Refused("unsupported-ci-config")
 
     def recover(self, number, sha, ref, key):
-        pipelines = paged(self.gitlab, "projects/17/pipelines", {"sha": sha, "ref": ref, "source": "api", "order_by": "id", "sort": "desc"}, max_pages=2, max_items=200)
+        expected = "pr:%s/%s/%s" % (REPO_ID, number, sha)
+        if expected != "pr:" + key:
+            raise Refused("invalid-recovery-correlation")
+        pipelines = paged(self.gitlab, "projects/17/pipelines", {"name": expected, "sha": sha, "ref": ref, "source": "api", "order_by": "id", "sort": "desc"}, max_pages=2, max_items=200)
         if len(pipelines) > 20:
             raise Refused("recovery-pipeline-bound-exceeded")
         for pipeline in pipelines:
             if not isinstance(pipeline, dict) or pipeline.get("sha") != sha or pipeline.get("ref") != ref or pipeline.get("source") != "api" or not isinstance(pipeline.get("id"), int) or isinstance(pipeline.get("id"), bool) or pipeline["id"] <= 0:
                 raise Refused("invalid-recovery-pipeline")
-            variables, _ = self.gitlab.request("GET", "projects/17/pipelines/%s/variables" % pipeline["id"])
-            if not isinstance(variables, list) or len(variables) > 256:
-                raise Refused("invalid-pipeline-variables")
-            selected = {}
-            for item in variables:
-                if not isinstance(item, dict):
-                    raise Refused("invalid-pipeline-variable")
-                k = item.get("key")
-                if isinstance(k, str) and k in EXPECTED_KEYS:
-                    if k in selected:
-                        raise Refused("duplicate-pipeline-variable")
-                    selected[k] = item.get("value")
-            if selected == self.variables(number, sha, key):
+            # Developer can read names, but private pipeline variables can be
+            # Maintainer-only. Never request that broader/private endpoint.
+            if pipeline.get("name") == expected:
                 return pipeline["id"]
         return None
 
@@ -339,11 +331,13 @@ class Poller:
         result, _ = self.gitlab.request("POST", "projects/17/pipeline", body=body)
         if not isinstance(result, dict) or not isinstance(result.get("id"), int) or isinstance(result.get("id"), bool) or result["id"] <= 0:
             raise Uncertain("invalid-creation-response")
-        if result.get("sha") != sha or result.get("ref") != ref or result.get("source") != "api" or result.get("tag") is not False:
-            self.gitlab.request("POST", "projects/17/pipelines/%s/cancel" % result["id"])
+        if result.get("sha") != sha or result.get("ref") != ref or result.get("source") != "api" or result.get("tag") is not False or result.get("name") != "pr:" + key:
             record["state"] = "refused"
             record["pipeline"] = result["id"]
             self.store.save(journal)
+            # Persist refusal before cancellation: denied/uncertain cancellation
+            # must never turn a mismatched pipeline into accepted evidence.
+            self.gitlab.request("POST", "projects/17/pipelines/%s/cancel" % result["id"])
             raise Refused("created-pipeline-identity-mismatch")
         record.update(state="scheduled", pipeline=result["id"])
         self.store.save(journal)
