@@ -13,6 +13,14 @@ Upgrade an existing YAML project with `pptxgengo design project migrate --projec
 checks compatibility and compiler fit first, backs up the old lock, and changes
 only the pin. Follow with `project build` and native visual review.
 
+### Inventory native editing structure
+
+`pptxgengo design project editability --project PATH` reports actual build
+ownership, Selection Pane names, nesting, native tables and mapped text fields
+from the receipt-pinned baseline. Read [the family pilot](../../docs/native-editing-pilot.md).
+Structural counts do not qualify native selection/movement/resize behavior.
+This source capability follows v4.1.0; Mac and Windows editing tasks remain pending.
+
 ### Review an edited PowerPoint copy
 
 The source commands `project reconcile propose --project PATH --edited FILE

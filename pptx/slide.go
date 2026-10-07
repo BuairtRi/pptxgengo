@@ -39,6 +39,27 @@ func (s *Slide) AddShape(shapeName ShapeType, opts *ShapeProps) error {
 	return addShapeDefinition(s.ps, shapeName, opts)
 }
 
+// AddConnector adds an attached native p:cxnSp line. Targets can be added later;
+// Write validates their unique names, rectangle kinds and connection sites.
+func (s *Slide) AddConnector(opts *ConnectorProps) error {
+	if opts == nil || !validConnectorConnection(opts.Connection) {
+		return errors.New("connector requires distinct named endpoints and rectangle sites in [0,3]")
+	}
+	shape := opts.ShapeProps
+	if !validConnectorBounds(shape.PositionProps, false) {
+		return errors.New("native straight connector requires finite nonnegative bounds and distinct points")
+	}
+	if shape.Fill != nil || shape.Rotate != 0 || shape.Hyperlink != nil || len(shape.Points) != 0 || shape.RectRadius != 0 || shape.AngleRange != nil || len(shape.Adjustments) != 0 {
+		return errors.New("native straight connector does not support fill, rotation, links or custom geometry")
+	}
+	if err := addShapeDefinition(s.ps, ShapeTypeLine, &shape); err != nil {
+		return err
+	}
+	connection := opts.Connection
+	s.ps.SlideObjects[len(s.ps.SlideObjects)-1].Options.NativeConnection = &connection
+	return nil
+}
+
 // AddImage adds an image (by path or base64 data) to the slide. Ports TS addImage.
 func (s *Slide) AddImage(opts *ImageProps) error {
 	return addImageDefinition(s.ps, opts)

@@ -55,9 +55,10 @@ still pending.
 
 Project builds now record generation, slide and shape tags; see the
 [native lineage contract](native-lineage.md). Desktop identity survival is pending.
-Next: implement three-way text
-proposals and explicit conflicts, preserve unsupported structure/format reports,
-and adopt reviewed proposals through guarded source mutation. Evaluate Save As,
+Source commands now provide [three-way text proposals, conflicts and reviewed
+adoption](text-reconciliation.md). The [native editing inventory/pilot](native-editing-pilot.md)
+records actual group ownership, nesting and source-field coverage before any
+serializer rollout. Evaluate Save As,
 reorder, duplicate/delete/ungroup and editing on Mac and Windows before extending
 supported identities. Grouping/geometry pilot changes must preserve this mapping
 contract and receive visual/edit-task review.

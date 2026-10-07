@@ -33,11 +33,12 @@ type SceneContext struct {
 }
 
 type scenePlan struct {
-	ID       string
-	Bounds   Rect
-	Items    []sceneItem
-	Groups   []ComponentRecord
-	Warnings []string
+	Definition string
+	ID         string
+	Bounds     Rect
+	Items      []sceneItem
+	Groups     []ComponentRecord
+	Warnings   []string
 	// Only an auto-height callout owns this text-derived container envelope.
 	// It permits a density retry without changing any authored outer rectangle.
 	TextFlowBounds bool
@@ -52,9 +53,10 @@ type sceneItem struct {
 }
 
 type sceneShape struct {
-	Type   pptx.ShapeType
-	Props  pptx.ShapeProps
-	Record ShapeRecord
+	Connection *pptx.ConnectorConnection
+	Type       pptx.ShapeType
+	Props      pptx.ShapeProps
+	Record     ShapeRecord
 }
 
 type sceneTableCell struct {
@@ -281,7 +283,7 @@ func (r *renderer) planSceneNode(id string, raw json.RawMessage, ctx SceneContex
 	if r.typeEngine.engine != CandidateEngine {
 		return nil, fmt.Errorf("scene.requires_v2")
 	}
-	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planRoadForkScene, r.planIntakeGaugeScene, r.planIntakeCycleScene, r.planIntakeRoadScene, r.planIntakeScoreLegendScene, r.planIntakeRound12Scene, r.planIntakeVennScene, r.planIntakeMaturityScene, r.planIntakeArchitectureScene, r.planIntakeGeographyScene, r.planIntakeCurveScene, r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
+	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planNativeEditingScene, r.planRoadForkScene, r.planIntakeGaugeScene, r.planIntakeCycleScene, r.planIntakeRoadScene, r.planIntakeScoreLegendScene, r.planIntakeRound12Scene, r.planIntakeVennScene, r.planIntakeMaturityScene, r.planIntakeArchitectureScene, r.planIntakeGeographyScene, r.planIntakeCurveScene, r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
 		plan, handled, err := handler(id, raw, ctx)
 		if handled || err != nil {
 			if err == nil && r.contrastProbe == nil {
