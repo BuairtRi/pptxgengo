@@ -85,7 +85,8 @@ fixture, not the library.
 The earlier automated Mac Save As trial timed out; the retained native UI
 Documents-folder round trip subsequently passed (see [round-trip evidence](native-roundtrip.md)).
 The combined-diagram task below adds bounded Mac movement/endpoint evidence.
-Other family tasks, both-platform density qualification and rollout decisions
+The native table task below adds one-cell editing evidence. Whole-card movement,
+other family tasks, both-platform density qualification and rollout decisions
 remain pending. The original structural inventory states
 `desktop_qualification: not_recorded`. Stable v4.1.0 contains neither this
 inventory nor the newer reconciliation commands.
@@ -226,3 +227,32 @@ verification does not migrate the fixture's compiler or authorize source edits.
 Ordinary headless Make targets clear these opt-in paths. Generated positive and
 negative geometry fixtures run in short tests and the selected editability race
 lane; explicit supplied-file execution is skipped without all paths.
+
+## Mac native table and card task — 2026-10-07
+
+An owned synthetic fixture under
+`~/Documents/pptxgengo-qualification/native-cards-table-20261007/` was edited
+through the native PowerPoint UI and saved as `cards-table-edited.pptx`.
+On slide 4, `table.native` cell at zero-based row 1 / column 0 changed exactly
+from `Review` to `Reviewed in PowerPoint`. Independent ZIP/XML inspection found
+the other five cells and all geometry unchanged. All 68 shape identities and
+74 native tag records survived. Each of the 15 original source files and its
+retained baseline copy matched the original fixture hash.
+
+- Baseline PPTX SHA256: `230cf6db1a74c5a979490ce8e50d2c097da23af5722cb735b1cbc694d464048e`.
+- Edited PPTX SHA256: `918db59269599f0ea35c8528c105b2b473d2dde4dc30cefc1d479d38a22aad4e`.
+- Evidence: `README.md`, `verification.json`, independent `verify.py`, screenshots
+  01–07 and `evidence-files.sha256.json` in the private directory above.
+
+Whole-card movement remains **not qualified**. Selection Pane attempts did not
+produce a verified whole-group move. One container-only nudge was detected by
+the XML comparison and reverted; the final Source card group and all nine child
+objects exactly match the baseline. This bounded selection attempt does not
+establish a general product defect or successful group movement.
+
+The current About dialog could not be read through the native UI. The earlier
+16.113.4 version observation belongs to the separate diagram qualification;
+it is not a new version observation for this task. No native table-cell source
+adoption, Windows execution, density-wide coverage or human ergonomics verdict
+is claimed. The owned edited presentation was left open when the native menu
+state became unavailable; no unowned document was closed.
