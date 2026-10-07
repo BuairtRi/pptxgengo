@@ -145,13 +145,15 @@ PPTXGENGO_INSTALL_PROCESS_OUT=/path/new-qualification-directory \
   go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
 ```
 
-CI adds this on native amd64/arm64 Kubernetes Linux, hosted macOS and hosted
-Windows, including Intel Mac and Windows ARM64. The workflow requires each
-declared Go host architecture; public hosted runner availability and the home
-lab's online `arm64` pool are checked independently. Only the
-generic `qualification.json` is retained for 14 days; unsigned executable
-fixtures are not uploaded. The Linux result also gates future protected release
-build/resource jobs. Actual hosted results must pass before source integration.
+Private GitLab runs this on native amd64/arm64 Kubernetes Linux and protected
+macOS arm64. Windows amd64/arm64 and Intel Mac checks are configured as opt-in
+protected-main jobs pending their private runners; see [CI policy](testing.md).
+The jobs require the declared Go host architecture. Generic qualification JSON
+is retained privately for 14 days; unsigned executable fixtures are not uploaded.
+Linux and protected Mac lanes gate future release build/resource jobs.
+
+The reports below describe historical qualification, including GitHub runs
+before Actions was disabled on 2026-10-07. GitHub is no longer a CI gate.
 
 The first Windows script run caught PowerShell 7 module paths inherited through
 the Go process: Windows PowerShell could not autoload `Get-FileHash`. The child

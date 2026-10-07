@@ -1,0 +1,129 @@
+# Every check and artifact runs in private GitLab. Protected Mac execution uses
+# the existing signing runner; no protected runner/secret access is added to
+# ordinary source branches.
+cross-platform-build:
+  stage: test
+  image: golang:1.27.1
+  timeout: 15 minutes
+  interruptible: true
+  variables:
+    CGO_ENABLED: '0'
+    GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
+    GOCACHE: $CI_PROJECT_DIR/.cache/go-build
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux
+    paths: [.cache/go-mod, .cache/go-build]
+  script:
+    - bash scripts/ci/cross-platform-build.sh
+
+.native-macos:
+  stage: test
+  tags: [macos, darwin-arm64]
+  timeout: 30 minutes
+  interruptible: true
+  resource_group: pptxgengo-macos-validation
+  variables:
+    GOTOOLCHAIN: local
+    GOFLAGS: -mod=readonly
+    GOPATH: /Users/admin/.gocache-ci/pptxgengo/go
+    GOMODCACHE: /Users/admin/.gocache-ci/pptxgengo/mod
+    GOCACHE: /Users/admin/.gocache-ci/pptxgengo/build
+    WMDS_BRANDING_ROOT: $CI_PROJECT_DIR/.cache/empty-branding
+    PPTXGENGO_NATIVE_LIVE_OUT: ''
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/'
+    - when: never
+  before_script:
+    - source scripts/release/use-macos-go.sh
+    - test "$(go env GOHOSTOS)/$(go env GOHOSTARCH)" = darwin/arm64
+    - mkdir -p "$WMDS_BRANDING_ROOT"
+  artifacts:
+    when: on_success
+    access: maintainer
+    expire_in: 14 days
+
+macos-cli:
+  extends: .native-macos
+  variables:
+    PPTXGENGO_INSTALL_PROCESS_OUT: $CI_PROJECT_DIR/.cache/installation-process
+    PPTXGENGO_INSTALL_PROCESS_COMMIT: $CI_COMMIT_SHA
+  script:
+    - make test
+    - make test-race
+    - go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
+  artifacts:
+    paths: [.cache/installation-process/qualification.json]
+
+macos-model:
+  extends: .native-macos
+  variables:
+    CGO_ENABLED: '0'
+    PPTXGENGO_EMBED_MODEL_DIR: $CI_PROJECT_DIR/.cache/offline-model
+    PPTXGENGO_SEARCH_BENCH_OUT: $CI_PROJECT_DIR/.cache/search-performance
+    PPTXGENGO_SEARCH_BENCH_COMMIT: $CI_COMMIT_SHA
+  script:
+    - go run ./cmd/pptxdesign library-model --download --out "$PPTXGENGO_EMBED_MODEL_DIR"
+    - go test -count=1 -timeout=5m ./internal/localembed ./internal/modelpackage ./scripts/cmd/release-ci
+    - go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
+    - go test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$' -v ./internal/wmdesign
+  artifacts:
+    paths: [.cache/search-performance/]
+
+# Native Windows execution needs the forthcoming home-lab shell runner.
+# Build/sign Windows releases on Linux; do not enqueue an unavailable runner.
+windows-cli:
+  stage: test
+  tags: [windows, pptxgengo-windows-native]
+  timeout: 30 minutes
+  interruptible: true
+  variables:
+    CGO_ENABLED: '0'
+    PPTXGENGO_NATIVE_LIVE_OUT: ''
+    PPTXGENGO_WINDOWS_ARCH: amd64
+  rules:
+    - if: '$PPTXGENGO_WINDOWS_CLI == "true" && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"'
+      when: manual
+      allow_failure: false
+    - when: never
+  script:
+    - 'powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ci/windows-cli.ps1; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }'
+  artifacts:
+    when: always
+    access: maintainer
+    expire_in: 14 days
+    paths: [.cache/installation-process/, .cache/search-performance/, .cache/windows-smoke/]
+
+windows-cli-arm64:
+  extends: windows-cli
+  tags: [windows, arm64, pptxgengo-windows-native]
+  variables:
+    PPTXGENGO_WINDOWS_ARCH: arm64
+  rules:
+    - if: '$PPTXGENGO_WINDOWS_ARM64_CLI == "true" && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"'
+      when: manual
+      allow_failure: false
+    - when: never
+
+# Intel native execution is available when a private Intel Mac runner is added.
+# Its Go 1.27.1 toolchain must be provisioned by the runner owner.
+.native-macos-intel:
+  extends: .native-macos
+  tags: [macos, darwin-amd64]
+  resource_group: pptxgengo-macos-intel-validation
+  rules:
+    - if: '$PPTXGENGO_MACOS_INTEL == "true" && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"'
+      when: manual
+      allow_failure: false
+    - when: never
+  before_script:
+    - test "$(go version)" = 'go version go1.27.1 darwin/amd64'
+    - mkdir -p "$WMDS_BRANDING_ROOT"
+
+macos-intel-cli:
+  extends: [macos-cli, .native-macos-intel]
+
+macos-intel-model:
+  extends: [macos-model, .native-macos-intel]
