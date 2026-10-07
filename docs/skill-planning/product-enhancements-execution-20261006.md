@@ -607,3 +607,59 @@ presentations were closed. The older retained fixture is incompatible with the
 new baseline generation contract and its failed verification is retained.
 This proves this Mac Save As identity case only; three-field editing/reorder,
 human ergonomics/visual review and Windows desktop qualification remain open.
+
+
+## Integration and CI cadence — 2026-10-07
+
+This entry supersedes the earlier pending integration statements. Stable
+[v4.1.0](https://gitlab.samcott.com/riscott/pptxgengo/-/releases/v4.1.0) remains
+promoted from `fe1331e36db4eb4bf5438ecad11d8d4ceacee28e`. Later enhancements
+below are source integrations, not contents of those released binaries.
+
+- Portable projects: PR #21 merged as
+  `170bde272c85550d4bd1cd9539d9c7260ba94c5b` after full local preflight and
+  private GitLab pipeline 21278. Shared independently versioned asset objects,
+  numbered complete snapshots and verified portable ZIP operations are merged.
+- CI cadence: PR #23 merged as
+  `6dfe14a9f3ef4822843be4b282dc93653105ef47` after full local preflight and
+  exact-head private pipeline 21307. Actual PR checks completed successfully;
+  main pipeline 21308 passed in 123 seconds. Ordinary branch pushes create no
+  automatic pipeline. PR/main each have four jobs; main runs the full hermetic
+  unit suite. Races are excluded from PR, main and release pipelines. Protected
+  release tags retain installer, security, packaging/signing and private
+  publication gates. See [CI cadence](../ci-cadence.md).
+- Browsing libraries: PR #22 merged as
+  `561056d933d91aa126e2e3413a057566d935ed99` after full local preflight and
+  private pipeline 21288. Main pipeline 21309 passed. Default template library
+  has 717 slides (649 templates, 36 catalog-defined frame variants, 32 guides
+  and dividers). The separate reusable library selects latest approved revisions
+  only. Release generation and installer inventory enforce both decks' exact
+  mutual inputs and file closure. Private production branding and approved-slide
+  source archives are still required for a branded release.
+
+GitHub Actions remains disabled. GitHub hosts source/PR merge authority; all
+CI execution and release artifacts remain private in GitLab. A bounded private
+Kubernetes poller discovers same-repository PRs and requests exact-head four-job
+GitLab checks, with durable deduplication. CI-changing PRs require explicit
+review of their capability profile. The live worker created pipeline 21307;
+a second discovery created no duplicate.
+
+The nightly schedule is active at 01:00 America/Los_Angeles, with failure-only
+pipeline email configured for the operator's GitLab account. Actual email
+delivery has not been qualified by an intentional failure. Schedule pipeline
+[21310](https://gitlab.samcott.com/riscott/pptxgengo/-/pipelines/21310), on exact
+merged source `561056d933d91aa126e2e3413a057566d935ed99`, passed all 19 jobs
+in 865 seconds. Linux/Mac race jobs took 643.6/679.0 seconds. Native Linux ARM64
+installer, model and performance jobs all ran on dedicated runner 24 with hard
+Mac mini Linux node placement; their durations were 71.2, 50.3 and 48.3 seconds.
+They do not use the Raspberry Pi pool. Windows-target source scanning in this
+run was executed on Linux; it is not Windows desktop or installer qualification.
+
+The native pilot follow-up retains one actual Mac combined rectangle copy/move
+and attached-connector result, plus one actual native table-cell edit. Detailed
+pins, task scope and supplied-file verification are in
+[native editing pilot](../native-editing-pilot.md). Whole-card movement was not
+qualified: a child-only nudge was detected and reverted. Windows desktop,
+multiple-density family coverage, human ergonomics, table-cell source adoption
+and broad geometry adoption remain open. Private decks/screenshots remain in
+owned Documents folders rather than the public source repository.

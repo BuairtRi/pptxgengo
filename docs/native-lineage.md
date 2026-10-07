@@ -2,8 +2,8 @@
 
 Project builds now carry `pptxgengo.native-lineage.v1` in the immutable object map
 and native identity tags in the generated PowerPoint. This extends the
-[native text field baseline](native-field-mapping.md). Three-way text proposals
-and reviewed source adoption are the next implementation step.
+[native text field baseline](native-field-mapping.md). [Three-way text proposals and reviewed adoption](text-reconciliation.md) are
+implemented with a bounded plain-text contract.
 
 ## Identity representation
 

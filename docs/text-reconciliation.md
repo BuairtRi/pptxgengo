@@ -2,8 +2,10 @@
 
 This source capability follows [native field mappings](native-field-mapping.md)
 and [generation/shape lineage](native-lineage.md). Stable **v4.1.0 predates it**.
-Mac and Windows desktop Save As and editing qualification remain pending;
-headless package mutation fixtures do not establish PowerPoint acceptance.
+The Mac synthetic Save As/three-text-field/reorder workflow has passed native
+UI and independent supplied-file checks; see [retained evidence](native-roundtrip.md).
+Windows desktop execution and broader editing acceptance remain pending.
+Headless package mutations alone do not establish PowerPoint acceptance.
 
 ## Preserve and propose
 
