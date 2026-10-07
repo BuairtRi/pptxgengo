@@ -8,10 +8,14 @@ import (
 )
 
 type LibraryIndexFindOptions struct {
-	Shape       LibrarySearchOptions `json:"shape"`
-	Kinds       []string             `json:"kinds,omitempty"`
-	Namespace   string               `json:"namespace,omitempty"`
-	IncludeWeak bool                 `json:"include_weak,omitempty"`
+	Shape          LibrarySearchOptions `json:"shape"`
+	Kinds          []string             `json:"kinds,omitempty"`
+	Namespace      string               `json:"namespace,omitempty"`
+	IncludeWeak    bool                 `json:"include_weak,omitempty"`
+	Retrieval      string               `json:"retrieval,omitempty"`
+	RequireShape   bool                 `json:"require_shape,omitempty"`
+	Lifecycles     []string             `json:"lifecycles,omitempty"`
+	ContentAdapter string               `json:"content_adapter,omitempty"`
 }
 
 type LibraryEntitySummary struct {
@@ -32,15 +36,17 @@ type LibraryEntitySummary struct {
 }
 
 type LibraryIndexHit struct {
-	Entity         LibraryEntitySummary `json:"entity"`
-	GroupID        string               `json:"group_id,omitempty"`
-	VariantIDs     []string             `json:"variant_ids,omitempty"`
-	Score          int                  `json:"score"`
-	ScenarioScore  int                  `json:"scenario_score"`
-	Reasons        []string             `json:"reasons"`
-	UnmatchedHints []string             `json:"unmatched_hints,omitempty"`
-	CountMatch     *LibraryCountMatch   `json:"count_match,omitempty"`
-	FitStatus      string               `json:"fit_status"`
+	Entity           LibraryEntitySummary `json:"entity"`
+	GroupID          string               `json:"group_id,omitempty"`
+	VariantIDs       []string             `json:"variant_ids,omitempty"`
+	Score            int                  `json:"score"`
+	ScenarioScore    int                  `json:"scenario_score"`
+	Reasons          []string             `json:"reasons"`
+	UnmatchedHints   []string             `json:"unmatched_hints,omitempty"`
+	CountMatch       *LibraryCountMatch   `json:"count_match,omitempty"`
+	FitStatus        string               `json:"fit_status"`
+	StructuralStatus string               `json:"structural_status"`
+	Retrieval        *LibraryRetrievalHit `json:"retrieval,omitempty"`
 }
 
 type LibraryIndexFindResult struct {
@@ -50,6 +56,7 @@ type LibraryIndexFindResult struct {
 	Vocabulary LibraryDiscoveryVocabulary `json:"vocabulary"`
 	Matches    []LibraryIndexHit          `json:"matches"`
 	Policy     []string                   `json:"policy"`
+	Retrieval  LibraryRetrievalReport     `json:"retrieval"`
 }
 
 func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFindResult, error) {
@@ -57,6 +64,26 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 	if _, e := SearchLibrary(nil, options.Shape); e != nil {
 		return result, e
 	}
+	mode := options.Retrieval
+	if mode == "" {
+		mode = "metadata"
+	}
+	if mode != "metadata" && mode != "keyword" {
+		return result, fmt.Errorf("library.retrieval_invalid: choose metadata or keyword; model-backed semantic/hybrid retrieval is not available in this build")
+	}
+	result.Retrieval = LibraryRetrievalReport{Requested: mode, Actual: mode, Ranking: "metadata_and_structural_hints"}
+	keyword := mode == "keyword" && strings.TrimSpace(options.Shape.Query) != ""
+	if mode == "keyword" {
+		result.Retrieval.TextPreparation = index.Report.RetrievalText
+		result.Retrieval.Ranking = "exact_identity_then_sqlite_fts5_bm25_ascending_then_canonical_id"
+		result.Policy = append(result.Policy, "Exact eligible entity IDs or unique canonical keys rank first. Other keyword ranks use FTS5 BM25 across the pinned library, with name/purpose/discovery weights 5/2/1 and Porter English stemming over Unicode tokens. Structural scores are separate and are not added to BM25.")
+		if !keyword {
+			result.Retrieval.Actual = "metadata"
+			result.Retrieval.Ranking = "metadata_and_structural_hints"
+			result.Retrieval.Notice = "An empty text query browses structural metadata; no lexical retrieval was performed."
+		}
+	}
+	result.Policy = append(result.Policy, "--require-shape promotes every supplied role, structure, visual-form and exact source item-count hint to an eligibility constraint. Source agreement is not measured fit for new content.")
 	filters, args := []string{"1=1"}, []any{}
 	if options.Namespace != "" {
 		filters = append(filters, "namespace=?")
@@ -73,18 +100,34 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 	if !options.Shape.IncludeDeprecated {
 		filters = append(filters, "lifecycle!='deprecated'")
 	}
-	entities, e := index.entities(strings.Join(filters, " AND "), args)
+	if len(options.Lifecycles) > 0 {
+		placeholders := make([]string, len(options.Lifecycles))
+		for i, lifecycle := range options.Lifecycles {
+			placeholders[i] = "?"
+			args = append(args, lifecycle)
+		}
+		filters = append(filters, "lifecycle IN ("+strings.Join(placeholders, ",")+")")
+	}
+	if options.ContentAdapter != "" {
+		filters = append(filters, "json_extract(json,'$.discovery.capability.content_adapter')=?")
+		args = append(args, options.ContentAdapter)
+	}
+	entities, e := index.discoveryEntities(strings.Join(filters, " AND "), args)
 	if e != nil {
 		return result, e
 	}
 	queryCoverage := map[string]int{}
+	eligible := map[string]bool{}
 	for _, entity := range entities {
 		def := LibraryTemplate{TemplateDefinition: TemplateDefinition{Key: entity.Key}, Name: entity.Name, Purpose: entity.Purpose, Family: entity.Family, Status: entity.Lifecycle, Discovery: entity.Discovery}
 		if entity.Template != nil {
-			def = *entity.Template
-			def.Discovery = entity.Discovery
+			def.Uses = entity.Template.Uses
 		}
-		part, e := SearchLibrary([]LibraryTemplate{def}, options.Shape)
+		shape := options.Shape
+		if keyword {
+			shape.Query = ""
+		}
+		part, e := SearchLibrary([]LibraryTemplate{def}, shape)
 		if e != nil {
 			return result, e
 		}
@@ -92,17 +135,70 @@ func (index *LibraryIndex) Find(options LibraryIndexFindOptions) (LibraryIndexFi
 			continue
 		}
 		hit := part.Matches[0]
-		if strings.TrimSpace(options.Shape.Query) != "" && hit.Score == 0 && !options.IncludeWeak {
+		structuralStatus := libraryStructureStatus(hit, options.Shape)
+		if options.RequireShape && structuralStatus == "source_hints_mismatch" {
 			continue
 		}
+		if !keyword && strings.TrimSpace(options.Shape.Query) != "" && hit.Score == 0 && !options.IncludeWeak {
+			continue
+		}
+		eligible[entity.ID] = true
 		queryCoverage[entity.ID] = libraryScenarioQueryCoverage(def, options.Shape.Query)
 		discovery := entity.Discovery
 		discovery.Zones = nil
 		summary := LibraryEntitySummary{ID: entity.ID, Namespace: entity.Namespace, Kind: entity.Kind, Key: entity.Key, Name: entity.Name, Purpose: entity.Purpose, Lifecycle: entity.Lifecycle, Revision: entity.Revision, SourceRevision: entity.SourceRevision, SourceSHA256: entity.SourceSHA256, Discovery: discovery, Capacity: entity.Capacity, SupportedAdaptations: entity.SupportedAdaptations, PreviewCount: len(entity.Artifacts)}
-		result.Matches = append(result.Matches, LibraryIndexHit{Entity: summary, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, CountMatch: hit.CountMatch, FitStatus: hit.FitStatus})
+		result.Matches = append(result.Matches, LibraryIndexHit{Entity: summary, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, CountMatch: hit.CountMatch, FitStatus: hit.FitStatus, StructuralStatus: structuralStatus})
+	}
+	if keyword {
+		exactID, uniqueKeyID := "", ""
+		keyMatches := 0
+		for _, entity := range entities {
+			if !eligible[entity.ID] {
+				continue
+			}
+			if entity.ID == strings.TrimSpace(options.Shape.Query) {
+				exactID = entity.ID
+			}
+			if entity.Key == strings.TrimSpace(options.Shape.Query) {
+				uniqueKeyID = entity.ID
+				keyMatches++
+			}
+		}
+		if exactID == "" && keyMatches == 1 {
+			exactID = uniqueKeyID
+		}
+		ranks, err := index.keywordRanks(options.Shape.Query, eligible, exactID)
+		if err != nil {
+			return result, err
+		}
+		matches := []LibraryIndexHit{}
+		for _, hit := range result.Matches {
+			if rank, ok := ranks[hit.Entity.ID]; ok {
+				hit.Retrieval = &rank
+				if rank.Method == "exact_entity_identity" {
+					hit.Reasons = append(hit.Reasons, "Exact eligible entity ID or unique canonical key matches the query.")
+				} else {
+					hit.Reasons = append(hit.Reasons, fmt.Sprintf("FTS5 BM25 lexical rank %d; smaller raw BM25 values rank first", rank.Rank))
+				}
+			} else if !options.IncludeWeak {
+				continue
+			} else {
+				hit.Reasons = append(hit.Reasons, "No literal keyword match; included by --include-weak.")
+			}
+			matches = append(matches, hit)
+		}
+		result.Matches = matches
 	}
 	sort.Slice(result.Matches, func(i, j int) bool {
 		a, b := result.Matches[i], result.Matches[j]
+		if keyword {
+			if (a.Retrieval == nil) != (b.Retrieval == nil) {
+				return a.Retrieval != nil
+			}
+			if a.Retrieval != nil && b.Retrieval != nil && a.Retrieval.Rank != b.Retrieval.Rank {
+				return a.Retrieval.Rank < b.Retrieval.Rank
+			}
+		}
 		if a.Score != b.Score {
 			return a.Score > b.Score
 		}

@@ -50,6 +50,17 @@ pptxgengo design library-preview --id cards/3
 - `library-authoring --template KEY` lists each slot's readable alias, description and approximate capacity (characters and lines). Read it before writing copy. Estimates use the authored typography and identify unsupported internals explicitly; changed density and actual text require `--check-fit`, a build and native review. Capacity is advisory, not a character limit or proof of fit.
 - More flags are in the [CLI reference](cli-reference.md#find-and-understand-templates).
 
+### Keyword ranking in the next source build
+
+After building a new index, `library-find --retrieval keyword` uses BM25 over
+names, purposes, relationships and authoring metadata. The older metadata mode
+remains the default. See `docs/semantic-template-discovery.md` in the toolkit
+source for index creation and migration commands; stable v4.1.0 lacks these flags.
+Use `--require-shape` when all supplied roles, structures, visual forms and exact
+source group counts must match. Read `structural_status` and source count scope;
+neither a lexical rank nor a matching count establishes content fit. Inspect
+and build the actual copy. Model-backed semantic/hybrid ranking remains pending.
+
 Consider at least three candidates per page, or record why fewer exist.
 
 ## Judge candidates as a designer

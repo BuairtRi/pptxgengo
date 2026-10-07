@@ -23,11 +23,54 @@ slots with unsupported claims.
 5. Build actual-content alternatives when consequential. Review measurements
    and every native PowerPoint page; repair both geometry and meaning.
 
-Current ranking uses deterministic metadata and structural affordances, not
-vector embeddings. The agent supplies semantic interpretation. Structural
-hints remain independent of labels. Complete query coverage now breaks ties
-that previously arose when the primary text-score cap was reached. A search
-score remains a discovery signal, never a fit guarantee.
+Discovery offers two ranking methods in the next source build:
+
+- `--retrieval metadata` is the existing default: scenario and structural hints
+  contribute separate deterministic metadata scores.
+- `--retrieval keyword` uses SQLite FTS5 BM25 with English stemming. It indexes
+  names, purposes, canonical identities, component terminology, relationships,
+  content groups and authoring aliases/descriptions. It excludes synthetic
+  example copy. Exact eligible IDs or unique canonical keys rank first; other
+  matches use ascending BM25 with field weights name/purpose/discovery 5/2/1.
+
+This is a lexical baseline. Local model-backed semantic and hybrid ranking are
+not implemented in this build; requesting them fails explicitly. Existing stable
+`v4.1.0` binaries do not yet have these new flags.
+
+Build a **new** index with the matching bundle and optional gallery; existing
+indexes remain usable for metadata discovery. Keyword mode rejects old indexes
+with an actionable rebuild message. No installed immutable package is modified:
+
+```sh
+pptxdesign library-index --bundle library/wm-design-system/v11 \
+  --gallery library/wm-design-system/v11/catalog --out /tmp/library-keyword.sqlite
+pptxdesign library-find --index /tmp/library-keyword.sqlite --retrieval keyword \
+  --query 'modernization economics' --kinds template --summary
+pptxdesign library-find --index /tmp/library-keyword.sqlite --retrieval keyword \
+  --query 'pillars' --kinds template --roles point --items 3 --item-role point \
+  --require-shape --summary
+```
+
+Kinds, namespace, lifecycle (`--lifecycles`) and declared adapter capability
+(`--content-adapter`) are explicit filters. Deprecated entries additionally need
+`--include-deprecated`. Roles, structures, visual forms and exact source group
+counts remain hints unless `--require-shape` is supplied, which requires **all**
+the supplied hints. Count evidence retains its source scope; an exact nested
+count does not establish primary-page capacity. A count/structure mismatch is
+visible even for a highly relevant keyword result.
+
+The result's `retrieval` report states the actual ranking method and text recipe;
+each hit has a separate raw BM25/rank and `structural_status`. The existing
+`score` remains metadata/shape scoring; it is never added to BM25. Empty text
+queries explicitly report metadata browsing. `--include-weak` may add unmatched
+rows after lexical matches. Neither retrieval nor source agreement measures fit
+for supplied copy or native acceptance. Use `library-fit` and native review.
+
+Input is bounded literal natural language, not the FTS expression language.
+Source/entity and retrieval-text hashes detect stale projections, while FTS
+schema and corpus checks detect altered rows. Rebuild instead of silently using
+stale metadata. Asset registry `--kinds asset --summary` keeps its separate metadata
+path and rejects the keyword flag; omit `--summary` for indexed asset search.
 
 ## Screenshots and SQLite
 
@@ -121,4 +164,30 @@ with the resulting snapshot; originals and sidecars are read only:
   --out /tmp/wm-photos-new.json
 # Replace internal/wmdesign/photo_registry.json with the reviewed snapshot,
 # rebuild, then regenerate the production SQLite index and asset gallery.
+```
+
+## Lexical baseline measurements (2026-10-06)
+
+On this Apple M5 Max Mac, Go 1.27.1, the newly built V11 index was approximately
+72.1 MB and contained counts read from its report: 649 templates plus indexed
+assets/components/frames. A three-iteration microbenchmark measured about
+113 ms per warm keyword query (modernization economics, templates only) and
+16.2 MB allocated per query. The full verification/open path measured about
+511 ms and 608 MB cumulative allocations per open. These are cached-filesystem
+microbenchmarks, not uncached startup, peak resident memory, Windows measurements
+or performance targets. Full entity/source verification remains at open.
+
+The finder now reads compact discovery projections rather than full source
+scene definitions. Before that change the same warm sample took about 214 ms
+and allocated 201 MB. Inspection and fit retain the original source definitions.
+Engineering judgments cover exact cards/3, interview lists, practices heat maps,
+modernization economics, roadmaps and pillars, with an acceptable candidate in
+its first ten results. These judgments derive from source purposes and still
+need operator and supplied-content/native review.
+
+Reproduce the bounded measurements with:
+
+```sh
+go test -run '^$' -bench '^BenchmarkKeyword' -benchtime=3x -benchmem \
+  -timeout=3m ./internal/wmdesign
 ```

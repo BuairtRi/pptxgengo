@@ -130,27 +130,30 @@ func (index *LibraryIndex) entityAuthoringMetadata(entity LibraryEntity) (Librar
 }
 
 type LibraryFindSummaryHit struct {
-	ID              string                `json:"id"`
-	GroupID         string                `json:"group_id,omitempty"`
-	VariantIDs      []string              `json:"variant_ids,omitempty"`
-	Key             string                `json:"key"`
-	Name            string                `json:"name"`
-	Purpose         string                `json:"purpose"`
-	Score           int                   `json:"score"`
-	ScenarioScore   int                   `json:"scenario_score"`
-	Reasons         []string              `json:"reasons"`
-	UnmatchedHints  []string              `json:"unmatched_hints,omitempty"`
-	Structures      []string              `json:"structures"`
-	Groups          []LibraryContentGroup `json:"content_groups,omitempty"`
-	ScreenshotPaths []string              `json:"screenshot_paths"`
-	FitStatus       string                `json:"fit_status"`
+	ID               string                `json:"id"`
+	GroupID          string                `json:"group_id,omitempty"`
+	VariantIDs       []string              `json:"variant_ids,omitempty"`
+	Key              string                `json:"key"`
+	Name             string                `json:"name"`
+	Purpose          string                `json:"purpose"`
+	Score            int                   `json:"score"`
+	ScenarioScore    int                   `json:"scenario_score"`
+	Reasons          []string              `json:"reasons"`
+	UnmatchedHints   []string              `json:"unmatched_hints,omitempty"`
+	Structures       []string              `json:"structures"`
+	Groups           []LibraryContentGroup `json:"content_groups,omitempty"`
+	ScreenshotPaths  []string              `json:"screenshot_paths"`
+	FitStatus        string                `json:"fit_status"`
+	StructuralStatus string                `json:"structural_status"`
+	Retrieval        *LibraryRetrievalHit  `json:"retrieval,omitempty"`
 }
 
 type LibraryFindSummary struct {
-	Schema  string                  `json:"schema"`
-	Query   LibraryIndexFindOptions `json:"query"`
-	Matches []LibraryFindSummaryHit `json:"matches"`
-	Policy  []string                `json:"policy"`
+	Schema    string                  `json:"schema"`
+	Query     LibraryIndexFindOptions `json:"query"`
+	Matches   []LibraryFindSummaryHit `json:"matches"`
+	Policy    []string                `json:"policy"`
+	Retrieval LibraryRetrievalReport  `json:"retrieval"`
 }
 
 func (index *LibraryIndex) FindSummary(options LibraryIndexFindOptions) (LibraryFindSummary, error) {
@@ -158,13 +161,13 @@ func (index *LibraryIndex) FindSummary(options LibraryIndexFindOptions) (Library
 	if err != nil {
 		return LibraryFindSummary{}, err
 	}
-	out := LibraryFindSummary{Schema: "pptxgengo.library-search-summary.v1", Query: options, Matches: []LibraryFindSummaryHit{}, Policy: result.Policy}
+	out := LibraryFindSummary{Schema: "pptxgengo.library-search-summary.v1", Query: options, Matches: []LibraryFindSummaryHit{}, Policy: result.Policy, Retrieval: result.Retrieval}
 	for _, hit := range result.Matches {
 		card, err := index.SelectionCard(hit.Entity.ID)
 		if err != nil {
 			return out, err
 		}
-		out.Matches = append(out.Matches, LibraryFindSummaryHit{ID: card.ID, GroupID: hit.GroupID, VariantIDs: hit.VariantIDs, Key: hit.Entity.Key, Name: card.Name, Purpose: card.Purpose, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, Structures: card.Discovery.Structures, Groups: card.Discovery.Groups, ScreenshotPaths: card.ScreenshotPaths, FitStatus: hit.FitStatus})
+		out.Matches = append(out.Matches, LibraryFindSummaryHit{ID: card.ID, GroupID: hit.GroupID, VariantIDs: hit.VariantIDs, Key: hit.Entity.Key, Name: card.Name, Purpose: card.Purpose, Score: hit.Score, ScenarioScore: hit.ScenarioScore, Reasons: hit.Reasons, UnmatchedHints: hit.UnmatchedHints, Structures: card.Discovery.Structures, Groups: card.Discovery.Groups, ScreenshotPaths: card.ScreenshotPaths, FitStatus: hit.FitStatus, StructuralStatus: hit.StructuralStatus, Retrieval: hit.Retrieval})
 	}
 	return out, nil
 }

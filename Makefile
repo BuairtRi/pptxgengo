@@ -1,5 +1,7 @@
 GO ?= go
-FAST_TEST_TIMEOUT ?= 150s
+# The full short suite includes pinned catalog/index verification; slower hosted
+# Macs need a separate package ceiling from the small, selected race workloads.
+FAST_TEST_TIMEOUT ?= 5m
 INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
@@ -23,6 +25,7 @@ test-race:
 	@for check in ConcurrentColdAndWarm CloneIsolation FingerprintDependencies BoundedEvictionAndErrors DriftAfterWarm; do \
 		$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run "^TestLibraryCatalogCache$$check$$" ./internal/wmdesign || exit $$?; \
 	done
+	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestKeywordConcurrentReadOnlyQueries$$' ./internal/wmdesign
 
 # Includes catalog-wide and relocated-deck checks. Requires registered private
 # branding assets at WMDS_BRANDING_ROOT (or ~/Documents/branding).
