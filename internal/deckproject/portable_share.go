@@ -43,6 +43,7 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 		r.Files[rel] = digest(b)
 	}
 	files["SHARE.md"] = []byte("# Complete private deck project\n\nUse `pptxdesign project share-extract --archive package.zip --out new-project` for a complete working project. Manual unzip can open versioned PowerPoint decks, but legacy asset aliases must be expanded before rebuilding. Asset originals with duplicate hashes are stored once in this ZIP and expanded deterministically to ordinary relative files for legacy path compatibility; no filesystem links. The working deck is deck.yaml; ordered slides are in slides/, local templates in slides/templates/, and deck-owned immutable assets in assets/. versions/current.json identifies the latest committed source-and-deck snapshot. Each version has a browsable deck.pptx and manifest.json. Asset bytes are shared by SHA256, never symlinks. Native working copies, receipts, approval history, contexts and evidence are private material.\n\nRun `pptxdesign project share-verify --project .` after synchronization/extraction. Resolve conflicting copies explicitly without deleting either collaborator's work. OneDrive is not a transaction service; interrupted publications are rejected. Materialize a saved version into a NEW folder with `pptxdesign project version materialize --project . --number 000001 --out ../restored-project`.\n\nToolchain executable/OS/architecture and template pins remain exact. Use the originally pinned runtime to rebuild, or explicitly migrate the toolchain using project migrate; sharing does not authorize a new runtime. Shared branding resources and fonts are still required unless an offline runtime package is also supplied. PowerPoint can open versions/<number>/deck.pptx without the CLI; native render quality and font installation remain separate qualification.\n")
+	files["SHARE.md"] = append(files["SHARE.md"], []byte("\nCurrent saved PowerPoint: ["+r.CurrentVersion+"](versions/"+r.CurrentVersion+"/deck.pptx).\n")...)
 	r.Files["SHARE.md"] = digest(files["SHARE.md"])
 	delete(r.Files, "share-manifest.json")
 	r.AssetAliases = map[string]VersionAsset{}
@@ -136,11 +137,15 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 	if !reflectEqual(original, hashBytes(current)) {
 		return r, fmt.Errorf("project changed during share; ZIP discarded")
 	}
-	b, e := os.ReadFile(abs)
+	// Stream the final ZIP hash; never allocate another archive-sized buffer.
+	info, e := os.Stat(abs)
 	if e != nil {
 		return r, e
 	}
-	r.SHA256 = digest(b)
+	r.SHA256, _, _, e = hashReconcileFile(abs, info.Size(), false)
+	if e != nil {
+		return r, e
+	}
 	ok = true
 	return r, nil
 }

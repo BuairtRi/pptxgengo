@@ -56,7 +56,10 @@ type VersionList struct {
 }
 
 func readOptional(path string) ([]byte, error) {
-	b, e := os.ReadFile(path)
+	return readOptionalLimit(path, uint64(portableFileLimit))
+}
+func readOptionalLimit(path string, limit uint64) ([]byte, error) {
+	_, _, b, e := hashReconcileFile(path, int64(limit), true)
 	if os.IsNotExist(e) {
 		return nil, nil
 	}
@@ -329,7 +332,11 @@ func ListVersions(root string) (VersionList, error) {
 		r.Versions = append(r.Versions, v)
 	}
 	sort.Slice(r.Versions, func(i, j int) bool { return r.Versions[i].Number < r.Versions[j].Number })
-	raw, e := readOptional(filepath.Join(root, "versions/current.json"))
+	pointerPath, e := SafePath(root, "versions/current.json")
+	if e != nil {
+		return r, e
+	}
+	raw, e := readOptionalLimit(pointerPath, portableManifestLimit)
 	if e != nil {
 		return r, e
 	}
@@ -402,7 +409,7 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 		if e != nil {
 			return v, e
 		}
-		if b, e := readOptional(path); e != nil || b != nil {
+		if b, e := readOptionalLimit(path, portableManifestLimit); e != nil || b != nil {
 			return v, fmt.Errorf("project busy: %s; no forced lock takeover", rel)
 		}
 	}
@@ -602,7 +609,7 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 	}
 	pointer := VersionPointer{Schema: "pptxgengo.deck-version-pointer.v1", Number: v.Number, ManifestSHA256: digest(manifest)}
 	dest := filepath.Join(p.Root, "versions/current.json")
-	before, e := readOptional(dest)
+	before, e := readOptionalLimit(dest, portableManifestLimit)
 	if e != nil {
 		return v, e
 	}
@@ -740,7 +747,7 @@ func RecoverVersion(root, number, expect string) (VersionPointer, error) {
 	if e != nil {
 		return r, e
 	}
-	before, e := readOptional(dest)
+	before, e := readOptionalLimit(dest, portableManifestLimit)
 	if e != nil {
 		return r, e
 	}
@@ -801,7 +808,7 @@ func RecoverVersion(root, number, expect string) (VersionPointer, error) {
 		}
 	}
 	r = VersionPointer{Schema: "pptxgengo.deck-version-pointer.v1", Number: number, ManifestSHA256: digest(raw)}
-	current, e := readOptional(dest)
+	current, e := readOptionalLimit(dest, portableManifestLimit)
 	if e != nil || !bytes.Equal(current, before) {
 		return r, fmt.Errorf("pointer changed during recovery")
 	}

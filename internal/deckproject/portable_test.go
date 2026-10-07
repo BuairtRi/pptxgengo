@@ -487,3 +487,26 @@ func TestPortableProducerRefusesOversizedFilesBeforeReading(t *testing.T) {
 		t.Fatal("oversized manifest read accepted")
 	}
 }
+
+func TestPortableOptionalAndPointerReadsAreBounded(t *testing.T) {
+	root := t.TempDir()
+	path := filepath.Join(root, "oversized-pointer.json")
+	f, e := os.Create(path)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if e = f.Truncate(int64(portableManifestLimit) + 1); e != nil {
+		f.Close()
+		t.Skipf("oversized fixture unsupported: %v", e)
+	}
+	f.Close()
+	if _, e := readOptionalLimit(path, portableManifestLimit); e == nil {
+		t.Fatal("unbounded pointer read accepted")
+	}
+	if b, e := readOptional(filepath.Join(root, "missing")); e != nil || b != nil {
+		t.Fatalf("optional absent read changed: %v", e)
+	}
+	if _, e := readOptional(root); e == nil {
+		t.Fatal("optional directory accepted")
+	}
+}
