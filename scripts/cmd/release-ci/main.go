@@ -760,7 +760,11 @@ func publish(dir, version, commit string) error {
 		}
 		links = append(links, map[string]string{"name": p, "url": endpoint, "link_type": "package"})
 	}
-	description := "Signed CLI prerelease for macOS, Linux and Windows (amd64 and arm64).\n\nPackage kind: " + packageKind() + ". CLI-only archives contain three executables; full archives additionally contain checksum-verified private presentation resources.\n\nWindows runtime and native PowerPoint validation are pending the interactive desktop runner. macOS notarization uses online Apple ticket lookup.\n\nFinal archives have CycloneDX SBOMs and vulnerability scans. manifest.json is signed with the private Sigstore service; verify its bundle against release/sigstore-policy.json before trusting checksums.\n\nSource: `" + commit + "`\nPipeline: " + os.Getenv("CI_PIPELINE_URL")
+	releaseKind := "release"
+	if strings.Contains(version, "-rc.") {
+		releaseKind = "prerelease"
+	}
+	description := "Signed CLI " + releaseKind + " for macOS, Linux and Windows (amd64 and arm64).\n\nPackage kind: " + packageKind() + ". CLI-only archives contain three executables; full archives additionally contain checksum-verified private presentation resources.\n\nWindows runtime and native PowerPoint validation are pending the interactive desktop runner. macOS notarization uses online Apple ticket lookup.\n\nFinal archives have CycloneDX SBOMs and vulnerability scans. manifest.json is signed with the private Sigstore service; verify its bundle against release/sigstore-policy.json before trusting checksums.\n\nSource: `" + commit + "`\nPipeline: " + os.Getenv("CI_PIPELINE_URL")
 	body, e := json.Marshal(map[string]any{"name": "pptxgengo " + version, "tag_name": version, "description": description, "assets": map[string]any{"links": links}})
 	if e != nil {
 		return e

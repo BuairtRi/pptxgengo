@@ -279,6 +279,12 @@ Stable table-cell and chart-data reconciliation; speaker notes and structural
 edits; importing newly added slides; and controlled geometry/local-template
 adoption. General lossless PPTX reverse compilation is outside the first release.
 
+## Execution record
+
+Implementation work begun after this handoff is tracked in the
+[execution record](product-enhancements-execution-20261006.md). The original
+planning scope and completion criteria below remain the baseline.
+
 ## Execution guidance for the next agent
 
 1. Read this handoff and confirm the installed release/source, available Windows

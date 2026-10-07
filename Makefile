@@ -16,6 +16,7 @@ test:
 # Race the source-mutation guard, native-worker cleanup paths, library cache,
 # and the library's concurrent presentation serialization regressions.
 test-race:
+	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/installstate
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity' ./internal/deckproject
 	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/nativeexport
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace' ./pptx

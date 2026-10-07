@@ -18,15 +18,42 @@ server or external assets; keep them together for navigation.
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install-windows.ps1
 ```
 
-The installer verifies every packaged file, installs to
-`%LOCALAPPDATA%\pptxgengo\releases\VERSION`, adds its `bin` directory to your user
-PATH, installs the skill into `%USERPROFILE%\.codex\skills` (or `CODEX_HOME`), and
-installs the bundled IBM Plex fonts for this user. It preserves an existing skill
-in a timestamped backup. Existing release folders are never overwritten.
-Restart Codex, PowerPoint, and your terminal afterward. `-SkipSkill`, `-SkipFonts`,
-and `-NoPath` opt out of those installation steps. A custom `-Destination` must be
-a new directory. Enterprise policy may require IT approval for unsigned binaries
-or PowerShell; the command does not change machine execution policy.
+The installer verifies the complete package, native architecture and required
+resources, checks a copied stage and all three executable versions, then activates
+through the shared installation manager. Releases are immutable; retrying an
+identical package is supported. A different package cannot overwrite a release.
+User PATH uses one stable `%LOCALAPPDATA%\pptxgengo\bin` entry across upgrades.
+The skill is installed into `%USERPROFILE%\.codex\skills` (or `CODEX_HOME`), with
+existing user skills backed up. Fonts are installed separately for this user.
+
+Activation records a durable receipt before changing settings. A failed activation
+restores the previous selection; an interrupted operation can be recovered with:
+
+```powershell
+pptxgengo installation doctor
+pptxgengo installation recover
+pptxgengo installation rollback
+```
+
+Recovery preserves conflicting edits and reports the receipt requiring attention.
+Open a new terminal and restart the agent after activation or rollback. Font
+registration is a separate best-effort step and is not rolled back. Actual Windows
+installer/PATH and PowerPoint qualification remain pending the desktop runner.
+
+`-SkipSkill`, `-SkipFonts` and `-NoPath` opt out separately; `-StageOnly` checks and
+stages without activation. A custom `-Destination` must be absent or contain the
+same verified package. A custom destination is an additional checked staging copy;
+activation still uses the managed `%LOCALAPPDATA%\pptxgengo\releases\VERSION`
+selection. Use the Go command's `--root` for a different managed installation root.
+x64 packages require an x64 PC and ARM64 packages an ARM64
+PC. Enterprise policy can still block scripts or signed executables; this command
+does not change machine execution policy.
+
+`pptxgengo installation uninstall` removes owned activation bindings, restores an
+unchanged original user skill when recorded, and retains releases/backups. Edited
+skills, user projects, authored decks and fonts are preserved. `--keep-skill` keeps
+the current skill explicitly. These commands require a package containing the new
+installation manager; the earlier `v4.1.0` CLI does not include them.
 
 For portable use, skip installation and invoke `bin\pptxgengo.exe` directly.
 Copy `skills\west-monroe-presentations` into your own skill directory and install
