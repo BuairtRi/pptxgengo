@@ -230,7 +230,7 @@ func TestSplitForkAndSectionChangesKeepExternalFormat(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if p.TemplateFiles["editable-fork"] != "templates/editable-fork.yaml" {
+	if p.TemplateFiles["editable-fork"] != "slides/templates/editable-fork.yaml" {
 		t.Fatal("fork collapsed external templates")
 	}
 	if _, err := AddSection(p, SectionAddOptions{ID: "copy", Title: "Editable source", BeforeSlideID: local.ID}); err != nil {
@@ -422,7 +422,7 @@ func TestSplitNormalizesReferencedJSONTemplateWithoutChangingCanonical(t *testin
 func TestSplitRefusesOccupiedDestinationsWithoutChangingSource(t *testing.T) {
 	p := example(t)
 	before := append([]byte(nil), p.Raw...)
-	path := filepath.Join(p.Root, "slides", "001-"+p.Document.Slides[0].ID+".yaml")
+	path := filepath.Join(p.Root, "slides", p.Document.Slides[0].ID+".yaml")
 	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
 		t.Fatal(err)
 	}

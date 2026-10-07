@@ -8,20 +8,22 @@ import (
 )
 
 type AssetRegistration struct {
-	ID          string
-	Data        []byte
-	Description string
-	Focus       *AssetFocus
+	ID            string
+	Data          []byte
+	Description   string
+	Focus         *AssetFocus
+	ReplaceSHA256 string
 }
 type AssetRegistrationReceipt struct {
-	Operation    string `json:"operation"`
-	ID           string `json:"id"`
-	Path         string `json:"path"`
-	SHA256       string `json:"sha256"`
-	BeforeSHA256 string `json:"before_sha256"`
-	AfterSHA256  string `json:"after_sha256"`
-	Decision     string `json:"decision"`
-	Policy       string `json:"policy"`
+	Operation      string `json:"operation"`
+	PreviousSHA256 string `json:"previous_sha256,omitempty"`
+	ID             string `json:"id"`
+	Path           string `json:"path"`
+	SHA256         string `json:"sha256"`
+	BeforeSHA256   string `json:"before_sha256"`
+	AfterSHA256    string `json:"after_sha256"`
+	Decision       string `json:"decision"`
+	Policy         string `json:"policy"`
 }
 
 // RegisterAsset retains the exact approved/client original in the project. It
@@ -31,8 +33,24 @@ func RegisterAsset(p *Project, o AssetRegistration) (AssetRegistrationReceipt, e
 	if !stableID.MatchString(o.ID) || o.Description == "" {
 		return r, fmt.Errorf("asset registration requires stable ID and description")
 	}
-	if _, exists := p.Document.Assets[o.ID]; exists {
-		return r, fmt.Errorf("asset ID already exists: %s", o.ID)
+	old, exists := p.Document.Assets[o.ID]
+	guarded := map[string][]byte{}
+	if o.ReplaceSHA256 != "" {
+		if !exists || old.Path == "" || !shaPattern.MatchString(o.ReplaceSHA256) {
+			return r, fmt.Errorf("asset revise requires an existing owned asset and exact predecessor SHA256")
+		}
+		previous, err := readProjectFile(p.Root, old.Path)
+		if err != nil {
+			return r, err
+		}
+		if digest(previous) != o.ReplaceSHA256 || (old.SHA256 != "" && old.SHA256 != o.ReplaceSHA256) {
+			return r, fmt.Errorf("asset predecessor changed; preserve both revisions and resolve explicitly")
+		}
+		guarded[old.Path] = previous
+		r.Operation = "revise-asset"
+		r.PreviousSHA256 = o.ReplaceSHA256
+	} else if exists {
+		return r, fmt.Errorf("asset ID already exists: %s; use asset revise with predecessor hash", o.ID)
 	}
 	if len(o.Data) > 64<<20 {
 		return r, fmt.Errorf("asset exceeds 64MiB")
@@ -44,22 +62,29 @@ func RegisterAsset(p *Project, o AssetRegistration) (AssetRegistrationReceipt, e
 	if err != nil {
 		return r, err
 	}
-	ext := map[string]string{"image/png": ".png", "image/jpeg": ".jpg", "image/svg+xml": ".svg"}[mime]
+	_ = mime
 	r.SHA256 = digest(o.Data)
-	r.Path = "assets/originals/" + o.ID + "-" + r.SHA256[:16] + ext
+	r.Path = "assets/objects/sha256/" + r.SHA256
 	path, err := SafePath(p.Root, r.Path)
 	if err != nil {
 		return r, err
 	}
-	if err = writeExclusive(path, o.Data, 0444); err != nil {
+	prior, err := readOptional(path)
+	if err != nil {
 		return r, err
 	}
-	committed := false
-	defer func() {
-		if !committed {
-			os.Remove(path)
+	created := prior == nil
+	if created {
+		if err = writeExclusive(path, o.Data, 0444); err != nil {
+			return r, err
 		}
-	}()
+	} else if digest(prior) != r.SHA256 {
+		return r, fmt.Errorf("immutable asset object drift")
+	}
+	guarded[r.Path] = o.Data
+	// A concurrent registration can adopt a deduplicated object before this
+	// source transaction finishes. Retain unused immutable objects on failure;
+	// deleting a newly created object could break the other author's source.
 	main, err := sourceYAML(p.Raw)
 	if err != nil {
 		return r, err
@@ -84,12 +109,11 @@ func RegisterAsset(p *Project, o AssetRegistration) (AssetRegistrationReceipt, e
 	if err != nil {
 		return r, err
 	}
-	candidate, err := commitSourceChanges(p, changes, func(next *Project) error { r.AfterSHA256 = next.SourceHash(); return writeJSON(decision, r) })
+	candidate, err := commitSourceChangesChecked(p, changes, nil, guarded, func(next *Project) error { r.AfterSHA256 = next.SourceHash(); return writeJSON(decision, r) })
 	if err != nil {
 		os.Remove(decision)
 		return r, err
 	}
 	_ = candidate
-	committed = true
 	return r, nil
 }

@@ -285,7 +285,7 @@ Additional scope requested on 2026-10-07: two CI-generated packaged PowerPoint
 browsing libraries (all templates/valid frame and rail variants, and versioned
 reusable authored slides), consistent portable project folders, numbered
 source/deck versions and complete colleague ZIP handoff. See
-[portable projects and browsing decks](portable-projects-and-browsing-decks-20261007.md)
+[portable projects and browsing decks](../portable-projects.md)
 for the requirements and acceptance evidence.
 
 Implementation work begun after this handoff is tracked in the
