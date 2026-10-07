@@ -385,6 +385,9 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 			assets[a.Path] = b
 		}
 	}
+	for relative := range assets {
+		delete(files, relative)
+	}
 	builds, e := projectInventory(p.Root, func(rel string, dir bool) bool {
 		return ignoredPortable(rel, dir) || (!strings.HasPrefix(rel, "builds/") && rel != "builds")
 	})
@@ -430,6 +433,12 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 	}
 	for rel, b := range builds {
 		v.SharedBuilds[rel] = digest(b)
+	}
+	for rel := range builds {
+		parts := strings.Split(rel, "/")
+		if len(parts) < 3 || builds["builds/"+parts[1]+"/receipt.json"] == nil {
+			return v, fmt.Errorf("incomplete retained build directory: %s", rel)
+		}
 	}
 	for rel, b := range builds {
 		if strings.HasSuffix(rel, "/receipt.json") {
@@ -493,6 +502,9 @@ func SaveVersion(p *Project, actor, message string) (DeckVersion, error) {
 	})
 	if e != nil {
 		return v, e
+	}
+	for relative := range assets {
+		delete(nowFiles, relative)
 	}
 	if !reflectEqual(hashBytes(nowFiles), hashBytes(files)) {
 		return v, fmt.Errorf("project inventory changed during publication; snapshot retained")

@@ -106,27 +106,9 @@ func runProjectPortable(command string, args []string) error {
 		}
 		result, e = deckproject.PortableLayout(p, *apply)
 	case "version":
-		switch action {
-		case "save":
-			result, e = deckproject.SaveVersion(p, *actor, *message)
-		case "recover":
-			result, e = deckproject.RecoverVersion(p.Root, *number, *expect)
-		case "list":
-			result, e = deckproject.ListVersions(p.Root)
-		case "verify":
-			result, e = deckproject.VerifyVersion(p.Root, *number)
-		case "materialize":
-			if *out == "" {
-				return fmt.Errorf("materialize requires --out")
-			}
-			result, e = deckproject.MaterializeVersion(p.Root, *number, *out)
-		default:
-			return fmt.Errorf("unknown version action %s", action)
-		}
+		result, e = deckproject.SaveVersion(p, *actor, *message)
 	case "share":
 		result, e = deckproject.ShareProject(p, *out)
-	case "share-verify":
-		result, e = deckproject.VerifyShare(p.Root)
 	default:
 		return fmt.Errorf("unknown portable command %s", command)
 	}

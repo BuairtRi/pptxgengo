@@ -46,8 +46,19 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 	r.Files["SHARE.md"] = digest(files["SHARE.md"])
 	delete(r.Files, "share-manifest.json")
 	r.AssetAliases = map[string]VersionAsset{}
+	assetPaths := map[string]bool{}
+	for _, asset := range p.Document.Assets {
+		if asset.Path != "" {
+			assetPaths[asset.Path] = true
+		}
+	}
+	for _, version := range list.Versions {
+		for relative := range version.Assets {
+			assetPaths[relative] = true
+		}
+	}
 	for rel, b := range files {
-		if strings.HasPrefix(rel, "assets/") {
+		if strings.HasPrefix(rel, "assets/") || assetPaths[rel] {
 			sha := digest(b)
 			object := "assets/objects/sha256/" + sha
 			if rel != object {
@@ -145,7 +156,7 @@ func VerifyShare(root string) (ShareReceipt, error) {
 		return r, fmt.Errorf("invalid private share manifest")
 	}
 	for rel, a := range r.AssetAliases {
-		if !strings.HasPrefix(rel, "assets/") || a.Object != "assets/objects/sha256/"+a.SHA256 || r.Files[rel] != a.SHA256 || r.Files[a.Object] != a.SHA256 {
+		if a.Object != "assets/objects/sha256/"+a.SHA256 || r.Files[rel] != a.SHA256 || r.Files[a.Object] != a.SHA256 {
 			return r, fmt.Errorf("invalid shared asset alias %s", rel)
 		}
 	}
@@ -246,7 +257,7 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 		if e = portableName(rel); e != nil {
 			return r, e
 		}
-		if !strings.HasPrefix(rel, "assets/") || a.Object != "assets/objects/sha256/"+a.SHA256 || r.Files[rel] != a.SHA256 || r.Files[a.Object] != a.SHA256 {
+		if a.Object != "assets/objects/sha256/"+a.SHA256 || r.Files[rel] != a.SHA256 || r.Files[a.Object] != a.SHA256 {
 			return r, fmt.Errorf("invalid shared asset alias %s", rel)
 		}
 		if _, exists := entries[rel]; exists {
@@ -320,6 +331,9 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 	}
 	if _, e = VerifyShare(abs); e != nil {
 		return r, e
+	}
+	if _, e = Load(abs); e != nil {
+		return r, fmt.Errorf("extracted working project invalid: %w", e)
 	}
 	success = true
 	return r, nil
