@@ -74,6 +74,11 @@ func TestBrowsingPresentationClosure(t *testing.T) {
 			ids := pattern.FindAll(p["ppt/presentation.xml"], -1)
 			p["ppt/presentation.xml"] = bytes.Replace(p["ppt/presentation.xml"], ids[1], ids[0], 1)
 		},
+		"duplicate_relationship_id": func(p map[string][]byte) {
+			pattern := regexp.MustCompile(`<Relationship\b[^>]*/>`)
+			relations := pattern.FindAll(p["ppt/_rels/presentation.xml.rels"], -1)
+			p["ppt/_rels/presentation.xml.rels"] = bytes.Replace(p["ppt/_rels/presentation.xml.rels"], []byte("</Relationships>"), append(append([]byte{}, relations[0]...), []byte("</Relationships>")...), 1)
+		},
 		"duplicate_slide_name": func(p map[string][]byte) {
 			p["ppt/slides/slide2.xml"] = bytes.Replace(p["ppt/slides/slide2.xml"], []byte(`name="page-2"`), []byte(`name="page-1"`), 1)
 		},
@@ -107,6 +112,21 @@ func TestBrowsingPresentationClosure(t *testing.T) {
 		t.Fatal("manifest order ignored")
 	}
 }
+
+func TestBrowsingLargeNativeCorpusOptIn(t *testing.T) {
+	file := os.Getenv("PPTXGENGO_BROWSING_FRAME_CORPUS")
+	if file == "" {
+		t.Skip("explicit existing native developer frame corpus required")
+	}
+	pages, e := browsingartifact.PresentationPages(file)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if len(pages) != 9073 || pages[0] != "how-to-use" {
+		t.Fatal("expected complete current 9072-frame corpus plus guide", len(pages))
+	}
+	t.Logf("bounded native presentation parser verified %d ordered pages including every independent developer frame specimen", len(pages))
+}
 func TestBrowsingTypedCoverageAndApproval(t *testing.T) {
 	for _, kind := range []string{"templates", "reusable"} {
 		deck := browsingfixture.Deck(t, kind)
@@ -136,5 +156,57 @@ func TestBrowsingTypedCoverageAndApproval(t *testing.T) {
 	}
 	if _, e := browsingartifact.ReadManifest(p); e == nil || !strings.Contains(e.Error(), "16MiB") {
 		t.Fatal("manifest size bound ignored", e)
+	}
+}
+
+func TestBrowsingAliasAccounting(t *testing.T) {
+	deck := browsingfixture.Deck(t, "templates")
+	file, hash := artifact(t, deck), browsingfixture.Hash(deck)
+	makeManifest := func() map[string]any {
+		var m map[string]any
+		if e := json.Unmarshal(browsingfixture.Manifest(t, "templates", hash), &m); e != nil {
+			t.Fatal(e)
+		}
+		c := m["coverage"].(map[string]any)
+		c["frame_mode"], c["expected_frame_requests"], c["frame_candidates"] = "exhaustive", 3, 3
+		entry := c["entries"].([]any)[1].(map[string]any)
+		entry["frame"] = map[string]any{"rail": "none", "footer": "compact", "no_header": true, "title_lines": 1, "density": "standard"}
+		c["frame_aliases"] = []any{
+			map[string]any{"slide_id": "page-5", "basis": "Inactive header fields only", "frame": map[string]any{"rail": "none", "footer": "compact", "no_header": true, "title_lines": 2, "density": "standard"}},
+			map[string]any{"slide_id": "page-5", "basis": "Inactive header fields only", "frame": map[string]any{"rail": "none", "footer": "compact", "no_header": true, "title_lines": 1, "density": "appendix"}},
+		}
+		return m
+	}
+	raw, e := json.Marshal(makeManifest())
+	if e != nil {
+		t.Fatal(e)
+	}
+	if e = browsingartifact.ValidateFile(raw, "templates", hash, file); e != nil {
+		t.Fatal("valid inactive header aliases refused", e)
+	}
+	cases := map[string]func(map[string]any){
+		"duplicate_request": func(c map[string]any) {
+			aliases := c["frame_aliases"].([]any)
+			aliases[1] = aliases[0]
+		},
+		"changed_active_request": func(c map[string]any) {
+			c["frame_aliases"].([]any)[0].(map[string]any)["frame"].(map[string]any)["surface"] = "inverse"
+		},
+		"source_pin_not_in_inventory": func(c map[string]any) {
+			c["entries"].([]any)[0].(map[string]any)["source_sha256"] = strings.Repeat("b", 64)
+		},
+	}
+	for name, change := range cases {
+		t.Run(name, func(t *testing.T) {
+			m := makeManifest()
+			change(m["coverage"].(map[string]any))
+			raw, e := json.Marshal(m)
+			if e != nil {
+				t.Fatal(e)
+			}
+			if e = browsingartifact.ValidateFile(raw, "templates", hash, file); e == nil {
+				t.Fatal("incoherent coverage accepted")
+			}
+		})
 	}
 }

@@ -1,6 +1,7 @@
 package wmdesign
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -8,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 	"github.com/buairtri/pptxgengo/internal/finishedslide"
 )
 
@@ -262,4 +264,56 @@ func TestBrowsingCatalogModeComplete(t *testing.T) {
 	if _, _, e = TemplateBrowsingDocumentWithFrames(bundle, "", 2026, "partial"); e == nil {
 		t.Fatal("unknown mode accepted")
 	}
+}
+
+func TestBrowsingExhaustiveManifestFitsBound(t *testing.T) {
+	doc, coverage, e := TemplateBrowsingDocument("../../library/wm-design-system/v11", "", 2026)
+	if e != nil {
+		t.Fatal(e)
+	}
+	pages := make([]map[string]string, 0, len(doc.Slides))
+	for _, slide := range doc.Slides {
+		// A longest actual role is conservative for the serialized page inventory.
+		pages = append(pages, map[string]string{"id": slide.ID, "kind": "deprecation_notice"})
+	}
+	raw, e := json.Marshal(map[string]any{"coverage": coverage, "pages": pages})
+	if e != nil {
+		t.Fatal(e)
+	}
+	// Reserve ample space for source/font/asset pins and the fixed top-level fields.
+	const metadataReserve = 128 << 10
+	if len(raw)+metadataReserve > 16<<20 {
+		t.Fatalf("exhaustive coverage plus complete page inventory exceeds manifest bound: %d bytes", len(raw))
+	}
+	t.Logf("complete exhaustive coverage and %d page identities: %d compact JSON bytes; %d bytes reserved for remaining pins", len(pages), len(raw), metadataReserve)
+	for i, slide := range doc.Slides {
+		switch {
+		case slide.ID == "how-to-use":
+			pages[i]["kind"] = "guide"
+		case strings.HasPrefix(slide.ID, "family-"):
+			pages[i]["kind"] = "family_divider"
+		case strings.HasSuffix(slide.ID, "-deprecated"):
+			pages[i]["kind"] = "deprecation_notice"
+		case slide.ID == "frame-divider":
+			pages[i]["kind"] = "frame_divider"
+		case strings.HasPrefix(slide.ID, "template-"):
+			pages[i]["kind"] = "template"
+		case strings.HasPrefix(slide.ID, "frame-"):
+			pages[i]["kind"] = "frame"
+		default:
+			t.Fatal("missing actual page role", slide.ID)
+		}
+	}
+	// These declared test-only artifact identities exercise actual source coverage
+	// coherence. They are not hashes or qualification of a branded rendered deck.
+	pin := strings.Repeat("a", 64)
+	manifest := map[string]any{"schema": "pptxgengo.browsing-library.v1", "kind": "templates", "as_of": "2026-10-07", "deck_sha256": pin, "bundle_sha256": pin, "source_revision": coverage.SourceRevision, "source_commit": coverage.SourceCommit, "slides": len(pages), "pages": pages, "compiler": CandidateEngine, "release_identity": "generic-test-only", "qualification": "native_visual_copy_paste_qualification_pending", "coverage": coverage, "source_files": coverage.SourceFiles, "fonts": []map[string]string{{"file": "fixture.ttf", "sha256": pin, "postscript_name": "Fixture"}}}
+	raw, e = json.Marshal(manifest)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if e = browsingartifact.Validate(raw, "templates", pin, len(pages)); e != nil {
+		t.Fatal("complete current source manifest failed shared validator", e)
+	}
+	t.Logf("actual current source coverage and roles pass shared typed validator: %d bytes with explicit test-only artifact/font identities", len(raw))
 }

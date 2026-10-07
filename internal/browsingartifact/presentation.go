@@ -19,6 +19,13 @@ const officeNS = "http://schemas.openxmlformats.org/officeDocument/2006/relation
 const packageNS = "http://schemas.openxmlformats.org/package/2006/relationships"
 
 func ReadManifest(file string) ([]byte, error) {
+	info, e := os.Lstat(file)
+	if e != nil {
+		return nil, e
+	}
+	if !info.Mode().IsRegular() || info.Size() > MaxManifestBytes {
+		return nil, fmt.Errorf("browsing.manifest_exceeds_16MiB_or_nonregular")
+	}
 	f, e := os.Open(file)
 	if e != nil {
 		return nil, e

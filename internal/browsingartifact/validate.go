@@ -20,9 +20,22 @@ type FilePin struct {
 	SHA256 string `json:"sha256"`
 }
 type Frame struct {
-	Rail     string `json:"rail"`
-	Footer   string `json:"footer"`
-	NoHeader bool   `json:"no_header"`
+	Rail          string `json:"rail"`
+	Footer        string `json:"footer"`
+	Surface       string `json:"surface"`
+	RailSurface   string `json:"rail_surface"`
+	TitleLines    int    `json:"title_lines"`
+	Density       string `json:"density"`
+	HeaderDensity string `json:"header_density"`
+	SourceLines   int    `json:"source_lines"`
+	NoHeader      bool   `json:"no_header"`
+	NoPage        bool   `json:"no_page"`
+	Split         string `json:"split"`
+	Active        string `json:"active"`
+	Nav           []struct {
+		ID    string `json:"id"`
+		Label string `json:"label"`
+	} `json:"nav"`
 }
 type Entry struct {
 	SlideID      string `json:"slide_id"`
@@ -203,7 +216,23 @@ func templates(raw []byte, m Manifest) error {
 	}
 	ids := map[string]Entry{}
 	keys := map[string]bool{}
+	requests := map[string]bool{}
+	recordRequest := func(frame Frame) error {
+		raw, e := json.Marshal(frame)
+		if e != nil {
+			return e
+		}
+		if requests[string(raw)] {
+			return fmt.Errorf("browsing.frame_request_duplicate")
+		}
+		requests[string(raw)] = true
+		return nil
+	}
 	templates, frames := 0, 0
+	sourceHashes := map[string]bool{}
+	for _, pin := range c.SourceFiles {
+		sourceHashes[pin.SHA256] = true
+	}
 	for _, entry := range c.Entries {
 		if entry.SlideID == "" || entry.Key == "" || pageRoles[entry.SlideID] != entry.Kind {
 			return fmt.Errorf("browsing.coverage_identity_missing")
@@ -216,13 +245,16 @@ func templates(raw []byte, m Manifest) error {
 		switch entry.Kind {
 		case "template":
 			templates++
-			if entry.Revision < 1 || !hash(entry.SourceSHA256) || (entry.Lifecycle != "active" && entry.Lifecycle != "deprecated") {
+			if entry.Revision < 1 || !hash(entry.SourceSHA256) || !sourceHashes[entry.SourceSHA256] || (entry.Lifecycle != "active" && entry.Lifecycle != "deprecated") {
 				return fmt.Errorf("browsing.template_pin_invalid")
 			}
 		case "frame":
 			frames++
-			if entry.Frame == nil || entry.Frame.Rail == "" || entry.Frame.Footer == "" || !hash(entry.SourceSHA256) {
+			if entry.Frame == nil || entry.Frame.Rail == "" || entry.Frame.Footer == "" || !hash(entry.SourceSHA256) || !sourceHashes[entry.SourceSHA256] {
 				return fmt.Errorf("browsing.frame_pin_invalid")
+			}
+			if e := recordRequest(*entry.Frame); e != nil {
+				return e
 			}
 		default:
 			return fmt.Errorf("browsing.coverage_kind_invalid")
@@ -239,12 +271,24 @@ func templates(raw []byte, m Manifest) error {
 		return fmt.Errorf("browsing.coverage_omission")
 	}
 	for _, alias := range c.Aliases {
+		if e := recordRequest(alias.Frame); e != nil {
+			return e
+		}
 		entry, ok := ids[alias.SlideID]
 		if !ok || entry.Kind != "frame" || entry.Frame == nil || !entry.Frame.NoHeader || !alias.Frame.NoHeader || alias.Basis == "" {
 			return fmt.Errorf("browsing.alias_invalid")
 		}
+		normalized := alias.Frame
+		normalized.TitleLines = 1
+		normalized.Density = "standard"
+		if !reflect.DeepEqual(normalized, *entry.Frame) {
+			return fmt.Errorf("browsing.alias_changed_active_request")
+		}
 	}
 	for _, x := range c.Exclusions {
+		if e := recordRequest(x.Frame); e != nil {
+			return e
+		}
 		switch x.Reason {
 		case "frame.split_requires_no_panel_rail", "frame.split_requires_standard_header", "frame.appendix_requires_one_title_line", "frame.invalid_line_allocation", "frame.empty_body":
 		default:

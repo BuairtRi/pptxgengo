@@ -27,6 +27,13 @@ frame/rail chapter. Deprecated templates remain available behind visible warning
 pages. The default `--frames catalog` includes every catalog-defined rail/footer/split
 variant (36 in the current V11), with all 649 retained template variants.
 This produces 717 pages rather than multiplying every presentation setting.
+Each template keeps its canonical pinned source frame. The independent frame
+chapter uses each catalog entity's declared default request: light/inverse
+surfaces, one title line, no source lines, standard density and a visible header;
+navigation rails have two illustrative tabs. It includes 12 nonsplit variants
+(four rail choices times three footers) and 24 split variants (two valid rail
+choices times three footers times four splits). These defaults are recorded in
+each frame's coverage entry.
 `--frames exhaustive` independently covers every valid combination of rail, footer,
 split, surface, rail
 surface, title allocation, source allocation, standard/appendix density,
@@ -92,8 +99,8 @@ Archive assembly requires both actual deck files and both coverage manifests and
 checks their exact hashes before including them. They are part of the final
 archive checksum, SBOM/security scan and signed release manifest. `full` packages
 also retain the authoring bundle, originals, gallery, documentation and skills.
-No generated branded presentation or private authored content is uploaded by
-GitHub Actions or stored in public GitHub release assets.
+All CLI CI runs in private GitLab. Generated branded presentations and private
+authored content stay in its private release artifacts.
 
 ## Qualification evidence
 
