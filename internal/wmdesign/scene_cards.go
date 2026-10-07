@@ -678,6 +678,12 @@ func (r *renderer) sceneSourceCardRow(id string, raw json.RawMessage, ctx SceneC
 		if e != nil {
 			return nil, e
 		}
+		if r.contrastProbe == nil {
+			if e := sceneTextEnvelope(child, cc); e != nil {
+				return nil, e
+			}
+			child = r.applyNativeEditingProfile(child, rr, cc)
+		}
 		p.Items = append(p.Items, child.Items...)
 		p.Groups = append(p.Groups, child.Groups...)
 		p.Warnings = append(p.Warnings, child.Warnings...)

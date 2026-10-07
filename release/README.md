@@ -76,6 +76,27 @@ The inherited library and photography package checks are summarized in
 [local.16 qualification](qualification-local16.json). Draft Review Notes checks
 and native visual review are recorded in the engineering command reference.
 
+## Next signed CLI release scope
+
+The candidate following stable v4.1.0 includes portable project creation/layout,
+numbered complete source/deck snapshots with shared content-addressed assets,
+version verification/materialization/recovery, and portable share/extract ZIPs.
+It also includes reviewed text reconciliation, native object lineage, native
+plain lists, single-shape title/body cards and directly selectable plain tables.
+The [approved Mac demo](../docs/native-component-demo.md) records real wrapping,
+bullet insertion, whole-card movement and table cell editing.
+
+The optional persisted [native editing profile](../docs/native-editing-profile.md)
+applies these ergonomics to eligible source scenes while retaining resolved
+styles. Existing projects retain stock rendering by default. Changed builds
+need review; resizing and Windows PowerPoint qualification remain pending.
+
+This is a CLI-only distribution. Production browsing decks, reusable-slide
+inventory/revision metadata and branding/graphics/photos are deferred. The
+compiler still requires an existing exact pinned authoring bundle and its
+fonts. New private branding inputs are not required to release these CLIs.
+Stable v4.1.0 remains unchanged until the new protected tag passes publication.
+
 ## Source and discovery
 
 Run from the repository root:

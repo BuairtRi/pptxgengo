@@ -20,8 +20,8 @@ registered branding originals are currently on another machine.
 
 ```sh
 # Example for the next new stable version; never recreate an existing tag.
-git tag -a v4.1.1 -m 'Release v4.1.1'
-git push origin refs/tags/v4.1.1
+git tag -a v4.2.0 -m 'Release v4.2.0'
+git push origin refs/tags/v4.2.0
 ```
 
 Never move or reuse a release tag. A retry can reuse already-uploaded identical
@@ -38,7 +38,7 @@ proofs are retained separately.
 ## Signing and release gates
 
 Protected tag pipelines require Linux tests/security, six-target compilation,
-and protected Mac ARM64 short/race/installer/model checks before resource or
+and protected Mac ARM64 unit/installer/model checks before resource or
 binary builds. Windows native execution and Intel Mac execution remain separate
 opt-in private GitLab lanes pending their runners; compilation is not runtime
 qualification. See [CI policy](../docs/testing.md).
@@ -54,7 +54,7 @@ qualification. See [CI policy](../docs/testing.md).
   online ticket lookup. This pipeline does not claim offline stapling.
 - Linux downloads run an amd64 CLI smoke probe. The arm64 build has archive,
   identity and checksum checks; it is not yet a native arm64 runtime result.
-- All branches run redacted Gitleaks and reachable Go vulnerability checks for
+- PR/main pipelines run redacted Gitleaks; protected tags also require reachable Go vulnerability checks for
   Linux, Darwin and Windows. JSON vulnerability output is explicitly inspected:
   `govulncheck` JSON mode alone does not return failure for findings.
 - Final signed archives, rather than the source checkout, receive CycloneDX
@@ -103,8 +103,8 @@ initializing trust. Then compare archive SHA-256 with the signed manifest.
 
 ## Optional offline search model
 
-Source CI after v4.1.0 adds `security:offline-model` on ordinary branches and
-protected tags. It verifies the pinned complete package from the offline model
+Protected tags, nightly schedules and selected on-demand pipelines run
+`security:offline-model`. Ordinary branch pushes create no pipeline. It verifies the pinned complete package from the offline model
 runtime gate, creates one deterministic ZIP and scans its actual extracted files.
 Compiled-in identity, artifact hashes/sizes, license and source attribution must
 match; caller-provided manifest hashes cannot override pins. File/count/size
@@ -130,6 +130,32 @@ model directory. Normal searches remain offline and never fetch weights. Build
 source-bound embeddings for the exact selected library. This change adds future
 CI automation; it does not modify released v4.1.0 or cut a new tag.
 
+## Scoped CLI release resources
+
+The next release deliberately defers production browsing PowerPoints,
+reusable-slide inventory/revision metadata and branding/graphics/photo
+distribution. The checked-in CI setting is
+`PPTXGENGO_BROWSING_POLICY=deferred`, paired with
+`PPTXGENGO_PACKAGE_KIND=cli-only`. This policy remains effective for subsequent
+tags until deliberately changed. It does not disable units, installation,
+model checks, security, reproducibility, signing, notarization or attestation.
+
+The resource job emits an exact version/commit policy marker. Assembly carries
+it separately into final release evidence; sealing hashes it into the signed
+manifest. Verification rejects contradictory or missing policy metadata and
+stale presentation resources. No branding URL, photos or complete template
+library is required for this scope. Platform archives include the three CLI
+executables, installation material and notices. Presentation authoring still
+requires an existing exact pinned authoring bundle and its fonts; CLI-only
+archives do not install a library, fonts or presentation skill.
+
+A future browsing-inclusive release must explicitly set
+`PPTXGENGO_BROWSING_POLICY=required` and supply the strict pinned browsing inputs
+in [the browsing guide](../docs/skill-planning/portable-projects-and-browsing-decks-20261007.md). Full mode also needs the
+private branding inputs below; it refuses deferred browsing or missing inputs.
+The helper's default remains `required`, so omission outside this deliberate CI
+configuration cannot silently skip the library requirement.
+
 ## Bring private branding into CI
 
 The branding files are deliberately external inputs. On the machine containing
@@ -147,6 +173,7 @@ Configure these **protected** GitLab variables:
 | Variable | Value |
 | --- | --- |
 | `PPTXGENGO_PACKAGE_KIND` | `full` |
+| `PPTXGENGO_BROWSING_POLICY` | `required` |
 | `WMDS_BRANDING_ARCHIVE_URL` | masked HTTPS presigned S3 URL, or project 17 Generic Package URL |
 | `WMDS_BRANDING_ARCHIVE_SHA256` | exact archive digest from the producer |
 

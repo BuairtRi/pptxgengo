@@ -81,7 +81,7 @@ func TestNativeEditabilityEditableListActualPackage(t *testing.T) {
 	}
 	span := editableListSpan(t, part)
 	x := string(part[span.start:span.end])
-	if strings.Count(x, `<a:buChar char="■"/>`) != 3 || strings.Count(x, "<a:buClr>") != 3 || strings.Contains(x, "<a:br") || strings.Count(x, "<a:noAutofit/>") != 1 || strings.Contains(x, "<a:normAutofit") || strings.Contains(x, "<a:spAutoFit") {
+	if strings.Count(x, `<a:buChar char=""/>`) != 3 || strings.Count(x, "<a:buClr>") != 3 || strings.Contains(x, "<a:br") || strings.Count(x, "<a:noAutofit/>") != 1 || strings.Contains(x, "<a:normAutofit") || strings.Contains(x, "<a:spAutoFit") {
 		t.Fatal(x)
 	}
 	tx := directXML(o.shape, lineagePML, "txBody")
@@ -151,7 +151,7 @@ func TestReconcileEditableListTopologyRequiresManualReview(t *testing.T) {
 			case "longer":
 				changed = bytes.Replace(changed, []byte("Review the source"), []byte("Review the source and add a longer explanation that can wrap onto another line in PowerPoint."), 1)
 			case "format":
-				changed = bytes.Replace(changed, []byte(`<a:buChar char="■"/>`), []byte(`<a:buChar char="•"/>`), 1)
+				changed = bytes.Replace(changed, []byte(`<a:buChar char=""/>`), []byte(`<a:buChar char="•"/>`), 1)
 			}
 			if bytes.Equal(shape, changed) {
 				t.Fatal("fixture mutation did not apply")

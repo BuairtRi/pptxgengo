@@ -63,6 +63,7 @@ type State struct {
 	Invalidations  []Invalidation    `json:"invalidations"`
 }
 type Receipt struct {
+	EditingProfile          string            `json:"editing_profile,omitempty"`
 	NativeLineageBuildToken string            `json:"native_lineage_build_token,omitempty"`
 	Schema                  string            `json:"schema"`
 	BuildID                 string            `json:"build_id"`
@@ -728,7 +729,7 @@ func Build(p *Project, opts BuildOptions) (Receipt, error) {
 			outputs["authored/"+relative] = raw
 		}
 	}
-	r = Receipt{NativeLineageBuildToken: objects.Lineage.BuildToken, Schema: "pptxgengo.deck-build-receipt.v1", BuildID: id, ProjectID: p.Document.ID, Created: time.Now().UTC().Format(time.RFC3339), SourceSHA256: p.SourceHash(), SemanticSHA256: digest(p.Canonical), LockSHA256: digest(lockBytes), Baseline: s.CurrentBuild, AssetHashes: c.AssetHashes, Outputs: map[string]string{}, Fit: "compiler_checks_passed_arbitrary_content_unqualified", Native: "not_reviewed", Visual: "not_reviewed", Reproducibility: "fixed build timestamp 2000-01-01T00:00:00Z; identity seed is canonical authored source SHA256; native lineage generation token pins source, lock and unstamped PPTX; execution receipt time is independent"}
+	r = Receipt{EditingProfile: p.Document.EditingProfile, NativeLineageBuildToken: objects.Lineage.BuildToken, Schema: "pptxgengo.deck-build-receipt.v1", BuildID: id, ProjectID: p.Document.ID, Created: time.Now().UTC().Format(time.RFC3339), SourceSHA256: p.SourceHash(), SemanticSHA256: digest(p.Canonical), LockSHA256: digest(lockBytes), Baseline: s.CurrentBuild, AssetHashes: c.AssetHashes, Outputs: map[string]string{}, Fit: "compiler_checks_passed_arbitrary_content_unqualified", Native: "not_reviewed", Visual: "not_reviewed", Reproducibility: "fixed build timestamp 2000-01-01T00:00:00Z; identity seed is canonical authored source SHA256; native lineage generation token pins source, lock and unstamped PPTX; execution receipt time is independent"}
 	keys := []string{}
 	for k := range outputs {
 		keys = append(keys, k)

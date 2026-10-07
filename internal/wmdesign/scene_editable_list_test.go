@@ -36,7 +36,7 @@ func TestNativeEditingEditableListOneTextBoxAndParagraphStyles(t *testing.T) {
 				t.Fatal("wrapped paragraph did not move following baseline", tr.Rich)
 			}
 			xml := string(editableListParagraphXML(*tr))
-			if strings.Count(xml, "<a:p>") != 3 || strings.Count(xml, `<a:buChar char="■"/>`) != 3 || strings.Count(xml, "<a:buClr>") != 3 || strings.Contains(xml, "<a:br") {
+			if strings.Count(xml, `<a:buFont typeface="Wingdings" charset="2"/>`) != 3 || strings.Count(xml, "<a:p>") != 3 || strings.Count(xml, `<a:buChar char=""/>`) != 3 || strings.Count(xml, "<a:buClr>") != 3 || strings.Contains(xml, "<a:br") {
 				t.Fatal(xml)
 			}
 			for i, key := range []string{"first", "second", "third"} {
@@ -44,6 +44,10 @@ func TestNativeEditingEditableListOneTextBoxAndParagraphStyles(t *testing.T) {
 					t.Fatal(tr.Rich)
 				}
 				para := tr.Rich.Paragraphs[i]
+				markerSize := int(math.Round(para.BulletMarkerPt * 2048 / 592 * 100))
+				if !strings.Contains(xml, fmt.Sprintf(`<a:buSzPts val="%d"/>`, markerSize)) || para.ParagraphGapAfter <= 0 {
+					t.Fatal("square ink size or inherited new-item spacing changed", xml)
+				}
 				properties := string(sceneTableParagraphProperties(*tr, para.ParagraphGapAfter, true, para))
 				indent := int(math.Round(para.BulletIndentPt * 12700))
 				for _, want := range []string{
@@ -130,7 +134,7 @@ func TestNativeEditingEditableListTerminalInkMatchesNativeGap(t *testing.T) {
 	}
 	x := string(editableListParagraphXML(*tr))
 	property := fmt.Sprintf(`<a:spcAft><a:spcPts val="%d"/></a:spcAft>`, int(math.Round(first.ParagraphGapAfter*100)))
-	if !strings.Contains(x, property) || second.ParagraphGapAfter != 0 {
+	if !strings.Contains(x, property) || second.ParagraphGapAfter != first.ParagraphGapAfter {
 		t.Fatal("reserve not serialized exactly once", property, x)
 	}
 }

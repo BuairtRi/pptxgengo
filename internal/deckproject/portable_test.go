@@ -3,6 +3,7 @@ package deckproject
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -682,5 +683,44 @@ func TestPortableFailedCreationAndMaterializationRetainOwnedEvidence(t *testing.
 	}
 	if _, e = os.Stat(filepath.Join(dest, "deck.yaml")); e != nil {
 		t.Fatalf("failed materialization source was deleted: %v", e)
+	}
+}
+
+func TestPortableCreatePersistsNativeEditingProfileThroughBuildEvidence(t *testing.T) {
+	root := filepath.Join(t.TempDir(), "native project")
+	p, err := CreateProject(CreateOptions{Out: root, ID: "native-project", Title: "Native project", Year: 2026, Bundle: bundle(t), Template: "cards/3", Engine: wmdesign.CandidateEngine, EditingProfile: wmdesign.NativeEditingProfile})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if p.Document.EditingProfile != wmdesign.NativeEditingProfile {
+		t.Fatal("profile not persisted")
+	}
+	c, err := Check(p, bundle(t), wmdesign.CandidateEngine)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c.Document.EditingProfile != wmdesign.NativeEditingProfile {
+		t.Fatal("profile not compiled")
+	}
+	receipt, err := Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if receipt.EditingProfile != wmdesign.NativeEditingProfile {
+		t.Fatal("profile not in receipt")
+	}
+	raw, err := os.ReadFile(filepath.Join(root, "builds", receipt.BuildID, "layout-report.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var report wmdesign.Report
+	if err = json.Unmarshal(raw, &report); err != nil {
+		t.Fatal(err)
+	}
+	if report.EditingProfile != wmdesign.NativeEditingProfile {
+		t.Fatal("profile not in layout evidence")
+	}
+	if _, err = CreateProject(CreateOptions{Out: filepath.Join(t.TempDir(), "invalid"), EditingProfile: "unknown"}); err == nil {
+		t.Fatal("unknown profile accepted")
 	}
 }

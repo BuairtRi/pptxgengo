@@ -11,11 +11,14 @@ import (
 )
 
 type CreateOptions struct {
-	Out, ID, Title, Bundle, Engine, Template string
-	Year                                     int
+	Out, ID, Title, Bundle, Engine, Template, EditingProfile string
+	Year                                                     int
 }
 
 func CreateProject(o CreateOptions) (*Project, error) {
+	if err := wmdesign.ValidateEditingProfile(o.EditingProfile); err != nil {
+		return nil, err
+	}
 	if !stableID.MatchString(o.ID) || strings.TrimSpace(o.Title) == "" || o.Year < 2000 || o.Year > 9999 || o.Out == "" || o.Bundle == "" || o.Template == "" {
 		return nil, fmt.Errorf("create requires new directory, stable ID, title, year, bundle and shared template")
 	}
@@ -33,6 +36,9 @@ func CreateProject(o CreateOptions) (*Project, error) {
 	// Retain partial outputs: OneDrive may have synchronized another author's
 	// file into this newly owned directory. Recursive cleanup could erase it.
 	document := map[string]any{"schema": Schema, "id": o.ID, "title": o.Title, "year": o.Year, "toolchain": map[string]any{"lockfile": "toolchain.lock.json"}, "context": map[string]any{"project": "context/project.md"}, "slides": []any{"slides/first-slide.yaml"}}
+	if o.EditingProfile != "" {
+		document["editing_profile"] = o.EditingProfile
+	}
 	node, e := editYAMLNode(document)
 	if e != nil {
 		return nil, e

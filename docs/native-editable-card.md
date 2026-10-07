@@ -3,8 +3,8 @@
 Source builds after stable v4.1.0 support an explicit `wmds/component/editable-card`
 component. One native filled rectangle contains two native paragraphs: a title
 using the source `subhead` / `primary` role and a body using `body` / `secondary`.
-There is no separate surface/text group. A 12-point inset and measured eight-point
-inter-paragraph gap define this opt-in design. Existing stock card definitions
+There is no separate surface/text group. A 12-point inset, eight-point card gap,
+and six-point source paragraph margin define this opt-in design. Existing stock card definitions
 are unchanged; this is not a stock-card appearance equivalence claim.
 
 ## Authoring
@@ -64,3 +64,9 @@ Documents folder, select the whole native rectangle, edit each paragraph, move,
 align and resize it, Save As, then inspect lineage and supported reconciliation
 on both Mac and Windows. Do not extend the pilot to stock templates until those
 family-specific results are reviewed.
+
+The 2026-10-07 comparison demo preserves the reference plain card's title/body
+positions at Comfortable, Compact and Dense. The real Mac editing task moved
+the entire Compact card 47pt and changed its body independently; all generation
+identities survived saving. Resizing, Windows behavior and broad stock-card
+equivalence remain unqualified. See [component demo](native-component-demo.md).

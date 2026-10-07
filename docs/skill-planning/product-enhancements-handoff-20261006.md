@@ -350,3 +350,13 @@ references to GitHub CI describe the original handoff baseline, not current
 execution policy. GitHub remains slotctl's source review/merge authority. See
 [testing lanes](../testing.md) for protected Mac gates and pending opt-in private
 Windows/Intel Mac runners.
+
+## Next release scope update — 2026-10-07
+
+Ri deferred reusable-slide inventory/revision metadata and production branding,
+graphics and photo distribution to the following release. The immediate release
+focus is already implemented enhancements and native editing. A concrete
+PowerPoint comparison demo was approved on 2026-10-07. The scoped resource
+policy and bounded opt-in editing profile preserve deferred content and native
+qualification limits. See the
+[component demo and remaining qualification](../native-component-demo.md).

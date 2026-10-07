@@ -288,6 +288,9 @@ func (r *renderer) planSceneNode(id string, raw json.RawMessage, ctx SceneContex
 		if handled || err != nil {
 			if err == nil && r.contrastProbe == nil {
 				err = sceneTextEnvelope(plan, ctx)
+				if err == nil {
+					plan = r.applyNativeEditingProfile(plan, raw, ctx)
+				}
 			}
 			return plan, err
 		}

@@ -208,6 +208,9 @@ func SafePath(root, rel string) (string, error) {
 }
 func (p *Project) validate() error {
 	d := p.Document
+	if err := wmdesign.ValidateEditingProfile(d.EditingProfile); err != nil {
+		return p.fail("/editing_profile", "%v", err)
+	}
 	if d.Schema != Schema || !stableID.MatchString(d.ID) || strings.TrimSpace(d.Title) == "" || d.Year < 2000 || d.Year > 9999 || len(d.Slides) == 0 {
 		return p.fail("", "schema/id/title/year/slides invalid or missing")
 	}
