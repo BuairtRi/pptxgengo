@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 	"time"
 )
@@ -86,6 +87,9 @@ func TestPinnedLibrarySearchPerformance(t *testing.T) {
 			Warm                           []float64      `json:"repeated_find_ms"`
 			Peak                           uint64         `json:"process_peak_resident_bytes"`
 			Coverage                       int            `json:"vector_coverage"`
+			ClockMethod                    string         `json:"elapsed_clock_method"`
+			ClockUnits                     int64          `json:"elapsed_counter_units_per_second"`
+			First                          float64        `json:"first_find_ms"`
 		}
 		if err = json.Unmarshal(raw, &m); err != nil {
 			t.Fatal(err)
@@ -95,6 +99,17 @@ func TestPinnedLibrarySearchPerformance(t *testing.T) {
 		}
 		if mode != "keyword" && m.Coverage != len(snapshot.Rows) {
 			t.Fatal("incomplete vector benchmark coverage")
+		}
+		if m.ClockMethod == "" || m.ClockUnits <= 0 || m.First <= 0 {
+			t.Fatal("missing clock evidence or unmeasured first-query interval")
+		}
+		if runtime.GOOS == "windows" && !strings.Contains(m.ClockMethod, "QueryPerformanceCounter") {
+			t.Fatal("Windows counter was not high resolution")
+		}
+		for _, ms := range m.Warm {
+			if ms <= 0 {
+				t.Fatal("repeated query interval did not resolve", mode, ms)
+			}
 		}
 	}
 }
