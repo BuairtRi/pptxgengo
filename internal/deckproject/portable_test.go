@@ -175,6 +175,13 @@ func TestPortableCompleteVersionsSharedAssetsAndRelocatedZIP(t *testing.T) {
 		if _, e = Check(restored, bundle(t), wmdesign.CandidateEngine); e != nil {
 			t.Fatal(e)
 		}
+		rebuilt, e := Build(restored, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine})
+		if e != nil {
+			t.Fatal(e)
+		}
+		if rebuilt.Outputs["deck.pptx"] != v.DeckSHA256 {
+			t.Fatalf("relocated version%s rebuilt different native deck", n)
+		}
 	} // Neither the old source nor native deck was replaced.
 	if _, e = VerifyVersion(p.Root, "000001"); e != nil {
 		t.Fatal(e)
