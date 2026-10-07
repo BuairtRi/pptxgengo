@@ -678,31 +678,49 @@ func MaterializeVersion(root, number, out string) (DeckVersion, error) {
 			os.RemoveAll(abs)
 		}
 	}()
-	copy := func(from, to string) error {
+	expected := map[string]string{}
+	copy := func(from, to, want string) error {
 		b, e := readProjectFile(root, from)
 		if e != nil {
 			return e
+		}
+		if digest(b) != want {
+			return fmt.Errorf("immutable input changed during materialization: %s", from)
 		}
 		path, e := SafePath(abs, to)
 		if e != nil {
 			return e
 		}
+		if prior, exists := expected[to]; exists {
+			if prior != want {
+				return fmt.Errorf("conflicting materialized destination: %s", to)
+			}
+			return nil
+		}
+		expected[to] = want
 		return writeExclusive(path, b, portableFileMode(to))
 	}
-	for rel := range v.Files {
-		if e = copy("versions/"+number+"/source/"+rel, rel); e != nil {
+	for rel, want := range v.Files {
+		if e = copy("versions/"+number+"/source/"+rel, rel, want); e != nil {
 			return v, e
 		}
 	}
 	for rel, a := range v.Assets {
-		if e = copy(a.Object, rel); e != nil {
+		if e = copy(a.Object, rel, a.SHA256); e != nil {
 			return v, e
 		}
 	}
-	for rel := range v.SharedBuilds {
-		if e = copy(rel, rel); e != nil {
+	for rel, want := range v.SharedBuilds {
+		if e = copy(rel, rel, want); e != nil {
 			return v, e
 		}
+	}
+	materialized, e := projectInventory(abs, nil)
+	if e != nil {
+		return v, e
+	}
+	if !reflectEqual(hashBytes(materialized), expected) {
+		return v, fmt.Errorf("materialized complete inventory changed")
 	}
 	p, e := Load(abs)
 	if e != nil {

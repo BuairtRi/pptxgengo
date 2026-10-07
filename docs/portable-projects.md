@@ -10,10 +10,11 @@ Generate these during private GitLab release CI and include both in installation
 archives:
 
 1. A complete template library: native editable placeholder slides for every
-   template in the pinned library, organized with family dividers and a
+   retained template variant in the pinned library, organized with family dividers and a
    “How to use this deck” component. The agreed packaged default contains every
    canonical template plus the declared supported frame/rail gallery. The current
-   pinned catalog yields 649 canonical templates, 36 gallery entries and 32
+   pinned catalog yields 649 retained template variants with their canonical pinned frames,
+   36 gallery entries and 32
    divider/instruction slides: 717 slides. Counts are derived from the exact
    bundle, not fixed invariants. Complete exhaustive frame/rail combinations
    remain an explicit generation option (currently 9,072 frame specimens),
@@ -37,10 +38,18 @@ release blockers; an incomplete deck cannot claim complete coverage.
 
 The existing library-reference/frame-reference and finished-slide compilation
 are starting points. Derive valid frame/rail combinations from contracts and
-reject incompatible combinations. Default coverage must close every canonical
-template and every declared gallery variant; it must not claim exhaustive
+reject incompatible combinations. Default coverage must close every retained
+template variant and every declared gallery specimen; it must not claim exhaustive
 variant coverage. In explicit exhaustive mode, include every compatible variant
 without silent omissions.
+The browse command uses `browsing-library --kind templates --frames catalog|exhaustive`;
+`catalog` is the packaged default. Coverage's `frame_mode` labels the mode,
+`entries` identify template/frame specimens, and `frame_aliases`/`frame_exclusions`
+explain request deduplication and structural incompatibilities in exhaustive
+mode. The current exhaustive output has 9,753 slides total (649 template variants,
+9,072 resolved frame specimens and 32 organizational slides); those derived
+counts can change with pinned inputs.
+
 The reusable-slide deck includes only the latest approved revisions. Drafts,
 deprecated revisions and expired approvals are excluded. Preserve explicit
 withdrawal history so a newer withdrawal cannot resurrect an older approval.
@@ -103,7 +112,7 @@ Bound waits, close only exact task copies and preserve failed evidence.
 
 ## Acceptance evidence
 
-- Default coverage proves every pinned canonical template and every declared
+- Default coverage proves every pinned retained template variant and every declared
   frame/rail gallery variant is present, and both browsing decks open in
   PowerPoint. Explicit exhaustive coverage separately closes all compatible
   frame/rail variants without silently labeling the default as exhaustive.
