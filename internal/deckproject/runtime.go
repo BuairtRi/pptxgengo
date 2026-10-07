@@ -63,20 +63,21 @@ type State struct {
 	Invalidations  []Invalidation    `json:"invalidations"`
 }
 type Receipt struct {
-	Schema          string            `json:"schema"`
-	BuildID         string            `json:"build_id"`
-	ProjectID       string            `json:"project_id"`
-	Created         string            `json:"created"`
-	SourceSHA256    string            `json:"source_sha256"`
-	SemanticSHA256  string            `json:"semantic_sha256"`
-	LockSHA256      string            `json:"lock_sha256"`
-	Baseline        string            `json:"prior_baseline,omitempty"`
-	AssetHashes     map[string]string `json:"asset_hashes"`
-	Outputs         map[string]string `json:"outputs"`
-	Fit             string            `json:"fit"`
-	Native          string            `json:"native"`
-	Visual          string            `json:"visual"`
-	Reproducibility string            `json:"reproducibility"`
+	NativeLineageBuildToken string            `json:"native_lineage_build_token,omitempty"`
+	Schema                  string            `json:"schema"`
+	BuildID                 string            `json:"build_id"`
+	ProjectID               string            `json:"project_id"`
+	Created                 string            `json:"created"`
+	SourceSHA256            string            `json:"source_sha256"`
+	SemanticSHA256          string            `json:"semantic_sha256"`
+	LockSHA256              string            `json:"lock_sha256"`
+	Baseline                string            `json:"prior_baseline,omitempty"`
+	AssetHashes             map[string]string `json:"asset_hashes"`
+	Outputs                 map[string]string `json:"outputs"`
+	Fit                     string            `json:"fit"`
+	Native                  string            `json:"native"`
+	Visual                  string            `json:"visual"`
+	Reproducibility         string            `json:"reproducibility"`
 }
 type BuildOptions struct {
 	Bundle string
@@ -706,13 +707,17 @@ func Build(p *Project, opts BuildOptions) (Receipt, error) {
 	if e != nil {
 		return r, e
 	}
+	pptxBytes, objects, e = StampNativeLineage(pptxBytes, objects, digest(lockBytes))
+	if e != nil {
+		return r, e
+	}
 	outputs := map[string][]byte{"deck.pptx": pptxBytes, "deck.yaml": p.Raw, "source.canonical.json": p.Canonical, "scene.json": canonical(c.Document), "layout-report.json": canonical(report), "object-map.json": canonical(objects), "toolchain.lock.json": lockBytes}
 	for relative, raw := range p.SourceFiles {
 		if p.hasExternalSources() {
 			outputs["authored/"+relative] = raw
 		}
 	}
-	r = Receipt{Schema: "pptxgengo.deck-build-receipt.v1", BuildID: id, ProjectID: p.Document.ID, Created: time.Now().UTC().Format(time.RFC3339), SourceSHA256: p.SourceHash(), SemanticSHA256: digest(p.Canonical), LockSHA256: digest(lockBytes), Baseline: s.CurrentBuild, AssetHashes: c.AssetHashes, Outputs: map[string]string{}, Fit: "compiler_checks_passed_arbitrary_content_unqualified", Native: "not_reviewed", Visual: "not_reviewed", Reproducibility: "fixed build timestamp 2000-01-01T00:00:00Z; identity seed is canonical authored source SHA256; receipt time is independent"}
+	r = Receipt{NativeLineageBuildToken: objects.Lineage.BuildToken, Schema: "pptxgengo.deck-build-receipt.v1", BuildID: id, ProjectID: p.Document.ID, Created: time.Now().UTC().Format(time.RFC3339), SourceSHA256: p.SourceHash(), SemanticSHA256: digest(p.Canonical), LockSHA256: digest(lockBytes), Baseline: s.CurrentBuild, AssetHashes: c.AssetHashes, Outputs: map[string]string{}, Fit: "compiler_checks_passed_arbitrary_content_unqualified", Native: "not_reviewed", Visual: "not_reviewed", Reproducibility: "fixed build timestamp 2000-01-01T00:00:00Z; identity seed is canonical authored source SHA256; native lineage generation token pins source, lock and unstamped PPTX; execution receipt time is independent"}
 	keys := []string{}
 	for k := range outputs {
 		keys = append(keys, k)

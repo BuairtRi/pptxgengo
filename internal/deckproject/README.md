@@ -315,3 +315,7 @@ hashes. Typed card title/body mappings select the specific field; ambiguous or
 unsupported text remains manual review. This is baseline infrastructure, not an
 edited-PPTX adoption engine or desktop qualification. See
 [native field mapping](../../docs/native-field-mapping.md).
+
+Project builds embed native generation/slide/shape tags and retain their token
+mappings in the object map and receipt. See [native lineage](../../docs/native-lineage.md)
+for inspection bounds, baseline trust and pending desktop qualification.
