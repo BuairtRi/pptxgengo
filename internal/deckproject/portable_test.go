@@ -650,3 +650,37 @@ func TestPortableMaterializationReadRejectsChangedEditorialEvidence(t *testing.T
 		t.Fatal("changed editorial evidence accepted after verification")
 	}
 }
+
+func TestPortableFailedCreationAndMaterializationRetainOwnedEvidence(t *testing.T) {
+	out := filepath.Join(t.TempDir(), "failed-create")
+	if _, e := CreateProject(CreateOptions{Out: out, ID: "retained-project", Title: "Retain partial source", Year: 2026, Bundle: bundle(t), Template: "cards/3", Engine: "unsupported-engine"}); e == nil {
+		t.Fatal("invalid engine accepted")
+	}
+	if _, e := os.Stat(filepath.Join(out, "deck.yaml")); e != nil {
+		t.Fatalf("failed create source was deleted: %v", e)
+	}
+	p := example(t)
+	pin(t, p)
+	if _, e := Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine}); e != nil {
+		t.Fatal(e)
+	}
+	v, e := SaveVersion(p, "Operator", "retain failure evidence")
+	if e != nil {
+		t.Fatal(e)
+	}
+	manifest := filepath.Join(p.Root, "versions/000001/manifest.json")
+	v.SemanticSHA256 = strings.Repeat("0", 64)
+	if e = os.Chmod(manifest, 0644); e != nil {
+		t.Fatal(e)
+	}
+	if e = os.WriteFile(manifest, canonical(v), 0444); e != nil {
+		t.Fatal(e)
+	}
+	dest := filepath.Join(t.TempDir(), "failed-materialize")
+	if _, e = MaterializeVersion(p.Root, "000001", dest); e == nil {
+		t.Fatal("inconsistent source pins accepted")
+	}
+	if _, e = os.Stat(filepath.Join(dest, "deck.yaml")); e != nil {
+		t.Fatalf("failed materialization source was deleted: %v", e)
+	}
+}

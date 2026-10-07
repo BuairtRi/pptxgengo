@@ -26,6 +26,13 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 	if out == "" {
 		return r, fmt.Errorf("share requires a new ZIP path")
 	}
+	currentProject, e := Load(p.SourcePath)
+	if e != nil {
+		return r, e
+	}
+	if currentProject.SourceHash() != p.SourceHash() {
+		return r, fmt.Errorf("authored source changed before share")
+	}
 	list, e := ListVersions(p.Root)
 	if e != nil {
 		return r, e
@@ -132,6 +139,13 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 	}
 	if !reflectEqual(original, hashBytes(current)) {
 		return r, fmt.Errorf("project changed during share; ZIP retained as failed evidence")
+	}
+	currentProject, e = Load(p.SourcePath)
+	if e != nil {
+		return r, e
+	}
+	if currentProject.SourceHash() != p.SourceHash() {
+		return r, fmt.Errorf("authored source changed during share; failed ZIP retained")
 	}
 	// Stream the final ZIP hash; never allocate another archive-sized buffer.
 	info, e := os.Stat(abs)
