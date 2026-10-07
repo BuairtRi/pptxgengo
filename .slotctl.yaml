@@ -1,0 +1,45 @@
+schema: 1
+
+toolchains:
+  - name: go
+    min_version: 1.27.1
+
+# This CLI needs no shared providers, credentials, or resident services.
+# Private branding and interactive PowerPoint checks are separate opt-in lanes.
+tasks:
+  dependencies:
+    command: [go, mod, download]
+  build:
+    command: [make, build]
+  static:
+    command: [go, vet, ./...]
+  test:
+    command: [make, test]
+  test-race:
+    command: [make, test-race]
+  test-integration:
+    command: [make, test-integration]
+  test-native:
+    command: [make, test-native]
+
+workflows:
+  prepare:
+    tasks:
+      - id: dependencies
+        task: dependencies
+      - id: build
+        task: build
+        needs: [dependencies]
+  preflight:
+    tasks:
+      - id: static
+        task: static
+      - id: test
+        task: test
+        needs: [static]
+      - id: test-race
+        task: test-race
+        needs: [test]
+      - id: build
+        task: build
+        needs: [test-race]

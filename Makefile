@@ -4,7 +4,10 @@ INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
 
-.PHONY: test test-race test-integration test-race-full test-native
+.PHONY: build test test-race test-integration test-race-full test-native
+
+build:
+	CGO_ENABLED=0 $(GO) build -trimpath -o bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs
 
 # Everyday checks omit only explicitly marked exhaustive/private-asset tests.
 test:
