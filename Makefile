@@ -5,9 +5,9 @@ FAST_TEST_TIMEOUT ?= 5m
 INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
-HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT= PPTXGENGO_SEARCH_BENCH_OUT= PPTXGENGO_INSTALL_PROCESS_OUT=
+HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT= PPTXGENGO_SEARCH_BENCH_OUT= PPTXGENGO_INSTALL_PROCESS_OUT= PPTXGENGO_NATIVE_DIAGRAM_FIXTURE= PPTXGENGO_NATIVE_DIAGRAM_EDITED= PPTXGENGO_NATIVE_DIAGRAM_VERIFY_OUT=
 
-.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows test-search-performance test-installation-process
+.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows test-search-performance test-installation-process test-diagram-verify
 
 build:
 	CGO_ENABLED=0 $(GO) build -trimpath -o bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs
@@ -74,3 +74,9 @@ test-installation-process:
 	test -n "$$PPTXGENGO_INSTALL_PROCESS_OUT" || (echo 'set PPTXGENGO_INSTALL_PROCESS_OUT to a new qualification directory; see docs/installation.md' >&2; exit 1)
 	test ! -e "$$PPTXGENGO_INSTALL_PROCESS_OUT" || (echo 'qualification output must not already exist' >&2; exit 1)
 	$(GO) test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$$' -v ./internal/installstate
+
+# Read-only native diagram evidence; opening/moving/editing remains a desktop task.
+test-diagram-verify:
+	test -n "$$PPTXGENGO_NATIVE_DIAGRAM_FIXTURE" -a -n "$$PPTXGENGO_NATIVE_DIAGRAM_EDITED" -a -n "$$PPTXGENGO_NATIVE_DIAGRAM_VERIFY_OUT" || (echo 'set all three diagram fixture/edited/new evidence paths; see docs/native-editing-pilot.md' >&2; exit 1)
+	test ! -e "$$PPTXGENGO_NATIVE_DIAGRAM_VERIFY_OUT" || (echo 'diagram evidence destination must be new' >&2; exit 1)
+	$(GO) test -count=1 -timeout=3m -run '^TestNativeEditabilityDiagramSuppliedCopy$$' -v ./internal/deckproject
