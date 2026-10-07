@@ -25,7 +25,7 @@ jobs:
         target: [test, test-race]
     env:
       # Headless checks must succeed without a developer's private artwork.
-      WMDS_BRANDING_ROOT: ${{ runner.temp }}/pptxgengo-empty-branding
+      WMDS_BRANDING_ROOT: ${{ github.workspace }}/.cache/empty-branding
       PPTXGENGO_NATIVE_LIVE_OUT: ''
     steps:
       - uses: actions/checkout@v7

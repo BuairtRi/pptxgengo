@@ -20,7 +20,7 @@ jobs:
     env:
       CGO_ENABLED: '0'
       PPTXGENGO_NATIVE_LIVE_OUT: ''
-      WMDS_BRANDING_ROOT: ${{ runner.temp }}\pptxgengo-empty-branding
+      WMDS_BRANDING_ROOT: ${{ github.workspace }}/.cache/empty-branding
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
