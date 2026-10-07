@@ -105,6 +105,12 @@ func authoredSlides(p *Project, main *yaml.Node) (map[string]*yaml.Node, map[str
 // file, checks every predecessor under one mutation guard, and restores bytes
 // on an I/O failure. Unselected files are never serialized or rewritten.
 func commitSourceChanges(p *Project, changes map[string][]byte, validate func(*Project) error) (*Project, error) {
+	return commitSourceChangesObserved(p, changes, nil, validate)
+}
+
+// observed authorizes updates to explicitly read editorial dependencies, and
+// checks their predecessors under the same guard as the authored source tree.
+func commitSourceChangesObserved(p *Project, changes, observed map[string][]byte, validate func(*Project) error) (*Project, error) {
 	candidate, err := loadProject(p.SourcePath, changes)
 	if err != nil {
 		return nil, err
@@ -151,6 +157,16 @@ func commitSourceChanges(p *Project, changes map[string][]byte, validate func(*P
 			return nil, fmt.Errorf("authored source changed during mutation: %s", relative)
 		}
 	}
+	for relative, expected := range observed {
+		path, err := SafePath(p.Root, relative)
+		if err != nil {
+			return nil, err
+		}
+		actual, err := os.ReadFile(path)
+		if err != nil || !bytes.Equal(actual, expected) {
+			return nil, fmt.Errorf("project dependency changed during mutation: %s", relative)
+		}
+	}
 	type preparedFile struct {
 		relative, path, temporary string
 		previous                  []byte
@@ -179,6 +195,9 @@ func commitSourceChanges(p *Project, changes map[string][]byte, validate func(*P
 		file := preparedFile{relative: relative, path: path, mode: 0644}
 		if info, err := os.Stat(path); err == nil {
 			previous, authored := p.SourceFiles[relative]
+			if !authored {
+				previous, authored = observed[relative]
+			}
 			if !authored || !info.Mode().IsRegular() {
 				return nil, fmt.Errorf("source destination already exists: %s", relative)
 			}
@@ -194,7 +213,14 @@ func commitSourceChanges(p *Project, changes map[string][]byte, validate func(*P
 		prepared = append(prepared, file)
 	}
 	// Preserve every preimage as a recoverable source tree.
+	preimages := map[string][]byte{}
 	for relative, raw := range p.SourceFiles {
+		preimages[relative] = raw
+	}
+	for relative, raw := range observed {
+		preimages[relative] = raw
+	}
+	for relative, raw := range preimages {
 		path, err := SafePath(p.Root, "decisions/sources/"+p.SourceHash()+"/"+relative)
 		if err != nil {
 			return nil, err

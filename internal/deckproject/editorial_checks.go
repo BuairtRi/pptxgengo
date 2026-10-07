@@ -10,12 +10,13 @@ import (
 )
 
 type CompositionEntry struct {
-	Purpose        string   `json:"purpose"`
-	Relationship   string   `json:"relationship,omitempty"`
-	Candidates     []string `json:"candidates,omitempty"`
-	ChosenTemplate string   `json:"chosen_template"`
-	Rationale      string   `json:"rationale"`
-	Unresolved     []string `json:"unresolved,omitempty"`
+	Library        *LibraryLineage `json:"library,omitempty"`
+	Purpose        string          `json:"purpose"`
+	Relationship   string          `json:"relationship,omitempty"`
+	Candidates     []string        `json:"candidates,omitempty"`
+	ChosenTemplate string          `json:"chosen_template"`
+	Rationale      string          `json:"rationale"`
+	Unresolved     []string        `json:"unresolved,omitempty"`
 }
 type CompositionLog struct {
 	Schema string                      `json:"schema"`
@@ -70,14 +71,7 @@ func editorialSource(p *Project, relative string) (string, []byte, error) {
 	if err != nil {
 		return "", nil, err
 	}
-	info, err := os.Stat(path)
-	if err != nil {
-		return "", nil, err
-	}
-	if !info.Mode().IsRegular() || info.Size() > 16<<20 {
-		return "", nil, fmt.Errorf("%s: expected regular file <=16MiB", relative)
-	}
-	raw, err := os.ReadFile(path)
+	raw, err := projectDependency(p, relative, 16<<20)
 	if err != nil {
 		return "", nil, err
 	}

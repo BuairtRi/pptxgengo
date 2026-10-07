@@ -190,3 +190,19 @@ This operates on YAML projects; it does not convert a standalone PPTX to YAML.
 
 - Single slides outside a project: [design-system one-slide routes](design-system-authoring.md).
 - Library-maintenance commands (`library-index`, `library-search`, `library-sweep`, `library-bound-sweep`, `inspect`, `templates`, the `*-reference` commands, `typography-probes`) are not for deck work.
+
+## Reuse authored finished slides in the next source build
+
+`project slide publish --id SOURCE --library-id curated/slide/KEY --revision N
+--name NAME --purpose PURPOSE --owner OWNER --out NEW-DIR` creates a closed draft
+revision from supported supplied-content shared source. `project slide insert
+--package REVISION-DIR --id FRESH-ID --rationale REASON` inserts an independent
+copy with composition lineage; draft work requires `--allow-draft`. Both accept
+`--project`, `--bundle` and `--engine`; insertion accepts `--before`, `--after`
+and `--into-section`. Exact pins and existing authored composition are required.
+
+`library-index --slide-library ROOT` adds closed revisions; `library-find
+--kinds finished-slide` distinguishes them from templates. Read lifecycle,
+owner, approval/freshness metadata and previews before reuse. Claims and local
+or unsupported typed dependencies currently fail explicitly. Stable v4.1.0
+lacks these commands; full scope is documented in `docs/finished-slides.md`.

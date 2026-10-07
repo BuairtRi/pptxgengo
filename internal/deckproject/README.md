@@ -297,6 +297,16 @@ and unrelated slide metadata, use the same atomic mutation guard and preimage
 backup as other slide operations, and invalidate the affected build/review inputs.
 Both inline and split source projects are supported. No template fork is needed.
 
+### Finished-slide revisions
+
+`project slide publish` creates a new closed draft revision from supported
+content-complete shared source. `project slide insert` validates that revision,
+creates independent slide/item/asset identities and commits its composition
+lineage with the source. Existing composition entries and exact toolchain pins
+are required. See [finished-slide commands and scope](../../docs/finished-slides.md).
+Stable v4.1.0 lacks these commands; claims/local-template migration, content
+curation and native desktop qualification remain pending.
+
 ### Native text model
 
 New object maps declare `pptxgengo.native-text-model.v1` and retain paragraph/run/

@@ -172,3 +172,16 @@ The output has a deck, layout report and foundation per candidate, plus `fit-rep
 Show the operator the rendered alternatives with what each emphasizes, its fit caveats and your recommendation. Record the candidates, the choice and the reasons in the composition log.
 
 An exact item count in a search result is the template's fixed topology, and word budgets are advisory; neither shows that your copy fits.
+
+### Reuse authored finished content in the next source build
+
+A `finished-slide` is content-complete material with explicit owner/revision and
+reuse policy. It is distinct from an empty stock template. Search a private index
+with `--kinds finished-slide`; inspect its approval, freshness, package path and
+preview. Inserting a supported revision with `project slide insert` creates an
+independent copy and writes library lineage plus your composition rationale.
+Draft reuse requires `--allow-draft`. Existing composition entries and exact
+compiler/template pins are required; expired/deprecated content is refused.
+Adapted copy needs the destination deck's evidence and review process.
+Stable v4.1.0 lacks this feature. See `docs/finished-slides.md` for the implemented
+source commands, supported dependencies and remaining curation/native work.

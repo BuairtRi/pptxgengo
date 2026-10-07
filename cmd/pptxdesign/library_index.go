@@ -18,6 +18,7 @@ func runLibraryIndex(command string, args []string) error {
 	source := f.String("source", "", "matching source override")
 	legacy := f.String("legacy-index", "", "optional legacy catalog-library.sqlite projection")
 	legacyRoot := f.String("legacy-root", "", "original/relocated release root for legacy contract resource paths")
+	slideLibrary := f.String("slide-library", "", "closed finished-slide revisions root; read overrides may relocate it")
 	gallery := f.String("gallery", "", "optional matching release catalog root for hash-pinned preview links")
 	indexPath := f.String("index", "", "unified SQLite index for read-only discovery")
 	out := f.String("out", "", "new SQLite file for library-index, or new directory for library-fit")
@@ -29,7 +30,7 @@ func runLibraryIndex(command string, args []string) error {
 	requireShape := f.Bool("require-shape", false, "require all supplied structural hints and an exact source item-count group; does not establish measured fit")
 	kinds := f.String("kinds", "", "explicit comma-separated entity-kind filter")
 	assetKind := f.String("asset-kind", "all", "asset summary filter: all, icon, photo, graphic, logo")
-	namespace := f.String("namespace", "", "explicit wmds or legacy namespace filter")
+	namespace := f.String("namespace", "", "explicit wmds, legacy or curated namespace filter")
 	lifecycles := f.String("lifecycles", "", "explicit comma-separated lifecycle filter; deprecated still requires --include-deprecated")
 	contentAdapter := f.String("content-adapter", "", "exact declared content-adapter capability filter; does not establish measured fit")
 	roles := f.String("roles", "", "comma-separated soft content-role hints")
@@ -47,11 +48,11 @@ func runLibraryIndex(command string, args []string) error {
 		return e
 	}
 	allowed := map[string]map[string]bool{
-		"library-embed":   {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "out": true, "model-dir": true},
-		"library-index":   {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "out": true},
-		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "query": true, "retrieval": true, "embeddings": true, "model-dir": true, "require-shape": true, "lifecycles": true, "content-adapter": true, "kinds": true, "asset-kind": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "include-weak": true, "engine": true, "summary": true},
-		"library-inspect": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true, "summary": true},
-		"library-preview": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "index": true, "id": true},
+		"library-embed":   {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "slide-library": true, "index": true, "out": true, "model-dir": true},
+		"library-index":   {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "slide-library": true, "out": true},
+		"library-find":    {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "slide-library": true, "index": true, "query": true, "retrieval": true, "embeddings": true, "model-dir": true, "require-shape": true, "lifecycles": true, "content-adapter": true, "kinds": true, "asset-kind": true, "namespace": true, "roles": true, "structures": true, "visual-forms": true, "items": true, "item-role": true, "limit": true, "include-deprecated": true, "include-weak": true, "engine": true, "summary": true},
+		"library-inspect": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "slide-library": true, "index": true, "id": true, "summary": true},
+		"library-preview": {"bundle": true, "source": true, "legacy-index": true, "legacy-root": true, "gallery": true, "slide-library": true, "index": true, "id": true},
 		"library-fit":     {"bundle": true, "source": true, "engine": true, "spec": true, "out": true},
 	}
 	var invalid string
@@ -103,7 +104,7 @@ func runLibraryIndex(command string, args []string) error {
 	if validLockedBundle(*bundle) {
 		*bundle = designBundlePath(*bundle)
 	}
-	options := wmdesign.LibraryIndexOptions{Bundle: *bundle, Source: *source, LegacyIndex: *legacy, LegacyRoot: *legacyRoot, Gallery: *gallery}
+	options := wmdesign.LibraryIndexOptions{Bundle: *bundle, Source: *source, LegacyIndex: *legacy, LegacyRoot: *legacyRoot, Gallery: *gallery, SlideLibrary: *slideLibrary}
 	if command == "library-index" {
 		if options.Bundle == "" {
 			options.Bundle = designBundlePath(currentDesignBundle)
