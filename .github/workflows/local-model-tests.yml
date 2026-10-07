@@ -24,6 +24,8 @@ jobs:
     env:
       CGO_ENABLED: '0'
       PPTXGENGO_EMBED_MODEL_DIR: ${{ github.workspace }}/.cache/offline-model
+      PPTXGENGO_SEARCH_BENCH_OUT: ${{ github.workspace }}/.cache/search-performance
+      PPTXGENGO_SEARCH_BENCH_COMMIT: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -40,3 +42,12 @@ jobs:
       - name: Complete bounded-corpus offline snapshot and retrieval
         shell: bash
         run: go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
+      - name: Fresh-process and repeated retrieval performance evidence
+        shell: bash
+        run: go test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$' -v ./internal/wmdesign
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: search-performance-${{ matrix.os }}
+          path: .cache/search-performance/
+          retention-days: 14

@@ -5,9 +5,9 @@ FAST_TEST_TIMEOUT ?= 5m
 INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
-HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT=
+HEADLESS_TEST_ENV = PPTXGENGO_NATIVE_LIVE_OUT= PPTXGENGO_ROUNDTRIP_PREPARE_OUT= PPTXGENGO_ROUNDTRIP_FIXTURE= PPTXGENGO_ROUNDTRIP_SAVED_AS= PPTXGENGO_ROUNDTRIP_EDITED= PPTXGENGO_ROUNDTRIP_VERIFY_OUT= PPTXGENGO_ROUNDTRIP_WINDOWS_OUT= PPTXGENGO_SEARCH_BENCH_OUT=
 
-.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows
+.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows test-search-performance
 
 build:
 	CGO_ENABLED=0 $(GO) build -trimpath -o bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs
@@ -20,7 +20,7 @@ test:
 # and the library's concurrent presentation serialization regressions.
 test-race:
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/installstate
-	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/modelpackage ./scripts/cmd/release-ci
+	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/modelpackage ./scripts/cmd/release-ci ./scripts/cmd/search-benchmark
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/finishedslide
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestNativeRoundTrip|TestFinishedSlideClaims)' ./internal/deckproject
 	$(HEADLESS_TEST_ENV) $(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestFinishedSlideClaims' ./internal/deckproject
@@ -63,3 +63,9 @@ test-roundtrip-verify:
 test-roundtrip-windows:
 	test -n "$$PPTXGENGO_ROUNDTRIP_WINDOWS_OUT" || (echo 'set PPTXGENGO_ROUNDTRIP_WINDOWS_OUT to a new directory on an interactive Windows desktop' >&2; exit 1)
 	$(GO) test -count=1 -timeout=3m -run '^TestNativeRoundTripLiveWindows$$' ./internal/deckproject
+
+# Offline diagnostics never open Office; fixture/model preparation is untimed.
+test-search-performance:
+	test -n "$$PPTXGENGO_EMBED_MODEL_DIR" -a -n "$$PPTXGENGO_SEARCH_BENCH_OUT" || (echo 'set existing model directory and new benchmark output directory; see docs/search-performance.md' >&2; exit 1)
+	test ! -e "$$PPTXGENGO_SEARCH_BENCH_OUT" || (echo 'benchmark output must not already exist' >&2; exit 1)
+	$(GO) test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$$' -v ./internal/wmdesign

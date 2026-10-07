@@ -18,9 +18,9 @@ jobs:
   developer:
     name: Developer checks (${{ matrix.target }})
     runs-on: macos-latest
-    # Complete pinned catalog/race checks reached 9m58s on a hosted Mac before
-    # adding the model's Go dependency compilation. Per-package ceilings remain.
-    timeout-minutes: 15
+    # The complete race lane reached the last check when a hosted Mac hit the
+    # 15-minute job deadline. Preserve every check and its per-package ceiling.
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
