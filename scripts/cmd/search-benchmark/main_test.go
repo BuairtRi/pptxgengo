@@ -100,6 +100,9 @@ func TestSearchBenchmarkKeywordProofAndNoOverwrite(t *testing.T) {
 	if m.FirstPeakResidentBytes == 0 || m.LastPeakResidentBytes == 0 || max(m.FirstPeakResidentBytes, m.LastPeakResidentBytes) != m.PeakResidentBytes || m.GoMemoryLimit == "" || m.WarmMedianMS != m.WarmFindMS[0] || m.WarmP95MS != m.WarmFindMS[0] {
 		t.Fatal("incomplete memory/settings or inconsistent statistics", m)
 	}
+	if m.ElapsedClockMethod == "" || m.ElapsedCounterUnits <= 0 || m.OpenMS <= 0 || m.FirstFindMS <= 0 || m.WarmFindMS[0] <= 0 {
+		t.Fatal("missing counter evidence or nonpositive elapsed timing", m)
+	}
 	if err = run(args); err == nil {
 		t.Fatal("measurement overwritten")
 	}
