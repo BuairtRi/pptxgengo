@@ -1,7 +1,7 @@
 # Testing lanes
 
 Run `make test` for everyday development. It runs the repository suite with Go's
-`-short` mode, `-count=1`, and a 150-second per-package timeout. It should fit
+`-short` mode, `-count=1`, and a five-minute per-package timeout. It should fit
 within a normal short development loop. Only specifically marked exhaustive or
 resource-dependent integration tests skip in short mode; ordinary unit and
 focused regression coverage still runs.
@@ -24,66 +24,69 @@ by their per-package ceilings; a timeout is a test failure and should be
 investigated by rerunning the affected package. The exhaustive race lane is not
 a routine developer check and should not be described as passing unless it has
 actually completed.
-The fast and focused-race targets use a 150-second per-package ceiling;
+The fast target uses a five-minute per-package ceiling; focused race checks
+use 150 seconds per package;
 exhaustive race checks use 10 minutes per package.
 
 ## CI policy
 
-GitHub Actions runs `make test` and `make test-race` on hosted macOS for pushes
-and pull requests, plus its scheduled run. It sets an empty branding root and
-clears `PPTXGENGO_NATIVE_LIVE_OUT`, so these checks are headless, require no
-private artwork, and do not open PowerPoint. The native-export package still
-tests worker startup/cancellation and its hermetic export harness.
+All project jobs run in private GitLab. GitHub Actions is disabled, and the
+repository contains no GitHub workflows. GitHub remains the source review and
+merge authority used by slotctl; it does not execute CLI operations or retain
+CI artifacts. Slot preflight validates the local GitLab job graph with
+`go run ./scripts/cmd/ci-lint`; GitLab server lint validates rules and matrices.
 
-GitLab runs the same targets in a Go 1.27.1 Linux container. It is also
-headless and sets an empty branding root. Full `test-integration` and
-`test-race-full` jobs are isolated to a runner tagged
-`pptxgengo-integration`. GitLab enables them only on the protected default
-branch when `PPTXGENGO_FULL_TESTS=true`, for scheduled pipelines or as a manual
-job in a web pipeline. The GitHub exhaustive matrix is similarly opt-in through
-the repository variable `PPTXGENGO_FULL_TESTS=true` on the default branch for
-scheduled or manually dispatched workflows and requires a self-hosted runner
-tagged `pptxgengo-integration`.
+Ordinary source branches run headless Linux developer tests/race checks,
+installer process qualification, pinned model/performance checks on amd64 and
+arm64 Kubernetes runners, security scans, and six-target cross-builds. An empty
+branding root and cleared live-output variables keep ordinary checks independent
+of private artwork and PowerPoint. Cross-builds prove compilation, not native
+execution.
 
-Do not set the live native output environment variable in general CI jobs.
-Native PowerPoint qualification remains a separate `make test-native` run.
+Protected main and protected release tags additionally run `macos-cli` and
+`macos-model` on the existing private runner tagged `macos` and `darwin-arm64`.
+The CLI lane runs short/race tests and actual installation processes; the model
+lane verifies pinned downloads, retrieval and performance. Both lanes must pass
+before release resources or binaries can be built. Protected runners and signing
+credentials are never made available to ordinary slot branches.
 
-### Windows preview
+Full `test-integration` and `test-race-full` jobs remain isolated to a runner
+with tag `pptxgengo-integration`, enabled on protected main with
+`PPTXGENGO_FULL_TESTS=true` in scheduled or manual web pipelines. General jobs
+never open Office. Native PowerPoint qualification requires a separate desktop
+run, retained evidence and human inspection.
 
-`.github/workflows/windows-tests.yml` builds the three Windows executables,
-parses the PowerShell scripts, runs portable Go regression tests and a package-style
-smoke test in a path containing spaces. It uses hosted `windows-latest`, does not
-open PowerPoint and needs no private photographs. Windows COM export and NTFS
-receipt permissions also have simulated regression coverage.
+### Windows and Intel Mac qualification
 
-Actual Windows PowerPoint qualification is a separate opt-in workflow job. Register
-a self-hosted runner with labels `Windows` and `pptxgengo-windows-native`, install
-desktop PowerPoint and the bundled IBM Plex fonts, and start the runner's `run.cmd`
-from the signed-in desktop account. A Windows service/session-zero runner is not
-an eligible Office automation session. Set repository variable
-`PPTXGENGO_WINDOWS_NATIVE=true`, then manually dispatch the workflow on the default
-branch. It retains PDFs, PNGs, receipts and logs; a human must still inspect the
-full-size images. No native job is enabled for pull requests.
+The forthcoming Windows shell runner uses tags `windows` and
+`pptxgengo-windows-native`. Set `PPTXGENGO_WINDOWS_CLI=true` in a web pipeline on
+protected main and start manual `windows-cli`. It parses PowerShell scripts,
+builds all three executables, runs portable/helper tests, exercises actual
+installation and a relocated path containing spaces, and verifies pinned model
+retrieval/performance. It does not open PowerPoint. Native Windows ARM64 requires
+an additional `arm64` runner tag and `PPTXGENGO_WINDOWS_ARM64_CLI=true`.
 
-GitLab has the matching opt-in `windows-native` job for a PowerShell shell runner
-tagged `windows` and `pptxgengo-windows-native`. Enable
-`PPTXGENGO_WINDOWS_NATIVE=true` and run its manual job in a web pipeline on the
-protected default branch. It also requires an interactive desktop runner and
-retains the smoke-test output as an artifact.
+Live Office qualification is separate: set `PPTXGENGO_WINDOWS_NATIVE=true` and
+start `windows-native` in a protected-main web pipeline. The runner must run in
+the signed-in desktop account with PowerPoint and bundled fonts installed;
+Session 0 is ineligible. This lane retains native export smoke and the synthetic
+Save As/three-field/reorder round-trip evidence. See
+[native round-trip](native-roundtrip.md) for ownership, cleanup and human
+acceptance boundaries. No Windows runtime or Office result is claimed until
+the runner actually executes the lane.
 
-Both desktop lanes also run the retained synthetic native round-trip harness
-after export smoke. It verifies Save As tag survival, three exact supported text
-changes, slide reordering and bounded adoption/rebuild. See
-[native round-trip](native-roundtrip.md) for macOS/Windows supplied-file commands,
-Windows automation, retained failure evidence and the separate human acceptance
-boundary. Hosted short tests and simulated COM helpers do not establish desktop
-qualification. Explicit round-trip entry points skip in short mode; hermetic
-verifier and failure regressions still run normally and under selected race.
+Private Intel Mac execution is configured separately for tags `macos` and
+`darwin-amd64`, with a preprovisioned Go 1.27.1 toolchain. Enable
+`PPTXGENGO_MACOS_INTEL=true` in a protected-main web pipeline and start
+`macos-intel-cli` and `macos-intel-model`. These lanes remain pending until the
+runner is available. Historical GitHub reports remain historical evidence;
+they are not current CI gates.
 
+Generic installer/model diagnostics are private maintainer-access GitLab
+artifacts retained for 14 days. Native Office artifacts also remain private.
 The tester ZIP includes `smoke-test-windows.ps1`; use `-Native` only on a real
-Windows desktop with PowerPoint. Its manifest explicitly reports that a
-cross-compiled build has not yet received Windows runtime qualification. See
-`internal/releasepackage/WINDOWS.md` for installation and operator checks.
+desktop. Cross-build/signing on Linux remains available while Windows native
+execution is pending. See `internal/releasepackage/WINDOWS.md` for operator checks.
 
 ## Short-mode skips
 
@@ -167,8 +170,9 @@ and their assertions remain in the focused race lane.
 an explicit new `PPTXGENGO_SEARCH_BENCH_OUT` directory. The standard corpus
 contains 26 actual entities; three separate child processes retain keyword,
 semantic and hybrid timing/memory JSON. This opens no Office application.
-Pinned model CI runs it on Linux/macOS/Windows and retains generic diagnostics
-for 14 days. See [measurement scope and commands](search-performance.md).
+GitLab runs this on Kubernetes Linux and protected Mac ARM64; configured
+Windows and Intel Mac lanes remain opt-in pending their private runners. Generic
+diagnostics are retained for 14 days. See [measurement scope and commands](search-performance.md).
 Ordinary headless Make targets clear this opt-in output variable.
 
 ## Actual installer process qualification
@@ -180,9 +184,9 @@ processes in owned paths. Windows also executes the actual installer with
 PATH/skill/font opt-outs and synthetic full-format resources. Ordinary headless
 Make targets clear this opt-in; private originals and Office are not required.
 
-Linux amd64/arm64 run in Kubernetes, macOS arm64/amd64 on separate hosted
-machines and Windows amd64/arm64 in the portable matrix. Pinned model/performance
-checks use those same native architectures. Passing cross-builds are not used
-as native execution evidence. CI retains only generic qualification JSON for
-14 days, excluding unsigned executable fixtures and any customer content.
+Linux amd64/arm64 run in Kubernetes and protected macOS arm64 on the private
+Mac runner. Windows amd64/arm64 and Intel Mac lanes require their private runners
+and explicit protected-main web-pipeline flags. Passing cross-builds are not
+native execution evidence. GitLab retains generic qualification JSON for
+14 days, excluding unsigned executable fixtures and customer content.
 See [installation evidence and scope](installation.md).

@@ -2,12 +2,14 @@
 
 All downloads are in the **private GitLab project** `riscott/pptxgengo` (project
 17). GitHub remains the canonical source/review mirror. No GitHub release assets
-are created. The first CI release is a CLI-only prerelease because registered
-branding originals are currently on another machine.
+are created. All builds, tests, security scans and release operations run in
+GitLab; GitHub Actions is disabled. Stable v4.1.0 is a CLI-only release because
+registered branding originals are currently on another machine.
 
 ## Cut a release
 
-1. Land the release changes on `main` and wait for its developer and security jobs.
+1. Land release changes on `main` and wait for every applicable GitLab gate,
+   including Linux and protected Mac native CLI/model checks.
 2. Create an annotated immutable tag, `vX.Y.Z-rc.N` for a prerelease or `vX.Y.Z`
    for a stable release. Push the tag through `origin`, which has both GitHub and
    GitLab push URLs. Only maintainers can create protected `v*` tags.
@@ -34,6 +36,12 @@ Signing changes the binary hashes; signed hashes and original reproducibility
 proofs are retained separately.
 
 ## Signing and release gates
+
+Protected tag pipelines require Linux tests/security, six-target compilation,
+and protected Mac ARM64 short/race/installer/model checks before resource or
+binary builds. Windows native execution and Intel Mac execution remain separate
+opt-in private GitLab lanes pending their runners; compilation is not runtime
+qualification. See [CI policy](../docs/testing.md).
 
 - Windows cross-builds on Linux, then Jsign uses Azure Artifact Signing with a
   short-lived GitLab OIDC credential. Linux independently verifies Authenticode,
