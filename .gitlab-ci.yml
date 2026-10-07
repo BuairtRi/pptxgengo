@@ -85,6 +85,8 @@ security:go:
       - GOOS: [linux, darwin, windows]
   variables:
     CGO_ENABLED: '0'
+  before_script:
+    - source scripts/release/use-linux-go.sh
   script:
     - bash scripts/release/scan-source.sh vulnerabilities
   artifacts:
@@ -101,6 +103,8 @@ security:secrets:
     entrypoint: [""]
   timeout: 15 minutes
   interruptible: true
+  before_script:
+    - source scripts/release/use-linux-go.sh
   script:
     - bash scripts/release/scan-source.sh secrets
   artifacts:

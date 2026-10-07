@@ -160,3 +160,7 @@ and [Sigstore blob signing](https://docs.sigstore.dev/cosign/signing/signing_wit
 
 The legacy library index now uses the same pure Go SQLite driver as the unified
 index; distribution binaries do not require a separate system sqlite3 CLI.
+
+The pinned shared security/signing images contain Go 1.26.5. Linux jobs install
+Go 1.27.1 from official archives with checked-in SHA-256 pins before scanning or
+building. macOS uses the same verified archive approach. GOTOOLCHAIN stays local.

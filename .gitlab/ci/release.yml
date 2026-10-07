@@ -16,6 +16,8 @@
     GOFLAGS: -mod=readonly
     CGO_ENABLED: '0'
     GOMODCACHE: $CI_PROJECT_DIR/.cache/release-go-mod
+  before_script:
+    - source scripts/release/use-linux-go.sh
   artifacts:
     when: on_success
     expire_in: 14 days
