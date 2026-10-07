@@ -6,7 +6,7 @@ INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
 
-.PHONY: build test test-race test-integration test-race-full test-native
+.PHONY: build test test-race test-integration test-race-full test-native test-roundtrip-prepare test-roundtrip-verify test-roundtrip-windows
 
 build:
 	CGO_ENABLED=0 $(GO) build -trimpath -o bin/ ./cmd/pptxgengo ./cmd/pptxdesign ./cmd/wmdsdocs
@@ -20,10 +20,11 @@ test:
 test-race:
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/installstate
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/finishedslide
-	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestFinishedSlideClaims)' ./internal/deckproject
+	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestSourceMutationsShareGuard|TestConcurrentSourceMutationGuard|TestSectionMutationCommentsAndAtomicity|TestFinishedSlide|TestObservedDependency|TestNative|TestTypedCardNative|TestTypedCardField' -skip '^(TestNativeEditability|TestNativeRoundTrip|TestFinishedSlideClaims)' ./internal/deckproject
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestFinishedSlideClaims' ./internal/deckproject
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestReconcile' ./internal/deckproject
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditability' ./internal/deckproject
+	$(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeRoundTrip' ./internal/deckproject
 	PPTXGENGO_NATIVE_LIVE_OUT= $(GO) test -race -short -count=1 -timeout=$(RACE_TEST_TIMEOUT) ./internal/nativeexport
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run 'TestConcurrentWriteRace|TestConcurrentAddChartRace|TestNativeConnector' ./pptx
 	$(GO) test -race -count=1 -timeout=$(RACE_TEST_TIMEOUT) -run '^TestNativeEditing' ./internal/wmdesign
@@ -46,3 +47,17 @@ test-native:
 	test -n "$$PPTXGENGO_NATIVE_LIVE_OUT" || (echo 'set PPTXGENGO_NATIVE_LIVE_OUT to a new output directory' >&2; exit 1)
 	test ! -e "$$PPTXGENGO_NATIVE_LIVE_OUT" || (echo 'PPTXGENGO_NATIVE_LIVE_OUT must not already exist' >&2; exit 1)
 	$(GO) test -count=1 -timeout=2m -run '^TestNativeLiveSmoke$$' ./internal/nativeexport
+
+# Only the Windows action opens Office. Explicit path checks prevent a skipped
+# opt-in test from reporting a successful Make target.
+test-roundtrip-prepare:
+	test -n "$$PPTXGENGO_ROUNDTRIP_PREPARE_OUT" || (echo 'set PPTXGENGO_ROUNDTRIP_PREPARE_OUT to a new directory' >&2; exit 1)
+	$(GO) test -count=1 -timeout=2m -run '^TestNativeRoundTripPrepare$$' ./internal/deckproject
+
+test-roundtrip-verify:
+	test -n "$$PPTXGENGO_ROUNDTRIP_FIXTURE" -a -n "$$PPTXGENGO_ROUNDTRIP_SAVED_AS" -a -n "$$PPTXGENGO_ROUNDTRIP_EDITED" -a -n "$$PPTXGENGO_ROUNDTRIP_VERIFY_OUT" || (echo 'set the four round-trip verification paths; see docs/native-roundtrip.md' >&2; exit 1)
+	$(GO) test -count=1 -timeout=3m -run '^TestNativeRoundTripVerify$$' ./internal/deckproject
+
+test-roundtrip-windows:
+	test -n "$$PPTXGENGO_ROUNDTRIP_WINDOWS_OUT" || (echo 'set PPTXGENGO_ROUNDTRIP_WINDOWS_OUT to a new directory on an interactive Windows desktop' >&2; exit 1)
+	$(GO) test -count=1 -timeout=3m -run '^TestNativeRoundTripLiveWindows$$' ./internal/deckproject
