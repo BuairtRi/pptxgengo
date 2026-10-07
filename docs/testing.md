@@ -11,6 +11,7 @@ focused regression coverage still runs.
 | Command | Coverage | Environment |
 | --- | --- | --- |
 | `make test` | Normal short suite | Go 1.27.1+; no PowerPoint required |
+| `make test-pr` | Focused PR units plus compilation of every package | Empty branding root; no actual installers/model/Office |
 | `make test-race` | Race checks for project source mutation guards, the full hermetic native-export package, library catalog cache, and concurrent PPTX serialization | CGO-enabled Go toolchain |
 | `make test-integration` | Full normal suite, including exhaustive catalogs and final relocated projects | Registered private branding assets; see below |
 | `make test-race-full` | Full suite under the race detector, including tests skipped by `-short` | Opt-in; CGO-enabled Go; 10-minute per-package ceiling |
@@ -36,19 +37,24 @@ merge authority used by slotctl; it does not execute CLI operations or retain
 CI artifacts. Slot preflight validates the local GitLab job graph with
 `go run ./scripts/cmd/ci-lint`; GitLab server lint validates rules and matrices.
 
-Ordinary source branches run headless Linux developer tests/race checks,
-installer process qualification, pinned model/performance checks on amd64 and
-arm64 Kubernetes runners, security scans, and six-target cross-builds. An empty
-branding root and cleared live-output variables keep ordinary checks independent
-of private artwork and PowerPoint. Cross-builds prove compilation, not native
-execution.
+Ordinary branch pushes create no pipelines. Opening/updating a PR selects
+focused `make test-pr` units, workflow validation, and a secret scan. Main merges
+run the complete hermetic `make test` suite, workflow validation, and secret
+scanning. Neither tier runs races, actual installers, downloaded models, or
+native desktop qualification.
 
-Protected main and protected release tags additionally run `macos-cli` and
-`macos-model` on the existing private runner tagged `macos` and `darwin-arm64`.
-The CLI lane runs short/race tests and actual installation processes; the model
-lane verifies pinned downloads, retrieval and performance. Both lanes must pass
-before release resources or binaries can be built. Protected runners and signing
-credentials are never made available to ordinary slot branches.
+Protected release tags add actual installation, model closure/goldens, source
+security, generated resources/decks, six-platform release builds, signing,
+notarization, archive scanning, signature verification, attestation and private
+publication. Tags never run races or performance diagnostics. Nightly protected
+main runs long races, retrieval/performance, installer and cross-platform/native
+qualification. Source/binary security gates remain mandatory for release.
+
+Agents can select one subsystem job through `PPTXGENGO_CI_JOB` in a web/API
+pipeline. All native Linux ARM64 jobs use the dedicated Mac mini Linux runner,
+not the Pi pool. Protected Mac runners never execute ordinary PR/main jobs.
+See [CI tiers and notifications](ci-cadence.md) for the complete job inventory,
+automatic GitHub PR relay, schedule and cache ownership.
 
 Full `test-integration` and `test-race-full` jobs remain isolated to a runner
 with tag `pptxgengo-integration`, enabled on protected main with

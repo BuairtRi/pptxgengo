@@ -8,17 +8,27 @@ variables:
   GOTOOLCHAIN: local
   PPTXGENGO_PACKAGE_KIND: cli-only
   PPTXGENGO_OFFLINE_MODEL: 'true'
+  PPTXGENGO_PR_PIPELINE_NAME: ''
+
+# Branch pushes are filtered. GitLab MR events or the GitHub PR relay select
+# focused PR checks; merged main gets all hermetic units, never races/installers.
+workflow:
+  name: '$PPTXGENGO_PR_PIPELINE_NAME'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE =~ /^(api|web)$/ && $PPTXGENGO_CI_TIER == "pr")'
+      variables:
+        PPTXGENGO_PR_PIPELINE_NAME: 'pr:$PPTXGENGO_PR_KEY'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB != "" || $PPTXGENGO_WINDOWS_CLI == "true" || $PPTXGENGO_WINDOWS_ARM64_CLI == "true" || $PPTXGENGO_WINDOWS_NATIVE == "true" || $PPTXGENGO_MACOS_INTEL == "true" || $PPTXGENGO_FULL_TESTS == "true")'
+    - when: never
 
 developer:
   stage: test
   image: golang:1.27.1
-  # The complete sequential short race lane can exceed ten minutes on the
-  # Kubernetes pool. Preserve the Makefile's separate short/race package ceilings.
-  timeout: 20 minutes
+  timeout: 10 minutes
   interruptible: true
-  parallel:
-    matrix:
-      - TEST_TARGET: [test, test-race]
   variables:
     GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
     GOCACHE: $CI_PROJECT_DIR/.cache/go-build
@@ -27,12 +37,66 @@ developer:
   cache:
     key:
       files: [go.mod, go.sum]
-      prefix: go-linux
+      prefix: go-linux-fast-v1
     paths: [.cache/go-mod, .cache/go-build]
   before_script:
     - mkdir -p "$WMDS_BRANDING_ROOT"
   script:
-    - make "$TEST_TARGET"
+    - make test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "developer")'
+    - when: never
+
+pr-unit:
+  extends: developer
+  timeout: 5 minutes
+  cache:
+    policy: pull
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-fast-v1
+    paths: [.cache/go-mod, .cache/go-build]
+  script:
+    - test -z "${PPTXGENGO_PR_HEAD:-}" || test "$CI_COMMIT_SHA" = "$PPTXGENGO_PR_HEAD"
+    - make test-pr
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE =~ /^(api|web)$/ && $PPTXGENGO_CI_TIER == "pr")'
+    - when: never
+
+pr-relay-unit:
+  stage: test
+  image: python:3.13.8-alpine@sha256:3a77fbbb5bc88c0f63cc2692a13b011547f25ee93536e991544c452801856226
+  timeout: 2 minutes
+  interruptible: true
+  script:
+    - python3 -B -m unittest discover -s scripts/ci -p 'test_github_pr_poller.py'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE =~ /^(api|web)$/ && $PPTXGENGO_CI_TIER == "pr")'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "pr-relay-unit")'
+    - when: never
+
+developer-race:
+  extends: developer
+  # Keep instrumented builds out of the everyday short-suite cache.
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-race-v1
+    paths: [.cache/go-mod, .cache/go-build]
+  # Retain separate per-package ceilings; do not increase them to hide a stall.
+  timeout: 20 minutes
+  script:
+    - make test-race
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "developer-race")'
+    - when: never
 
 installation-process:
   stage: test
@@ -46,9 +110,10 @@ installation-process:
     PPTXGENGO_INSTALL_PROCESS_OUT: $CI_PROJECT_DIR/.cache/installation-process
     PPTXGENGO_INSTALL_PROCESS_COMMIT: $CI_COMMIT_SHA
   cache:
+    policy: pull
     key:
       files: [go.mod, go.sum]
-      prefix: go-linux
+      prefix: go-linux-fast-v1
     paths: [.cache/go-mod, .cache/go-build]
   script:
     - go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
@@ -57,18 +122,29 @@ installation-process:
     access: maintainer
     expire_in: 14 days
     paths: [.cache/installation-process/qualification.json]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "installation-process")'
+    - when: never
 
 installation-process-arm64:
   extends: installation-process
-  tags: [arm64]
+  tags: [linux, arm64, macmini-linux]
   cache:
+    policy: pull
     key:
       files: [go.mod, go.sum]
-      prefix: go-linux-arm64
+      prefix: go-linux-arm64-native-v1
     paths: [.cache/go-mod, .cache/go-build]
   before_script:
     - test "$(go env GOHOSTARCH)" = arm64
     - go test -short -count=1 -timeout=150s ./scripts/cmd/search-benchmark ./internal/powershellenv
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "installation-process-arm64")'
+    - when: never
 
 workflow-lint:
   stage: test
@@ -82,6 +158,13 @@ workflow-lint:
     when: [runner_system_failure]
   script:
     - go run ./scripts/cmd/ci-lint
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE =~ /^(api|web)$/ && $PPTXGENGO_CI_TIER == "pr")'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "workflow-lint")'
+    - when: never
 
 offline-model:
   stage: test
@@ -96,32 +179,76 @@ offline-model:
     PPTXGENGO_SEARCH_BENCH_OUT: $CI_PROJECT_DIR/.cache/search-performance
     PPTXGENGO_SEARCH_BENCH_COMMIT: $CI_COMMIT_SHA
   cache:
+    policy: pull
     key:
       files: [go.mod, go.sum]
-      prefix: go-linux
+      prefix: go-linux-fast-v1
     paths: [.cache/go-mod, .cache/go-build]
   script:
     - go run ./cmd/pptxdesign library-model --download --out "$PPTXGENGO_EMBED_MODEL_DIR"
-    - go test -count=1 -timeout=5m ./internal/localembed ./internal/modelpackage ./scripts/cmd/release-ci
-    - go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
-    - go test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$' -v ./internal/wmdesign
+    # Ordinary unit cases run once in developer; these require actual weights.
+    - go test -count=1 -timeout=5m -run '^TestPinned(ModelGolden|PackageOfflineCopy|ModelPackageClosure|OfflineModelReleaseReproducibleAndRelocatable)$' ./internal/localembed ./internal/modelpackage ./scripts/cmd/release-ci
 
   artifacts:
     when: on_success
     access: maintainer
     expire_in: 14 days
     paths: [.cache/offline-model/, .cache/search-performance/]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "offline-model" || $PPTXGENGO_CI_JOB == "search-performance" || $PPTXGENGO_CI_JOB == "security:offline-model")'
+    - when: never
 
 offline-model-arm64:
   extends: offline-model
-  tags: [arm64]
+  tags: [linux, arm64, macmini-linux]
+  # The only ARM cache writer; installer jobs consume it without uploading.
   cache:
+    policy: pull-push
     key:
       files: [go.mod, go.sum]
-      prefix: go-linux-arm64
+      prefix: go-linux-arm64-native-v1
     paths: [.cache/go-mod, .cache/go-build]
   before_script:
     - test "$(go env GOHOSTARCH)" = arm64
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "offline-model-arm64" || $PPTXGENGO_CI_JOB == "search-performance-arm64")'
+    - when: never
+
+search-performance:
+  extends: offline-model
+  needs: [offline-model]
+  script:
+    - go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign
+    - go test -count=1 -timeout=7m -run '^TestPinnedLibrarySearchPerformance$' -v ./internal/wmdesign
+  artifacts:
+    when: on_success
+    access: maintainer
+    expire_in: 14 days
+    paths: [.cache/search-performance/]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "search-performance")'
+    - when: never
+
+search-performance-arm64:
+  extends: search-performance
+  tags: [linux, arm64, macmini-linux]
+  needs: [offline-model-arm64]
+  cache:
+    policy: pull
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-arm64-native-v1
+    paths: [.cache/go-mod, .cache/go-build]
+  before_script:
+    - test "$(go env GOHOSTARCH)" = arm64
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "search-performance-arm64")'
+    - when: never
 
 exhaustive:
   stage: test
@@ -189,6 +316,11 @@ security:go:
     access: maintainer
     expire_in: 14 days
     paths: [.cache/security/govulncheck-*.json]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "security:go")'
+    - when: never
 
 security:secrets:
   stage: security
@@ -209,8 +341,16 @@ security:secrets:
     paths: [.cache/security/gitleaks.json]
 
 
-# Scan the separate optional model archive on branches before cutting tags.
+# Scan the separate optional model archive during full qualification.
 # v0.0.0 identifies an unpublished validation fixture on untagged branches.
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE =~ /^(api|web)$/ && $PPTXGENGO_CI_TIER == "pr")'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "security:secrets")'
+    - when: never
+
 security:offline-model:
   stage: security
   needs: [offline-model]
@@ -232,3 +372,8 @@ security:offline-model:
     access: maintainer
     expire_in: 3 days
     paths: [dist/model/]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "security:offline-model")'
+    - when: never
