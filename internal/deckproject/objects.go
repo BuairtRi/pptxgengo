@@ -14,6 +14,8 @@ import (
 )
 
 type ObjectRecord struct {
+	TextMappingContract   string              `json:"text_mapping_contract,omitempty"`
+	ParagraphSourceSlots  map[string]string   `json:"paragraph_source_slots,omitempty"`
 	NativeParentToken     string              `json:"native_parent_token,omitempty"`
 	ShapeToken            string              `json:"shape_token,omitempty"`
 	SourceTemplate        Reference           `json:"source_template"`
@@ -208,6 +210,16 @@ func bindObject(p *Project, index int, s wmdesign.SlideSpec, r ObjectRecord) Obj
 					continue
 				}
 				r.SourcePointers = append(r.SourcePointers, currentPath)
+				if n.Definition != nil && n.Definition.Scope == "shared" && n.Definition.ID == "wmds/component/editable-card" && r.NativeName == id {
+					r.TextMappingContract = wmdesign.EditableCardContract
+					r.ParagraphSourceSlots = map[string]string{}
+					for _, role := range []string{"title", "body"} {
+						argument, ok := n.Arguments[role].(map[string]any)
+						if key, bound := argument["binding"].(string); ok && bound && key != "" && len(argument) == 1 {
+							r.ParagraphSourceSlots[role] = key
+						}
+					}
+				}
 				for _, v := range []any{n.Text, n.Asset, n.Arguments} {
 					collectBindings(v, func(key string) {
 						r.SourcePointers = append(r.SourcePointers, ptr+"/"+escape(key))
