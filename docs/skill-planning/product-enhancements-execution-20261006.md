@@ -288,3 +288,36 @@ Reconciliation hosted CI follow-up: local full preflight and GitLab pipeline
 previous selected workload. Reconciliation now runs as a separate bounded race
 command with the same ceiling; exact-head full preflight and hosted gates will
 be rerun. No tests or race checking are removed.
+
+
+Native editing hosted CI follow-up: exact head `96cbbac9` passed the full slot
+preflight, all eight GitLab pipeline 21180 jobs and all ten applicable GitHub
+checks. PR #11 merged as `96a5676b`. Source and headless geometry/mapping checks
+passed; desktop visual/editing behavior and wider rollout remain unqualified.
+
+## Finished-slide stewardship and evidence closure — managed source work
+
+The `pptx-slide-stewardship` slot adds `project slide review-reuse`. Explicit
+JSON decisions bind a higher immutable revision to predecessor/source hashes,
+actor/date/reason and, for approval, the exact nonempty preview/review artifacts,
+reuse scope and expiry policy. Approval/deprecation/draft transitions preserve
+all payload and pins plus the raw decision, prior manifest and receipt. These
+are operator declarations, not authenticated human identities or native verdicts.
+
+Selected structured claims retain literal copy/source and declared hashed file
+artifacts. Markdown evidence retains exact whole-registry bytes and an explicit
+selector, with no inferred prose conversion; private packages can therefore
+contain material beyond the selected claim. Insertion remaps fresh claim IDs,
+copies owned evidence, records lineage, preserves existing registry comments or
+Markdown bytes, and validates the entire graph under the existing source guard.
+Evidence dependency changes invalidate stage approvals. Bounded verified payload
+reads protect approval/integration from changed or oversized package files.
+
+Focused tests passed for six source/destination claim-format combinations and
+real headless builds, preserved bytes/copy, lifecycle history, CLI approval and
+insertion, false resealed graphs, dependency drift, approval invalidation,
+split/reorder, clean client export and relocated maintainer handoff/rebuild.
+Full submission preflight and exact-head hosted CI remain pending. The initial
+10–20 approved real pages, broader typed/local dependencies, branding assets and
+Mac/Windows desktop qualification are still outstanding. This work is not in
+released v4.1.0; no new release tag has been cut.

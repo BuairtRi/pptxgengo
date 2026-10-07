@@ -22,6 +22,23 @@ and edited native copy, then adopt explicitly reviewed named text fields. Read
 [the decision format and limits](../../docs/text-reconciliation.md). Stable
 v4.1.0 predates these commands; desktop identity survival remains unqualified.
 
+### Reuse an authored slide with its evidence
+
+Source builds after v4.1.0 provide `project slide publish`, `insert` and
+`review-reuse`. Read [the finished slide contract](../../docs/finished-slides.md)
+for closed revisions, exact template/toolchain pins, private evidence files and
+explicit review decisions. Publication creates a draft; `review-reuse --package
+DIR --decision FILE.json --out NEW_DIR` records approval, deprecation or draft
+status in a new immutable revision. Approval requires real reviewer facts and
+matching source, preview and report hashes. Destination decks still require
+copy, evidence, fit and native review.
+
+Selected claims and declared evidence files accompany insertion with fresh
+claim IDs and recorded lineage. Markdown claims remain references to their
+exact registry bytes; the whole file is retained in the private package.
+Existing deck copies are independent of later library revisions. The initial
+curated content set and desktop qualification remain pending.
+
 ### Local native rendering (macOS)
 
 ```sh

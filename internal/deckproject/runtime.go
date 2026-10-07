@@ -445,6 +445,17 @@ func dependencies(p *Project) (map[string]string, error) {
 			m["context:"+k] = digest(b)
 		}
 	}
+	if p.Document.Context["claims"] != "" {
+		_, files, err := readClaimDependencies(p)
+		if err != nil {
+			return nil, err
+		}
+		for path, raw := range files {
+			if path != p.Document.Context["claims"] {
+				m["context:claim-evidence:"+path] = digest(raw)
+			}
+		}
+	}
 	lock, _, e := ReadLock(p)
 	if e != nil {
 		return nil, e

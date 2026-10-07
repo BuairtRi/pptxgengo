@@ -200,3 +200,28 @@ For stable v4.1.0, older baselines without lineage, or unsupported fields, use
 `source-inventory`, inspect the edited deck and reconcile reviewed changes into
 source manually. A modified build baseline is an integrity blocker; do not
 bypass its receipt or remove its lock.
+
+
+## Reuse maintained authored slides
+
+Source builds after v4.1.0 can publish, find, preview and insert closed authored
+revisions. Follow `docs/finished-slides.md`; stable v4.1.0 lacks these commands.
+Use the distinct `finished-slide` entity kind, inspect reuse scope/freshness and
+exact template/toolchain pins, and review the actual supplied copy and evidence.
+Keep closed packages private: an exact Markdown registry can include material
+beyond the selected claim.
+
+`project slide insert --project PATH --package DIR --id FRESH_ID --rationale
+REASON` creates independent item, asset and claim identities, registers exact
+evidence files and records composition/library lineage. `--allow-draft` permits
+unapproved draft work explicitly. Missing or incompatible dependencies refuse
+insertion; do not strip evidence to make a package fit. Adaptations require the
+destination deck's copy/evidence review, build, fit checks and visual review.
+
+Only record real operator decisions using `project slide review-reuse --package
+DIR --decision FILE.json --out NEW_DIR`. Approval names the exact revision,
+source/preview/report hashes, reviewer, date, reason, scope and expiry policy.
+The command retains the raw decision and predecessor manifest in a new revision.
+It does not authenticate the reviewer or establish native acceptance. Never
+invent approval or an initial curated content set. Deprecation/draft revisions
+retain decision history; earlier inserted copies keep their original lineage.

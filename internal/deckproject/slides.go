@@ -46,6 +46,7 @@ type reuseAddition struct {
 	Observed        map[string][]byte
 	CompositionPath string
 	Composition     []byte
+	ClaimsPath      string
 	Validate        func(*Project) error
 }
 
@@ -128,6 +129,9 @@ func operateSlide(p *Project, o SlideOperation, reuse *reuseAddition) (SlideOper
 			replaceMappingField(main.Content[0], "context", context)
 		}
 		replaceMappingField(context, "composition_log", &yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: reuse.CompositionPath})
+		if reuse.ClaimsPath != "" {
+			replaceMappingField(context, "claims", &yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: reuse.ClaimsPath})
+		}
 		r.EditorialAction = "Library lineage and authored reuse rationale recorded in " + reuse.CompositionPath
 	}
 	nodes, documents, err := authoredSlides(p, main)
