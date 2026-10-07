@@ -299,7 +299,7 @@ are drift rather than silently ignored content. Large handoffs that exceed a
 limit are refused with evidence retained; no files/versions are dropped to make
 them fit.
 
-New-directory create, extraction and materialization outputs are retained if an
+New-directory create, extraction, materialization and failed ZIP outputs are retained if an
 operation fails after creation. A concurrent synchronization may already have
 introduced another colleague's files; the CLI never recursively deletes that
 folder to roll back. Inspect and preserve failed evidence, resolve conflicts or

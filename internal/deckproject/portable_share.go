@@ -101,13 +101,9 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 	if e != nil {
 		return r, e
 	}
-	ok := false
-	defer func() {
-		f.Close()
-		if !ok {
-			os.Remove(abs)
-		}
-	}()
+	// Preserve failed ZIP evidence too: synchronization may replace or edit
+	// this newly created path. A failed operation never authorizes deleting it.
+	defer f.Close()
 	z := zip.NewWriter(f)
 	for _, name := range sortedFileKeys(files) {
 		if _, e := SafePath(p.Root, name); e != nil {
@@ -135,7 +131,7 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 		return r, e
 	}
 	if !reflectEqual(original, hashBytes(current)) {
-		return r, fmt.Errorf("project changed during share; ZIP discarded")
+		return r, fmt.Errorf("project changed during share; ZIP retained as failed evidence")
 	}
 	// Stream the final ZIP hash; never allocate another archive-sized buffer.
 	info, e := os.Stat(abs)
@@ -146,7 +142,6 @@ func ShareProject(p *Project, out string) (ShareReceipt, error) {
 	if e != nil {
 		return r, e
 	}
-	ok = true
 	return r, nil
 }
 func hashBytes(files map[string][]byte) map[string]string {
