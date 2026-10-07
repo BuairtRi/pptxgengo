@@ -11,8 +11,14 @@ archives:
 
 1. A complete template library: native editable placeholder slides for every
    template in the pinned library, organized with family dividers and a
-   “How to use this deck” component. Include supported frame/rail combinations
-   and other declared variants, with explicit coverage identifying each entry.
+   “How to use this deck” component. The agreed packaged default contains every
+   canonical template plus the declared supported frame/rail gallery. The current
+   pinned catalog yields 649 canonical templates, 36 gallery entries and 32
+   divider/instruction slides: 717 slides. Counts are derived from the exact
+   bundle, not fixed invariants. Complete exhaustive frame/rail combinations
+   remain an explicit generation option (currently 9,072 frame specimens),
+   rather than making the default browse deck thousands of slides. Coverage
+   identifies the selected mode and each entry.
 2. A separate library of versioned reusable authored slides, organized for
    browsing and copy/paste. Preserve content, assets, source/revision provenance
    and visible approval/freshness information. Do not present placeholder
@@ -30,8 +36,11 @@ remain private in GitLab. Missing private assets/content must be actionable
 release blockers; an incomplete deck cannot claim complete coverage.
 
 The existing library-reference/frame-reference and finished-slide compilation
-are starting points. Enumerate valid frame/rail combinations from contracts;
-do not silently omit valid variants or force incompatible combinations.
+are starting points. Derive valid frame/rail combinations from contracts and
+reject incompatible combinations. Default coverage must close every canonical
+template and every declared gallery variant; it must not claim exhaustive
+variant coverage. In explicit exhaustive mode, include every compatible variant
+without silent omissions.
 The reusable-slide deck includes only the latest approved revisions. Drafts,
 deprecated revisions and expired approvals are excluded. Preserve explicit
 withdrawal history so a newer withdrawal cannot resurrect an older approval.
@@ -94,8 +103,10 @@ Bound waits, close only exact task copies and preserve failed evidence.
 
 ## Acceptance evidence
 
-- Coverage proves every pinned template and supported frame/rail variant is
-  present, without silent omissions, and both browsing decks open in PowerPoint.
+- Default coverage proves every pinned canonical template and every declared
+  frame/rail gallery variant is present, and both browsing decks open in
+  PowerPoint. Explicit exhaustive coverage separately closes all compatible
+  frame/rail variants without silently labeling the default as exhaustive.
 - A colleague copies a template and an authored slide into another deck with
   expected copy, native objects and assets on Mac and Windows.
 - Release archives contain both decks, matching coverage pins, hashes and signed
