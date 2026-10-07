@@ -672,12 +672,8 @@ func MaterializeVersion(root, number, out string) (DeckVersion, error) {
 	if e = os.Mkdir(abs, 0755); e != nil {
 		return v, e
 	}
-	ok := false
-	defer func() {
-		if !ok {
-			os.RemoveAll(abs)
-		}
-	}()
+	// Failed output is retained for explicit recovery, including any concurrent
+	// colleague edits; never recursively delete synchronized project data.
 	expected := map[string]string{}
 	copy := func(from, to, want string) error {
 		b, e := readVersionInput(root, from, want)
@@ -736,7 +732,6 @@ func MaterializeVersion(root, number, out string) (DeckVersion, error) {
 	if e = VerifyMaterializedAssets(abs, v); e != nil {
 		return v, e
 	}
-	ok = true
 	return v, nil
 }
 func VerifyMaterializedAssets(root string, v DeckVersion) error {

@@ -321,12 +321,8 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 	if e = os.Mkdir(abs, 0755); e != nil {
 		return r, e
 	}
-	success := false
-	defer func() {
-		if !success {
-			os.RemoveAll(abs)
-		}
-	}()
+	// Retain failed extraction: concurrent synchronization can introduce
+	// colleague-owned files after initial directory creation.
 	for name := range entries {
 		b, e := read(name)
 		if e != nil {
@@ -362,7 +358,6 @@ func ExtractShare(archive, out string) (ShareReceipt, error) {
 	if _, e = Load(abs); e != nil {
 		return r, fmt.Errorf("extracted working project invalid: %w", e)
 	}
-	success = true
 	return r, nil
 }
 

@@ -30,12 +30,8 @@ func CreateProject(o CreateOptions) (*Project, error) {
 	if e = os.Mkdir(root, 0755); e != nil {
 		return nil, e
 	}
-	success := false
-	defer func() {
-		if !success {
-			os.RemoveAll(root)
-		}
-	}()
+	// Retain partial outputs: OneDrive may have synchronized another author's
+	// file into this newly owned directory. Recursive cleanup could erase it.
 	document := map[string]any{"schema": Schema, "id": o.ID, "title": o.Title, "year": o.Year, "toolchain": map[string]any{"lockfile": "toolchain.lock.json"}, "context": map[string]any{"project": "context/project.md"}, "slides": []any{"slides/first-slide.yaml"}}
 	node, e := editYAMLNode(document)
 	if e != nil {
@@ -75,6 +71,5 @@ func CreateProject(o CreateOptions) (*Project, error) {
 	if _, e = Pin(p, o.Bundle, engine); e != nil {
 		return nil, e
 	}
-	success = true
 	return p, nil
 }
