@@ -281,3 +281,18 @@ and stale source refusal. Full slot preflight and exact-head hosted CI are pendi
 Actual Mac/Windows PowerPoint Save As and colleague editing acceptance remain
 unqualified. This capability is not included in released v4.1.0. See
 [commands, decision format and scope](../text-reconciliation.md).
+
+## Native editing inventory — managed pilot slot
+
+`pptx-editability-pilot` adds `project editability` over a receipt-verified build.
+It inventories actual Selection Pane names, native kinds, token/group ownership,
+parent/top-level selection units, nesting, paragraph/cell counts and source-field
+coverage. Card-row fixtures verify the actual nested card group and exact title/
+body fields; representative list, native table and diagram fixtures establish
+structural coverage. Reports retain source/receipt/native pins and explicitly
+state desktop qualification is not recorded.
+
+No serializer changes or whole-library/native editing acceptance are claimed.
+The family task matrix covers copy, selection, move/align/resize, table cells,
+diagram adjustment and Save As/identity tasks on both desktop platforms. Full
+preflight and hosted checks are pending. See [the maintained pilot](../native-editing-pilot.md).
