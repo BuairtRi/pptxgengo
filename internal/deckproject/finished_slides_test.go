@@ -175,7 +175,7 @@ func TestFinishedSlideDoesNotRelabelExamples(t *testing.T) {
 	p = reuseProject(t)
 	p.Document.Slides[0].EvidenceRefs = []string{"claim"}
 	_, err = PublishFinishedSlide(p, FinishedSlidePublishOptions{SlideID: p.Document.Slides[0].ID, Out: filepath.Join(t.TempDir(), "new"), Bundle: bundle(t), Engine: wmdesign.CandidateEngine})
-	if err == nil || !strings.Contains(err.Error(), "evidence_dependency") {
+	if err == nil || !strings.Contains(err.Error(), "claims registry required") {
 		t.Fatal("claims omitted", err)
 	}
 }

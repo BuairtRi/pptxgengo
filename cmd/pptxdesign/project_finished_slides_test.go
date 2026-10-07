@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/buairtri/pptxgengo/internal/deckproject"
 	"github.com/buairtri/pptxgengo/internal/finishedslide"
@@ -42,7 +43,14 @@ func TestFinishedSlideProjectCommands(t *testing.T) {
 		t.Fatal(err)
 	}
 	out := filepath.Join(t.TempDir(), "revision with spaces")
-	published := projectCommandJSON(t, "slide", "publish", "--project", root, "--bundle", bundle, "--id", "authored-message", "--out", out, "--library-id", "curated/slide/cli-message", "--revision", "1", "--name", "Authored command message", "--purpose", "Exercise publication and insertion", "--owner", "Fixture steward")
+	previewPath, reviewPath := filepath.Join(t.TempDir(), "preview.png"), filepath.Join(t.TempDir(), "review.json")
+	if e := os.WriteFile(previewPath, []byte("Owned CLI fixture preview; not native acceptance"), 0600); e != nil {
+		t.Fatal(e)
+	}
+	if e := os.WriteFile(reviewPath, []byte(`{"fixture":"operator decision plumbing only"}`), 0600); e != nil {
+		t.Fatal(e)
+	}
+	published := projectCommandJSON(t, "slide", "publish", "--project", root, "--bundle", bundle, "--id", "authored-message", "--out", out, "--library-id", "curated/slide/cli-message", "--revision", "1", "--name", "Authored command message", "--purpose", "Exercise publication and insertion", "--owner", "Fixture steward", "--preview", previewPath, "--review", reviewPath)
 	var manifest finishedslide.Manifest
 	if err := json.Unmarshal(published, &manifest); err != nil || manifest.Lifecycle != "draft" || manifest.Approval != nil {
 		t.Fatal("publication invented approval", err, manifest)
@@ -58,5 +66,39 @@ func TestFinishedSlideProjectCommands(t *testing.T) {
 	}
 	if _, err := deckproject.Check(p, bundle, wmdesign.CandidateEngine); err != nil {
 		t.Fatal(err)
+	}
+	d := finishedslide.ReviewDecision{Schema: finishedslide.ReviewDecisionSchema, RevisionSHA256: manifest.RevisionSHA256, NewRevision: 2, Action: "approve", Actor: "Owned CLI fixture steward", Date: time.Now().UTC().Format(time.DateOnly), Reason: "Fixture expressly reviews supplied artifacts without real content or native approval", ReuseScope: "Owned fixture invocations", ValidUntil: "none"}
+	for _, f := range manifest.Files {
+		switch f.Role {
+		case "source":
+			d.SourceSHA256 = f.SHA256
+		case "preview":
+			d.Preview = &finishedslide.ReviewedArtifact{Path: f.Path, SHA256: f.SHA256}
+		case "review":
+			d.Report = &finishedslide.ReviewedArtifact{Path: f.Path, SHA256: f.SHA256}
+		}
+	}
+	raw, _ = json.Marshal(d)
+	decisionFile := filepath.Join(t.TempDir(), "decision.json")
+	if e := os.WriteFile(decisionFile, raw, 0600); e != nil {
+		t.Fatal(e)
+	}
+	approvedOut := filepath.Join(t.TempDir(), "approved revision")
+	approved := projectCommandJSON(t, "slide", "review-reuse", "--package", out, "--decision", decisionFile, "--out", approvedOut)
+	var result finishedslide.ReviewResult
+	if e := json.Unmarshal(approved, &result); e != nil || result.Manifest.Lifecycle != "approved" || result.Manifest.Approval.By != d.Actor || result.Receipt.PreviousRevisionSHA256 != manifest.RevisionSHA256 {
+		t.Fatal("review command lost explicit decision", e)
+	}
+	inserted = projectCommandJSON(t, "slide", "insert", "--project", root, "--bundle", bundle, "--package", approvedOut, "--id", "reviewed-independent-message", "--rationale", "Owned test accepts reviewed revision in this deck")
+	if e := json.Unmarshal(inserted, &receipt); e != nil || receipt.Library.Revision != 2 {
+		t.Fatal("approved insertion required draft bypass", e)
+	}
+}
+
+func TestFinishedSlideReviewCommandRequiresExplicitInputs(t *testing.T) {
+	for _, args := range [][]string{{}, {"--package", "missing"}, {"--package", "missing", "--decision", "missing", "--out", "new", "extra"}} {
+		if e := runFinishedSlideReview(args); e == nil {
+			t.Fatal("incomplete decision accepted", args)
+		}
 	}
 }

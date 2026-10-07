@@ -38,7 +38,10 @@ func projectRuntime(p *deckproject.Project, bundle, engine string) (string, stri
 
 func runProjectSlide(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: project slide <add|insert|publish|move|remove|hide|show|draft-review> --project PATH --id ID")
+		return fmt.Errorf("usage: project slide <add|insert|publish|review-reuse|move|remove|hide|show|draft-review> --project PATH --id ID")
+	}
+	if args[0] == "review-reuse" {
+		return runFinishedSlideReview(args[1:])
 	}
 	if args[0] == "publish" || args[0] == "insert" {
 		return runProjectFinishedSlide(args[0], args[1:])

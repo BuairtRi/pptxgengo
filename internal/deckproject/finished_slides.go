@@ -3,8 +3,6 @@ package deckproject
 import (
 	"encoding/json"
 	"fmt"
-	"os"
-	"path/filepath"
 	"reflect"
 	"sort"
 	"strconv"
@@ -24,6 +22,7 @@ type FinishedSlideDependencies struct {
 	SourceSHA256  string           `json:"source_sha256"`
 	Year          int              `json:"year"`
 	Assets        map[string]Asset `json:"assets"`
+	Claims        []Claim          `json:"claims,omitempty"`
 }
 
 type LibraryLineage struct {
@@ -35,6 +34,7 @@ type LibraryLineage struct {
 	SourceSHA256   string            `json:"source_sha256"`
 	AssetRemaps    map[string]string `json:"asset_remaps"`
 	ItemRemaps     map[string]string `json:"item_remaps"`
+	EvidenceRemaps map[string]string `json:"evidence_remaps,omitempty"`
 	ContentPolicy  string            `json:"content_policy"`
 }
 
@@ -114,9 +114,6 @@ func finishedSupported(slide Slide, def wmdesign.LibraryTemplate) error {
 	if !stableID.MatchString(slide.ID) || slide.Template.Scope != "shared" || slide.Template.ID != def.Key || slide.ContentKind != "supplied_content" {
 		return fmt.Errorf("finished-slide.requires_content_complete_shared_slide")
 	}
-	if len(slide.EvidenceRefs) != 0 {
-		return fmt.Errorf("finished-slide.evidence_dependency_unsupported: preserve claims in source; closed claim migration is pending")
-	}
 	// This initial insertion contract handles declared slot/array bindings and
 	// typed cards. Other identity-bearing typed families require explicit mapping.
 	if def.ContentContract != wmdesign.LibraryBindingsContract && def.Key != "cards/3" && def.Key != "cards/4" {
@@ -164,6 +161,14 @@ func PublishFinishedSlide(p *Project, o FinishedSlidePublishOptions) (finishedsl
 	files := map[string][]byte{}
 	roles := map[string]string{}
 	deps := FinishedSlideDependencies{Schema: finishedDependenciesSchema, SourceProject: p.Document.ID, SourceSHA256: p.SourceHash(), Year: p.Document.Year, Assets: map[string]Asset{}}
+	claims, claimFiles, err := closeFinishedClaims(p, slide)
+	if err != nil {
+		return m, err
+	}
+	deps.Claims = claims
+	for name, raw := range claimFiles {
+		files[name], roles[name] = raw, "evidence"
+	}
 	media, err := finishedMediaSlots(slide, def)
 	if err != nil {
 		return m, err
@@ -256,19 +261,9 @@ func PublishFinishedSlide(p *Project, o FinishedSlidePublishOptions) (finishedsl
 func readFinishedSource(root string, m finishedslide.Manifest) (Slide, FinishedSlideDependencies, map[string][]byte, error) {
 	var slide Slide
 	var deps FinishedSlideDependencies
-	files := map[string][]byte{}
-	for _, entry := range m.Files {
-		if entry.Bytes > 64<<20 {
-			return slide, deps, nil, fmt.Errorf("finished-slide.integration_file_too_large: %s", entry.Path)
-		}
-		raw, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(entry.Path)))
-		if err != nil {
-			return slide, deps, nil, err
-		}
-		if int64(len(raw)) != entry.Bytes || digest(raw) != entry.SHA256 {
-			return slide, deps, nil, fmt.Errorf("finished-slide.bytes_changed: %s", entry.Path)
-		}
-		files[entry.Path] = raw
+	files, err := finishedslide.ReadPayload(root, m)
+	if err != nil {
+		return slide, deps, nil, err
 	}
 	parser := &Project{Positions: map[string]Position{}, positionFiles: map[string]string{}}
 	value, err := parser.parseSource(files[m.Source], m.Source, "")
@@ -373,13 +368,21 @@ func InsertFinishedSlide(p *Project, o FinishedSlideInsertOptions) (FinishedSlid
 	if _, err := Check(p, o.Bundle, o.Engine); err != nil {
 		return r, err
 	}
-	lineage := LibraryLineage{ID: m.ID, Revision: m.Revision, RevisionSHA256: m.RevisionSHA256, SourceProject: deps.SourceProject, SourceSlide: slide.ID, SourceSHA256: deps.SourceSHA256, AssetRemaps: map[string]string{}, ItemRemaps: map[string]string{}, ContentPolicy: "Copy preserved; item and asset identities remapped. New context and any later copy adaptations require project review; library approval does not approve this deck."}
+	lineage := LibraryLineage{ID: m.ID, Revision: m.Revision, RevisionSHA256: m.RevisionSHA256, SourceProject: deps.SourceProject, SourceSlide: slide.ID, SourceSHA256: deps.SourceSHA256, AssetRemaps: map[string]string{}, ItemRemaps: map[string]string{}, EvidenceRemaps: map[string]string{}, ContentPolicy: "Copy and selected claim/evidence payloads preserved; item, asset and claim identities remapped. New context and any later copy adaptations require project review; library approval does not approve this deck."}
 	observed := map[string][]byte{p.Document.Toolchain.Lockfile: lockRaw}
 	assets := map[string]Asset{}
 	for k, v := range p.Document.Assets {
 		assets[k] = v
 	}
 	files := map[string][]byte{}
+	claimRoles := map[string]string{}
+	for _, file := range m.Files {
+		claimRoles[file.Path] = file.Role
+	}
+	claimsPath, err := insertFinishedClaims(p, &slide, deps.Claims, packageFiles, files, observed, lineage.EvidenceRemaps, claimRoles)
+	if err != nil {
+		return r, err
+	}
 	media, err := finishedMediaSlots(slide, def)
 	if err != nil {
 		return r, err
@@ -469,7 +472,7 @@ func InsertFinishedSlide(p *Project, o FinishedSlideInsertOptions) (FinishedSlid
 	if err != nil {
 		return r, err
 	}
-	addition := &reuseAddition{Assets: assets, Files: files, Observed: observed, CompositionPath: logPath, Composition: logRaw, Validate: func(candidate *Project) error {
+	addition := &reuseAddition{Assets: assets, Files: files, Observed: observed, ClaimsPath: claimsPath, CompositionPath: logPath, Composition: logRaw, Validate: func(candidate *Project) error {
 		if err := ValidateEditorial(candidate); err != nil {
 			return err
 		}
