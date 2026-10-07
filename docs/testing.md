@@ -160,3 +160,13 @@ Catalog cache race regressions run in separate invocations with the same
 150-second ceiling for each. The combined invocation exceeded that ceiling on
 hosted macOS even though its individual checks completed. All five regressions
 and their assertions remain in the focused race lane.
+
+## Offline search performance diagnostics
+
+`make test-search-performance` requires an existing pinned offline model and
+an explicit new `PPTXGENGO_SEARCH_BENCH_OUT` directory. The standard corpus
+contains 26 actual entities; three separate child processes retain keyword,
+semantic and hybrid timing/memory JSON. This opens no Office application.
+Pinned model CI runs it on Linux/macOS/Windows and retains generic diagnostics
+for 14 days. See [measurement scope and commands](search-performance.md).
+Ordinary headless Make targets clear this opt-in output variable.

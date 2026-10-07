@@ -13,7 +13,9 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"runtime/metrics"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -43,6 +45,8 @@ type measurement struct {
 	GoVersion              string               `json:"go_version"`
 	CPUCount               int                  `json:"cpu_count"`
 	GOMAXPROCS             int                  `json:"gomaxprocs"`
+	GCPercent              uint64               `json:"go_gc_percent"`
+	GoMemoryLimit          string               `json:"go_memory_limit_bytes"`
 	Created                string               `json:"created"`
 	Scope                  string               `json:"scope"`
 	FilesystemCache        string               `json:"filesystem_cache"`
@@ -165,8 +169,21 @@ func quantile(values []float64, q float64) float64 {
 	return v[int(math.Ceil(float64(len(v))*q))-1]
 }
 
+func median(values []float64) float64 {
+	v := append([]float64(nil), values...)
+	sort.Float64s(v)
+	return (v[(len(v)-1)/2] + v[len(v)/2]) / 2
+}
+
 func measure(o options) (measurement, error) {
 	m := measurement{Schema: "pptxgengo.search-performance.v1", SourceCommit: o.commit, OS: runtime.GOOS, Architecture: runtime.GOARCH, GoVersion: runtime.Version(), CPUCount: runtime.NumCPU(), GOMAXPROCS: runtime.GOMAXPROCS(0), Created: time.Now().UTC().Format(time.RFC3339Nano), Scope: "fresh benchmark process using production LibraryIndex API; index open and first find timed separately; repeated finds reuse the index, not a cached model; timings exclude CLI parsing/process launch, preparation, footprint hashing and output writing; peak resident covers this process through the last timed query including initial hashing", FilesystemCache: "not flushed or controlled; initial footprint hashing and prior fixture/model preparation may warm OS file cache", Mode: o.mode, Query: o.query, Kinds: []string{"template"}, WarmFindMS: []float64{}, FirstMatches: []string{}, RelevanceAcceptance: "not_recorded; retrieval does not measure content fit or native acceptance", PerformanceTargets: "not_agreed; observational measurements only"}
+	gc := []metrics.Sample{{Name: "/gc/gogc:percent"}, {Name: "/gc/gomemlimit:bytes"}}
+	metrics.Read(gc)
+	if gc[0].Value.Kind() != metrics.KindUint64 || gc[1].Value.Kind() != metrics.KindUint64 {
+		return m, fmt.Errorf("runtime GC settings unavailable")
+	}
+	m.GCPercent = gc[0].Value.Uint64()
+	m.GoMemoryLimit = strconv.FormatUint(gc[1].Value.Uint64(), 10)
 	var err error
 	m.Index, err = fileHash(o.index, 512<<20)
 	if err != nil {
@@ -233,7 +250,7 @@ func measure(o options) (measurement, error) {
 			m.WarmFindMS = append(m.WarmFindMS, elapsed)
 		}
 	}
-	m.WarmMedianMS = quantile(m.WarmFindMS, .5)
+	m.WarmMedianMS = median(m.WarmFindMS)
 	m.WarmP95MS = quantile(m.WarmFindMS, .95)
 	m.GoMemoryAfter = heapMemory()
 	m.PeakResidentBytes, m.PeakResidentMethod, err = peakResidentBytes()
