@@ -97,7 +97,7 @@ func TestSearchBenchmarkKeywordProofAndNoOverwrite(t *testing.T) {
 	if m.Schema != "pptxgengo.search-performance.v1" || m.Mode != "keyword" || m.Model != nil || m.Embeddings != nil || m.ProjectionSHA256 != report.ProjectionSHA256 || m.PeakResidentBytes == 0 || len(m.WarmFindMS) != 1 || len(m.FirstMatches) == 0 || m.FirstMatches[0] != "wmds/template/cards/3" || m.RelevanceAcceptance == "" || m.PerformanceTargets == "" {
 		t.Fatal(m)
 	}
-	if m.FirstPeakResidentBytes == 0 || m.FirstPeakResidentBytes > m.PeakResidentBytes || m.GoMemoryLimit == "" || m.WarmMedianMS != m.WarmFindMS[0] || m.WarmP95MS != m.WarmFindMS[0] {
+	if m.FirstPeakResidentBytes == 0 || m.LastPeakResidentBytes == 0 || max(m.FirstPeakResidentBytes, m.LastPeakResidentBytes) != m.PeakResidentBytes || m.GoMemoryLimit == "" || m.WarmMedianMS != m.WarmFindMS[0] || m.WarmP95MS != m.WarmFindMS[0] {
 		t.Fatal("incomplete memory/settings or inconsistent statistics", m)
 	}
 	if err = run(args); err == nil {

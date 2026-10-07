@@ -449,6 +449,10 @@ repeated median 468.7 ms, first peak 368.3 MiB and final peak 772.3 MiB, with
 91,102,969 bytes of pinned inference artifacts. Complete scope, input hashes
 and keyword/semantic comparisons are in `docs/search-performance.md`.
 Focused tests passed; final submission/hosted gates are pending.
+GitLab's race run at `334da317` exposed asynchronous Linux RSS accounting:
+the raw last VmHWM sample was 241,664 bytes below the first sample. The report
+now retains both raw samples and their observed maximum, with explicit kernel
+approximation documented; no assertion or qualified memory precision is hidden.
 Actual full-library Windows/other architecture performance, agreed budgets,
 operator relevance/native fit and desktop editing acceptance remain open.
 No further release tag was cut.

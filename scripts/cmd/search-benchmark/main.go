@@ -72,6 +72,7 @@ type measurement struct {
 	GoMemoryAfterFirst     goMemory             `json:"go_memory_after_first_find"`
 	GoMemoryAfter          goMemory             `json:"go_memory_after"`
 	FirstPeakResidentBytes uint64               `json:"process_peak_resident_after_first_find_bytes"`
+	LastPeakResidentBytes  uint64               `json:"process_peak_resident_after_last_find_bytes"`
 	PeakResidentBytes      uint64               `json:"process_peak_resident_bytes"`
 	PeakResidentMethod     string               `json:"process_peak_resident_method"`
 	RelevanceAcceptance    string               `json:"relevance_acceptance"`
@@ -253,10 +254,14 @@ func measure(o options) (measurement, error) {
 	m.WarmMedianMS = median(m.WarmFindMS)
 	m.WarmP95MS = quantile(m.WarmFindMS, .95)
 	m.GoMemoryAfter = heapMemory()
-	m.PeakResidentBytes, m.PeakResidentMethod, err = peakResidentBytes()
-	if err != nil || m.PeakResidentBytes == 0 {
+	m.LastPeakResidentBytes, m.PeakResidentMethod, err = peakResidentBytes()
+	if err != nil || m.LastPeakResidentBytes == 0 {
 		return m, fmt.Errorf("cannot capture process peak resident memory: %v", err)
 	}
+	// Linux proc RSS counters are asynchronously accounted and can move slightly
+	// backwards between reads. Retain both raw OS samples and their observed max;
+	// do not turn that documented approximation into a false monotonicity claim.
+	m.PeakResidentBytes = max(m.FirstPeakResidentBytes, m.LastPeakResidentBytes)
 	// Recheck exact physical inputs AFTER the timed calls. Never attach a hash
 	// from a replaced index/snapshot to measurements from the earlier input.
 	observed, err := fileHash(o.index, 512<<20)

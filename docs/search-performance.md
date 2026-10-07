@@ -59,15 +59,18 @@ benchmark output opt-in.
 - Every repeated duration is retained. Median averages the two middle values
   for an even sample count. P95 uses nearest rank; with 1–10 samples it is the
   observed maximum, not a statistically established service percentile.
-- Peak resident memory is an OS high-water mark through the last timed query,
-  including startup and initial hashing. The first-query high-water mark is
-  recorded separately. Darwin uses `getrusage` bytes, Windows uses
+- Peak resident memory is the greatest observed OS high-water-mark sample after
+  the first/last timed queries, including startup and initial hashing. Both raw
+  samples are retained. Darwin uses `getrusage` bytes, Windows uses
   `K32GetProcessMemoryInfo.PeakWorkingSetSize`, and Linux uses
   `/proc/self/status`'s `VmHWM` KiB converted to bytes.
 - Linux `getrusage` was deliberately replaced: it retains the pre-exec
   address-space peak, which can include the model-preparing Go parent's memory.
   A touched-memory/subprocess regression distinguishes this from the current
   executable's address space. Missing OS counters fail the measurement.
+  Kernel proc RSS accounting is asynchronous/approximate: Linux raw VmHWM reads
+  can decrease slightly. Their observed maximum preserves the measured samples
+  without asserting exact page accounting or a strictly monotonic kernel counter.
 - Go live heap, reserved heap and total runtime reservations are separate
   samples, not interchangeable with resident memory or cumulative allocations.
   Actual Go GC percentage and memory limit are recorded, with no forced GC.
