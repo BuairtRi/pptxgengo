@@ -164,8 +164,9 @@ They checked fresh identity, exact byte independence, unchanged earlier copies
 across revisions, ordinary-string preservation, collisions, unsupported
 sources, file/preview drift, relocation and concurrent-source/editorial guards.
 Targeted source/reuse race checks passed in 27.32 seconds on this M5 Max.
-CLI publish/insert also passed. Full preflight and exact-head hosted gates still
-need to pass before landing the slot.
+CLI publish/insert also passed. Full slot preflight and exact-head GitLab
+pipeline 21147 (all eight gates), hosted Windows portable/model and macOS
+normal/race/model checks passed before PR #7 merged as `2dcde4fc`.
 
 Remaining: closed claim/evidence migration, navigation/derived/local-template
 and wider typed identity contracts, reviewed CLI approval maintenance, initial
@@ -222,3 +223,16 @@ then the shared native editing/reconciliation identity contract.
 Agree native field-address mappings before the editing pilot, then implement
 bounded reconciliation. Model choice, curated content and native acceptance
 remain explicit decisions rather than silently selected defaults.
+
+## Native field contract implementation follow-up
+
+The `pptx-native-fields` slot adds the shared paragraph/run/cell address and
+source-field baseline contract before editing or reconciliation changes. Run
+boundaries no longer invent native paragraph breaks. Typed card title/body
+objects map to their specific keyed field; frame mappings respect actual raw
+slots. Exact unique plain fields retain stable source-slot identity and hashes;
+rich, dynamic, bullet, cell and ambiguous fields remain explicit manual review.
+Native structure hashes separate text-leaf changes from geometry/format/shape
+changes conservatively. Targeted XML and generated-card tests passed locally.
+Full preflight/CI, native identity survival, editing pilot and three-way adoption
+remain pending. See [the maintained mapping contract](../native-field-mapping.md).
