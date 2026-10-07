@@ -570,11 +570,27 @@ Selected race checks pass. Full submission and hosted gates remain required;
 real operator content and broad typed/local dependencies remain outstanding.
 
 Ri added packaged browsing libraries and consistent portable projects on
-2026-10-07. The linked portable-projects/browsing-decks scope retains the
-requirements for both private CI-generated PowerPoints, full supported
-template/frame/rail coverage, split source/assets/local templates, numbered
-versions and colleague ZIP handoff. These are additional requirements, not
-implemented commands.
+2026-10-07. The canonical [portable project contract](../portable-projects.md)
+incorporates complete source/deck snapshots, shared deck-owned independently
+versioned assets and latest-approved-only reusable-slide browsing. The earlier
+scope file now redirects there rather than retaining conflicting defaults.
+
+Portable project implementation adds create, lossless layout preview/apply,
+exact-predecessor asset revise, immutable numbered version save/list/verify,
+explicit interrupted-pointer recovery, new-directory materialization, complete
+private colleague ZIP creation, bounded verified extraction and inventory
+verification. Generic real-build tests exercise separate asset revisions,
+unchanged-object reuse, transport deduplication, relocated rebuild, source and
+receipt preimages, approval history/invalidation, concurrency guards, closed
+version inventories and bounded logical expansion. CLI/skill/colleague guides
+match implemented commands. A retained five-version qualification ZIP under
+~/Documents/pptxgengo-qualification/portable-projects-20261007 has exactly two
+asset objects; separate extracted/materialized versions were checked with their
+original pins. Focused short/race checks and all six platform/architecture test
+compilations passed; final slot preflight and GitLab gates remain pending for
+this implementation. Human OneDrive conflict resolution, cross-platform native
+Office qualification and CI-generated browsing library packaging remain separate
+requirements, not claims made by these source/ZIP tests.
 
 Mac native evidence follow-up: a bounded Documents-folder attempt exposed a
 visible PowerPoint Grant File Access prompt for the owned synthetic folder.
