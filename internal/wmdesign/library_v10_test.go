@@ -211,6 +211,11 @@ func TestLibraryV10NewTemplatesRoundTripAndBuild(t *testing.T) {
 			t.Fatalf("binding changed authored template %s", source.Slides[i].TemplateBinding.Template)
 		}
 	}
+	// The source/binding assertions above remain hermetic. Rendering the
+	// source specimens needs original private artwork in the integration lane.
+	if testing.Short() {
+		return
+	}
 	for name, doc := range map[string]Document{"source": source, "bound": bound} {
 		t.Run(name, func(t *testing.T) {
 			deck, report, err := BuildWithEngine(bundle, "", doc, CandidateEngine)

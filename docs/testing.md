@@ -138,3 +138,9 @@ To reproduce one failure with its package timeout:
 ```sh
 go test -count=1 -timeout=10m ./internal/deckproject
 ```
+
+The contrast catalog audit, Gantt source-artwork audit, and V10 individual
+source builds also require private originals. V6/V10/V11 round-trip tests keep
+their binding assertions in short mode; their artwork-dependent rendering
+assertions run in the integration lanes. Frozen gallery closure remains a
+required hermetic check.

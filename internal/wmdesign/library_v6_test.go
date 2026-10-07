@@ -153,6 +153,11 @@ func TestLibraryV6HeatmapsRoundTripAndBuild(t *testing.T) {
 			t.Fatalf("source content changed through binding: %s", key)
 		}
 	}
+	// The source/binding assertions above remain hermetic. Rendering the
+	// source specimens needs original private artwork in the integration lane.
+	if testing.Short() {
+		return
+	}
 	for name, doc := range map[string]Document{"source": source, "bound": bound} {
 		for _, slide := range doc.Slides {
 			t.Run(name+"/"+slide.TemplateBinding.Template, func(t *testing.T) {
