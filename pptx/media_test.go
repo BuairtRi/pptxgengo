@@ -244,8 +244,11 @@ func TestResolveSlideMediaRels_ErrorContext_MalformedBase64Data(t *testing.T) {
 	if !strings.Contains(errs[0].Error(), badPath) {
 		t.Errorf("error %q does not mention the malformed source %q", errs[0].Error(), badPath)
 	}
-	if !errors.Is(errs[0], os.ErrNotExist) {
-		t.Errorf("error should wrap an underlying cause via %%w: %v", errs[0])
+	// Windows rejects ':' in this local filename, while Unix reports a
+	// missing file. Both must preserve the actual OS read error through %w.
+	var pathErr *os.PathError
+	if !errors.As(errs[0], &pathErr) || pathErr.Path != badPath || pathErr.Err == nil {
+		t.Errorf("error should wrap the underlying path error via %%w: %v", errs[0])
 	}
 	got, ok := layout.RelsMedia[0].Data.(string)
 	if !ok || got != IMG_BROKEN {
