@@ -655,6 +655,23 @@ func verify(dir, version, commit string) error {
 	if m.Files["security-policy.json"] == "" {
 		return fmt.Errorf("security policy missing")
 	}
+	entries, e := os.ReadDir(dir)
+	if e != nil {
+		return e
+	}
+	for _, entry := range entries {
+		name := entry.Name()
+		info, e := entry.Info()
+		if e != nil {
+			return e
+		}
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("nonregular final artifact: %s", name)
+		}
+		if name != "manifest.json" && name != "SHA256SUMS" && name != "manifest.sigstore.json" && m.Files[name] == "" {
+			return fmt.Errorf("unattested final artifact: %s", name)
+		}
+	}
 	for p, h := range m.Files {
 		if !safePath(p) {
 			return fmt.Errorf("unsafe manifest path")
