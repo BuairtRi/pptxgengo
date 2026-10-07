@@ -1,0 +1,47 @@
+package main
+
+import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+	"testing"
+)
+
+func TestBrowsingArchiveRequiresBothDecksAndHashes(t *testing.T) {
+	root := t.TempDir()
+	files := map[string]Input{}
+	if e := addBrowsingFiles(files, root); e == nil {
+		t.Fatal("missing decks accepted")
+	}
+	os.Mkdir(filepath.Join(root, "browsing"), 0755)
+	hashes := map[string]string{}
+	names := []string{"template-library.pptx", "template-library.manifest.json", "reusable-slides.pptx", "reusable-slides.manifest.json"}
+	for _, name := range names {
+		path := filepath.Join(root, "browsing", name)
+		if e := os.WriteFile(path, []byte("generic fixture: "+name), 0644); e != nil {
+			t.Fatal(e)
+		}
+		hash, e := digest(path)
+		if e != nil {
+			t.Fatal(e)
+		}
+		hashes["browsing/"+name] = hash
+	}
+	for _, pair := range []struct{ manifest, deck, kind string }{{"template-library.manifest.json", "template-library.pptx", "templates"}, {"reusable-slides.manifest.json", "reusable-slides.pptx", "reusable"}} {
+		path := filepath.Join(root, "browsing", pair.manifest)
+		data, _ := json.Marshal(map[string]any{"schema": "pptxgengo.browsing-library.v1", "kind": pair.kind, "deck_sha256": hashes["browsing/"+pair.deck], "slides": 3})
+		if e := os.WriteFile(path, data, 0644); e != nil {
+			t.Fatal(e)
+		}
+		hashes["browsing/"+pair.manifest], _ = digest(path)
+	}
+	raw, _ := json.Marshal(map[string]any{"schema": "pptxgengo.release-browsing-files.v1", "files_sha256": hashes})
+	os.WriteFile(filepath.Join(root, "browsing-manifest.json"), raw, 0644)
+	if e := addBrowsingFiles(files, root); e != nil || len(files) != 5 {
+		t.Fatal(files, e)
+	}
+	os.WriteFile(filepath.Join(root, "browsing", names[0]), []byte("tampered"), 0644)
+	if e := addBrowsingFiles(map[string]Input{}, root); e == nil {
+		t.Fatal("tampered deck accepted")
+	}
+}

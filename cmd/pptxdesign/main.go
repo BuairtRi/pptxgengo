@@ -30,6 +30,9 @@ func run() error {
 		return fmt.Errorf("usage: pptxdesign <project|render|render-doctor|source-inventory|asset-gallery|asset-catalog|photo-register|library-publish|library-find|library-inspect|library-preview|library-match|library-authoring|library-fit|library-index|library-model|library-embed|library-catalog|library-search|templates|template|build|inspect|measure-style|reference|template-reference|library-reference|library-source-reference|library-sweep|library-bound-sweep|frame-reference|component-reference|metric-reference|card-row-reference|data-metric-reference|rich-reference|parallel-reference|typography-probes> [flags]")
 	}
 	command := os.Args[1]
+	if command == "browsing-library" {
+		return runBrowsingLibrary(os.Args[2:])
+	}
 	if command == "photo-register" {
 		return runPhotoRegistration(os.Args[2:])
 	}

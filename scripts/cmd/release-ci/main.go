@@ -280,12 +280,15 @@ func archive(dir, target, version, commit, out string) error {
 	} else if packageKind() != "cli-only" {
 		return fmt.Errorf("unknown package kind")
 	}
+	if e := addBrowsingFiles(files, "dist/resources"); e != nil {
+		return e
+	}
 	for _, tool := range tools {
 		p := "bin/" + name(tool, target)
 		files[p] = Input{Path: filepath.Join(dir, filepath.FromSlash(p))}
 	}
 	files["VERSION"] = Input{Data: []byte(version + "\n")}
-	files["README.txt"] = Input{Data: []byte("pptxgengo " + version + " (" + target + ")\nPackage kind: " + packageKind() + "\nExtract and add bin to PATH. Run pptxgengo --version.\nCLI-only archives omit the presentation library and branding originals; full archives contain verified private resources.\nWindows runtime and native PowerPoint validation remain pending.\nBare macOS CLIs cannot be stapled; Apple online ticket lookup is required on first use.\nVerify manifest.sigstore.json before trusting checksums and installing.\n")}
+	files["README.txt"] = Input{Data: []byte("pptxgengo " + version + " (" + target + ")\nPackage kind: " + packageKind() + "\nExtract and add bin to PATH. Run pptxgengo --version.\nEvery installation archive includes two private generated browsing PowerPoint libraries and their coverage manifests. CLI-only archives omit branding originals and authoring resources; full archives additionally contain verified private resources.\nWindows runtime and native PowerPoint validation remain pending.\nBare macOS CLIs cannot be stapled; Apple online ticket lookup is required on first use.\nVerify manifest.sigstore.json before trusting checksums and installing.\n")}
 	for _, p := range []string{"LICENSE", "internal/releasepackage/THIRD-PARTY-NOTICES.txt"} {
 		files[filepath.Base(p)] = Input{Path: p}
 	}
