@@ -7,11 +7,12 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/buairtri/pptxgengo/internal/modelpackage"
 	"golang.org/x/text/unicode/norm"
 )
 
-const MaxTokens = 256
-const TokenizerVersion = "pptxgengo.bert-uncased-wordpiece.v1"
+const MaxTokens = modelpackage.MaxTokens
+const TokenizerVersion = modelpackage.TokenizerVersion
 
 type Tokenizer struct{ vocab map[string]int64 }
 

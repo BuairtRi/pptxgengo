@@ -320,3 +320,21 @@ changes remain manual. Plan comparisons preserve three style roles across all
 three V11 density tiers. A separately retained synthetic desktop fixture enables
 future move/resize/Save As tasks. Mac/Windows desktop visual and behavior evidence,
 actual density acceptance and shared-library rollout are still pending.
+
+
+## Separate offline model release automation — managed source work
+
+The `pptx-offline-model-release` slot shares dependency-free compiled model pins
+and complete package verification with the inference maintenance command.
+Release tooling creates a deterministic, relocatable platform-independent ZIP
+from exact weights/tokenizer/license/attribution; real pinned local tests verify
+reproducibility, extraction, copied evidence, wrong tag and tamper refusal.
+
+Branch CI prepares/scans an unpublished package fixture after pinned inference
+checks. Tag CI uses the actual release identity, copies the separate model ZIP,
+rechecks/rescans final bytes and includes model evidence/SBOM/vulnerabilities in
+the signed private release manifest. Linux/macOS/Windows model lanes exercise
+real package regressions. The model remains optional and separate from CLI
+archives; data file scans/signature coverage do not establish model safety or
+relevance. No new release tag has been cut. Full preflight, hosted CI and the
+actual branch security scan remain pending.

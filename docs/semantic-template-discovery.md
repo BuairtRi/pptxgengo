@@ -75,6 +75,24 @@ prepared-text hash. Rebuild after any drift. Their checksum detects accidental
 changes; it is not a signature or proof of human review. Keep generated packages
 and snapshots in private GitLab when distributing them.
 
+Source release CI after v4.1.0 prepares a separate
+`pptxgengo-vX.Y.Z-offline-model.zip` for all supported platforms. The ZIP and its
+file evidence, CycloneDX SBOM and vulnerability report publish only in private
+GitLab and are covered by the release manifest's Sigstore attestation. Verify
+that attestation and the archive hash before extracting; `library-model --from`
+can copy the extracted pins into a new owned directory. The model is data, so
+it has no platform executable signature/notarization. CLI archives remain free
+of weights. Set `PPTXGENGO_OFFLINE_MODEL=false` in CI to omit the separate release
+attachment; branch package/security checks still run.
+
+Pinned package checks and real reproducible/relocatable ZIP regressions run on
+Linux, macOS and Windows alongside inference golden cases. The branch security
+job uses an unpublished `v0.0.0` fixture; tag pipelines use the actual tag/commit.
+Both branch and final release archives are scanned with the suppression-free
+Grype policy and fresh database. Those scans inventory dependencies/data pins;
+they do not establish model safety or business relevance. Stable v4.1.0 has no
+model attachment, and no new tag is created by this source change.
+
 Preparation prioritizes names, purposes and intended uses, then deterministic
 relationship/group/authoring metadata. It excludes synthetic example prose and
 source scene definitions. Truncation remains a limitation for long metadata.

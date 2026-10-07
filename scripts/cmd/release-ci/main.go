@@ -1,5 +1,6 @@
 // release-ci owns archive layout, release identity, checksums and private GitLab
-// publication. It uses the standard library so signing jobs need no new modules.
+// publication. Model package pins use a dependency-free package; signing jobs
+// do not import or initialize the inference runtime.
 package main
 
 import (
@@ -36,6 +37,7 @@ type Evidence struct {
 	Unsigned     *Evidence         `json:"unsigned,omitempty"`
 }
 type Manifest struct {
+	OfflineModelArchive       string            `json:"offline_model_archive,omitempty"`
 	Schema                    string            `json:"schema"`
 	Project                   string            `json:"project"`
 	Version                   string            `json:"version"`
@@ -528,6 +530,11 @@ func assemble(version, commit string) error {
 			return e
 		}
 	}
+	if offlineModelEnabled() {
+		if e := copyModelRelease("dist/model", out, version, commit); e != nil {
+			return e
+		}
+	}
 	return nil
 }
 func seal(dir, version, commit string) error {
@@ -541,6 +548,20 @@ func seal(dir, version, commit string) error {
 		return fmt.Errorf("security policy failed")
 	}
 	m := Manifest{Schema: "pptxgengo.release-manifest/v1", Project: "riscott/pptxgengo", Version: version, Commit: commit, Pipeline: os.Getenv("CI_PIPELINE_URL"), PackageKind: packageKind(), Branding: "not-included", Files: map[string]string{}, Targets: targets}
+	if offlineModelEnabled() {
+		m.OfflineModelArchive = modelArchiveName(version)
+		if e := verifyModelRelease(dir, version, commit); e != nil {
+			return e
+		}
+		for _, suffix := range []string{"", ".evidence.json", ".sbom.json", ".vulnerabilities.json"} {
+			name := m.OfflineModelArchive + suffix
+			hash, e := digest(filepath.Join(dir, name))
+			if e != nil {
+				return e
+			}
+			m.Files[name] = hash
+		}
+	}
 	if packageKind() == "full" {
 		m.Branding = "verified-private-originals"
 	}
@@ -610,6 +631,25 @@ func verify(dir, version, commit string) error {
 		}
 		if strings.HasPrefix(target, "darwin-") && m.Files[target+".notarization.json"] == "" {
 			return fmt.Errorf("notarization evidence missing")
+		}
+	}
+	if m.OfflineModelArchive != "" {
+		if m.OfflineModelArchive != modelArchiveName(version) {
+			return fmt.Errorf("offline model archive identity mismatch")
+		}
+		for _, suffix := range []string{"", ".sbom.json", ".vulnerabilities.json", ".evidence.json"} {
+			if m.Files[m.OfflineModelArchive+suffix] == "" {
+				return fmt.Errorf("offline model release evidence missing: %s", suffix)
+			}
+		}
+		if e := verifyModelRelease(dir, version, commit); e != nil {
+			return e
+		}
+	} else {
+		for name := range m.Files {
+			if strings.Contains(name, "-offline-model.zip") {
+				return fmt.Errorf("unidentified optional model artifact")
+			}
 		}
 	}
 	if m.Files["security-policy.json"] == "" {
@@ -765,6 +805,11 @@ func publish(dir, version, commit string) error {
 		releaseKind = "prerelease"
 	}
 	description := "Signed CLI " + releaseKind + " for macOS, Linux and Windows (amd64 and arm64).\n\nPackage kind: " + packageKind() + ". CLI-only archives contain three executables; full archives additionally contain checksum-verified private presentation resources.\n\nWindows runtime and native PowerPoint validation are pending the interactive desktop runner. macOS notarization uses online Apple ticket lookup.\n\nFinal archives have CycloneDX SBOMs and vulnerability scans. manifest.json is signed with the private Sigstore service; verify its bundle against release/sigstore-policy.json before trusting checksums.\n\nSource: `" + commit + "`\nPipeline: " + os.Getenv("CI_PIPELINE_URL")
+	var publishedManifest Manifest
+	if e := readJSON(filepath.Join(dir, "manifest.json"), &publishedManifest); e != nil {
+		return e
+	}
+	description += modelReleaseDescription(publishedManifest)
 	body, e := json.Marshal(map[string]any{"name": "pptxgengo " + version, "tag_name": version, "description": description, "assets": map[string]any{"links": links}})
 	if e != nil {
 		return e
@@ -787,6 +832,18 @@ func main() {
 	}
 	var e error
 	switch a[0] {
+	case "model-package":
+		if len(a) != 5 {
+			e = fmt.Errorf("model-package DIR OUT_DIR VERSION COMMIT")
+			break
+		}
+		e = assembleModel(a[1], a[2], a[3], a[4])
+	case "verify-model":
+		if len(a) != 4 {
+			e = fmt.Errorf("verify-model DIR VERSION COMMIT")
+			break
+		}
+		e = verifyModelRelease(a[1], a[2], a[3])
 	case "evidence":
 		if len(a) != 6 && len(a) != 7 {
 			e = fmt.Errorf("evidence DIR TARGET VERSION COMMIT VERIFICATION [UNSIGNED]")
