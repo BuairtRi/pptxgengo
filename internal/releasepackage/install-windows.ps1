@@ -1,6 +1,10 @@
 param([string]$Destination, [switch]$SkipSkill, [switch]$SkipFonts, [switch]$NoPath, [switch]$StageOnly)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+# Load only the required Windows PowerShell modules from this host's PSHOME.
+# Explicit paths avoid global module discovery and PowerShell 7/user modules.
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Management\Microsoft.PowerShell.Management.psd1')) -ErrorAction Stop
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Utility\Microsoft.PowerShell.Utility.psd1')) -ErrorAction Stop
 # Hashes establish package consistency. Authenticate the outer signed release
 # manifest and archive before invoking this script; these hashes are not a signature.
 function Assert-Package([string]$Directory) {

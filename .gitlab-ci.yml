@@ -31,6 +31,42 @@ developer:
   script:
     - make "$TEST_TARGET"
 
+installation-process:
+  stage: test
+  image: golang:1.27.1
+  timeout: 10 minutes
+  interruptible: true
+  variables:
+    CGO_ENABLED: '0'
+    GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
+    GOCACHE: $CI_PROJECT_DIR/.cache/go-build
+    PPTXGENGO_INSTALL_PROCESS_OUT: $CI_PROJECT_DIR/.cache/installation-process
+    PPTXGENGO_INSTALL_PROCESS_COMMIT: $CI_COMMIT_SHA
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux
+    paths: [.cache/go-mod, .cache/go-build]
+  script:
+    - go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
+  artifacts:
+    when: on_success
+    access: maintainer
+    expire_in: 14 days
+    paths: [.cache/installation-process/qualification.json]
+
+installation-process-arm64:
+  extends: installation-process
+  tags: [arm64]
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-arm64
+    paths: [.cache/go-mod, .cache/go-build]
+  before_script:
+    - test "$(go env GOHOSTARCH)" = arm64
+    - go test -short -count=1 -timeout=150s ./scripts/cmd/search-benchmark ./internal/powershellenv
+
 workflow-lint:
   stage: test
   image: golang:1.27.1
@@ -67,6 +103,17 @@ offline-model:
     access: maintainer
     expire_in: 14 days
     paths: [.cache/offline-model/, .cache/search-performance/]
+
+offline-model-arm64:
+  extends: offline-model
+  tags: [arm64]
+  cache:
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-arm64
+    paths: [.cache/go-mod, .cache/go-build]
+  before_script:
+    - test "$(go env GOHOSTARCH)" = arm64
 
 exhaustive:
   stage: test

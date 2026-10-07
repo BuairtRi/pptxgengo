@@ -1,6 +1,10 @@
 param([Parameter(Mandatory=$true)][string]$Config)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+# Load only the required Windows PowerShell modules from this host's PSHOME.
+# Explicit paths avoid global module discovery and PowerShell 7/user modules.
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Management\Microsoft.PowerShell.Management.psd1')) -ErrorAction Stop
+Import-Module ([IO.Path]::Combine($PSHOME, 'Modules\Microsoft.PowerShell.Utility\Microsoft.PowerShell.Utility.psd1')) -ErrorAction Stop
 [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
 $request = Get-Content -LiteralPath $Config -Raw -Encoding UTF8 | ConvertFrom-Json
 $app = $null; $deck = $null; $failure = $null; $result = $null

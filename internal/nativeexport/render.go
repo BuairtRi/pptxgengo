@@ -22,6 +22,8 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/buairtri/pptxgengo/internal/powershellenv"
 )
 
 //go:embed powerpoint.applescript
@@ -68,6 +70,9 @@ type runner func(context.Context, string, ...string) ([]byte, error)
 
 func command(ctx context.Context, name string, args ...string) ([]byte, error) {
 	cmd := exec.CommandContext(ctx, name, args...)
+	if strings.EqualFold(filepath.Base(name), "powershell.exe") {
+		cmd.Env = powershellenv.ForWindowsPowerShell(os.Environ())
+	}
 	cmd.WaitDelay = 2 * time.Second
 	output, err := cmd.CombinedOutput()
 	if err != nil {
