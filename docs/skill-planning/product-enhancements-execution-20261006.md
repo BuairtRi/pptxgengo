@@ -322,6 +322,46 @@ future move/resize/Save As tasks. Mac/Windows desktop visual and behavior eviden
 actual density acceptance and shared-library rollout are still pending.
 
 
+Native editing hosted CI follow-up: exact head `96cbbac9` passed the full slot
+preflight, all eight GitLab pipeline 21180 jobs and all ten applicable GitHub
+checks. PR #11 merged as `96a5676b`. Source and headless geometry/mapping checks
+passed; desktop visual/editing behavior and wider rollout remain unqualified.
+
+## Finished-slide stewardship and evidence closure — managed source work
+
+The `pptx-slide-stewardship` slot adds `project slide review-reuse`. Explicit
+JSON decisions bind a higher immutable revision to predecessor/source hashes,
+actor/date/reason and, for approval, the exact nonempty preview/review artifacts,
+reuse scope and expiry policy. Approval/deprecation/draft transitions preserve
+all payload and pins plus the raw decision, prior manifest and receipt. These
+are operator declarations, not authenticated human identities or native verdicts.
+
+Selected structured claims retain literal copy/source and declared hashed file
+artifacts. Markdown evidence retains exact whole-registry bytes and an explicit
+selector, with no inferred prose conversion; private packages can therefore
+contain material beyond the selected claim. Insertion remaps fresh claim IDs,
+copies owned evidence, records lineage, preserves existing registry comments or
+Markdown bytes, and validates the entire graph under the existing source guard.
+Evidence dependency changes invalidate stage approvals. Bounded verified payload
+reads protect approval/integration from changed or oversized package files.
+
+Focused tests passed for six source/destination claim-format combinations and
+real headless builds, preserved bytes/copy, lifecycle history, CLI approval and
+insertion, false resealed graphs, dependency drift, approval invalidation,
+split/reorder, clean client export and relocated maintainer handoff/rebuild.
+Full submission preflight and exact-head hosted CI remain pending. The initial
+10–20 approved real pages, broader typed/local dependencies, branding assets and
+Mac/Windows desktop qualification are still outstanding. This work is not in
+released v4.1.0; no new release tag has been cut.
+
+
+Stewardship hosted CI follow-up: exact head `72e64638` passed full local
+submission preflight, all eight GitLab pipeline 21187 jobs and all ten
+applicable GitHub macOS/Windows checks. PR #12 merged as `0882e4c3` and
+slotctl aligned private GitLab/main and the clean primary. Its approved content
+set and actual desktop qualification remain outstanding.
+
+
 ## Separate offline model release automation — managed source work
 
 The `pptx-offline-model-release` slot shares dependency-free compiled model pins
@@ -354,10 +394,3 @@ The test now checks encoded TAR/ZIP executable modes on every OS, extracted
 payloads everywhere and Unix filesystem permissions on Unix. Model package
 regressions themselves passed on Windows. The final-head full preflight and
 hosted rerun remain due; no new release publication has been performed.
-
-
-Stewardship hosted CI follow-up: exact head `72e64638` passed full local
-submission preflight, all eight GitLab pipeline 21187 jobs and all ten
-applicable GitHub macOS/Windows checks. PR #12 merged as `0882e4c3` and
-slotctl aligned private GitLab/main and the clean primary. Its approved content
-set and actual desktop qualification remain outstanding.

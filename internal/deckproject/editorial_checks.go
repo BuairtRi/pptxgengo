@@ -3,7 +3,6 @@ package deckproject
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"reflect"
 	"regexp"
 	"strings"
@@ -23,9 +22,21 @@ type CompositionLog struct {
 	Slides map[string]CompositionEntry `json:"slides"`
 }
 type Claim struct {
-	ID     string `json:"id"`
-	Text   string `json:"text"`
-	Source string `json:"source,omitempty"`
+	ID        string                  `json:"id"`
+	Text      string                  `json:"text,omitempty"`
+	Source    string                  `json:"source,omitempty"`
+	Registry  *ClaimRegistryReference `json:"registry,omitempty"`
+	Artifacts []ClaimArtifact         `json:"artifacts,omitempty"`
+}
+type ClaimArtifact struct {
+	Path   string `json:"path"`
+	SHA256 string `json:"sha256"`
+}
+type ClaimRegistryReference struct {
+	Path    string `json:"path"`
+	SHA256  string `json:"sha256"`
+	ClaimID string `json:"claim_id"`
+	Format  string `json:"format"`
 }
 type ClaimsRegistry struct {
 	Schema string  `json:"schema"`
@@ -125,6 +136,11 @@ func ValidateEditorial(p *Project) error {
 	}
 	relative := p.Document.Context["claims"]
 	if relative == "" {
+		for _, slide := range p.Document.Slides {
+			if len(slide.EvidenceRefs) != 0 {
+				return fmt.Errorf("claims registry required for slide %s evidence_refs", slide.ID)
+			}
+		}
 		return nil
 	}
 	ids := map[string]bool{}
@@ -135,46 +151,22 @@ func ValidateEditorial(p *Project) error {
 		ids[id] = true
 		return nil
 	}
-	if strings.ToLower(filepath.Ext(relative)) == ".md" {
-		_, raw, err := editorialSource(p, relative)
-		if err != nil {
+	registry, _, err := readClaimDependencies(p)
+	if err != nil {
+		return err
+	}
+	for _, claim := range registry.Claims {
+		if err := add(claim.ID); err != nil {
 			return err
-		}
-		for _, line := range markdownClaimLines(string(raw)) {
-			matches := claimAnchor.FindAllStringSubmatch(line, -1)
-			for _, m := range matches {
-				if err := add(m[1]); err != nil {
-					return err
-				}
-			}
-			if len(matches) == 0 && strings.HasPrefix(line, "## ") {
-				id := strings.TrimSpace(strings.TrimPrefix(line, "## "))
-				if stableID.MatchString(id) {
-					if err := add(id); err != nil {
-						return err
-					}
-				}
-			}
-		}
-	} else {
-		var registry ClaimsRegistry
-		if err := editorialValue(p, relative, &registry); err != nil {
-			return err
-		}
-		if registry.Schema != "pptxgengo.claims.v1" {
-			return fmt.Errorf("unsupported claims schema")
-		}
-		for _, claim := range registry.Claims {
-			if err := add(claim.ID); err != nil {
-				return err
-			}
-			if strings.TrimSpace(claim.Text) == "" {
-				return fmt.Errorf("claim %s requires text", claim.ID)
-			}
 		}
 	}
 	for _, slide := range p.Document.Slides {
+		seen := map[string]bool{}
 		for _, id := range slide.EvidenceRefs {
+			if seen[id] {
+				return fmt.Errorf("slide %s duplicate evidence_refs ID %s", slide.ID, id)
+			}
+			seen[id] = true
 			if !ids[id] {
 				return fmt.Errorf("slide %s evidence_refs ID %s not found in %s", slide.ID, id, relative)
 			}

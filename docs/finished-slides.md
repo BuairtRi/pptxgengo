@@ -1,6 +1,6 @@
 # Reusable finished slides
 
-Implemented in the `pptx-slide-reuse` source branch. Stable v4.1.0 does not
+Implemented in maintained source after v4.1.0. Stable v4.1.0 does not
 contain these commands. A finished slide is authored, content-complete material,
 with a distinct `finished-slide` kind and `curated/slide/<key>` identity.
 Production curation and desktop qualification remain pending.
@@ -24,16 +24,16 @@ The source project is never modified.
 
 The first scope supports declared shared slot/array bindings and typed cards/3
 and cards/4. Source must already be `supplied_content`; synthetic specimens and
-local templates are rejected. Claims/evidence references, derived-asset chains,
+local templates are rejected. Selected claims/evidence references are preserved
+through the closed dependency contract below. Derived-asset chains,
 navigation and other typed identity families currently return explicit errors.
 These dependencies must be supported explicitly before those slides can publish.
 
 `--preview FILE.png` and `--review FILE.json` optionally retain supplied artifacts.
 They do not grant approval. CLI publication always creates a **draft**. The
-manifest API supports explicit approval actor/date/reuse scope and requires
-preview/review files for approved revisions; reviewed approval maintenance in
-the CLI remains pending. Neither hashing nor compilation establishes human
-approval, native acceptance or rights to publish supplied material.
+`review-reuse` command records an explicit operator decision as a new revision
+and requires exact source/preview/review pins for approval. Neither hashing nor
+compilation establishes human approval, native acceptance or rights to publish supplied material.
 
 Each revision has a sorted closed inventory with file roles, sizes and SHA256,
 plus a digest covering identity, revision, metadata and inventory. Reads reject
@@ -42,6 +42,93 @@ name collisions. Existing revisions cannot be overwritten; create a new revision
 when metadata or content changes. Approval/freshness dates are explicit metadata,
 and expiry is evaluated by UTC date. Content stewardship and the initial 10–20
 approved useful pages still require operator selection.
+
+## Preserve selected claims and evidence
+
+`evidence_refs` requires a registered `context.claims` file. Structured YAML/JSON
+claims preserve selected literal `text` and human-readable `source` strings.
+Unselected structured claims are omitted from the revision. File dependencies
+must be declared explicitly, for example:
+
+```yaml
+schema: pptxgengo.claims.v1
+claims:
+  - id: finding-1
+    text: Supplied finding for review.
+    source: Interview notes from the named source.
+    artifacts:
+      - path: evidence/interview-notes.txt
+        sha256: SHA256_OF_THE_EXACT_FILE
+```
+
+The publisher verifies declared SHA256 values and copies exact evidence bytes
+into the closed revision. `source` is descriptive copy, not an inferred file
+path or a URL to fetch. Publication/insertion never establishes factual support
+or approves an adapted claim.
+
+Markdown registries retain their entire exact bytes and their explicit heading/
+anchor selector. They are not rewritten into inferred claim text. A structured
+registry can preserve such a reference with `registry: {path: claims.md,
+sha256: ..., claim_id: finding-1, format: markdown}` and no `text`. Fenced,
+indented and inline code examples do not define claim IDs. Full Markdown files
+can contain material beyond the selected claim; keep these packages private.
+
+Insertion creates fresh claim IDs, remaps the inserted slide's `evidence_refs`,
+copies evidence into owned files, and records `evidence_remaps` in library lineage.
+Existing YAML registry nodes/comments remain; an existing Markdown registry is
+retained byte-for-byte and referenced from a new structured registry. The new
+slide, registry, evidence files and composition decision share one source guard.
+Missing selectors, changed bytes and incompatible graphs refuse insertion.
+Registry, evidence and slide reference changes participate in stage dependency
+pins, so prior approvals do not silently cover changed evidence. Maintainer
+exports retain the private registry/evidence files; client exports retain the
+deck-only delivery contract.
+
+## Record reviewed reuse as a new revision
+
+After reviewing a draft's authored source, preview and review file, write an
+explicit JSON decision using the exact hashes in its manifest:
+
+```json
+{
+  "schema": "pptxgengo.finished-slide-review.v1",
+  "revision_sha256": "SHA256_FROM_THE_DRAFT_MANIFEST",
+  "new_revision": 2,
+  "action": "approve",
+  "actor": "Named reviewer",
+  "date": "2026-10-07",
+  "reason": "The reviewed content is suitable for the stated reuse context.",
+  "reuse_scope": "Explicitly approved audience and context",
+  "valid_until": "2026-11-07",
+  "source_sha256": "SHA256_FROM_THE_SOURCE_FILE_ENTRY",
+  "preview": {"path": "preview.png", "sha256": "SHA256_FROM_THE_PREVIEW_ENTRY"},
+  "report": {"path": "review.json", "sha256": "SHA256_FROM_THE_REVIEW_ENTRY"}
+}
+```
+
+Replace the hash placeholders and review facts with the actual values, then:
+
+```sh
+pptxdesign project slide review-reuse --package /private/library/message/1 \
+  --decision ./reuse-decision.json --out /private/library/message/2
+```
+
+The decision must name a higher revision and the exact predecessor digest.
+Approval requires `supplied_content`, a shared template, matching source and
+nonempty preview/review artifacts, actor/date/reason/scope, and an explicit
+expiry date or `valid_until: "none"`. Future decisions and already-expired new
+approvals are refused. The command verifies the entire predecessor closure,
+preserves payload and template/toolchain pins, and retains the exact decision,
+prior manifest and receipt. It creates a new directory without overwriting
+either revision. Identity metadata is an operator declaration, not authentication
+of the named person or a cryptographic signature.
+
+Use `action: "deprecate"` or `action: "draft"` with actor/date/reason, source hash
+and revision pins to withdraw reuse or request more review. Omit approval-only
+fields for these actions. The new revision has no carried approval or expiry;
+the predecessor and decision history remain inspectable. Rebuild the library
+index to discover any new revision. Existing inserted decks retain their original
+revision and still need their own copy, evidence, fit and native review.
 
 ## Find and preview
 
@@ -100,7 +187,7 @@ A process crash during a multi-file commit still needs recovery from these
 preimages: this is an I/O rollback contract, not a crash-proof filesystem transaction.
 
 The composition entry records library ID/revision/digest, source project/slide/hash,
-asset and item remaps, and the preserved-copy/review policy. Later library
+asset, item and evidence remaps, and the preserved-copy/review policy. Later library
 revisions do not alter inserted copies. Copy adaptations require the destination
 project's evidence, build and review process. Existing maintainer/client review
 annotation rules continue to apply; insertion grants no deck approval.
@@ -113,6 +200,13 @@ Fresh slide/item/asset identity, byte independence, later-revision independence,
 business-string preservation, collisions, missing/changed files, source guard,
 editorial drift, index relocation and preview drift have targeted checks.
 
-Claims migration, more typed/local dependencies, approval maintenance, actual
-curation, and Mac/Windows interactive PowerPoint review remain incomplete.
+Focused tests cover selected structured/Markdown claims, exact evidence closure,
+fresh claim identities in two independent projects, preserved original registries,
+false dependency graphs, approved insertion, lifecycle history and hash-bound
+review decisions, evidence approval invalidation and concurrent dependency drift.
+Additional fixtures split/reorder/build, verify clean client export, relocate a
+maintainer handoff with exact evidence/source bytes and rebuild it. Payload reads
+are bounded to 64 MiB per file and 512 MiB per integration, with verified closure
+and predecessor digest. More typed/local dependencies, actual curation, and Mac/Windows
+interactive PowerPoint review remain incomplete.
 These fixtures do not establish production content or native qualification.
