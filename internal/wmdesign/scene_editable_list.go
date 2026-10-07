@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"strconv"
 	"strings"
 )
 
@@ -96,19 +97,19 @@ func (r *renderer) planEditableList(id string, raw json.RawMessage, ctx SceneCon
 		paragraph.LineBreaks = nil
 		paragraph.FirstLine = len(layout.Lines)
 		paragraph.LineCount = len(part.Layout.Lines)
-		if i < len(n.Items)-1 {
-			// Reserve measured terminal ink in the actual native paragraph gap,
-			// so the next paragraph advances by the same amount as this report.
-			paragraph.ParagraphGapAfter = gap + math.Max(0, part.Layout.OccupiedTop+part.Layout.EstimatedOccupiedHeight-part.Layout.AllocationHeight)
-		} else {
-			paragraph.ParagraphGapAfter = 0
-		}
+		// Retain the same after-spacing on the last paragraph: PowerPoint
+		// inherits it when Enter adds an item. It has no painted effect until
+		// there is a following paragraph, so it is excluded from final fit.
+		paragraph.ParagraphGapAfter = gap + math.Max(0, part.Layout.OccupiedTop+part.Layout.EstimatedOccupiedHeight-part.Layout.AllocationHeight)
 		for _, line := range part.Layout.Lines {
 			line.Baseline += offset
 			layout.Lines = append(layout.Lines, line)
 		}
 		lastOccupied = offset + part.Layout.OccupiedTop + part.Layout.EstimatedOccupiedHeight
-		offset += part.Layout.AllocationHeight + paragraph.ParagraphGapAfter
+		offset += part.Layout.AllocationHeight
+		if i < len(n.Items)-1 {
+			offset += paragraph.ParagraphGapAfter
+		}
 		rich.Paragraphs = append(rich.Paragraphs, paragraph)
 	}
 	if math.Max(offset, lastOccupied) > b.H+.02 {
@@ -124,7 +125,7 @@ func (r *renderer) planEditableList(id string, raw json.RawMessage, ctx SceneCon
 	combined.Layout = layout
 	combined.Rich = &rich
 	combined.NativeParagraphContract = EditableListContract
-	return &scenePlan{Definition: "scene.editable-list", ID: id, Bounds: b, Items: []sceneItem{{Text: &combined}}, Warnings: []string{"Editable list uses one native text box and styled bullet paragraphs. Font size is fixed; added copy may require resizing the one box. Native reflow and visual qualification remain pending; bullet source adoption is manual."}}, nil
+	return &scenePlan{Definition: "scene.editable-list", ID: id, Bounds: b, Items: []sceneItem{{Text: &combined}}, Warnings: []string{"Editable list uses one native text box and styled bullet paragraphs. Square bullets require the Wingdings desktop font; it is not redistributed in the bundle. Font size is fixed; added copy may require resizing the one box. Native reflow and visual qualification remain pending; bullet source adoption is manual."}}, nil
 }
 
 func editableListParagraphXML(tr TextRecord) []byte {
@@ -133,6 +134,15 @@ func editableListParagraphXML(tr TextRecord) []byte {
 		one := tr
 		one.Rich = &RichTextLayout{Contract: RichTextContract, Paragraphs: []RichParagraphLayout{paragraph}}
 		properties := sceneTableParagraphProperties(one, paragraph.ParagraphGapAfter, true, paragraph)
+		// IBM Plex has no U+25A0 glyph: leaving it as the bullet font makes
+		// PowerPoint substitute a tiny fallback square. Wingdings' small
+		// solid square has 592 font units of ink in a 2048-unit em. Size the
+		// glyph to the source marker's actual ink dimensions, not its em.
+		// Wingdings is an Office desktop prerequisite, never redistributed.
+		fontSize := int(math.Round(paragraph.BulletMarkerPt * 2048 / 592 * 100))
+		oldSize := int(math.Round(paragraph.BulletMarkerPt * 100))
+		properties = bytes.Replace(properties, []byte(`<a:buSzPts val="`+strconv.Itoa(oldSize)+`"/>`), []byte(`<a:buSzPts val="`+strconv.Itoa(fontSize)+`"/>`), 1)
+		properties = bytes.Replace(properties, []byte(`<a:buFont typeface="`+sceneTableXMLEscape(tr.Layout.Font.Typeface)+`"/><a:buChar char="■"/>`), []byte(`<a:buFont typeface="Wingdings" charset="2"/><a:buChar char=""/>`), 1)
 		// Keep bullet ink explicit rather than inheriting a presentation theme.
 		properties = bytes.Replace(properties, []byte("<a:buSzPts"), []byte(`<a:buClr><a:srgbClr val="`+sceneTableXMLEscape(tr.Color)+`"/></a:buClr><a:buSzPts`), 1)
 		out = append(out, richParagraphXML(one, properties)...)

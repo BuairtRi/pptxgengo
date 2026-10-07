@@ -11,11 +11,11 @@ import (
 // geometry remains explicit. Source fields are validated by the selected planner.
 func ComposeSceneNode(kind string, arguments map[string]any, allocation Rect) (json.RawMessage, error) {
 	noHeight := map[string]bool{}
-	for _, k := range strings.Fields("bullets ol list schedule grouplabel numhead colhead strongnum pullquote logo art square table metric feesummary matrix beforeafter stepper vstepper phasehead phases timeaxis gauge gantt swimlane legend pod person orgchart governance device dotmap") {
+	for _, k := range strings.Fields("editable-table bullets ol list schedule grouplabel numhead colhead strongnum pullquote logo art square table metric feesummary matrix beforeafter stepper vstepper phasehead phases timeaxis gauge gantt swimlane legend pod person orgchart governance device dotmap") {
 		noHeight[k] = true
 	}
 	known := map[string]bool{}
-	for _, k := range strings.Fields("editable-list editable-card editable-block attached-connector text textblock bullets ol list schedule grouplabel numhead colhead strongnum pullquote imageframe logo art square mark thumbnail table chart card cardrow metric callout feesummary block frame chevron textarrow connector container cylinder node layerrow matrix beforeafter stepper vstepper phasehead phases timeaxis pyramid funnel cycle road roadfork gauge bracket scorelegend gantt swimlane legend pod role person orgchart governance logoslot device plane dotmap teamcurve venn maturity") {
+	for _, k := range strings.Fields("editable-table editable-list editable-card editable-block attached-connector text textblock bullets ol list schedule grouplabel numhead colhead strongnum pullquote imageframe logo art square mark thumbnail table chart card cardrow metric callout feesummary block frame chevron textarrow connector container cylinder node layerrow matrix beforeafter stepper vstepper phasehead phases timeaxis pyramid funnel cycle road roadfork gauge bracket scorelegend gantt swimlane legend pod role person orgchart governance logoslot device plane dotmap teamcurve venn maturity") {
 		known[k] = true
 	}
 	if !known[kind] {

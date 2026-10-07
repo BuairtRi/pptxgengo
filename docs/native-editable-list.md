@@ -2,7 +2,7 @@
 
 `wmds/component/editable-list` places a complete flat unordered list in one
 native PowerPoint text box. Every item is a paragraph with a styled square
-bullet, hanging indent, source typeface, body/small size and paragraph spacing.
+bullet, hanging indent, source text typeface, body/small size and paragraph spacing.
 Wrapping stays within that paragraph; the following paragraphs flow with it.
 Markers are native bullet properties, not separate shapes or typed characters.
 
@@ -44,6 +44,14 @@ PowerPoint owns subsequent paragraph reflow; longer or added content may
 require increasing the one text box's height. Automatic font shrinking and
 automatic box growth are not enabled.
 
+The marker uses Wingdings' small solid square (U+F0A7), with its font size
+calibrated to the source marker's ink width. IBM Plex supplies the text; it has
+no square glyph and must not be relied on for the bullet. Wingdings is a desktop
+Office prerequisite and is not redistributed. The last paragraph retains the
+same after-spacing so pressing Enter inherits a consistent gap; trailing spacing
+is not included in the painted initial fit. The Mac comparison covers all three
+densities; Windows and non-Office consumers remain unqualified.
+
 The maintained generation identity belongs to the text box. Individual
 paragraphs do not contain durable item identities. Changing text, adding,
 deleting or reordering bullets, and changing styles therefore require manual
@@ -77,6 +85,11 @@ contains immutable build evidence, source and hashes. Preparation opens no app.
 Ordinary Make test lanes clear this opt-in output variable. macOS and Windows
 qualification must check wrapping alignment, pressing Enter to add a bullet,
 paragraph spacing, fixed fonts, resizing and Save As identity retention.
+
+The 2026-10-07 [comparison demo](native-component-demo.md) records real Mac
+wrapping and insertion: a two-line item became four lines, both following items
+flowed down, and Enter produced a fourth native square-bullet paragraph. The
+saved package retained every generation identity. Resizing remains pending.
 
 The 2026-10-07 synthetic fixture's 15 retained files passed independent SHA256
 verification. Its generated PPTX is

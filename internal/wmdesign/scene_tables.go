@@ -60,7 +60,7 @@ func (r *renderer) planTableScene(id string, raw json.RawMessage, ctx SceneConte
 	if err := json.Unmarshal(raw, &tag); err != nil {
 		return nil, false, err
 	}
-	if tag.Type != "table" {
+	if tag.Type != "table" && tag.Type != "editable-table" {
 		return nil, false, nil
 	}
 	var n sceneTableSource
@@ -71,6 +71,16 @@ func (r *renderer) planTableScene(id string, raw json.RawMessage, ctx SceneConte
 		return nil, true, err
 	}
 	p, err := r.sceneTable(id, n, ctx)
+	if err == nil && tag.Type == "editable-table" {
+		// A plain native table needs no selection wrapper. Decorated tables
+		// need an explicit ownership design rather than silently ungrouping
+		// labels, icons or underlays from their table.
+		if len(p.Items) != 1 || p.Items[0].Table == nil {
+			return nil, true, fmt.Errorf("scene.editable_table_requires_one_native_table_without_external_adornments")
+		}
+		p.Groups = nil
+		p.Definition = "scene.editable-table"
+	}
 	return p, true, err
 }
 

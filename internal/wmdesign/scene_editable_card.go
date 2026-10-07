@@ -76,10 +76,12 @@ func (r *renderer) planEditableCard(id string, raw json.RawMessage, ctx SceneCon
 		para := &rec.Rich.Paragraphs[0]
 		para.Key = []string{"title", "body"}[i]
 		if i == 0 {
-			para.ParagraphGapAfter = 8 + math.Max(0, need-rec.Layout.AllocationHeight)
+			// Source card body-flow adds a 6pt paragraph top margin after the
+			// card's 8pt title/body gap. Keep both in the native paragraph gap.
+			para.ParagraphGapAfter = 14 + math.Max(0, need-rec.Layout.AllocationHeight)
 		}
 		records = append(records, rec)
-		y += need + 8
+		y += need + 14
 	}
 	title, body := records[0], records[1]
 	tr := title
