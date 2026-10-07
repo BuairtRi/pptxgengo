@@ -82,9 +82,12 @@ attachment is not established. This is a concrete pilot gap: moving a node must
 not be assumed to move or reconnect this arrow. These counts describe this exact
 fixture, not the library.
 
-The earlier Mac PowerPoint Save As trial timed out without a saved output.
-Mac and Windows task/visual evidence, native density qualification
-and family rollout decisions remain pending. The report states
+The earlier automated Mac Save As trial timed out; the retained native UI
+Documents-folder round trip subsequently passed (see [round-trip evidence](native-roundtrip.md)).
+The combined-diagram task below adds bounded Mac movement/endpoint evidence.
+The native table task below adds one-cell editing evidence. Whole-card movement,
+other family tasks, both-platform density qualification and rollout decisions
+remain pending. The original structural inventory states
 `desktop_qualification: not_recorded`. Stable v4.1.0 contains neither this
 inventory nor the newer reconciliation commands.
 
@@ -161,3 +164,95 @@ V11 density tiers for body, small and label roles. Three reviewed fields can be
 adopted and rebuilt while retaining the connector and combined native units;
 connector/geometry changes remain manual review. This is limited structural and
 source round-trip evidence, with no desktop visual or whole-library verdict.
+
+## Mac combined-diagram task — 2026-10-07
+
+Native UI actions in PowerPoint 16.113.4 (16.113.26100421), on macOS ARM64,
+opened an owned copy under `~/Documents/pptxgengo-qualification/`. Selecting the
+filled input rectangle selected its text and paint together. Two keyboard nudges
+and a downward drag moved that native unit. The attached straight connector
+followed its right-center endpoint while the output node stayed fixed. Editing
+the input text produced exactly `Reviewed input`; a separate Save As retained
+all six baseline identities. The UI visibly showed the rerouted connector and
+combined node after the move. This records agent-operated fixture actions,
+not a human ergonomics or whole-family acceptance decision.
+
+Independent receipt-pinned supplied-file verification passed at
+2026-10-07T13:46:38Z. Input y changed from 2,514,600 to 3,200,401 EMU
+(685,801 EMU, approximately 54 points); x, width and height stayed unchanged.
+The saved connector retained the exact tagged input/output references and
+right/left connection sites. Its actual transform reaches both current
+rectangle centers with at most one EMU endpoint rounding. It remains a straight
+native connector, and both nodes retain native rectangle text/fill. Original
+baseline files and receipts remain unchanged.
+
+Private retained directory:
+`~/Documents/pptxgengo-qualification/native-editing-macos-20261007/`.
+It contains `attached-diagram/`, `attached-diagram-owned.pptx`,
+`attached-diagram-moved-edited.pptx`, a native local-printing PDF, and
+`diagram-supplied-verification/evidence.json`. Pins:
+
+- Baseline PPTX: `0d627adfa70c9bdc364f452477883c680eee2a6dcfa9ea9300e4d90c8ae10344`.
+- Edited PPTX: `6ae720acc38b945f81ebd038357b1c468f56d619398fe22af30b9c08fb61ee7d`.
+- Native PDF: `b112393a2caa7de97c9026d318ff8737bd59f8aac3ce609b509ccb15dea18615`.
+- Baseline receipt: `b9dc1086d54d80afd4ad735fa1a25e995db0bb46ff68501d013e749ff0e3f274`.
+
+The supplied-file reader does not independently prove application provenance.
+The native UI observations above are separate from the on-disk verifier.
+`human_acceptance` remains `not_recorded`. This task does not establish node
+resize/align, cards/lists/tables, other density tiers, Windows execution, copied
+slides, or geometry adoption into YAML.
+
+### Repeat the bounded supplied-file task
+
+Use the combined-shape fixture prepared above, work on a separate copy, move
+only the input node vertically down without resizing/flipping it, and replace
+its entire text with exactly `Reviewed input`. Leave the output geometry and
+other text unchanged, then save a new `.pptx`. This harness is deliberately tied
+to that synthetic authored fixture rather than guessing arbitrary deck objects.
+
+```sh
+PPTXGENGO_NATIVE_DIAGRAM_FIXTURE=/absolute/retained-native-diagram \
+PPTXGENGO_NATIVE_DIAGRAM_EDITED=/absolute/edited-copy.pptx \
+PPTXGENGO_NATIVE_DIAGRAM_VERIFY_OUT=/absolute/NEW-evidence-directory \
+  make test-diagram-verify
+```
+
+It follows generation/shape tokens, verifies every immutable receipt output,
+compares exact expected copy, native kinds and endpoint IDs/sites/geometry, and
+retains a read-only copy plus evidence. It refuses missing/duplicate identities,
+wrong copy, absent movement, changed node geometry, flipped/rotated nodes, wrong
+connector sites, curved/custom connectors and detached geometry. Supplied-file
+verification does not migrate the fixture's compiler or authorize source edits.
+Ordinary headless Make targets clear these opt-in paths. Generated positive and
+negative geometry fixtures run in short tests and the selected editability race
+lane; explicit supplied-file execution is skipped without all paths.
+
+## Mac native table and card task — 2026-10-07
+
+An owned synthetic fixture under
+`~/Documents/pptxgengo-qualification/native-cards-table-20261007/` was edited
+through the native PowerPoint UI and saved as `cards-table-edited.pptx`.
+On slide 4, `table.native` cell at zero-based row 1 / column 0 changed exactly
+from `Review` to `Reviewed in PowerPoint`. Independent ZIP/XML inspection found
+the other five cells and all geometry unchanged. All 68 shape identities and
+74 native tag records survived. Each of the 15 original source files and its
+retained baseline copy matched the original fixture hash.
+
+- Baseline PPTX SHA256: `230cf6db1a74c5a979490ce8e50d2c097da23af5722cb735b1cbc694d464048e`.
+- Edited PPTX SHA256: `918db59269599f0ea35c8528c105b2b473d2dde4dc30cefc1d479d38a22aad4e`.
+- Evidence: `README.md`, `verification.json`, independent `verify.py`, screenshots
+  01–07 and `evidence-files.sha256.json` in the private directory above.
+
+Whole-card movement remains **not qualified**. Selection Pane attempts did not
+produce a verified whole-group move. One container-only nudge was detected by
+the XML comparison and reverted; the final Source card group and all nine child
+objects exactly match the baseline. This bounded selection attempt does not
+establish a general product defect or successful group movement.
+
+The current About dialog could not be read through the native UI. The earlier
+16.113.4 version observation belongs to the separate diagram qualification;
+it is not a new version observation for this task. No native table-cell source
+adoption, Windows execution, density-wide coverage or human ergonomics verdict
+is claimed. The owned edited presentation was left open when the native menu
+state became unavailable; no unowned document was closed.
