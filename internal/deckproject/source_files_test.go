@@ -230,7 +230,7 @@ func TestSplitForkAndSectionChangesKeepExternalFormat(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if p.TemplateFiles["editable-fork"] != "templates/editable-fork.yaml" {
+	if p.TemplateFiles["editable-fork"] != "slides/templates/editable-fork.yaml" {
 		t.Fatal("fork collapsed external templates")
 	}
 	if _, err := AddSection(p, SectionAddOptions{ID: "copy", Title: "Editable source", BeforeSlideID: local.ID}); err != nil {

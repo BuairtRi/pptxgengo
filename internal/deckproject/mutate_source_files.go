@@ -79,7 +79,7 @@ func applySourceTemplate(p *Project, id string, template LocalTemplate, values m
 		templates = &yaml.Node{Kind: yaml.MappingNode, Tag: "!!map"}
 		replaceMappingField(main.Content[0], "local_templates", templates)
 	}
-	relative := "templates/" + id + ".yaml"
+	relative := "slides/templates/" + id + ".yaml"
 	replaceMappingField(templates, id, &yaml.Node{Kind: yaml.ScalarNode, Tag: "!!str", Value: relative})
 	definition, err := editYAMLNode(template)
 	if err != nil {
