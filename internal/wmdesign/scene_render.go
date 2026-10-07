@@ -7,6 +7,7 @@ import (
 )
 
 type SceneRecord struct {
+	Definition    string            `json:"definition,omitempty"`
 	ID            string            `json:"id"`
 	SourcePointer string            `json:"source_pointer"`
 	Bounds        Rect              `json:"rect"`
@@ -41,7 +42,7 @@ func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 	if p == nil {
 		return fmt.Errorf("scene.empty_plan")
 	}
-	record := SceneRecord{ID: p.ID, SourcePointer: path, Bounds: p.Bounds, Groups: p.Groups, Warnings: p.Warnings}
+	record := SceneRecord{Definition: p.Definition, ID: p.ID, SourcePointer: path, Bounds: p.Bounds, Groups: p.Groups, Warnings: p.Warnings}
 	for _, item := range p.Items {
 		count := 0
 		for _, present := range []bool{item.Shape != nil, item.Text != nil, item.Image != nil, item.Table != nil, item.Chart != nil} {
@@ -58,7 +59,11 @@ func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 			if sh.Props.ObjectName == "" {
 				sh.Props.ObjectName = sh.Record.ID
 			}
-			if err := r.slide.AddShape(sh.Type, &sh.Props); err != nil {
+			if sh.Connection != nil {
+				if err := r.slide.AddConnector(&pptx.ConnectorProps{ShapeProps: sh.Props, Connection: *sh.Connection}); err != nil {
+					return err
+				}
+			} else if err := r.slide.AddShape(sh.Type, &sh.Props); err != nil {
 				return err
 			}
 			sr.Shapes = append(sr.Shapes, sh.Record)
@@ -71,6 +76,20 @@ func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 				valign = pptx.VAlign(tr.VerticalAlign)
 			}
 			opts := &pptx.TextPropsOptions{PositionProps: pos(tr.Rect), ObjectNameProps: pptx.ObjectNameProps{ObjectName: tr.ID}, TextBaseProps: pptx.TextBaseProps{FontFace: id.Typeface, FontSize: s.Size, Bold: &id.Bold, Italic: &id.NativeItalic, Color: tr.Color, Align: pptx.HAlign(tr.Align)}, CharSpacing: s.TrackingPt, LineSpacing: s.Leading, ParaSpaceBefore: zero(), ParaSpaceAfter: zero(), Margin: pptx.Margin{0}, Fit: "none", Valign: valign, Rotate: tr.Rotation}
+			if tr.NativeShape != nil {
+				outer := tr.NativeShape.Rect
+				if !inside(tr.Rect, outer) || tr.Rich != nil || tr.Rotation != 0 {
+					return fmt.Errorf("scene.invalid_combined_text_shape: %s", tr.ID)
+				}
+				opts.PositionProps = pos(outer)
+				opts.Fill = &pptx.ShapeFillProps{Color: tr.NativeShape.Fill}
+				opts.Line = &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}
+				opts.Shape = pptx.ShapeTypeRect
+				isTextBox := false
+				opts.IsTextBox = &isTextBox
+				// The writer's Margin order is left/right/bottom/top, in points.
+				opts.Margin = pptx.Margin{tr.Rect.X - outer.X, outer.X + outer.W - tr.Rect.X - tr.Rect.W, outer.Y + outer.H - tr.Rect.Y - tr.Rect.H, tr.Rect.Y - outer.Y}
+			}
 			if err := r.slide.AddText([]pptx.TextProps{{Text: tr.Layout.Displayed}}, opts); err != nil {
 				return err
 			}

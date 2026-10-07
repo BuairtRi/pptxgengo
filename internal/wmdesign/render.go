@@ -69,14 +69,22 @@ type BuildIdentity struct {
 	Seed      string `json:"seed"`
 }
 type TextRecord struct {
-	ID            string          `json:"id"`
-	Rect          Rect            `json:"rect"`
-	Color         string          `json:"color"`
-	Align         string          `json:"align"`
-	VerticalAlign string          `json:"vertical_align,omitempty"`
-	Layout        TextLayout      `json:"layout"`
-	Rich          *RichTextLayout `json:"rich,omitempty"`
-	Rotation      float64         `json:"rotation_deg,omitempty"`
+	NativeShape   *NativeTextShape `json:"native_shape,omitempty"`
+	ID            string           `json:"id"`
+	Rect          Rect             `json:"rect"`
+	Color         string           `json:"color"`
+	Align         string           `json:"align"`
+	VerticalAlign string           `json:"vertical_align,omitempty"`
+	Layout        TextLayout       `json:"layout"`
+	Rich          *RichTextLayout  `json:"rich,omitempty"`
+	Rotation      float64          `json:"rotation_deg,omitempty"`
+}
+
+// NativeTextShape records the containing rectangle of the editable-block pilot.
+// TextRecord.Rect remains the independently measured inner text allocation.
+type NativeTextShape struct {
+	Rect Rect   `json:"rect"`
+	Fill string `json:"fill"`
 }
 type SlideReport struct {
 	ID              string               `json:"id"`
@@ -117,22 +125,23 @@ type Report struct {
 	MediaOptimization  *pptx.MediaOptimizationReport `json:"media_optimization,omitempty"`
 }
 type renderer struct {
-	contrastProbe *contrastProbe
-	bodyDensity   string
-	headerDensity string
-	densityScope  string
-	projectAssets map[string]AssetData
-	source        *Source
-	typeEngine    *Typography
-	bundle        string
-	pres          *pptx.Presentation
-	slide         *pptx.Slide
-	master        *pptx.SlideMasterProps
-	records       *[]TextRecord
-	err           error
-	libraryChrome *LibraryChrome
-	sceneContext  SceneContext
-	sceneTargets  map[string]annotationTarget
+	contrastProbe   *contrastProbe
+	bodyDensity     string
+	headerDensity   string
+	densityScope    string
+	projectAssets   map[string]AssetData
+	source          *Source
+	typeEngine      *Typography
+	bundle          string
+	pres            *pptx.Presentation
+	slide           *pptx.Slide
+	master          *pptx.SlideMasterProps
+	records         *[]TextRecord
+	err             error
+	libraryChrome   *LibraryChrome
+	sceneContext    SceneContext
+	sceneTargets    map[string]annotationTarget
+	editableTargets map[string]Rect
 }
 
 func pos(r Rect) pptx.PositionProps {
@@ -560,6 +569,9 @@ func buildWithTypography(bundle string, s *Source, t *Typography, doc Document, 
 		}
 		sr := SlideReport{ID: slide.ID, Hidden: slide.Hidden, Page: i + 1, Frame: f, TemplateBinding: slide.TemplateBinding}
 		r.libraryChrome = slide.LibraryChrome
+		if err := r.registerEditableTargets(slide); err != nil {
+			return nil, report, err
+		}
 		if err := r.registerSceneTargets(slide, f); err != nil {
 			return nil, report, err
 		}

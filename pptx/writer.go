@@ -131,6 +131,11 @@ func compressionFrom(props []*WriteProps) bool {
 
 // build produces the complete .pptx package bytes.
 func (p *Presentation) build(compression bool) ([]byte, error) {
+	for _, slide := range p.slides {
+		if err := validateNativeConnectors(slide); err != nil {
+			return nil, err
+		}
+	}
 	// Per-build clock + uuid, threaded explicitly (no package-global state) so
 	// concurrent writes of different presentations don't race (REVIEW C1).
 	bc := p.newBuildContext()

@@ -202,6 +202,15 @@ source manually. A modified build baseline is an integrity blocker; do not
 bypass its receipt or remove its lock.
 
 
+## Inventory native editing structure
+
+Source builds after v4.1.0 provide `project editability --project PATH`. Use its
+receipt-pinned ownership, Selection Pane labels, nesting and source-field report
+when choosing native editing pilots. Native groups, table cells and text counts
+are structural observations; record actual Mac/Windows editing tasks separately.
+Read `docs/native-editing-pilot.md` for the family/density task matrix.
+
+
 ## Reuse maintained authored slides
 
 Source builds after v4.1.0 can publish, find, preview and insert closed authored

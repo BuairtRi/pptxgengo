@@ -97,7 +97,7 @@ func descendants(n *xmlNode, key string) []*xmlNode {
 	return out
 }
 func ObjectMap(p *Project, doc wmdesign.Document, data []byte) (Objects, error) {
-	out := Objects{TextModelSchema: NativeTextModelSchema, Schema: "pptxgengo.deck-object-map.v1", DeckID: p.Document.ID, SourceSHA256: digest(p.Canonical), Objects: []ObjectRecord{}, Reconciliation: "baseline plus stable IDs available; edited-PPTX three-way reconciliation is not implemented"}
+	out := Objects{TextModelSchema: NativeTextModelSchema, Schema: "pptxgengo.deck-object-map.v1", DeckID: p.Document.ID, SourceSHA256: digest(p.Canonical), Objects: []ObjectRecord{}, Reconciliation: "receipt-pinned named plain text proposals and reviewed adoption are available through project reconcile; rich text, cells, geometry and structural adoption require manual review"}
 	z, e := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if e != nil {
 		return out, e
