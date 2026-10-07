@@ -93,31 +93,28 @@ func TestVerifyRejectsPackageDriftAndExtraFiles(t *testing.T) {
 	}
 }
 func TestInstallUpgradeAndRollbackPreserveUserSkill(t *testing.T) {
-	if runtime.GOOS == "windows" {
-		t.Skip("this fixture would alter HKCU PATH; Windows qualification uses an isolated runner account")
-	}
 	c := config(t)
 	os.MkdirAll(c.SkillDir, 0700)
 	os.WriteFile(filepath.Join(c.SkillDir, "SKILL.md"), []byte("user skill"), 0600)
 	one := fixture(t, "v1.0.0")
 	two := fixture(t, "v1.1.0")
-	if _, e := c.Install(context.Background(), one, Options{}); e != nil {
+	if _, e := c.Install(context.Background(), one, Options{NoPath: true}); e != nil {
 		t.Fatal(e)
 	}
-	if _, e := c.Install(context.Background(), two, Options{}); e != nil {
+	if _, e := c.Install(context.Background(), two, Options{NoPath: true}); e != nil {
 		t.Fatal(e)
 	}
 	// Reinstalling the same version must retain the rollback target and avoid
 	// creating another skill backup when the owned settings already match.
 	priorBackups, _ := filepath.Glob(c.SkillDir + ".backup-*")
-	if _, e := c.Install(context.Background(), two, Options{}); e != nil {
+	if _, e := c.Install(context.Background(), two, Options{NoPath: true}); e != nil {
 		t.Fatal(e)
 	}
 	afterBackups, _ := filepath.Glob(c.SkillDir + ".backup-*")
 	if len(priorBackups) != len(afterBackups) {
 		t.Fatal("idempotent install created a backup")
 	}
-	selected, e := c.Rollback(context.Background(), Options{})
+	selected, e := c.Rollback(context.Background(), Options{NoPath: true})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -137,10 +134,12 @@ func TestInstallUpgradeAndRollbackPreserveUserSkill(t *testing.T) {
 	if !preserved {
 		t.Fatal("original user skill backup lost")
 	}
-	for _, tool := range []string{"pptxgengo", "pptxdesign", "wmdsdocs"} {
-		target, e := os.Readlink(filepath.Join(c.BinDir, tool))
-		if e != nil || target != filepath.Join(c.Root, "bin", tool) {
-			t.Fatal(tool, target, e)
+	if runtime.GOOS != "windows" {
+		for _, tool := range []string{"pptxgengo", "pptxdesign", "wmdsdocs"} {
+			target, e := os.Readlink(filepath.Join(c.BinDir, tool))
+			if e != nil || target != filepath.Join(c.Root, "bin", tool) {
+				t.Fatal(tool, target, e)
+			}
 		}
 	}
 	if _, e = os.Stat(filepath.Join(c.Root, "pending.json")); !os.IsNotExist(e) {
