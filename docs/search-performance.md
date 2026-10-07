@@ -142,17 +142,20 @@ index opening and every find use the selected counter; input hashing and
 preparation remain outside timings. Native counter progression, conversion,
 fault handling and positive keyword/report intervals are checked, with pinned
 model CI requiring clock evidence and positive first/repeated intervals.
-Actual six-architecture hosted verification of this correction is required
-before integration.
+The correction was verified on six native architectures before integration.
+Historical reports remain evidence; current execution follows GitLab-only policy.
 
 This follows [Microsoft's interval timing guidance](https://learn.microsoft.com/en-us/windows/win32/sysinfo/acquiring-high-resolution-time-stamps)
 and [performance counter API](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter).
 
-GitLab Kubernetes Linux and GitHub macOS/Windows pinned model lanes retain
+Private GitLab Kubernetes Linux and protected Mac ARM64 model lanes retain
 `keyword.json`, `semantic.json` and `hybrid.json`. They check actual mode,
 platform, source fingerprints, counts, complete vector coverage, repeated
-sample count and nonzero memory. The portable Windows lane also exercises the
-native memory API and the no-model keyword/report regressions.
+sample count and nonzero memory. The opt-in private Windows lane also exercises the
+native memory API and the no-model keyword/report regressions once its runner
+is available. Intel Mac execution is likewise opt-in pending its private runner.
+See [CI policy](testing.md) for runner tags and flags. GitHub Actions was disabled
+on 2026-10-07; the following GitHub reports are historical, not active gates.
 
 Preliminary head `54851875249b3757d650d0e2abcc38d9c7e10abd` passed pinned
 model jobs on Linux amd64 (private GitLab pipeline 21215), macOS arm64 and

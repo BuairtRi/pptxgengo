@@ -341,3 +341,12 @@ decision, not necessary for publishing this document.
 
 Track source, documentation and qualification records in Git. Colleague release
 ZIPs and compiled distribution artifacts remain outside the repository.
+
+## CI execution policy update — 2026-10-07
+
+All CLI builds, tests, scans, signing, notarization and publication run in private
+GitLab. GitHub Actions is disabled and its workflow files are removed. Earlier
+references to GitHub CI describe the original handoff baseline, not current
+execution policy. GitHub remains slotctl's source review/merge authority. See
+[testing lanes](../testing.md) for protected Mac gates and pending opt-in private
+Windows/Intel Mac runners.

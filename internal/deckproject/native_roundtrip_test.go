@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -49,6 +50,89 @@ type desktopRoundTripEvidence struct {
 	Failures         []string                         `json:"failures"`
 	RebuiltBuildID   string                           `json:"rebuilt_build_id,omitempty"`
 	DesktopExecution *nativeexport.RoundTripExecution `json:"desktop_execution,omitempty"`
+	AutomaticNumbers []desktopAutomaticNumber         `json:"automatic_slide_numbers,omitempty"`
+}
+
+type desktopAutomaticNumber struct {
+	ShapeToken string `json:"shape_token"`
+	SlideToken string `json:"slide_token"`
+	Before     string `json:"before"`
+	After      string `json:"after"`
+}
+
+// Only the cached value of an existing, single slide-number field may follow
+// the verified native slide order. Other dynamic fields and ordinary text still
+// require exact equality. This does not adopt numbering, geometry or formatting.
+func roundTripSlideNumber(shape *xmlNode) (string, string, bool) {
+	if shape == nil || shape.Name != (xml.Name{Space: lineagePML, Local: "sp"}) {
+		return "", "", false
+	}
+	body := lineageChild(shape, lineagePML, "txBody")
+	if body == nil {
+		return "", "", false
+	}
+	var field *xmlNode
+	paragraphs := 0
+	for _, paragraph := range body.Children {
+		if paragraph.Name != (xml.Name{Space: drawingML, Local: "p"}) {
+			continue
+		}
+		paragraphs++
+		for _, child := range paragraph.Children {
+			if child.Name.Space != drawingML {
+				return "", "", false
+			}
+			switch child.Name.Local {
+			case "pPr", "endParaRPr":
+			case "fld":
+				if field != nil || attr(child, "type") != "slidenum" || attr(child, "id") == "" {
+					return "", "", false
+				}
+				field = child
+			default:
+				return "", "", false
+			}
+		}
+	}
+	if paragraphs != 1 || field == nil {
+		return "", "", false
+	}
+	var text *xmlNode
+	for _, child := range field.Children {
+		if child.Name.Space != drawingML {
+			return "", "", false
+		}
+		switch child.Name.Local {
+		case "rPr":
+		case "t":
+			if text != nil || len(child.Children) != 0 {
+				return "", "", false
+			}
+			text = child
+		default:
+			return "", "", false
+		}
+	}
+	if text == nil {
+		return "", "", false
+	}
+	return attr(field, "id"), text.Text, true
+}
+
+func roundTripNumberChange(before, after NativeLineageObject, oldOrder, newOrder []string) bool {
+	oldID, oldText, oldOK := roundTripSlideNumber(before.shape)
+	newID, newText, newOK := roundTripSlideNumber(after.shape)
+	ordinal := func(order []string, token string) string {
+		for i, t := range order {
+			if t == token {
+				return strconv.Itoa(i + 1)
+			}
+		}
+		return ""
+	}
+	return oldOK && newOK && oldID == newID && before.ShapeToken == after.ShapeToken &&
+		before.SlideToken == after.SlideToken && oldText == ordinal(oldOrder, before.SlideToken) &&
+		newText == ordinal(newOrder, after.SlideToken)
 }
 
 func roundTripWrite(path string, data []byte) error {
@@ -332,17 +416,26 @@ func verifyRoundTripFixture(t *testing.T, root, savedPath, editedPath, destinati
 	for _, edit := range f.Plan.Edits {
 		baselineText[edit.ShapeToken] = edit.After
 	}
+	out.EditedOrder, err = roundTripOrder(edited)
+	if err != nil || !reflect.DeepEqual(out.EditedOrder, []string{f.SlideOrder[1], f.SlideOrder[0]}) {
+		out.Failures = append(out.Failures, "actual edited slide order is not the requested reorder")
+	}
+	baselineObjects := map[string]NativeLineageObject{}
+	for _, object := range b.inspection.Objects {
+		baselineObjects[object.ShapeToken] = object
+	}
 	for _, object := range identity.Objects {
 		if object.shape == nil || nativeParagraphText(nativeParagraphs(object.shape)) != baselineText[object.ShapeToken] {
+			before := baselineObjects[object.ShapeToken]
+			if roundTripNumberChange(before, object, f.SlideOrder, out.EditedOrder) {
+				out.AutomaticNumbers = append(out.AutomaticNumbers, desktopAutomaticNumber{object.ShapeToken, object.SlideToken, baselineText[object.ShapeToken], nativeParagraphText(nativeParagraphs(object.shape))})
+				continue
+			}
 			out.Failures = append(out.Failures, "edited native text differs from the three prescribed changes")
 		}
 	}
 	if err = roundTripWrite(filepath.Join(destination, "edited-lineage.json"), canonical(identity)); err != nil {
 		return out, err
-	}
-	out.EditedOrder, err = roundTripOrder(edited)
-	if err != nil || !reflect.DeepEqual(out.EditedOrder, []string{f.SlideOrder[1], f.SlideOrder[0]}) {
-		out.Failures = append(out.Failures, "actual edited slide order is not the requested reorder")
 	}
 	packet, err := WriteTextReviewPacket(p, b, edited, filepath.Join(destination, "review"))
 	if err != nil {
@@ -524,6 +617,73 @@ func TestNativeRoundTripCore(t *testing.T) {
 	}
 	if _, err := verifyRoundTripFixture(t, root, filepath.Join(root, "baseline.pptx"), path, filepath.Join(root, "verification"), "repeat", nil); err == nil {
 		t.Fatal("verification output overwritten")
+	}
+}
+
+func TestNativeRoundTripAutomaticNumbers(t *testing.T) {
+	root := filepath.Join(t.TempDir(), "fixture")
+	_, b, f := prepareRoundTripFixture(t, root)
+	values := map[string]string{}
+	for i, name := range f.NativeNames {
+		values[name] = f.Plan.Edits[i].After
+	}
+	edited := roundTripReorder(t, reconcileEditFields(t, b, values))
+	// Mimic PowerPoint refreshing the cached values of existing slide-number
+	// fields after reorder. Source content and field identities remain exact.
+	for i, part := range []string{"ppt/slides/slide1.xml", "ppt/slides/slide2.xml"} {
+		edited = lineageEdit(t, edited, part, func(raw []byte) []byte {
+			from := []byte(fmt.Sprintf("<a:t>%d</a:t></a:fld>", i+1))
+			to := []byte(fmt.Sprintf("<a:t>%d</a:t></a:fld>", 2-i))
+			if bytes.Count(raw, from) != 1 {
+				t.Fatal("expected one generated slide-number cache")
+			}
+			return bytes.Replace(raw, from, to, 1)
+		})
+	}
+	path := filepath.Join(root, "edited.pptx")
+	if err := roundTripWrite(path, edited); err != nil {
+		t.Fatal(err)
+	}
+	out, err := verifyRoundTripFixture(t, root, filepath.Join(root, "baseline.pptx"), path, filepath.Join(root, "verification"), "hermetic refreshed-number fixture", nil)
+	if err != nil || out.Status != "pass" || len(out.AutomaticNumbers) != 2 || out.RebuiltBuildID == "" {
+		t.Fatalf("%v %+v", err, out)
+	}
+}
+
+func TestNativeRoundTripNumberChangeBounds(t *testing.T) {
+	shape := func(field string) *xmlNode {
+		n, err := readXML(strings.NewReader(`<p:sp xmlns:p="` + lineagePML + `" xmlns:a="` + drawingML + `"><p:txBody><a:p>` + field + `</a:p></p:txBody></p:sp>`))
+		if err != nil {
+			t.Fatal(err)
+		}
+		return n.Children[0]
+	}
+	field := `<a:fld id="same" type="slidenum"><a:t>1</a:t></a:fld>`
+	before := NativeLineageObject{ShapeToken: "shape", SlideToken: "a", shape: shape(field)}
+	good := strings.Replace(field, ">1<", ">2<", 1)
+	for _, tc := range []struct {
+		name, field string
+		want        bool
+	}{
+		{"refresh", good, true},
+		{"wrong-number", strings.Replace(good, ">2<", ">9<", 1), false},
+		{"changed-id", strings.Replace(good, `id="same"`, `id="other"`, 1), false},
+		{"other-field", strings.Replace(good, `type="slidenum"`, `type="datetime"`, 1), false},
+		{"static-text", `<a:r><a:t>2</a:t></a:r>`, false},
+		{"added-text", good + `<a:r><a:t>surprise</a:t></a:r>`, false},
+		{"duplicate-field", good + good, false},
+		{"extra-paragraph", good + `</a:p><a:p>`, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			after := before
+			after.shape = shape(tc.field)
+			if got := roundTripNumberChange(before, after, []string{"a", "b"}, []string{"b", "a"}); got != tc.want {
+				t.Fatalf("got %v want %v", got, tc.want)
+			}
+		})
+	}
+	if roundTripNumberChange(before, before, []string{"b", "a"}, []string{"a", "b"}) {
+		t.Fatal("incorrect original ordinal accepted")
 	}
 }
 
