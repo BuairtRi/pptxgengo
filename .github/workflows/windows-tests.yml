@@ -14,9 +14,15 @@ concurrency:
 
 jobs:
   portable:
-    name: Windows portable CLI
-    runs-on: windows-latest
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: windows-latest, arch: amd64, name: Windows portable CLI}
+          - {os: windows-11-arm, arch: arm64, name: Windows ARM64 portable CLI}
     env:
       CGO_ENABLED: '0'
       PPTXGENGO_NATIVE_LIVE_OUT: ''
@@ -26,6 +32,11 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
+          architecture: ${{ matrix.arch }}
+      - name: Require the declared native Go architecture
+        shell: pwsh
+        run: |
+          if ((go env GOHOSTARCH) -ne '${{ matrix.arch }}') { throw 'Unexpected Go host architecture.' }
       - name: Parse PowerShell scripts without executing installers or COM
         shell: pwsh
         run: |
@@ -53,7 +64,7 @@ jobs:
           [void](New-Item -ItemType Directory -Path $env:WMDS_BRANDING_ROOT -Force)
           go test -short -count=1 -timeout=150s ./cmd/pptxgengo ./cmd/pptxdesign ./internal/deckproject ./internal/library ./internal/releasepackage ./internal/textlayout ./pptx ./scripts/cmd/search-benchmark
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          go test -short -count=1 -timeout=150s -run '^(TestWindows|TestSignedNativeReceiptRejectsHandmadeAndTamperedEvidence|TestConcurrentNative)' ./internal/nativeexport
+          go test -short -count=1 -timeout=150s -v -run '^(TestWindows|TestSignedNativeReceiptRejectsHandmadeAndTamperedEvidence|TestConcurrentNative)' ./internal/nativeexport
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Installer staging, rollback and recovery regressions
         shell: pwsh
@@ -62,6 +73,20 @@ jobs:
           # font registrations are reserved for the desktop qualification lane.
           go test -count=1 -timeout=150s ./internal/installstate ./internal/finishedslide
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Actual CLI lifecycle and PowerShell installer with isolated opt-outs
+        shell: pwsh
+        env:
+          PPTXGENGO_INSTALL_PROCESS_OUT: ${{ runner.temp }}\installation-process
+          PPTXGENGO_INSTALL_PROCESS_COMMIT: ${{ github.sha }}
+        run: |
+          go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: installation-process-${{ matrix.os }}
+          path: ${{ runner.temp }}\installation-process\qualification.json
+          retention-days: 14
       - name: Relocated package-style smoke test without PowerPoint
         shell: pwsh
         run: |
@@ -71,7 +96,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: windows-portable-results
+          name: windows-portable-results-${{ matrix.os }}
           path: ${{ runner.temp }}\pptxgengo smoke with spaces
 
   native:

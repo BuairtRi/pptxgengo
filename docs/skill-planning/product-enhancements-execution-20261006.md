@@ -448,7 +448,10 @@ The current full 1,969-entity V11 Mac sample measured hybrid first 475.4 ms,
 repeated median 468.7 ms, first peak 368.3 MiB and final peak 772.3 MiB, with
 91,102,969 bytes of pinned inference artifacts. Complete scope, input hashes
 and keyword/semantic comparisons are in `docs/search-performance.md`.
-Focused tests passed; final submission/hosted gates are pending.
+PR #15 passed full five-step slot preflight, all ten GitHub checks and all nine
+GitLab pipeline 21225 jobs at exact head `8cec1d7b`; it merged as `bd63c193`.
+Independently downloaded nine actual platform/mode reports passed count/model/
+source/raw memory/GC checks. Both hosted race runs passed in 17m27s/16m24s.
 GitLab's race run at `334da317` exposed asynchronous Linux RSS accounting:
 the raw last VmHWM sample was 241,664 bytes below the first sample. The report
 now retains both raw samples and their observed maximum, with explicit kernel
@@ -456,3 +459,61 @@ approximation documented; no assertion or qualified memory precision is hidden.
 Actual full-library Windows/other architecture performance, agreed budgets,
 operator relevance/native fit and desktop editing acceptance remain open.
 No further release tag was cut.
+
+## Actual installer processes and native architecture CI — managed source work
+
+Slot `pptx-installer-process` builds two synthetic CLI fixture versions of
+the actual three source tools, then runs stage-only, install/upgrade, repeat
+installation, immutable dispatch, rollback, missing-dispatcher repair,
+false-version startup refusal, recovery and uninstall through new processes.
+Owned paths contain spaces; controlled child PATH resolves the intended tools,
+registry PATH is unchanged and the original user skill/releases are preserved.
+Unsigned source fixtures do not establish publisher authenticity.
+
+Windows also executes the actual PowerShell installer in owned app data with
+StageOnly, then repeated NoPath/SkipSkill/SkipFonts activation against synthetic
+full-format resources. Initial hosted execution exposed PowerShell 7 module
+paths inherited through Go, breaking Windows PowerShell's Utility autoloading.
+A shared child environment filter now resets only that variable for native
+PowerShell export/round-trip helpers and the installer harness. Actual Windows
+hashing/JSON regression calls use an unusable inherited module path, with no COM.
+
+Mac local actual-tool runs passed; preliminary `b3adbc57` passed all ten
+private GitLab pipeline 21227 jobs and hosted Windows run 37607310782. Downloaded
+Linux and Windows qualification JSON confirms exact source hashes, actual native
+architectures and all eight/eleven declared scenarios. Earlier hosted Mac
+execution also passed. Full tag-configuration simulation passed without creating
+a tag; source work remains outside released v4.1.0.
+
+CI now adds Intel Mac and ARM64 Windows native model/performance/core installer
+checks, plus ARM64 model/installer jobs on the verified online home-lab pool.
+Every new lane requires its declared Go host architecture. Generic diagnostics
+expire after 14 days; binary fixtures/weights/customer content are not uploaded
+to GitHub. Both Linux architecture results gate future protected release builds.
+These additions and final full preflight/hosted gates are pending.
+Real font/skill registration, inherited desktop PATH, signed Windows package
+execution, private full resources, Office/visual review and operator curation
+remain outstanding; no new release tag was cut.
+
+Native architecture evidence follow-up: exact preliminary `c302b474` passed all
+four GitHub model/performance lanes in run 37610005988 and all twelve GitLab
+pipeline 21233 jobs, including native ARM64 installer/model execution. Eighteen
+actual platform/mode reports were downloaded and verified; timings and scope
+are retained in `docs/search-performance.md`. Windows ARM64 subsequently passed
+all eleven actual CLI/script scenarios at `a8e117b3` in run 37611230623. Its
+parallel same-head run timed out during the Windows PowerShell cmdlet regression, so bounded
+startup diagnostics were added instead of discarding that result. Intel Mac's
+missing output-parent setup was corrected. Exact `d9641533` passed the full
+five-step slot submission preflight; final exact-head hosted qualification and
+integration remain required. No further release tag was cut.
+
+Windows module follow-up: both `d9641533` ARM64 failures reached the script,
+with stages before hashing/before JSON serialization; a separate native Windows
+PowerShell 5.1 file-entry probe completed in 235/242 ms. Explicit imports now
+select native PSHOME Management/Utility manifests in export, round-trip,
+installer and smoke scripts. Both helper launchers are checked through command
+and file entry points, with native module-path evidence and unchanged 30-second
+limits. Focused portable checks and Windows ARM64 compilation passed; hosted
+execution remains required. Intel Mac's corrected actual-tool lane passed at
+`d9641533`, with its downloaded eight-scenario qualification independently
+verified. The source adds no desktop Office or operator acceptance claim.

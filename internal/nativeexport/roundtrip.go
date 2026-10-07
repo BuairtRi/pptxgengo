@@ -15,6 +15,8 @@ import (
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"github.com/buairtri/pptxgengo/internal/powershellenv"
 )
 
 // RoundTripEdit describes one whole plain-text fixture shape, identified by its
@@ -74,6 +76,9 @@ func WindowsRoundTrip(ctx context.Context, destination string, fixture []byte, p
 
 func roundTripCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
 	cmd := exec.CommandContext(ctx, name, args...)
+	if strings.EqualFold(filepath.Base(name), "powershell.exe") {
+		cmd.Env = powershellenv.ForWindowsPowerShell(os.Environ())
+	}
 	configureWorkerProcess(cmd)
 	cmd.WaitDelay = 2 * time.Second
 	out, err := cmd.CombinedOutput()

@@ -118,6 +118,78 @@ the single recorded location explicitly. No purge operation is implemented.
 
 ## Evidence and remaining qualification
 
+The opt-in `TestInstallationRealToolProcesses` harness builds and executes
+the actual three source tools with synthetic CLI package versions. It exercises
+stage-only behavior, install/upgrade, repeated installation, all three immutable
+dispatchers, rollback, a missing-dispatcher repair, false-version startup refusal,
+recovery and uninstall. Owned paths contain spaces. The source tools are unsigned;
+fixture metadata is not a publisher signature.
+
+Every activation uses `--no-path`, explicit managed/bin/skill directories and
+a fresh controlled child-process PATH. The harness checks the user registry PATH
+is unchanged, preserves an existing user skill, retains releases after uninstall
+and records a JSON scenario list with actual OS/architecture and package hashes.
+It does not qualify a newly opened desktop terminal's inherited registry PATH.
+
+On Windows, the same opt-in also executes the actual
+`install-windows.ps1` with `-StageOnly`, then repeated activation using
+`-NoPath -SkipSkill -SkipFonts`. Its full-format resources are synthetic
+placeholders in an isolated app-data directory. No fake font is registered,
+private branding is included or PowerPoint opened. This covers the script and
+opt-outs, not a usable full presentation package.
+
+Run from the repository root with a new directory in an existing parent:
+
+```sh
+PPTXGENGO_INSTALL_PROCESS_OUT=/path/new-qualification-directory \
+  go test -count=1 -timeout=8m -run '^TestInstallationRealToolProcesses$' -v ./internal/installstate
+```
+
+CI adds this on native amd64/arm64 Kubernetes Linux, hosted macOS and hosted
+Windows, including Intel Mac and Windows ARM64. The workflow requires each
+declared Go host architecture; public hosted runner availability and the home
+lab's online `arm64` pool are checked independently. Only the
+generic `qualification.json` is retained for 14 days; unsigned executable
+fixtures are not uploaded. The Linux result also gates future protected release
+build/resource jobs. Actual hosted results must pass before source integration.
+
+The first Windows script run caught PowerShell 7 module paths inherited through
+the Go process: Windows PowerShell could not autoload `Get-FileHash`. The child
+environment now removes only `PSModulePath`, allowing Windows PowerShell to
+construct its native module search path. This also applies to production export
+and round-trip helpers. Actual Windows regressions load hashing/JSON cmdlets
+from a deliberately unusable inherited module path without opening Office.
+The parent and registry environment remain untouched, following
+[Microsoft's documented launch behavior](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_psmodulepath).
+
+Preliminary `b3adbc57` passed all ten GitLab pipeline 21227 jobs and Windows
+run 37607310782. Its independently downloaded Windows amd64 report confirms all
+eleven prescribed CLI/script scenarios and unchanged user PATH. The earlier
+Mac and Linux reports confirm eight core scenarios. Native Linux ARM64 also
+passed all eight at `c302b474` in GitLab job 282938. Windows ARM64 passed all
+eleven at `a8e117b3` in GitHub run 37611230623; both qualification reports were
+independently downloaded and verified against their exact source, architecture
+and opt-outs. Its parallel same-head hosted run timed out during the Windows
+PowerShell hashing/JSON regression under the unchanged 30-second bound. Diagnostics
+retain an owned script-stage marker. At `d9641533`, two failures reached script
+execution: one stopped before hashing and one before JSON serialization; a basic
+file-entry probe completed in 235/242 ms. These results locate the issue beyond
+host startup, without establishing the underlying cache/module cause.
+
+The helpers, installer and smoke script now explicitly import required
+Management/Utility modules by absolute paths under their own `$PSHOME`, avoiding
+unrelated module discovery. The regression uses the identical import block for
+both production launchers and command/file entry points, verifies actual native
+module paths, and retains every 30-second deadline. Parent environment, registry
+and production deadlines remain unchanged. Actual hosted verification of that
+change is required; the earlier failures are retained.
+
+The Intel Mac actual-process check initially refused an output whose parent did
+not exist. Its output now uses the existing runner temporary directory, scoped
+at the step where that context is available. The corrected Intel Mac check passed
+at `d9641533`; its downloaded native amd64 report confirms all eight scenarios.
+All final exact-head checks and full slot preflight are required before integration.
+
 The bounded regression lane covers hashes/inventory, staging, repeated install,
 upgrade, rollback, interrupted activation, conflicting edits, skill symlinks,
 uninstall preservation and launcher setup recovery. An isolated macOS arm64
@@ -125,7 +197,9 @@ execution check installed the actual signed `v4.1.0` and `v4.1.0-rc.2` CLI
 packages, exercised all three dispatchers, rolled back and checked diagnostics.
 No user's active installation was changed for that check.
 
-Windows and Linux cross-compilation is available. Windows PATH registration,
-PowerShell installer execution, full private resource packages and interactive
-PowerPoint qualification still need their respective native evidence. Headless
-Go checks and source scans do not replace desktop Office review.
+Native execution above supplements the existing six-target cross-compilation.
+Windows PATH registration, signed package execution, full private resource
+packages and interactive PowerPoint qualification still need their respective
+native evidence. The unsigned synthetic PowerShell script evidence above does
+not qualify those outcomes. Headless Go checks and source scans do not replace
+desktop Office review.
