@@ -1,0 +1,42 @@
+name: Offline embedding runtime
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: local-model-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  golden:
+    name: Pinned Go model (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    env:
+      CGO_ENABLED: '0'
+      PPTXGENGO_EMBED_MODEL_DIR: ${{ runner.temp }}/pptxgengo-offline-model
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Explicit pinned model maintenance download
+        shell: bash
+        run: go run ./cmd/pptxdesign library-model --download --out "$PPTXGENGO_EMBED_MODEL_DIR"
+      - name: Independent tokenizer and inference golden cases
+        shell: bash
+        run: go test -count=1 -timeout=5m ./internal/localembed
+      - name: Complete offline source-bound snapshot and retrieval
+        shell: bash
+        run: go test -count=1 -timeout=8m -run '^TestPinnedLibraryEmbeddingsEndToEnd$' ./internal/wmdesign

@@ -46,7 +46,7 @@
 release:resources:
   extends: .release-linux
   stage: build
-  needs: [developer, security:go, security:secrets]
+  needs: [developer, offline-model, security:go, security:secrets]
   script:
     - if [ "$PPTXGENGO_PACKAGE_KIND" = full ]; then apt-get update && apt-get install -y --no-install-recommends python3; fi
     - bash scripts/release/prepare-resources.sh
@@ -56,7 +56,7 @@ release:resources:
 release:build:
   extends: .release-linux
   stage: build
-  needs: [developer, security:go, security:secrets]
+  needs: [developer, offline-model, security:go, security:secrets]
   parallel:
     matrix:
       - RELEASE_TARGET: [linux-amd64, linux-arm64, windows-amd64, windows-arm64, darwin-amd64, darwin-arm64]

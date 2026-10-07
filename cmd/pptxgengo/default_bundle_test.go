@@ -30,6 +30,19 @@ func TestPublishedBundleDefaultsAndClosedMetadata(t *testing.T) {
 	}
 }
 
+func TestEmbeddingMaintenanceWrapperArguments(t *testing.T) {
+	root := t.TempDir()
+	model := []string{"library-model", "--download", "--out", "offline model"}
+	got, err := designArgs(root, model)
+	if err != nil || !reflect.DeepEqual(got, model) {
+		t.Fatal("model maintenance received library/engine flags", got, err)
+	}
+	got, err = designArgs(root, []string{"library-embed", "--model-dir", "offline model", "--out", "vectors.json"})
+	if err != nil || hasFlag(got, "--engine") || !hasFlag(got, "--index") || !hasFlag(got, "--bundle") {
+		t.Fatal("embedding maintenance lost source defaults or received engine", got, err)
+	}
+}
+
 func TestDesignArgsUseStagedV11ButRespectProjectPins(t *testing.T) {
 	root := t.TempDir()
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {

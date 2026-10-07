@@ -50,7 +50,7 @@ pptxgengo design library-preview --id cards/3
 - `library-authoring --template KEY` lists each slot's readable alias, description and approximate capacity (characters and lines). Read it before writing copy. Estimates use the authored typography and identify unsupported internals explicitly; changed density and actual text require `--check-fit`, a build and native review. Capacity is advisory, not a character limit or proof of fit.
 - More flags are in the [CLI reference](cli-reference.md#find-and-understand-templates).
 
-### Keyword ranking in the next source build
+### Text ranking in the next source build
 
 After building a new index, `library-find --retrieval keyword` uses BM25 over
 names, purposes, relationships and authoring metadata. The older metadata mode
@@ -59,7 +59,12 @@ source for index creation and migration commands; stable v4.1.0 lacks these flag
 Use `--require-shape` when all supplied roles, structures, visual forms and exact
 source group counts must match. Read `structural_status` and source count scope;
 neither a lexical rank nor a matching count establishes content fit. Inspect
-and build the actual copy. Model-backed semantic/hybrid ranking remains pending.
+and build the actual copy. Optional offline `semantic` and `hybrid` modes require
+a pinned model package and compatible embedding snapshot. Use explicit
+`library-model` and `library-embed` maintenance commands to prepare them;
+search never downloads resources. Hybrid combines separate eligible ranks,
+reports keyword fallback when resources are missing, and rejects stale/corrupt
+snapshots. A high text rank does not establish structural suitability or fit.
 
 Consider at least three candidates per page, or record why fewer exist.
 
