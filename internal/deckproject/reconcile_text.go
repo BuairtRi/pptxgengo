@@ -33,20 +33,22 @@ type TextReconciliationIssue struct {
 	Detail     string `json:"detail"`
 }
 type TextReconciliationReport struct {
-	Schema                string                    `json:"schema"`
-	ProjectID             string                    `json:"project_id"`
-	BaselineBuildID       string                    `json:"baseline_build_id"`
-	BaselineReceiptSHA256 string                    `json:"baseline_receipt_sha256"`
-	BaselinePPTXSHA256    string                    `json:"baseline_pptx_sha256"`
-	CurrentSourceSHA256   string                    `json:"current_source_sha256"`
-	CurrentSemanticSHA256 string                    `json:"current_semantic_sha256"`
-	EditedPPTXSHA256      string                    `json:"edited_pptx_sha256"`
-	LockSHA256            string                    `json:"lock_sha256"`
-	Fields                []TextReconciliationField `json:"fields"`
-	ManualReview          []TextReconciliationIssue `json:"manual_review"`
-	Counts                map[string]int            `json:"counts"`
-	NativeQualification   string                    `json:"native_qualification"`
-	AdoptionScope         string                    `json:"adoption_scope"`
+	GeometryScope         string                        `json:"geometry_scope,omitempty"`
+	Geometry              []GeometryReconciliationField `json:"geometry,omitempty"`
+	Schema                string                        `json:"schema"`
+	ProjectID             string                        `json:"project_id"`
+	BaselineBuildID       string                        `json:"baseline_build_id"`
+	BaselineReceiptSHA256 string                        `json:"baseline_receipt_sha256"`
+	BaselinePPTXSHA256    string                        `json:"baseline_pptx_sha256"`
+	CurrentSourceSHA256   string                        `json:"current_source_sha256"`
+	CurrentSemanticSHA256 string                        `json:"current_semantic_sha256"`
+	EditedPPTXSHA256      string                        `json:"edited_pptx_sha256"`
+	LockSHA256            string                        `json:"lock_sha256"`
+	Fields                []TextReconciliationField     `json:"fields"`
+	ManualReview          []TextReconciliationIssue     `json:"manual_review"`
+	Counts                map[string]int                `json:"counts"`
+	NativeQualification   string                        `json:"native_qualification"`
+	AdoptionScope         string                        `json:"adoption_scope"`
 }
 
 // ReconcileText compares verified source/native baselines with current YAML and
@@ -198,6 +200,7 @@ func ReconcileText(p *Project, b *TextBaseline, edited []byte) (TextReconciliati
 			out.Fields = append(out.Fields, entry)
 		}
 	}
+	reconcileNativeOrder(b, native, addIssue)
 	if e = reconcilePackageChanges(b.files["deck.pptx"], edited, b.inspection, native, addIssue); e != nil {
 		return out, e
 	}

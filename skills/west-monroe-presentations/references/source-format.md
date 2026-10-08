@@ -142,3 +142,21 @@ The deck schema is independent of the engine and template bundle version.
 Preserve explicit template revisions and local definitions until their target
 contracts are reviewed. Follow [project upgrades](upgrading-projects.md) before
 changing schema, bundle, executable or template pins.
+
+## Reconciled native geometry (development build)
+
+Reviewed transforms and paint order are source-owned slide fields:
+`native_geometry`, `native_order`, and `native_geometry_template`. Transform
+keys are receipt-recorded object names; each value declares native kind, parent,
+point coordinates/extents, optional rotation/flips, and group `child_space`.
+They do not use frame-relative placement coordinates. They are included in source
+hashes, builds, numbered versions and portable project packages. Use
+[the geometry workflow](architecture-geometry.md) to create/review them; a
+changed template reference requires explicit reset and review.
+
+Each persisted transform also pins its authored geometry basis with
+`source_geometry_sha256`. Changes to the underlying node/child coordinates are
+rejected instead of applying an old transform to a newly generated coordinate
+space. Use an explicit layout reset and fresh baseline to review that change.
+The geometry proposal renderer verifies the actual current executable, fonts and
+bundle against the project lock before computing current YAML geometry.

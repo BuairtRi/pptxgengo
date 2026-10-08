@@ -37,9 +37,20 @@ type TextReviewPacket struct {
 // complete current authored tree. A closed manifest binds every file. Publication
 // uses kernel no-replace semantics; it does not update project source or state.
 func WriteTextReviewPacket(p *Project, b *TextBaseline, edited []byte, destination string) (*TextReviewPacket, error) {
+	return writeReviewPacket(p, b, edited, destination, "", "")
+}
+func WriteGeometryReviewPacket(p *Project, b *TextBaseline, edited []byte, destination, bundle, engine string) (*TextReviewPacket, error) {
+	return writeReviewPacket(p, b, edited, destination, bundle, engine)
+}
+func writeReviewPacket(p *Project, b *TextBaseline, edited []byte, destination, bundle, engine string) (*TextReviewPacket, error) {
 	report, e := ReconcileText(p, b, edited)
 	if e != nil {
 		return nil, e
+	}
+	if bundle != "" {
+		if e = addGeometryReconciliation(p, b, edited, &report, bundle, engine); e != nil {
+			return nil, e
+		}
 	}
 	files := map[string][]byte{"report.json": canonical(report), "edited.pptx": edited, "current-source.canonical.json": p.Canonical, "current-lock.json": b.files["toolchain.lock.json"]}
 	for name, raw := range b.files {

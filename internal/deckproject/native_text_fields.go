@@ -268,6 +268,11 @@ func ResolveNativeSourceField(p *Project, object ObjectRecord, field NativeSourc
 	}
 	base := "/slides/" + strconv.Itoa(index) + "/values"
 	pointer := slotPointer(slide.Values, base, field.SourceSlot)
+	if slide.Template.Scope == "local" {
+		if _, ok := slide.Values[field.SourceSlot]; ok {
+			pointer = base + "/" + escape(field.SourceSlot)
+		}
+	}
 	if pointer == base {
 		return "", "", fmt.Errorf("native_mapping.source_slot_missing")
 	}

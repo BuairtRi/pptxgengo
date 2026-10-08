@@ -233,3 +233,12 @@ manifest. Locks, conflicting OneDrive copies, placeholders, changed predecessors
 and nonportable names are diagnosed rather than silently resolved. Sharing
 retains executable/OS/architecture pins and branding/font requirements; explicit
 toolchain migration and offline runtime export remain separate commands.
+
+## Diagram editing (geometry development build)
+
+`project diagram inspect|patch|connect|arrange` uses `--project` and `--slide`.
+Mutations preview by default; `--apply` commits validated source changes.
+`project reconcile propose --geometry` also proposes native transforms and
+existing-object paint order. See [architecture and geometry](architecture-geometry.md)
+for source fields, examples, supported targets, reset behavior and exclusions.
+These commands are not in the promoted v4.2.1 binary.

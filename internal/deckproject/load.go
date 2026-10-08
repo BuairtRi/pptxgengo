@@ -335,6 +335,37 @@ func (p *Project) validate() error {
 				return p.fail(path+"/brief", "brief must be a project-relative path to a page brief file, not inline editorial text: %v", e)
 			}
 		}
+		if len(s.NativeGeometry) > 0 || len(s.NativeOrder) > 0 {
+			if s.NativeGeometryTemplate == nil || *s.NativeGeometryTemplate != s.Template {
+				return p.fail(path, "native geometry is pinned to another template; reset/review native layout before a template upgrade")
+			}
+		}
+		if len(s.NativeGeometry) > 10000 || len(s.NativeOrder) > 10000 {
+			return p.fail(path, "native geometry/order exceeds 10000 entries")
+		}
+		for name, g := range s.NativeGeometry {
+			if !shaPattern.MatchString(g.SourceGeometrySHA256) {
+				return p.fail(path+"/native_geometry/"+escape(name), "native transform requires an authored source geometry pin; propose/adopt from a compatible baseline")
+			}
+			if name == "" || len(name) > 512 {
+				return p.fail(path, "invalid native geometry key")
+			}
+			if e := validateNativeGeometry(g); e != nil {
+				return p.fail(path+"/native_geometry/"+escape(name), "%v", e)
+			}
+		}
+		for _, names := range s.NativeOrder {
+			if len(names) > 10000 {
+				return p.fail(path, "native order exceeds 10000 objects")
+			}
+			seen := map[string]bool{}
+			for _, name := range names {
+				if name == "" || len(name) > 512 || seen[name] {
+					return p.fail(path, "invalid or duplicate native order name")
+				}
+				seen[name] = true
+			}
+		}
 		seen := map[string]bool{}
 		for _, r := range s.EvidenceRefs {
 			if !stableID.MatchString(r) || seen[r] {

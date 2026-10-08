@@ -34,6 +34,7 @@ In short: sentence-case titles that state the conclusion as a full sentence; per
 | Find or register photos, icons, graphics and logos | [Assets](references/assets.md) |
 | Build a page no template fits, or fork a template | [Custom slide design](references/custom-slide-design.md) |
 | Change, add, move, hide, remove or re-layout individual slides; manage sections; rebuild an existing PowerPoint | [Editing slides](references/editing-slides.md) |
+| Customize architecture nodes/arrows or reconcile native geometry | [Architecture and geometry](references/architecture-geometry.md) |
 | Look up `deck.yaml`, slide file or local template fields | [Source format](references/source-format.md) |
 | Fit wordier copy, use Comfortable / Compact / Dense, or understand an automatic fitting warning | [Typography density](references/typography-density.md) |
 | Upgrade a schema, CLI, bundle or template revision | [Project upgrades](references/upgrading-projects.md) |
@@ -68,5 +69,5 @@ Approvals record real decisions; do not ask again for something already approved
 - `design` builds lay out text in Go with bundled IBM Plex font metrics. Native PowerPoint rendering and visual review are separate steps.
 - Shared library definitions are pinned within a project build. Make deliberate design changes as local derived templates; never edit the shared library to fix one deck.
 - Use the slide's density presets for type changes; body roles move together and the header stays Comfortable unless explicitly changed. Preserve source-owned density limits. Do not shrink individual cards independently or expand geometry to silence overflow.
-- Generated builds are immutable baselines. Preserve a separate PowerPoint working copy for native editing. Use reviewed proposals and explicit adoption for uniquely mapped plain text ([editing slides](references/editing-slides.md)); geometry, rich formatting, combined card/list fields and ambiguous objects need manual source review.
+- Generated builds are immutable baselines. Preserve a separate PowerPoint working copy for native editing. Use reviewed proposals and explicit adoption for uniquely mapped plain text ([editing slides](references/editing-slides.md)); the geometry development build also proposes tagged transforms and paint order ([architecture and geometry](references/architecture-geometry.md)). Added/deleted objects, route edits, rich formatting and ambiguous objects need explicit review.
 - Use `pptxgengo design` for deck authoring and `pptxgengo docs` to browse the design-system reference board. See the [CLI reference](references/cli-reference.md) and `pptxgengo paths` for commands and packaged resources.

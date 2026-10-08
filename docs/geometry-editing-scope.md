@@ -1,6 +1,16 @@
 # Geometry editing and architecture reconciliation: next slice
 
-Requested by Ri on 2026-10-08. **Implementation scope, not shipped commands.**
+Requested by Ri on 2026-10-08. **Target scope; not all implemented or released.**
+
+The geometry development branch implements the first slice: line-safe catalog
+detach, typed diagram inspect/patch/connect/arrange with previews, straight
+attached block connectors, and receipt-backed native transform/paint-order
+adoption. [Operator guidance](../skills/west-monroe-presentations/references/architecture-geometry.md)
+describes the available surface and exclusions. The promoted v4.2.1 release does
+not include these changes. Native structural imports/deletions/reparenting,
+custom bends/elbows, obstacle routing, inner-container constraints and desktop
+qualification remain open. Source group coordinate-space changes require a
+fresh baseline; transforms do not claim native typography reflow qualification.
 The v4.2.1 baseline already has explicit local-template placements, resolved frame
 zones, native object identity tags, low-level connector support and reviewed
 plain-text adoption. It does not expose a complete diagram-editing CLI or adopt

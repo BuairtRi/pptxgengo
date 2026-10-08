@@ -138,8 +138,16 @@ func AdoptTextReviewPacket(p *Project, packet *TextReviewPacket, decisionsRaw []
 	if e != nil {
 		return result, e
 	}
+	if packet.Report.GeometryScope != "" {
+		if e = addGeometryReconciliation(original, b, packet.Edited, &replayed, bundle, engine); e != nil {
+			return result, e
+		}
+	}
 	if !bytes.Equal(canonical(replayed), canonical(packet.Report)) {
 		return result, fmt.Errorf("reconcile.report_does_not_match_verified_inputs")
+	}
+	if packet.Report.GeometryScope != "" {
+		result.Validation = "reviewed_text_and_transforms_frame_checked_native_review_required"
 	}
 	result.Actor = decisions.Actor
 	result.ReportSHA256 = packet.ReportSHA256
@@ -164,6 +172,11 @@ func AdoptTextReviewPacket(p *Project, packet *TextReviewPacket, decisionsRaw []
 	selected := map[string]bool{}
 	for _, d := range decisions.Decisions {
 		selected[d.FieldID] = true
+	}
+	for _, f := range packet.Report.Geometry {
+		if (f.Status == "native_only" || f.Status == "conflict") && !selected[f.ID] {
+			result.RemainingFieldIDs = append(result.RemainingFieldIDs, f.ID)
+		}
 	}
 	for _, f := range packet.Report.Fields {
 		if (f.Status == "native_only" || f.Status == "conflict") && !selected[f.ID] {
@@ -306,9 +319,68 @@ func reviewedTextSourceChanges(p *Project, report TextReconciliationReport, deci
 		}
 		fields[f.ID] = f
 	}
+	geometryFields := map[string]GeometryReconciliationField{}
+	for _, f := range report.Geometry {
+		if _, ok := geometryFields[f.ID]; ok {
+			return nil, nil, fmt.Errorf("reconcile.duplicate_geometry_field")
+		}
+		geometryFields[f.ID] = f
+	}
 	touched := map[string]bool{}
 	selected := map[string]bool{}
 	for _, d := range decisions.Decisions {
+		if gf, ok := geometryFields[d.FieldID]; ok {
+			if selected[d.FieldID] || (gf.Status != "native_only" && gf.Status != "conflict") {
+				return nil, nil, fmt.Errorf("reconcile.invalid_geometry_decision")
+			}
+			selected[d.FieldID] = true
+			if d.Action == "keep_yaml" {
+				continue
+			}
+			node := slides[gf.SlideID]
+			if node == nil {
+				return nil, nil, fmt.Errorf("reconcile.geometry_slide_missing")
+			}
+			key := "native_geometry"
+			var value any = gf.EditedNative
+			if gf.EditedNative != nil {
+				copy := *gf.EditedNative
+				copy.SourceGeometrySHA256 = gf.SourceGeometrySHA256
+				value = &copy
+			}
+			if gf.Property == "paint_order" {
+				key = "native_order"
+				value = gf.EditedOrder
+			} else if gf.Property != "transform" || gf.EditedNative == nil {
+				return nil, nil, fmt.Errorf("reconcile.unsupported_geometry_property")
+			}
+			mapping := mappingNode(node, key)
+			if mapping == nil {
+				mapping = &yaml.Node{Kind: yaml.MappingNode, Tag: "!!map"}
+				replaceMappingField(node, key, mapping)
+			}
+			v, err := editYAMLNode(value)
+			if err != nil {
+				return nil, nil, err
+			}
+			replaceMappingField(mapping, gf.Name, v)
+			for _, sourceSlide := range p.Document.Slides {
+				if sourceSlide.ID == gf.SlideID {
+					pin, err := editYAMLNode(sourceSlide.Template)
+					if err != nil {
+						return nil, nil, err
+					}
+					replaceMappingField(node, "native_geometry_template", pin)
+				}
+			}
+			file := p.SlideFiles[gf.SlideID]
+			if file == "" {
+				file = filepath.Base(p.SourcePath)
+			}
+			touched[file] = true
+			changed = append(changed, AdoptedTextField{gf.ID, gf.SlideID, key + "/" + gf.Name, string(canonical(gf.CurrentYAML)), string(canonical(value))})
+			continue
+		}
 		f, ok := fields[d.FieldID]
 		if !ok || selected[d.FieldID] || (f.Status != "native_only" && f.Status != "conflict") {
 			return nil, nil, fmt.Errorf("reconcile.decision_is_not_a_supported_text_proposal")

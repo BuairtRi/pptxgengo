@@ -35,6 +35,17 @@ type nativeEditingSource struct {
 // permits forward references without matching text, geometry or paint order.
 func (r *renderer) registerEditableTargets(slide SlideSpec) error {
 	r.editableTargets = map[string]Rect{}
+	r.editableTargetNames = map[string]string{}
+	needsStockTargets := false
+	for _, node := range slide.Nodes {
+		if node.Scene != nil {
+			var tag struct{ Type string }
+			if e := json.Unmarshal(node.Scene.Node, &tag); e != nil {
+				return e
+			}
+			needsStockTargets = needsStockTargets || tag.Type == "attached-connector"
+		}
+	}
 	for _, node := range slide.Nodes {
 		if node.Scene == nil {
 			continue
@@ -46,7 +57,7 @@ func (r *renderer) registerEditableTargets(slide SlideSpec) error {
 		if e := json.Unmarshal(node.Scene.Node, &tag); e != nil {
 			return e
 		}
-		if tag.Type != "editable-block" {
+		if tag.Type != "editable-block" && (tag.Type != "block" || !needsStockTargets) {
 			continue
 		}
 		if !validPartKey(node.ID) {
@@ -60,6 +71,10 @@ func (r *renderer) registerEditableTargets(slide SlideSpec) error {
 			return fmt.Errorf("scene.invalid_editable_target_bounds: %s", node.ID)
 		}
 		r.editableTargets[node.ID] = b
+		r.editableTargetNames[node.ID] = node.ID
+		if tag.Type == "block" {
+			r.editableTargetNames[node.ID] = node.ID + ".surface"
+		}
 	}
 	return nil
 }
@@ -201,7 +216,14 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 		return nil, true, fmt.Errorf("scene.unknown_native_connector_head")
 	}
 	flipH, flipV := a[0] > z[0], a[1] > z[1]
-	connection := &pptx.ConnectorConnection{Begin: pptx.ConnectorEndpoint{ObjectName: n.From.Node, Site: start}, End: pptx.ConnectorEndpoint{ObjectName: n.To.Node, Site: end}}
+	fromName, toName := r.editableTargetNames[n.From.Node], r.editableTargetNames[n.To.Node]
+	if fromName == "" {
+		fromName = n.From.Node
+	}
+	if toName == "" {
+		toName = n.To.Node
+	}
+	connection := &pptx.ConnectorConnection{Begin: pptx.ConnectorEndpoint{ObjectName: fromName, Site: start}, End: pptx.ConnectorEndpoint{ObjectName: toName, Site: end}}
 	shape := &sceneShape{Type: pptx.ShapeTypeLine, Props: pptx.ShapeProps{PositionProps: pos(bounds), ObjectNameProps: pptx.ObjectNameProps{ObjectName: id}, Line: line, FlipH: &flipH, FlipV: &flipV}, Record: ShapeRecord{ID: id, Rect: bounds, Color: color, Geometry: "native-straight-connector"}, Connection: connection}
 	p := &scenePlan{Definition: "scene.attached-connector", ID: id, Bounds: bounds, Items: []sceneItem{{Shape: shape}}, Warnings: []string{"Native attached connector pilot uses explicit same-slide rectangular sites; routing, node movement and Save As require desktop qualification."}}
 	if strings.Contains(ctx.Path, "/body/") {
