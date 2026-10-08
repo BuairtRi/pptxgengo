@@ -184,10 +184,14 @@
     "density-limit": {
       "summary": "New slide field densityLimit: the densest level a slide may be rendered at when content is fitted (comfortable, compact or dense; default dense, i.e. no limit). Set to comfortable on the agenda schedule (agenda/schedule*) and lead-question (key-message/lead-questions*) templates, whose small Magenta text passes contrast only at comfortable sizes.",
       "pptx": "When stepping density down to fit, never go past densityLimit; if the slide still overflows at that level, flag it for a split. densityLimit never changes the authored density."
+    },
+    "families-2026-10-08": {
+      "summary": "New sections: Product backlogs (software, backlog/* x10), Product strategy roadmaps (roadmaps, roadmap-strategy/* x9), Resource plans (team, resource-plan/* x9). All compact density, no per-component sizes; contrast sweep clean at every density. Resource plans show FTE and allocation; cost only at team level.",
+      "pptx": "New templates only; composed from existing nodes (tables with rowGroups, priority, status, heat FTE cells, gantt, teamcurve, cards, blocks)."
     }
   },
   "summary": {
-    "added": 552,
+    "added": 580,
     "revised": 37,
     "deprecated": 1,
     "removed": 0,
@@ -4202,6 +4206,87 @@
       "pptx": "Dense table with bullets columns and a two-line row header; nav rail with Roadmap active. Density migration: Set slide density \"compact\" (body 12/17, small 11/15, subhead 16/21, label 8/11, table cells 12/10 per tokens.density); title zone stays comfortable. Drop the per-component small sizes on: bullets (“Scope”) size=small; bullets (“Entry criteria”) size=small; bullets (“Exit criteria”) size=small; bullets (“Decision gate”) size=small. Those nodes now take the slide's body/small roles, so their text size is unchanged (12 pt) while the other text on the slide steps down to the same scale. Geometry unchanged."
     },
     {
+      "key": "roadmap-strategy/bets-assumptions",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Strategy roadmap, bets with assumptions and decision points: Each strategic bet with the assumption to validate, the signal that says it is working, and the date to persevere or pivot, with the pivot named in advance.",
+      "pptx": "Build a table with priority chips, bet, assumption, signal and a decision cell with date and named pivot."
+    },
+    {
+      "key": "roadmap-strategy/cascade-full",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Strategy roadmap, vision to initiatives cascade: The product vision at the top, three strategic pillars below it, each with its outcome and metric, and the roadmap initiatives that deliver it by horizon.",
+      "pptx": "Build a vision band, three pillar bars, three outcome cards (KPI baseline to target) and nine Now/Next/Later initiative bars (fills inverse/strong/outline)."
+    },
+    {
+      "key": "roadmap-strategy/cascade-split",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Strategy roadmap, cascade in a split frame: The vision and how to read the cascade in the short column; a tall table of pillars, outcomes with baseline and target, initiatives and horizon beside it.",
+      "pptx": "Build a tall-right split: vision and north star text in the short column; tall table with three pillar group tabs, six outcome rows (baseline to target), initiatives and Now/Next/Later chips."
+    },
+    {
+      "key": "roadmap-strategy/nav-sections",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Strategy roadmap with strategy section rail: Strategy sections as the nav rail, with this slide showing the roadmap: pillars down the side, horizons across, and each bet with its decision gate.",
+      "pptx": "Build the nav rail (Vision, Segments, Bets, Roadmap, Measures; Roadmap active), horizon chevrons, three pillar cards and nine bet cards with decision gates and signals."
+    },
+    {
+      "key": "roadmap-strategy/north-star-inputs",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Strategy roadmap, north star and input metrics: The north star metric on top, four input metrics beneath it with baseline and target, and the bets that move each input with their timing.",
+      "pptx": "Build a north star band, four arrows to input headers, baseline-to-target stats and two timed bet cards per input."
+    },
+    {
+      "key": "roadmap-strategy/okr-quarters",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "OKR roadmap, key results by quarter: One objective per quarter with two key results, the initiative mapped to each, and a confidence status the team updates monthly.",
+      "pptx": "Build a table with quarter group tabs, objective, key result, mapped initiative, owner and a RAG confidence status column with High/Medium/Low labels."
+    },
+    {
+      "key": "roadmap-strategy/outcome-horizons",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Outcome-based roadmap, KPIs by horizon: Three horizon columns where every item is an outcome with its baseline and target, and the initiatives that deliver it listed beneath; no feature appears without an outcome.",
+      "pptx": "Build three horizon chevrons and six outcome cards, each with KPI label (baseline to target), outcome title and three initiative bullets."
+    },
+    {
+      "key": "roadmap-strategy/strategy-on-a-page",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Strategy on a page, digital front door: A dense one-page strategy: vision, target segments, problems, value proposition, strategic bets, what we will not do and success measures.",
+      "pptx": "Build a vision band and a 3x2 grid of labelled sections with rules and bullet lists, with the value proposition as a card with a Magenta left edge."
+    },
+    {
+      "key": "roadmap-strategy/themes-swimlanes",
+      "family": "roadmaps",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Theme-based strategic roadmap, lanes with capacity: Strategic themes as swimlanes across five quarters, each with its share of delivery capacity shown as a small allocation bar and its initiatives as bars.",
+      "pptx": "Build four theme lane labels, a capacity percentage with a track-and-fill allocation bar, five quarter headers and initiative bars positioned by quarter span."
+    },
+    {
       "key": "roadmap/compact-narrative-right",
       "family": "roadmaps",
       "change": "added",
@@ -4640,6 +4725,96 @@
       "pptx": "Right inverse panel with cadence stat and ground rules; table of check-in cadence."
     },
     {
+      "key": "backlog/epic-hierarchy",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "One epic broken into four features and their user stories, with acceptance criteria counts, estimates and status; the epic summary sits in a panel at the left.",
+      "pptx": "Grounded epic panel with two metrics beside a table with four rowGroups (features), nine story rows, AC and points num columns, status."
+    },
+    {
+      "key": "backlog/epic-overview",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Table of epics grouped by product area with the outcome each serves, priority chip, size, status and target release.",
+      "pptx": "Table with rowGroups (Access, Money, Engage), priority chips P1-P4, tag sizes, status column and release text."
+    },
+    {
+      "key": "backlog/health-dashboard",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "A five-metric backlog health row (ready items, refinement coverage, average age, blocked items, bugs to features) with an age chart and three insights.",
+      "pptx": "5-up metric row, column chart of age buckets with the last bar highlighted, three strongnum insights."
+    },
+    {
+      "key": "backlog/ready-done",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Definition of ready and definition of done side by side as two checklist cards, with the owner and review cadence in a band below.",
+      "pptx": "Two subtle cards with checklists (DoR, DoD) and a Grounded band with the ownership line."
+    },
+    {
+      "key": "backlog/release-nav",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Three releases as cards listing the epics allocated to each, with planned load against capacity beneath, on the nav rail.",
+      "pptx": "Nav rail (active Plan); three edge-topped cards with epic bullets and an outcome, a metric under each for planned load vs capacity."
+    },
+    {
+      "key": "backlog/split-ranked",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "A tall ranked backlog table of twelve items in the tall column, with the prioritization rationale and the cut line in the short column.",
+      "pptx": "tall-right split: bullets and a Magenta callout in the short column; twelve-row ranked table in the tall column."
+    },
+    {
+      "key": "backlog/sprint-plan",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Backlog items allocated to four sprint columns, block height scaled to points, with the commitment line and carryover items marked.",
+      "pptx": "Four sprint columns of outline blocks whose height is 9 pt per story point, Grounded blocks for carryover, dashed capacity frames, a dashed commitment connector and a legend."
+    },
+    {
+      "key": "backlog/story-detail",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "A single user story with its statement, Given/When/Then acceptance criteria, definition of done checklist, dependencies, a designs link placeholder and the estimate.",
+      "pptx": "Subtle story card, Given/When/Then table, checkbox DoD table, estimate metric, dependencies bullets and an outlined designs-link block."
+    },
+    {
+      "key": "backlog/value-effort",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "A value versus effort 2x2 with eight backlog items plotted as numbered markers, and a ranked list beside it that keys the numbers.",
+      "pptx": "Quadrant chart with markers-only key, ordered list keyed to the numbers, and a strongnum reading column."
+    },
+    {
+      "key": "backlog/wsjf-scoring",
+      "family": "software",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "A weighted shortest job first table with value, time criticality, risk reduction and job size per item, the resulting score, rank and priority tier.",
+      "pptx": "Dark-header table with num columns, WSJF score, rank and priority tier chips, plus a formula line."
+    },
+    {
       "key": "capability-map/dense",
       "family": "software",
       "change": "added",
@@ -4929,6 +5104,87 @@
       "rev": 1,
       "summary": "Nav variant of bios/three, tall footer. Refit: cards 234 tall with a third proof point each, plus a one-line closing statement at y 378.",
       "pptx": "Set rail \"nav\" with nav items [Context, Approach, Team, Commercials, Next steps], active 2 (Team); content area unchanged. Tall footer; add third bullet to each bio card, card h 234, add lead-style closing line."
+    },
+    {
+      "key": "resource-plan/capacity-demand-nav",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Peak demand by role against planned capacity with the variance and a Covered, Gap or Over status for each role.",
+      "pptx": "Nav-rail table with num, delta and status columns; status labels Covered/Gap/Over."
+    },
+    {
+      "key": "resource-plan/firm-client",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Firm roles paired with client counterpart roles and the weekly time commitment each counterpart needs to give.",
+      "pptx": "tall-right split: bullets and two metrics in the short column, table with total row in the tall column."
+    },
+    {
+      "key": "resource-plan/fte-curve",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Total team size across the program as stacked bands by role group, with phase bands under the curve and the peak called out. Review fix: whole-number FTE shown as 1.0, average column one decimal; FTE-curve peak label aligned to weeks 7-10.",
+      "pptx": "Teamcurve (three stacked bands, four phase labels) plus four metrics."
+    },
+    {
+      "key": "resource-plan/one-pager",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Single page with the staffing table, three key assumptions and the team monthly run rate by phase.",
+      "pptx": "Heat staffing table, assumptions card, run-rate table with team-level runRate; source line."
+    },
+    {
+      "key": "resource-plan/ramp",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Roles as bars across the program weeks showing when each joins and leaves, with phase bands and milestones.",
+      "pptx": "Gantt: W1-W16 periods, four phase bands, group rails, two bar kinds, diamond milestones."
+    },
+    {
+      "key": "resource-plan/roster",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Person tiles with initials, role, allocation percentage and start and end dates for the named core team.",
+      "pptx": "3x3 subtle cards, each with a person (initials), role and a mono allocation and dates line."
+    },
+    {
+      "key": "resource-plan/shore-mix",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Delivery mix by phase as stacked bars with percentages, plus the time-zone overlap each location gives the client team.",
+      "pptx": "Stacked proportional blocks per phase (80/20/0 etc.), overlap table and note card; source line."
+    },
+    {
+      "key": "resource-plan/staffing-fortnight",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Role-by-fortnight staffing table at finer grain, with FTE heat cells and totals per period and per role.",
+      "pptx": "Same table with eight fortnight heat columns."
+    },
+    {
+      "key": "resource-plan/staffing-month",
+      "family": "team",
+      "change": "added",
+      "date": "2026-10-08",
+      "rev": 1,
+      "summary": "Role-by-month staffing table with FTE heat cells, totals per month and per role, and the peak month called out. Review fix: whole-number FTE shown as 1.0, average column one decimal; FTE-curve peak label aligned to weeks 7-10.",
+      "pptx": "Table with rowGroups (Leadership/Delivery/Client), heat cells 0-3 FTE, avg column, total row and a peak line."
     },
     {
       "key": "roles/by-phase-nav",

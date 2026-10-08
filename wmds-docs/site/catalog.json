@@ -225,10 +225,11 @@
       "name": "Software product delivery",
       "summary": "Capability maps, now/next/later roadmaps and product development lifecycle (PDLC) slides for a software product build and enhancement offering, with the SDLC drawn as an overlay.",
       "file": "templates/library/software.json",
-      "count": 7,
+      "count": 17,
       "sections": [
         "Capability maps",
-        "Capability maps with narrative"
+        "Capability maps with narrative",
+        "Product backlogs"
       ]
     },
     {
@@ -291,9 +292,10 @@
       "name": "Roadmaps",
       "summary": "Roadmaps and timelines: graphic roads (straight and branching), now/next/later, roadmap structures and dense grids, narrative roadmaps, phased plans and milestone timelines. Collected from the diagrams, software and approach families on 2026-10-06.",
       "file": "templates/library/roadmaps.json",
-      "count": 36,
+      "count": 45,
       "sections": [
         "Graphic roadmaps",
+        "Product strategy roadmaps",
         "Branching roadmaps",
         "Now, next, later",
         "Roadmap structures",
@@ -432,12 +434,13 @@
       "name": "Team and governance",
       "summary": "Org charts, pods, rosters, bios, roles by phase and governance.",
       "file": "templates/library/team.json",
-      "count": 21,
+      "count": 30,
       "sections": [
         "Org charts",
         "Pods and rosters",
         "Bios",
-        "Roles and governance"
+        "Roles and governance",
+        "Resource plans"
       ]
     },
     {
@@ -12026,6 +12029,391 @@
       "replacedBy": null
     },
     {
+      "key": "backlog/epic-overview",
+      "name": "Product backlog, epic overview",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Table of epics grouped by product area with the outcome each serves, priority chip, size, status and target release.",
+      "nodes": [
+        "priority",
+        "status",
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table.rowgroups",
+        "table.priority",
+        "table.tag",
+        "table.status"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "epic",
+        "outcome"
+      ],
+      "budget": {
+        "words": 150,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/epic-hierarchy",
+      "name": "Product backlog, epic to feature to story",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "One epic broken into four features and their user stories, with acceptance criteria counts, estimates and status; the epic summary sits in a panel at the left.",
+      "nodes": [
+        "block",
+        "metric",
+        "num",
+        "status",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table.rowgroups",
+        "table.status",
+        "shape.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "feature",
+        "story"
+      ],
+      "budget": {
+        "words": 175,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/story-detail",
+      "name": "Product backlog, story detail one-pager",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A single user story with its statement, Given/When/Then acceptance criteria, definition of done checklist, dependencies, a designs link placeholder and the estimate.",
+      "nodes": [
+        "block",
+        "bullets",
+        "card",
+        "checkbox",
+        "grouplabel",
+        "metric",
+        "table"
+      ],
+      "uses": [
+        "card.plain",
+        "table.checkbox",
+        "metric"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "statement",
+        "criterion",
+        "dependency"
+      ],
+      "budget": {
+        "words": 152,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/value-effort",
+      "name": "Product backlog, value vs effort",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A value versus effort 2x2 with eight backlog items plotted as numbered markers, and a ranked list beside it that keys the numbers.",
+      "nodes": [
+        "chart",
+        "grouplabel",
+        "ol",
+        "strongnum"
+      ],
+      "uses": [
+        "chart.quadrant",
+        "list.ordered",
+        "text.grouplabel"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "item"
+      ],
+      "budget": {
+        "words": 122,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/wsjf-scoring",
+      "name": "Product backlog, WSJF scoring",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A weighted shortest job first table with value, time criticality, risk reduction and job size per item, the resulting score, rank and priority tier.",
+      "nodes": [
+        "num",
+        "priority",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table.num",
+        "table.priority",
+        "text.body"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "item",
+        "formula note"
+      ],
+      "budget": {
+        "words": 129,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/sprint-plan",
+      "name": "Product backlog, sprint plan with capacity",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Backlog items allocated to four sprint columns, block height scaled to points, with the commitment line and carryover items marked.",
+      "nodes": [
+        "block",
+        "connector",
+        "frame",
+        "text"
+      ],
+      "uses": [
+        "shape.block",
+        "connector",
+        "legend"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "sprint",
+        "item"
+      ],
+      "budget": {
+        "words": 148,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/health-dashboard",
+      "name": "Product backlog, health dashboard",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A five-metric backlog health row (ready items, refinement coverage, average age, blocked items, bugs to features) with an age chart and three insights.",
+      "nodes": [
+        "chart",
+        "metric",
+        "rule",
+        "strongnum"
+      ],
+      "uses": [
+        "metric",
+        "chart.column",
+        "list.strongnum"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "metric label",
+        "insight title",
+        "insight text"
+      ],
+      "budget": {
+        "words": 110,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/ready-done",
+      "name": "Product backlog, definition of ready and done",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Definition of ready and definition of done side by side as two checklist cards, with the owner and review cadence in a band below.",
+      "nodes": [
+        "block",
+        "card",
+        "text"
+      ],
+      "uses": [
+        "card.checklist",
+        "shape.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "criterion",
+        "band"
+      ],
+      "budget": {
+        "words": 123,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/split-ranked",
+      "name": "Product backlog, ranked table with rationale",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "working",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A tall ranked backlog table of twelve items in the tall column, with the prioritization rationale and the cut line in the short column.",
+      "nodes": [
+        "bullets",
+        "callout",
+        "num",
+        "priority",
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table.priority",
+        "table.tag",
+        "text.bullets"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "rationale",
+        "item"
+      ],
+      "budget": {
+        "words": 157,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "backlog/release-nav",
+      "name": "Product backlog, release plan with nav rail",
+      "family": "software",
+      "section": "Product backlogs",
+      "tier": "working",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Three releases as cards listing the epics allocated to each, with planned load against capacity beneath, on the nav rail.",
+      "nodes": [
+        "cardrow",
+        "metric"
+      ],
+      "uses": [
+        "card.row",
+        "metric",
+        "frame.nav"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "release",
+        "epic line"
+      ],
+      "budget": {
+        "words": 139,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
       "key": "lifecycle/three-phases",
       "name": "Modernization lifecycle · three phases",
       "family": "modernization",
@@ -15926,6 +16314,350 @@
       "legacy": "new 2026-10-06",
       "rev": 1,
       "added": "2026-10-06",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/cascade-full",
+      "name": "Strategy roadmap, vision to initiatives cascade",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "The product vision at the top, three strategic pillars below it, each with its outcome and metric, and the roadmap initiatives that deliver it by horizon.",
+      "nodes": [
+        "block",
+        "card",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "card",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "vision",
+        "pillar",
+        "outcome metric",
+        "initiative"
+      ],
+      "budget": {
+        "words": 150,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/cascade-split",
+      "name": "Strategy roadmap, cascade in a split frame",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "The vision and how to read the cascade in the short column; a tall table of pillars, outcomes with baseline and target, initiatives and horizon beside it.",
+      "nodes": [
+        "priority",
+        "rule",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table",
+        "rowGroups",
+        "priority",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "vision",
+        "outcome",
+        "initiative"
+      ],
+      "budget": {
+        "words": 134,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/outcome-horizons",
+      "name": "Outcome-based roadmap, KPIs by horizon",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Three horizon columns where every item is an outcome with its baseline and target, and the initiatives that deliver it listed beneath; no feature appears without an outcome.",
+      "nodes": [
+        "card",
+        "chevron"
+      ],
+      "uses": [
+        "chevron",
+        "card",
+        "bullets"
+      ],
+      "slots": [
+        "title",
+        "horizon",
+        "KPI",
+        "outcome",
+        "initiative"
+      ],
+      "budget": {
+        "words": 174,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/okr-quarters",
+      "name": "OKR roadmap, key results by quarter",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "One objective per quarter with two key results, the initiative mapped to each, and a confidence status the team updates monthly.",
+      "nodes": [
+        "status",
+        "table"
+      ],
+      "uses": [
+        "table",
+        "rowGroups",
+        "status"
+      ],
+      "slots": [
+        "title",
+        "objective",
+        "key result",
+        "initiative"
+      ],
+      "budget": {
+        "words": 97,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/north-star-inputs",
+      "name": "Strategy roadmap, north star and input metrics",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "The north star metric on top, four input metrics beneath it with baseline and target, and the bets that move each input with their timing.",
+      "nodes": [
+        "block",
+        "card",
+        "connector",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "connector",
+        "text",
+        "card"
+      ],
+      "slots": [
+        "title",
+        "north star",
+        "input",
+        "metric",
+        "bet"
+      ],
+      "budget": {
+        "words": 150,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/strategy-on-a-page",
+      "name": "Strategy on a page, digital front door",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A dense one-page strategy: vision, target segments, problems, value proposition, strategic bets, what we will not do and success measures.",
+      "nodes": [
+        "block",
+        "bullets",
+        "card",
+        "ol",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "bullets",
+        "ol",
+        "card",
+        "rule"
+      ],
+      "slots": [
+        "title",
+        "vision",
+        "section label",
+        "bullet"
+      ],
+      "budget": {
+        "words": 187,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/themes-swimlanes",
+      "name": "Theme-based strategic roadmap, lanes with capacity",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Strategic themes as swimlanes across five quarters, each with its share of delivery capacity shown as a small allocation bar and its initiatives as bars.",
+      "nodes": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "theme",
+        "capacity share",
+        "initiative bar"
+      ],
+      "budget": {
+        "words": 104,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/bets-assumptions",
+      "name": "Strategy roadmap, bets with assumptions and decision points",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Each strategic bet with the assumption to validate, the signal that says it is working, and the date to persevere or pivot, with the pivot named in advance.",
+      "nodes": [
+        "priority",
+        "table"
+      ],
+      "uses": [
+        "table",
+        "priority"
+      ],
+      "slots": [
+        "title",
+        "bet",
+        "assumption",
+        "signal",
+        "decision"
+      ],
+      "budget": {
+        "words": 181,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "roadmap-strategy/nav-sections",
+      "name": "Strategy roadmap with strategy section rail",
+      "family": "roadmaps",
+      "section": "Product strategy roadmaps",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Strategy sections as the nav rail, with this slide showing the roadmap: pillars down the side, horizons across, and each bet with its decision gate.",
+      "nodes": [
+        "card",
+        "chevron",
+        "text"
+      ],
+      "uses": [
+        "nav rail",
+        "card",
+        "chevron"
+      ],
+      "slots": [
+        "title",
+        "rail section",
+        "pillar",
+        "outcome",
+        "gate",
+        "bet"
+      ],
+      "budget": {
+        "words": 181,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
       "revised": null,
       "status": "active",
       "replacedBy": null
@@ -24051,6 +24783,337 @@
       "rev": 2,
       "added": "2026-10-02",
       "revised": "2026-10-06",
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/staffing-month",
+      "name": "Resource plan · staffing by month",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Role-by-month staffing table with FTE heat cells, totals per month and per role, and the peak month called out.",
+      "nodes": [
+        "heat",
+        "num",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table.standard (heat cells, rowGroups, total row)",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "role",
+        "role note",
+        "FTE"
+      ],
+      "budget": {
+        "words": 101,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/staffing-fortnight",
+      "name": "Resource plan · staffing by fortnight",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Role-by-fortnight staffing table at finer grain, with FTE heat cells and totals per period and per role.",
+      "nodes": [
+        "heat",
+        "num",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table.standard (heat cells, rowGroups, total row)"
+      ],
+      "slots": [
+        "title",
+        "role",
+        "FTE"
+      ],
+      "budget": {
+        "words": 92,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/ramp",
+      "name": "Resource plan · ramp-on and ramp-off",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Roles as bars across the program weeks showing when each joins and leaves, with phase bands and milestones.",
+      "nodes": [
+        "gantt"
+      ],
+      "uses": [
+        "advanced.gantt (group rails, gates, phases)"
+      ],
+      "slots": [
+        "title",
+        "role",
+        "bar label",
+        "milestone"
+      ],
+      "budget": {
+        "words": 90,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/fte-curve",
+      "name": "Resource plan · FTE curve by role group",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Total team size across the program as stacked bands by role group, with phase bands under the curve and the peak called out.",
+      "nodes": [
+        "metric",
+        "teamcurve"
+      ],
+      "uses": [
+        "data.teamcurve",
+        "data.metric"
+      ],
+      "slots": [
+        "title",
+        "phase",
+        "phase note",
+        "metric label"
+      ],
+      "budget": {
+        "words": 74,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/shore-mix",
+      "name": "Resource plan · onshore, nearshore and offshore mix",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Delivery mix by phase as stacked bars with percentages, plus the time-zone overlap each location gives the client team.",
+      "nodes": [
+        "block",
+        "card",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "shape.block (proportional bars)",
+        "table.standard",
+        "card"
+      ],
+      "slots": [
+        "title",
+        "phase",
+        "percentage",
+        "location",
+        "overlap note"
+      ],
+      "budget": {
+        "words": 109,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/firm-client",
+      "name": "Resource plan · firm and client responsibilities",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Firm roles paired with client counterpart roles and the weekly time commitment each counterpart needs to give.",
+      "nodes": [
+        "bullets",
+        "metric",
+        "num",
+        "table"
+      ],
+      "uses": [
+        "table.standard (total row)",
+        "text.bullets"
+      ],
+      "slots": [
+        "title",
+        "firm role",
+        "client role",
+        "hours",
+        "ask"
+      ],
+      "budget": {
+        "words": 98,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/roster",
+      "name": "Resource plan · named roster with allocation",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Person tiles with initials, role, allocation percentage and start and end dates for the named core team.",
+      "nodes": [
+        "card",
+        "person",
+        "text"
+      ],
+      "uses": [
+        "people.person",
+        "card"
+      ],
+      "slots": [
+        "title",
+        "name",
+        "role",
+        "allocation",
+        "dates"
+      ],
+      "budget": {
+        "words": 140,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/capacity-demand-nav",
+      "name": "Resource plan · capacity against demand · nav rail",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "nav rail · tall footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Peak demand by role against planned capacity with the variance and a Covered, Gap or Over status for each role.",
+      "nodes": [
+        "delta",
+        "num",
+        "status",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table.standard (num, delta, status)",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "role",
+        "FTE",
+        "note"
+      ],
+      "budget": {
+        "words": 85,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "resource-plan/one-pager",
+      "name": "Resource plan · one-page summary",
+      "family": "team",
+      "section": "Resource plans",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Single page with the staffing table, three key assumptions and the team monthly run rate by phase.",
+      "nodes": [
+        "card",
+        "heat",
+        "num",
+        "table"
+      ],
+      "uses": [
+        "table.standard (heat)",
+        "card",
+        "table.standard (runRate)"
+      ],
+      "slots": [
+        "title",
+        "role",
+        "assumption",
+        "phase",
+        "run rate"
+      ],
+      "budget": {
+        "words": 103,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-08",
+      "rev": 1,
+      "added": "2026-10-08",
+      "revised": null,
       "status": "active",
       "replacedBy": null
     },
