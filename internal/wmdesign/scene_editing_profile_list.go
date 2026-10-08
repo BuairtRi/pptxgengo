@@ -142,12 +142,14 @@ func (r *renderer) nativeProfileListResult(p *scenePlan, raw json.RawMessage) (*
 		paragraphs[len(paragraphs)-1].ParagraphGapAfter = paragraphs[len(paragraphs)-2].ParagraphGapAfter
 	}
 	tr.Rect.H = bottom - tr.Rect.Y
-	texts := make([]string, len(items))
-	for i := range items {
-		texts[i] = items[i].text
+	originals := make([]string, len(records))
+	displayed := make([]string, len(records))
+	for i := range records {
+		originals[i] = records[i].Layout.Original
+		displayed[i] = records[i].Layout.Displayed
 	}
-	tr.Layout.Original = strings.Join(texts, "\n")
-	tr.Layout.Displayed = tr.Layout.Original
+	tr.Layout.Original = strings.Join(originals, "\n")
+	tr.Layout.Displayed = strings.Join(displayed, "\n")
 	last := records[len(records)-1]
 	offset := last.Rect.Y - tr.Rect.Y
 	tr.Layout.AllocationHeight = offset + last.Layout.AllocationHeight

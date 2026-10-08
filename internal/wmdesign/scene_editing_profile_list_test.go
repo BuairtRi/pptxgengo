@@ -164,3 +164,29 @@ func TestNativeProfileListConvertsPlannerResolvedInlineMarkup(t *testing.T) {
 		t.Fatalf("inline source syntax was not emitted as measured rich runs: %+v", paragraph)
 	}
 }
+
+func TestNativeProfileListDisplayedMetadataMatchesParagraphText(t *testing.T) {
+	r := intakeTestRenderer(t)
+	r.source = densityTestSource(t)
+	var err error
+	r.typeEngine, err = NewSourceTypographyEngine(r.source, filepath.Join(densityTestBundle(), "fonts"), CandidateEngine)
+	if err != nil {
+		t.Fatal(err)
+	}
+	r.editingProfile = NativeEditingProfile
+	p, err := r.planSceneNode("styled-list", json.RawMessage(`{"type":"bullets","x":60,"y":100,"w":340,"items":["[[Formatted]] text","Next item"]}`), SceneContext{Surface: "light"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(p.Items) != 1 || p.Items[0].Text == nil {
+		t.Fatal("styled list did not convert", p.Warnings)
+	}
+	tr := p.Items[0].Text
+	var display []string
+	for _, para := range tr.Rich.Paragraphs {
+		display = append(display, para.Displayed)
+	}
+	if tr.Layout.Displayed != strings.Join(display, "\n") || strings.Contains(tr.Layout.Displayed, "[[") {
+		t.Fatal("displayed metadata includes authored syntax", tr.Layout.Displayed)
+	}
+}
