@@ -160,3 +160,10 @@ rejected instead of applying an old transform to a newly generated coordinate
 space. Use an explicit layout reset and fresh baseline to review that change.
 The geometry proposal renderer verifies the actual current executable, fonts and
 bundle against the project lock before computing current YAML geometry.
+
+Reviewed structural reconciliation writes removed/copied components into the
+project-owned local template and adjusts the selected slide's bindings. Copied
+blocks receive fresh node IDs and independent content keys; their exact native
+transforms and paint order use the same pinned fields above. Use
+`reconcile propose --geometry --structure-map FILE` for explicit copy ownership,
+then review `structure` field IDs. Never inject native XML into authored YAML.

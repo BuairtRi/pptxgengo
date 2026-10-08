@@ -54,7 +54,7 @@ def remove(tree):
     raise ValueError('missing removal parent')
 
 
-def add(tree):
+def add(tree, inherited_tags=False):
     node = copy.deepcopy(group(tree, 'node07'))
     maximum = max(int(i.get('id')) for i in tree.findall('.//p:cNvPr', NS))
     for i, identity in enumerate(node.findall('.//p:cNvPr', NS), 1):
@@ -62,11 +62,19 @@ def add(tree):
         identity.set('name', identity.get('name').replace('node07', 'added-service'))
     for parent in node.iter():
         for child in list(parent):
-            if child.tag == '{' + NS['p'] + '}custDataLst':
+            if not inherited_tags and child.tag == '{' + NS['p'] + '}custDataLst':
                 parent.remove(child)
+    for leaf in node.findall('.//a:t', NS):
+        leaf.text = 'Monitoring'
     off = transform(node).find('a:off', NS)
-    off.set('y', str(int(off.get('y')) + 60 * 12700))
+    # Reuse the third service's row position. In the combined case that service
+    # was removed; the add-only case intentionally retains the occupied slot.
+    off.set('x', str(int(off.get('x')) + 160 * 12700))
     tree.find('p:cSld/p:spTree', NS).append(node)
+
+
+def add_with_tags(tree):
+    add(tree, inherited_tags=True)
 
 
 def reorder(tree):
@@ -110,7 +118,9 @@ def main():
     cases = {'no-op': [], 'move': [move], 'resize': [resize], 'remove': [remove],
              'add': [add], 'reorder': [reorder], 'connector-move': [reroute],
              'combined-supported': [move, resize, reorder, reroute],
-             'combined': [move, resize, remove, add, reorder, reroute]}
+             'combined': [move, resize, remove, add, reorder, reroute],
+             'add-inherited-tags': [add_with_tags],
+             'combined-inherited-tags': [move, resize, remove, add_with_tags, reorder, reroute]}
     results = {}
     with zipfile.ZipFile(build / 'deck.pptx') as archive:
         original = archive.read('ppt/slides/slide1.xml')

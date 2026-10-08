@@ -134,20 +134,30 @@ func AdoptTextReviewPacket(p *Project, packet *TextReviewPacket, decisionsRaw []
 	if e != nil {
 		return result, e
 	}
-	replayed, e := ReconcileText(original, b, packet.Edited)
+	mappings, e := packetStructureMappings(packet)
+	if e != nil {
+		return result, e
+	}
+	analysis, e := prepareMappedNativeCopies(packet.Edited, b, mappings)
+	if e != nil {
+		return result, e
+	}
+	replayed, e := ReconcileText(original, b, analysis)
 	if e != nil {
 		return result, e
 	}
 	if packet.Report.GeometryScope != "" {
-		if e = addGeometryReconciliation(original, b, packet.Edited, &replayed, bundle, engine); e != nil {
+		if e = addGeometryReconciliation(original, b, analysis, &replayed, bundle, engine, mappings...); e != nil {
 			return result, e
 		}
 	}
+	replayed.EditedPPTXSHA256 = digest(packet.Edited)
+
 	if !bytes.Equal(canonical(replayed), canonical(packet.Report)) {
 		return result, fmt.Errorf("reconcile.report_does_not_match_verified_inputs")
 	}
 	if packet.Report.GeometryScope != "" {
-		result.Validation = "reviewed_text_and_transforms_frame_checked_native_review_required"
+		result.Validation = "reviewed_text_transforms_and_supported_structure_frame_checked_native_review_required"
 	}
 	result.Actor = decisions.Actor
 	result.ReportSHA256 = packet.ReportSHA256
@@ -159,7 +169,7 @@ func AdoptTextReviewPacket(p *Project, packet *TextReviewPacket, decisionsRaw []
 	result.ManualReview = packet.Report.ManualReview
 	result.ReviewDecisions = decisions.Decisions
 	result.ID = "text-adoption-" + digest(canonical([]string{result.ReportSHA256, result.DecisionsSHA256, result.Actor}))
-	changes, changed, e := reviewedTextSourceChanges(original, packet.Report, decisions)
+	changes, changed, e := reviewedTextSourceChanges(original, packet.Report, decisions, bundle, engine)
 	if e != nil {
 		return result, e
 	}
@@ -172,6 +182,11 @@ func AdoptTextReviewPacket(p *Project, packet *TextReviewPacket, decisionsRaw []
 	selected := map[string]bool{}
 	for _, d := range decisions.Decisions {
 		selected[d.FieldID] = true
+	}
+	for _, f := range packet.Report.Structure {
+		if (f.Status == "native_only" || f.Status == "conflict") && !selected[f.ID] {
+			result.RemainingFieldIDs = append(result.RemainingFieldIDs, f.ID)
+		}
 	}
 	for _, f := range packet.Report.Geometry {
 		if (f.Status == "native_only" || f.Status == "conflict") && !selected[f.ID] {
@@ -301,7 +316,7 @@ func projectFromTextPacket(p *Project, packet *TextReviewPacket) (*Project, erro
 	}
 	return original, nil
 }
-func reviewedTextSourceChanges(p *Project, report TextReconciliationReport, decisions TextReviewDecisions) (map[string][]byte, []AdoptedTextField, error) {
+func reviewedTextSourceChanges(p *Project, report TextReconciliationReport, decisions TextReviewDecisions, bundle, engine string) (map[string][]byte, []AdoptedTextField, error) {
 	changes := map[string][]byte{}
 	changed := []AdoptedTextField{}
 	main, e := sourceYAML(p.Raw)
@@ -328,7 +343,14 @@ func reviewedTextSourceChanges(p *Project, report TextReconciliationReport, deci
 	}
 	touched := map[string]bool{}
 	selected := map[string]bool{}
+	structureIDs := map[string]bool{}
+	for _, f := range report.Structure {
+		structureIDs[f.ID] = true
+	}
 	for _, d := range decisions.Decisions {
+		if structureIDs[d.FieldID] {
+			continue
+		}
 		if gf, ok := geometryFields[d.FieldID]; ok {
 			if selected[d.FieldID] || (gf.Status != "native_only" && gf.Status != "conflict") {
 				return nil, nil, fmt.Errorf("reconcile.invalid_geometry_decision")
@@ -408,6 +430,11 @@ func reviewedTextSourceChanges(p *Project, report TextReconciliationReport, deci
 		touched[file] = true
 		changed = append(changed, AdoptedTextField{f.ID, f.SlideID, f.SourceSlot, f.CurrentYAML, f.EditedNative})
 	}
+	structureChanged, err := applyReviewedStructure(p, report, decisions, slides, documents, touched, bundle, engine)
+	if err != nil {
+		return nil, nil, err
+	}
+	changed = append(changed, structureChanged...)
 	for file := range touched {
 		raw, e := encodeSourceYAML(documents[file])
 		if e != nil {
