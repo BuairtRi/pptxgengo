@@ -13,3 +13,24 @@ type NativeGeometry struct {
 	FlipV                bool    `json:"flip_v,omitempty"`
 	Child                *Rect   `json:"child_space,omitempty"`
 }
+
+// Padding is expressed in the container's native placement axes, before its
+// rotation and parent scaling. This is an allocation contract, not an ink bound.
+type DiagramPadding struct {
+	Top    float64 `json:"top_pt"`
+	Right  float64 `json:"right_pt"`
+	Bottom float64 `json:"bottom_pt"`
+	Left   float64 `json:"left_pt"`
+}
+type DiagramContainment struct {
+	Container string         `json:"container"`
+	Padding   DiagramPadding `json:"padding"`
+}
+type DiagramContainmentObservation struct {
+	Member        string         `json:"member"`
+	Container     string         `json:"container"`
+	Padding       DiagramPadding `json:"padding"`
+	Clearance     DiagramPadding `json:"clearance"`
+	ContainerRect Rect           `json:"container_rect"`
+	MemberBounds  Rect           `json:"member_bounds_in_container_axes"`
+}

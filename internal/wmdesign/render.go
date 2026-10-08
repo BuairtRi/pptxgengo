@@ -39,23 +39,24 @@ type Node struct {
 	Scene      *SceneSpec      `json:"scene,omitempty"`
 }
 type SlideSpec struct {
-	NativeGeometry  map[string]NativeGeometry `json:"native_geometry,omitempty"`
-	NativeOrder     map[string][]string       `json:"native_order,omitempty"`
-	ID              string                    `json:"id"`
-	Density         string                    `json:"density,omitempty"`
-	DensityLimit    string                    `json:"source_density_limit,omitempty"`
-	AutoDensity     *bool                     `json:"auto_density,omitempty"`
-	Hidden          bool                      `json:"hidden,omitempty"`
-	Notes           string                    `json:"notes,omitempty"`
-	DraftReview     *DraftReviewNote          `json:"draft_review,omitempty"`
-	Frame           FrameRequest              `json:"frame"`
-	Eyebrow         string                    `json:"eyebrow"`
-	Title           string                    `json:"title"`
-	Source          string                    `json:"source,omitempty"`
-	Nodes           []Node                    `json:"nodes"`
-	ContentKind     string                    `json:"content_kind,omitempty"`
-	TemplateBinding *TemplateSlideRecord      `json:"template_binding,omitempty"`
-	LibraryChrome   *LibraryChrome            `json:"library_chrome,omitempty"`
+	DiagramContainment map[string]DiagramContainment `json:"diagram_containment,omitempty"`
+	NativeGeometry     map[string]NativeGeometry     `json:"native_geometry,omitempty"`
+	NativeOrder        map[string][]string           `json:"native_order,omitempty"`
+	ID                 string                        `json:"id"`
+	Density            string                        `json:"density,omitempty"`
+	DensityLimit       string                        `json:"source_density_limit,omitempty"`
+	AutoDensity        *bool                         `json:"auto_density,omitempty"`
+	Hidden             bool                          `json:"hidden,omitempty"`
+	Notes              string                        `json:"notes,omitempty"`
+	DraftReview        *DraftReviewNote              `json:"draft_review,omitempty"`
+	Frame              FrameRequest                  `json:"frame"`
+	Eyebrow            string                        `json:"eyebrow"`
+	Title              string                        `json:"title"`
+	Source             string                        `json:"source,omitempty"`
+	Nodes              []Node                        `json:"nodes"`
+	ContentKind        string                        `json:"content_kind,omitempty"`
+	TemplateBinding    *TemplateSlideRecord          `json:"template_binding,omitempty"`
+	LibraryChrome      *LibraryChrome                `json:"library_chrome,omitempty"`
 }
 type Document struct {
 	EditingProfile    string                         `json:"editing_profile,omitempty"`
@@ -97,23 +98,24 @@ type NativeGeometryObservation struct {
 	WorldBounds Rect   `json:"world_bounds"`
 }
 type SlideReport struct {
-	NativeGeometry  []NativeGeometryObservation `json:"native_geometry,omitempty"`
-	ID              string                      `json:"id"`
-	Density         *SlideDensityRecord         `json:"density,omitempty"`
-	Hidden          bool                        `json:"hidden,omitempty"`
-	Notes           string                      `json:"notes,omitempty"`
-	DraftReview     *DraftReviewRecord          `json:"draft_review,omitempty"`
-	Page            int                         `json:"page"`
-	Frame           ResolvedFrame               `json:"frame"`
-	Texts           []TextRecord                `json:"texts"`
-	Nodes           []Node                      `json:"nodes"`
-	Components      []ComponentRecord           `json:"components,omitempty"`
-	CardRows        []CardRowRecord             `json:"card_rows,omitempty"`
-	Shapes          []ShapeRecord               `json:"shapes,omitempty"`
-	Scenes          []SceneRecord               `json:"scenes,omitempty"`
-	Tables          []SceneTableRecord          `json:"tables,omitempty"`
-	Charts          []SceneChartRecord          `json:"charts,omitempty"`
-	TemplateBinding *TemplateSlideRecord        `json:"template_binding,omitempty"`
+	DiagramContainment []DiagramContainmentObservation `json:"diagram_containment,omitempty"`
+	NativeGeometry     []NativeGeometryObservation     `json:"native_geometry,omitempty"`
+	ID                 string                          `json:"id"`
+	Density            *SlideDensityRecord             `json:"density,omitempty"`
+	Hidden             bool                            `json:"hidden,omitempty"`
+	Notes              string                          `json:"notes,omitempty"`
+	DraftReview        *DraftReviewRecord              `json:"draft_review,omitempty"`
+	Page               int                             `json:"page"`
+	Frame              ResolvedFrame                   `json:"frame"`
+	Texts              []TextRecord                    `json:"texts"`
+	Nodes              []Node                          `json:"nodes"`
+	Components         []ComponentRecord               `json:"components,omitempty"`
+	CardRows           []CardRowRecord                 `json:"card_rows,omitempty"`
+	Shapes             []ShapeRecord                   `json:"shapes,omitempty"`
+	Scenes             []SceneRecord                   `json:"scenes,omitempty"`
+	Tables             []SceneTableRecord              `json:"tables,omitempty"`
+	Charts             []SceneChartRecord              `json:"charts,omitempty"`
+	TemplateBinding    *TemplateSlideRecord            `json:"template_binding,omitempty"`
 }
 type Report struct {
 	EditingProfile     string                        `json:"editing_profile,omitempty"`

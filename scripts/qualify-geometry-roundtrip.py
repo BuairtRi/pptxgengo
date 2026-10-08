@@ -55,6 +55,7 @@ def main():
     parser.add_argument('--bundle', type=Path, required=True, help='ordinary V11 bundle directory, no symlinks')
     parser.add_argument('--out', type=Path, required=True, help='new private directory; use Documents for PowerPoint')
     parser.add_argument('--structures', action='store_true', help='qualify mapped copies and deletion together with transforms')
+    parser.add_argument('--containment', action='store_true', help='also declare Services padding and verify refused source/native escapes')
     parser.add_argument('--native', action='store_true', help='also render original/edited/rebuilt in local PowerPoint')
     args = parser.parse_args()
     cli, bundle, root = args.cli.resolve(), args.bundle.resolve(), args.out.absolute()
@@ -83,6 +84,16 @@ def main():
         '--title', 'Architecture geometry demo', '--bundle', bundle, '--template', 'architecture/nested')
     run('detach', 'project', 'detach', '--project', project, '--slide', 'first-slide',
         '--as', 'custom-architecture', '--reason', 'Catalog geometry round-trip qualification', '--bundle', bundle)
+    if args.containment:
+        arguments = ['project', 'diagram', 'contain', '--project', project, '--slide', 'first-slide',
+                     '--bundle', bundle, '--nodes', 'node06,node07,node08', '--container', 'node05',
+                     '--padding', '12', '--padding-top', '28', '--padding-bottom', '4',
+                     '--actor', 'Controlled XML qualification operator', '--reason', 'Keep services inside Services']
+        original = (project / 'slides/first-slide.yaml').read_bytes()
+        preview = run('contain-preview', *arguments)
+        if preview['applied'] or original != (project / 'slides/first-slide.yaml').read_bytes():
+            raise AssertionError('containment preview wrote source')
+        run('contain-apply', *arguments, '--apply')
     baseline = run('baseline', 'project', 'build', '--project', project, '--bundle', bundle)
     run('inspect', 'project', 'diagram', 'inspect', '--project', project, '--slide', 'first-slide', '--bundle', bundle)
     cases = root / 'xml-cases'
@@ -90,6 +101,47 @@ def main():
                               '--project', str(project), '--out', str(cases)],
                              capture_output=True, text=True, check=True, timeout=30)
     (logs / 'fixtures.stdout').write_text(process.stdout)
+    if args.containment:
+        def refused(name, *arguments):
+            command = [str(cli), *map(str, arguments)]
+            before = (project / 'slides/first-slide.yaml').read_bytes()
+            process = subprocess.run(command, capture_output=True, text=True, timeout=150)
+            (logs / (name + '.stdout')).write_text(process.stdout)
+            (logs / (name + '.stderr')).write_text(process.stderr)
+            (logs / (name + '.command.json')).write_text(json.dumps(command, indent=2) + '\n')
+            if not process.returncode or 'containment' not in process.stderr:
+                raise AssertionError(name + ': escape was not refused by containment: ' + process.stderr)
+            if before != (project / 'slides/first-slide.yaml').read_bytes():
+                raise AssertionError(name + ': refused escape wrote source')
+        patch = root / 'escape-patch.json'
+        patch.write_text(json.dumps({'schema': 'pptxgengo.diagram-patch.v1', 'actor': 'qualification',
+                                    'reason': 'Verify inner-container refusal',
+                                    'operations': [{'action': 'move', 'id': 'node06', 'dy_pt': 60}]}))
+        refused('source-escape', 'project', 'diagram', 'patch', '--project', project, '--slide', 'first-slide',
+                '--bundle', bundle, '--patch', patch, '--apply')
+        baseline_file = project / 'builds' / baseline['build_id'] / 'deck.pptx'
+        escape_file = root / 'native-escape.pptx'
+        with zipfile.ZipFile(baseline_file) as archive:
+            tree = ET.fromstring(archive.read('ppt/slides/slide1.xml'))
+            target = next(node for node in tree.findall('.//p:grpSp', NS)
+                          if node.find('p:nvGrpSpPr/p:cNvPr', NS).get('name') == 'node06')
+            off = target.find('p:grpSpPr/a:xfrm/a:off', NS)
+            off.set('y', str(int(off.get('y')) + 60 * 12700))
+            with zipfile.ZipFile(escape_file, 'w') as output:
+                for info in archive.infolist():
+                    output.writestr(info, ET.tostring(tree, encoding='utf-8', xml_declaration=True)
+                                    if info.filename == 'ppt/slides/slide1.xml' else archive.read(info.filename))
+        escape = run('native-escape-propose', 'project', 'reconcile', 'propose', '--project', project,
+                     '--geometry', '--bundle', bundle, '--edited', escape_file, '--out', root / 'escape-review')
+        decision = root / 'escape-decisions.json'
+        decision.write_text(json.dumps({'schema': 'pptxgengo.text-review-decisions.v1',
+                                       'report_sha256': escape['report_sha256'], 'actor': 'qualification',
+                                       'decisions': [{'field_id': field['id'], 'action': 'use_native',
+                                                      'reason': 'Verify refusal before source writes'}
+                                                     for field in escape['report']['geometry'] if field['status'] == 'native_only']}))
+        refused('native-escape-adopt', 'project', 'reconcile', 'adopt', '--project', project,
+                '--bundle', bundle, '--packet', root / 'escape-review', '--decisions', decision)
+        summary['containment_source_and_native_escape_refused_before_writes'] = True
     supported = None
     selected_case = 'combined-inherited-tags' if args.structures else 'combined-supported'
     mapping = root / 'structure-map.json'
@@ -147,6 +199,13 @@ def main():
         if any(node['id'] == 'node08' for node in current['nodes']) or not any(node['id'] == 'monitoring' for node in current['nodes']):
             raise AssertionError('native copy/deletion did not persist in source')
         summary['whole_component_deletion_and_mapped_copy_passed'] = True
+        if args.containment:
+            rules = {rule['member']: rule for rule in current['containment']}
+            if set(rules) != {'node06', 'node07', 'monitoring'} or rules['monitoring']['container'] != 'node05':
+                raise AssertionError('copy inheritance or deletion pruning failed')
+            if current.get('overlaps'):
+                raise AssertionError('unexpected sibling allocation overlap')
+            summary['containment_clearances_and_copy_inheritance_passed'] = True
     if edited_transforms != rebuilt_transforms or edited_order != rebuilt_order:
         raise AssertionError('rebuilt transforms or paint order differ from edited geometry')
     summary.update(objects_compared=len(edited_transforms), all_transforms_equal=True,

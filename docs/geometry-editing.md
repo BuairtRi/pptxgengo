@@ -36,8 +36,8 @@ cannot discard interleaved non-object XML.
 
 The layout report retains text measured in authored coordinates and separately
 records final native world bounds. Transform scaling is not a claim about native
-text reflow or typography acceptance. Frame boxes are checked; full ink extent,
-inner-container padding, obstacles and crossing diagnostics remain open.
+text reflow or typography acceptance. Frame boxes and explicitly declared inner-container allocations are checked;
+full ink extent, obstacles and crossing diagnostics remain open.
 
 ## Reconciliation protections
 
@@ -132,7 +132,7 @@ combined move/resize/connector translation/reorder, whole service deletion, and
 an explicitly mapped monitoring copy. The final comparison checks every transform,
 paint order, source topology, numbered version and private ZIP extraction, followed
 by actual PowerPoint exports. Controlled XML edits do not establish GUI editing/
-Save As qualification. Inner-container/ink clearance and bent routes remain open.
+Save As qualification. Full ink clearance and bent routes remain open.
 
 Second-slice private evidence is under
 `~/Documents/pptxgengo-qualification/geometry-structure-20261008/`:
@@ -157,3 +157,53 @@ Second-slice private evidence is under
   decisions, source conflicts/drift, off-frame refusal before source writes and
   repeated idempotent adoption. Full GUI/Save As and Windows qualification remain
   separate acceptance work.
+
+## Logical containment contract
+
+`diagram_containment` stores per-member native container names and nonnegative
+per-edge padding. The affine inverse of the container's native outer transform
+projects every member/descendant allocation into container placement axes. Parent
+scaling, rotation, flips and group child coordinate systems are included. A
+surviving member referencing a deleted container fails final fit. Explicit
+membership cycles and relationships contradicting native group ancestry fail.
+This does not reparent objects or infer semantic containers from visual overlap.
+
+The check runs after all native transforms/order and endpoint validation during
+build, preview and guarded adoption. Source member removal prunes membership;
+complete native deletion prunes exact owned names. Mapped copies inherit their
+source member rules. Related membership enters structural source fingerprints,
+so edits to those rules after a baseline require conflict review. Rules retain
+template identity pins even without transform overrides. Layout reset preserves
+rules, and uncontain is a separate actor/reason transaction with predecessors.
+
+Inspection returns clearances and overlap envelopes for direct declared siblings.
+Overlap warnings are diagnostic and conservative for rotated allocations; they
+are not exact ink collisions. Container headings need authored top padding, and
+stroke/arrowhead extent is still separate visual acceptance work.
+
+Focused tests cover source/native escape refusal before writes, scaled/rotated
+nested groups and descendants, cycles, missing references, padding, overlaps,
+copy inheritance/idempotence, source/native member removal, container deletion,
+reset preservation and canonical receipt retention. Qualification uses
+`scripts/qualify-geometry-roundtrip.py --structures --containment` with private
+Documents output; it additionally checks exact native rebuild, numbered snapshots
+and share/extraction. PowerPoint rendering remains a separate acceptance step.
+
+Third-slice private evidence is under
+`~/Documents/pptxgengo-qualification/geometry-containment-20261008/`:
+
+- `qualification-03` uses fixed CLI SHA-256
+  `dbc6146d85bd2ab7e7599970be3be5ed738489e3c557e01dde05dbe46f24818f`.
+  Authored and native moves escaping Services while staying inside the slide are
+  refused before writes. The combined inherited-tag specimen has three native
+  geometry and two structural proposals, zero manual items, all 41 transforms
+  and paint orders equal after rebuild, no declared sibling overlap, inherited
+  monitoring membership, deleted-member pruning and version/share/extraction.
+- The overlap diagnostic exposed a 2 pt sibling collision in the earlier copy
+  fixture. The corrected specimen moves the wider copy 168 pt horizontally,
+  preserving a 6 pt sibling gap and 12 pt container right padding.
+- A fresh Documents-based `render-doctor` probe reaches PowerPoint 16.113.4 and
+  passes automation/staging checks, but PDF export again returns `-9074` with
+  file access marked unknown. Its cause is unconfirmed; no native visual signoff
+  is claimed for this specimen. Controlled XML reconciliation qualification
+  passed independently. Full GUI/Save As and Windows checks remain pending.

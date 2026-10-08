@@ -33,22 +33,24 @@ type DiagramPatch struct {
 	Operations []DiagramOperation `json:"operations"`
 }
 type DiagramInspection struct {
-	SourceGeometryBasis map[string]string           `json:"source_geometry_basis"`
-	Ports               []DiagramPort               `json:"ports,omitempty"`
-	Connections         []DiagramConnection         `json:"connections,omitempty"`
-	Schema              string                      `json:"schema"`
-	SlideID             string                      `json:"slide_id"`
-	TemplateID          string                      `json:"template_id"`
-	SourceSHA256        string                      `json:"source_sha256"`
-	Frame               wmdesign.ResolvedFrame      `json:"frame"`
-	Nodes               []Node                      `json:"nodes"`
-	NativeGeometry      map[string]NativeGeometry   `json:"native_geometry,omitempty"`
-	NativeOrder         map[string][]string         `json:"native_order,omitempty"`
-	MeasuredScenes      []wmdesign.SceneRecord      `json:"measured_scenes"`
-	MeasuredText        []wmdesign.TextRecord       `json:"measured_text"`
-	FinalNative         []NativeGeometryObservation `json:"final_native_geometry"`
-	Warnings            []string                    `json:"warnings"`
-	Validation          string                      `json:"validation"`
+	Containment         []wmdesign.DiagramContainmentObservation `json:"containment,omitempty"`
+	Overlaps            []DiagramOverlap                         `json:"overlaps,omitempty"`
+	SourceGeometryBasis map[string]string                        `json:"source_geometry_basis"`
+	Ports               []DiagramPort                            `json:"ports,omitempty"`
+	Connections         []DiagramConnection                      `json:"connections,omitempty"`
+	Schema              string                                   `json:"schema"`
+	SlideID             string                                   `json:"slide_id"`
+	TemplateID          string                                   `json:"template_id"`
+	SourceSHA256        string                                   `json:"source_sha256"`
+	Frame               wmdesign.ResolvedFrame                   `json:"frame"`
+	Nodes               []Node                                   `json:"nodes"`
+	NativeGeometry      map[string]NativeGeometry                `json:"native_geometry,omitempty"`
+	NativeOrder         map[string][]string                      `json:"native_order,omitempty"`
+	MeasuredScenes      []wmdesign.SceneRecord                   `json:"measured_scenes"`
+	MeasuredText        []wmdesign.TextRecord                    `json:"measured_text"`
+	FinalNative         []NativeGeometryObservation              `json:"final_native_geometry"`
+	Warnings            []string                                 `json:"warnings"`
+	Validation          string                                   `json:"validation"`
 }
 type DiagramPatchResult struct {
 	Applied      bool              `json:"applied"`
@@ -171,6 +173,13 @@ func InspectDiagram(p *Project, id, bundle, engine string) (DiagramInspection, e
 	for _, n := range names {
 		out.FinalNative = append(out.FinalNative, NativeGeometryObservation{n, objects[n].geometry, world[n]})
 	}
+	out.Containment, out.Overlaps, e = checkDiagramContainment(objects, s.DiagramContainment)
+	if e != nil {
+		return out, e
+	}
+	for _, overlap := range out.Overlaps {
+		out.Warnings = append(out.Warnings, fmt.Sprintf("Allocation envelopes of declared siblings %s and %s overlap inside %s; review the diagram.", overlap.A, overlap.B, overlap.Container))
+	}
 	// Text remains measured in authored coordinates. Native group scaling is
 	// reported separately instead of claiming that PowerPoint reflow was tested.
 	if len(s.NativeGeometry) > 0 {
@@ -288,7 +297,9 @@ func PatchDiagram(p *Project, slideID string, patch DiagramPatch, bundle, engine
 			}
 			removeMappingField(slides[slideID], "native_geometry")
 			removeMappingField(slides[slideID], "native_order")
-			removeMappingField(slides[slideID], "native_geometry_template")
+			if len(s.DiagramContainment) == 0 {
+				removeMappingField(slides[slideID], "native_geometry_template")
+			}
 			nativeLayoutActive = false
 			slideChanged = true
 		case "add":
@@ -376,6 +387,9 @@ func PatchDiagram(p *Project, slideID string, patch DiagramPatch, bundle, engine
 	}
 	changes := map[string][]byte{}
 	if nodesChanged {
+		if pruneRemovedNodeContainment(p.Document.LocalTemplates[s.Template.ID].Nodes, t.Nodes, slides[slideID]) {
+			slideChanged = true
+		}
 		pruned, err := updateDiagramNodes(t, s, templateNode, slides[slideID], false)
 		if err != nil {
 			return out, err
@@ -528,4 +542,49 @@ func updateDiagramNodes(t LocalTemplate, s Slide, templateNode, slideNode *yaml.
 	}
 	replaceMappingField(templateNode, "nodes", replacement)
 	return slideChanged, nil
+}
+
+// Native names use the source node namespace plus component part suffixes.
+// Prune removed members only. Surviving children of a removed container need an
+// explicit membership decision and will fail final validation until revised.
+func pruneRemovedNodeContainment(before, after []Node, slide *yaml.Node) bool {
+	var names func([]Node, string, map[string]bool)
+	names = func(nodes []Node, prefix string, out map[string]bool) {
+		for _, n := range nodes {
+			id := prefix + n.ID
+			out[id] = true
+			names(n.Nodes, id+".", out)
+		}
+	}
+	old, new := map[string]bool{}, map[string]bool{}
+	names(before, "", old)
+	names(after, "", new)
+	m := mappingNode(slide, "diagram_containment")
+	if m == nil {
+		return false
+	}
+	changed := false
+	for i := 0; i+1 < len(m.Content); {
+		name := m.Content[i].Value
+		removed := false
+		for id := range old {
+			if !new[id] && (name == id || strings.HasPrefix(name, id+".")) {
+				removed = true
+				break
+			}
+		}
+		if removed {
+			m.Content = append(m.Content[:i], m.Content[i+2:]...)
+			changed = true
+		} else {
+			i += 2
+		}
+	}
+	if len(m.Content) == 0 {
+		removeMappingField(slide, "diagram_containment")
+		if mappingNode(slide, "native_geometry") == nil && mappingNode(slide, "native_order") == nil {
+			removeMappingField(slide, "native_geometry_template")
+		}
+	}
+	return changed
 }

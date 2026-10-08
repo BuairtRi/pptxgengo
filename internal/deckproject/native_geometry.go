@@ -298,7 +298,7 @@ func geometryWorld(objects map[string]*geometryObject) (map[string]wmdesign.Rect
 func applyNativeGeometry(raw []byte, doc wmdesign.Document, report *wmdesign.Report) ([]byte, error) {
 	any := false
 	for _, s := range doc.Slides {
-		any = any || len(s.NativeGeometry) > 0 || len(s.NativeOrder) > 0
+		any = any || len(s.NativeGeometry) > 0 || len(s.NativeOrder) > 0 || len(s.DiagramContainment) > 0
 	}
 	if !any {
 		return raw, nil
@@ -309,7 +309,7 @@ func applyNativeGeometry(raw []byte, doc wmdesign.Document, report *wmdesign.Rep
 	}
 	changed := map[string][]byte{}
 	for i, s := range doc.Slides {
-		if len(s.NativeGeometry) == 0 && len(s.NativeOrder) == 0 {
+		if len(s.NativeGeometry) == 0 && len(s.NativeOrder) == 0 && len(s.DiagramContainment) == 0 {
 			continue
 		}
 		part := fmt.Sprintf("ppt/slides/slide%d.xml", i+1)
@@ -427,6 +427,11 @@ func applyNativeGeometry(raw []byte, doc wmdesign.Document, report *wmdesign.Rep
 		if e = validateTransformedConnections(objects); e != nil {
 			return nil, e
 		}
+		checks, _, e := checkDiagramContainment(objects, s.DiagramContainment)
+		if e != nil {
+			return nil, e
+		}
+		report.Slides[i].DiagramContainment = checks
 		after, e = geometryWorld(objects)
 		if e != nil {
 			return nil, e

@@ -236,8 +236,12 @@ toolchain migration and offline runtime export remain separate commands.
 
 ## Diagram editing (geometry development build)
 
-`project diagram inspect|patch|connect|arrange` uses `--project` and `--slide`.
+`project diagram inspect|patch|connect|arrange|contain|uncontain` uses `--project` and `--slide`.
 Mutations preview by default; `--apply` commits validated source changes.
+`contain` declares native members/container and uniform or per-edge padding;
+`uncontain` explicitly removes selected memberships. Both preview before `--apply`
+and require `--actor`/`--reason`. Inspection includes clearances and sibling
+allocation overlaps.
 `project reconcile propose --geometry` also proposes native transforms and
 existing-object paint order and whole local leaf deletions. Add
 `--structure-map FILE` for explicit native block-copy mappings. See [architecture and geometry](architecture-geometry.md)

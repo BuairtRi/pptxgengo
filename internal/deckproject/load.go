@@ -335,13 +335,16 @@ func (p *Project) validate() error {
 				return p.fail(path+"/brief", "brief must be a project-relative path to a page brief file, not inline editorial text: %v", e)
 			}
 		}
-		if len(s.NativeGeometry) > 0 || len(s.NativeOrder) > 0 {
+		if len(s.NativeGeometry) > 0 || len(s.NativeOrder) > 0 || len(s.DiagramContainment) > 0 {
 			if s.NativeGeometryTemplate == nil || *s.NativeGeometryTemplate != s.Template {
-				return p.fail(path, "native geometry is pinned to another template; reset/review native layout before a template upgrade")
+				return p.fail(path, "native geometry/containment is pinned to another template; reset/review native layout and containment before a template upgrade")
 			}
 		}
 		if len(s.NativeGeometry) > 10000 || len(s.NativeOrder) > 10000 {
 			return p.fail(path, "native geometry/order exceeds 10000 entries")
+		}
+		if e := validateContainmentDeclarations(s.DiagramContainment); e != nil {
+			return p.fail(path+"/diagram_containment", "%v", e)
 		}
 		for name, g := range s.NativeGeometry {
 			if !shaPattern.MatchString(g.SourceGeometrySHA256) {

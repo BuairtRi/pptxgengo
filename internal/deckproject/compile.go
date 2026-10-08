@@ -159,6 +159,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 			c.Document.Slides = append(c.Document.Slides, doc.Slides...)
 			c.Document.Slides[len(c.Document.Slides)-1].NativeGeometry = slide.NativeGeometry
 			c.Document.Slides[len(c.Document.Slides)-1].NativeOrder = slide.NativeOrder
+			c.Document.Slides[len(c.Document.Slides)-1].DiagramContainment = slide.DiagramContainment
 			c.Document.Slides[len(c.Document.Slides)-1].Hidden = slide.Hidden
 			c.Document.Slides[len(c.Document.Slides)-1].Notes = slide.Notes
 			c.Document.Slides[len(c.Document.Slides)-1].DraftReview = slide.DraftReview
@@ -225,7 +226,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 		if slide.HeaderDensity != "" {
 			frame.HeaderDensity = slide.HeaderDensity
 		}
-		out := wmdesign.SlideSpec{NativeGeometry: slide.NativeGeometry, NativeOrder: slide.NativeOrder, ID: slide.ID, Hidden: slide.Hidden, Notes: slide.Notes, DraftReview: slide.DraftReview, ContentKind: slide.ContentKind, Density: slide.Density, AutoDensity: slide.AutoDensity, Frame: frame}
+		out := wmdesign.SlideSpec{DiagramContainment: slide.DiagramContainment, NativeGeometry: slide.NativeGeometry, NativeOrder: slide.NativeOrder, ID: slide.ID, Hidden: slide.Hidden, Notes: slide.Notes, DraftReview: slide.DraftReview, ContentKind: slide.ContentKind, Density: slide.Density, AutoDensity: slide.AutoDensity, Frame: frame}
 		if t.FrameChrome != nil {
 			out.LibraryChrome = &wmdesign.LibraryChrome{Emphasis: t.FrameChrome.Emphasis, Whiteboard: t.FrameChrome.Whiteboard, CustomWhiteboard: t.FrameChrome.CustomWhiteboard}
 		}
