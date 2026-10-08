@@ -1,10 +1,23 @@
 # Search, narrative, composition, and design passes
 
-Proposed architecture, 2026-09-25. Complements [PRODUCT_PLAN.md](PRODUCT_PLAN.md). This describes the intended product; the catalog and workflow are not implemented yet.
+Architecture and workflow notes, first drafted 2026-09-25; complements
+[PRODUCT_PLAN.md](PRODUCT_PLAN.md). Several catalog and authoring foundations
+described here are implemented in the current CLI: source-pinned templates,
+SQLite FTS5 discovery, project locks, measured layout, content matching and
+native-v1 editing where measured records permit it. This document remains a
+design reference for broader narrative planning, candidate evaluation and
+unimplemented evaluation stages. The published default is v11; its native
+rendering and visual qualification remain pending. See [current release
+status](docs/release-status.md) and the [documentation index](docs/README.md).
 
 ## A unified SQLite catalog
 
-Use SQLite from the first library implementation. The newly supplied corpus justifies a single query surface: 166 stock slides, 120 proposal examples, native layout parts, hundreds of local brand assets, a larger photo collection, and Markdown voice/design guidance. Keep original files and versioned manifests as the durable source; rebuild the catalog from them. Store large media and PPTX files in the filesystem, referenced by hash and resolvable location.
+The implemented library uses a source-pinned SQLite FTS5 index for discovery;
+the catalog remains a derived index over versioned manifests and source files.
+Keep original files and manifests as the durable source, rebuild indexes from
+them, and store large media and PPTX files in the filesystem with hashes and
+resolvable locations. The corpus counts in the sections below are historical
+examples from the original architecture draft, not current inventory totals.
 
 SQLite FTS5 supports ranked full-text retrieval and contextual snippets. That provides a practical foundation for searching descriptive metadata and document chunks; it does not infer the visual content of photographs. [SQLite FTS5 documentation](https://www.sqlite.org/fts5.html).
 

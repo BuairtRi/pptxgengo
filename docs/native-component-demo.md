@@ -65,6 +65,12 @@ preserves resolved source styles for eligible stock scenes; its build warnings
 identify conversions and exclusions. Demo approval does not confer exhaustive
 catalog or Windows qualification.
 
+The v4.2.1 release subsequently shipped a 717-slide template browsing deck with
+native editing coverage for all 649 retained templates. Its source-plan coverage
+does not extend this demo's desktop approval: Windows and exhaustive catalog
+PowerPoint qualification remain pending. The separate content-complete reusable
+slide inventory remains deferred.
+
 ## Repeat the fixture
 
 From the managed development checkout, use new private Documents destinations:

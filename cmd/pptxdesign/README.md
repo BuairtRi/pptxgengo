@@ -1,8 +1,11 @@
 # WMDS Go presentation authoring
 
-`pptxdesign` loads the current V11 source library, resolves pinned fonts, grids,
-frames and artwork, and writes editable PowerPoint objects. Normal generation
-runs in Go. PowerPoint rendering is the native review step.
+`pptxdesign` loads the published V11 source library, resolves bundled fonts,
+grids, frames and artwork, and writes editable PowerPoint objects. Normal
+generation runs in Go. New projects default to the `native-v1` editing profile
+where measured records support it; this is not native visual acceptance. V11
+native rendering and visual qualification remain pending. PowerPoint rendering
+is the review step for populated content.
 
 The [engineering command reference](../../docs/engineering-cli.md) covers
 content-first matching, aliases/capacity, asset discovery/registration, slide
@@ -76,10 +79,12 @@ not terminate PowerPoint or write other open presentations. If an app dialog
 blocks export, dismiss it and inspect `render-error.txt` before retrying in a
 new output directory.
 
-The library contains **616 templates (615 active)** at source commit
-`c788cefeb5bb409118ac217adb53216d8156eec3`. The accepted gallery qualifies each
-illustrated source specimen. New text, diagrams and images require a separate
-fit check and native review.
+The published V11 library contains **649 templates (648 active)** at source
+commit `3c56d842ba3abb5f24eb33cf0082be7a7a67f116`. It ships with bundled fonts,
+source/compiler files, gallery assets and a SQLite index; template-only archives
+include these resources. V11 native rendering and visual qualification are
+pending. New text, diagrams and images require a separate fit check and native
+review.
 
 ## Build and discover
 
@@ -87,11 +92,11 @@ Run from the repository root:
 
 ```sh
 go build -o /tmp/pptxdesign ./cmd/pptxdesign
-/tmp/pptxdesign library-find --index library/wm-design-system/v7/library.sqlite \
+/tmp/pptxdesign library-find --index library/wm-design-system/v11/library.sqlite \
   --query 'buy build modernization economics' --kinds template --limit 5 --summary
-/tmp/pptxdesign library-inspect --index library/wm-design-system/v7/library.sqlite \
+/tmp/pptxdesign library-inspect --index library/wm-design-system/v11/library.sqlite \
   --id decision/buy-build-economics --summary
-/tmp/pptxdesign library-preview --index library/wm-design-system/v7/library.sqlite \
+/tmp/pptxdesign library-preview --index library/wm-design-system/v11/library.sqlite \
   --id decision/buy-build-economics
 ```
 
@@ -117,8 +122,8 @@ library sweep commands.
 To make a new index after deliberate relocation:
 
 ```sh
-/tmp/pptxdesign library-index --bundle library/wm-design-system/v7 \
-  --gallery library/wm-design-system/v7/catalog --out /tmp/NEW-library.sqlite
+/tmp/pptxdesign library-index --bundle library/wm-design-system/v11 \
+  --gallery library/wm-design-system/v11/catalog --out /tmp/NEW-library.sqlite
 ```
 
 The SQLite index pins the matching source, bundle and gallery. Its artifact paths
@@ -132,9 +137,9 @@ then initialize, check and build with the same compiled executable:
 
 ```sh
 cp -R examples/deck-project /tmp/my-deck-project
-/tmp/pptxdesign project init --project /tmp/my-deck-project --bundle library/wm-design-system/v7
-/tmp/pptxdesign project check --project /tmp/my-deck-project --bundle library/wm-design-system/v7
-/tmp/pptxdesign project build --project /tmp/my-deck-project --bundle library/wm-design-system/v7
+/tmp/pptxdesign project init --project /tmp/my-deck-project --bundle library/wm-design-system/v11
+/tmp/pptxdesign project check --project /tmp/my-deck-project --bundle library/wm-design-system/v11
+/tmp/pptxdesign project build --project /tmp/my-deck-project --bundle library/wm-design-system/v11
 ```
 
 Source context, slide brief files, notes, hidden states, sections and custom assets
@@ -219,7 +224,7 @@ the selected template.
 Create a local derivative when the actual layout needs a deliberate change:
 
 ```sh
-/tmp/pptxdesign project scaffold --bundle library/wm-design-system/v7 \
+/tmp/pptxdesign project scaffold --bundle library/wm-design-system/v11 \
   --template lifecycle/three-phases --reason 'Preserve the authored phase structure' \
   --out /tmp/NEW-local-scaffold.json
 /tmp/pptxdesign project edit --project /tmp/my-deck-project --patch slide-edits.json
@@ -240,7 +245,7 @@ are advisory; chart/table internals and rotated text need visual inspection.
 ### Split a deck into editable slide files
 
 ```sh
-pptxdesign project split --project /path/to/project --bundle v7
+pptxdesign project split --project /path/to/project --bundle v11
 ```
 
 `deck.yaml` becomes the ordered index. Individual slide files contain human copy;
@@ -259,7 +264,7 @@ The [local composition example](../../examples/local-composition/README.md)
 demonstrates Venn, maturity and road components. See the
 [project contract](../../internal/deckproject/README.md) for strict source validation,
 assets, source lineage, approvals and portable exports. The retained
-[typography calculation contract](../../library/wm-design-system/v7/typography/README.md)
+[typography calculation contract](../../library/wm-design-system/v11/typography/README.md)
 describes calibrated measurements and their limits; the engine identifier remains
 `wmds-go-foundation.v2`.
 

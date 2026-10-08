@@ -1,6 +1,13 @@
 # Upstream template intake
 
-## Current implementation status — 2026-10-06
+This file retains earlier intake/qualification snapshots. Its production and
+upstream counts below describe their dated v10-era checkpoint, not the current
+package. The published default is now v11 / 649 source templates (648 active);
+see the [frozen v11 intake record](../planning/wm-design-contracts/v11/intake-20261006-649-frozen/README.md).
+Native render and visual qualification remain pending; see [current release
+status](release-status.md).
+
+## V10 intake qualification — 2026-10-06
 
 The qualified production library is **v10 / 649 templates** (648 active), pinned
 to `c14fb286fb38e15800a6fd476a1ed67956f1165f`. The 18 additions comprise five

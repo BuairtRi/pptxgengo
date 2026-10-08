@@ -2,7 +2,7 @@
 
 ## Inventory an actual build
 
-Source builds after v4.1.0 add:
+Source builds include:
 
 ```sh
 pptxgengo design project editability --project ./deck > native-editability.json
@@ -88,8 +88,9 @@ The combined-diagram task below adds bounded Mac movement/endpoint evidence.
 The native table task below adds one-cell editing evidence. Whole-card movement,
 other family tasks, both-platform density qualification and rollout decisions
 remain pending. The original structural inventory states
-`desktop_qualification: not_recorded`. Stable v4.1.0 contains neither this
-inventory nor the newer reconciliation commands.
+`desktop_qualification: not_recorded`. v4.2.1 includes the inventory and
+reconciliation commands; that release fact does not change the historical
+qualification state of this representative fixture.
 
 ## Explicit combined blocks and attached connectors
 
@@ -263,5 +264,9 @@ state became unavailable; no unowned document was closed.
 The [editable-card component](native-editable-card.md) adds an opt-in single
 filled rectangle with separate native title/body paragraphs and explicit source
 field addresses. It addresses the containing-unit design in the observed card
-selection pilot; actual Mac/Windows whole-card editing, movement and resizing
-remain qualification tasks. Existing stock card groups are unchanged.
+selection pilot. The v4.2.1 `native-v1` profile converts eligible stock scene
+cards to single native text shapes, preserving measured paragraphs and supported
+outline/deemphasis borders; unsupported stateful/decorated cards retain their
+groups with explicit reasons. This catalog source-plan comparison does not
+qualify Mac/Windows whole-card editing, movement and resizing for every template.
+See [native editing profile](native-editing-profile.md).

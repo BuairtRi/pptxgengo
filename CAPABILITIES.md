@@ -1,8 +1,26 @@
 # Capability survey
 
-Survey date: 2026-09-25. Baseline: local `master`, commit `82b44057`, plus the Go version change described below. This is a code and workflow survey, not a visual certification of generated presentations. Remote branch observations use locally available refs.
+Historical survey baseline: 2026-09-25, local `master` at `82b44057`, plus the Go version change described below. The original capability table records that snapshot and is not a current inventory. Neither the survey nor the updates below constitute visual certification of generated presentations.
 
-## Current authoring work — 2026-09-26
+## Current repository state — 2026-10-08
+
+The repository is now at v4.2.1 (`66229bd1`). `pptxgengo design` provides
+template search and inspection, project creation/build/edit, density controls,
+content matching, native rendering/review workflows, and portable packaging.
+The published default is WMDS v11: 649 templates, 648 active, with template
+sources, fonts, gallery and SQLite index included in template-only archives.
+New projects default to `native-v1` where a template's measured records support
+safe native text emission. This is an implementation default; v11 native
+rendering and visual qualification remain pending. See [release status](docs/release-status.md)
+and the [documentation index](docs/README.md).
+
+The Go authoring system, skill pack, SQLite catalog and project format described
+as absent in the original survey are now implemented to bounded scopes. The
+original rows below retain the 2026-09-25 baseline; read them as historical
+findings, not current product claims. See [testing lanes](docs/testing.md) for
+current CI ownership and qualification boundaries.
+
+## Historical authoring checkpoint — 2026-09-26
 
 The latest `pptxcompose` path includes measured numbered/metric cards, native
 canvas text/surfaces/rules, pinned PNG/JPEG imports, narrative notes, single-line
@@ -45,9 +63,10 @@ Uniform-style Arial blocks and explicit bounded tracks remain the supported scop
 The subsequent UHG experiment added `cmd/pptxscene`, `cmd/pptxdiff` and
 `cmd/pptxanchor`, source-derived native JSON bindings, native PowerPoint phrase
 measurements, image alpha bounds, and rendered QA controls. See the
-[results and limitations](planning/RECONSTRUCTION_CHECKPOINT.md). The complete
-authoring CLI, semantic deck schema, library database and skill pack remain
-planned. The table below records the initial survey before this spike.
+[results and limitations](planning/RECONSTRUCTION_CHECKPOINT.md). At this
+checkpoint, the complete authoring CLI, semantic deck schema, library database
+and skill pack remained planned. The current-state note at the top supersedes
+that status. The table below records the initial survey before this spike.
 
 ## Catalog execution update
 
@@ -145,7 +164,10 @@ The existing slide skill prefers new body designs and permits cloning only for s
 
 These checks establish a usable library baseline under the new toolchain. They do not prove attractive design, no PowerPoint repair prompts, correct SVG previews, font fidelity, or safe import/re-export. Those are explicit experiments in [PRODUCT_PLAN.md](PRODUCT_PLAN.md).
 
-Survey outputs now also include `scripts/inventory-pptx.py`, 286 per-slide sidecars, three JSON inventories, and complete proposal/layout ledgers. The script was exercised on all three supplied decks. These are structural discovery artifacts, not an importer or renderer. The CLI, SQLite catalog and skill design remain proposed work.
+At the initial survey checkpoint, outputs included `scripts/inventory-pptx.py`,
+286 per-slide sidecars, three JSON inventories and proposal/layout ledgers.
+Those were structural discovery artifacts. The CLI, SQLite catalog and skill
+design were proposed then; they now exist in bounded forms described above.
 
 ## Dynamic role and pod composition (2026-09-26)
 

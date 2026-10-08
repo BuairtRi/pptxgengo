@@ -2,7 +2,16 @@
 
 Requested by Ri on 2026-10-07. This extends the
 [product enhancements handoff](skill-planning/product-enhancements-handoff-20261006.md).
-The requirements below are implementation scope, not completion claims.
+The v4.2.1 release ships the private template browsing deck and its coverage
+manifest in all six platform archives. The deck has 717 slides covering the 649
+retained v11 templates, and uses synthetic placeholders where external artwork
+is unavailable. The separate content-complete reusable-slide deck remains
+deferred: tooling exists, but production curation and its approved inventory do
+not ship. See [release details](../release/README.md#signed-release-scope-v421).
+
+The sections below retain the implementation contract and original requirements
+for context; historical requested scope is not a claim that every requested
+artifact shipped.
 
 ## Two regenerated PowerPoint libraries
 
@@ -50,7 +59,7 @@ mode. The current exhaustive output has 9,753 slides total (649 template variant
 9,072 resolved frame specimens and 32 organizational slides); those derived
 counts can change with pinned inputs.
 
-The reusable-slide deck includes only the latest approved revisions. Drafts,
+The planned reusable-slide deck includes only the latest approved revisions. Drafts,
 deprecated revisions and expired approvals are excluded. Preserve explicit
 withdrawal history so a newer withdrawal cannot resurrect an older approval.
 

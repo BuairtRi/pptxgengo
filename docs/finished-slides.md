@@ -1,9 +1,11 @@
 # Reusable finished slides
 
-Implemented in maintained source after v4.1.0. Stable v4.1.0 does not
-contain these commands. A finished slide is authored, content-complete material,
+The finished-slide commands are implemented in maintained source and available
+in v4.2.1. A finished slide is authored, content-complete material,
 with a distinct `finished-slide` kind and `curated/slide/<key>` identity.
-Production curation and desktop qualification remain pending.
+Production curation remains deferred in v4.2.1: the release ships the template
+browsing deck, not a content-complete reusable-slide inventory. Desktop
+qualification for interactive reuse remains pending.
 
 ## Publish a closed revision
 

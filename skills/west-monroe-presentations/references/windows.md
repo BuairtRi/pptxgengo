@@ -1,9 +1,11 @@
 # Windows workflows
 
-Use this reference on Windows. The production macOS binaries cannot run there;
-use the Windows preview ZIP containing `pptxgengo.exe`, `pptxdesign.exe`,
-`wmdsdocs.exe`, the library/index and this skill. The ZIP's `WINDOWS.md` explains
-its user-level installer and smoke test. Go and Python are not runtime requirements.
+Use the private GitLab Windows archive matching the machine architecture. It
+contains `pptxgengo.exe`, `pptxdesign.exe`, `wmdsdocs.exe`, the template source
+bundle/SQLite index/fonts/gallery and template browsing deck. The skill is
+installed separately. Go and Python are not required for ordinary CLI authoring.
+Use the shared [installation workflow](installation.md); check command help for
+this package rather than assuming a legacy preview ZIP has the same installer.
 
 ## Authoring
 
@@ -23,14 +25,15 @@ A project copied from macOS retains an OS/compiler lock. Work on a copy, run
 The original lock is preserved; incompatible custom compositions require repair.
 Never silently delete the lock to get around a drift error.
 
-The small tester ZIP has photo metadata and thumbnails but omits original photo
-bytes. Use the full ZIP or set `WMDS_BRANDING_ROOT` to the matching original
-branding collection when a selected photo needs to be embedded.
+Private photo/branding originals are separate. Set `WMDS_BRANDING_ROOT` to the
+matching collection when a selected registered asset requires it, or register an
+operator-provided image in the project. Template browsing media are illustrative
+placeholders, not originals to copy into a final client deck.
 
 ## Native review
 
-Windows native export is **experimental** until an actual Windows PowerPoint
-smoke test and visual review are recorded. It needs desktop PowerPoint in the
+Windows CLI binaries are signed, but interactive PowerPoint qualification
+remains pending. Record an actual export and visual review for the current deck. It needs desktop PowerPoint in the
 signed-in user session, Windows PowerShell 5.1 and the bundled IBM Plex fonts.
 PowerPoint COM exports PDF and slide PNGs; Go creates the contact sheet and signs
 the receipt. PNGs are direct PowerPoint slide exports, not PDFKit rasterizations.

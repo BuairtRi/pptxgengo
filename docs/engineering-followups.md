@@ -1,10 +1,24 @@
 # Engineering follow-up qualification
 
+This file preserves dated engineering qualification records. Its original top
+section describes the October 5 v7/local.16 checkpoint and must not be read as
+the current production state. Current as of 2026-10-08: repository v4.2.1 at
+`66229bd1`, published default v11 (649 templates, 648 active), with new projects
+defaulting to native-v1 where supported. The v11 native render/visual
+qualification remains pending. Template-only packages carry source/compiler
+inputs, bundled fonts, gallery and SQLite index. The stable private GitLab
+pipeline 21443 passed all 28 jobs in 793 seconds; GitHub Actions is disabled.
+See [current release status](release-status.md) and [testing lanes](testing.md).
+
+The qualification details below are historical snapshots, including their
+version pins, counts, timings, and workstation observations. They remain useful
+for the exact releases named in each section, not as current release evidence.
+
 Scope: the 18 observations in `docs/skill-planning/engineering-followups.md`,
 following the local.12 survey. Import/reconciliation, a new preview renderer,
 wireframes and presentation-skill authoring remain outside this work.
 
-## October 5 publication and photography extension
+## Historical October 5 v7 publication and photography qualification
 
 The repository default and single production gallery/index are now v7: **616
 templates** and **1,204 asset variants**. Photo registration covers **all 521**

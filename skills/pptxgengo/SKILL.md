@@ -1,33 +1,31 @@
 ---
 name: pptxgengo
-description: Build or adapt PowerPoint presentations with this repository's native scene, reviewed component, or experimental dynamic composition tools. Use when working in pptxgengo; this does not treat catalog examples as approved templates.
+description: Author, edit, inspect or adapt PowerPoint with pptxgengo in this repository. Use the released design/project CLI for source-managed decks and repository scene tools for source-bound adaptations; West Monroe narrative and brand work uses the west-monroe-presentations skill.
 ---
 
 # pptxgengo
 
-Use the narrowest workflow that fits the requested change:
+Choose the route matching the requested artifact:
 
-- Use `pptxscene` to extract selected native slides into a source-bound scene project and rebuild a new PPTX.
-- Use `pptxcomponent` to inspect or apply reviewed text/color contracts in an extracted scene.
-- Use `pptxcompose` for measured, editable compositions from JSON. Pods/team, cards, canvas, measured grids/panels, and accents have bounded support; the newer cards/canvas/accent surface is alpha.
-- Use `pptxlib` to find/inspect/preview library contracts, instantiate semantic slots, and assemble a deck from saved values and narrative. Read [library authoring](references/library-authoring.md) for this route. The initial thirteen portable contracts are candidates awaiting changed-content native qualification.
-- Use `pptxtemplate` to list, inspect and build changed-content review decks from the 65 shortlisted source designs. Read [template adaptation](references/template-rollout.md). These fixed-geometry examples have separate native visual review states; they are not arbitrary-content qualified templates.
-- Use `pptxcompose recover-text --text-only` for bounded text recovery from a generated deck with its original spec/bundle. Original styling is restored; changed geometry or unknown objects require the scene workflow.
-- Use `pptxanchor` to calculate phrase-level raster/SVG accent placement from native measurement evidence. It emits placement JSON; it does not edit a deck.
+- For a source-managed deck, use `pptxgengo design project` and the installed
+  template library. Read [workflow](references/workflow.md).
+- For template discovery, bindings and local derivatives, read
+  [library authoring](references/library-authoring.md) and
+  [template adaptation](references/template-rollout.md).
+- For West Monroe narrative, copy, style or deck review, use the
+  `west-monroe-presentations` skill and preserve its source/composition log.
+- For an existing standalone PPTX without project lineage, inventory it first;
+  use source-bound scene extraction only when the requested edit needs that
+  route. Repository-only tools and their bounded contracts are in
+  `docs/legacy-authoring/`; inspect current command help before use.
 
-Read [the workflow reference](references/workflow.md) for command forms, measurement and catalog guidance, and current limits. Keep outputs new and preserve source evidence. Catalog ratings and design preferences are not technical approval. Do not describe source patterns as approved reusable templates. The five dense proposal recipes have exact native verification and visual-review evidence in `library/showcase/dense-proof.json`. Keep the broader canvas/cards/accent surface alpha; those fixtures do not approve arbitrary layouts or styles.
+Keep generated baselines immutable and save PowerPoint edits in a working copy.
+Use explicit reviewed adoption for supported mapped text; translate unsupported
+geometry/formatting into source manually. Preserve predecessors and approvals.
+Template/catalog matches and Go fit checks do not qualify arbitrary copy:
+render through PowerPoint and inspect the deck at presentation size.
 
-For named grids/panels and incremental native measurement, read
-`library/layout-components/README.md`. Reuse the cache only through the CLI's
-contract/environment validation. Every final deck still needs native verification
-and visual review. Parent ownership lives in the spec; native manual dragging does
-not move related shapes as a group.
-
-For mixed typography, image crops, and roadmap presets, read
-`library/visual-components/README.md` and its qualification checkpoint. These are
-bounded Wave 2 features: Arial paragraphs/runs and two native bullet glyphs,
-pinned PNG/JPEG or static SVG with a pinned PNG fallback, picture outlines, and
-four editable shape presets. Read the follow-up qualification status before
-promoting new variants. Rich-text recovery is not supported.
-Keep source geometry controls distinct from changed-content designs; fixture
-generation and passing unit tests alone do not establish visual fidelity.
+New v2 projects and template generation use native-v1 where supported. Existing
+projects retain their profile. Inspect conversion/retention reasons rather than
+assuming every component is one object. Keep all media and template pins with
+the project, and use complete shares for private colleague handoff.

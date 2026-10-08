@@ -1,6 +1,6 @@
 # Editing individual slides
 
-Every change to a slide happens in the project source, never in the generated PowerPoint. After any change: update the slide's composition-log entry, run `project check`, `project build`, `project measure --report BUILD/layout-report.json --slides <ids>`, and render the changed pages.
+Keep the source and generated baseline together. Author source changes in the project; for PowerPoint edits, use a separate working copy and the reconciliation workflow below. After a source change: update the slide's composition-log entry, run `project check`, `project build`, `project measure --report BUILD/layout-report.json --slides <ids>`, and render the changed pages.
 
 Commands run as `pptxgengo design project … --project PATH`. Use block-style YAML in slide files and patches. In flow style (`{…}`), quote any value containing a comma; an unquoted comma breaks the map, sometimes with a misleading `binding.unsupported_field` error.
 
@@ -10,7 +10,7 @@ Commands run as `pptxgengo design project … --project PATH`. Use block-style Y
 pptxgengo design project split --project ./client-deck --bundle v11
 ```
 
-Split once, early. `deck.yaml` becomes an ordered index of slide files; notes move to `notes/`, local templates to `templates/`. Shared-template slides get readable `content` with `bindings` to the template's slots. The deck's output doesn't change.
+Split once, early. `deck.yaml` becomes an ordered index of slide files; notes move to `notes/`, local templates to `slides/templates/`. Shared-template slides get readable `content` with `bindings` to the template's slots. The deck's output doesn't change.
 
 Use the bundle matching the project's lock; V11 is the current source for new
 projects. Upgrade an older project with [project migrate](cli-reference.md#move-a-project-to-a-new-cli-version)
@@ -119,7 +119,7 @@ pptxgengo design project scaffold --bundle v11 --template lifecycle/three-phases
   --reason 'Add a fourth phase' --out /tmp/phases-four.json
 ```
 
-Save the output's `template` object as `templates/phases-four.yaml`, register it under `local_templates`, and point the slide at `template: {scope: local, id: phases-four}` with real `values`. `--omit-nodes` drops source nodes. This works for source-scene templates; typed templates (`cards/3`, `cards/4`) can't be derived and must stay shared. Then modify the definition ([source format](source-format.md#local-templates), [custom slide design](custom-slide-design.md)).
+Save the output's `template` object as `slides/templates/phases-four.yaml`, register it under `local_templates`, and point the slide at `template: {scope: local, id: phases-four}` with real `values`. `--omit-nodes` drops source nodes. This works for source-scene templates; typed templates (`cards/3`, `cards/4`) can't be derived and must stay shared. Then modify the definition ([source format](source-format.md#local-templates), [custom slide design](custom-slide-design.md)).
 
 **3. Detach** a slide's shared template into a local one, keeping its readable copy: `project detach --slide ID --as NEW --reason R`. Capacity comments are dropped, and decorative slots may appear as empty entries; leave them empty. Works for source-scene templates, not `cards/3` or `cards/4`. Use detach to keep an existing slide's copy; use option 2 when starting fresh.
 
@@ -178,7 +178,7 @@ Look at every changed page at full size, then record the review with `project at
 Never overwrite a hand-edited deck or an immutable build. Keep the edited copy
 separately and record who changed what in `project.md`.
 
-A source build after v4.1.0 provides bounded reviewed text reconciliation:
+For a working copy of a receipt-backed project build, use reviewed text reconciliation:
 
 ```sh
 pptxgengo design project reconcile propose --project ./deck \
@@ -193,10 +193,9 @@ proposal IDs, `use_native` or `keep_yaml`, and reasons. Only supported
 `native_only` and `conflict` proposals are selectable. Do not invent decisions
 or operator acceptance. Adoption retains the edited deck and predecessor source,
 preserves unsupported changes for review, and requires a new build and visual
-review. See `docs/text-reconciliation.md` for the complete format and scope.
-Mac/Windows Save As qualification remains pending.
+review. Inspect `report.json` and the CLI's decision template for required fields. A successful adoption does not approve the edited layout or establish desktop fidelity.
 
-For stable v4.1.0, older baselines without lineage, or unsupported fields, use
+For older baselines without lineage or unsupported fields, use
 `source-inventory`, inspect the edited deck and reconcile reviewed changes into
 source manually. A modified build baseline is an integrity blocker; do not
 bypass its receipt or remove its lock.
@@ -204,25 +203,25 @@ bypass its receipt or remove its lock.
 
 ## Inventory native editing structure
 
-Source builds after v4.1.0 provide `project editability --project PATH`. Use its
-receipt-pinned ownership, Selection Pane labels, nesting and source-field report
-when choosing native editing pilots. Native groups, table cells and text counts
-are structural observations; record actual Mac/Windows editing tasks separately.
-Read `docs/native-editing-pilot.md` for the family/density task matrix.
+Use `project editability --project PATH` to inspect receipt-pinned ownership,
+Selection Pane labels, nesting and source fields. The report describes object
+structure; perform and review the actual editing task in PowerPoint separately.
+Under `native-v1`, a list can reflow in one box, a simple card can move as one
+shape, and a table can be selected and edited through its cells. Extra copy may
+need the box resized. Decorated components can retain multiple objects; inspect
+their retention reason before changing the layout.
 
-The source-only `docs/native-roundtrip.md` harness prepares a disposable synthetic
-project and verifies Save As, three exact supported text edits and slide reorder
-against receipt-pinned baseline tags. macOS uses supplied saved files; an opt-in
-Windows desktop COM lane automates the same fixture and retains execution/review/
-rebuild evidence. Its automated synthetic adoption is not an approval to adopt
-customer changes. Keep human editing/visual acceptance and package-format manual
-items explicit; a headless fixture pass does not qualify desktop PowerPoint.
+Keep the generated baseline unchanged and save native edits in a separate copy.
+Review supported text proposals before adoption. Combined list/card fields,
+geometry, table structural edits and unsupported formatting require manual
+source updates and a fresh build/render review.
 
 
 ## Reuse maintained authored slides
 
-Source builds after v4.1.0 can publish, find, preview and insert closed authored
-revisions. Follow `docs/finished-slides.md`; stable v4.1.0 lacks these commands.
+The CLI can publish, find, preview and insert operator-provided closed authored
+revisions. No curated reusable-slide inventory or content-complete browsing deck
+is bundled; use this route only when an actual approved revision is available.
 Use the distinct `finished-slide` entity kind, inspect reuse scope/freshness and
 exact template/toolchain pins, and review the actual supplied copy and evidence.
 Keep closed packages private: an exact Markdown registry can include material

@@ -60,9 +60,12 @@ changes into YAML. Preserve an edited copy and reconcile it against its exact
 receipt-pinned baseline.
 
 Existing stock `bullets`, ordered and rich/decorative list renderers remain
-available. This component is the authoring preference for new plain lists;
-stock-library migration follows actual Mac/Windows visual and editing checks.
-The current stable v4.1.0 does not contain this later source enhancement.
+available. This authored component is the authoring preference for new plain
+lists. Separately, the v4.2.1 `native-v1` profile converts eligible stock flat
+unordered lists, including supported measured lead/body and inline rich runs.
+Nested, ordered, decorative or otherwise unsupported structures retain their
+scene output with a reason. See the [catalog profile](native-editing-profile.md).
+The profile's source-plan matching does not qualify desktop behavior on Windows.
 
 ## Qualification
 

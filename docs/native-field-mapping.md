@@ -61,7 +61,9 @@ PowerPoint supplies the actual representative card objects. Desktop behavior is
 still pending.
 
 Project builds now record generation, slide and shape tags; see the
-[native lineage contract](native-lineage.md). Desktop identity survival is pending.
+[native lineage contract](native-lineage.md). The retained Mac round trip
+verified identity survival for its 40-object synthetic fixture; Windows and
+broader family-specific survival remain pending.
 Source commands now provide [three-way text proposals, conflicts and reviewed
 adoption](text-reconciliation.md). The [native editing inventory/pilot](native-editing-pilot.md)
 records actual group ownership, nesting and source-field coverage before any

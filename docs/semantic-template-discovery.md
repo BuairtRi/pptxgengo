@@ -1,5 +1,7 @@
 # Semantic template discovery
 
+Current status — 2026-10-08: the published default is V11 (649 templates, 648 active). The template-only package carries the V11 source, bundled fonts, gallery and SQLite index. Discovery is available in the current `pptxgengo design` CLI; native rendering and visual qualification of V11 remain pending. See [release status](release-status.md) and [testing/CI policy](testing.md).
+
 An agent should identify the original slide's purpose and argument before
 searching: the decision it supports, comparison or relationship it shows,
 material facts, and which details can move to notes. Counts help describe that
@@ -23,7 +25,7 @@ slots with unsupported claims.
 5. Build actual-content alternatives when consequential. Review measurements
    and every native PowerPoint page; repair both geometry and meaning.
 
-Discovery offers four ranking methods in the next source build:
+Discovery currently offers four ranking methods:
 
 - `--retrieval metadata` is the existing default: scenario and structural hints
   contribute separate deterministic metadata scores.
@@ -39,8 +41,7 @@ Discovery offers four ranking methods in the next source build:
   signals. Exact eligible IDs or unique canonical keys rank first. Raw BM25,
   cosine and structural scores are never added together.
 
-Existing stable `v4.1.0` binaries do not yet have these new flags. Metadata stays
-the default. Semantic ranking scans all eligible vectors; a high position is
+Metadata remains the default. Semantic ranking scans all eligible vectors; a high position is
 relative relevance, not a qualification or measured content-fit claim.
 
 ## Optional offline search package
@@ -75,7 +76,7 @@ prepared-text hash. Rebuild after any drift. Their checksum detects accidental
 changes; it is not a signature or proof of human review. Keep generated packages
 and snapshots in private GitLab when distributing them.
 
-Source release CI after v4.1.0 prepares a separate
+Private GitLab release CI can prepare a separate
 `pptxgengo-vX.Y.Z-offline-model.zip` for all supported platforms. The ZIP and its
 file evidence, CycloneDX SBOM and vulnerability report publish only in private
 GitLab and are covered by the release manifest's Sigstore attestation. Verify
@@ -90,8 +91,8 @@ Linux, macOS and Windows alongside inference golden cases. The branch security
 job uses an unpublished `v0.0.0` fixture; tag pipelines use the actual tag/commit.
 Both branch and final release archives are scanned with the suppression-free
 Grype policy and fresh database. Those scans inventory dependencies/data pins;
-they do not establish model safety or business relevance. Stable v4.1.0 has no
-model attachment, and no new tag is created by this source change.
+they do not establish model safety or business relevance. The current CLI release keeps model weights out of its platform archives; any
+offline-model archive is a separate, explicitly opted-in resource.
 
 Preparation prioritizes names, purposes and intended uses, then deterministic
 relationship/group/authoring metadata. It excludes synthetic example prose and
@@ -136,14 +137,15 @@ path and rejects non-metadata retrieval; omit `--summary` for indexed asset sear
 
 ## Screenshots and SQLite
 
-The accepted 616 gallery already has a native screenshot for every template.
-The retained catalog is `library/wm-design-system/v7/catalog`; its unified index
-is `library/wm-design-system/v7/library.sqlite`. Run from the repository root:
+The published V11 bundle contains a gallery and unified SQLite index at
+`library/wm-design-system/v11/catalog` and
+`library/wm-design-system/v11/library.sqlite`. Preview files are source references;
+V11 native visual qualification remains pending. Run from the repository root:
 
 ```sh
-pptxdesign library-find --index library/wm-design-system/v7/library.sqlite \
+pptxdesign library-find --index library/wm-design-system/v11/library.sqlite \
   --query 'phased delivery roadmap' --kinds template --summary
-pptxdesign library-inspect --index library/wm-design-system/v7/library.sqlite \
+pptxdesign library-inspect --index library/wm-design-system/v11/library.sqlite \
   --id lifecycle/three-phases --summary
 ```
 
@@ -209,7 +211,7 @@ Search uses pinned metadata without rehashing the entire 4 GB collection.
 Photo search results explicitly report
 `registered_original_not_verified_in_query`; preview and deck use verify the
 selected original. The visual asset gallery contains derived thumbnails from
-verified originals at `library/wm-design-system/v7/catalog/assets/index.html`.
+verified originals at `library/wm-design-system/v11/catalog/assets/index.html`.
 Inspect the photo before choosing a crop or deciding where slide copy can sit.
 
 The SQLite `entities` table stores each photo as `kind='asset'`, `family='photo'`.
@@ -265,7 +267,7 @@ The same lanes now retain fresh-process/repeated API timing, actual corpus
 counts, model footprint and OS peak resident memory reports. See
 [search performance](search-performance.md) for the measurement scope,
 commands and full V11 Mac sample.
-Full V5 qualification is opt-in with `PPTXGENGO_EMBED_MODEL_DIR` and
+The bounded/full-library benchmark selector is separate from the packaged V11 default. Full V5 qualification is opt-in with `PPTXGENGO_EMBED_MODEL_DIR` and
 `PPTXGENGO_EMBED_FULL_LIBRARY=1` when running
 `TestPinnedLibraryEmbeddingsEndToEnd`; see the runtime evaluation for the
 command and measured V5/V11 catalog evidence.

@@ -3,8 +3,8 @@
 The developer command `scripts/cmd/search-benchmark` measures the production
 `LibraryIndex` API for keyword, semantic or hybrid template retrieval. It runs
 offline against an existing verified SQLite index and, when needed, the pinned
-model and complete vector snapshot. This source tool is not part of the
-released v4.1.0 CLI.
+model and complete vector snapshot. It is a source diagnostic, not an installed
+CLI subcommand. Current project CI runs in private GitLab; see [testing lanes](testing.md).
 
 ## Reproduce
 
@@ -148,7 +148,9 @@ Historical reports remain evidence; current execution follows GitLab-only policy
 This follows [Microsoft's interval timing guidance](https://learn.microsoft.com/en-us/windows/win32/sysinfo/acquiring-high-resolution-time-stamps)
 and [performance counter API](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter).
 
-Private GitLab Kubernetes Linux and protected Mac ARM64 model lanes retain
+Current configured CI runs in private GitLab. The following preliminary
+GitHub/GitLab reports are dated historical qualification evidence; they are not
+active GitHub Actions gates. Private GitLab Kubernetes Linux and protected Mac ARM64 model lanes retain
 `keyword.json`, `semantic.json` and `hybrid.json`. They check actual mode,
 platform, source fingerprints, counts, complete vector coverage, repeated
 sample count and nonzero memory. The opt-in private Windows lane also exercises the
@@ -157,14 +159,14 @@ is available. Intel Mac execution is likewise opt-in pending its private runner.
 See [CI policy](testing.md) for runner tags and flags. GitHub Actions was disabled
 on 2026-10-07; the following GitHub reports are historical, not active gates.
 
-Preliminary head `54851875249b3757d650d0e2abcc38d9c7e10abd` passed pinned
+Historical preliminary head `54851875249b3757d650d0e2abcc38d9c7e10abd` passed pinned
 model jobs on Linux amd64 (private GitLab pipeline 21215), macOS arm64 and
 Windows amd64 (GitHub run 37602299427). Independently downloaded reports confirm
 26 actual entities and the same runtime model identity. Hybrid first/repeated
 median were 188.0/158.0 ms on Linux, 135.1/139.4 ms on hosted Mac and
 233.1/207.5 ms on Windows. That preliminary Linux memory result used the
 pre-exec-sensitive counter and is excluded from memory conclusions.
-PR #15's corrected exact head `8cec1d7b` passed full slot preflight, all ten
+Historical PR #15 corrected exact head `8cec1d7b` passed full slot preflight, all ten
 GitHub checks and all nine GitLab pipeline 21225 jobs. It merged as `bd63c193`.
 Nine independently downloaded reports verified counts/source SHA, full vectors,
 actual GC settings and retained raw first/last memory samples with their observed

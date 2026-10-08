@@ -27,6 +27,21 @@ Each template record has a **purpose** (what the slide is for), **uses** (the co
 
 Browse visually with `pptxgengo catalog --design-system --open`. Look at the gallery before relying only on search results; seeing the template is often faster than reading its record.
 
+## Browse the packaged PowerPoint library
+
+Open `browsing/template-library.pptx` under `root` from `pptxgengo paths`. It
+contains template placeholders, family/frame dividers and a “How to use this
+deck” component. You can copy slides into a PowerPoint working deck when the
+operator wants a native-only workflow. For a source-managed project, use the
+corresponding template key and scaffold the slide through the CLI.
+
+The browsing deck uses native-v1 editing where supported. Its photos/graphics
+are illustrative media placeholders; replace them with verified available assets
+before client delivery. Check the accompanying coverage/manifest if you need to
+understand retained object structure. The library describes design options;
+review actual supplied copy and do not infer approval from a placeholder.
+No content-complete reusable-slide browsing deck is bundled.
+
 ## Search by scenario and by shape
 
 For each page, describe two things separately:
@@ -50,19 +65,19 @@ pptxgengo design library-preview --id cards/3
 - `library-authoring --template KEY` lists each slot's readable alias, description and approximate capacity (characters and lines). Read it before writing copy. Estimates use the authored typography and identify unsupported internals explicitly; changed density and actual text require `--check-fit`, a build and native review. Capacity is advisory, not a character limit or proof of fit.
 - More flags are in the [CLI reference](cli-reference.md#find-and-understand-templates).
 
-### Text ranking in the next source build
+### Text ranking
 
-After building a new index, `library-find --retrieval keyword` uses BM25 over
-names, purposes, relationships and authoring metadata. The older metadata mode
-remains the default. See `docs/semantic-template-discovery.md` in the toolkit
-source for index creation and migration commands; stable v4.1.0 lacks these flags.
+`library-find --retrieval keyword` uses BM25 over names, purposes, relationships
+and authoring metadata in the installed index. Metadata retrieval remains the
+default. Use the installed index rather than rebuilding it during ordinary deck
+work.
 Use `--require-shape` when all supplied roles, structures, visual forms and exact
 source group counts must match. Read `structural_status` and source count scope;
 neither a lexical rank nor a matching count establishes content fit. Inspect
 and build the actual copy. Optional offline `semantic` and `hybrid` modes require
-a pinned model package and compatible embedding snapshot. Use explicit
-`library-model` and `library-embed` maintenance commands to prepare them;
-search never downloads resources. Hybrid combines separate eligible ranks,
+a pinned model package and compatible embedding snapshot. Use those modes when the operator has supplied a compatible offline model and
+embedding snapshot; otherwise use metadata or keyword retrieval. Search never
+downloads resources. Hybrid combines separate eligible ranks,
 reports keyword fallback when resources are missing, and rejects stale/corrupt
 snapshots. A high text rank does not establish structural suitability or fit.
 
@@ -173,7 +188,7 @@ Show the operator the rendered alternatives with what each emphasizes, its fit c
 
 An exact item count in a search result is the template's fixed topology, and word budgets are advisory; neither shows that your copy fits.
 
-### Reuse authored finished content in the next source build
+### Reuse operator-supplied finished content
 
 A `finished-slide` is content-complete material with explicit owner/revision and
 reuse policy. It is distinct from an empty stock template. Search a private index
@@ -183,20 +198,5 @@ independent copy and writes library lineage plus your composition rationale.
 Draft reuse requires `--allow-draft`. Existing composition entries and exact
 compiler/template pins are required; expired/deprecated content is refused.
 Adapted copy needs the destination deck's evidence and review process.
-Stable v4.1.0 lacks this feature. See `docs/finished-slides.md` for the implemented
-source commands, supported dependencies and remaining curation/native work.
-
-## Browse without the CLI
-
-Template-inclusive archives contain `browsing/template-library.pptx`, its exact
-provenance manifest and native editing coverage, plus the pinned template source,
-fonts, catalog and SQLite discovery index. The template deck has every retained
-template, a How to use page, family dividers and catalog frame variants. It uses
-native editing enhancements where compatible and schematic media placeholders;
-these are not original photographs or graphics. Copy with Keep Source Formatting
-and review the destination deck. Deprecated templates are visibly labeled.
-
-The separate content-complete reusable-slide browsing deck is deferred. Its
-future release needs a real approved inventory; synthetic template examples are
-not approved reusable content. Existing v4.2.0 binary-only archives omit both
-browsing decks and SQLite.
+No curated inventory is bundled. Use only a revision the operator actually
+provides and follow [maintained authored slides](editing-slides.md#reuse-maintained-authored-slides).

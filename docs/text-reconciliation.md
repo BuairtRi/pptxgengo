@@ -1,11 +1,18 @@
 # Reviewed native text reconciliation
 
 This source capability follows [native field mappings](native-field-mapping.md)
-and [generation/shape lineage](native-lineage.md). Stable **v4.1.0 predates it**.
+and [generation/shape lineage](native-lineage.md). It is included in v4.2.1.
 The Mac synthetic Save As/three-text-field/reorder workflow has passed native
 UI and independent supplied-file checks; see [retained evidence](native-roundtrip.md).
 Windows desktop execution and broader editing acceptance remain pending.
 Headless package mutations alone do not establish PowerPoint acceptance.
+
+The v4.2.1 native editing profile converts eligible stock lists, cards and
+table wrappers while preserving source-resolved displayed text and positions.
+That broader rendering does not broaden reconciliation: adoption still supports
+only unique named plain string mappings. Rich runs, bullets, table cells and
+unmapped content remain manual review; the rendering profile never infers field
+identity from visible copy or position.
 
 ## Preserve and propose
 

@@ -30,20 +30,30 @@ prerequisite and is not redistributed. The box initially retains the measured
 content height; added copy may require resizing one box.
 
 Eligible cards put their measured text paragraphs in the card's native shape.
-Paragraph fonts, colors, baselines and gaps remain source-resolved. Complex
-independently positioned content and artwork retain their existing structure
-where a combined object would change paint order or appearance.
+Titleless body cards and cards with label, title and body paragraphs are eligible
+when their resolved styles and positions fit the combined shape. Plain and
+supported rich inline paragraph runs retain their source-resolved fonts, colors,
+baselines and gaps. Simple outline and deemphasis surfaces retain the resolved
+fill and border. Cards with featured/stateful decoration, unsupported content,
+or incompatible placement retain their existing structure with an explicit
+reason. Independently positioned content and artwork retain their existing
+structure where a combined object would change paint order or appearance.
 
-Tables are native PowerPoint tables. Eligible tables lose a redundant outer
-component group, retaining the original cells, grid, formatting and geometry.
-Intentional parent composition groups and separate adornments remain.
+Tables are native PowerPoint AddTable objects. Eligible scenes remove only a
+redundant outer component group around the table, retaining its cells, grid,
+formatting and geometry. No cell-to-shape conversion occurs. Intentional parent
+composition groups and separate adornments remain.
 
 Every considered source scene records conversion or a retention reason in
 `slides[].scenes[].warnings`. The browsing generator emits
 `native-editing-coverage.json`, with an entry for every retained template and
-counts of actual native list boxes, card shapes and tables. This is rendered
-catalog coverage, not a count inferred from source JSON. Normal source errors
-still fail the build; conversion never hides invalid source or overflow.
+counts of actual native list boxes, card shapes and tables. The v4.2.1 full-catalog
+run emitted 586 native list boxes, 96 native card shapes and 206 native tables.
+Converted list/card objects (682 total) matched source displayed text and
+absolute line positions in that source-plan comparison. Counts describe rendered
+outputs, not source JSON incidence; this does not qualify PowerPoint pixels or
+Windows behavior. Normal source errors still fail the build; conversion never
+hides invalid source or overflow. Retained scenes include explicit reasons.
 
 ## Evidence
 
@@ -51,10 +61,11 @@ Regression checks compare source and converted run styles, fonts, colors,
 paragraph gaps and measured baselines at Comfortable, Compact and Dense. XML
 checks cover native paragraph formatting and marker ink. Existing gallery
 previews describe the original source specimens; they do not qualify all native
-adaptations.
+adaptations. Frozen v11 source content and pins are unchanged.
 
 The approved [Mac comparison](native-component-demo.md) demonstrates list reflow
 and insertion, whole-card movement and direct table cell editing. Catalog-wide
 PowerPoint visual review, Windows qualification and exhaustive resizing and
-alignment checks remain pending. Stock bullet/card source adoption still requires
-manual review; their new object structure does not invent role mappings.
+alignment checks remain pending. Source-to-field adoption still requires manual
+review; the native profile does not invent role mappings. Existing unprofiled
+projects retain their recorded rendering, and adoption into them is deliberate.

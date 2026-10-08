@@ -67,7 +67,7 @@ Present them side by side with a one-line note on each: what it emphasizes, what
 - IBM Plex Sans for titles and body; IBM Plex Mono for eyebrows, labels, numbers and footers.
 - Square corners, flat surfaces, no shadows or gradients.
 - Charts: label directly instead of using a detached legend where possible, and do not rely on color alone to carry meaning.
-- Use only logos, photography, icons and illustrations that the package registers. Match crop and placement to the page. Photography should show real people doing meaningful work.
+- Use verified registered originals available on this machine or operator-supplied images registered in the project. Match crop and placement to the page. Photography should show real people doing meaningful work.
 
 ## Accents
 
