@@ -17,9 +17,11 @@ type DiagramPort struct {
 	Y            float64 `json:"y_pt"`
 }
 type DiagramConnection struct {
-	Node string      `json:"node"`
-	From DiagramPort `json:"from"`
-	To   DiagramPort `json:"to"`
+	Route  string       `json:"route"`
+	Points [][2]float64 `json:"points"`
+	Node   string       `json:"node"`
+	From   DiagramPort  `json:"from"`
+	To     DiagramPort  `json:"to"`
 }
 
 func diagramPorts(n string, b wmdesign.Rect, native string) []DiagramPort {
@@ -83,15 +85,31 @@ func addDiagramPorts(out *DiagramInspection, c wmdesign.Document) error {
 		a, ok := ports[src.From.Node+"\x00"+src.From.Site]
 		z, ok2 := ports[src.To.Node+"\x00"+src.To.Site]
 		if ok && ok2 {
-			out.Connections = append(out.Connections, DiagramConnection{node.ID, a, z})
+			connection := DiagramConnection{Node: node.ID, From: a, To: z, Route: "straight"}
+			if connector, exists := native[node.ID]; exists {
+				if connector.Geometry.Route != nil {
+					connection.Route = "bentConnector3"
+				}
+				for _, point := range nativeConnectorPoints(connector.Geometry) {
+					xy, e := nativeObjectPoint(objects, node.ID, point[0], point[1])
+					if e != nil {
+						return e
+					}
+					connection.Points = append(connection.Points, xy)
+				}
+			}
+			out.Connections = append(out.Connections, connection)
 		}
 	}
 	return nil
 }
 
-// Straight connections retain endpoint semantics in YAML. The renderer resolves
+// Connections retain endpoint semantics in YAML. The renderer resolves
 // the real named rectangle/site; moving either authored node recalculates them.
 func ConnectDiagram(p *Project, slide, id, from, fromSite, to, toSite, head, style, actor, reason, bundle, engine string, apply bool) (DiagramPatchResult, error) {
+	return ConnectRoutedDiagram(p, slide, id, from, fromSite, to, toSite, head, style, "straight", nil, actor, reason, bundle, engine, apply)
+}
+func ConnectRoutedDiagram(p *Project, slide, id, from, fromSite, to, toSite, head, style, route string, bend *float64, actor, reason, bundle, engine string, apply bool) (DiagramPatchResult, error) {
 	inspect, e := InspectDiagram(p, slide, bundle, engine)
 	if e != nil {
 		return DiagramPatchResult{}, e
@@ -113,6 +131,10 @@ func ConnectDiagram(p *Project, slide, id, from, fromSite, to, toSite, head, sty
 	// still checks the final line against this allocation and split reservations.
 	r := wmdesign.Rect{X: 0, Y: 0, W: inspect.Frame.Body.W, H: inspect.Frame.Body.H}
 	node := Node{ID: id, Kind: "component", Placement: &Placement{Zone: "body", Rect: &r}, Definition: &Reference{Scope: "shared", ID: "wmds/component/attached-connector"}, Arguments: map[string]any{"from": map[string]any{"node": from, "site": fromSite}, "to": map[string]any{"node": to, "site": toSite}, "head": head, "style": style}}
+	node.Arguments["route"] = route
+	if bend != nil {
+		node.Arguments["bend"] = *bend
+	}
 	patch := DiagramPatch{Schema: DiagramPatchSchema, Actor: actor, Reason: reason, Operations: []DiagramOperation{{Action: "add", ID: id, Node: &node}}}
 	return PatchDiagram(p, slide, patch, bundle, engine, apply)
 }

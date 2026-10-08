@@ -30,7 +30,7 @@ After ordinary layout and group assembly, builds apply those transforms by
 bounded XML span replacement, preserving other native payloads. Affine parent
 matrices resolve scales, rotations and flips into final world bounds. Overrides
 must resolve uniquely to the recorded kind and parent. Frame-zone checks include
-transformed descendants; attached straight connectors must retain their actual
+transformed descendants; attached supported connectors must retain their actual
 endpoint/site geometry. Native orders require an exact existing-object set and
 cannot discard interleaved non-object XML.
 
@@ -52,7 +52,7 @@ An authored group child-coordinate-space change is deliberately unresolved,
 because applying the old native transform to newly rebased children could double
 apply a move. Rebuild and review a new baseline first. Whole local leaves and
 explicitly mapped block copies can now be reconciled. Partial deletions, unmapped
-additions, ambiguous identities, reparenting, connector route/attachment edits
+additions, ambiguous identities, reparenting, unsupported connector route/attachment edits
 and unsupported formatting remain visible.
 Legacy text proposals now also report paint-order changes.
 
@@ -85,7 +85,7 @@ repository.
 
 These are controlled XML edits followed by actual PowerPoint rendering, not
 PowerPoint UI editing/Save As geometry qualification. Windows desktop execution,
-general card/image/table acceptance, broader structural adoption, bent arrows and the
+general card/image/table acceptance, broader structural adoption, other arrow presets and the
 other target-scope items remain pending. No release qualification or complete
 geometry synchronization is claimed.
 
@@ -132,7 +132,7 @@ combined move/resize/connector translation/reorder, whole service deletion, and
 an explicitly mapped monitoring copy. The final comparison checks every transform,
 paint order, source topology, numbered version and private ZIP extraction, followed
 by actual PowerPoint exports. Controlled XML edits do not establish GUI editing/
-Save As qualification. Full ink clearance and bent routes remain open.
+Save As qualification. Full ink clearance and broader routing remain open.
 
 Second-slice private evidence is under
 `~/Documents/pptxgengo-qualification/geometry-structure-20261008/`:
@@ -207,3 +207,46 @@ Third-slice private evidence is under
   file access marked unknown. Its cause is unconfirmed; no native visual signoff
   is claimed for this specimen. Controlled XML reconciliation qualification
   passed independently. Full GUI/Save As and Windows checks remain pending.
+
+## Attached elbow contract
+
+Source `attached-connector` supports straight and horizontal/vertical first
+orthogonal routes. Elbows serialize as one attached native `p:cxnSp` using
+`bentConnector3` and literal `adj1`; vertical first uses a 90-degree transform
+with endpoint-relative extents/flips. The low-level connector API copies route
+metadata and continues to validate explicit unique rectangle/site attachments.
+Source movement recalculates the path. Inspection resolves final path points
+through native parent coordinates and orientation, including adopted bends.
+
+Supported native preset/guide metadata enters the typed native geometry, source
+basis and three-way comparison. Exact validated route spans are replaced with
+transforms, preserving attachments and other native payloads. Geometry-only
+comparison ignores preset XML only after complete supported metadata validation;
+unknown presets, extra guides, formulas, custom paths and attachment edits remain
+manual. Default empty-guide bent presets normalize to `adj1=50000`. Literal
+signed guides are bounded; their actual path allocation enters frame and
+container checks, including bends outside the endpoint rectangle. Ink/stroke
+extent and automatic obstacle routing remain separate work.
+
+Focused tests cover both orientations, forward/reverse and all direction
+quadrants, aligned endpoints, strict route inputs, route snapshot isolation,
+35%-to-65% native bend adoption, exact rebuild, idempotence and refused frame/
+container escapes before writes. Private catalog CLI qualification is performed
+with `scripts/qualify-routed-connectors.py`; it includes preview safety, source
+node movement, calculated endpoints, controlled bend edits, snapshots and ZIP
+sharing. It does not establish native PowerPoint rendering or GUI/Save As fidelity.
+
+The preset definition was checked against the
+[LibreOffice source copy of the DrawingML preset definitions](https://raw.githubusercontent.com/LibreOffice/core/master/oox/source/drawingml/customshapes/presetShapeDefinitions.xml).
+Attachment semantics follow the
+[Microsoft Open XML connection-shape reference](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.connectionshape?view=openxml-3.0.1).
+
+Fourth-slice private evidence is under
+`~/Documents/pptxgengo-qualification/geometry-elbows-20261008/qualification-01/`.
+Fixed CLI SHA-256 is
+`3b796c48104050f6b5a31e3cfb9fa61f58af552883ae9c3487f2ff38000c1cab`.
+Both catalog-derived projects pass preview/no-write, source movement with attached
+endpoints, single-proposal bend adoption, changed calculated path, exact guide
+rebuild, repeat adoption and version/share/extraction. The horizontal specimen
+also refuses inner-container and frame escape before source writes. Native
+rendering/GUI Save As was not run; the earlier `-9074` probe remains unresolved.

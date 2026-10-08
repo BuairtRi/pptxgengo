@@ -72,7 +72,7 @@ func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 				sh.Props.ObjectName = sh.Record.ID
 			}
 			if sh.Connection != nil {
-				if err := r.slide.AddConnector(&pptx.ConnectorProps{ShapeProps: sh.Props, Connection: *sh.Connection}); err != nil {
+				if err := r.slide.AddConnector(&pptx.ConnectorProps{Route: sh.Route, ShapeProps: sh.Props, Connection: *sh.Connection}); err != nil {
 					return err
 				}
 			} else if err := r.slide.AddShape(sh.Type, &sh.Props); err != nil {

@@ -11,6 +11,8 @@ func TestDiagramContainmentFlagsAreCommandSpecific(t *testing.T) {
 		{"uncontain", "--slide", "test", "--container", "box"},
 		{"inspect", "--slide", "test", "--padding-top", "28"},
 		{"connect", "--slide", "test", "--container", "box"},
+		{"inspect", "--slide", "test", "--route", "horizontal"},
+		{"contain", "--slide", "test", "--bend", "0.5"},
 		{"contain", "--slide", "test", "--align", "left"},
 	} {
 		if e := runProjectDiagram(args); e == nil || !strings.Contains(e.Error(), "not accepted") {

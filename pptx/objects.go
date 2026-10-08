@@ -1287,8 +1287,12 @@ func addShapeDefinition(target *PresSlide, shapeName ShapeType, opts *ShapeProps
 		return errors.New("shape line join must be empty, round, bevel or miter")
 	}
 	for name, value := range opts.Adjustments {
-		if name != "adj" || value < 0 || value > 100000 {
-			return errors.New("shape adjustments require adj in [0,100000]")
+		valid := name == "adj" && value >= 0 && value <= 100000
+		if shapeName == ShapeTypeBentConnector3 {
+			valid = name == "adj1" && value >= -2147483647 && value <= 2147483647
+		}
+		if !valid {
+			return errors.New("shape adjustment name or value is unsupported for this preset")
 		}
 	}
 	if len(opts.Adjustments) != 0 && (opts.RectRadius != 0 || opts.AngleRange != nil) {

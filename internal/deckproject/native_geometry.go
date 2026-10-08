@@ -124,9 +124,18 @@ func readNativeGeometry(n *xmlNode, parent string) (NativeGeometry, error) {
 			return g, e
 		}
 	}
+	if n.Name.Local == "cxnSp" {
+		route, err := readConnectorRoute(n)
+		if err == nil {
+			g.Route = route
+		}
+	}
 	return g, validateNativeGeometry(g)
 }
 func validateNativeGeometry(g NativeGeometry) error {
+	if g.Route != nil && (g.Kind != "cxnSp" || g.Route.Preset != "bentConnector3" || g.Route.Adjustment < -2147483647 || g.Route.Adjustment > 2147483647) {
+		return fmt.Errorf("unsupported native connector route")
+	}
 	values := []float64{g.X, g.Y, g.W, g.H, g.Rotation}
 	if g.Child != nil {
 		values = append(values, g.Child.X, g.Child.Y, g.Child.W, g.Child.H)
@@ -280,7 +289,7 @@ func geometryWorld(objects map[string]*geometryObject) (map[string]wmdesign.Rect
 		}
 		g := o.geometry
 		outer := parent.mul(geometryOriented(g))
-		bounds[name] = outer.bounds(wmdesign.Rect{X: g.X, Y: g.Y, W: g.W, H: g.H})
+		bounds[name] = outer.bounds(nativeGeometryAllocation(g))
 		m := parent
 		if c := g.Child; c != nil {
 			m = outer.mul(geometryTranslate(g.X, g.Y)).mul(geometryMatrix{g.W / c.W, 0, 0, g.H / c.H, 0, 0}).mul(geometryTranslate(-c.X, -c.Y))
@@ -351,6 +360,27 @@ func applyNativeGeometry(raw []byte, doc wmdesign.Document, report *wmdesign.Rep
 				return nil, fmt.Errorf("native transform missing: %s", name)
 			}
 			patches = append(patches, lineagePatch{o.xf.start, o.xf.end, geometryXML(g, o.xf.node.Name.Space)})
+			if g.Kind == "cxnSp" {
+				_, routeErr := readConnectorRoute(o.node)
+				if routeErr == nil {
+					var span *lineageSpan
+					for _, props := range o.span.children {
+						if props.node.Name.Space == lineagePML && props.node.Name.Local == "spPr" {
+							for _, child := range props.children {
+								if child.node.Name.Space == drawingML && child.node.Name.Local == "prstGeom" {
+									span = child
+								}
+							}
+						}
+					}
+					if span == nil {
+						return nil, fmt.Errorf("connector preset span missing")
+					}
+					patches = append(patches, lineagePatch{span.start, span.end, connectorRouteXML(g.Route)})
+				} else if g.Route != nil {
+					return nil, routeErr
+				}
+			}
 			o.geometry = g
 		}
 		after, e := geometryWorld(objects)
@@ -519,7 +549,7 @@ func validateTransformedConnections(objects map[string]*geometryObject) error {
 		}
 		props := lineageChild(o.node, lineagePML, "spPr")
 		shape := lineageChild(props, drawingML, "prstGeom")
-		if shape == nil || lineageAttr(shape, "", "prst") != "line" {
+		if _, routeErr := readConnectorRoute(o.node); shape == nil || routeErr != nil {
 			return fmt.Errorf("native connector route is unsupported for transformed geometry")
 		}
 		for i, end := range []*xmlNode{a, z} {

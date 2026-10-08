@@ -186,3 +186,17 @@ descendants must fit. Rules also require `native_geometry_template` to match the
 selected template. Native copies inherit source membership; removed members are
 pruned. A layout reset preserves these rules. Numbered source snapshots and
 complete project shares carry them with the slide YAML.
+
+### Attached elbow routes (development build)
+
+`wmds/component/attached-connector` arguments include endpoint node/site pairs,
+`route: straight|horizontal|vertical` (default straight), and an optional elbow
+`bend` fraction in `[0,1]` (default `.5`). Do not supply a bend for a straight
+connector. Use `project diagram connect` to preview these options.
+
+Reviewed native elbow edits persist an optional `native_geometry/<name>/route`:
+`{preset: bentConnector3, adj1: 65000}`. `adj1` is a literal DrawingML guide in
+100000ths of the native width, before flips/rotation. Native guides may extend
+past the endpoint rectangle; calculated route allocations must still fit the
+frame and declared containment. Unknown presets/formulas remain manual review.
+Use reconciliation to write these overrides and their source basis pins.

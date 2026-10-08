@@ -16,6 +16,8 @@ type nativeEditingEndpoint struct {
 	Site string `json:"site"`
 }
 type nativeEditingSource struct {
+	Route   string                 `json:"route,omitempty"`
+	Bend    *float64               `json:"bend,omitempty"`
 	Type    string                 `json:"type"`
 	X       float64                `json:"x"`
 	Y       float64                `json:"y"`
@@ -121,7 +123,7 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 		return nil, true, fmt.Errorf("scene.invalid_native_editing_allocation")
 	}
 	if n.Type == "editable-block" {
-		if n.Text == "" || n.From != nil || n.To != nil || n.Head != "" || n.Ink != "" {
+		if n.Text == "" || n.From != nil || n.To != nil || n.Head != "" || n.Ink != "" || n.Route != "" || n.Bend != nil {
 			return nil, true, fmt.Errorf("scene.editable_block_requires_plain_text_and_no_connection_options")
 		}
 		// Reuse the existing measured block typography/padding, then fold its one
@@ -224,7 +226,34 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 		toName = n.To.Node
 	}
 	connection := &pptx.ConnectorConnection{Begin: pptx.ConnectorEndpoint{ObjectName: fromName, Site: start}, End: pptx.ConnectorEndpoint{ObjectName: toName, Site: end}}
-	shape := &sceneShape{Type: pptx.ShapeTypeLine, Props: pptx.ShapeProps{PositionProps: pos(bounds), ObjectNameProps: pptx.ObjectNameProps{ObjectName: id}, Line: line, FlipH: &flipH, FlipV: &flipV}, Record: ShapeRecord{ID: id, Rect: bounds, Color: color, Geometry: "native-straight-connector"}, Connection: connection}
+	route, rotation := (*pptx.ConnectorRoute)(nil), 0.
+	position := bounds
+	mode := n.Route
+	if mode == "" {
+		mode = "straight"
+	}
+	if mode != "straight" && mode != "horizontal" && mode != "vertical" {
+		return nil, true, fmt.Errorf("scene.native_connector_route_requires_straight_horizontal_or_vertical")
+	}
+	if mode == "straight" && n.Bend != nil {
+		return nil, true, fmt.Errorf("scene.straight_connector_has_no_bend")
+	}
+	if mode != "straight" {
+		bend := .5
+		if n.Bend != nil {
+			bend = *n.Bend
+		}
+		if math.IsNaN(bend) || math.IsInf(bend, 0) || bend < 0 || bend > 1 {
+			return nil, true, fmt.Errorf("scene.native_connector_bend_requires_fraction_in_0_1")
+		}
+		route = &pptx.ConnectorRoute{Preset: "bentConnector3", Adjustment: int(math.Round(bend * 100000))}
+		if mode == "vertical" {
+			rotation = 90
+			position = Rect{X: (a[0] + z[0] - bounds.H) / 2, Y: (a[1] + z[1] - bounds.W) / 2, W: bounds.H, H: bounds.W}
+			flipH, flipV = a[1] > z[1], a[0] < z[0]
+		}
+	}
+	shape := &sceneShape{Route: route, Type: pptx.ShapeTypeLine, Props: pptx.ShapeProps{PositionProps: pos(position), Rotate: rotation, ObjectNameProps: pptx.ObjectNameProps{ObjectName: id}, Line: line, FlipH: &flipH, FlipV: &flipV}, Record: ShapeRecord{ID: id, Rect: bounds, Color: color, Geometry: "native-" + mode + "-connector"}, Connection: connection}
 	p := &scenePlan{Definition: "scene.attached-connector", ID: id, Bounds: bounds, Items: []sceneItem{{Shape: shape}}, Warnings: []string{"Native attached connector pilot uses explicit same-slide rectangular sites; routing, node movement and Save As require desktop qualification."}}
 	if strings.Contains(ctx.Path, "/body/") {
 		p.Warnings = append(p.Warnings, "Shared-library connector rollout is not qualified by this authoring pilot.")

@@ -333,7 +333,15 @@ type ConnectorConnection struct {
 
 // ConnectorProps creates a native connection shape. Endpoints are explicit;
 // arbitrary geometry, grouped targets and automatic routing are not inferred.
+// ConnectorRoute retains a supported native preset and its bend guide. A nil
+// route is the existing straight line. BentConnector3 uses adj1/100000 of width.
+type ConnectorRoute struct {
+	Preset     string `json:"preset"`
+	Adjustment int    `json:"adj1"`
+}
+
 type ConnectorProps struct {
+	Route *ConnectorRoute
 	ShapeProps
 	Connection ConnectorConnection
 }

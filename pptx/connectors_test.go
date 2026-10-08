@@ -128,3 +128,31 @@ func TestNativeConnectorDoesNotChangeLegacyLineSerialization(t *testing.T) {
 		t.Fatal("legacy line changed")
 	}
 }
+
+func TestNativeConnectorElbowMetadataAndRouteCopy(t *testing.T) {
+	p := New()
+	s := p.AddSlide()
+	opts := nativeConnectorOptions()
+	opts.Route = &ConnectorRoute{Preset: "bentConnector3", Adjustment: 35000}
+	opts.Rotate = 90
+	if e := s.AddConnector(opts); e != nil {
+		t.Fatal(e)
+	}
+	opts.Route.Adjustment = 90000
+	connectorRect(t, s, "input & source", ShapeTypeRect)
+	connectorRect(t, s, "output", ShapeTypeRect)
+	raw := unzipParts(t, mustWrite(t, p))["ppt/slides/slide1.xml"]
+	for _, want := range []string{`<p:cxnSp>`, `prst="bentConnector3"`, `name="adj1" fmla="val 35000"`, `rot="5400000"`, `<a:stCxn`, `<a:endCxn`} {
+		if !strings.Contains(raw, want) {
+			t.Fatal("missing elbow metadata", want)
+		}
+	}
+	for _, route := range []*ConnectorRoute{{Preset: "curvedConnector3", Adjustment: 50000}, {Preset: "bentConnector3", Adjustment: 2147483648}} {
+		opts := nativeConnectorOptions()
+		opts.Route = route
+		slide := New().AddSlide()
+		if e := slide.AddConnector(opts); e == nil || len(slide.ps.SlideObjects) != 0 {
+			t.Fatal("invalid route appended")
+		}
+	}
+}

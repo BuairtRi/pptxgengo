@@ -142,7 +142,7 @@ func checkDiagramContainment(objects map[string]*geometryObject, rules map[strin
 				return e
 			}
 			r := inv.mul(m)
-			b := r.bounds(wmdesign.Rect{X: o.geometry.X, Y: o.geometry.Y, W: o.geometry.W, H: o.geometry.H})
+			b := r.bounds(nativeGeometryAllocation(o.geometry))
 			x0 = math.Min(x0, b.X)
 			y0 = math.Min(y0, b.Y)
 			x1 = math.Max(x1, b.X+b.W)
