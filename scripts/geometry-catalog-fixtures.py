@@ -67,9 +67,10 @@ def add(tree, inherited_tags=False):
     for leaf in node.findall('.//a:t', NS):
         leaf.text = 'Monitoring'
     off = transform(node).find('a:off', NS)
-    # Reuse the third service's row position. In the combined case that service
-    # was removed; the add-only case intentionally retains the occupied slot.
-    off.set('x', str(int(off.get('x')) + 160 * 12700))
+    # Place the wider copied block in the third service's area, preserving
+    # 12 pt right padding and a 6 pt gap to the original. The combined case
+    # removes the third service; the add-only case retains its occupied area.
+    off.set('x', str(int(off.get('x')) + 168 * 12700))
     tree.find('p:cSld/p:spTree', NS).append(node)
 
 

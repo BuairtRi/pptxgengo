@@ -51,12 +51,21 @@ func structureNodeHash(d Document, s Slide, t LocalTemplate, n *Node, names []st
 		collectBindings(v, func(key string) { values[key] = s.Values[key]; zones[key] = t.Zones[key] })
 	}
 	geometry := map[string]NativeGeometry{}
+	containment := map[string]wmdesign.DiagramContainment{}
+	for member, rule := range s.DiagramContainment {
+		for _, name := range names {
+			if member == name || rule.Container == name {
+				containment[member] = rule
+				break
+			}
+		}
+	}
 	for _, name := range names {
 		if g, ok := s.NativeGeometry[name]; ok {
 			geometry[name] = g
 		}
 	}
-	return digest(canonical([]any{n, values, zones, s.Template, t.Frame, t.FrameOptions, t.FrameChrome, t.Grid, d.EditingProfile, geometry}))
+	return digest(canonical([]any{n, values, zones, s.Template, t.Frame, t.FrameOptions, t.FrameChrome, t.Grid, d.EditingProfile, geometry, containment}))
 }
 func addStructureReconciliation(p *Project, b *TextBaseline, native NativeLineageInspection, report *TextReconciliationReport) error {
 	var base Document
@@ -274,6 +283,27 @@ func applyReviewedStructure(p *Project, report TextReconciliationReport, decisio
 				replaceMappingField(slide, "native_order", orders)
 			}
 			replaceMappingField(orders, "", order)
+			containment := mappingNode(slide, "diagram_containment")
+			copyNames := []string{}
+			for name := range f.NativeGeometry {
+				copyNames = append(copyNames, name)
+			}
+			sort.Strings(copyNames)
+			for _, name := range copyNames {
+				sourceName := f.SourceNode + strings.TrimPrefix(name, f.NodeID)
+				if rule, ok := s.DiagramContainment[sourceName]; ok {
+					if containment == nil {
+						containment = &yaml.Node{Kind: yaml.MappingNode, Tag: "!!map"}
+						replaceMappingField(slide, "diagram_containment", containment)
+					}
+					v, err := editYAMLNode(rule)
+					if err != nil {
+						return nil, err
+					}
+					replaceMappingField(containment, name, v)
+				}
+			}
+
 			pin, _ := editYAMLNode(s.Template)
 			replaceMappingField(slide, "native_geometry_template", pin)
 			changed = append(changed, AdoptedTextField{f.ID, f.SlideID, "nodes/" + f.NodeID, "absent", "copied from " + f.SourceNode})
@@ -294,6 +324,9 @@ func applyReviewedStructure(p *Project, report TextReconciliationReport, decisio
 		removed := map[string]bool{}
 		for _, name := range f.NativeObjects {
 			removed[name] = true
+			if containment := mappingNode(slide, "diagram_containment"); containment != nil {
+				removeMappingField(containment, name)
+			}
 			if geometry := mappingNode(slide, "native_geometry"); geometry != nil {
 				removeMappingField(geometry, name)
 			}
@@ -378,13 +411,13 @@ func applyReviewedStructure(p *Project, report TextReconciliationReport, decisio
 		}
 		// Empty overrides no longer require a template pin.
 		slide := slides[slideID]
-		for _, key := range []string{"native_geometry", "native_order"} {
+		for _, key := range []string{"native_geometry", "native_order", "diagram_containment"} {
 			m := mappingNode(slide, key)
 			if m != nil && len(m.Content) == 0 {
 				removeMappingField(slide, key)
 			}
 		}
-		if mappingNode(slide, "native_geometry") == nil && mappingNode(slide, "native_order") == nil {
+		if mappingNode(slide, "native_geometry") == nil && mappingNode(slide, "native_order") == nil && mappingNode(slide, "diagram_containment") == nil {
 			removeMappingField(slide, "native_geometry_template")
 		}
 		touched[file] = true

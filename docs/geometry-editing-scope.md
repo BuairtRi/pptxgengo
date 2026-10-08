@@ -10,8 +10,10 @@ describes the available surface and exclusions. The promoted v4.2.1 release does
 not include these changes. A second slice adds reviewed whole local leaf
 deletions and explicitly mapped block copies with independent text bindings,
 including copied identity tags. Arbitrary native imports, partial deletions and reparenting,
-custom bends/elbows, obstacle routing, inner-container constraints and desktop
-qualification remain open. Source group coordinate-space changes require a
+custom bends/elbows, obstacle routing, full ink bounds and desktop
+qualification remain open. A third slice adds explicit logical containment with
+container-axis padding, descendant checks, sibling allocation overlap warnings,
+and rule inheritance/pruning during structural adoption. Source group coordinate-space changes require a
 fresh baseline; transforms do not claim native typography reflow qualification.
 The v4.2.1 baseline already has explicit local-template placements, resolved frame
 zones, native object identity tags, low-level connector support and reviewed

@@ -167,3 +167,22 @@ blocks receive fresh node IDs and independent content keys; their exact native
 transforms and paint order use the same pinned fields above. Use
 `reconcile propose --geometry --structure-map FILE` for explicit copy ownership,
 then review `structure` field IDs. Never inject native XML into authored YAML.
+
+### Logical diagram containment (development build)
+
+A local slide can persist `diagram_containment` keyed by exact native names:
+
+```yaml
+diagram_containment:
+  node06:
+    container: node05
+    padding: {top_pt: 28, right_pt: 12, bottom_pt: 4, left_pt: 12}
+```
+
+Create/review these rules with `project diagram contain|uncontain`. Missing
+objects, cycles and invalid padding fail validation. Padding is measured in the
+container's placement axes before rotation/parent scaling; the member and its
+descendants must fit. Rules also require `native_geometry_template` to match the
+selected template. Native copies inherit source membership; removed members are
+pruned. A layout reset preserves these rules. Numbered source snapshots and
+complete project shares carry them with the slide YAML.

@@ -4,14 +4,16 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/buairtri/pptxgengo/internal/deckproject"
 	"os"
 	"strings"
+
+	"github.com/buairtri/pptxgengo/internal/deckproject"
+	"github.com/buairtri/pptxgengo/internal/wmdesign"
 )
 
 func runProjectDiagram(args []string) error {
-	if len(args) == 0 || (args[0] != "inspect" && args[0] != "patch" && args[0] != "connect" && args[0] != "arrange") {
-		return fmt.Errorf("usage: project diagram <inspect|patch|connect|arrange> --project PATH --slide ID; patch --patch FILE [--apply]")
+	if len(args) == 0 || (args[0] != "inspect" && args[0] != "patch" && args[0] != "connect" && args[0] != "arrange" && args[0] != "contain" && args[0] != "uncontain") {
+		return fmt.Errorf("usage: project diagram <inspect|patch|connect|arrange|contain|uncontain> --project PATH --slide ID; patch --patch FILE [--apply]")
 	}
 	f := flag.NewFlagSet("project diagram "+args[0], flag.ContinueOnError)
 	project := f.String("project", ".", "project directory or deck.yaml")
@@ -27,16 +29,22 @@ func runProjectDiagram(args []string) error {
 	toSite := f.String("to-site", "left", "top, left, bottom or right")
 	head := f.String("head", "end", "none, start, end or both")
 	style := f.String("style", "solid", "solid, dashed or dotted")
-	nodes := f.String("nodes", "", "comma-separated node IDs in desired distribution order; first node is alignment anchor")
+	nodes := f.String("nodes", "", "comma-separated source IDs for arrange, or native member names for containment")
 	align := f.String("align", "", "left, right, top, bottom, center or middle")
 	distribute := f.String("distribute", "", "horizontal or vertical")
-	actor := f.String("actor", "", "named author for connect/arrange")
-	reason := f.String("reason", "", "adaptation reason for connect/arrange")
+	container := f.String("container", "", "native object name of the logical container")
+	padding := f.Float64("padding", 12, "uniform container-axis padding in points")
+	topPadding := f.Float64("padding-top", -1, "override top padding, for example to reserve a container header")
+	rightPadding := f.Float64("padding-right", -1, "override right padding")
+	bottomPadding := f.Float64("padding-bottom", -1, "override bottom padding")
+	leftPadding := f.Float64("padding-left", -1, "override left padding")
+	actor := f.String("actor", "", "named author for diagram edits")
+	reason := f.String("reason", "", "adaptation reason for diagram edits")
 	if e := f.Parse(args[1:]); e != nil {
 		return e
 	}
 	common := map[string]bool{"project": true, "slide": true, "bundle": true, "engine": true}
-	allowed := map[string]map[string]bool{"inspect": {}, "patch": {"patch": true, "apply": true}, "connect": {"id": true, "from": true, "to": true, "from-site": true, "to-site": true, "head": true, "style": true, "actor": true, "reason": true, "apply": true}, "arrange": {"nodes": true, "align": true, "distribute": true, "actor": true, "reason": true, "apply": true}}
+	allowed := map[string]map[string]bool{"inspect": {}, "patch": {"patch": true, "apply": true}, "connect": {"id": true, "from": true, "to": true, "from-site": true, "to-site": true, "head": true, "style": true, "actor": true, "reason": true, "apply": true}, "contain": {"container": true, "nodes": true, "padding": true, "padding-top": true, "padding-right": true, "padding-bottom": true, "padding-left": true, "actor": true, "reason": true, "apply": true}, "uncontain": {"nodes": true, "actor": true, "reason": true, "apply": true}, "arrange": {"nodes": true, "align": true, "distribute": true, "actor": true, "reason": true, "apply": true}}
 	var flagErr error
 	f.Visit(func(v *flag.Flag) {
 		if !common[v.Name] && !allowed[args[0]][v.Name] {
@@ -65,6 +73,31 @@ func runProjectDiagram(args []string) error {
 		result, e = deckproject.InspectDiagram(p, *slide, b, en)
 	} else if args[0] == "connect" {
 		result, e = deckproject.ConnectDiagram(p, *slide, *id, *from, *fromSite, *to, *toSite, *head, *style, *actor, *reason, b, en, *apply)
+	} else if args[0] == "contain" || args[0] == "uncontain" {
+		ids := strings.Split(*nodes, ",")
+		for i := range ids {
+			ids[i] = strings.TrimSpace(ids[i])
+		}
+		pad := wmdesign.DiagramPadding{Top: *padding, Right: *padding, Bottom: *padding, Left: *padding}
+		f.Visit(func(v *flag.Flag) {
+			switch v.Name {
+			case "padding-top":
+				pad.Top = *topPadding
+			case "padding-right":
+				pad.Right = *rightPadding
+			case "padding-bottom":
+				pad.Bottom = *bottomPadding
+			case "padding-left":
+				pad.Left = *leftPadding
+			}
+		})
+		if args[0] == "contain" && *container == "" {
+			return fmt.Errorf("contain requires --container")
+		}
+		if args[0] == "uncontain" {
+			pad = wmdesign.DiagramPadding{}
+		}
+		result, e = deckproject.ContainDiagram(p, *slide, ids, *container, pad, *actor, *reason, b, en, *apply)
 	} else if args[0] == "arrange" {
 		ids := strings.Split(*nodes, ",")
 		for i := range ids {

@@ -84,6 +84,48 @@ pptxgengo design project diagram arrange --project ./deck --slide architecture \
 Use `--apply` after reviewing the preview. Distribution retains the supplied
 order and first/last positions; insufficient space is an error.
 
+## Keep elements inside a logical container
+
+Visual nesting is not automatically a containment rule. Use exact native names
+from `final_native_geometry` to declare the relationship on the selected slide:
+
+```sh
+pptxgengo design project diagram contain --project ./deck --slide architecture \
+  --nodes node06,node07,node08 --container node05 \
+  --padding 12 --padding-top 28 --padding-bottom 4 \
+  --actor deck-author --reason 'Keep services inside the Services box'
+```
+
+Review the preview, then repeat with `--apply`. Uniform padding defaults to 12
+points; `--padding-top`, `--padding-right`, `--padding-bottom` and `--padding-left`
+override individual edges. Padding uses the container's native placement axes,
+before its own rotation and parent scaling. It is not necessarily slide-space
+padding. Use a larger top value to reserve the container heading.
+
+`inspect` reports padded clearances and allocation overlaps between declared
+siblings. Overlap is a warning; review intentional layers and rotated envelopes
+visually. Builds, patches and native reconciliation reject objects or descendants
+outside their declared allocation **before source writes**. The rules persist in
+slide YAML as `diagram_containment` and pin the local template reference. They do
+not move objects, reparent them, reserve ink/stroke space, or infer relationships
+from appearances.
+
+A mapped native copy inherits its source component's membership. Deleting a
+member removes its rule. Deleting a container with surviving members is refused;
+first reassign those members or explicitly remove the obsolete relationship:
+
+```sh
+pptxgengo design project diagram uncontain --project ./deck --slide architecture \
+  --nodes node06,node07 --actor deck-author --reason 'Remove the obsolete boundary'
+```
+
+Before changing the template reference, deliberately remove obsolete memberships
+and declare/review new ones against the new template. A layout reset alone does
+not remove their template pin.
+
+Preview before `--apply`. `reset_native_layout` clears adopted transforms/order
+while preserving containment rules. Review clearance again after a reset.
+
 ## Draw an attached arrow
 
 ```sh
@@ -193,8 +235,8 @@ Select reviewed `structure` field IDs using the same review-decisions schema.
 Copy proposals carry the edited root order; related supported additions/deletions
 on that slide must be accepted together. Missing mappings remain review items.
 After adoption, rebuild, render every changed slide, and check the hierarchy and
-clearance visually. A successful frame-box check does not detect every overlap
-or enforce the padding of a visual inner container.
+clearance visually. Declared containment enforces allocation padding; frame-box
+checks alone do not infer visual container relationships or detect every overlap.
 
 A reconciled native layout takes precedence over source placement. Before a
 later source placement/topology change, explicitly start the patch with
