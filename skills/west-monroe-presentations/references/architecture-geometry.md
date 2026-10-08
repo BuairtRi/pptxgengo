@@ -109,7 +109,8 @@ pptxgengo design project reconcile propose --project ./deck --geometry \
   --edited ./deck/working/architecture-edited.pptx --out ./deck/reviews/geometry-1
 ```
 
-Review `geometry` fields alongside text fields and every `manual_review` item.
+Review `geometry` and `structure` fields alongside text fields and every
+`manual_review` item.
 The supported native properties are transform placement/extent, group child
 space, rotation, flips, and existing-object paint order. Matching uses receipt
 lineage tokens; names in the report are the recorded source binding, not guesses
@@ -138,9 +139,62 @@ attachments; include incident connector transforms when required.
 
 Native group resizing preserves its scaling rather than reflowing source text.
 Measured text remains in authored coordinates; review scaled typography in
-PowerPoint. Added/deleted/duplicated/reparented native objects, changed routes,
-formatting, rich copy and ambiguous mappings remain explicit review. Do not
+PowerPoint. Whole local leaf deletions and explicitly mapped block copies are
+supported as described below. Other additions, unresolved duplicate identities,
+reparenting, changed routes, formatting and rich copy remain explicit review. Do not
 report complete synchronization while any edit remains unresolved.
+
+## Reconcile removed and copied components
+
+For a whole-component deletion, `--geometry` proposes `structure` fields with
+`action: remove_node`. Review the node ID and complete native-object list before
+selecting its field ID with `use_native`. This supports top-level project-owned
+local leaves, not deletion of a single composite subshape or a nested group.
+Untracked or ambiguous identities prevent a deletion proposal. Source edits
+become conflicts; a surviving attached arrow prevents deletion. If the component
+and its incident arrows are all removed, select their separate proposals together.
+Unused bindings are pruned and exact predecessor files retained.
+
+For a new copy of an existing block or editable block, provide an explicit map:
+
+```yaml
+schema: pptxgengo.native-structure-map.v1
+copies:
+  - slide_id: architecture
+    native_object: Monitoring copy
+    source_node: node07
+    new_node: monitoring
+```
+
+`native_object` is the unique name of the **new copy** in the edited PPTX
+(available in PowerPoint's Selection Pane). `source_node` is its baseline YAML
+component, and `new_node` is an unused stable ID. A diagnostic native name selects
+that pinned input only; it does not become permanent source identity.
+
+```sh
+pptxgengo design project reconcile propose --project ./deck --geometry \
+  --structure-map copies.yaml --edited ./deck/working/architecture-edited.pptx \
+  --out ./deck/reviews/geometry-2
+```
+
+The map supports complete top-level `block`/`editable-block` components with
+matching native structure and styling. Copies can move, resize, rotate, flip,
+and change uniquely bound plain text. Each copy gets independent source bindings.
+The copied source component must be unchanged in YAML since the baseline.
+Literal text changes, rich formatting, new arbitrary Office objects, routes,
+and reparenting need separate source authoring or further implementation.
+
+PowerPoint may duplicate identity tags along with objects. The explicit map
+identifies the new copy; analysis ignores only its inherited tags and requires
+exactly one original instance to remain. Exact edited bytes are preserved.
+Do not map the original as a new copy or erase tags in the original build.
+
+Select reviewed `structure` field IDs using the same review-decisions schema.
+Copy proposals carry the edited root order; related supported additions/deletions
+on that slide must be accepted together. Missing mappings remain review items.
+After adoption, rebuild, render every changed slide, and check the hierarchy and
+clearance visually. A successful frame-box check does not detect every overlap
+or enforce the padding of a visual inner container.
 
 A reconciled native layout takes precedence over source placement. Before a
 later source placement/topology change, explicitly start the patch with

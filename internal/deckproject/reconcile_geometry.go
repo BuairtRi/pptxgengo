@@ -61,7 +61,7 @@ func geometryOnlyChange(a, b *xmlNode) bool {
 // the pinned compiler to detect simultaneous placement and template changes.
 // Native coordinates are retained in their parent space; only final validation
 // resolves group transforms into frame-space bounds.
-func addGeometryReconciliation(p *Project, b *TextBaseline, edited []byte, report *TextReconciliationReport, bundle, engine string) error {
+func addGeometryReconciliation(p *Project, b *TextBaseline, edited []byte, report *TextReconciliationReport, bundle, engine string, mappings ...NativeCopyMapping) error {
 	c, e := Check(p, bundle, engine)
 	if e != nil {
 		return e
@@ -231,8 +231,19 @@ func addGeometryReconciliation(p *Project, b *TextBaseline, edited []byte, repor
 	}
 	report.ManualReview = issues
 	sort.Slice(report.Geometry, func(i, j int) bool { return report.Geometry[i].ID < report.Geometry[j].ID })
-	report.GeometryScope = "tagged_transforms_and_existing_object_paint_order_v1"
-	report.AdoptionScope = "reviewed_plain_text_and_native_transforms; topology_routes_styles_remain_explicit_review"
+	structuralNative, e := addCopyReconciliation(p, b, native, report, mappings)
+	if e != nil {
+		return e
+	}
+	if e = addStructureReconciliation(p, b, structuralNative, report); e != nil {
+		return e
+	}
+
+	if e = addStructureOrder(b, native, report, mappings); e != nil {
+		return e
+	}
+	report.GeometryScope = "tagged_transforms_existing_order_whole_local_leaf_deletions_and_mapped_copies_v2"
+	report.AdoptionScope = "reviewed_plain_text_and_native_transforms; whole_local_leaf_deletions_and_mapped_block_copies_reviewed; grouping_routes_styles_remain_explicit_review"
 	for _, f := range report.Geometry {
 		report.Counts["geometry_"+f.Status]++
 	}

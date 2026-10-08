@@ -376,91 +376,11 @@ func PatchDiagram(p *Project, slideID string, patch DiagramPatch, bundle, engine
 	}
 	changes := map[string][]byte{}
 	if nodesChanged {
-		used := map[string]bool{}
-		var collect func([]Node)
-		collect = func(nodes []Node) {
-			for _, n := range nodes {
-				for _, v := range []any{n.Text, n.Asset, n.Arguments} {
-					collectBindings(v, func(key string) { used[key] = true })
-				}
-				collect(n.Nodes)
-			}
+		pruned, err := updateDiagramNodes(t, s, templateNode, slides[slideID], false)
+		if err != nil {
+			return out, err
 		}
-		collect(t.Nodes)
-		removed := false
-		values := map[string]any{}
-		for key, v := range s.Values {
-			values[key] = v
-		}
-		for key, z := range t.Zones {
-			if z.Role != "slide-title" && z.Role != "eyebrow" && z.Role != "source" && z.Role != "nav" && !used[key] {
-				delete(t.Zones, key)
-				delete(values, key)
-				removed = true
-			}
-		}
-		if removed {
-			zones, e := editYAMLNode(t.Zones)
-			if e != nil {
-				return out, e
-			}
-			preserveDiagramComments(mappingNode(templateNode, "zones"), zones)
-			replaceMappingField(templateNode, "zones", zones)
-			node := slides[slideID]
-			if mappingNode(node, "content") != nil {
-				content, bindings, e := localAuthoredContent(t, values)
-				if e != nil {
-					return out, e
-				}
-				cn, e := editYAMLNode(content)
-				if e != nil {
-					return out, e
-				}
-				bn, e := editYAMLNode(bindings)
-				if e != nil {
-					return out, e
-				}
-				preserveDiagramComments(mappingNode(node, "content"), cn)
-				preserveDiagramComments(mappingNode(node, "bindings"), bn)
-				replaceMappingField(node, "content", cn)
-				replaceMappingField(node, "bindings", bn)
-				removeMappingField(node, "values")
-			} else {
-				vn, e := editYAMLNode(values)
-				if e != nil {
-					return out, e
-				}
-				preserveDiagramComments(mappingNode(node, "values"), vn)
-				replaceMappingField(node, "values", vn)
-			}
-			slideChanged = true
-		}
-		// Preserve comments on untouched source nodes, including their bindings.
-		originalNodes := mappingNode(templateNode, "nodes")
-		byID := map[string]*yaml.Node{}
-		if originalNodes != nil {
-			for _, n := range originalNodes.Content {
-				if id := mappingNode(n, "id"); id != nil {
-					byID[id.Value] = n
-				}
-			}
-		}
-		replacement := &yaml.Node{Kind: yaml.SequenceNode, Tag: "!!seq"}
-		for _, n := range t.Nodes {
-			v, e := editYAMLNode(n)
-			if e != nil {
-				return out, e
-			}
-			if old := byID[n.ID]; old != nil {
-				if same, err := yamlNodeMatchesNode(old, n); err == nil && same {
-					v = old
-				} else {
-					preserveDiagramComments(old, v)
-				}
-			}
-			replacement.Content = append(replacement.Content, v)
-		}
-		replaceMappingField(templateNode, "nodes", replacement)
+		slideChanged = slideChanged || pruned
 		raw, e := encodeSourceYAML(documents[file])
 		if e != nil {
 			return out, e
@@ -516,4 +436,96 @@ func preserveDiagramComments(old, current *yaml.Node) {
 			}
 		}
 	}
+}
+
+// updateDiagramNodes writes a typed local definition and prunes only unused
+// non-chrome bindings. Callers share one authored AST and one guarded commit.
+func updateDiagramNodes(t LocalTemplate, s Slide, templateNode, slideNode *yaml.Node, forceBindings bool) (bool, error) {
+	slideChanged := false
+	used := map[string]bool{}
+	var collect func([]Node)
+	collect = func(nodes []Node) {
+		for _, n := range nodes {
+			for _, v := range []any{n.Text, n.Asset, n.Arguments} {
+				collectBindings(v, func(key string) { used[key] = true })
+			}
+			collect(n.Nodes)
+		}
+	}
+	collect(t.Nodes)
+	removed := false
+	values := map[string]any{}
+	for key, v := range s.Values {
+		values[key] = v
+	}
+	for key, z := range t.Zones {
+		if z.Role != "slide-title" && z.Role != "eyebrow" && z.Role != "source" && z.Role != "nav" && !used[key] {
+			delete(t.Zones, key)
+			delete(values, key)
+			removed = true
+		}
+	}
+	if removed || forceBindings {
+		zones, e := editYAMLNode(t.Zones)
+		if e != nil {
+			return false, e
+		}
+		preserveDiagramComments(mappingNode(templateNode, "zones"), zones)
+		replaceMappingField(templateNode, "zones", zones)
+		node := slideNode
+		if mappingNode(node, "content") != nil {
+			content, bindings, e := localAuthoredContent(t, values)
+			if e != nil {
+				return false, e
+			}
+			cn, e := editYAMLNode(content)
+			if e != nil {
+				return false, e
+			}
+			bn, e := editYAMLNode(bindings)
+			if e != nil {
+				return false, e
+			}
+			preserveDiagramComments(mappingNode(node, "content"), cn)
+			preserveDiagramComments(mappingNode(node, "bindings"), bn)
+			replaceMappingField(node, "content", cn)
+			replaceMappingField(node, "bindings", bn)
+			removeMappingField(node, "values")
+		} else {
+			vn, e := editYAMLNode(values)
+			if e != nil {
+				return false, e
+			}
+			preserveDiagramComments(mappingNode(node, "values"), vn)
+			replaceMappingField(node, "values", vn)
+		}
+		slideChanged = true
+	}
+	// Preserve comments on untouched source nodes, including their bindings.
+	originalNodes := mappingNode(templateNode, "nodes")
+	byID := map[string]*yaml.Node{}
+	if originalNodes != nil {
+		for _, n := range originalNodes.Content {
+			if id := mappingNode(n, "id"); id != nil {
+				byID[id.Value] = n
+			}
+		}
+	}
+	replacement := &yaml.Node{Kind: yaml.SequenceNode, Tag: "!!seq"}
+	for _, n := range t.Nodes {
+		v, e := editYAMLNode(n)
+		if e != nil {
+			return false, e
+		}
+		if old := byID[n.ID]; old != nil {
+			if same, err := yamlNodeMatchesNode(old, n); err == nil && same {
+				v = old
+			} else {
+				preserveDiagramComments(old, v)
+			}
+		}
+		replacement.Content = append(replacement.Content, v)
+	}
+	replaceMappingField(templateNode, "nodes", replacement)
+	return slideChanged, nil
 }

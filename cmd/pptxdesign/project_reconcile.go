@@ -20,7 +20,8 @@ func runProjectReconcile(args []string) error {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	if action == "propose" {
-		geometry := f.Bool("geometry", false, "also propose tagged native transforms and paint order; imports, deletions and route edits require manual review")
+		structureMap := f.String("structure-map", "", "explicit YAML/JSON mappings for untagged copies of local block components; requires --geometry")
+		geometry := f.Bool("geometry", false, "also propose tagged transforms, paint order and reviewed whole local component deletions")
 		bundle := f.String("bundle", "", "bundle path/revision, defaults to project lock")
 		engine := f.String("engine", "", "engine, defaults to project lock")
 		build := f.String("build", "", "baseline build ID; defaults to the state-pinned current build")
@@ -32,6 +33,9 @@ func runProjectReconcile(args []string) error {
 		}
 		if f.NArg() != 0 || *edited == "" || *out == "" {
 			return fmt.Errorf("reconcile propose requires --edited FILE and --out NEW_DIRECTORY, with no positional arguments")
+		}
+		if *structureMap != "" && !*geometry {
+			return fmt.Errorf("--structure-map requires --geometry")
 		}
 		p, err := deckproject.Load(*project)
 		if err != nil {
@@ -51,7 +55,15 @@ func runProjectReconcile(args []string) error {
 			if e != nil {
 				return e
 			}
-			packet, err = deckproject.WriteGeometryReviewPacket(p, b, raw, *out, runtimeBundle, runtimeEngine)
+			if *structureMap != "" {
+				mappingRaw, e := readReconciliationInput(*structureMap, 1<<20)
+				if e != nil {
+					return e
+				}
+				packet, err = deckproject.WriteMappedGeometryReviewPacket(p, b, raw, *out, runtimeBundle, runtimeEngine, mappingRaw)
+			} else {
+				packet, err = deckproject.WriteGeometryReviewPacket(p, b, raw, *out, runtimeBundle, runtimeEngine)
+			}
 		} else {
 			packet, err = deckproject.WriteTextReviewPacket(p, b, raw, *out)
 		}

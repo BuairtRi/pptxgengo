@@ -42,17 +42,32 @@ func WriteTextReviewPacket(p *Project, b *TextBaseline, edited []byte, destinati
 func WriteGeometryReviewPacket(p *Project, b *TextBaseline, edited []byte, destination, bundle, engine string) (*TextReviewPacket, error) {
 	return writeReviewPacket(p, b, edited, destination, bundle, engine)
 }
-func writeReviewPacket(p *Project, b *TextBaseline, edited []byte, destination, bundle, engine string) (*TextReviewPacket, error) {
-	report, e := ReconcileText(p, b, edited)
+func WriteMappedGeometryReviewPacket(p *Project, b *TextBaseline, edited []byte, destination, bundle, engine string, mappingRaw []byte) (*TextReviewPacket, error) {
+	m, e := DecodeNativeStructureMap(mappingRaw)
+	if e != nil {
+		return nil, e
+	}
+	return writeReviewPacket(p, b, edited, destination, bundle, engine, m.Copies...)
+}
+func writeReviewPacket(p *Project, b *TextBaseline, edited []byte, destination, bundle, engine string, mappings ...NativeCopyMapping) (*TextReviewPacket, error) {
+	analysis, e := prepareMappedNativeCopies(edited, b, mappings)
+	if e != nil {
+		return nil, e
+	}
+	report, e := ReconcileText(p, b, analysis)
 	if e != nil {
 		return nil, e
 	}
 	if bundle != "" {
-		if e = addGeometryReconciliation(p, b, edited, &report, bundle, engine); e != nil {
+		if e = addGeometryReconciliation(p, b, analysis, &report, bundle, engine, mappings...); e != nil {
 			return nil, e
 		}
 	}
+	report.EditedPPTXSHA256 = digest(edited)
 	files := map[string][]byte{"report.json": canonical(report), "edited.pptx": edited, "current-source.canonical.json": p.Canonical, "current-lock.json": b.files["toolchain.lock.json"]}
+	if len(mappings) > 0 {
+		files["structure-map.json"] = canonical(NativeStructureMap{StructureMapSchema, mappings})
+	}
 	for name, raw := range b.files {
 		files["baseline/"+name] = raw
 	}

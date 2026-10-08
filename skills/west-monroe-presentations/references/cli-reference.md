@@ -239,6 +239,7 @@ toolchain migration and offline runtime export remain separate commands.
 `project diagram inspect|patch|connect|arrange` uses `--project` and `--slide`.
 Mutations preview by default; `--apply` commits validated source changes.
 `project reconcile propose --geometry` also proposes native transforms and
-existing-object paint order. See [architecture and geometry](architecture-geometry.md)
+existing-object paint order and whole local leaf deletions. Add
+`--structure-map FILE` for explicit native block-copy mappings. See [architecture and geometry](architecture-geometry.md)
 for source fields, examples, supported targets, reset behavior and exclusions.
 These commands are not in the promoted v4.2.1 binary.

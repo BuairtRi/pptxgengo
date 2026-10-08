@@ -2,12 +2,14 @@
 
 Requested by Ri on 2026-10-08. **Target scope; not all implemented or released.**
 
-The geometry development branch implements the first slice: line-safe catalog
+Main contains the first geometry slice: line-safe catalog
 detach, typed diagram inspect/patch/connect/arrange with previews, straight
 attached block connectors, and receipt-backed native transform/paint-order
 adoption. [Operator guidance](../skills/west-monroe-presentations/references/architecture-geometry.md)
 describes the available surface and exclusions. The promoted v4.2.1 release does
-not include these changes. Native structural imports/deletions/reparenting,
+not include these changes. A second slice adds reviewed whole local leaf
+deletions and explicitly mapped block copies with independent text bindings,
+including copied identity tags. Arbitrary native imports, partial deletions and reparenting,
 custom bends/elbows, obstacle routing, inner-container constraints and desktop
 qualification remain open. Source group coordinate-space changes require a
 fresh baseline; transforms do not claim native typography reflow qualification.
