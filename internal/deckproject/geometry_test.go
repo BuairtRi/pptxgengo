@@ -493,3 +493,44 @@ func TestGeometryAuthoredBasisDriftDoesNotDoubleApplyGroupMove(t *testing.T) {
 		t.Fatal("old transform applied to a rebased source group", e)
 	}
 }
+
+func TestDiagramExplicitResetEnablesSourceEditing(t *testing.T) {
+	p, b := geometryFixture(t)
+	objects, _ := geometryFromPackage(t, b.files["deck.pptx"])
+	g := objects["node06"].geometry
+	g.Y += 12
+	edited := geometryEdited(t, p, b, map[string]NativeGeometry{"node06": g}, nil)
+	packet, e := WriteGeometryReviewPacket(p, b, edited, filepath.Join(t.TempDir(), "review"), bundle(t), wmdesign.CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = AdoptTextReviewPacket(p, packet, geometryDecisions(packet), bundle(t), wmdesign.CandidateEngine); e != nil {
+		t.Fatal(e)
+	}
+	p, e = Load(p.SourcePath)
+	if e != nil {
+		t.Fatal(e)
+	}
+	dy := 6.
+	patch := DiagramPatch{Schema: DiagramPatchSchema, Actor: "test", Reason: "Deliberately return to authored placements", Operations: []DiagramOperation{{Action: "move", ID: "node06", DY: &dy}}}
+	if _, e = PatchDiagram(p, "architecture-slide", patch, bundle(t), wmdesign.CandidateEngine, true); e == nil {
+		t.Fatal("source move silently overrode reconciled layout")
+	}
+	patch.Operations = append([]DiagramOperation{{Action: "reset_native_layout", ID: "architecture-slide"}}, patch.Operations...)
+	out, e := PatchDiagram(p, "architecture-slide", patch, bundle(t), wmdesign.CandidateEngine, true)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if len(out.Inspection.NativeGeometry) != 0 || len(out.Inspection.NativeOrder) != 0 {
+		t.Fatal("reset did not clear native layout")
+	}
+	for _, o := range out.Inspection.FinalNative {
+		if o.Name == "node06" {
+			if o.Geometry.Y != objects["node06"].geometry.Y+6 {
+				t.Fatal("move was applied twice", o)
+			}
+			return
+		}
+	}
+	t.Fatal("node missing")
+}
