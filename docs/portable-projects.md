@@ -65,6 +65,8 @@ withdrawal history so a newer withdrawal cannot resurrect an older approval.
 
 ## Consistent portable project layout
 
+The operator skill includes the complete [canonical folder tree and repair workflow](../skills/west-monroe-presentations/references/project-structure.md), including the limits of current layout migration.
+
 Projects should have a predictable layout:
 
     deck.yaml

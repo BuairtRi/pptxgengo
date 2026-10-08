@@ -39,3 +39,8 @@ For schema, engine, bundle and template revision changes, use the West Monroe
 skill's project-upgrade reference. Toolchain migration changes pins, not schemas
 or local template definitions; select the bundle explicitly and review a fresh
 baseline before adopting it.
+
+For project folder repair, read the West Monroe skill's project-structure
+reference. `project layout` normalizes active slide/local-template references;
+it does not reorganize assets, context or immutable build/version history.
+Preserve predecessors, update other authored references deliberately and rebuild.

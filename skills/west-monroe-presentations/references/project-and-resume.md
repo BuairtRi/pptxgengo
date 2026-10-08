@@ -19,16 +19,20 @@ For a historical project, split with the bundle matching its lock.
 
 ## Project files
 
+Use the [canonical folder tree and repair workflow](project-structure.md) when
+creating files or resuming a project with scattered paths. Supporting documents
+belong under `context/`; sources, briefs and notes have their own folders.
+
 Create each file when its stage needs it. Formats are in [project templates](project-templates.md).
 
 | File | Holds | `context` key |
 | --- | --- | --- |
-| `project.md` | Stage, next move, frame with confirmed/working/open status, decision log, style decisions | `project` |
-| `win-strategy.md` | Internal win themes, competitor concerns, pricing logic | `win_strategy` (never packaged) |
+| `context/project.md` | Stage, next move, frame with confirmed/working/open status, decision log, style decisions | `project` |
+| `context/win-strategy.md` | Internal win themes, competitor concerns, pricing logic | `win_strategy` (never packaged) |
 | `sources/` (with `sources/index.md`) | Source files and the index of IDs, locations, authority and limits | `sources` (link the folder to track every file) |
-| `audience-context.md` | The readers' starting position; no conclusions or win strategy | `audience` |
-| `outline.md` | Narrative and ordered pages with titles, support and transitions | `outline` |
-| `claims.md` | Claims under `## <claim-id>` headings; slides' `evidence_refs` are checked against it | `claims` (link it, or `evidence_refs` go unchecked) |
+| `context/audience-context.md` | The readers' starting position; no conclusions or win strategy | `audience` |
+| `context/outline.md` | Narrative and ordered pages with titles, support and transitions | `outline` |
+| `context/claims.md` | Claims under `## <claim-id>` headings; slides' `evidence_refs` are checked against it | `claims` (link it, or `evidence_refs` go unchecked) |
 | `briefs/<slide-id>.md` | Each page's job, required content, evidence and open choices | Per slide, via the slide's `brief` field |
 | `composition-log.yaml` | Required. Each slide's purpose, candidates, chosen template and rationale; checked by `project check` | `composition_log` (optional; the root file is found automatically) |
 | `reviews/` | Reviewer findings and operator decisions | Not tracked |
@@ -49,7 +53,7 @@ Command details are in the [CLI reference](cli-reference.md#deck-projects).
 
 ## Resume
 
-1. Read `project.md` and `composition-log.yaml`, then run `project status`.
+1. Read the project context path declared in `deck.yaml` (normally `context/project.md`) and `composition-log.yaml`, then run `project status`.
 2. Check invalidated approvals, and whether the generated deck was edited by hand (a changed baseline blocks build and export). If `check` reports `project.toolchain_drift`, the CLI was upgraded; follow the re-pin steps in the [CLI reference](cli-reference.md#move-a-project-to-a-new-cli-version) with the operator's agreement.
 3. Continue from the first unresolved step. Don't redo approved stages whose inputs haven't changed.
 4. If someone edited a PowerPoint working copy, preserve it and the immutable build baseline. Use [reviewed text reconciliation](editing-slides.md#rebuild-or-update-an-existing-deck) for supported fields; manually translate geometry, formatting and unsupported content after review.
