@@ -534,3 +534,30 @@ func TestDiagramExplicitResetEnablesSourceEditing(t *testing.T) {
 	}
 	t.Fatal("node missing")
 }
+
+func TestGeometryYAMLOnlyGroupMoveRetainsSourceWithoutNativeDecision(t *testing.T) {
+	p, b := geometryFixture(t)
+	dy := 6.
+	patch := DiagramPatch{Schema: DiagramPatchSchema, Actor: "test", Reason: "Source-only move", Operations: []DiagramOperation{{Action: "move", ID: "node06", DY: &dy}}}
+	if _, e := PatchDiagram(p, "architecture-slide", patch, bundle(t), wmdesign.CandidateEngine, true); e != nil {
+		t.Fatal(e)
+	}
+	var e error
+	p, e = Load(p.SourcePath)
+	if e != nil {
+		t.Fatal(e)
+	}
+	packet, e := WriteGeometryReviewPacket(p, b, b.files["deck.pptx"], filepath.Join(t.TempDir(), "review"), bundle(t), wmdesign.CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	for _, f := range packet.Report.Geometry {
+		if f.Name == "node06" {
+			if f.Status != "yaml_only" {
+				t.Fatal(f)
+			}
+			return
+		}
+	}
+	t.Fatal("missing source-only group field")
+}

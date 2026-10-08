@@ -166,10 +166,10 @@ func addGeometryReconciliation(p *Project, b *TextBaseline, edited []byte, repor
 		if now := inventories[o.SlideID][o.NativeName]; now != nil && now.geometry.Kind == base.Kind && now.geometry.Parent == base.Parent && editedParent == parent {
 			g := now.geometry
 			f.CurrentYAML = &g
-			if base.Child != nil && !bytes.Equal(canonical(base.Child), canonical(g.Child)) {
+			f.Status = threeWayStatus(base, g, after)
+			if (f.Status == "native_only" || f.Status == "conflict") && base.Child != nil && !bytes.Equal(canonical(base.Child), canonical(g.Child)) {
+				f.Status = "manual_review"
 				f.Reason = "The authored group coordinate space changed; rebuild a baseline before adopting its native transform."
-			} else {
-				f.Status = threeWayStatus(base, g, after)
 			}
 		} else {
 			f.Reason = "The source object or parent changed; geometry ownership must be reviewed."
