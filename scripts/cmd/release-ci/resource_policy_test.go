@@ -9,7 +9,7 @@ import (
 
 func TestScopedBrowsingPolicyRefusesInvalidOrMissingResources(t *testing.T) {
 	version, commit := "v4.2.0", strings.Repeat("a", 40)
-	for _, tc := range []struct{ kind, policy string }{{"cli-only", "unknown"}, {"full", "deferred"}, {"unknown", "required"}} {
+	for _, tc := range []struct{ kind, policy string }{{"cli-only", "unknown"}, {"full", "deferred"}, {"full", "templates-only"}, {"unknown", "required"}} {
 		t.Setenv("PPTXGENGO_PACKAGE_KIND", tc.kind)
 		t.Setenv("PPTXGENGO_BROWSING_POLICY", tc.policy)
 		if err := prepareResourcePolicy(filepath.Join(t.TempDir(), "resources"), version, commit); err == nil {
@@ -50,6 +50,27 @@ func TestDeferredBrowsingHasNoArchiveResourcesAndRejectsStaleFiles(t *testing.T)
 	}
 	if err := prepareResourcePolicy(root, version, commit); err == nil {
 		t.Fatal("existing resources overwritten")
+	}
+}
+
+func TestTemplateOnlyPolicyRequiresClosedCatalogInventory(t *testing.T) {
+	t.Setenv("PPTXGENGO_PACKAGE_KIND", "cli-only")
+	t.Setenv("PPTXGENGO_BROWSING_POLICY", "templates-only")
+	version, commit := "v4.2.0", strings.Repeat("a", 40)
+	root := filepath.Join(t.TempDir(), "resources")
+	if err := prepareResourcePolicy(root, version, commit); err != nil {
+		t.Fatal(err)
+	}
+	for _, dir := range []string{"browsing", "library"} {
+		if err := os.Mkdir(filepath.Join(root, dir), 0755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := addScopedBrowsingFiles(map[string]Input{}, root, version, commit); err == nil {
+		t.Fatal("template-only policy accepted a missing inventory")
+	}
+	if description := browsingContentDescription("cli-only", "templates-only"); !strings.Contains(description, "SQLite") || !strings.Contains(description, "not native PowerPoint qualification") {
+		t.Fatal(description)
 	}
 }
 

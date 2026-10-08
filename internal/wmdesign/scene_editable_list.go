@@ -144,7 +144,11 @@ func editableListParagraphXML(tr TextRecord) []byte {
 		properties = bytes.Replace(properties, []byte(`<a:buSzPts val="`+strconv.Itoa(oldSize)+`"/>`), []byte(`<a:buSzPts val="`+strconv.Itoa(fontSize)+`"/>`), 1)
 		properties = bytes.Replace(properties, []byte(`<a:buFont typeface="`+sceneTableXMLEscape(tr.Layout.Font.Typeface)+`"/><a:buChar char="■"/>`), []byte(`<a:buFont typeface="Wingdings" charset="2"/><a:buChar char=""/>`), 1)
 		// Keep bullet ink explicit rather than inheriting a presentation theme.
-		properties = bytes.Replace(properties, []byte("<a:buSzPts"), []byte(`<a:buClr><a:srgbClr val="`+sceneTableXMLEscape(tr.Color)+`"/></a:buClr><a:buSzPts`), 1)
+		bulletColor := paragraph.BulletColor
+		if bulletColor == "" {
+			bulletColor = tr.Color
+		}
+		properties = bytes.Replace(properties, []byte("<a:buSzPts"), []byte(`<a:buClr><a:srgbClr val="`+sceneTableXMLEscape(bulletColor)+`"/></a:buClr><a:buSzPts`), 1)
 		out = append(out, richParagraphXML(one, properties)...)
 	}
 	return out

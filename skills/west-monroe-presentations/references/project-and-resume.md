@@ -127,14 +127,17 @@ in `docs/portable-projects.md` in the source repository for schema and limits.
 
 ### Native editing profile
 
-Source builds after v4.1.0 accept `project create --editing-profile native-v1`.
-The setting persists as `editing_profile: native-v1` in `deck.yaml` and build
-receipts; absent or `stock` retains existing rendering. It adapts eligible flat
-plain lists, simple title/body cards and plain tables after resolving their
-source styles. Read conversion/exclusion warnings in each layout-report scene.
-Do not rewrite frozen shared templates or assume their gallery previews qualify
-a changed native structure. Preserve old builds and review the new PowerPoint.
-Rich/decorated variants retain source structure; stock card and bullet source
-adoption remains manual. Prefer the explicit editable components for new local
-plain compositions with declared bounds. See the repository's
-`docs/native-editing-profile.md` for scope and font prerequisites.
+New v2 projects default to `editing_profile: native-v1`, persisted in `deck.yaml`
+and build receipts. Existing projects with absent or `stock` retain their prior
+structure; explicitly opt in and create a new baseline. CLI template generation
+and the packaged browsing deck also use native-v1. `--editing-profile stock`
+selects original structure when needed.
+
+The renderer adapts eligible measured lists, cards and tables while retaining
+source styles and geometry. Read conversion/retention reasons in layout reports
+and the catalog-wide `native-editing-coverage.json`. Frozen shared template bytes
+stay pinned. Gallery previews describe original specimens and do not qualify all
+native adaptations. Preserve old builds and review the new PowerPoint. Complex
+artwork and incompatible geometry retain their structure. Stock card/bullet
+source adoption remains manual. See `docs/native-editing-profile.md` for scope,
+font prerequisites and native evidence.

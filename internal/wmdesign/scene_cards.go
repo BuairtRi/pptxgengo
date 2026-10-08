@@ -503,6 +503,7 @@ func (r *renderer) sceneBodyFlow(p *scenePlan, id string, blocks []json.RawMessa
 }
 func ptrSceneBool(v bool) *bool { return &v }
 func (r *renderer) sceneDataBullets(p *scenePlan, id string, items []json.RawMessage, ctx SceneContext, path string, b Rect, surface string, st Style) (float64, error) {
+	firstItem, firstWarning := len(p.Items), len(p.Warnings)
 	y := b.Y
 	mark, inset, gap, offset := 4.0, 15.0, 6.0, 8.5
 	small := st.Size <= 12
@@ -568,6 +569,35 @@ func (r *renderer) sceneDataBullets(p *scenePlan, id string, items []json.RawMes
 				return y, e
 			}
 			y = end + gap
+		}
+	}
+	if r.editingProfile == NativeEditingProfile && len(items) > 0 {
+		size := ""
+		if small {
+			size = "small"
+		}
+		source := struct {
+			Type  string            `json:"type"`
+			X     float64           `json:"x"`
+			Y     float64           `json:"y"`
+			W     float64           `json:"w"`
+			Size  string            `json:"size,omitempty"`
+			Items []json.RawMessage `json:"items"`
+		}{Type: "bullets", X: b.X, Y: b.Y, W: b.W, Size: size, Items: items}
+		raw, err := json.Marshal(source)
+		if err != nil {
+			return y - gap, err
+		}
+		child := &scenePlan{ID: id, Bounds: Rect{X: b.X, Y: b.Y, W: b.W}, Items: append([]sceneItem{}, p.Items[firstItem:]...), Warnings: append([]string{}, p.Warnings[firstWarning:]...)}
+		candidate, reason := r.nativeProfileListResult(child, raw)
+		if candidate == nil {
+			p.Warnings = append(p.Warnings, "native-v1 retained source object structure: "+id+" ("+reason+").")
+		} else if err := sceneTextEnvelope(candidate, ctx); err != nil {
+			p.Warnings = append(p.Warnings, "native-v1 retained source object structure: "+id+" (converted text allocation crosses the declared content envelope).")
+		} else {
+			p.Items = append(p.Items[:firstItem], candidate.Items...)
+			p.Warnings = append(p.Warnings[:firstWarning], candidate.Warnings...)
+			p.Warnings = append(p.Warnings, "native-v1 converted source component: "+id+"; source-resolved geometry, fonts and colors retained. Native edits require review; catalog previews do not qualify this editing profile.")
 		}
 	}
 	return y - gap, nil

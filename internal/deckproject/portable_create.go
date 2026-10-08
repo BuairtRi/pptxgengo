@@ -16,6 +16,9 @@ type CreateOptions struct {
 }
 
 func CreateProject(o CreateOptions) (*Project, error) {
+	if o.EditingProfile == "" && (o.Engine == "" || o.Engine == wmdesign.CandidateEngine) {
+		o.EditingProfile = wmdesign.NativeEditingProfile
+	}
 	if err := wmdesign.ValidateEditingProfile(o.EditingProfile); err != nil {
 		return nil, err
 	}

@@ -110,8 +110,12 @@ func editableCardParagraphXML(tr TextRecord) []byte {
 	for _, para := range tr.Rich.Paragraphs {
 		one := tr
 		one.Rich = &RichTextLayout{Contract: RichTextContract, Paragraphs: []RichParagraphLayout{para}}
-		run := para.Runs[0]
-		one.Layout.Style, one.Layout.Font, one.Color = run.Style, run.Font, run.Color
+		// richParagraphXML writes explicit properties for each run. The first
+		// run supplies only paragraph defaults and endParaRPr for this paragraph.
+		if len(para.Runs) > 0 {
+			run := para.Runs[0]
+			one.Layout.Style, one.Layout.Font, one.Color = run.Style, run.Font, run.Color
+		}
 		out = append(out, richParagraphXML(one, sceneTableParagraphProperties(one, para.ParagraphGapAfter, false))...)
 	}
 	return out

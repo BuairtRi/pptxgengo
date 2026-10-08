@@ -129,7 +129,7 @@ func runProjectCreate(args []string) error {
 	bundle := f.String("bundle", currentDesignBundle, "shared bundle revision or path")
 	template := f.String("template", "", "initial shared template key")
 	engine := f.String("engine", wmdesign.CandidateEngine, "pinned compiler engine")
-	editing := f.String("editing-profile", "", "persisted editing profile: stock (default) or native-v1")
+	editing := f.String("editing-profile", "", "persisted editing profile: native-v1 (default for v2) or stock")
 	if e := f.Parse(args); e != nil {
 		return e
 	}

@@ -127,8 +127,8 @@ Component `<type>` is the scene node type, not the catalog name (`stepper`, not 
 
 ## Persisted editing profile
 
-Optional top-level `editing_profile` is `stock` (also the absent default) or
-`native-v1`. It changes native structure for eligible simple source scenes using
+Optional top-level `editing_profile` is `stock` (the absent setting in existing projects) or
+`native-v1` (persisted by default in new v2 projects). It changes native structure for eligible source scenes using
 the v2 engine, while retaining pinned source styles. The profile is part of the
 authored source hash, compiled scene, layout report and build receipt. Preserve
 existing baselines and review converted builds. It does not alter shared bundle

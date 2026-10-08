@@ -20,6 +20,8 @@ func runBrowsingLibrary(args []string) (err error) {
 	engine := f.String("engine", wmdesign.CandidateEngine, "required source-pinned candidate engine")
 	frames := f.String("frames", "catalog", "templates: catalog frame variants or exhaustive valid request combinations")
 	kind := f.String("kind", "", "templates or reusable")
+	media := f.String("media-policy", "placeholders", "templates: placeholders (default, no external originals) or originals")
+	editing := f.String("editing-profile", wmdesign.NativeEditingProfile, "templates: native-v1 (default) or stock")
 	bundle := f.String("bundle", currentDesignBundle, "pinned bundle")
 	source := f.String("source", "", "exact pinned source override (templates only)")
 	library := f.String("finished-library", "", "private closed immutable revisions (reusable only)")
@@ -55,9 +57,25 @@ func runBrowsingLibrary(args []string) (err error) {
 	assets := map[string]wmdesign.AssetData{}
 	name := "template-library.pptx"
 	if *kind == "templates" {
+		if err = wmdesign.ValidateEditingProfile(*editing); err != nil {
+			return err
+		}
 		doc, manifest, err = wmdesign.TemplateBrowsingDocumentWithFrames(*bundle, *source, date.Year(), *frames)
 		if err != nil {
 			return err
+		}
+		doc.EditingProfile = *editing
+		if *media != "placeholders" && *media != "originals" {
+			return fmt.Errorf("unknown template media policy: %s", *media)
+		}
+		if *media == "placeholders" {
+			assets, err = wmdesign.TemplatePlaceholderAssets()
+			if err != nil {
+				return err
+			}
+			for i := range doc.Slides {
+				doc.Slides[i].Notes += "\nMedia policy: synthetic schematic placeholders replace registered photos, icons and artwork; not original brand assets."
+			}
 		}
 	} else {
 		name = "reusable-slides.pptx"
@@ -98,6 +116,11 @@ func runBrowsingLibrary(args []string) (err error) {
 	if e != nil {
 		return e
 	}
+	var nativeCoverage *wmdesign.NativeCatalogCoverage
+	if *kind == "templates" {
+		c := wmdesign.TemplateNativeCoverage(manifest.(wmdesign.BrowsingCoverage), layout)
+		nativeCoverage = &c
+	}
 	// Publish atomically into a newly owned directory after all slides succeeded.
 	parent := filepath.Dir(*out)
 	if e = os.MkdirAll(parent, 0755); e != nil {
@@ -108,6 +131,11 @@ func runBrowsingLibrary(args []string) (err error) {
 		return e
 	}
 	defer os.RemoveAll(stage)
+	if nativeCoverage != nil {
+		if e = wmdesign.WriteJSON(filepath.Join(stage, "native-editing-coverage.json"), nativeCoverage); e != nil {
+			return e
+		}
+	}
 	bundleHash, e := deckproject.BrowsingBundleSHA256(*bundle, wmdesign.CandidateEngine)
 	if e != nil {
 		return e
@@ -142,6 +170,8 @@ func runBrowsingLibrary(args []string) (err error) {
 		pages = append(pages, browsingartifact.Page{ID: slide.ID, Kind: role})
 	}
 	output := struct {
+		MediaPolicy     string                  `json:"media_policy,omitempty"`
+		EditingProfile  string                  `json:"editing_profile,omitempty"`
 		Pages           []browsingartifact.Page `json:"pages"`
 		BundleSHA256    string                  `json:"bundle_sha256"`
 		SourceRevision  string                  `json:"source_revision"`
@@ -158,7 +188,12 @@ func runBrowsingLibrary(args []string) (err error) {
 		Fonts           []wmdesign.FontIdentity `json:"fonts"`
 		Assets          []wmdesign.SourceFile   `json:"assets"`
 		Qualification   string                  `json:"qualification"`
-	}{Pages: pages, BundleSHA256: bundleHash, SourceRevision: layout.SourceRevision, SourceCommit: layout.SourceCommit, Schema: "pptxgengo.browsing-library.v1", Kind: *kind, AsOf: *asOf, DeckSHA256: fmt.Sprintf("%x", sum), Compiler: wmdesign.CandidateEngine, ReleaseIdentity: releaseIdentity, Slides: len(doc.Slides), Coverage: manifest, SourceFiles: layout.SourceFiles, Fonts: layout.Fonts, Assets: layout.Assets, Qualification: "native_visual_copy_paste_qualification_pending"}
+	}{MediaPolicy: func() string {
+		if *kind == "templates" {
+			return *media
+		}
+		return "originals"
+	}(), EditingProfile: doc.EditingProfile, Pages: pages, BundleSHA256: bundleHash, SourceRevision: layout.SourceRevision, SourceCommit: layout.SourceCommit, Schema: "pptxgengo.browsing-library.v1", Kind: *kind, AsOf: *asOf, DeckSHA256: fmt.Sprintf("%x", sum), Compiler: wmdesign.CandidateEngine, ReleaseIdentity: releaseIdentity, Slides: len(doc.Slides), Coverage: manifest, SourceFiles: layout.SourceFiles, Fonts: layout.Fonts, Assets: layout.Assets, Qualification: "native_visual_copy_paste_qualification_pending"}
 	for _, a := range []struct {
 		name  string
 		value any

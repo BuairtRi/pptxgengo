@@ -81,11 +81,15 @@ func TestNativeEditingProfileLeavesComplexScenesAndDefaultsUnchanged(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, raw := range []string{
-		`{"type":"bullets","x":60,"y":100,"w":340,"items":[{"lead":"Lead","text":"Plain body"}]}`,
-		`{"type":"bullets","x":60,"y":100,"w":340,"items":["[[Rich]] body"]}`,
-		`{"type":"card","x":60,"y":100,"w":360,"h":230,"title":"Title","body":[{"p":"First body"},{"p":"Second body"}]}`,
+	for _, tc := range []struct {
+		raw        string
+		nativeList bool
+	}{
+		{`{"type":"bullets","x":60,"y":100,"w":340,"items":[{"lead":"Lead","text":"Plain body"}]}`, true},
+		{`{"type":"bullets","x":60,"y":100,"w":340,"items":["[[Rich]] body"]}`, true},
+		{`{"type":"card","x":60,"y":100,"w":360,"h":230,"title":"Title","body":[{"p":"First body"},{"p":"Second body"}]}`, true},
 	} {
+		raw := tc.raw
 		r.editingProfile = ""
 		before, err := r.planSceneNode("example", json.RawMessage(raw), SceneContext{Surface: "light"})
 		if err != nil {
@@ -101,8 +105,16 @@ func TestNativeEditingProfileLeavesComplexScenesAndDefaultsUnchanged(t *testing.
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !reflect.DeepEqual(before.Items, after.Items) || !reflect.DeepEqual(before.Groups, after.Groups) || len(after.Warnings) <= len(before.Warnings) {
-			t.Fatal("complex scene changed", raw)
+		if tc.nativeList {
+			wantParagraphs := 1
+			if strings.Contains(raw, `"type":"card"`) {
+				wantParagraphs = 3
+			}
+			if len(after.Items) != 1 || after.Items[0].Text == nil || len(after.Items[0].Text.Rich.Paragraphs) != wantParagraphs {
+				t.Fatal("eligible lead/body list did not convert", after.Warnings)
+			}
+		} else if !reflect.DeepEqual(before.Items, after.Items) || !reflect.DeepEqual(before.Groups, after.Groups) || len(after.Warnings) <= len(before.Warnings) {
+			t.Fatal("unsupported complex scene changed", raw)
 		}
 	}
 	if ValidateEditingProfile("unknown") == nil {
@@ -118,27 +130,39 @@ func TestNativeEditingProfileRetainsBorderedCardsAndReservedFooter(t *testing.T)
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, tc := range []struct {
-		raw  string
-		zone Rect
-	}{
-		{`{"type":"card","x":60,"y":100,"w":360,"h":230,"state":"deemph","title":"Title","body":[{"p":"Plain copy"}]}`, Rect{}},
-		{`{"type":"card","x":60,"y":100,"w":360,"h":230,"state":"placeholder","title":"Title","body":[{"p":"Plain copy"}]}`, Rect{}},
-		{`{"type":"card","x":60,"y":100,"w":360,"h":300,"title":"Title","body":[{"p":"Plain copy"}]}`, Rect{X: 60, Y: 100, W: 360, H: 150}},
-	} {
-		ctx := SceneContext{Surface: "light", Zone: tc.zone}
-		r.editingProfile = ""
-		before, err := r.planSceneNode("example", json.RawMessage(tc.raw), ctx)
-		if err != nil {
-			t.Fatal(err)
-		}
-		r.editingProfile = NativeEditingProfile
-		after, err := r.planSceneNode("example", json.RawMessage(tc.raw), ctx)
-		if err != nil {
-			t.Fatal("valid source now fails", err)
-		}
-		if !reflect.DeepEqual(before.Items, after.Items) || !reflect.DeepEqual(before.Groups, after.Groups) || len(after.Warnings) <= len(before.Warnings) {
-			t.Fatal("border or footer compatibility changed", tc.raw)
+	for _, density := range []string{"comfortable", "compact", "dense"} {
+		r.bodyDensity = density
+		for _, tc := range []struct {
+			raw       string
+			zone      Rect
+			converted bool
+		}{
+			{`{"type":"card","x":60,"y":100,"w":360,"h":230,"state":"deemph","title":"Title","body":[{"p":"Plain copy"}]}`, Rect{}, true},
+			{`{"type":"card","x":60,"y":100,"w":360,"h":230,"state":"placeholder","title":"Title","body":[{"p":"Plain copy"}]}`, Rect{}, false},
+			{`{"type":"card","x":60,"y":100,"w":360,"h":300,"title":"Title","body":[{"p":"Plain copy"}]}`, Rect{X: 60, Y: 100, W: 360, H: 150}, false},
+		} {
+			ctx := SceneContext{Surface: "light", Zone: tc.zone}
+			r.editingProfile = ""
+			before, err := r.planSceneNode("example", json.RawMessage(tc.raw), ctx)
+			if err != nil {
+				t.Fatal(err)
+			}
+			r.editingProfile = NativeEditingProfile
+			after, err := r.planSceneNode("example", json.RawMessage(tc.raw), ctx)
+			if err != nil {
+				t.Fatal("valid source now fails", err)
+			}
+			if tc.converted {
+				if len(after.Items) != 1 || after.Items[0].Text == nil || after.Items[0].Text.NativeShape == nil || after.Items[0].Text.NativeShape.Fill != before.Items[0].Shape.Props.Fill.Color || !reflect.DeepEqual(after.Items[0].Text.NativeShape.Line, before.Items[0].Shape.Props.Line) || after.Items[0].Text.NativeShape.Rect != before.Items[0].Shape.Record.Rect {
+					t.Fatalf("deemph card fill, border, or bounds changed at %s density", density)
+				}
+				got, want := nativeTextShapeBounds(*after.Items[0].Text.NativeShape), before.Items[0].Shape.Props.PositionProps
+				if math.Abs(got.X/72-want.X.Val) > .0001 || math.Abs(got.Y/72-want.Y.Val) > .0001 || math.Abs(got.W/72-want.W.Val) > .0001 || math.Abs(got.H/72-want.H.Val) > .0001 {
+					t.Fatalf("deemph outline path geometry changed at %s density", density)
+				}
+			} else if !reflect.DeepEqual(before.Items, after.Items) || !reflect.DeepEqual(before.Groups, after.Groups) || len(after.Warnings) <= len(before.Warnings) {
+				t.Fatal("placeholder/footer compatibility changed", tc.raw)
+			}
 		}
 	}
 }

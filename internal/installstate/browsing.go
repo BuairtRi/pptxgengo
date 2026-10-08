@@ -11,6 +11,24 @@ import (
 // is required and checked; these hashes provide integrity, not an approval or
 // signature claim. Release signing covers the enclosing installation archive.
 func allowBrowsingFiles(root string, files map[string]string, allowed map[string]bool) error {
+	if _, exists := files[browsingartifact.TemplateCatalogInventoryName]; exists {
+		raw, e := browsingartifact.ReadManifest(filepath.Join(root, browsingartifact.TemplateCatalogInventoryName))
+		if e != nil {
+			return e
+		}
+		in, e := browsingartifact.ReadTemplateCatalogInventory(raw)
+		if e != nil {
+			return e
+		}
+		if e = browsingartifact.ValidateTemplateCatalogInventory(root, in, files, ""); e != nil {
+			return e
+		}
+		for _, name := range browsingartifact.TemplateCatalogFiles(in) {
+			allowed[name] = true
+		}
+		allowed[browsingartifact.TemplateCatalogInventoryName] = true
+		return nil
+	}
 	if _, exists := files["browsing-manifest.json"]; !exists {
 		return nil
 	}

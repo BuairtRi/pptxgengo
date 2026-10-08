@@ -75,6 +75,75 @@ func addBrowsingFiles(files map[string]Input, root string) error {
 	return nil
 }
 
+// addTemplateCatalogFiles stages a catalog-only resource closure. It carries
+// the generated template deck plus the source bundle, font files, gallery and
+// rebuilt SQLite index, without reusable content or private media originals.
+func addTemplateCatalogFiles(files map[string]Input, root, version, commit string) error {
+	if len(files) != 0 {
+		return fmt.Errorf("template-only resources cannot be combined with other presentation payloads")
+	}
+	entries, e := os.ReadDir(root)
+	if e != nil {
+		return e
+	}
+	want := map[string]bool{"browsing": true, "library": true, browsingartifact.TemplateCatalogInventoryName: true, resourcePolicyName: true}
+	if len(entries) != len(want) {
+		return fmt.Errorf("template-only resource directory has unexpected files")
+	}
+	for _, entry := range entries {
+		if !want[entry.Name()] {
+			return fmt.Errorf("template-only resource directory has unexpected file: %s", entry.Name())
+		}
+	}
+	raw, e := os.ReadFile(filepath.Join(root, browsingartifact.TemplateCatalogInventoryName))
+	if e != nil {
+		return fmt.Errorf("template-only release requires a closed catalog inventory: %w", e)
+	}
+	in, e := browsingartifact.ReadTemplateCatalogInventory(raw)
+	if e != nil {
+		return e
+	}
+	if in.ReleaseIdentity != commit {
+		return fmt.Errorf("template catalog release identity differs from release commit")
+	}
+	if pipeline := os.Getenv("CI_PIPELINE_CREATED_AT"); pipeline == "" || in.PipelineCreatedAt != pipeline {
+		return fmt.Errorf("template catalog date differs from authoritative pipeline creation time")
+	}
+	for _, rel := range browsingartifact.TemplateCatalogFiles(in) {
+		files[rel] = Input{Path: filepath.Join(root, filepath.FromSlash(rel))}
+	}
+	if e = browsingartifact.ValidateTemplateCatalogInventory(root, in, in.Files, commit); e != nil {
+		return e
+	}
+	files[browsingartifact.TemplateCatalogInventoryName] = Input{Path: filepath.Join(root, browsingartifact.TemplateCatalogInventoryName)}
+	// Bind the inventory to the exact source selected by the tagged release.
+	selected, e := readSelectedReleaseBundle()
+	if e != nil {
+		return e
+	}
+	if strings.TrimSpace(string(selected)) != in.Bundle {
+		return fmt.Errorf("template catalog bundle differs from tagged release selection")
+	}
+	return nil
+}
+
+func readSelectedReleaseBundle() ([]byte, error) {
+	working, e := os.Getwd()
+	if e != nil {
+		return nil, e
+	}
+	for dir := working; ; dir = filepath.Dir(dir) {
+		path := filepath.Join(dir, "release", "default-bundle.txt")
+		if raw, err := os.ReadFile(path); err == nil {
+			return raw, nil
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return nil, fmt.Errorf("release/default-bundle.txt not found from %s", working)
+		}
+	}
+}
+
 func browsingHash(s string) bool {
 	b, e := hex.DecodeString(s)
 	return e == nil && len(b) == 32 && strings.ToLower(s) == s

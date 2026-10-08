@@ -1,11 +1,13 @@
 package main
 
 import (
-	"github.com/buairtri/pptxgengo/internal/browsingfixture"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
+	"github.com/buairtri/pptxgengo/internal/browsingfixture"
 )
 
 func TestBrowsingArchiveRequiresBothDecksAndHashes(t *testing.T) {
@@ -60,5 +62,33 @@ func TestBrowsingArchiveRejectsLinkedDirectory(t *testing.T) {
 	}
 	if e := addBrowsingFiles(map[string]Input{}, root); e == nil || !strings.Contains(e.Error(), "real directories") {
 		t.Fatal("linked browsing directory accepted", e)
+	}
+}
+
+// Set PPTXGENGO_TEST_TEMPLATE_RESOURCE_ROOT to exercise the same staging
+// directory produced by prepare-resources.sh through release-ci's archive
+// closure. This remains opt-in so ordinary unit tests stay hermetic.
+func TestStagedTemplateOnlyResourcesArchiveClosure(t *testing.T) {
+	root := os.Getenv("PPTXGENGO_TEST_TEMPLATE_RESOURCE_ROOT")
+	version, commit, pipeline := os.Getenv("CI_COMMIT_TAG"), os.Getenv("CI_COMMIT_SHA"), os.Getenv("CI_PIPELINE_CREATED_AT")
+	if root == "" || version == "" || commit == "" || pipeline == "" {
+		t.Skip("staged template resource integration not requested")
+	}
+	t.Setenv("PPTXGENGO_PACKAGE_KIND", "cli-only")
+	t.Setenv("PPTXGENGO_BROWSING_POLICY", "templates-only")
+	t.Setenv("CI_PIPELINE_CREATED_AT", pipeline)
+	files := map[string]Input{}
+	if err := addScopedBrowsingFiles(files, root, version, commit); err != nil {
+		t.Fatal(err)
+	}
+	for _, required := range []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/native-editing-coverage.json", "library/wm-design-system/v11/library.sqlite", "library/wm-design-system/v11/bundle.json", "library/wm-design-system/v11/fonts/IBMPlexSans-Regular.ttf", browsingartifact.TemplateCatalogInventoryName} {
+		if _, ok := files[required]; !ok {
+			t.Fatalf("staged archive closure omitted %s", required)
+		}
+	}
+	for name := range files {
+		if strings.Contains(name, "reusable-slides") || strings.Contains(name, "catalog/assets/") {
+			t.Fatalf("deferred resource entered templates-only archive: %s", name)
+		}
 	}
 }

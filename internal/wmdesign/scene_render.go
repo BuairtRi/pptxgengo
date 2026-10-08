@@ -38,6 +38,18 @@ type SceneChartRecord struct {
 	NativeEditable bool             `json:"native_editable"`
 }
 
+// nativeTextShapeBounds returns the DrawingML path bounds before its centered
+// stroke is applied. Subtracting half the stroke keeps the visible outline on
+// the source rectangle's measured outer bounds.
+func nativeTextShapeBounds(shape NativeTextShape) Rect {
+	bounds := shape.Rect
+	if shape.Line != nil {
+		inset := shape.Line.Width / 2
+		bounds = Rect{bounds.X + inset, bounds.Y + inset, bounds.W - 2*inset, bounds.H - 2*inset}
+	}
+	return bounds
+}
+
 func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 	if p == nil {
 		return fmt.Errorf("scene.empty_plan")
@@ -81,14 +93,20 @@ func (r *renderer) drawScene(p *scenePlan, sr *SlideReport, path string) error {
 				if !inside(tr.Rect, outer) || (tr.Rich != nil && tr.NativeShape.ParagraphContract != EditableCardContract) || tr.Rotation != 0 {
 					return fmt.Errorf("scene.invalid_combined_text_shape: %s", tr.ID)
 				}
-				opts.PositionProps = pos(outer)
+				shapeBounds := nativeTextShapeBounds(*tr.NativeShape)
 				opts.Fill = &pptx.ShapeFillProps{Color: tr.NativeShape.Fill}
-				opts.Line = &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}
+				if tr.NativeShape.Line == nil {
+					opts.Line = &pptx.ShapeLineProps{ShapeFillProps: pptx.ShapeFillProps{Type: "none"}}
+				} else {
+					line := *tr.NativeShape.Line
+					opts.Line = &line
+				}
+				opts.PositionProps = pos(shapeBounds)
 				opts.Shape = pptx.ShapeTypeRect
 				isTextBox := false
 				opts.IsTextBox = &isTextBox
 				// The writer's Margin order is left/right/bottom/top, in points.
-				opts.Margin = pptx.Margin{tr.Rect.X - outer.X, outer.X + outer.W - tr.Rect.X - tr.Rect.W, outer.Y + outer.H - tr.Rect.Y - tr.Rect.H, tr.Rect.Y - outer.Y}
+				opts.Margin = pptx.Margin{tr.Rect.X - shapeBounds.X, shapeBounds.X + shapeBounds.W - tr.Rect.X - tr.Rect.W, shapeBounds.Y + shapeBounds.H - tr.Rect.Y - tr.Rect.H, tr.Rect.Y - shapeBounds.Y}
 			}
 			if err := r.slide.AddText([]pptx.TextProps{{Text: tr.Layout.Displayed}}, opts); err != nil {
 				return err
