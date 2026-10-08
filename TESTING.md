@@ -1,4 +1,10 @@
-# Testing pptxgengo
+# Testing and historical PptxGenJS checks
+
+Current Go test lanes, private GitLab CI policy and platform qualification are
+documented in [docs/testing.md](docs/testing.md). GitHub Actions is disabled;
+GitHub run links elsewhere in this repository are dated historical evidence,
+not current CI gates. The sections below preserve the original writer baseline
+and inherited upstream JavaScript guide.
 
 Use Go 1.27.1 or newer:
 
@@ -11,12 +17,14 @@ Writer tests live in `pptx/`; eight golden cases compare generated package parts
 the retained PptxGenJS 4.0.1 output, including embedded workbooks. See
 [`pptx/testdata/golden/README.md`](pptx/testdata/golden/README.md).
 
-The 2026-09-25 baseline passed both commands on Go 1.27.1, darwin/arm64,
+The historical 2026-09-25 baseline passed both commands on Go 1.27.1, darwin/arm64,
 with 78.1% statement coverage. These are code and XML checks, not rendered
 presentation acceptance. See [PRODUCT_PLAN.md](PRODUCT_PLAN.md) for proposed
 visual, narrative, reuse, and round-trip experiments.
 
-The experimental scene, anchor and pixel tools also have tests under
+Later source work added authoring, project, template and packaging tests; do not
+use the baseline figures above as current aggregate coverage. The experimental
+scene, anchor and pixel tools also have tests under
 `internal/nativepkg/` and `cmd/`. Their latest prior `go test -race ./...`
 run passed after the highlight implementation. The 78.1% figure above belongs
 to the earlier writer baseline, not an updated aggregate for these tools.

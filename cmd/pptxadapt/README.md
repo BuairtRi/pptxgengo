@@ -76,6 +76,7 @@ family category hints. A category hint requires structural inspection; new conte
 still requires measurement and review. Consult the current checkpoint before claiming
 any family or variant has completed native review.
 
-The source dispatcher now routes `pptxgengo adapt` to this CLI for the next packaged
-release. The currently installed 0.1.0-local.3 remains unchanged and does not
-include this development command.
+This remains a development CLI and is not routed by the current packaged
+`pptxgengo design` dispatcher. The installed v4.2.1 / 0.1.0-local.21 package
+does not include this command. See [current release status](../../docs/release-status.md)
+for the supported authoring interface.

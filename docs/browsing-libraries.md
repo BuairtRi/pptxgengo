@@ -95,8 +95,14 @@ collection or finished-slide inventory is required for this package.
 verified external originals. The legacy `required` policy still demands both
 browsing decks and immutable private branding/finished-library archives; its
 validation remains separate from the template-only contract. `deferred` supports
-older CLI-only packages with neither browsing document. Published v4.2.0 bytes
-remain unchanged and omit the template library and SQLite.
+older CLI-only packages with neither browsing document. Stable v4.2.0 bytes
+remain unchanged and omit the template library and SQLite; v4.2.1 is the first
+stable package with the template-only catalog.
+
+Stable v4.2.1 pipeline 21443 completed all 28 jobs successfully at source
+`66229bd1`. Its template resource bundle contains 2,663 files and regenerated
+SQLite with 649 templates. These are release generation and integrity results;
+they do not establish native PowerPoint visual/copy-paste acceptance.
 
 ## Qualification evidence
 

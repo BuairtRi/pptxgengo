@@ -1,8 +1,8 @@
 # Native PowerPoint round-trip qualification fixture
 
-This source-only harness exercises the handoff's Save As, three supported text
-edits and slide reordering criteria against a disposable synthetic project. It
-is not included in stable v4.1.0. It records actual package identity/text/order
+This harness exercises the handoff's Save As, three supported text edits and
+slide reordering criteria against a disposable synthetic project. It records
+actual package identity/text/order
 and bounded adoption/rebuild evidence separately from native visual acceptance
 and human editing ergonomics.
 

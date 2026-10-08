@@ -94,7 +94,11 @@ An October 7 UTC trial on macOS 27.0.1 with PowerPoint 16.113.4
 timed out with `-1712` and produced no output. The owned presentation was closed
 without saving; no native identity-survival qualification is claimed from that
 trial. Windows desktop Save As/edit/reorder/duplicate/delete/ungroup trials remain
-pending when the interactive runner is available.
+pending when the interactive runner is available. Separately, the later
+[native round-trip fixture](native-roundtrip.md) passed its Mac synthetic
+Save As/edit/reorder identity checks for forty objects. That bounded result does
+not retroactively change the earlier trial or qualify Windows or every object
+family.
 
 Two explicit test hooks support desktop evidence without starting Office in the
 headless development lane:

@@ -1,6 +1,6 @@
 # Engineering command reference
 
-These examples target the current `0.1.0-local.21/v11` package and use its `pptxgengo` wrapper. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
+These examples target the current `0.1.0-local.21/v11` package and use its `pptxgengo` wrapper. New projects default to native-v1 wherever the measured template records support safe conversion; this implementation default does not establish native visual qualification. V11 native review remains pending. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
 
 ## Wrapper defaults and project pins
 

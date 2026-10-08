@@ -11,6 +11,12 @@ system used by slotctl; GitHub Actions is disabled.
 | Protected release tag | Full hermetic units, actual Linux amd64/arm64 and Mac ARM64 installer qualification, pinned model closure/goldens, source security, six-target builds, generated decks/resources, binary signing/notarization, final scans, signature verification, attestation, publication | Races, performance diagnostics, duplicate cross-build job |
 | Nightly protected main | Full unit suite, Linux/Mac races, installers, model/retrieval/performance on Linux amd64/arm64 and Mac, cross-builds, security | Actual Office/human acceptance unless separately provisioned/requested |
 
+Release evidence: protected tag pipeline 21443 for v4.2.1 at `66229bd1` passed all
+28 jobs in 793 seconds. It generated the template-only catalog and archives,
+signed/notarized the Mac binaries and signed the Windows binaries. Windows runtime
+and native desktop PowerPoint qualification remain pending. CI artifacts and
+release files are private GitLab assets.
+
 ## Focused PR suite
 
 `make test-pr` compiles every Go package without executing its tests, then runs
@@ -23,8 +29,10 @@ runs the complete hermetic short suite after main merges and on tags.
 The hermetic suite excludes tests explicitly requiring private branding,
 catalog-wide integration, downloaded model weights, or an interactive Office
 desktop. Those remain distinct qualification jobs, not silently claimed unit
-coverage. Mac/Windows CI capacity is reserved for native execution and release
-work rather than ordinary PR or main pipelines.
+coverage. PR, main and protected release tiers do not run race suites; the nightly
+protected-main tier runs the heavier race, installer, model/retrieval, performance,
+cross-build and security checks. Mac/Windows CI capacity is reserved for native
+execution and release work rather than ordinary PR or main pipelines.
 
 ## PR discovery
 
@@ -87,7 +95,7 @@ only pull the short cache. The ARM model job is the single native cache writer;
 ARM installer/performance jobs only pull it. Cross-target artifacts do not bloat
 the everyday cache. All keys include go.mod/go.sum; misses are valid.
 
-In old pipeline 21288 the ARM installer assertions passed in 171.3 seconds, but
+Historical cache example (pipeline 21288 before the v4.2.1 release) had ARM installer assertions pass in 171.3 seconds, but
 cache restore took 215.3 seconds and the 600-second overall job deadline expired
 while saving the cache. The failure/trace remain retained; the exact-head retry
 passed. Test assertions and package deadlines have not been increased.
@@ -113,7 +121,8 @@ and unprotected tags, nightly, and representative individual selectors. Assert
 job names as well as YAML validity: a valid pipeline containing an accidental
 race job is still a policy failure. CI unit regressions check gate/routing policy.
 
-Old pipeline 21278 ran Linux races for 743.9 seconds and short units for 282.1 seconds;
-main pipeline 21277 ran Mac CLI tests for 873.2 seconds. These are measured old job
-durations, not promises for the new pipelines. Compare actual PR/main/on-demand
-and scheduled runs after rollout. Release signing/notary latency remains necessary.
+Historical pipelines 21278 and 21277 measured Linux races at 743.9 seconds, short
+units at 282.1 seconds and Mac CLI tests at 873.2 seconds. These are old job
+durations, not promises for current pipelines. The v4.2.1 release pipeline took
+793 seconds across 28 successful jobs; future durations can vary, especially
+release signing and notarization.

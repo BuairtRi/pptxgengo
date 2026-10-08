@@ -2,7 +2,7 @@
 
 For a full deck, use the [project workflow](project-and-resume.md) and [template selection](template-selection.md). Use the direct routes below for single-slide work.
 
-`pptxgengo design` uses the installed release's V11 design library, the Go typography engine `wmds-go-foundation.v2`, bundled fonts and registered assets. It needs no repository checkout. Resolve the bundle and gallery from `design_system_default` in `pptxgengo paths`.
+`pptxgengo design` uses the installed release's V11 design library, the Go typography engine `wmds-go-foundation.v2`, bundled fonts and the asset registry. Selected private media originals must be available separately ([assets](assets.md)). It needs no repository checkout. Resolve the bundle and gallery from `design_system_default` in `pptxgengo paths`.
 
 ## Find a design and inspect its contract
 
@@ -24,7 +24,7 @@ pptxgengo design asset-catalog
 Copy `source-values.json` from a template's gallery folder (`catalog/design-system/<template-key>/` under `design_system_default`) (a one-slide `pptxgengo.wmds-template-document.v1` document). Edit the content, keep the template key, and build to a new directory:
 
 ```sh
-pptxgengo design template --spec source-values.json --out /tmp/wm-slide-new
+pptxgengo design template --spec source-values.json --out ./wm-slide-new
 ```
 
 - Set `content_kind: supplied_content` for real content; keep `synthetic_example` for illustrative copy.
@@ -36,7 +36,7 @@ pptxgengo design template --spec source-values.json --out /tmp/wm-slide-new
   supported typography changes, outside its `values`. See [typography density](typography-density.md).
 - `cards/3` and `cards/4` take typed values: `eyebrow`, `title` and `cards` under `values`, with exactly three or four cards. Each card needs a unique `key`, `title` and `body`; array order sets card order.
 - Navigation variants need 2–6 keyed labels and an `active` key.
-- Photo and icon fields take registered asset IDs from `design asset-catalog`.
+- Photo and icon fields take registered asset IDs from `design asset-catalog`; verify their original bytes are available before rendering.
 - Quadrant coordinates, table metrics and checkbox booleans follow their catalog kinds and bounds.
 - Names, quotes and metrics in gallery example files are synthetic. Never present them as client facts.
 
@@ -45,12 +45,12 @@ pptxgengo design template --spec source-values.json --out /tmp/wm-slide-new
 When the composition itself is the starting point, copy `source.foundation.json` from the same gallery folder (a one-slide `pptxgengo.wmds-foundation.v1` document with editable scene nodes) and build it:
 
 ```sh
-pptxgengo design build --spec source.foundation.json --out /tmp/wm-composition-new
+pptxgengo design build --spec source.foundation.json --out ./wm-composition-new
 ```
 
 Change only supported scene properties and keep source provenance. Filling a content contract does not generate a template's illustration from prose; the illustration lives in `source.foundation.json`.
 
-Every build needs a new output directory.
+Every build needs a new output directory. Template generation defaults to `native-v1`; explicit `--editing-profile stock` retains original object structure. The low-level foundation `build` route uses the profile declared in its document, so set `editing_profile: native-v1` there when desired. Review converted and retained components in the layout report.
 
 ## Typography and final review
 

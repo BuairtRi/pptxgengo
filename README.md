@@ -1,24 +1,26 @@
 # pptxgengo
 
-Go library for generating editable PowerPoint presentations, ported from
-PptxGenJS 4.0.1. The Go implementation is in [`pptx/`](pptx/).
-Requires **Go 1.27.1 or newer**.
+Go tools for creating, inspecting, adapting and reviewing editable PowerPoint
+decks. The Go presentation writer retains PptxGenJS 4.0.1 compatibility goals;
+the repository also contains the `pptxgengo` authoring CLI and West Monroe
+template system. Current source is **v4.2.1** (CLI package
+**0.1.0-local.21**). Requires **Go 1.27.1 or newer**.
 
-The planned product is a CLI and agent skill pack for branded presentation
-authoring, quality checks, reusable slide libraries, and revisions after
-colleagues edit a deck in PowerPoint. **Experimental reconstruction and QA CLIs
-now exist, alongside measured composition and a repository agent skill pack.
-The full product remains under development.**
-The first target is detailed West Monroe proposal and
-document-style decks.
+The published default template bundle is **v11** (`release/default-bundle.txt`):
+649 source templates (648 active), with bundled fonts, gallery, compiler sources
+and a SQLite discovery index. New project creation defaults to native-v1
+editable text where a measured template can be emitted safely. Native rendering
+and visual qualification of the v11 templates are still pending; native-v1
+indicates an implementation path, not acceptance. See [current release and
+qualification status](docs/release-status.md) and the [documentation
+index](docs/README.md).
 
-The current West Monroe design system is
-[`library/wm-design-system/v5`](library/wm-design-system/v5/), with 587 templates,
-native previews and a SQLite discovery index. It is the only retained design
-system version. The three final converted decks, editable YAML and offline
-packages are together in [`samples/final`](samples/final/README.md).
+The three final converted decks, editable YAML and offline packages are together
+in [`samples/final`](samples/final/README.md).
 
 - [Local CLI release and Codex installation](release/README.md)
+- [Documentation index and current versus historical records](docs/README.md)
+- [Current release and qualification status](docs/release-status.md)
 - [West Monroe authoring skill with progressive references](skills/west-monroe-presentations/SKILL.md)
 - [Current capabilities and verified baseline](CAPABILITIES.md)
 - [WMDS Go authoring: typography, grids, components and slide designs](cmd/pptxdesign/README.md)
@@ -33,7 +35,7 @@ packages are together in [`samples/final`](samples/final/README.md).
 - [Source corpus and inventory policy](planning/README.md)
 - [UHG reconstruction results, native placement experiments, and QA evidence](planning/RECONSTRUCTION_CHECKPOINT.md)
 - [Go port conventions](PORTING.md)
-- [Reviewed native text reconciliation (source capability after v4.1.0)](docs/text-reconciliation.md)
+- [Reviewed native text reconciliation](docs/text-reconciliation.md)
 - [Testing lanes and integration dependencies](docs/testing.md)
 - [Engineering follow-up status and qualification](docs/engineering-followups.md)
 - [Historical code review and resolution log](REVIEW.md)
@@ -47,7 +49,17 @@ make test-race
 `make test` runs the bounded short suite. The full integration and exhaustive
 race lanes are documented in [docs/testing.md](docs/testing.md).
 
-### Native reconstruction experiment
+## Install or update the agent skill
+
+From an authenticated private GitLab checkout, run
+`python3 scripts/install-skill.py --agent both` to install or update the complete
+West Monroe skill for Codex and Claude Code. On Windows use `py -3` in place of
+`python3`. Previous skill contents are backed up; CLI and deck pins are preserved.
+See [skill installation](docs/skill-installation.md) for project scope, legacy
+locations, updates and rollback, and [project upgrades](skills/west-monroe-presentations/references/upgrading-projects.md)
+for schema and template changes.
+
+## Native reconstruction experiment
 
 ```sh
 go run ./cmd/pptxscene extract \
@@ -78,7 +90,7 @@ explicit installed font families such as IBM Plex Sans; see
 
 The TypeScript source, distributions, demos, and documentation below are retained
 from upstream for reference and golden-output comparisons. They describe
-PptxGenJS, not the planned Go CLI.
+PptxGenJS rather than the Go CLI.
 
 ## Upstream PptxGenJS documentation
 

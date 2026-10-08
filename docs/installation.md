@@ -1,9 +1,8 @@
 # Install, upgrade, diagnose and recover
 
-These commands are implemented in the source containing the installation manager.
-The published `v4.1.0` CLI predates them; use a later package containing this code,
-or a build from this source. Read its `installation` help before using the workflow.
-Signing and Windows/PowerPoint qualification are separate from these commands.
+The `v4.2.1` release includes these commands. Read the installed `installation`
+help before using the workflow. Package signatures establish publisher and byte
+integrity; they do not establish Windows runtime or PowerPoint desktop qualification.
 
 ## Verify and install an extracted package
 
@@ -16,16 +15,16 @@ The installer checks package consistency; it is not a replacement for that signa
 pptxgengo installation doctor
 ```
 
-On Windows, use `.\bin\pptxgengo.exe` from PowerShell. The full presentation
-package's `install-windows.ps1` also installs fonts unless `-SkipFonts` is set.
+On Windows, use `.\bin\pptxgengo.exe` from PowerShell. The v4.2.1 Windows archive includes template fonts, but no PowerShell installer. The separately supplied full-package `install-windows.ps1` installs fonts unless `-SkipFonts` is set.
 The Go command never changes fonts. macOS/Linux source installation uses
 `scripts/install-local-release.sh`; it prepares resources and calls the same manager.
 
 The installer validates the native architecture, executable build metadata,
-version files, hashes and required resources. Full packages must contain a complete
-manifest inventory with no unlisted files or symlinks. CLI-only packages use their
-binary evidence and record every included file's digest. CLI-only packages do not
-install the library, skill or fonts.
+version files, hashes and required resources. v4.2.1 platform archives use a
+complete closed manifest inventory with no unlisted files or symlinks. Their
+template catalog includes the 717-slide browsing deck, 649-template coverage,
+source bundle, fonts, catalog and regenerated SQLite index. The separate reusable
+content deck and private original photos/branding are not included.
 
 A new release is copied to a unique stage, rechecked, and each of the three tools
 must start and report its version within 30 seconds. Only then is the directory
@@ -44,9 +43,13 @@ places owned symlinks in `~/.local/bin`; add that directory to your shell PATH i
 it is absent. Unowned executables and launchers are never replaced automatically.
 
 The default state root is `%LOCALAPPDATA%\pptxgengo` on Windows and
-`${XDG_DATA_HOME:-~/.local/share}/pptxgengo` on macOS/Linux. The skill defaults to
+`${XDG_DATA_HOME:-~/.local/share}/pptxgengo` on macOS/Linux. The full-package manager skill defaults to
 `${CODEX_HOME:-~/.codex}/skills/west-monroe-presentations`. Existing skill folders
 or symlinks are preserved in uniquely named backups. Linked targets are not changed.
+
+The v4.2.1 CLI/template package omits the skill; install or update it independently
+for [Codex and Claude Code](skill-installation.md). The standalone helper uses
+current agent discovery locations and preserves the previous skill.
 
 Open a new terminal after activation, and restart the agent to load the skill.
 Existing shells may retain old PATH resolution. `installation doctor` reports:
@@ -133,10 +136,10 @@ It does not qualify a newly opened desktop terminal's inherited registry PATH.
 
 On Windows, the same opt-in also executes the actual
 `install-windows.ps1` with `-StageOnly`, then repeated activation using
-`-NoPath -SkipSkill -SkipFonts`. Its full-format resources are synthetic
-placeholders in an isolated app-data directory. No fake font is registered,
-private branding is included or PowerPoint opened. This covers the script and
-opt-outs, not a usable full presentation package.
+`-NoPath -SkipSkill -SkipFonts`. Its fixture resources are synthetic placeholders
+in an isolated app-data directory. No private originals are included or PowerPoint opened. This harness
+exercise is historical installer evidence, not desktop qualification for the
+v4.2.1 package.
 
 Run from the repository root with a new directory in an existing parent:
 
@@ -200,8 +203,7 @@ packages, exercised all three dispatchers, rolled back and checked diagnostics.
 No user's active installation was changed for that check.
 
 Native execution above supplements the existing six-target cross-compilation.
-Windows PATH registration, signed package execution, full private resource
-packages and interactive PowerPoint qualification still need their respective
-native evidence. The unsigned synthetic PowerShell script evidence above does
-not qualify those outcomes. Headless Go checks and source scans do not replace
-desktop Office review.
+Windows PATH registration and interactive PowerPoint qualification still need
+their respective native evidence. Windows runtime execution and desktop Office
+qualification remain pending for v4.2.1. Headless checks and signed packages do
+not replace desktop Office review.

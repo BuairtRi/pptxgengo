@@ -1,5 +1,10 @@
 # Density design follow-ups
 
+This records V11 source-side density and contrast decisions. They do not mean
+the V11 package has completed native rendering or visual qualification. That
+release gate remains pending; see [current release status](release-status.md)
+and the [V11 intake qualification record](../planning/wm-design-contracts/v11/intake-20261006-649-frozen/README.md).
+
 ## Accent contrast: use the designer's color treatment
 
 Operator direction on 2026-10-06 supersedes the earlier temporary Bold repair.
@@ -86,10 +91,12 @@ at every supported density. The final CLI audit checks 62,578 text/font/color
 objects with zero contrast failures and zero traversal gaps. All three repaired
 specimens also pass independent full-size PowerPoint review.
 
-## Qualification scope
+## Pending native qualification
 
-The native review covers 352 current source specimens. The other 297 retain
-their prior accepted previews only after exact authored-composition and visible
-dependency comparisons. All 649 source and 648 active bound builds pass. These
-checks qualify stock copy; edited slides still require fit and native review.
-Publication and installation are recorded separately in the V11 intake checkpoint.
+The source-side qualification plan identifies 352 specimens for new native
+review and 297 for inheritance checks against prior accepted previews. These
+counts describe required coverage, not completed v11 publication evidence. The
+all-source/bound build and exact native packet/inheritance receipts remain
+release gates. Even after stock qualification, populated user content still
+requires fit checks and native review. Publication and installation status are
+tracked separately in the V11 intake checkpoint.

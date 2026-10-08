@@ -1,5 +1,7 @@
 # Go Port Conventions (pptxgengo)
 
+> Maintainer conventions for the core OOXML port, distinct from the design/project application. Read current go.mod and source for application dependencies; the stdlib-only convention below refers to the original core port. Current authoring guidance is in [docs/README.md](docs/README.md).
+
 This repo is a port of PptxGenJS (TypeScript, `src/`) to Go. The Go library lives in
 `pptx/` (package `pptx`, import path `github.com/buairtri/pptxgengo/pptx`).
 `go.mod` is at the repo root. **Stdlib only** — no third-party deps.

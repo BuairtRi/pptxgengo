@@ -1,9 +1,14 @@
 # Engineering waves — qualification record
 
+Historical qualification for v5 / 0.1.0-local.12, dated 2026-10-04. It is not
+the current default. The repository now publishes v11 (649 templates, 648
+active); see [current release status](release-status.md) and the [documentation
+index](README.md). V11 native render/visual qualification remains pending.
+
 Date: 2026-10-04. Release: **0.1.0-local.12/v5**.
 
 Authorized scope: Waves 1–3 and bounded Wave 4 work from
-[engineering asks](skill-planning/engineering-asks.md). Edited-PowerPoint
+historical engineering asks (`skill-planning/engineering-asks.md`, not retained in this checkout). Edited-PowerPoint
 reconciliation, automatic project import, wireframe authoring/design lint and a
 new Go preview renderer remain deferred. The presentation skill belongs to a
 separate agent.

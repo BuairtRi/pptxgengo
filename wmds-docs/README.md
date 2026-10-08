@@ -41,4 +41,9 @@ The global package includes the docs server and the static documentation. Instal
 
 Upstream documentation can advance while an intake is being qualified. `release/default-docs.txt` selects the matching frozen documentation snapshot for the installed release; without that file the installer uses `wmds-docs/site`. The source checkout keeps the latest upstream board here, while the global package serves the selected release snapshot at its usual `wmds-docs/site` path. The installer still requires an exact match to the native bundle and does not overwrite the latest upstream publication.
 
+The published default is V11, with 649 source templates (648 active). Its
+documentation snapshot, source bundle, bundled fonts and SQLite index are
+packaged together. Documentation integrity is checked separately from native
+rendering and visual qualification, which remain pending for V11.
+
 The documentation board may render many examples at once. During browser review, Chrome reported high memory use; lazy rendering is a follow-up performance improvement.

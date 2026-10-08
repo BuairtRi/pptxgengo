@@ -3,8 +3,9 @@
 All downloads are in the **private GitLab project** `riscott/pptxgengo` (project
 17). GitHub remains the canonical source/review mirror. No GitHub release assets
 are created. All builds, tests, security scans and release operations run in
-GitLab; GitHub Actions is disabled. Stable v4.1.0 is a CLI-only release because
-registered branding originals are currently on another machine.
+GitLab; GitHub Actions is disabled. The latest stable release is v4.2.1. Its protected
+GitLab pipeline generated template browsing resources without requiring the
+private original-photo/branding collection or a reusable-slide inventory.
 
 ## Cut a release
 
@@ -20,8 +21,8 @@ registered branding originals are currently on another machine.
 
 ```sh
 # Example for the next new stable version; never recreate an existing tag.
-git tag -a v4.2.0 -m 'Release v4.2.0'
-git push origin refs/tags/v4.2.0
+git tag -a v4.2.2 -m 'Release v4.2.2'
+git push origin refs/tags/v4.2.2
 ```
 
 Never move or reuse a release tag. A retry can reuse already-uploaded identical
@@ -93,7 +94,7 @@ export PATH="/tmp/pptx-release-tools:$PATH"
 bash scripts/release/sigstore.sh initialize --home /tmp/pptx-release-trust
 bash scripts/release/sigstore.sh verify --home /tmp/pptx-release-trust \
   --blob downloads/manifest.json --bundle downloads/manifest.sigstore.json \
-  --version v4.1.0
+  --version v4.2.1
 ```
 
 The signature verifier requires the exact project/tag certificate identity, issuer,
@@ -130,73 +131,45 @@ model directory. Normal searches remain offline and never fetch weights. Build
 source-bound embeddings for the exact selected library. This change adds future
 CI automation; it does not modify released v4.1.0 or cut a new tag.
 
-## Scoped CLI release resources
+## Template browsing resources (v4.2.1 policy)
 
-The next release deliberately defers production browsing PowerPoints,
-reusable-slide inventory/revision metadata and branding/graphics/photo
-distribution. The checked-in CI setting is
-`PPTXGENGO_BROWSING_POLICY=deferred`, paired with
-`PPTXGENGO_PACKAGE_KIND=cli-only`. This policy remains effective for subsequent
-tags until deliberately changed. It does not disable units, installation,
-model checks, security, reproducibility, signing, notarization or attestation.
+The protected release pipeline sets `PPTXGENGO_PACKAGE_KIND=cli-only` and
+`PPTXGENGO_BROWSING_POLICY=templates-only`. This produces six platform archives
+with the three CLI tools plus a closed, hashed template authoring catalog. The
+`cli-only` package-kind label preserves its binary/install format; it does not
+mean the template resources are omitted.
 
-The resource job emits an exact version/commit policy marker. Assembly carries
-it separately into final release evidence; sealing hashes it into the signed
-manifest. Verification rejects contradictory or missing policy metadata and
-stale presentation resources. No branding URL, photos or complete template
-library is required for this scope. Platform archives include the three CLI
-executables, installation material and notices. Presentation authoring still
-requires an existing exact pinned authoring bundle and its fonts; CLI-only
-archives do not install a library, fonts or presentation skill.
+Each archive contains the 717-slide template browsing deck, provenance manifest,
+`native-editing-coverage.json` for all 649 catalog templates, the v11 template
+source bundle, fonts, catalog and freshly regenerated `library.sqlite`. SQLite
+is the search index; templates render from the bundled source and compiler inputs.
+Installer relocation checks exercise catalog search, and strict archive
+verification rejects stale, extra or missing files. Existing pinned frame marks
+are included as template prerequisites.
 
-A future browsing-inclusive release must explicitly set
-`PPTXGENGO_BROWSING_POLICY=required` and supply the strict pinned browsing inputs
-in [the browsing guide](../docs/skill-planning/portable-projects-and-browsing-decks-20261007.md). Full mode also needs the
-private branding inputs below; it refuses deferred browsing or missing inputs.
-The helper's default remains `required`, so omission outside this deliberate CI
-configuration cannot silently skip the library requirement.
+Generation uses `--editing-profile native-v1` and
+`--media-policy placeholders`. Synthetic diagrams represent external photos,
+icons and artwork; they are identified as placeholders and are not original
+brand assets. The package does not require unavailable private photo/branding
+originals or a finished reusable-slide inventory. The separate content-complete
+reusable browsing deck remains deferred. Legacy `required` policy and its
+two-deck/private-input validation remain supported independently; `deferred`
+remains available for older CLI-only packages. v4.2.0 remains immutable and does
+not gain these resources retroactively.
 
-## Bring private branding into CI
+Pipeline 21443 for tag `v4.2.1` at `66229bd1` completed all 28 jobs successfully
+in 793 seconds. Resource generation recorded 2,663 files and a regenerated
+SQLite index with 649 templates. Private GitLab holds CI artifacts and release
+packages; no GitHub release assets are created.
 
-The branding files are deliberately external inputs. On the machine containing
-`~/Documents/branding` (or set `WMDS_BRANDING_ROOT`), use the same source revision:
+## Signing and qualification status
 
-```sh
-scripts/release/create-branding-input.sh /private/path/branding.tar.gz
-```
-
-This stages and verifies the existing source release, then archives its verified
-registered originals. Upload the archive **privately** to S3 or this project's
-Generic Packages. Do not add branding archives to GitHub or the source tree.
-Configure these **protected** GitLab variables:
-
-| Variable | Value |
-| --- | --- |
-| `PPTXGENGO_PACKAGE_KIND` | `full` |
-| `PPTXGENGO_BROWSING_POLICY` | `required` |
-| `WMDS_BRANDING_ARCHIVE_URL` | masked HTTPS presigned S3 URL, or project 17 Generic Package URL |
-| `WMDS_BRANDING_ARCHIVE_SHA256` | exact archive digest from the producer |
-
-Cut a new tag. CI verifies the archive hash, rejects unsafe members, and runs the
-existing source/gallery/asset/documentation verifier in stage-only mode. Full
-archives pair these resources with final signed platform binaries and regenerate
-package hashes. Windows receives its existing user installer, smoke harness and
-offline guides; macOS/Linux can run directly after adding the extracted `bin` to
-PATH, with font installation as a separate local action. Full mode fails if the
-input is absent or differs; it cannot silently downgrade to CLI-only mode.
-
-Full package assembly is implemented, but cannot be qualified until the private
-input exists. Signing a CLI does not qualify arbitrary presentation content.
-
-## Windows desktop qualification
-
-A Windows node is expected shortly. It is needed for execution and interactive
-PowerPoint COM validation, not compilation or Authenticode signing. The existing
-opt-in job requires runner tags `windows` and `pptxgengo-windows-native` and must
-run from the signed-in desktop, not Session 0. Until that lane runs, release
-metadata keeps `windows_runtime_qualified` and `native_powerpoint_qualified` false.
-The first CI prerelease therefore must not be promoted as a fully qualified
-Windows presentation package.
+The v4.2.1 release completed Windows Azure Artifact Signing and macOS Developer
+ID signing with Apple notarization acceptance, followed by signed archive
+verification and private manifest attestation. Windows runtime execution and
+interactive native PowerPoint qualification remain pending. Cross-compilation,
+Authenticode verification and signing do not establish Windows runtime or desktop
+Office qualification; release metadata keeps both qualification flags false.
 
 ## slotctl
 

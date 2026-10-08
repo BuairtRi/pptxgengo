@@ -7,10 +7,17 @@ It creates no source refs, GitLab reviews/merges, GitHub statuses or artifacts.
 Ordinary branch pushes do not run CLI checks; main/tag/nightly cadence is owned
 by `.gitlab-ci.yml`. GitHub Actions remains disabled.
 
-## Activation contract
+## Current deployment and activation contract
 
-Everything here is a deployment template, initially **suspended**. After the
-cadence source merges, an operator:
+The project 17 poller is activated as a Kubernetes CronJob. It discovers same-repository
+PRs every three minutes and creates only PR-tier pipelines. The live capability
+ConfigMap approves six complete exact-hash profiles; the current `.gitlab-ci.yml`
+hash is `385bf5aec0bd6461adbde6631fba44ccae47a279f1de7217f1e5da677d1b7142`.
+The remaining steps below document deployment and recovery for maintainers; they
+are not outstanding activation work.
+
+When provisioning a replacement deployment or reactivating a suspended CronJob,
+an operator:
 
 1. Reviews the exact merged workflow/job graph. Confirms `source=api` and
    `PPTXGENGO_CI_TIER=pr` select only `pr-unit`, `pr-relay-unit`, `workflow-lint`, and secrets.
@@ -38,8 +45,8 @@ cadence source merges, an operator:
    Generate values from the reviewed merged checkout using `hashlib.sha256`.
    Empty profiles intentionally refuse discovery. Up to eight complete profiles
    may be approved; individual hashes cannot be mixed between profiles.
-6. Applies the suspended deployment and checks configuration/secret mounts,
-   namespace RBAC and diagnostics. Unsuspends only after source/config review.
+6. Applies the deployment suspended, checks configuration/secret mounts,
+   namespace RBAC and diagnostics, then unsuspends after source/config review.
 
 **CI-changing PRs are not triggered automatically** until the exact config is
 approved. An operator can explicitly qualify such a PR after reviewing the rule

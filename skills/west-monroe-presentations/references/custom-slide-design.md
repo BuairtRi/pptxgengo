@@ -111,7 +111,7 @@ Reference design-system components in local templates as `wmds/component/<type>`
 | A quote | `pullquote` |
 | Labeled text section | `textblock`, `colhead`, `grouplabel` |
 
-If `project check` rejects a component, use the closest one it accepts and note the gap in the composition log. For working examples see `examples/local-composition` under the release `root`; inspect `source/components/v0/components.json` under `design_system_default` (from `pptxgengo paths`) and the [design documentation board](design-system-documentation.md) for component fields and geometry rules.
+If `project check` rejects a component, use the closest one it accepts and note the gap in the composition log. Inspect `source/components/v0/components.json` under `design_system_default` (from `pptxgengo paths`) for component fields and geometry rules. Use the [design documentation board](design-system-documentation.md) when its optional site is installed.
 
 ### Design rules
 

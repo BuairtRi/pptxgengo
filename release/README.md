@@ -1,9 +1,26 @@
 # Current West Monroe presentation release
 
-For protected-tag CI releases, platform signing, scans and private branding inputs,
+For protected-tag CI releases, platform signing, scans and resource policies,
 see [the CI release runbook](CI.md).
 
-The current source package is **0.1.0-local.21/v11**. Its production gallery and
+## Current signed release
+
+The current stable release is v4.2.1. Its six private GitLab platform archives
+include signed executables, V11 source/catalog/fonts, the regenerated SQLite
+index and 717-slide template browsing deck. They omit the skill, optional docs
+site, private media originals and curated reusable-slide deck. See
+[release status](../docs/release-status.md) for verified contents and remaining
+desktop qualification, and [skill installation](../docs/skill-installation.md)
+for independent Codex/Claude updates.
+
+## Historical full authoring package: local.21
+
+The sections below record the earlier full local package and its qualification.
+Its resources, installation scripts and private-media closure are not the
+contents of the signed v4.2.1 CLI/template archives. Local version numbers refer
+to those source-package checkpoints, not the current protected release tag.
+
+The recorded source package is **0.1.0-local.21/v11**. Its production gallery and
 SQLite discovery index cover all 649 source templates (648 active, one deprecated).
 The gallery includes 352 freshly reviewed PowerPoint specimens and 297 inherited
 previews verified by exact composition and visible dependency comparison.
@@ -76,26 +93,33 @@ The inherited library and photography package checks are summarized in
 [local.16 qualification](qualification-local16.json). Draft Review Notes checks
 and native visual review are recorded in the engineering command reference.
 
-## Next signed CLI release scope
+## Signed release scope: v4.2.1
 
-The candidate following stable v4.1.0 includes portable project creation/layout,
-numbered complete source/deck snapshots with shared content-addressed assets,
-version verification/materialization/recovery, and portable share/extract ZIPs.
-It also includes reviewed text reconciliation, native object lineage, native
-plain lists, single-shape title/body cards and directly selectable plain tables.
-The [approved Mac demo](../docs/native-component-demo.md) records real wrapping,
-bullet insertion, whole-card movement and table cell editing.
+The v4.2.1 protected release includes the CLI and template browsing catalog. All
+six platform archives contain a 717-slide native PowerPoint template deck, its
+provenance and native editing coverage for all 649 templates, plus the v11 source
+bundle, fonts, catalog and regenerated SQLite search index. The catalog sources
+and compiler inputs travel with SQLite so template search and authoring remain
+relocatable after installation. See the [release runbook](CI.md) and
+[browsing package details](../docs/browsing-libraries.md).
 
-The optional persisted [native editing profile](../docs/native-editing-profile.md)
-applies these ergonomics to eligible source scenes while retaining resolved
-styles. Existing projects retain stock rendering by default. Changed builds
-need review; resizing and Windows PowerPoint qualification remain pending.
+The browsing deck uses the native editing profile and synthetic placeholders for
+external artwork. These are identified and are not original brand assets. The
+existing pinned frame marks ship with the source bundle. Private original
+photos/branding and the separate content-complete reusable-slide deck remain
+deferred; no finished-slide inventory is required. This does not change the
+source library's local v11 qualification or assert original-asset/desktop
+acceptance for placeholder content.
 
-This is a CLI-only distribution. Production browsing decks, reusable-slide
-inventory/revision metadata and branding/graphics/photos are deferred. The
-compiler still requires an existing exact pinned authoring bundle and its
-fonts. New private branding inputs are not required to release these CLIs.
-Stable v4.1.0 remains unchanged until the new protected tag passes publication.
+Pipeline 21443 for tag v4.2.1 at source `66229bd1` completed all 28 jobs
+successfully in 793 seconds. Mac signing/notarization and Windows Azure signing
+completed. Windows runtime and native PowerPoint desktop qualification are still
+pending. GitLab is the private CI/artifact/release location; GitHub Actions is
+disabled and no GitHub release assets are produced.
+
+The earlier v4.1.0 CLI-only release and local.21/v11 source qualification
+records below describe their original scope and remain historical records. They
+do not describe the v4.2.1 platform archives.
 
 ## Source and discovery
 
@@ -183,6 +207,5 @@ The [local.20 qualification](qualification-local20.json) records density checks,
 
 Source builds containing the new manager support verified staging, upgrade,
 rollback, interrupted activation recovery and read-only diagnostics. See
-[installation and recovery](../docs/installation.md). The signed `v4.1.0` CLI
-predates these commands. Windows/Office qualification and full private resources
-remain separate requirements.
+[installation and recovery](../docs/installation.md). The signed v4.1.0 CLI predates these commands; v4.2.1 adds template catalog
+resources while Windows runtime/native PowerPoint qualification remains pending.

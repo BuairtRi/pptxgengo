@@ -1,10 +1,12 @@
 # Product and architecture plan
 
+> Historical product/architecture proposal from 2026-09-25. Its proposed commands and execution sequence are design history; use [the documentation index](docs/README.md) for current operator and maintainer guidance.
+
 2026-09-25 · Proposed design · First benchmark: detailed proposal/document-style decks
 
 See [CAPABILITIES.md](CAPABILITIES.md) for the implementation inventory and verified baseline, [DESIGN_WORKFLOW.md](DESIGN_WORKFLOW.md) for catalog and design-pass details, and [planning/README.md](planning/README.md) for the supplied benchmark. All commands, schemas, package names and thresholds below are proposals, not existing capabilities.
 
-**Current execution sequence:** [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)
+**Historical execution sequence:** [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)
 incorporates the completed reconstruction, underline and highlight experiments
 and prioritizes library inventory, curation, semantic adaptation and revision.
 It supersedes the original implementation sequence below.

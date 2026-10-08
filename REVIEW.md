@@ -1,5 +1,7 @@
 # Deep Code Review — Go Port (pptx/)
 
+> Historical code-review record of the Go port. File/line references and findings describe that checkpoint; compare with current source before treating a finding as open. Current release/qualification status is in [docs/release-status.md](docs/release-status.md).
+
 Six independent review passes (foundation, xml, charts, objects, tables+media,
 top-level/cross-cutting), each verified against the TS source and/or the live
 `dist/pptxgen.cjs.js`, with behavioral claims reproduced in scratch tests before

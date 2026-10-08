@@ -1,8 +1,10 @@
 # Remaining implementation and library plan
 
+> Historical implementation plan from the 2026-09-25 development sequence, including later checkpoint additions. Proposed work and status here are not the current release inventory. Use [release status](docs/release-status.md) and [the documentation index](docs/README.md) for current capabilities.
+
 2026-09-25 · Revised for exhaustive catalogs, dynamic composition and delegated execution
 
-This is the current implementation sequence. It supersedes the earlier sequence
+This recorded the implementation sequence at that checkpoint. It supersedes the earlier sequence
 in [PRODUCT_PLAN.md](PRODUCT_PLAN.md); that document and
 [DESIGN_WORKFLOW.md](DESIGN_WORKFLOW.md) retain the broader architecture. Commands,
 schemas, library counts and acceptance gates below are proposed unless explicitly

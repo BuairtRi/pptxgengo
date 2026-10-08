@@ -2,19 +2,18 @@
 
 Use only registered library assets, or images the operator supplies and you register in the project. Never pull images from the web or generate them.
 
-## What the library has
+## Check available originals
 
-| Kind | Count | Notes |
-| --- | --- | --- |
-| Icons | 222 concepts, each in navy, magenta and white | Line icons on a 42 × 42 grid |
-| Photos | 523 catalog records | Includes all 521 originals under West Monroe Photos, with existing descriptive sidecars |
-| Graphics | 12 | Brand marks: hand-drawn arrows, highlights, circles, underscores, sparks |
-| Logos | 3 | West Monroe logo variants |
+The registry describes icons, photos, graphics and logos. Search results and
+metadata do not guarantee that their original files or thumbnails are available.
+The current template archives include pinned frame marks and illustrative media
+in the browsing deck; the private photo and branding collections are separate.
+Use verified originals supplied by the operator or available in the matching
+collection. `WMDS_BRANDING_ROOT` can point to that collection when required.
 
-The installed asset gallery has 760 concepts and 1,204 variants. The SQLite index
-includes the full photography inventory. Metadata comes from existing sidecars;
-inspect thumbnails and selected originals before treating a description as proof
-of visual suitability. When no photo fits, use approved operator-supplied imagery.
+For a missing asset, select an available alternative or register an approved
+project image. Preserve an explicit placeholder only while the content is draft;
+a browsing-deck placeholder is not a final brand asset.
 
 ## Search
 
@@ -36,7 +35,7 @@ pptxgengo catalog --assets --open
 pptxgengo design asset-gallery --out ./gallery --kind icon --query people
 ```
 
-`catalog --assets` opens the full packaged gallery. `asset-gallery` builds a filtered gallery in a new folder (`index.html`, `assets.json`, preview files). Use the registered originals in decks, never the gallery previews.
+`catalog --assets` opens the asset gallery when that optional collection is installed; it is absent from the current template-only archives. `asset-gallery` builds a filtered gallery in a new folder (`index.html`, `assets.json`, preview files). Use the registered originals in decks, never the gallery previews.
 
 ## Use an asset on a slide
 
@@ -59,11 +58,12 @@ pptxgengo design project asset add --project ./client-deck --id client-logo \
   --file ./approved/client-logo.png --description "Client logo, supplied by operator" --focus 0.5,0.5
 ```
 
-- PNG, JPEG or simple self-contained SVG, up to 64 MB. The original is copied into `assets/originals/` and recorded with its hash.
+- PNG, JPEG or simple self-contained SVG, up to 64 MB. The original is stored once under `assets/objects/sha256/` and recorded with its hash. Numbered deck versions reference that shared object.
 - `--description` is required. Describe what the image shows and where it came from.
 - `--focus x,y` (0–1) records the point to keep in view when cropped; it is advisory.
 - Builds shrink JPEGs to their placed size (220 ppi) and keep the original. PNGs aren't resized, so shrink large PNGs before registering.
 - Use the ID in slide image fields. Use `project:client-logo` if it collides with a library asset ID.
+- Revise an owned asset with `project asset revise --id ID --file IMAGE --description TEXT --expect-sha256 OLD_HASH`; retain the old object for prior versions.
 - Record the source and permission for client images in `project.md`. Never use a client logo or photo without the operator's confirmation.
 
 ## Choosing imagery

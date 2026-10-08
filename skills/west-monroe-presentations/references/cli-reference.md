@@ -12,11 +12,8 @@ pptxgengo catalog --design-system --open
 pptxgengo catalog --assets --open
 ```
 
-- `paths` returns JSON with release locations, including `design_system_default`, `design_index`, `design_docs` and `design_docs_source`. Resolve packaged files from these; never hardcode a release directory.
-- `paths.skill` identifies the skill snapshot bundled with the CLI release.
-  The active installed skill can receive newer documentation independently.
-  A documentation-only skill update does not change the executable or source
-  pin and does not itself require deck migration.
+- `paths` returns JSON with release locations, including `root`, `design_system_default` and `design_index`. Resolve files from these paths. Optional `design_docs`, `project_example` and `skill` paths can be reported even when that archive omits those resources; check that they exist before use.
+- The template archives include the source bundle, fonts, SQLite index, specimen gallery and `browsing/template-library.pptx` under `paths.root`. The skill and optional upstream docs site are installed separately. Documentation updates do not change a project's executable pin.
 - `catalog` takes one gallery (`--design-system`, `--templates`, which is the same page, or `--assets`) and `--print` (default) or `--open`.
 - The old routes (`template`, `compose`, `scene`, `component`, `lib`, `anchor`, `diff`, `adapt`) have been removed and print a replacement hint.
 
@@ -28,7 +25,7 @@ pptxgengo paths
 pptxgengo catalog --design-system --open
 ```
 
-- `pptxgengo docs [--addr localhost:8787]` serves the packaged static reference board; pass `--dir PATH` only to serve another built docs site. It covers foundations, primitives, components, composites, frames, template filters and a template catalog. See [design-system documentation](design-system-documentation.md).
+- If `paths.design_docs` exists, `pptxgengo docs [--addr localhost:8787]` serves that static reference board. Otherwise use the packaged specimen gallery or pass `--dir PATH` for an available built site. It covers foundations, primitives, components, composites, frames, template filters and a template catalog. See [design-system documentation](design-system-documentation.md).
 - `paths` reports `design_docs` and `design_docs_source`. The latter points to the frozen `SOURCE.json` receipt; compare its source commit with the current bundle metadata before assuming both artifacts describe the same upstream revision. While running, the docs server also provides `/api/source`.
 - `docs` explains upstream concepts and examples. `catalog --design-system` opens the separate native-reviewed specimen gallery for the installed bundle. Docs examples do not qualify replacement copy; fit and review supplied content in the actual build.
 
@@ -93,7 +90,7 @@ pptxgengo design library-fit --spec alternatives.json --out ./candidate-review
 | --- | --- |
 | `project init` | Pin the executable, engine, library and fonts in `toolchain.lock.json` (only when no lock exists) |
 | `project migrate [--bundle v11\|PATH] [--engine ENGINE] [--dry-run]` | Validate target compatibility and fit; preserve old lock and atomically update the pin |
-| `project split --bundle v11` | Move each slide into its own file; notes into `notes/`; local templates into `templates/`; use the matching locked bundle for historical projects |
+| `project split --bundle v11` | Move each slide into its own file; notes into `notes/`; local templates into `slides/templates/`; use the matching locked bundle for historical projects |
 | `project check` | Validate source, bindings, pins, composition log and claim references |
 | `project build` | Build a new immutable directory under `builds/`; enforces text fit |
 | `project titles [--format json]` | List slide titles in order with ID, hidden state and template |
@@ -154,6 +151,7 @@ pptxgengo design render --pptx ./client-deck/builds/<build-id>/deck.pptx --out .
 - `render` flags: `--pptx`, `--out` (new), `--pdf` and/or `--png`, `--slides` (pages or ranges), `--contact-sheet`, `--include-hidden`, `--staging-dir` (or `PPTXGENGO_NATIVE_STAGING`), `--timeout` (default 5m).
 - Output: a signed `render-manifest.json`, `native-pages/slide-NNN.png` (numbered by source slide), the PDF and the contact sheet. Never edit the manifest; `attach-render` rejects anything not signed by a render on this machine.
 - It works on a temporary copy and never changes the source deck.
+- On macOS, reuse one staging folder that PowerPoint can access (for example a dedicated folder under Documents) through `--staging-dir` or `PPTXGENGO_NATIVE_STAGING`. Pass the same location to `render-doctor`; files are staged directly there with unique task names.
 - **First macOS render:** PowerPoint may show a "Grant File Access" dialog for the staging folder. The operator must click Grant. Until then, renders fail within seconds with `file_access_denied … PowerPoint is showing Grant File Access`. Windows has its own setup, policy and Protected View diagnostics. Every failed render writes `render-error.txt` in `--out`.
 - If a render fails, read `render-error.txt`, run `render-doctor`, ask the operator to clear what they report, then retry once.
 
@@ -167,57 +165,49 @@ Writes `source_inventory.json` and `.md`: each slide's title, hidden state, text
 
 ## Move a project to a new CLI version
 
-A project pins its executable and source. A changed release can report
-`project.toolchain_drift`. When the operator has requested an upgrade:
-
-```sh
-pptxgengo design project migrate --project ./client-deck --dry-run
-pptxgengo design project migrate --project ./client-deck
-pptxgengo design project build --project ./client-deck
-```
-
-Migration defaults to V11 and keeps the existing engine unless `--engine` is
-specified. It validates source/template compatibility and compiler fit before
-changing the lock. A dry run or failed validation leaves the lock unchanged.
-Success preserves exact old bytes as `<configured-lock>.pre-migrate-<hash>` and
-atomically replaces the pin; repeated migration to the same toolchain creates
-no extra backup. It does not rewrite copy, custom templates, revisions or PPTX.
-Resolve reported custom ancestry/revision conflicts before retrying. Rebuild,
-render and review the new result; prior approvals/native coverage become stale.
-This operates on YAML projects; it does not convert a standalone PPTX to YAML.
+A project pins its executable, engine and source. Follow
+[project upgrades](upgrading-projects.md) to preserve the predecessor, choose an
+explicit bundle target, inspect template revisions and review the new baseline.
+`project migrate` validates and updates the toolchain lock; it does not convert
+schemas, rebase local templates or enable a native editing profile. Omitting
+`--bundle` selects V11, even for older projects.
 
 ## One-slide routes and maintenance commands
 
 - Single slides outside a project: [design-system one-slide routes](design-system-authoring.md).
 - Library-maintenance commands (`library-index`, `library-search`, `library-sweep`, `library-bound-sweep`, `inspect`, `templates`, the `*-reference` commands, `typography-probes`) are not for deck work.
 
-## Explicit native card pilot in later source builds
+## Native editing and maintained slides
 
-`wmds/component/editable-card` places two plain title/body paragraphs in one
-filled native rectangle. Use explicit distinct bindings in a local template;
-the source `subhead` and `body` roles remain separate. Stock cards are unchanged.
-`project editability` inventories both paragraph fields, and bounded text
-reconciliation can review/adopt each role independently. Markup, explicit line
-breaks, changed role formatting/topology and ambiguous bindings require review.
-Geometry remains manual. The component is an opt-in measured design with pending
-Mac/Windows selection, move/resize and visual qualification; stable v4.1.0
-does not include it. Authoring and limits are in `docs/native-editable-card.md`.
+New v2 projects persist `editing_profile: native-v1`. Direct template and
+browsing-library generation also default to native-v1; use `--editing-profile
+stock` on those routes when the original object structure is required. Existing
+project profiles stay pinned. In a project, change `deck.yaml` deliberately and
+build a new baseline before reviewing the new structure.
 
-## Reuse authored finished slides in the next source build
+Eligible flat lists, including supported bold lead/body runs, become native
+bullet paragraphs in one box. Eligible simple cards combine title/body content
+and background in one editable shape. Native tables retain rows, columns and
+cell editing while redundant outer wrappers are removed. Decorated cards,
+nested/ordered lists and unsupported artwork retain their source structure;
+inspect the layout report's retention reasons.
 
-`project slide publish --id SOURCE --library-id curated/slide/KEY --revision N
---name NAME --purpose PURPOSE --owner OWNER --out NEW-DIR` creates a closed draft
-revision from supported supplied-content shared source. `project slide insert
---package REVISION-DIR --id FRESH-ID --rationale REASON` inserts an independent
-copy with composition lineage; draft work requires `--allow-draft`. Both accept
-`--project`, `--bundle` and `--engine`; insertion accepts `--before`, `--after`
-and `--into-section`. Exact pins and existing authored composition are required.
+For a custom local template, `wmds/component/editable-card` and
+`wmds/component/editable-list` expose explicit bounded native components. Inspect
+the component's schema before use: their restrictions differ from automatic
+profile conversions. Added text can require resizing a box. Combined card/list
+source adoption is manual; keep baseline and edited copies, review and rebuild.
 
-`library-index --slide-library ROOT` adds closed revisions; `library-find
---kinds finished-slide` distinguishes them from templates. Read lifecycle,
-owner, approval/freshness metadata and previews before reuse. Claims and local
-or unsupported typed dependencies currently fail explicitly. Stable v4.1.0
-lacks these commands; full scope is documented in `docs/finished-slides.md`.
+Use `project editability` and the [editing workflow](editing-slides.md) for
+object ownership and supported text reconciliation. Actual native rendering and
+visual review remain required for the deck you are authoring.
+
+For operator-provided authored slide revisions, use `project slide publish`,
+`project slide insert` and `project slide review-reuse`; inspect each command's
+help and exact revision metadata. Use `library-find --kinds finished-slide` only
+against an index built with that supplied slide library. No reusable-slide
+inventory or content-complete browsing deck is shipped. See
+[maintained authored slides](editing-slides.md#reuse-maintained-authored-slides).
 
 ## Portable projects, numbered versions and complete shares
 
@@ -243,20 +233,3 @@ manifest. Locks, conflicting OneDrive copies, placeholders, changed predecessors
 and nonportable names are diagnosed rather than silently resolved. Sharing
 retains executable/OS/architecture pins and branding/font requirements; explicit
 toolchain migration and offline runtime export remain separate commands.
-
-### Native unordered lists
-
-For new flat unordered lists whose readers will edit in PowerPoint, use
-`wmds/component/editable-list`: one text box containing native bullet paragraphs.
-It keeps the source's typeface, body/small density metrics, square marker,
-hanging indent and paragraph spacing. Supply plain nonempty `items` and stable
-`keys.items`; the placement's height is a fixed allocation validated at build.
-PowerPoint can reflow the paragraphs within that box; added copy may require
-resizing the one box. Do not rebuild a plain list as separate marker/text shapes.
-
-This is an explicit candidate component. Existing stock `bullets` templates,
-ordered lists and `{lead, text}` decorative/rich lists retain their current
-renderer until separately qualified. Native list changes require manual source
-review; item order and keys are not guessed from edited paragraphs. macOS and
-Windows native editing acceptance remains pending. See
-`docs/native-editable-list.md`. The promoted v4.1.0 predates this component.

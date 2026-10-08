@@ -1,29 +1,56 @@
 # Installation and recovery
 
-Use a CLI containing the new installation manager. The signed `v4.1.0` CLI
-predates these commands; check the package help instead of assuming availability.
+## Skill setup for Codex and Claude Code
 
-Run `pptxgengo installation doctor` before repairing a colleague's setup. Read
-its selected CLI, resource pins, skill digest, PATH conflicts and pending receipt.
-Check `pptxgengo --version` and `pptxgengo paths` too. A CLI-only package omits the
-presentation resources and skill; it is not a full presentation installation.
+From an authenticated source checkout, run
+`python3 scripts/install-skill.py --agent both` (Windows: `py -3`). Select
+`--agent codex` or `--agent claude` for one agent; rerun after updating the checkout
+to update the skill. The helper copies the whole reference folder, preserves the
+previous installation and reports destinations/backups. Use `--dry-run` first
+when inspecting an existing setup; `--project PATH` installs for that project.
+Restart the agent and invoke `west-monroe-presentations` (Claude Code:
+`/west-monroe-presentations`). CLI and project pins are unchanged.
 
-After authenticating the release's signed manifest and archive digest, use
-`pptxgengo installation install --from EXTRACTED_PACKAGE` to install or upgrade.
-`--stage-only` verifies without activation; `--skip-skill` and `--no-path` leave
-those user settings alone. Full Windows packages retain `-SkipFonts` separately.
+The helper and its detailed setup guide are source-checkout resources, not
+files in the v4.2.1 CLI/template archives. If given the skill folder alone, copy
+the complete folder to `~/.agents/skills/west-monroe-presentations` for Codex or
+`~/.claude/skills/west-monroe-presentations` for Claude Code. Preserve the previous
+folder outside agent discovery roots before replacement. For an older Codex
+installation using `CODEX_HOME/skills`, the helper reuses the existing folder
+when the current location is absent. If both locations exist, select the active
+one with `--dest`; avoid two copies of the same skill.
 
-`installation rollback` selects the recorded previous release and matching skill;
-`installation recover` restores the predecessor after an interrupted activation.
-Use the original custom `--root`, `--bin-dir` and `--skill-dir` flags when present.
-Recovery must preserve conflicting user edits. Never delete a receipt or remove a
-lock to make recovery proceed without understanding its recorded predecessors.
+## CLI installation and recovery
 
-Open a new terminal and restart the agent after changing selection. Installer
-success does not qualify fonts, PowerPoint or supplied content. Run
-`pptxgengo design render-doctor --json` for native readiness and review exports.
+Check `pptxgengo --version`, `pptxgengo paths` and `pptxgengo installation doctor`
+before changing an installation. Read the selected executable, resource pins,
+PATH conflicts and pending receipt. Paths can describe optional files that are
+not installed; check availability before copying an example or opening a site.
 
-`installation uninstall` removes owned activation bindings, restores an unchanged
-original skill when recorded, and retains releases/backups. Edited user skills,
-fonts, projects and authored decks are preserved. `--keep-skill` preserves skills
-explicitly. Do not remove a colleague's projects as part of toolkit maintenance.
+The current template archives contain three executables, the V11 source bundle,
+SQLite index, specimen gallery, fonts and `browsing/template-library.pptx`.
+The skill, upstream docs site, private media originals and curated reusable-slide
+inventory are separate resources. Font files in an archive are not proof that
+PowerPoint has those fonts installed.
+
+After authenticating the private GitLab release's signed manifest and archive
+digest, use `pptxgengo installation install --from EXTRACTED_PACKAGE`.
+`--stage-only` verifies and copies without activation; `--skip-skill` and
+`--no-path` preserve those settings. Custom `--root`, `--bin-dir` and `--skill-dir`
+locations must be separate; retain the same flags for later recovery/rollback.
+Use the installed command's help for platform-specific choices.
+
+`installation rollback` selects the recorded predecessor; `installation recover`
+restores it after interrupted activation. Preserve conflicting edits and inspect
+the receipt before retrying. Restart the terminal and agent after changing the
+active release. A skill-only documentation update does not require project
+migration; changing the executable or bundle can require explicit migration.
+
+Run `pptxgengo design render-doctor --json` for native readiness. Resolve the
+reported font, activation or folder-access problem and review actual exports.
+On macOS use the same PowerPoint-accessible staging folder for doctor and render.
+On Windows follow [Windows workflows](windows.md).
+
+`installation uninstall` removes owned activation bindings and retains releases
+and backups. Edited skills, fonts and projects are preserved; `--keep-skill`
+explicitly retains skills. Keep authored decks outside toolkit cleanup.

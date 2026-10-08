@@ -11,6 +11,7 @@ schema: pptxgengo.deck-document.v1
 id: client-deck
 title: Phase 2 proposal
 year: 2026
+editing_profile: native-v1
 toolchain:
   lockfile: toolchain.lock.json
 context:
@@ -21,10 +22,10 @@ context:
   claims: claims.md
 assets:
   client-logo:
-    path: assets/originals/client-logo.png
+    path: assets/objects/sha256/REPLACE_WITH_REGISTERED_SHA256
     description: Client logo supplied by the operator
 local_templates:
-  phases-four: templates/phases-four.yaml
+  phases-four: slides/templates/phases-four.yaml
 slides:
   - slides/001-cover.yaml
   - slides/002-situation.yaml
@@ -38,6 +39,7 @@ sections:
 - `context` keys are limited to `project`, `audience`, `outline`, `sources`, `claims`, `composition_log`, `decisions`, `win_strategy` and `state`. Linked files invalidate approvals when they change; a directory (such as `sources`) tracks every file in it. `state` names the generated `state.json`.
 - `sections` group slides in PowerPoint; manage them with `project section` ([editing slides](editing-slides.md#sections-and-dividers)).
 - Builds deduplicate media and shrink JPEGs to 220 ppi at quality 90 by default. To change that, set `media_optimization` with all six fields (`deduplicate`, `resize_jpeg`, `compression`, `pixels_per_inch`, `jpeg_quality`, `min_savings_percent`); `resize_jpeg: false` keeps original JPEG bytes. Vector and lossless images are never resized.
+- Register assets with `project asset add` to write actual object paths and hashes; the example object path above is illustrative.
 - All paths are project-relative. Absolute paths, URLs, `..` and symlinks are rejected.
 
 ## A slide
@@ -123,7 +125,7 @@ Component `<type>` is the scene node type, not the catalog name (`stepper`, not 
 - Arrays with item identities need matching `keys` entries.
 - The planned output must fit the allocation, or the build fails.
 - Images: PNG, JPEG or simple self-contained SVG, with `cover` or `contain`.
-- For working examples, see `examples/local-composition` (`venn`, `maturity`, `road`) under the release `root`. For each component's arguments, look at a shared template that uses it (`library-inspect`) or the design system's `source/components/v0/components.json` under `design_system_default` from `pptxgengo paths`.
+- For each component's arguments, inspect a shared template that uses it (`library-inspect`) or `source/components/v0/components.json` under `design_system_default` from `pptxgengo paths`. Source-checkout examples are optional and are not included in every release archive.
 
 ## Persisted editing profile
 
@@ -133,3 +135,10 @@ the v2 engine, while retaining pinned source styles. The profile is part of the
 authored source hash, compiled scene, layout report and build receipt. Preserve
 existing baselines and review converted builds. It does not alter shared bundle
 bytes or qualify every template. Complex variants remain in their stock form.
+
+## Schema and template upgrades
+
+The deck schema is independent of the engine and template bundle version.
+Preserve explicit template revisions and local definitions until their target
+contracts are reviewed. Follow [project upgrades](upgrading-projects.md) before
+changing schema, bundle, executable or template pins.

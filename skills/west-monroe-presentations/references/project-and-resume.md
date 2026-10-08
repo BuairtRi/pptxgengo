@@ -5,16 +5,16 @@
 ## Start a project
 
 ```sh
-cp -R "$(pptxgengo paths | python3 -c 'import json,sys; print(json.load(sys.stdin)["project_example"])')" ./client-deck
-pptxgengo design project init --project ./client-deck
-pptxgengo design project split --project ./client-deck --bundle v11
+pptxgengo design project create --out ./client-deck --id client-deck \
+  --title 'Client deck' --bundle v11 --template cards/3
 ```
 
-Then replace the starter's example slides, template, asset and `context/project.md` with the deck's own, add slides with `project scaffold --stock` ([editing slides](editing-slides.md#add-a-slide)), and run `project check`.
+Choose the initial template from [template selection](template-selection.md); `cards/3` above is an example. Replace scaffold copy and update `context/project.md` and the composition log. Add slides with `project scaffold --stock` ([editing slides](editing-slides.md#add-a-slide)), then run `project check`. `project create` already writes and pins the portable project; use `project init` and `project split` for an existing unsplit source project.
 
 New projects use the installed V11 library. Existing projects retain their lock.
-For an upgrade, use `project migrate --project PATH --dry-run`, then repeat
-without `--dry-run`. See [migration](cli-reference.md#move-a-project-to-a-new-cli-version).
+For an upgrade, choose an explicit bundle target and follow
+[project upgrades](upgrading-projects.md); schema conversion and template
+revision changes are separate.
 For a historical project, split with the bundle matching its lock.
 
 ## Project files
@@ -52,7 +52,7 @@ Command details are in the [CLI reference](cli-reference.md#deck-projects).
 1. Read `project.md` and `composition-log.yaml`, then run `project status`.
 2. Check invalidated approvals, and whether the generated deck was edited by hand (a changed baseline blocks build and export). If `check` reports `project.toolchain_drift`, the CLI was upgraded; follow the re-pin steps in the [CLI reference](cli-reference.md#move-a-project-to-a-new-cli-version) with the operator's agreement.
 3. Continue from the first unresolved step. Don't redo approved stages whose inputs haven't changed.
-4. If someone edited the generated PowerPoint, keep that file, record who changed what, and copy the changes into the slide files by hand.
+4. If someone edited a PowerPoint working copy, preserve it and the immutable build baseline. Use [reviewed text reconciliation](editing-slides.md#rebuild-or-update-an-existing-deck) for supported fields; manually translate geometry, formatting and unsupported content after review.
 5. If `state.json` is missing but `builds/` exists, ask the operator to restore it; don't guess.
 
 ## Export
@@ -79,11 +79,7 @@ Build experiments in temporary directories. Never prune `builds/`, locks, state,
 
 ## Portable numbered projects and colleague handoff
 
-New projects can be created directly from an actual shared template:
-
-```sh
-pptxgengo design project create --out ./client-deck --id client-deck --title 'Client deck' --bundle v11 --template cards/3
-```
+Use the project created above or migrate an existing project's folder layout.
 
 Replace scaffold example copy before approval or delivery. New/split sources use
 `slides/<stable-id>.yaml`, local definitions use `slides/templates/`, and owned
@@ -122,8 +118,7 @@ copies; never pick an arbitrary winner or remove a build/source/version lock to
 force progress. A complete interrupted snapshot can be recovered only with
 `version recover --number NUMBER --expect-current-sha256 EXACT_POINTER_HASH`
 (or `absent` for the initial unpublished pointer). Incomplete snapshots remain
-retained for explicit resolution. See the maintained portable-project contract
-in `docs/portable-projects.md` in the source repository for schema and limits.
+retained for explicit resolution. Preserve the reported conflict and resolve its exact predecessor before resuming.
 
 ### Native editing profile
 
@@ -135,9 +130,6 @@ selects original structure when needed.
 
 The renderer adapts eligible measured lists, cards and tables while retaining
 source styles and geometry. Read conversion/retention reasons in layout reports
-and the catalog-wide `native-editing-coverage.json`. Frozen shared template bytes
-stay pinned. Gallery previews describe original specimens and do not qualify all
+and the catalog-wide `native-editing-coverage.json`. Shared template definitions remain pinned. Gallery previews describe original specimens and do not qualify all
 native adaptations. Preserve old builds and review the new PowerPoint. Complex
-artwork and incompatible geometry retain their structure. Stock card/bullet
-source adoption remains manual. See `docs/native-editing-profile.md` for scope,
-font prerequisites and native evidence.
+artwork and incompatible geometry retain their structure. Combined card/list text currently requires manual source adoption; do not infer original fields or list keys from edited paragraphs. Install the bundled IBM Plex fonts and review the rendered result; a profile setting does not record visual acceptance.
