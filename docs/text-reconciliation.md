@@ -14,6 +14,13 @@ only unique named plain string mappings. Rich runs, bullets, table cells and
 unmapped content remain manual review; the rendering profile never infers field
 identity from visible copy or position.
 
+The geometry development build adds an opt-in `--geometry` proposal path for
+transforms and existing-object paint order. It shares the closed packet,
+replay, explicit decisions, guarded adoption and immutable history protections.
+See [operator geometry guidance](../skills/west-monroe-presentations/references/architecture-geometry.md)
+and the [remaining scope](geometry-editing-scope.md). This does not change the
+v4.2.1 behavior described below.
+
 ## Preserve and propose
 
 Keep the original `builds/<build-id>/` immutable. Edit a separate PowerPoint copy.

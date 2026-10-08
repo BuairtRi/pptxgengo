@@ -44,3 +44,9 @@ For project folder repair, read the West Monroe skill's project-structure
 reference. `project layout` normalizes active slide/local-template references;
 it does not reorganize assets, context or immutable build/version history.
 Preserve predecessors, update other authored references deliberately and rebuild.
+
+For architecture customization and the geometry development commands, read
+[architecture and geometry](../../west-monroe-presentations/references/architecture-geometry.md).
+The promoted v4.2.1 still has text-only adoption; the development build adds
+reviewed tagged transforms and existing-object paint order. Native topology and
+route edits remain explicit review.

@@ -27,9 +27,12 @@ func CheckSlideFit(p *Project, ids []string, bundle, engine string) error {
 		return fmt.Errorf("fit check requires known slide IDs")
 	}
 	c.Document.Slides, c.Document.Sections = slides, nil
-	_, _, err = wmdesign.BuildWithEngineAndAssets(bundle, "", c.Document, engine, c.Assets)
+	native, report, err := wmdesign.BuildWithEngineAndAssets(bundle, "", c.Document, engine, c.Assets)
 	if err != nil {
 		return fmt.Errorf("slide fit check failed; source unchanged: %w", err)
+	}
+	if _, err = applyNativeGeometry(native, c.Document, &report); err != nil {
+		return fmt.Errorf("native geometry fit check failed; source unchanged: %w", err)
 	}
 	return nil
 }

@@ -693,6 +693,10 @@ func Build(p *Project, opts BuildOptions) (Receipt, error) {
 	if e != nil {
 		return r, e
 	}
+	pptxBytes, e = applyNativeGeometry(pptxBytes, c.Document, &report)
+	if e != nil {
+		return r, e
+	}
 	lock, lockBytes, e := ReadLock(p)
 	if e != nil {
 		return r, e

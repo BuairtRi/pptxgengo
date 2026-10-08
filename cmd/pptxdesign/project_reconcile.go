@@ -20,6 +20,9 @@ func runProjectReconcile(args []string) error {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 	if action == "propose" {
+		geometry := f.Bool("geometry", false, "also propose tagged native transforms and paint order; imports, deletions and route edits require manual review")
+		bundle := f.String("bundle", "", "bundle path/revision, defaults to project lock")
+		engine := f.String("engine", "", "engine, defaults to project lock")
 		build := f.String("build", "", "baseline build ID; defaults to the state-pinned current build")
 		receipt := f.String("receipt-sha256", "", "trusted receipt SHA-256, required for a historical baseline")
 		edited := f.String("edited", "", "edited PPTX copy; immutable build originals must be preserved")
@@ -42,7 +45,16 @@ func runProjectReconcile(args []string) error {
 		if err != nil {
 			return err
 		}
-		packet, err := deckproject.WriteTextReviewPacket(p, b, raw, *out)
+		var packet *deckproject.TextReviewPacket
+		if *geometry {
+			runtimeBundle, runtimeEngine, e := projectRuntime(p, *bundle, *engine)
+			if e != nil {
+				return e
+			}
+			packet, err = deckproject.WriteGeometryReviewPacket(p, b, raw, *out, runtimeBundle, runtimeEngine)
+		} else {
+			packet, err = deckproject.WriteTextReviewPacket(p, b, raw, *out)
+		}
 		if err != nil {
 			return err
 		}

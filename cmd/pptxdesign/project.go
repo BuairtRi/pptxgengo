@@ -14,7 +14,7 @@ import (
 // runProject is isolated from the legacy scene/semantic JSON build commands.
 func runProject(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|reconcile|editability> --project PATH [--bundle v11|PATH]")
+		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|diagram|reconcile|editability> --project PATH [--bundle v11|PATH]")
 	}
 	if args[0] == "create" {
 		return runProjectCreate(args[1:])
@@ -24,6 +24,9 @@ func runProject(args []string) error {
 	}
 	if args[0] == "editability" {
 		return runProjectEditability(args[1:])
+	}
+	if args[0] == "diagram" {
+		return runProjectDiagram(args[1:])
 	}
 	if args[0] == "reconcile" {
 		return runProjectReconcile(args[1:])

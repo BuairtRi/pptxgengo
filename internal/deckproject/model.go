@@ -1,5 +1,6 @@
 // Package deckproject compiles human-edited deck sources into immutable,
-// source-pinned WMDS build artifacts. It does not reverse-compile edited PPTX.
+// source-pinned WMDS build artifacts. Reviewed receipt-bound native changes
+// can be adopted; it does not infer arbitrary edited PPTX as authored source.
 package deckproject
 
 import (
@@ -33,18 +34,21 @@ type AssetFocus struct {
 	Y float64 `json:"y"`
 }
 type Slide struct {
-	ID            string                    `json:"id"`
-	Hidden        bool                      `json:"hidden,omitempty"`
-	Notes         string                    `json:"notes,omitempty"`
-	DraftReview   *wmdesign.DraftReviewNote `json:"draft_review,omitempty"`
-	ContentKind   string                    `json:"content_kind"`
-	Template      Reference                 `json:"template"`
-	Values        map[string]any            `json:"values"`
-	Density       string                    `json:"density,omitempty"`
-	HeaderDensity string                    `json:"header_density,omitempty"`
-	AutoDensity   *bool                     `json:"auto_density,omitempty"`
-	Brief         string                    `json:"brief,omitempty"`
-	EvidenceRefs  []string                  `json:"evidence_refs,omitempty"`
+	NativeGeometryTemplate *Reference                `json:"native_geometry_template,omitempty"`
+	NativeGeometry         map[string]NativeGeometry `json:"native_geometry,omitempty"`
+	NativeOrder            map[string][]string       `json:"native_order,omitempty"`
+	ID                     string                    `json:"id"`
+	Hidden                 bool                      `json:"hidden,omitempty"`
+	Notes                  string                    `json:"notes,omitempty"`
+	DraftReview            *wmdesign.DraftReviewNote `json:"draft_review,omitempty"`
+	ContentKind            string                    `json:"content_kind"`
+	Template               Reference                 `json:"template"`
+	Values                 map[string]any            `json:"values"`
+	Density                string                    `json:"density,omitempty"`
+	HeaderDensity          string                    `json:"header_density,omitempty"`
+	AutoDensity            *bool                     `json:"auto_density,omitempty"`
+	Brief                  string                    `json:"brief,omitempty"`
+	EvidenceRefs           []string                  `json:"evidence_refs,omitempty"`
 }
 type Zone struct {
 	Role           string         `json:"role"`

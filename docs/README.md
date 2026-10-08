@@ -57,3 +57,5 @@ and inherited Node demos are also separate from the Go release process.
 [Geometry editing and architecture reconciliation](geometry-editing-scope.md)
 records the requested next work. It is a planned contract, not an installed CLI
 capability.
+
+- [Geometry editing](geometry-editing.md): source/rendering contract and bounded development qualification; [remaining scope](geometry-editing-scope.md).

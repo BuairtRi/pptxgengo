@@ -4,6 +4,9 @@ Keep the source and generated baseline together. Author source changes in the pr
 
 Commands run as `pptxgengo design project … --project PATH`. Use block-style YAML in slide files and patches. In flow style (`{…}`), quote any value containing a comma; an unquoted comma breaks the map, sometimes with a misleading `binding.unsupported_field` error.
 
+For nodes inside an architecture slide and native geometry changes, use
+[architecture and geometry](architecture-geometry.md).
+
 ## Put each slide in its own file
 
 ```sh

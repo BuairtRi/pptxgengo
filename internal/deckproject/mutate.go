@@ -212,8 +212,12 @@ func Detach(p *Project, slideID, newID, bundle, engine, reason string) (Mutation
 		}
 		kind, _ := args["type"].(string)
 		b, ok := bounds[n.ID]
-		if !ok || b.W <= 0 || b.H <= 0 {
-			return Mutation{}, fmt.Errorf("detach requires positive measured scene bounds: %s", n.ID)
+		if !ok {
+			return Mutation{}, fmt.Errorf("measured scene bounds missing: %s", n.ID)
+		}
+		b, errBounds := editableSceneAllocation(kind, args, b)
+		if errBounds != nil {
+			return Mutation{}, fmt.Errorf("%s: %w", n.ID, errBounds)
 		}
 		zone, origin, e := chooseZone(b, frame)
 		if e != nil {

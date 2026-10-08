@@ -149,8 +149,12 @@ func ScaffoldTemplate(bundle, key, engine, reason string, year int, omitNodes ..
 		}
 		kind, _ := args["type"].(string)
 		b, ok := bounds[node.ID]
-		if !ok || b.W <= 0 || b.H <= 0 {
-			return out, fmt.Errorf("template scaffold requires positive measured bounds: %s", node.ID)
+		if !ok {
+			return out, fmt.Errorf("measured scene bounds missing: %s", node.ID)
+		}
+		b, errBounds := editableSceneAllocation(kind, args, b)
+		if errBounds != nil {
+			return out, fmt.Errorf("%s: %w", node.ID, errBounds)
 		}
 		zone, origin, err := chooseZone(b, frame)
 		if err != nil {

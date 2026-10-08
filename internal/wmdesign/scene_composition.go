@@ -26,6 +26,25 @@ func ComposeSceneNode(kind string, arguments map[string]any, allocation Rect) (j
 		n[k] = v
 	}
 	n["type"] = kind
+	if space, exists := n["point_space"]; exists {
+		if kind != "connector" || space != "allocation" {
+			return nil, fmt.Errorf("point_space allocation is only supported for connector")
+		}
+		var points [][2]float64
+		raw, err := json.Marshal(n["points"])
+		if err != nil {
+			return nil, err
+		}
+		if err = json.Unmarshal(raw, &points); err != nil || len(points) < 2 {
+			return nil, fmt.Errorf("connector allocation points require at least two coordinate pairs")
+		}
+		for i := range points {
+			points[i][0] = allocation.X + points[i][0]*allocation.W
+			points[i][1] = allocation.Y + points[i][1]*allocation.H
+		}
+		n["points"] = points
+		delete(n, "point_space")
+	}
 	if kind != "connector" {
 		if kind == "maturity" {
 			// The source curve has2.5pt stroked endpoints. A local allocation
