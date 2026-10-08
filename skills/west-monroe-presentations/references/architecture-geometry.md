@@ -134,13 +134,31 @@ pptxgengo design project diagram connect --project ./deck --slide architecture \
   --actor deck-author --reason 'Show the dependency'
 ```
 
-Review the preview; repeat with `--apply`. Straight arrows support stock `block`
-and `editable-block` rectangle targets and top/left/bottom/right sites. Authored
-node movement recalculates endpoints. `--head` accepts none/start/end/both;
-`--style` accepts solid/dashed/dotted. Elbows, obstacle avoidance, custom bends,
-and container connection sites are not implemented by this command. Inspect
-crossings and inner-container clearance; frame-box checks do not establish
-visual or full stroke/arrowhead clearance.
+Review the preview; repeat with `--apply`. Arrows support stock `block` and
+`editable-block` rectangle targets and top/left/bottom/right sites. Authored node
+movement recalculates endpoints. `--head` accepts none/start/end/both;
+`--style` accepts solid/dashed/dotted.
+
+Use `--route horizontal` for a horizontal/vertical/horizontal elbow, or
+`--route vertical` for a vertical/horizontal/vertical elbow. `--bend .35` places
+the middle segment at 35% of the first axis from the start; it defaults to 50%.
+Source bend fractions must be in `[0,1]`. Straight is the default and does not
+accept `--bend`. `inspect` returns the final calculated path points in slide
+coordinates, including adopted transforms and bend positions. These are single
+native attached connectors, not separate line fragments.
+
+A supported native elbow bend edit can be reviewed through `reconcile propose
+--geometry`; adoption persists its `bentConnector3` preset and literal `adj1`
+guide in `native_geometry/<name>/route`. Guides outside the endpoint rectangle
+are permitted only when their calculated allocation still fits the frame and
+any declared container. A source layout reset removes adopted bend overrides
+along with transforms, returning to the source-authored route.
+
+Obstacle avoidance, custom paths, curved/other elbow presets, connector labels,
+and container connection sites are not implemented. Unsupported metadata or
+attachment changes remain review items. Inspect crossings and inner-container
+clearance visually; allocation checks do not establish stroke/arrowhead or native
+Save As fidelity.
 
 ## Reconcile native geometry
 
@@ -223,7 +241,7 @@ The map supports complete top-level `block`/`editable-block` components with
 matching native structure and styling. Copies can move, resize, rotate, flip,
 and change uniquely bound plain text. Each copy gets independent source bindings.
 The copied source component must be unchanged in YAML since the baseline.
-Literal text changes, rich formatting, new arbitrary Office objects, routes,
+Literal text changes, rich formatting, new arbitrary Office objects, unsupported routes,
 and reparenting need separate source authoring or further implementation.
 
 PowerPoint may duplicate identity tags along with objects. The explicit map

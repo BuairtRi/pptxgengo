@@ -29,6 +29,8 @@ func runProjectDiagram(args []string) error {
 	toSite := f.String("to-site", "left", "top, left, bottom or right")
 	head := f.String("head", "end", "none, start, end or both")
 	style := f.String("style", "solid", "solid, dashed or dotted")
+	route := f.String("route", "straight", "straight, horizontal or vertical elbow")
+	bend := f.Float64("bend", .5, "elbow bend fraction in [0,1]")
 	nodes := f.String("nodes", "", "comma-separated source IDs for arrange, or native member names for containment")
 	align := f.String("align", "", "left, right, top, bottom, center or middle")
 	distribute := f.String("distribute", "", "horizontal or vertical")
@@ -44,7 +46,7 @@ func runProjectDiagram(args []string) error {
 		return e
 	}
 	common := map[string]bool{"project": true, "slide": true, "bundle": true, "engine": true}
-	allowed := map[string]map[string]bool{"inspect": {}, "patch": {"patch": true, "apply": true}, "connect": {"id": true, "from": true, "to": true, "from-site": true, "to-site": true, "head": true, "style": true, "actor": true, "reason": true, "apply": true}, "contain": {"container": true, "nodes": true, "padding": true, "padding-top": true, "padding-right": true, "padding-bottom": true, "padding-left": true, "actor": true, "reason": true, "apply": true}, "uncontain": {"nodes": true, "actor": true, "reason": true, "apply": true}, "arrange": {"nodes": true, "align": true, "distribute": true, "actor": true, "reason": true, "apply": true}}
+	allowed := map[string]map[string]bool{"inspect": {}, "patch": {"patch": true, "apply": true}, "connect": {"id": true, "from": true, "to": true, "from-site": true, "to-site": true, "head": true, "style": true, "route": true, "bend": true, "actor": true, "reason": true, "apply": true}, "contain": {"container": true, "nodes": true, "padding": true, "padding-top": true, "padding-right": true, "padding-bottom": true, "padding-left": true, "actor": true, "reason": true, "apply": true}, "uncontain": {"nodes": true, "actor": true, "reason": true, "apply": true}, "arrange": {"nodes": true, "align": true, "distribute": true, "actor": true, "reason": true, "apply": true}}
 	var flagErr error
 	f.Visit(func(v *flag.Flag) {
 		if !common[v.Name] && !allowed[args[0]][v.Name] {
@@ -72,7 +74,13 @@ func runProjectDiagram(args []string) error {
 	if args[0] == "inspect" {
 		result, e = deckproject.InspectDiagram(p, *slide, b, en)
 	} else if args[0] == "connect" {
-		result, e = deckproject.ConnectDiagram(p, *slide, *id, *from, *fromSite, *to, *toSite, *head, *style, *actor, *reason, b, en, *apply)
+		var bendValue *float64
+		f.Visit(func(v *flag.Flag) {
+			if v.Name == "bend" {
+				bendValue = bend
+			}
+		})
+		result, e = deckproject.ConnectRoutedDiagram(p, *slide, *id, *from, *fromSite, *to, *toSite, *head, *style, *route, bendValue, *actor, *reason, b, en, *apply)
 	} else if args[0] == "contain" || args[0] == "uncontain" {
 		ids := strings.Split(*nodes, ",")
 		for i := range ids {

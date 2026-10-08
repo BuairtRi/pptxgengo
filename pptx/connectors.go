@@ -57,7 +57,7 @@ func validateNativeConnectors(slide *PresSlide) error {
 			continue
 		}
 		connection := *object.Options.NativeConnection
-		if object.Type != SlideObjectTypeText || object.Shape != ShapeTypeLine || !validConnectorConnection(connection) || !validConnectorBounds(object.Options.PositionProps, false) {
+		if object.Type != SlideObjectTypeText || (object.Shape != ShapeTypeLine && object.Shape != ShapeTypeBentConnector3) || !validConnectorConnection(connection) || !validConnectorBounds(object.Options.PositionProps, false) {
 			return fmt.Errorf("invalid native connector")
 		}
 		for _, endpoint := range []ConnectorEndpoint{connection.Begin, connection.End} {

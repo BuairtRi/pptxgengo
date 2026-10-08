@@ -42,19 +42,26 @@ func threeWayStatus(a, b, c any) string {
 	}
 }
 func geometryOnlyChange(a, b *xmlNode) bool {
-	var clone func(*xmlNode) *xmlNode
-	clone = func(n *xmlNode) *xmlNode {
+	var clone func(*xmlNode, bool) *xmlNode
+	clone = func(n *xmlNode, routeSupported bool) *xmlNode {
+		if n.Name.Local == "cxnSp" && n.Name.Space == lineagePML {
+			_, err := readConnectorRoute(n)
+			routeSupported = err == nil
+		}
 		c := *n
 		c.Children = nil
 		for _, x := range n.Children {
 			if x.Name.Local == "xfrm" && (x.Name.Space == drawingML || x.Name.Space == lineagePML) {
 				continue
 			}
-			c.Children = append(c.Children, clone(x))
+			if routeSupported && n.Name.Space == lineagePML && n.Name.Local == "spPr" && x.Name.Space == drawingML && x.Name.Local == "prstGeom" {
+				continue
+			}
+			c.Children = append(c.Children, clone(x, routeSupported))
 		}
 		return &c
 	}
-	return reconcileStructureHash(clone(a)) == reconcileStructureHash(clone(b))
+	return reconcileStructureHash(clone(a, false)) == reconcileStructureHash(clone(b, false))
 }
 
 // Geometry proposals use exact tagged identity. Current YAML is rendered with
@@ -173,6 +180,14 @@ func addGeometryReconciliation(p *Project, b *TextBaseline, edited []byte, repor
 			}
 		} else {
 			f.Reason = "The source object or parent changed; geometry ownership must be reviewed."
+		}
+		if base.Kind == "cxnSp" {
+			_, originalErr := readConnectorRoute(original.shape)
+			_, nativeErr := readConnectorRoute(n.shape)
+			if originalErr != nil || nativeErr != nil {
+				f.Status = "manual_review"
+				f.Reason = "Connector route metadata is unsupported; author a supported route in YAML and rebuild a baseline."
+			}
 		}
 		f.ID = digest(canonical(f))
 		report.Geometry = append(report.Geometry, f)

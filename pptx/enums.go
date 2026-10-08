@@ -100,6 +100,7 @@ const (
 	ShapeTypeActionButtonSound          ShapeType = "actionButtonSound"
 	ShapeTypeArc                        ShapeType = "arc"
 	ShapeTypeBentArrow                  ShapeType = "bentArrow"
+	ShapeTypeBentConnector3             ShapeType = "bentConnector3"
 	ShapeTypeBentUpArrow                ShapeType = "bentUpArrow"
 	ShapeTypeBevel                      ShapeType = "bevel"
 	ShapeTypeBlockArc                   ShapeType = "blockArc"

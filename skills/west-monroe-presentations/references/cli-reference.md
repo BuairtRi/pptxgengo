@@ -238,6 +238,9 @@ toolchain migration and offline runtime export remain separate commands.
 
 `project diagram inspect|patch|connect|arrange|contain|uncontain` uses `--project` and `--slide`.
 Mutations preview by default; `--apply` commits validated source changes.
+`connect` accepts `--route straight|horizontal|vertical`; elbows optionally take
+`--bend` in `[0,1]` (default `.5`). Inspection returns final calculated path points.
+Supported literal native elbow guide changes join geometry reconciliation.
 `contain` declares native members/container and uniform or per-edge padding;
 `uncontain` explicitly removes selected memberships. Both preview before `--apply`
 and require `--actor`/`--reason`. Inspection includes clearances and sibling

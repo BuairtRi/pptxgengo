@@ -53,6 +53,7 @@ type sceneItem struct {
 }
 
 type sceneShape struct {
+	Route      *pptx.ConnectorRoute
 	Connection *pptx.ConnectorConnection
 	Type       pptx.ShapeType
 	Props      pptx.ShapeProps
