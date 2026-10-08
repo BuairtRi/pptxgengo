@@ -103,7 +103,9 @@ type Manifest struct {
 		SHA256     string `json:"sha256"`
 		PostScript string `json:"postscript_name"`
 	} `json:"fonts"`
-	Qualification string `json:"qualification"`
+	Qualification  string `json:"qualification"`
+	EditingProfile string `json:"editing_profile"`
+	MediaPolicy    string `json:"media_policy"`
 }
 
 func hash(s string) bool {

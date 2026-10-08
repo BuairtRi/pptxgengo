@@ -78,6 +78,7 @@ func run() error {
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
 	bundle := f.String("bundle", currentDesignBundle, "pinned foundation bundle path or v11 (default)")
 	engine := f.String("engine", wmdesign.CandidateEngine, "typography engine: wmds-go-foundation.v1 or wmds-go-foundation.v2 (candidate)")
+	editing := f.String("editing-profile", wmdesign.NativeEditingProfile, "template rendering: native-v1 (default) or stock")
 	source := f.String("source", "", "optional WMDS source override; must match pinned snapshot")
 	out := f.String("out", "", "new output directory")
 	spec := f.String("spec", "", "foundation document JSON")
@@ -88,6 +89,9 @@ func run() error {
 	year := f.Int("year", time.Now().Year(), "explicit legal year for reference generation")
 	if e := f.Parse(os.Args[2:]); e != nil {
 		return e
+	}
+	if err := wmdesign.ValidateEditingProfile(*editing); err != nil {
+		return err
 	}
 	if f.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
@@ -105,7 +109,7 @@ func run() error {
 		if *spec != "" {
 			return fmt.Errorf("%s does not accept --spec", command)
 		}
-		return runLibrary(command, *bundle, *source, *engine, *out, *family, *templateKeys, *templateKeysFile, *includeDeprecated, *year)
+		return runLibrary(command, *bundle, *source, *engine, *out, *family, *templateKeys, *templateKeysFile, *includeDeprecated, *year, *editing)
 	}
 	if *templateKeys != "" || *templateKeysFile != "" || *includeDeprecated {
 		return fmt.Errorf("--template-keys/--template-keys-file/--include-deprecated require a library command")
@@ -114,7 +118,7 @@ func run() error {
 		return fmt.Errorf("--family is supported only by library reference and sweep commands")
 	}
 	if command == "templates" || command == "template" || command == "template-reference" {
-		return runTemplates(command, *bundle, *source, *engine, *out, *spec, *year)
+		return runTemplates(command, *bundle, *source, *engine, *out, *spec, *year, *editing)
 	}
 	if command == "inspect" {
 		s, e := wmdesign.Load(*bundle, *source)

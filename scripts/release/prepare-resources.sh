@@ -4,10 +4,73 @@ set -euo pipefail
 source "$(dirname "$0")/common.sh"
 require_release_identity
 policy="${PPTXGENGO_BROWSING_POLICY:-required}"
-case "$policy" in required|deferred) ;; *) echo 'Unknown browsing policy' >&2; exit 1 ;; esac
+case "$policy" in required|deferred|templates-only) ;; *) echo 'Unknown browsing policy' >&2; exit 1 ;; esac
 case "${PPTXGENGO_PACKAGE_KIND:-cli-only}" in full|cli-only) ;; *) echo 'Unknown package kind' >&2; exit 1 ;; esac
 if [[ "$policy" == deferred ]]; then
   [[ "${PPTXGENGO_PACKAGE_KIND:-cli-only}" == cli-only ]] || { echo 'Deferred browsing is allowed only for CLI-only releases' >&2; exit 1; }
+  release_ci prepare-resource-policy dist/resources "$release_version" "$release_commit"
+  exit 0
+fi
+if [[ "$policy" == templates-only ]]; then
+  [[ "${PPTXGENGO_PACKAGE_KIND:-cli-only}" == cli-only ]] || { echo 'Template-only browsing is supported only for CLI-only releases' >&2; exit 1; }
+  export WMDS_BROWSING_AS_OF="${WMDS_BROWSING_AS_OF:-${CI_PIPELINE_CREATED_AT:0:10}}"
+  [[ "${WMDS_BROWSING_AS_OF:-}" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || { echo 'Set WMDS_BROWSING_AS_OF to the release review date (YYYY-MM-DD)' >&2; exit 1; }
+  [[ -n "${CI_PIPELINE_CREATED_AT:-}" && "$WMDS_BROWSING_AS_OF" == "${CI_PIPELINE_CREATED_AT:0:10}" ]] || { echo 'Template catalog date must match the authoritative GitLab pipeline creation date' >&2; exit 1; }
+  tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
+  bundle_revision="$(cat release/default-bundle.txt)"
+  bundle_source="library/wm-design-system/$bundle_revision"
+  go build -buildvcs=false -trimpath -ldflags "-X main.version=$release_version -X main.releaseIdentity=$release_commit" -o "$tmp/pptxdesign" ./cmd/pptxdesign
+  "$tmp/pptxdesign" browsing-library --kind templates --frames "${WMDS_BROWSING_FRAMES:-catalog}" --media-policy placeholders --bundle "$bundle_source" --as-of "${WMDS_BROWSING_AS_OF:-${CI_PIPELINE_CREATED_AT:0:10}}" --out "$tmp/template-browsing"
+  mkdir -p dist/resources/browsing "dist/resources/$bundle_source"
+  cp "$tmp/template-browsing/template-library.pptx" dist/resources/browsing/
+  cp "$tmp/template-browsing/browsing-manifest.json" dist/resources/browsing/template-library.manifest.json
+  dest="dist/resources/$bundle_source"
+  cp "$bundle_source/bundle.json" "$bundle_source/README.md" "$bundle_source/inventory.json" "$dest/"
+  for part in source fonts typography assets; do [[ ! -e "$bundle_source/$part" ]] || cp -R "$bundle_source/$part" "$dest/"; done
+  mkdir -p "$dest/catalog"
+  cp "$bundle_source/catalog/index.json" "$bundle_source/catalog/publication-report.json" "$bundle_source/catalog/design-system.html" "$dest/catalog/"
+  cp -R "$bundle_source/catalog/design-system" "$dest/catalog/"
+  if [[ -f "$tmp/template-browsing/native-editing-coverage.json" ]]; then cp "$tmp/template-browsing/native-editing-coverage.json" dist/resources/browsing/; fi
+  "$tmp/pptxdesign" library-index --bundle "$dest" --gallery "$dest/catalog" --out "$dest/library.sqlite" >/dev/null
+  python3 - "$dest" "$bundle_revision" <<'PY'
+import json, sqlite3, sys
+from pathlib import Path
+bundle=Path(sys.argv[1]); revision=sys.argv[2]
+relative=Path('library/wm-design-system')/revision
+with sqlite3.connect(bundle/'library.sqlite') as db:
+    row=db.execute("SELECT value FROM meta WHERE key='report'").fetchone()
+    if row is None: raise SystemExit('template catalog SQLite report missing')
+    report=json.loads(row[0]); report['path']=(relative/'library.sqlite').as_posix()
+    report['options']['bundle']=relative.as_posix(); report['options']['gallery']=(relative/'catalog').as_posix()
+    db.execute("UPDATE meta SET value=? WHERE key='report'",(json.dumps(report,separators=(',',':')),))
+PY
+  # Confirm ordinary runtime discovery works after moving the complete source
+  # bundle; queries must not depend on the build checkout or staging path.
+  mkdir -p "$tmp/relocated/bin" "$tmp/relocated/library/wm-design-system"
+  cp "$tmp/pptxdesign" "$tmp/relocated/bin/pptxdesign"
+  cp -R "$dest" "$tmp/relocated/library/wm-design-system/$bundle_revision"
+  (cd /tmp && "$tmp/relocated/bin/pptxdesign" library-find --query 'weekly status' --kinds template --summary > "$tmp/relocated-query.json")
+  python3 - "$tmp/relocated-query.json" <<'PY'
+import json,sys
+if not json.load(open(sys.argv[1])).get('matches'): raise SystemExit('relocated template catalog search returned no results')
+PY
+  python3 - "$tmp/template-browsing/browsing-manifest.json" dist/resources <<'PY'
+import hashlib, json, os, sys
+from pathlib import Path
+manifest=json.loads(Path(sys.argv[1]).read_text())
+root=Path(sys.argv[2])
+files={}
+for subtree in ('browsing','library'):
+    base=root/subtree
+    for path in sorted(base.rglob('*')):
+        if path.is_symlink(): raise SystemExit(f'linked resource refused: {path}')
+        if path.is_file():
+            rel=path.relative_to(root).as_posix()
+            files[rel]=hashlib.sha256(path.read_bytes()).hexdigest()
+bundle=Path(manifest['source_revision'].removeprefix('wmds-library.'))
+out={'schema':'pptxgengo.template-catalog-release.v1','files_sha256':files,'bundle':bundle.name,'source_revision':manifest['source_revision'],'source_commit':manifest['source_commit'],'bundle_sha256':manifest['bundle_sha256'],'compiler':manifest['compiler'],'release_identity':manifest['release_identity'],'as_of':manifest['as_of'],'pipeline_created_at':os.environ['CI_PIPELINE_CREATED_AT'],'editing_profile':manifest['editing_profile'],'media_policy':manifest['media_policy']}
+(root/'template-catalog-manifest.json').write_text(json.dumps(out,indent=2)+'\n')
+PY
   release_ci prepare-resource-policy dist/resources "$release_version" "$release_commit"
   exit 0
 fi
@@ -34,7 +97,7 @@ fetch_private "$WMDS_FINISHED_LIBRARY_ARCHIVE_URL" "$WMDS_FINISHED_LIBRARY_ARCHI
 export WMDS_BRANDING_ROOT="$tmp/branding"
 bundle_revision="$(cat release/default-bundle.txt)"
 go build -buildvcs=false -trimpath -ldflags "-X main.version=$release_version -X main.releaseIdentity=$release_commit" -o "$tmp/pptxdesign" ./cmd/pptxdesign
-"$tmp/pptxdesign" browsing-library --kind templates --frames "${WMDS_BROWSING_FRAMES:-catalog}" --bundle "library/wm-design-system/$bundle_revision" --as-of "$WMDS_BROWSING_AS_OF" --out "$tmp/template-browsing"
+"$tmp/pptxdesign" browsing-library --kind templates --frames "${WMDS_BROWSING_FRAMES:-catalog}" --media-policy originals --bundle "library/wm-design-system/$bundle_revision" --as-of "$WMDS_BROWSING_AS_OF" --out "$tmp/template-browsing"
 "$tmp/pptxdesign" browsing-library --kind reusable --bundle "library/wm-design-system/$bundle_revision" --as-of "$WMDS_BROWSING_AS_OF" --finished-library "$tmp/finished-library" --out "$tmp/reusable-browsing"
 if [[ "${PPTXGENGO_PACKAGE_KIND:-cli-only}" == full ]]; then
   # Stage-only verifies registered originals and documentation before packaging.

@@ -188,10 +188,15 @@ source commands, supported dependencies and remaining curation/native work.
 
 ## Browse without the CLI
 
-Installation archives include `browsing/template-library.pptx` and
-`browsing/reusable-slides.pptx` when their required private release inputs are
-available. Read the How to use page and family dividers. Copy with Keep Source
-Formatting and review the destination deck. Deprecated templates are visibly
-labeled; reusable content includes only the latest approved, nonexpired revisions
-and retains approval scope and revision metadata. Browsing does not grant
-permission for a different reuse scope or qualify adapted content.
+Template-inclusive archives contain `browsing/template-library.pptx`, its exact
+provenance manifest and native editing coverage, plus the pinned template source,
+fonts, catalog and SQLite discovery index. The template deck has every retained
+template, a How to use page, family dividers and catalog frame variants. It uses
+native editing enhancements where compatible and schematic media placeholders;
+these are not original photographs or graphics. Copy with Keep Source Formatting
+and review the destination deck. Deprecated templates are visibly labeled.
+
+The separate content-complete reusable-slide browsing deck is deferred. Its
+future release needs a real approved inventory; synthetic template examples are
+not approved reusable content. Existing v4.2.0 binary-only archives omit both
+browsing decks and SQLite.

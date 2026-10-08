@@ -360,3 +360,23 @@ PowerPoint comparison demo was approved on 2026-10-07. The scoped resource
 policy and bounded opt-in editing profile preserve deferred content and native
 qualification limits. See the
 [component demo and remaining qualification](../native-component-demo.md).
+
+
+## Template browsing and native catalog correction — 2026-10-07
+
+Ri explicitly retained the template browsing deck in this release scope and
+continued to defer the separate content-complete reusable-slide deck. New v2
+projects and CLI template generation now select native-v1 by default, with
+explicit stock compatibility for prior projects and specimens. Eligible native
+lists (including body blocks), card paragraphs and tables preserve source
+measurements; complex variants carry retention reasons. The frozen V11 bundle
+is unchanged. Catalog-wide rendered coverage accompanies the 717-slide template
+browsing deck; it does not claim exhaustive native desktop qualification.
+
+The template-only release policy packages the generated PowerPoint, its metadata,
+template source, fonts, catalog and rebuilt SQLite index together. Registered
+external photos, icons and artwork use explicitly labeled schematic placeholders
+in the browsing deck. The complete original graphics/photo collections and
+finished-slide curation remain deferred. Existing v4.2.0 bytes remain unchanged;
+these additions require a new tag. See [browsing libraries](../browsing-libraries.md)
+and [native editing](../native-editing-profile.md) for the current contract.

@@ -571,6 +571,8 @@ func seal(dir, version, commit string) error {
 	m := Manifest{Schema: "pptxgengo.release-manifest/v1", Project: "riscott/pptxgengo", Version: version, Commit: commit, Pipeline: os.Getenv("CI_PIPELINE_URL"), PackageKind: resources.PackageKind, BrowsingPolicy: resources.BrowsingPolicy, Branding: "verified-private-browsing-decks", Files: map[string]string{}, Targets: targets}
 	if resources.BrowsingPolicy == "deferred" {
 		m.Branding = "none-distribution-deferred"
+	} else if resources.BrowsingPolicy == "templates-only" {
+		m.Branding = "template-catalog-no-private-media"
 	}
 	if offlineModelEnabled() {
 		m.OfflineModelArchive = modelArchiveName(version)
@@ -659,6 +661,8 @@ func verify(dir, version, commit string) error {
 		}
 		if p.BrowsingPolicy == "deferred" {
 			branding = "none-distribution-deferred"
+		} else if p.BrowsingPolicy == "templates-only" {
+			branding = "template-catalog-no-private-media"
 		}
 		if m.Branding != branding {
 			return fmt.Errorf("signed branding scope mismatch")

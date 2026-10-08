@@ -65,6 +65,7 @@ type ComponentRecord struct {
 	ID             string         `json:"id"`
 	Definition     string         `json:"definition"`
 	Contract       string         `json:"contract"`
+	NativeObject   bool           `json:"native_object,omitempty"`
 	Rect           Rect           `json:"rect"`
 	RequiredHeight float64        `json:"required_height_pt"`
 	Padding        float64        `json:"padding_pt,omitempty"`
@@ -509,6 +510,9 @@ func (r *renderer) planComponent(n Node, b, zone Rect, surface string) (componen
 		}
 	}
 	p.record.Rect = b
+	if r.editingProfile == NativeEditingProfile {
+		p = r.applyNativeProfileComponent(n, p, zone, surface)
+	}
 	return p, r.err
 }
 func outlineParts(p *componentPlan, id string, b Rect, color string, weight float64) {
@@ -519,12 +523,24 @@ func outlineParts(p *componentPlan, id string, b Rect, color string, weight floa
 	}
 }
 func (r *renderer) drawComponent(p componentPlan) {
+	if len(p.texts) == 1 && p.texts[0].NativeShape != nil {
+		tr := p.texts[0]
+		plan := &scenePlan{ID: p.record.ID, Bounds: p.record.Rect, Items: []sceneItem{{Text: &tr}}}
+		if err := r.drawScene(plan, &SlideReport{}, ""); err != nil {
+			r.err = err
+		}
+		return
+	}
 	for _, sh := range p.record.Shapes {
 		if !r.drawMetricShape(sh) {
 			r.shape(sh.ID, sh.Rect, sh.Color, 0)
 		}
 	}
 	for _, tr := range p.texts {
-		r.text(tr.ID, tr.Layout.Original, tr.Layout.Style, tr.Rect, tr.Color, tr.Align, 0)
+		if tr.NativeParagraphContract == EditableListContract {
+			r.drawRich(tr)
+		} else {
+			r.text(tr.ID, tr.Layout.Original, tr.Layout.Style, tr.Rect, tr.Color, tr.Align, 0)
+		}
 	}
 }

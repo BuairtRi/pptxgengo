@@ -38,8 +38,10 @@ func validateOwnedParts(sr SlideReport) error {
 		}
 	}
 	for _, c := range sr.Components {
-		if e := add(c.ID); e != nil {
-			return e
+		if !c.NativeObject {
+			if e := add(c.ID); e != nil {
+				return e
+			}
 		}
 		for _, sh := range c.Shapes {
 			if e := add(sh.ID); e != nil {
@@ -115,6 +117,9 @@ func componentGroups(raw []byte, slides []SlideReport) ([]byte, error) {
 				}
 			}
 			for _, c := range cs {
+				if c.NativeObject {
+					continue
+				}
 				owned := map[string]bool{}
 				for _, id := range c.Parts {
 					owned[id] = true

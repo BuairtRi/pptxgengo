@@ -85,9 +85,10 @@ type TextRecord struct {
 // NativeTextShape records the containing rectangle of the editable-block pilot.
 // TextRecord.Rect remains the independently measured inner text allocation.
 type NativeTextShape struct {
-	Rect              Rect   `json:"rect"`
-	Fill              string `json:"fill"`
-	ParagraphContract string `json:"paragraph_contract,omitempty"`
+	Rect              Rect                 `json:"rect"`
+	Fill              string               `json:"fill"`
+	Line              *pptx.ShapeLineProps `json:"line,omitempty"`
+	ParagraphContract string               `json:"paragraph_contract,omitempty"`
 }
 type SlideReport struct {
 	ID              string               `json:"id"`

@@ -9,7 +9,7 @@ import (
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
 )
 
-func runTemplates(command, bundle, source, engine, out, spec string, year int) error {
+func runTemplates(command, bundle, source, engine, out, spec string, year int, editing ...string) error {
 	if engine != wmdesign.CandidateEngine {
 		return fmt.Errorf("%s requires --engine %s", command, wmdesign.CandidateEngine)
 	}
@@ -54,6 +54,7 @@ func runTemplates(command, bundle, source, engine, out, spec string, year int) e
 	if e != nil {
 		return e
 	}
+	compiled.EditingProfile = templateEditingProfile(editing)
 	deck, layout, e := wmdesign.BuildWithEngine(bundle, source, compiled, engine)
 	if e != nil {
 		return e
@@ -78,4 +79,11 @@ func runTemplates(command, bundle, source, engine, out, spec string, year int) e
 	}
 	fmt.Printf("Generated %d bound slides: %s\nProfile: %s; native qualification pending.\n", len(compiled.Slides), filepath.Join(out, name), wmdesign.ProfileForEngine(engine))
 	return nil
+}
+
+func templateEditingProfile(values []string) string {
+	if len(values) > 0 {
+		return values[0]
+	}
+	return wmdesign.NativeEditingProfile
 }

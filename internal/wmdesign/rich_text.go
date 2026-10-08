@@ -56,6 +56,7 @@ type RichParagraphLayout struct {
 	Bullet            bool            `json:"bullet,omitempty"`
 	BulletIndentPt    float64         `json:"bullet_indent_pt,omitempty"`
 	BulletMarkerPt    float64         `json:"bullet_marker_pt,omitempty"`
+	BulletColor       string          `json:"bullet_color,omitempty"`
 	ParagraphGapAfter float64         `json:"paragraph_gap_after_pt,omitempty"`
 	LineBreaks        []int           `json:"explicit_line_break_runes,omitempty"`
 }

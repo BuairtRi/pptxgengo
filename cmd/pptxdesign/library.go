@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func runLibrary(command, bundle, source, engine, out, family, templateKeys, templateKeysFile string, includeDeprecated bool, year int) error {
+func runLibrary(command, bundle, source, engine, out, family, templateKeys, templateKeysFile string, includeDeprecated bool, year int, editing ...string) error {
 	if engine != wmdesign.CandidateEngine {
 		return fmt.Errorf("%s requires --engine %s", command, wmdesign.CandidateEngine)
 	}
@@ -94,6 +94,7 @@ func runLibrary(command, bundle, source, engine, out, family, templateKeys, temp
 			}
 		}
 	}
+	doc.EditingProfile = templateEditingProfile(editing)
 	if command == "library-sweep" || command == "library-bound-sweep" {
 		return librarySweep(bundle, source, engine, out, doc)
 	}

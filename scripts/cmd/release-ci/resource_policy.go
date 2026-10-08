@@ -39,11 +39,14 @@ func validateResourcePolicy(p ResourcePolicy, version, commit string) error {
 	if p.PackageKind != "cli-only" && p.PackageKind != "full" {
 		return fmt.Errorf("unknown package kind")
 	}
-	if p.BrowsingPolicy != "required" && p.BrowsingPolicy != "deferred" {
+	if p.BrowsingPolicy != "required" && p.BrowsingPolicy != "deferred" && p.BrowsingPolicy != "templates-only" {
 		return fmt.Errorf("unknown browsing policy")
 	}
 	if p.BrowsingPolicy == "deferred" && p.PackageKind != "cli-only" {
 		return fmt.Errorf("deferred browsing is allowed only for CLI-only releases")
+	}
+	if p.BrowsingPolicy == "templates-only" && p.PackageKind != "cli-only" {
+		return fmt.Errorf("template-only browsing is allowed only for CLI-only releases")
 	}
 	return nil
 }
@@ -120,6 +123,9 @@ func addScopedBrowsingFiles(files map[string]Input, root, version, commit string
 	if p.BrowsingPolicy == "required" {
 		return addBrowsingFiles(files, root)
 	}
+	if p.BrowsingPolicy == "templates-only" {
+		return addTemplateCatalogFiles(files, root, version, commit)
+	}
 	entries, err := os.ReadDir(root)
 	if err != nil {
 		return err
@@ -131,6 +137,9 @@ func addScopedBrowsingFiles(files map[string]Input, root, version, commit string
 }
 
 func browsingContentDescription(kind, policy string) string {
+	if policy == "templates-only" {
+		return "Every installation archive includes the generated template browsing deck and a pinned source catalog, SQLite discovery index and fonts. Reusable-slide inventory and private branding/photo originals are not included. Template slides contain illustrative placeholders and are not native PowerPoint qualification."
+	}
 	if policy == "deferred" {
 		return "Browsing decks, reusable-slide inventory and branding/graphics/photo distribution are deferred to the following release. CLI-only archives omit authoring libraries, fonts and skills; presentation builds require an existing pinned authoring bundle and its fonts."
 	}

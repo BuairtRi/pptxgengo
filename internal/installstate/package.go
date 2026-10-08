@@ -19,6 +19,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/buairtri/pptxgengo/internal/browsingartifact"
 )
 
 type Package struct {
@@ -231,6 +233,19 @@ func Verify(root string) (Package, error) {
 		}
 		if e := allowBrowsingFiles(root, files, allowed); e != nil {
 			return p, e
+		}
+		if _, ok := files[browsingartifact.TemplateCatalogInventoryName]; ok {
+			inventoryRaw, err := browsingartifact.ReadManifest(filepath.Join(root, browsingartifact.TemplateCatalogInventoryName))
+			if err != nil {
+				return p, err
+			}
+			catalog, err := browsingartifact.ReadTemplateCatalogInventory(inventoryRaw)
+			if err != nil {
+				return p, err
+			}
+			p.Bundle = catalog.Bundle
+			p.SourceRevision = catalog.SourceRevision
+			p.SourceCommit = catalog.SourceCommit
 		}
 		for name := range files {
 			if !allowed[name] {
