@@ -8,7 +8,7 @@ they do not override the installed CLI or a project's lock.
 
 - [West Monroe presentation skill](../skills/west-monroe-presentations/SKILL.md): intake, voice, narrative, composition, native editing, review and delivery.
 - [Repository PowerPoint skill](../skills/pptxgengo/SKILL.md): select the current CLI or a specific source-bound repository route.
-- [Project setup and resume](../skills/west-monroe-presentations/references/project-and-resume.md), [commands](../skills/west-monroe-presentations/references/cli-reference.md), [editing](../skills/west-monroe-presentations/references/editing-slides.md), [template selection](../skills/west-monroe-presentations/references/template-selection.md), and [available media](../skills/west-monroe-presentations/references/assets.md).
+- [Project setup and resume](../skills/west-monroe-presentations/references/project-and-resume.md), [folder structure and repair](../skills/west-monroe-presentations/references/project-structure.md), [commands](../skills/west-monroe-presentations/references/cli-reference.md), [editing](../skills/west-monroe-presentations/references/editing-slides.md), [template selection](../skills/west-monroe-presentations/references/template-selection.md), and [available media](../skills/west-monroe-presentations/references/assets.md).
 
 Skill references retain what changes an agent's next authoring action: command
 forms, source/working-copy boundaries, bindings, available resources, migration,
@@ -51,3 +51,9 @@ Pinned `library/` documentation, source receipts and benchmark/sample decks stay
 with their original bundles. Their counts/qualification describe those inputs,
 not every current profile conversion. The upstream JavaScript [changelog](upstream-pptxgenjs-changelog.md)
 and inherited Node demos are also separate from the Go release process.
+
+## Next implementation slice
+
+[Geometry editing and architecture reconciliation](geometry-editing-scope.md)
+records the requested next work. It is a planned contract, not an installed CLI
+capability.

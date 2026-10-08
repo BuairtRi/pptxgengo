@@ -25,6 +25,7 @@ In short: sentence-case titles that state the conclusion as a full sentence; per
 
 | The request | Read |
 | --- | --- |
+| Inspect or repair project folders and file references | [Project structure and repair](references/project-structure.md) |
 | Start or resume a deck project | [Project and resumption](references/project-and-resume.md); on resume, run `pptxgengo design project status` before drafting |
 | Develop a deck from materials or a conversation | [Intake and framing](references/intake-and-framing.md) |
 | Write or revise the narrative, outline or slide copy | [Narrative and copy](references/narrative-and-copy.md), plus both voice references |
