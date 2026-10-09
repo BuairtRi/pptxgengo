@@ -37,7 +37,10 @@ cannot discard interleaved non-object XML.
 The layout report retains text measured in authored coordinates and separately
 records final native world bounds. Transform scaling is not a claim about native
 text reflow or typography acceptance. Frame boxes and explicitly declared inner-container allocations are checked;
-full ink extent, obstacles and crossing diagnostics remain open.
+full ink extent and automatic obstacle routing remain open. Inspection now
+reports advisory centerline crossings/overlaps and clearance from supported
+block/text allocation envelopes; see the [routing backlog](geometry-routing-backlog.md)
+for the measured scope, exclusions, and next acceptance work.
 
 ## Reconciliation protections
 
