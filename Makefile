@@ -2,6 +2,8 @@ GO ?= go
 # The full short suite includes pinned catalog/index verification; slower
 # Macs need a separate package ceiling from the small, selected race workloads.
 FAST_TEST_TIMEOUT ?= 5m
+# Only explicitly parallel, independent tests overlap; bound fixture memory.
+UNIT_TEST_PARALLEL ?= 4
 INTEGRATION_TEST_TIMEOUT ?= 10m
 RACE_TEST_TIMEOUT ?= 150s
 FULL_RACE_TEST_TIMEOUT ?= 10m
@@ -14,7 +16,7 @@ build:
 
 # Everyday checks omit only explicitly marked exhaustive/private-asset tests.
 test:
-	$(HEADLESS_TEST_ENV) $(GO) test -short -count=1 -timeout=$(FAST_TEST_TIMEOUT) ./...
+	$(HEADLESS_TEST_ENV) $(GO) test -short -parallel=$(UNIT_TEST_PARALLEL) -count=1 -timeout=$(FAST_TEST_TIMEOUT) ./...
 
 # Focused PR units plus compilation of all packages. No race detector, model
 # download, source-deck rendering, actual installers, or Office qualification.

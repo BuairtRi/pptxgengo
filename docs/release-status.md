@@ -1,5 +1,21 @@
 # Release status and qualification
 
+## v4.3.0 candidate
+
+The semantic composition capabilities and specialized skill runbooks are merged
+to main. [The completion matrix](v4.3.0-completion-matrix.json) records all 29
+frozen V11 runtime families and the named native qualification cases; see the
+[delivery record](v4.3.0-delivery.md) for scope and limitations. This does not
+claim exhaustive desktop acceptance of every browsing slide.
+
+Publication remains pending the final GitLab gates and independent download
+verification. The release compiler is pinned to Go 1.27.2 after pre-tag standard
+library vulnerability findings. The template browsing deck, SQLite catalog,
+registered schematic SVG originals and installable presentation skill are in
+scope. Windows runtime/PowerPoint, content-complete reusable slides and external
+branding/photo distribution remain deferred. The newer documentation-site
+catalog is independently versioned; this release retains the frozen V11 runtime.
+
 ## v4.2.1
 
 The [private GitLab release](https://gitlab.samcott.com/riscott/pptxgengo/-/releases/v4.2.1)

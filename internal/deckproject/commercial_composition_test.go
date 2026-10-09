@@ -40,6 +40,7 @@ func commercialPatch(p *Project, ops ...CommercialOperation) CommercialPatch {
 	return CommercialPatch{Schema: CommercialPatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Finance qualification", Reason: "Customize illustrative decimal source facts", NodeID: "fee", Operations: ops}
 }
 func TestCommercialCompositionInitializePreviewApplyRebuild(t *testing.T) {
+	t.Parallel()
 	p, _ := commercialFixture(t)
 	before := append([]byte(nil), p.Raw...)
 	m := commercialModel()
@@ -78,6 +79,7 @@ func TestCommercialCompositionInitializePreviewApplyRebuild(t *testing.T) {
 	}
 }
 func TestCommercialCompositionCollectionTargetsFollowKeys(t *testing.T) {
+	t.Parallel()
 	m := commercialModel()
 	m.Targets = []wmdesign.CommercialTarget{{Row: "fee", Path: "/rows/0/amount", Prefix: "$"}}
 	s := wmdesign.CommercialSpec{Model: m, Presentation: map[string]any{"type": "table", "rows": []any{map[string]any{"label": "Build", "amount": "old"}, map[string]any{"label": "Run", "amount": "unchanged"}}}}
@@ -98,6 +100,7 @@ func TestCommercialCompositionCollectionTargetsFollowKeys(t *testing.T) {
 	}
 }
 func TestCommercialCompositionInvalidUnitsFieldsMissingAndCascade(t *testing.T) {
+	t.Parallel()
 	p, _ := commercialFixture(t)
 	for _, mutate := range []func(*wmdesign.CommercialModel){func(m *wmdesign.CommercialModel) { m.Rows[0].Value = nil }, func(m *wmdesign.CommercialModel) { m.Rows[2].Assumption = "" }, func(m *wmdesign.CommercialModel) { m.Targets[0].Path = "/x" }, func(m *wmdesign.CommercialModel) { m.Rounding = "truncate" }} {
 		m := commercialModel()
@@ -118,6 +121,7 @@ func TestCommercialCompositionInvalidUnitsFieldsMissingAndCascade(t *testing.T) 
 	}
 }
 func TestCommercialCompositionMigratesFieldComments(t *testing.T) {
+	t.Parallel()
 	p, _ := commercialFixture(t)
 	doc, e := sourceYAML(p.Raw)
 	if e != nil {
@@ -148,6 +152,7 @@ func TestCommercialCompositionMigratesFieldComments(t *testing.T) {
 }
 
 func TestCommercialCompositionGroupUpdatesAllMappedDisplaysAtomically(t *testing.T) {
+	t.Parallel()
 	p, _ := commercialFixture(t)
 	m := commercialModel()
 	m.Targets[0].NodeID = "fee"
@@ -198,6 +203,7 @@ func TestCommercialCompositionGroupUpdatesAllMappedDisplaysAtomically(t *testing
 }
 
 func TestCommercialCompositionRepeatedRowAndTargetCountsKeepKeys(t *testing.T) {
+	t.Parallel()
 	p, _ := commercialFixture(t)
 	m := commercialModel()
 	if _, e := PatchCommercial(p, "commercial-slide", commercialPatch(p, CommercialOperation{Action: "initialize", Entity: "source", Model: &m, Cascade: true}), bundle(t), wmdesign.CandidateEngine, true); e != nil {

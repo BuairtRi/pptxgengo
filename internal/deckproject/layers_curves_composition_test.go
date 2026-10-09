@@ -96,6 +96,7 @@ func staffingPatch(p *Project, ops ...StaffingOperation) StaffingPatch {
 	return StaffingPatch{Schema: StaffingPatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "qualification", Reason: "Adapt synthetic catalog staffing", NodeID: "model", Operations: ops}
 }
 func TestMaturityCompositionCatalogCountReferencesAndAtomicApply(t *testing.T) {
+	t.Parallel()
 	p, id := curveFixture(t, "maturity/four-stage", "maturity")
 	before := append([]byte(nil), p.Raw...)
 	ins, e := InspectMaturity(p, "slide", id, curveCompositionBundle(t), wmdesign.CandidateEngine)
@@ -156,6 +157,7 @@ func TestMaturityCompositionCatalogCountReferencesAndAtomicApply(t *testing.T) {
 	}
 }
 func TestMaturityCompositionStrictInvalidAndBinding(t *testing.T) {
+	t.Parallel()
 	p, _ := curveFixture(t, "maturity/four-stage", "maturity")
 	raw := canonical(maturityPatch(p, MaturityOperation{Action: "remove", Entity: "current"}))
 	raw = bytes.Replace(raw, []byte(`"entity":"current"`), []byte(`"entity":"current","cascade":false`), 1)
@@ -184,6 +186,7 @@ func TestMaturityCompositionStrictInvalidAndBinding(t *testing.T) {
 	}
 }
 func TestStaffingCompositionCatalogPointsSeriesPhasesScale(t *testing.T) {
+	t.Parallel()
 	p, id := curveFixture(t, "team-curve/build-together", "teamcurve")
 	ins, e := InspectStaffing(p, "slide", id, curveCompositionBundle(t), wmdesign.CandidateEngine)
 	if e != nil {
@@ -233,6 +236,7 @@ func TestStaffingCompositionCatalogPointsSeriesPhasesScale(t *testing.T) {
 	}
 }
 func TestStaffingCompositionStrictMissingScaleAndInvalidValues(t *testing.T) {
+	t.Parallel()
 	p, _ := curveFixture(t, "team-curve/build-together", "teamcurve")
 	hide := true
 	if _, e := PatchStaffing(p, "slide", staffingPatch(p, StaffingOperation{Action: "set", Entity: "layout", Layout: &StaffingLayout{PhaseLabels: &hide}}), curveCompositionBundle(t), wmdesign.CandidateEngine, false); e == nil {
@@ -279,6 +283,7 @@ func layerFixture(t *testing.T) (*Project, []LayerSelection) {
 	return writeCurveFixture(t, p), selections
 }
 func TestLayerCompositionVariableCountsControlsAndFoundation(t *testing.T) {
+	t.Parallel()
 	p, sel := layerFixture(t)
 	label := "Integration"
 	text := "Shared APIs"
@@ -326,6 +331,7 @@ func TestLayerCompositionVariableCountsControlsAndFoundation(t *testing.T) {
 	}
 }
 func TestLayerCompositionExplicitSelectionsInvalidAndOverflowAtomic(t *testing.T) {
+	t.Parallel()
 	p, sel := layerFixture(t)
 	layout := LayerLayout{Rect: wmdesign.Rect{X: 0, Y: 0, W: 600, H: 198}, Palette: "preserve"}
 	label := strings.Repeat("long label ", 1000)
@@ -345,6 +351,7 @@ func TestLayerCompositionExplicitSelectionsInvalidAndOverflowAtomic(t *testing.T
 }
 
 func TestMaturityCompositionAllCurveProfileSourceContracts(t *testing.T) {
+	t.Parallel()
 	// All fifteen actual maturity curves are exercised. Four AI companion-only
 	// variants and readiness/adoption-curve need their actual assessment/chart models.
 	for _, key := range []string{"maturity/four-stage", "maturity/five-active", "maturity/split", "maturity/nav", "maturity/table", "maturity/ai-simple", "maturity/ai-beyond", "maturity/ai-capabilities", "maturity/three-stage", "maturity/six-stage", "maturity/table-left", "maturity/table-tall", "maturity/insights", "maturity/ai-insights", "maturity/ai-here-insights"} {
@@ -366,6 +373,7 @@ func TestMaturityCompositionAllCurveProfileSourceContracts(t *testing.T) {
 	}
 }
 func TestStaffingCompositionAllNineCatalogSourceContracts(t *testing.T) {
+	t.Parallel()
 	for _, key := range []string{"team-curve/build-together", "team-curve/build-together-bands", "team-curve/build-together-roles", "team-curve/agents", "team-curve/agents-bands", "team-curve/agents-roles", "team-curve/agents-nav", "team-curve/agents-split", "team-curve/before-after"} {
 		t.Run(key, func(t *testing.T) {
 			p, id := curveFixture(t, key, "teamcurve")
@@ -387,6 +395,7 @@ func TestStaffingCompositionAllNineCatalogSourceContracts(t *testing.T) {
 	}
 }
 func TestLayerCompositionPlanePainterOrderAndCompoundRows(t *testing.T) {
+	t.Parallel()
 	p, sel := layerFixture(t)
 	local := p.Document.LocalTemplates["fixture"]
 	for i := 0; i < 3; i++ {
@@ -441,6 +450,7 @@ func TestLayerCompositionPlanePainterOrderAndCompoundRows(t *testing.T) {
 	}
 }
 func TestStaffingCompositionRemoveAllPhasesAndNonuniformSpacing(t *testing.T) {
+	t.Parallel()
 	p, id := curveFixture(t, "team-curve/agents", "teamcurve")
 	ins, e := InspectStaffing(p, "slide", id, curveCompositionBundle(t), wmdesign.CandidateEngine)
 	if e != nil {
@@ -563,6 +573,7 @@ func layerCatalogFixture(t *testing.T, key string) (*Project, []LayerSelection) 
 	return writeCurveFixture(t, p), sel
 }
 func TestLayerCompositionAllEightCatalogProfiles(t *testing.T) {
+	t.Parallel()
 	for _, key := range []string{"architecture/layers", "architecture/layers-left", "architecture/layers-split", "architecture/layers-nav", "architecture/layers-icons", "architecture/layers-3d", "architecture/layers-3d-systems", "architecture/layer-map"} {
 		t.Run(key, func(t *testing.T) {
 			p, sel := layerCatalogFixture(t, key)
@@ -587,6 +598,7 @@ func TestLayerCompositionAllEightCatalogProfiles(t *testing.T) {
 }
 
 func TestStaffingCompositionCommentsFollowStableSeriesAfterPointEdit(t *testing.T) {
+	t.Parallel()
 	p, _ := curveFixture(t, "team-curve/build-together", "teamcurve")
 	doc, e := sourceYAML(p.Raw)
 	if e != nil {
@@ -635,6 +647,7 @@ func TestStaffingCompositionCommentsFollowStableSeriesAfterPointEdit(t *testing.
 }
 
 func TestMaturityCompositionNativeAndPinGuards(t *testing.T) {
+	t.Parallel()
 	for _, kind := range []string{"maturity", "staffing", "layers"} {
 		for _, refusal := range []string{"native-order", "native-geometry", "pinned-template", "shared-template"} {
 			t.Run(kind+"/"+refusal, func(t *testing.T) {

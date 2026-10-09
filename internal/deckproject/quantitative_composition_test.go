@@ -43,6 +43,7 @@ func quantitativePatch(p *Project, ops ...QuantitativeOperation) QuantitativePat
 }
 func qnumber(v float64) *float64 { return &v }
 func TestQuantitativeCompositionKeyedPreviewApplyAndRebuild(t *testing.T) {
+	t.Parallel()
 	p, _ := quantitativeFixture(t, "column")
 	before := append([]byte(nil), p.Raw...)
 	patch := quantitativePatch(p, QuantitativeOperation{Action: "set", Entity: "category", Key: "new", Label: "New"}, QuantitativeOperation{Action: "set", Entity: "value", Key: "new", Series: "capacity", Value: qnumber(5)}, QuantitativeOperation{Action: "reorder", Entity: "category", Order: []string{"new", "future", "current"}})
@@ -78,6 +79,7 @@ func TestQuantitativeCompositionKeyedPreviewApplyAndRebuild(t *testing.T) {
 	}
 }
 func TestQuantitativeCompositionNullZeroKindsAndCollectionCounts(t *testing.T) {
+	t.Parallel()
 	for _, kind := range []string{"line", "bar", "pie", "doughnut", "scatter", "quadrant"} {
 		t.Run(kind, func(t *testing.T) {
 			p, _ := quantitativeFixture(t, kind)
@@ -99,6 +101,7 @@ func TestQuantitativeCompositionNullZeroKindsAndCollectionCounts(t *testing.T) {
 	}
 }
 func TestQuantitativeCompositionInvalidFieldsBindingsAndDeletion(t *testing.T) {
+	t.Parallel()
 	p, _ := quantitativeFixture(t, "column")
 	for _, op := range []QuantitativeOperation{{Action: "remove", Entity: "category", Key: "current"}, {Action: "set", Entity: "value", Key: "current", Series: "capacity"}, {Action: "set", Entity: "value", Key: "current", Series: "capacity", Value: qnumber(0), Missing: true}, {Action: "set", Entity: "value", Key: "current", Series: "capacity", Value: qnumber(1e10)}, {Action: "reorder", Entity: "category", Order: []string{"future", "future"}}, {Action: "set", Entity: "setting", Field: "x", Setting: 0}, {Action: "set", Entity: "value", Key: "future", Series: "capacity", Missing: true}} {
 		before, _ := os.ReadFile(p.SourcePath)
@@ -121,6 +124,7 @@ func TestQuantitativeCompositionInvalidFieldsBindingsAndDeletion(t *testing.T) {
 }
 
 func TestQuantitativeCompositionExplicitSourceUnionMigration(t *testing.T) {
+	t.Parallel()
 	p, _ := quantitativeFixture(t, "column")
 	source := map[string]any{"kind": "scatter", "points": []any{[]any{-2.0, 3.0, "Lower"}, []any{4.0, 5.0, "Upper"}}, "units": "Index", "source": "Explicit illustrative migration", "xMin": -3.0, "xMax": 6.0, "yMin": 0.0, "yMax": 7.0}
 	op := QuantitativeOperation{Action: "replace", Entity: "source", Cascade: true, Data: source, Keys: map[string][]string{"points": {"lower", "upper"}}}
@@ -145,6 +149,7 @@ func TestQuantitativeCompositionExplicitSourceUnionMigration(t *testing.T) {
 	}
 }
 func TestQuantitativeCompositionRejectsMalformedIntermediateSeriesWithoutPanic(t *testing.T) {
+	t.Parallel()
 	p, _ := quantitativeFixture(t, "column")
 	ops := []QuantitativeOperation{{Action: "set", Entity: "series", Key: "capacity", Data: map[string]any{"name": "Capacity"}}, {Action: "reorder", Entity: "category", Order: []string{"future", "current"}}}
 	if _, e := PatchQuantitative(p, "quantitative-slide", quantitativePatch(p, ops...), bundle(t), wmdesign.CandidateEngine, true); e == nil {
@@ -153,6 +158,7 @@ func TestQuantitativeCompositionRejectsMalformedIntermediateSeriesWithoutPanic(t
 }
 
 func TestQuantitativeCompositionCountChangesRetainColorHighlightAndNestedKeys(t *testing.T) {
+	t.Parallel()
 	p, _ := quantitativeFixture(t, "pie")
 	ops := []QuantitativeOperation{{Action: "set", Entity: "setting", Field: "colors", Setting: []any{"series.1", "series.2"}}, {Action: "set", Entity: "setting", Field: "highlight", Setting: []any{1.0}}}
 	if _, e := PatchQuantitative(p, "quantitative-slide", quantitativePatch(p, ops...), bundle(t), wmdesign.CandidateEngine, true); e != nil {

@@ -30,6 +30,7 @@ func componentPatch(p *Project, ops ...ComponentOperation) ComponentPatch {
 	return ComponentPatch{Schema: ComponentPatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Test", Reason: "Illustrative content customization", SemanticReview: "Observations are independently authored; no dependent facts or legends", NodeID: "flow", Operations: ops}
 }
 func TestComponentCompositionNestedKeysPreviewApply(t *testing.T) {
+	t.Parallel()
 	p := componentFixture(t)
 	before := append([]byte{}, p.Raw...)
 	patch := componentPatch(p, ComponentOperation{Action: "set", Entity: "item", Path: "/body/@observations/bullets", Key: "third", Value: "Third observation"}, ComponentOperation{Action: "reorder", Entity: "item", Path: "/body", Order: []string{"note", "observations"}}, ComponentOperation{Action: "set", Entity: "argument", Path: "/body/@note/p", Value: "Updated supporting note"})
@@ -60,6 +61,7 @@ func TestComponentCompositionNestedKeysPreviewApply(t *testing.T) {
 	}
 }
 func TestComponentCompositionRefusesNumericPathsSpecializedAndOverflow(t *testing.T) {
+	t.Parallel()
 	p := componentFixture(t)
 	for _, op := range []ComponentOperation{{Action: "set", Entity: "argument", Path: "/body/0/bullets/0", Value: "x"}, {Action: "remove", Entity: "item", Path: "/body", Key: "note"}, {Action: "set", Entity: "argument", Path: "/title", Value: strings.Repeat("Very long title ", 100)}} {
 		if _, e := PatchComponent(p, "flow-slide", componentPatch(p, op), bundle(t), wmdesign.CandidateEngine, false); e == nil {
@@ -72,6 +74,7 @@ func TestComponentCompositionRefusesNumericPathsSpecializedAndOverflow(t *testin
 	}
 }
 func TestComponentCompositionExplicitNullAndStrictPresence(t *testing.T) {
+	t.Parallel()
 	p := componentFixture(t)
 	raw := canonical(componentPatch(p, ComponentOperation{Action: "set", Entity: "argument", Path: "/title", Value: nil}))
 	if !bytes.Contains(raw, []byte(`"value":null`)) {
@@ -87,6 +90,7 @@ func TestComponentCompositionExplicitNullAndStrictPresence(t *testing.T) {
 }
 
 func TestComponentCompositionInspectionUsesStablePublicPaths(t *testing.T) {
+	t.Parallel()
 	p := componentFixture(t)
 	inspection, e := InspectComponent(p, "flow-slide", "flow", bundle(t), wmdesign.CandidateEngine)
 	if e != nil {
@@ -104,6 +108,7 @@ func TestComponentCompositionInspectionUsesStablePublicPaths(t *testing.T) {
 }
 
 func TestComponentCompositionSourceGeometryReservedAndRetained(t *testing.T) {
+	t.Parallel()
 	p := componentFixture(t)
 	local := p.Document.LocalTemplates["process"]
 	metadata := map[string]any{"schema": wmdesign.SceneSourceGeometrySchema, "x_fraction": 0, "y_fraction": 0, "width_fraction": 1}

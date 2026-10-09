@@ -22,6 +22,7 @@ func teamTestTemplate() LocalTemplate {
 	return LocalTemplate{Nodes: []Node{teamTestPod("close", "Lead", "Accountant"), teamTestPod("data", "Architect")}}
 }
 func TestTeamRolesIdentityAndAssignment(t *testing.T) {
+	t.Parallel()
 	template := teamTestTemplate()
 	ops := []TeamOperation{{Action: "add-role", Component: "close", ID: "qa", Role: &TeamRole{Label: "Quality lead"}}, {Action: "reorder-roles", Component: "close", Order: []string{"qa", "slot-001", "slot-002"}}, {Action: "reassign-role", Component: "close", ID: "qa", Target: "data"}, {Action: "remove-role", Component: "close", ID: "slot-002"}}
 	for _, op := range ops {
@@ -41,6 +42,7 @@ func TestTeamRolesIdentityAndAssignment(t *testing.T) {
 	}
 }
 func TestTeamPodLayoutCountAndCapacity(t *testing.T) {
+	t.Parallel()
 	template := teamTestTemplate()
 	layout := TeamPodLayout{Rect: wmdesign.Rect{X: 12, Y: 24, W: 600, H: 240}, Columns: 2, Gap: 24}
 	if e := arrangeTeamPods(&template, []string{"data", "close"}, layout); e != nil {
@@ -58,6 +60,7 @@ func TestTeamPodLayoutCountAndCapacity(t *testing.T) {
 	}
 }
 func TestTeamReportingReparentAndCycle(t *testing.T) {
+	t.Parallel()
 	n := Node{ID: "reports", Kind: "component", Definition: &Reference{Scope: "shared", ID: "wmds/component/orgchart"}, Arguments: map[string]any{"root": teamObject(TeamReport{Key: "sponsor", Org: "client", Title: "Sponsor", Children: []TeamReport{{Key: "lead", Org: "wm", Title: "Lead", Children: []TeamReport{{Key: "analyst", Org: "wm", Title: "Analyst"}}}, {Key: "liaison", Org: "client", Title: "Liaison", Dotted: true}}})}}
 	template := LocalTemplate{Nodes: []Node{n}}
 	if e := applyTeamOperation(&template, TeamOperation{Action: "reparent-report", Component: "reports", ID: "analyst", Parent: "liaison"}); e != nil {
@@ -83,6 +86,7 @@ func TestTeamReportingReparentAndCycle(t *testing.T) {
 	}
 }
 func TestTeamStockScopedReportingKeys(t *testing.T) {
+	t.Parallel()
 	n := Node{ID: "org", Kind: "component", Definition: &Reference{Scope: "shared", ID: "wmds/component/orgchart"}, Arguments: map[string]any{"root": map[string]any{"org": "client", "title": "Sponsor", "children": []any{map[string]any{"org": "wm", "title": "Lead", "children": []any{map[string]any{"org": "wm", "title": "Analyst"}}}}}}}
 	if e := normalizeTeamNode(&n); e != nil {
 		t.Fatal(e)
@@ -102,6 +106,7 @@ func TestTeamStockScopedReportingKeys(t *testing.T) {
 	}
 }
 func TestTeamGovernanceReorderPreservesMembersAndDecisions(t *testing.T) {
+	t.Parallel()
 	tiers := []any{teamObject(TeamTier{Key: "steering", Name: "Steering", Cadence: "Monthly", Members: [][]string{{"Sponsor", "client"}}, Decisions: []any{"Funding"}}), teamObject(TeamTier{Key: "delivery", Name: "Delivery", Cadence: "Weekly", Members: [][]string{{"Lead", "wm"}}, Decisions: []any{"Scope"}})}
 	n := Node{ID: "gov", Kind: "component", Definition: &Reference{Scope: "shared", ID: "wmds/component/governance"}, Arguments: map[string]any{"tiers": tiers}, Keys: map[string][]string{"tiers": {"steering", "delivery"}, "tiers/0/members": {"sponsor"}, "tiers/0/decisions": {"funding"}, "tiers/1/members": {"lead"}, "tiers/1/decisions": {"scope"}}}
 	template := LocalTemplate{Nodes: []Node{n}}
@@ -147,6 +152,7 @@ func teamProjectFixture(t *testing.T) *Project {
 	return p
 }
 func TestTeamCatalogPreviewApplyAndStaleGuard(t *testing.T) {
+	t.Parallel()
 	p := teamProjectFixture(t)
 	inspection, e := InspectTeam(p, "team-slide", bundle(t), wmdesign.CandidateEngine)
 	if e != nil {
@@ -203,6 +209,7 @@ func TestTeamCatalogPreviewApplyAndStaleGuard(t *testing.T) {
 	}
 }
 func TestTeamPatchStrictFields(t *testing.T) {
+	t.Parallel()
 	patch := TeamPatch{Schema: TeamPatchSchema, Actor: "operator", Reason: "Strict contract", ExpectedSourceSHA256: strings.Repeat("a", 64), Operations: []TeamOperation{{Action: "add-role", Component: "pod", ID: "qa", Role: &TeamRole{Label: "QA"}}}}
 	if _, e := DecodeTeamPatch(canonical(patch), "patch"); e != nil {
 		t.Fatal(e)
@@ -223,6 +230,7 @@ func TestTeamPatchStrictFields(t *testing.T) {
 }
 
 func TestTeamAuthoredIrrelevantEmptyFieldsRefused(t *testing.T) {
+	t.Parallel()
 	patch := TeamPatch{Schema: TeamPatchSchema, Actor: "operator", Reason: "Strict authored field relevance", ExpectedSourceSHA256: strings.Repeat("a", 64), Operations: []TeamOperation{{Action: "add-role", Component: "pod", ID: "qa", Role: &TeamRole{Label: "QA"}}}}
 	for _, field := range []string{`"target":""`, `"rect":null`, `"order":[]`, `"incident_edges":""`} {
 		raw := bytes.Replace(canonical(patch), []byte(`"action":"add-role"`), []byte(`"action":"add-role",`+field), 1)
@@ -232,6 +240,7 @@ func TestTeamAuthoredIrrelevantEmptyFieldsRefused(t *testing.T) {
 	}
 }
 func TestTeamComponentRoutingRequiresSharedQualifiedDefinition(t *testing.T) {
+	t.Parallel()
 	n := teamTestPod("pod", "Lead")
 	if teamKind(n) != "pod" {
 		t.Fatal("supported shared pod not recognized")
@@ -248,6 +257,7 @@ func TestTeamComponentRoutingRequiresSharedQualifiedDefinition(t *testing.T) {
 }
 
 func TestTeamCatalogOverflowIsAtomic(t *testing.T) {
+	t.Parallel()
 	p := teamProjectFixture(t)
 	inspection, e := InspectTeam(p, "team-slide", bundle(t), wmdesign.CandidateEngine)
 	if e != nil {

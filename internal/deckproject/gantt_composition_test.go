@@ -99,6 +99,7 @@ func ganttPatch(p *Project, id string, ops ...GanttOperation) GanttPatch {
 }
 
 func TestGanttCompositionCatalogPreviewApplyStableReorder(t *testing.T) {
+	t.Parallel()
 	p, id := ganttCompositionFixture(t)
 	before := p.SourceHash()
 	raw := append([]byte(nil), p.Raw...)
@@ -156,6 +157,7 @@ func TestGanttCompositionCatalogPreviewApplyStableReorder(t *testing.T) {
 }
 
 func TestGanttCompositionOperations(t *testing.T) {
+	t.Parallel()
 	s := wmdesign.GanttSpec{Groups: []wmdesign.GanttGroup{{Key: "delivery", Lanes: []wmdesign.GanttLane{{Key: "build", Items: []wmdesign.GanttItem{{Key: "api", Kind: "build", Label: "API", From: 1, To: 2}}}, {Key: "test"}}}}}
 	op := GanttOperation{Action: "move", Entity: "task", Key: "api", Group: "delivery", Lane: "build", ToGroup: "delivery", ToLane: "test"}
 	if e := applyGanttOperation(&s, op); e != nil {
@@ -187,6 +189,7 @@ func TestGanttCompositionOperations(t *testing.T) {
 }
 
 func TestGanttCompositionRejectsAuthoredZeroFields(t *testing.T) {
+	t.Parallel()
 	base := GanttPatch{Schema: GanttPatchSchema, ExpectedSourceSHA256: strings.Repeat("a", 64), Actor: "Operator", Reason: "Remove marker", NodeID: "schedule", Timebase: "periods", Operations: []GanttOperation{{Action: "remove", Entity: "today"}}}
 	for field, value := range map[string]any{"at": 0, "cascade": false, "key": "", "order": []any{}} {
 		var obj map[string]any
@@ -201,6 +204,7 @@ func TestGanttCompositionRejectsAuthoredZeroFields(t *testing.T) {
 }
 
 func TestGanttCompositionEightLaneCapacityFailureRetainsSource(t *testing.T) {
+	t.Parallel()
 	p, id := ganttCompositionFixture(t)
 	before := append([]byte(nil), p.Raw...)
 	inspected, e := InspectGantt(p, "plan-slide", id, bundle(t), wmdesign.CandidateEngine)
@@ -228,6 +232,7 @@ func TestGanttCompositionEightLaneCapacityFailureRetainsSource(t *testing.T) {
 }
 
 func TestGanttCompositionValidationAndAtomicOverflow(t *testing.T) {
+	t.Parallel()
 	p, id := ganttCompositionFixture(t)
 	before, e := os.ReadFile(p.SourcePath)
 	if e != nil {
@@ -329,6 +334,7 @@ func TestGanttCompositionDemo(t *testing.T) {
 }
 
 func TestGanttCompositionRejectsCollidingGateLabels(t *testing.T) {
+	t.Parallel()
 	p, id := ganttCompositionFixture(t)
 	inspect, e := InspectGantt(p, "plan-slide", id, bundle(t), wmdesign.CandidateEngine)
 	if e != nil {

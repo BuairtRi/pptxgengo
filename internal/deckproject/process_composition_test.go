@@ -39,6 +39,7 @@ func processTestPatch(p *Project, ops ...ProcessOperation) ProcessPatch {
 	return ProcessPatch{Schema: ProcessPatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Test", Reason: "Illustrative customization", NodeID: "flow", Operations: ops}
 }
 func TestProcessCompositionPreviewApplyRelationships(t *testing.T) {
+	t.Parallel()
 	p := processFixture(t)
 	b := append([]byte{}, p.Raw...)
 	m, e := InspectProcess(p, "flow-slide", "flow", bundle(t), wmdesign.CandidateEngine)
@@ -74,6 +75,7 @@ func TestProcessCompositionPreviewApplyRelationships(t *testing.T) {
 	}
 }
 func TestProcessCompositionCascadeAndInvalid(t *testing.T) {
+	t.Parallel()
 	m := processTestModel()
 	if e := processRemoveStep(&m, "check", false); e == nil {
 		t.Fatal("incident removal accepted")
@@ -104,6 +106,7 @@ func TestProcessCompositionCascadeAndInvalid(t *testing.T) {
 	}
 }
 func TestProcessCompositionStrictOperationPresence(t *testing.T) {
+	t.Parallel()
 	p := processFixture(t)
 	raw := canonical(processTestPatch(p, ProcessOperation{Action: "set", Entity: "current", Key: "check"}))
 	raw = bytes.Replace(raw, []byte(`"key":"check"`), []byte(`"key":"check","cascade":false`), 1)
@@ -113,6 +116,7 @@ func TestProcessCompositionStrictOperationPresence(t *testing.T) {
 }
 
 func TestProcessCompositionVariablePreDecisionAndUnequalBranches(t *testing.T) {
+	t.Parallel()
 	p := processFixture(t)
 	m := processTestModel()
 	m.Columns = 10
@@ -183,6 +187,7 @@ func processTestExplicitOutcomeRoutes(m *wmdesign.ProcessSpec) {
 }
 
 func TestProcessCompositionOutcomeLabelsRequireMeasuredClearance(t *testing.T) {
+	t.Parallel()
 	p := processFixture(t)
 	before := append([]byte{}, p.Raw...)
 	base := processTestModel().Links[1]
@@ -228,6 +233,7 @@ func TestProcessCompositionOutcomeLabelsRequireMeasuredClearance(t *testing.T) {
 }
 
 func TestProcessCompositionOutcomeLabelAnchorStrictCoordinateCount(t *testing.T) {
+	t.Parallel()
 	p := processFixture(t)
 	link := processTestModel().Links[1]
 	link.LabelPosition = &[2]float64{1, 2}
@@ -256,6 +262,7 @@ func TestProcessCompositionOutcomeLabelAnchorStrictCoordinateCount(t *testing.T)
 }
 
 func TestProcessCompositionRefusesOccludedLogicalLinks(t *testing.T) {
+	t.Parallel()
 	p := processFixture(t)
 	before := append([]byte{}, p.Raw...)
 	m := processTestModel()
@@ -310,6 +317,7 @@ func TestProcessCompositionRefusesOccludedLogicalLinks(t *testing.T) {
 	}
 }
 func TestProcessCompositionInitializeAndBindings(t *testing.T) {
+	t.Parallel()
 	p := processFixtureUnpinned(t)
 	local := p.Document.LocalTemplates["process"]
 	local.Nodes[0].Definition.ID = "wmds/component/block"
@@ -347,6 +355,7 @@ func TestProcessCompositionInitializeAndBindings(t *testing.T) {
 }
 
 func TestProcessCompositionCapturedSourceGeometryRetained(t *testing.T) {
+	t.Parallel()
 	p := processFixture(t)
 	local := p.Document.LocalTemplates["process"]
 	geometry := map[string]any{"schema": wmdesign.SceneSourceGeometrySchema, "x_fraction": 0, "y_fraction": 0, "width_fraction": 1, "height_fraction": 1}

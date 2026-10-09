@@ -65,6 +65,7 @@ func cyclePatch(p *Project, id string, ops ...CycleOperation) CyclePatch {
 	return CyclePatch{Schema: CyclePatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Cycle qualification", Reason: "Customize synthetic cycle", NodeID: id, Operations: append([]CycleOperation{{Action: "materialize", Entity: "source"}}, ops...)}
 }
 func TestCycleCompositionCatalogPreviewApplyCountAndRelationships(t *testing.T) {
+	t.Parallel()
 	p, id := cycleCompositionFixture(t)
 	before := append([]byte(nil), p.Raw...)
 	inspect, e := InspectCycle(p, "cycle-slide", id, bundle(t), wmdesign.CandidateEngine)
@@ -137,6 +138,7 @@ func TestCycleCompositionCatalogPreviewApplyCountAndRelationships(t *testing.T) 
 	}
 }
 func TestCycleCompositionReferenceReorderCascade(t *testing.T) {
+	t.Parallel()
 	m := CycleModel{Steps: []CycleStep{{Key: "start", Label: "Start"}, {Key: "build", Label: "Build"}, {Key: "review", Label: "Review"}}, Active: "build", Loops: []CycleLoop{{Key: "feedback", From: "review", To: "build"}}}
 	if e := applyCycleOperation(&m, CycleOperation{Action: "reorder", Entity: "step", Order: []string{"review", "build", "start"}}); e != nil {
 		t.Fatal(e)
@@ -174,6 +176,7 @@ func TestCycleCompositionReferenceReorderCascade(t *testing.T) {
 	}
 }
 func TestCycleCompositionStrictAuthoredFields(t *testing.T) {
+	t.Parallel()
 	base := CyclePatch{Schema: CyclePatchSchema, ExpectedSourceSHA256: strings.Repeat("a", 64), Actor: "Agent", Reason: "Remove marker", NodeID: "cycle", Operations: []CycleOperation{{Action: "remove", Entity: "active"}}}
 	for field, value := range map[string]any{"key": "", "cascade": false, "order": []any{}, "layout": nil, "step": map[string]any{}} {
 		var object map[string]any
@@ -196,6 +199,7 @@ func TestCycleCompositionStrictAuthoredFields(t *testing.T) {
 	}
 }
 func TestCycleCompositionRejectsBindingsCapacityAndNativeLayout(t *testing.T) {
+	t.Parallel()
 	p, id := cycleCompositionFixture(t)
 	patch := cyclePatch(p, id, CycleOperation{Action: "set", Entity: "active", Key: "source-003"})
 	patch.Operations = patch.Operations[1:]
@@ -221,6 +225,7 @@ func TestCycleCompositionRejectsBindingsCapacityAndNativeLayout(t *testing.T) {
 }
 
 func TestCycleCompositionKeysAndCardinality(t *testing.T) {
+	t.Parallel()
 	n := Node{Arguments: map[string]any{"items": []any{map[string]any{"label": "One"}, map[string]any{"label": "Two"}}}, Keys: map[string][]string{"/items": {"one", "two"}}}
 	m, _, _, e := cycleSource(&n, nil)
 	if e != nil {
@@ -260,6 +265,7 @@ func TestCycleCompositionKeysAndCardinality(t *testing.T) {
 }
 
 func TestCycleCompositionUniqueUnkeyedCommentsFollowValues(t *testing.T) {
+	t.Parallel()
 	for _, entity := range []string{"step", "loop"} {
 		t.Run(entity, func(t *testing.T) {
 			p, id := cycleCompositionFixture(t)
@@ -336,6 +342,7 @@ func TestCycleCompositionUniqueUnkeyedCommentsFollowValues(t *testing.T) {
 }
 
 func TestCycleCompositionAmbiguousUnkeyedCommentsAreNotReattached(t *testing.T) {
+	t.Parallel()
 	for _, counts := range [][2]int{{1, 2}, {2, 1}, {2, 2}} {
 		oldValues := []any{}
 		currentValues := []any{}

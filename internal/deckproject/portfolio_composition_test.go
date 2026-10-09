@@ -40,6 +40,7 @@ func portfolioPatch(p *Project, ops ...PortfolioOperation) PortfolioPatch {
 	return PortfolioPatch{Schema: PortfolioPatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Test", Reason: "Illustrative portfolio customization", NodeID: "flow", Operations: ops}
 }
 func TestPortfolioCompositionTransferRetainsDependencies(t *testing.T) {
+	t.Parallel()
 	p := portfolioFixture(t)
 	m, e := InspectPortfolio(p, "flow-slide", "flow", bundle(t), wmdesign.CandidateEngine)
 	if e != nil || m.RenderError != "" {
@@ -70,6 +71,7 @@ func TestPortfolioCompositionTransferRetainsDependencies(t *testing.T) {
 	}
 }
 func TestPortfolioCompositionFiveHorizonsAndCascade(t *testing.T) {
+	t.Parallel()
 	p := portfolioFixture(t)
 	op1 := PortfolioOperation{Action: "set", Entity: "horizon", Key: "discover", Horizon: &wmdesign.PortfolioHorizon{Key: "discover", Label: "Discover", Meaning: "Ideas under review"}}
 	op2 := PortfolioOperation{Action: "set", Entity: "horizon", Key: "explore", Horizon: &wmdesign.PortfolioHorizon{Key: "explore", Label: "Explore", Meaning: "Evidence needed"}}
@@ -121,6 +123,7 @@ func TestPortfolioCompositionFiveHorizonsAndCascade(t *testing.T) {
 	}
 }
 func TestPortfolioCompositionInvalidAndStrictPresence(t *testing.T) {
+	t.Parallel()
 	m := portfolioTestModel()
 	m.Horizons[0].Meaning = ""
 	if e := wmdesign.ValidatePortfolio(m); e == nil {
@@ -140,6 +143,7 @@ func TestPortfolioCompositionInvalidAndStrictPresence(t *testing.T) {
 }
 
 func TestPortfolioCompositionCapturedSourceGeometryRetained(t *testing.T) {
+	t.Parallel()
 	p := portfolioFixture(t)
 	local := p.Document.LocalTemplates["process"]
 	geometry := map[string]any{"schema": wmdesign.SceneSourceGeometrySchema, "x_fraction": 0, "y_fraction": 0, "width_fraction": 1, "height_fraction": 1}
@@ -162,6 +166,7 @@ func TestPortfolioCompositionCapturedSourceGeometryRetained(t *testing.T) {
 }
 
 func TestPortfolioDependencyLabelPositionStrictCoordinatesAndGuards(t *testing.T) {
+	t.Parallel()
 	p := portfolioFixture(t)
 	dependency := portfolioTestModel().Dependencies[0]
 	dependency.LabelPosition = &[2]float64{1, 2}
@@ -205,6 +210,7 @@ func TestPortfolioDependencyLabelPositionStrictCoordinatesAndGuards(t *testing.T
 }
 
 func TestPortfolioDependencyNonadjacentRoutePreservesMembership(t *testing.T) {
+	t.Parallel()
 	p := portfolioFixture(t)
 	before := append([]byte{}, p.Raw...)
 	dependency := wmdesign.PortfolioDependency{Key: "access-enable", From: "access", To: "enable", Label: "Supports"}
