@@ -25,6 +25,8 @@ CI infrastructure and qualification ledgers belong in the repository docs below.
 | Packaged template deck and deferred reusable content deck | [Browsing libraries](browsing-libraries.md) |
 | Native profile conversions and retained variants | [Native editing profile](native-editing-profile.md) |
 | Explicit card/list/table components | [Card](native-editable-card.md), [list](native-editable-list.md), [table](native-editable-table.md) |
+| Family composition, stable identities and guarded source edits | [Composition operators](composition-operators.md), [teams/pods/governance runbook](../skills/west-monroe-presentations/references/team-composition.md), [Gantt runbook](../skills/west-monroe-presentations/references/gantt-composition.md) |
+| Geometry changes and bounded native imports | [Geometry editing](geometry-editing.md), [native imports](../skills/west-monroe-presentations/references/native-imports.md) |
 | Native ownership and text adoption | [Lineage](native-lineage.md), [field mapping](native-field-mapping.md), [text reconciliation](text-reconciliation.md) |
 | Operator-provided maintained slide revisions | [Finished slides](finished-slides.md) |
 | Discovery/index and optional offline search | [Template discovery](semantic-template-discovery.md), [performance](search-performance.md) |
@@ -33,6 +35,7 @@ CI infrastructure and qualification ledgers belong in the repository docs below.
 
 ## Maintainer operations and evidence
 
+- [PowerPoint failure types and evidence](powerpoint-automation-diagnostics.md), [operator recovery](../skills/west-monroe-presentations/references/powerpoint-recovery.md), and [GUI Save As evidence](native-save-as-equivalence.md).
 - [Release CI](../release/CI.md), [release packaging](../release/README.md), and [tagging](../RELEASING.md).
 - [CI cadence](ci-cadence.md), [GitHub review to private GitLab relay](github-pr-gitlab-poller.md), and [test lanes](testing.md).
 - [Native editing pilot](native-editing-pilot.md), [roundtrip harness](native-roundtrip.md), and [component demo](native-component-demo.md) retain exact fixture evidence and outstanding desktop tasks.
@@ -52,10 +55,15 @@ with their original bundles. Their counts/qualification describe those inputs,
 not every current profile conversion. The upstream JavaScript [changelog](upstream-pptxgenjs-changelog.md)
 and inherited Node demos are also separate from the Go release process.
 
-## Next implementation slice
+## Current development and remaining scope
 
-[Geometry editing and architecture reconciliation](geometry-editing-scope.md)
-records the requested next work. It is a planned contract, not an installed CLI
-capability.
+[Geometry editing](geometry-editing.md) describes source editing, tagged native
+geometry reconciliation and bounded desktop qualification on main.
+[Composition operators](composition-operators.md) covers the team, pod, governance,
+Gantt and bounded native-import additions. Inspect installed help and toolchain
+pins: these additions do not retroactively change the promoted release.
 
-- [Geometry editing](geometry-editing.md): source/rendering contract and bounded development qualification; [remaining scope](geometry-editing-scope.md).
+[Remaining geometry scope](geometry-editing-scope.md), [routing backlog](geometry-routing-backlog.md),
+and the [semantic family audit](template-customization-audit.md) retain gaps.
+Arbitrary native imports, automatic obstacle routing and additional family
+operators remain separate work; successful specimens do not qualify every variant.

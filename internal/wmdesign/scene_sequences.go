@@ -609,9 +609,10 @@ type ganttKind struct {
 	Label string `json:"label"`
 }
 type ganttGate struct {
-	Key   json.RawMessage `json:"key"`
-	At    float64         `json:"at"`
-	Label string          `json:"label"`
+	Key     json.RawMessage `json:"key"`
+	At      float64         `json:"at"`
+	Label   string          `json:"label"`
+	Callout bool            `json:"callout,omitempty"`
 }
 type ganttPhase struct {
 	Key   string  `json:"key"`
@@ -644,6 +645,15 @@ type ganttSpec struct {
 	Events       map[string]ganttKind `json:"events"`
 	Groups       []ganttGroup         `json:"groups"`
 }
+
+// Gantt source records are shared by the renderer and guarded project composition
+// commands. Numeric positions use period coordinates, not inferred calendar dates.
+type GanttSpec = ganttSpec
+type GanttItem = ganttItem
+type GanttLane = ganttLane
+type GanttGroup = ganttGroup
+type GanttGate = ganttGate
+type GanttPhase = ganttPhase
 type ganttPacked struct {
 	it          ganttItem
 	key         string
@@ -917,6 +927,7 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 			return nil, fmt.Errorf("scene.gantt_gate_at")
 		}
 		surf := "inverse"
+		isKey = isKey || g.Callout
 		if isKey {
 			surf = "callout"
 		}
@@ -959,7 +970,14 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		if e = r.diagramLine(p, id+".today-line", [2]float64{x, periodTop}, [2]float64{x, bodyBottom + 18}, col, 1.5, "solid"); e != nil {
 			return nil, e
 		}
-		if e = r.diagramStyledText(p, id+".today-label", "Today", label, Rect{x + 5, bodyBottom + 4, 60, 0}, ctx.Surface, "primary", "left", false); e != nil {
+		labelX := x + 5
+		if labelX+60 > tx+tw {
+			labelX = x - 65
+		}
+		if labelX < tx-.02 || labelX+60 > tx+tw+.02 {
+			return nil, fmt.Errorf("scene.gantt_today_label_outside_timeline")
+		}
+		if e = r.diagramStyledText(p, id+".today-label", "Today", label, Rect{labelX, bodyBottom + 4, 60, 0}, ctx.Surface, "primary", "left", false); e != nil {
 			return nil, e
 		}
 	}
@@ -998,8 +1016,12 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		if ic == "" {
 			ic = "target"
 		}
-		if e = r.sceneIcon(p, pre+".icon", ic, Rect{n.X + gw + 9, L.top + (L.h-18)/2, 18, 18}, ctx.Surface, "display"); e != nil {
-			return nil, e
+		// An explicit none omits the optional lane graphic without changing the
+		// heading allocation; an empty icon retains the legacy target default.
+		if ic != "none" {
+			if e = r.sceneIcon(p, pre+".icon", ic, Rect{n.X + gw + 9, L.top + (L.h-18)/2, 18, 18}, ctx.Surface, "display"); e != nil {
+				return nil, e
+			}
 		}
 		ts := small
 		titleSize := 12.5

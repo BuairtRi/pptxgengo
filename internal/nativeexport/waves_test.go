@@ -19,6 +19,9 @@ import (
 
 func TestMain(m *testing.M) {
 	if len(os.Args) > 1 && os.Args[1] == "render-native-worker" {
+		if phase := os.Getenv("PPTXGENGO_TEST_WORKER_PHASE"); phase != "" {
+			fmt.Fprintf(os.Stderr, "native_helper_entered=%s;\n", phase)
+		}
 		if os.Getenv("PPTXGENGO_TEST_BLOCK_WORKER") == "1" {
 			child := exec.Command("/bin/sleep", "60")
 			if runtime.GOOS == "windows" {
@@ -291,6 +294,7 @@ func TestWorkerDeadlineStopsHelperDescendants(t *testing.T) {
 		t.Skip("process group termination is native macOS behavior")
 	}
 	t.Setenv("PPTXGENGO_TEST_BLOCK_WORKER", "1")
+	t.Setenv("PPTXGENGO_TEST_WORKER_PHASE", "export_pdf")
 	ready := filepath.Join(t.TempDir(), "worker-ready")
 	t.Setenv("PPTXGENGO_TEST_WORKER_READY", ready)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -326,6 +330,10 @@ func TestWorkerDeadlineStopsHelperDescendants(t *testing.T) {
 	err := <-result
 	if err == nil || !errors.Is(err, context.Canceled) {
 		t.Fatal(err)
+	}
+	evidence := classifyNativeFailure(err.Error(), "")
+	if evidence.Phase != "unknown" || evidence.LastHelperPhase != "export_pdf" || evidence.CauseConfirmed {
+		t.Fatalf("deadline lost entry observation or invented failing phase: %+v", evidence)
 	}
 	// A surviving helper would hold the output pipe open until WaitDelay (2s).
 	if elapsed := time.Since(started); elapsed > time.Second {

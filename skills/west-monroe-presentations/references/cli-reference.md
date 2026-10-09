@@ -250,3 +250,24 @@ existing-object paint order and whole local leaf deletions. Add
 `--structure-map FILE` for explicit native block-copy mappings. See [architecture and geometry](architecture-geometry.md)
 for source fields, examples, supported targets, reset behavior and exclusions.
 These commands are not in the promoted v4.2.1 binary.
+
+## Family composition and bounded native import (development)
+
+Confirm installed help before using these main-source additions; v4.2.1 does not
+contain them. All patch commands preview by default; `--apply` repeats measured
+validation and commits through the source guard. Runtime flags `--bundle` and
+`--engine` default to the project lock.
+
+```sh
+pptxgengo design project team inspect --project ./deck --slide team
+pptxgengo design project team patch --project ./deck --slide team --patch team-patch.yaml
+pptxgengo design project gantt inspect --project ./deck --slide plan --node schedule
+pptxgengo design project gantt patch --project ./deck --slide plan --patch gantt-patch.yaml
+pptxgengo design project native-import inspect --in source.pptx
+pptxgengo design project native-import patch --project ./deck --slide architecture --in source.pptx --map import-map.yaml
+```
+
+Use the specialized [team](team-composition.md), [Gantt](gantt-composition.md) and
+[import](native-imports.md) runbooks for topology, units, keys, materialization,
+fit and native-edit boundaries. For structured render error phases, caller access,
+capture/Apple-event failures and bounded recovery, read [PowerPoint recovery](powerpoint-recovery.md).

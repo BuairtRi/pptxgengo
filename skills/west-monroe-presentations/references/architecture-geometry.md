@@ -268,3 +268,13 @@ rejected instead of applying an old transform to a newly generated coordinate
 space. Use an explicit layout reset and fresh baseline to review that change.
 The geometry proposal renderer verifies the actual current executable, fonts and
 bundle against the project lock before computing current YAML geometry.
+
+## Family semantics and foreign shapes
+
+Use [team composition](team-composition.md) and [Gantt composition](gantt-composition.md)
+when geometry also represents membership, reporting or periods; a native
+transform alone cannot establish those source facts. To reauthor selected foreign
+plain-text rectangles as editable blocks, follow [native imports](native-imports.md).
+It replaces styling explicitly and retains the original package; it does not
+import arbitrary architecture groups or connectors. Check installed help for
+these new development commands. For access failures, use [PowerPoint recovery](powerpoint-recovery.md).

@@ -231,15 +231,21 @@ func workerProcess(ctx context.Context, request workerRequest) ([]byte, error) {
 	configureWorkerProcess(cmd)
 	cmd.Stdin = bytes.NewReader(data)
 	cmd.WaitDelay = 2 * time.Second
-	output, err := cmd.CombinedOutput()
+	// Observations use stderr; the successful worker protocol is JSON stdout.
+	// Keeping the streams separate prevents phase logs corrupting receipts.
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout, cmd.Stderr = &stdout, &stderr
+	err = cmd.Run()
+	output := append(stdout.Bytes(), stderr.Bytes()...)
+	observation := helperObservationSummary(stderr.String())
 	if err != nil {
 		if ctx.Err() != nil {
-			return nil, fmt.Errorf("native worker deadline includes filesystem preparation and PowerPoint probes/export; check the staging folder and PowerPoint for a pending prompt (unconfirmed): %w", ctx.Err())
+			return nil, fmt.Errorf("%snative worker deadline includes filesystem preparation and PowerPoint probes/export; pending prompts and permissions are unconfirmed: %w; helper observations: %s", observation, ctx.Err(), strings.TrimSpace(stderr.String()))
 		}
 		if strings.Contains(string(output), "render-native-worker") {
 			return nil, fmt.Errorf("native worker unavailable in %s; the calling executable must dispatch render-native-worker to nativeexport.RenderWorker: %s", executable, strings.TrimSpace(string(output)))
 		}
-		return nil, fmt.Errorf("native worker failed: %s: %w", strings.TrimSpace(string(output)), err)
+		return nil, fmt.Errorf("%snative worker failed: %s: %w", observation, strings.TrimSpace(string(output)), err)
 	}
-	return output, nil
+	return stdout.Bytes(), nil
 }

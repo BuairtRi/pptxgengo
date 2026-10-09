@@ -4,6 +4,7 @@ use framework "Foundation"
 use scripting additions
 on run argv
  set nativePhase to "prepare_identity"
+ log "native_phase_entered=" & nativePhase & ";"
  try
  set sourceFile to POSIX file (item 1 of argv)
  set pdfFile to POSIX file (item 2 of argv)
@@ -23,6 +24,7 @@ on run argv
   tell application "/Applications/Microsoft PowerPoint.app"
    if not closeOnly then
     set nativePhase to "open_document"
+    log "native_phase_entered=" & nativePhase & ";"
     try
      with timeout of 12 seconds
       open sourceFile
@@ -33,6 +35,7 @@ on run argv
     end try
    end if
    set nativePhase to "identify_document"
+   log "native_phase_entered=" & nativePhase & ";"
    set matchedIndex to 0
    repeat with attempt from 1 to 40
     set matchCount to 0
@@ -55,12 +58,14 @@ on run argv
    set taskPresentation to presentation matchedIndex
    if closeOnly or probeOnly then
     set nativePhase to "close_document"
+    log "native_phase_entered=" & nativePhase & ";"
     if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before cleanup" number 68
     close taskPresentation saving no
     return
    end if
    try
     set nativePhase to "export_pdf"
+    log "native_phase_entered=" & nativePhase & ";"
     if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before export" number 68
     save taskPresentation in pdfFile as save as PDF
    on error messageText number errorNumber
@@ -73,6 +78,7 @@ on run argv
     error messageText number errorNumber
    end try
    set nativePhase to "close_document"
+   log "native_phase_entered=" & nativePhase & ";"
    if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before close" number 68
    close taskPresentation saving no
   end tell

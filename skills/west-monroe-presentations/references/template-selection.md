@@ -200,3 +200,11 @@ compiler/template pins are required; expired/deprecated content is refused.
 Adapted copy needs the destination deck's evidence and review process.
 No curated inventory is bundled. Use only a revision the operator actually
 provides and follow [maintained authored slides](editing-slides.md#reuse-maintained-authored-slides).
+
+## Templates with variable structure
+
+A team, pod, governance or Gantt match is a visual starting point. Inspect the
+selected variant's typed components before assuming it supports a family command.
+Read [team composition](team-composition.md) or [Gantt composition](gantt-composition.md)
+to change count, topology and scale. Loose-shape variants need an explicit local
+derivative; a family label alone does not qualify the command. Check installed help.

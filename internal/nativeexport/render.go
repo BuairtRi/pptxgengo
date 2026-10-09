@@ -74,7 +74,17 @@ func command(ctx context.Context, name string, args ...string) ([]byte, error) {
 		cmd.Env = powershellenv.ForWindowsPowerShell(os.Environ())
 	}
 	cmd.WaitDelay = 2 * time.Second
-	output, err := cmd.CombinedOutput()
+	// AppleScript entry observations must reach the parent before a blocked
+	// worker is killed. Keep stdout and ordinary stderr behavior unchanged.
+	var stdout bytes.Buffer
+	stderr := &phaseForwarder{target: os.Stderr}
+	if name != "/usr/bin/osascript" || !monitorAppleScript(args) {
+		stderr.target = io.Discard // Cleanup/probes never replace render progress.
+	}
+	cmd.Stdout = &stdout
+	cmd.Stderr = stderr
+	err := cmd.Run()
+	output := append(stdout.Bytes(), stderr.output.Bytes()...)
 	if err != nil {
 		if ctx.Err() != nil {
 			return nil, fmt.Errorf("%s: %w: %s", name, ctx.Err(), strings.TrimSpace(string(output)))
