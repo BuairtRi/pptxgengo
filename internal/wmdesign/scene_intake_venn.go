@@ -41,20 +41,21 @@ type intakeVennPoint struct {
 	Side  string          `json:"side,omitempty"`
 }
 type intakeVennSource struct {
-	Type       string             `json:"type"`
-	ID         string             `json:"id,omitempty"`
-	X          float64            `json:"x"`
-	Y          float64            `json:"y"`
-	W          float64            `json:"w"`
-	H          float64            `json:"h"`
-	Sets       []intakeVennSet    `json:"sets"`
-	Regions    []intakeVennRegion `json:"regions,omitempty"`
-	Points     []intakeVennPoint  `json:"points,omitempty"`
-	TextW      *float64           `json:"textW,omitempty"`
-	Opacity    *float64           `json:"opacity,omitempty"`
-	LabelStyle string             `json:"labelStyle,omitempty"`
-	Numbered   *bool              `json:"numbered,omitempty"`
-	CanvasH    float64            `json:"_h,omitempty"`
+	Type             string             `json:"type"`
+	ID               string             `json:"id,omitempty"`
+	X                float64            `json:"x"`
+	Y                float64            `json:"y"`
+	W                float64            `json:"w"`
+	H                float64            `json:"h"`
+	Sets             []intakeVennSet    `json:"sets"`
+	Regions          []intakeVennRegion `json:"regions,omitempty"`
+	Points           []intakeVennPoint  `json:"points,omitempty"`
+	TextW            *float64           `json:"textW,omitempty"`
+	Opacity          *float64           `json:"opacity,omitempty"`
+	LabelStyle       string             `json:"labelStyle,omitempty"`
+	Numbered         *bool              `json:"numbered,omitempty"`
+	CanvasH          float64            `json:"_h,omitempty"`
+	CompositionAreaH *float64           `json:"_composition_area_h,omitempty"`
 }
 
 // Geometry mirrors the source renderer, including the outward pairwise lens
@@ -134,6 +135,9 @@ func (r *renderer) planIntakeVennScene(id string, raw json.RawMessage, ctx Scene
 	}
 	if v, ok := fields["_h"]; ok && bytes.Equal(bytes.TrimSpace(v), []byte("null")) {
 		return bad("invalid_geometry")
+	}
+	if v, ok := fields["_composition_area_h"]; ok && (bytes.Equal(bytes.TrimSpace(v), []byte("null")) || n.CompositionAreaH == nil || !intakeFinite(*n.CompositionAreaH) || *n.CompositionAreaH <= 0 || *n.CompositionAreaH > 1080) {
+		return bad("invalid_composition_area_height")
 	}
 	if !intakeFinite(n.X, n.Y, n.W, n.H, n.CanvasH) || n.W <= 0 || n.H <= 0 || n.W > 1920 || n.H > 1080 || math.Abs(n.X) > 3840 || math.Abs(n.Y) > 2160 || n.CanvasH < 0 || n.CanvasH > 2160 {
 		return bad("invalid_geometry")

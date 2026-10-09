@@ -94,6 +94,18 @@ func TestRepositoryQualificationCadenceAndReleaseGates(t *testing.T) {
 			}
 		}
 	}
+	composition := job(root, "composition-catalog")
+	catalogRules := rules(composition)
+	catalogDedup := `$PPTXGENGO_FULL_TESTS == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE =~ /^(schedule|web)$/`
+	if !reflect.DeepEqual(catalogRules[0], map[string]any{"if": catalogDedup, "when": "never"}) || !has(composition, night) || has(composition, tag) || has(composition, main) || has(composition, pr) {
+		t.Fatal("composition catalogs must run once uninstrumented: normal nightly/on-demand, or opt-in exhaustive integration instead")
+	}
+	if !has(composition, `$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "composition-catalog")`) {
+		t.Fatal("API catalog request must remain available: exhaustive integration is selected only by schedule/web, not API")
+	}
+	if !reflect.DeepEqual(composition["script"], []any{"go test -count=1 -timeout=12m -run '^(TestQuantitativeCatalogV11EveryChartSource|TestCommercialCatalogV11EveryCommercialAndValueVariant)$' ./internal/deckproject"}) {
+		t.Fatal("catalog lane must run exactly the two full inventory sweeps without race instrumentation")
+	}
 	for _, name := range []string{"exhaustive", "windows-native"} {
 		for _, value := range rules(job(root, name)) {
 			condition, _ := value.(map[string]any)["if"].(string)

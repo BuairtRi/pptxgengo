@@ -909,6 +909,10 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		return nil, e
 	}
 	seen = map[string]bool{}
+	gateLabels := []struct {
+		key         string
+		left, width float64
+	}{}
 	for i, g := range n.Gates {
 		key := ""
 		isKey := false
@@ -948,6 +952,16 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		if left < tx-.02 || left+w > tx+tw+.02 {
 			return nil, fmt.Errorf("scene.gantt_gate_label_outside_timeline: %s", k)
 		}
+
+		for _, placed := range gateLabels {
+			if left < placed.left+placed.width-0.02 && left+w > placed.left+0.02 {
+				return nil, fmt.Errorf("scene.gantt_gate_labels_overlap: %s and %s; move, combine or remove gates explicitly", placed.key, k)
+			}
+		}
+		gateLabels = append(gateLabels, struct {
+			key         string
+			left, width float64
+		}{k, left, w})
 		if e = r.sceneRect(p, id+".gates."+k+".chip", Rect{left, gateTop, w, 18}, surf); e != nil {
 			return nil, e
 		}
@@ -1063,6 +1077,7 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 		}
 		base := L.top + (L.h-float64(L.tracks)*trackPitch)/2 + 4
 		for _, o := range L.items {
+			itemFrom := len(p.Items)
 			it := o.it
 			part := pre + ".items." + o.key
 			y := base + float64(o.track)*trackPitch
@@ -1174,6 +1189,11 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 			if e = r.sequenceLiteralText(p, part+".label", it.Label, small, Rect{labelX, y, labelW, 22}, color, "left", true); e != nil {
 				return nil, e
 			}
+			// Keep the stable bar/event parts and their caption together when a
+			// human moves the complete task. Individual interval handles remain
+			// available inside the group for explicit semantic retiming review.
+			itemBounds := diagramFinish(&scenePlan{Items: p.Items[itemFrom:]}, "").Bounds
+			sceneDataGroup(p, part, "gantt.item", itemFrom, itemBounds)
 		}
 	}
 	ly := bodyBottom + 14

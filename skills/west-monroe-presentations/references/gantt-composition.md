@@ -190,13 +190,22 @@ pptxgengo design project gantt reconcile --project ./deck-project --slide plan \
 ```
 
 The second command replays the receipt-backed packet and reports **proposals**.
-A horizontal move/resize of an original, single solid task bar can propose new
-`from/to` periods. A horizontal move of the original vertical gate guide can
+Select the complete original keyed task group when moving work horizontally:
+bars, event markers and their captions travel together. For a single solid task,
+a horizontal group move can propose new `from/to` periods while retaining duration.
+An individual original bar handle can resize the interval; its caption remains
+source copy and is regenerated on explicit retime adoption. A horizontal move/resize
+of that original single bar can also propose new `from/to` periods. A horizontal move of the original vertical gate guide can
 propose a new `at`. A gate chip or label alone does not establish its period.
-All tagged period anchors and their parent group transforms must be unchanged.
+All tagged period anchors and their ancestor coordinate transforms must be unchanged.
+The original direct keyed task group may translate horizontally; scaling, vertical
+movement, rotation, flips or reparenting require explicit source interpretation.
+PowerPoint may recompute a group envelope without changing its child coordinate
+map; that envelope normalization remains retained native evidence.
 Select the authored node ID discovered by inspection; `native_node_id` in the
 semantic report retains its qualified namespace through nested local groups.
-Coordinates remain in that common parent space and are converted to fractional
+Coordinates are rebased from the authenticated task group into that common axis
+parent space and are converted to fractional
 periods rounded to six decimal places; no week/day/integer snapping is applied.
 DrawingML quantization can affect the last decimal. Confirm the proposed
 coordinates against the intended schedule; use an explicit keyed patch when a
@@ -253,3 +262,13 @@ qualification does not establish a GUI Save As or Windows qualification. See
 [architecture and geometry](architecture-geometry.md),
 [editing slides](editing-slides.md) and
 [PowerPoint recovery](powerpoint-recovery.md).
+
+## Keep gate labels readable
+
+Gate chips occupy measured horizontal space above the timeline. Duplicate dates
+or nearby gates can make their chips overlap even when the guide lines fit.
+The compiler refuses overlapping measured gate labels. Explicitly combine gates
+whose decision really is shared, remove a superseded gate by stable key, rename a
+label where its meaning permits, or move its authored period. Do not silently
+shift a decision date just to make labels fit. Preview the complete schedule after
+retiming; an adopted date must also pass this readability guard.

@@ -1,7 +1,9 @@
 # Deck source and portable project contract
 
-**October 3, 2026 — authored YAML runtime implemented.** This document retains
-broader Wave 1 design intent alongside the bounded Wave 2 implementation.
+**Updated October 9, 2026 — maintained authored-source contract.** Historical
+design intent is retained where explicitly labeled. The v4.3.0 development
+additions have separate source and desktop gates in the
+[delivery matrix](../v4.3.0-completion-matrix.json).
 `design project` now loads/builds `pptxgengo.deck-document.v1` YAML; existing
 JSON template/foundation routes remain available. The authoritative implemented
 bounds are in [the runtime README](../../internal/deckproject/README.md), with a
@@ -46,7 +48,8 @@ The schema identifier is `pptxgengo.deck-document.v1`. The JSON Schema uses draf
 structural contract, not a substitute for catalog-dependent validation.
 
 Required root fields are `schema`, `id`, `title`, `year`, `toolchain`, and `slides`.
-Optional fields are `context`, `assets`, `local_templates`, and `media_optimization`.
+Optional fields are `editing_profile`, `context`, `assets`, `local_templates`,
+`sections`, and `media_optimization`.
 Unknown fields fail.
 `year` is explicit. `toolchain.lockfile` is a package-relative path. A source can be
 drafted with an unresolved lockfile, but a production build must resolve and verify
@@ -100,6 +103,43 @@ to the named zone's origin; the adapter translates to the current foundation
 renderer's slide-space points. Units are explicit; no mixing inches, CSS pixels,
 and points. A group does not change this coordinate origin.
 
+Source-derived components also preserve guarded `_source_geometry` arguments
+(`pptxgengo.scene-source-geometry.v1`). Normalized source origin/extent fractions
+distinguish the authored source geometry from measured native ink bounds. A
+cardrow retains its total allocation and authored gap while deriving each item
+width from the current count; captured Venn topology retains its original count
+and effective original frame layout height, reproducing source geometry when
+unchanged and reflowing changed counts within the owned allocation. Source geometry is
+captured by scaffold/detach, retained by family patches and consumed before strict
+source planner decoding. Do not fabricate or remove it to bypass fit checks.
+
+Four additional allocations support intentional source-derived layouts:
+
+- `source_canvas` spans x=0 through width 960 and y=0 through the frame body
+  bottom. It requires a component/composite in a pinned local derivative with
+  shared-parent source provenance. It does not authorize painting beyond the
+  frame body bottom or obscuring chrome without review.
+- `source_container` preserves an actual pinned shared container/frame with up
+  to six points below the body, retaining at least six points before source
+  caption and footer zones. The compiler recreates the true catalog parent and
+  checks node identity, definition, source hashes and captured source geometry,
+  including when an ancestor snapshot is present. New components and fabricated
+  extent metadata cannot acquire this exception. Placement edits stay inside
+  the fixed cap. The V11 layer-map container originally has only three points
+  before its source-caption zone: strict scaffold refuses it. Explicit
+  `--source-container-clearance-fit` authors a three-point height reduction
+  (294 to 291), retaining original geometry metadata and returning an adjustment
+  receipt. This is an intentional adaptation, not unchanged visual fidelity.
+- `source_body` spans the normal body width from y=0 through the body bottom;
+  it accepts explicit components/composites and requires review of intentional
+  header interaction.
+- `tall_plot` is reserved for a typed `wmds/component/chart` quadrant in a split
+  frame. It extends the tall-body top by nine points while retaining its bottom.
+
+Ordinary nodes use normal body/rail allocations. Loader and compiler checks
+validate these exceptions independently; naming a special zone is insufficient
+to make an incompatible model or overflowing geometry valid.
+
 Node array order specifies back-to-front paint order. Nesting preserves group
 ownership. Binding objects may appear recursively in component/composite arguments
 but are permitted only where the referenced argument schema declares a bindable
@@ -124,7 +164,7 @@ Selecting a shared template supplies its fixed executable content contract.
 Selecting a local template supplies a deck-owned composition and zone contract.
 Both compile through the same vocabulary and scene compiler.
 
-| Operation | Proposed semantics |
+| Operation | Semantics |
 | --- | --- |
 | Instantiate | Bind actual content to a shared definition while retaining the shared reference |
 | Detach | Copy a resolved shared template's editable composition/zone contract into `local_templates`; change that slide to a local reference |
@@ -184,6 +224,17 @@ manifest. Registry assets resolve from the pinned release; custom assets resolve
 from the deck package root. Absolute paths, URLs, `..`, symlink escapes, and missing
 payloads fail in portable production builds. Evidence URLs are permissible in
 the source index; they are not executable image imports.
+
+An explicitly schematic scaffold may declare a path asset with `placeholder_for`
+instead of `registry_id`. The alias names a registered non-icon/non-arrow media
+ID. Its exact SHA-256 payload lives at `assets/objects/sha256/<hash>`; its
+description starts `Schematic placeholder for `. Unknown aliases, competing
+original/alias declarations, duplicate aliases, original-byte claims, unsafe
+paths, missing payloads and hash drift fail validation. Original source media
+references remain unchanged and resolve through this declared alias. Genuine
+registered icon/arrow bytes remain originals. See
+[scaffold media](../../skills/west-monroe-presentations/references/scaffold-media.md)
+for the explicit flag, emitted descriptors/payloads and portable installation.
 
 Original assets are preserved byte-for-byte. Compression/resizing creates a
 derivative with its own ID/hash and records original ID/hash, recipe, dimensions,
@@ -307,20 +358,21 @@ Reconciliation resolves the authored item key before applying an edit to the
 current source. Objects emitted from shared chrome or fixed illustration parts
 may have no deck-owned content field; the map explicitly records that limitation.
 
-## 10. Manual editing and future reconciliation
+## 10. Manual editing and bounded reconciliation
 
 Native PowerPoint editing is supported as an operator activity. There is no current
 general reverse compiler that turns a changed PPTX into maintained semantic YAML.
-The first implementation must at least detect divergence from the last generated
-PPTX hash before replacing or claiming source/output alignment.
+Generated builds remain immutable; native edits are made in a separate working
+copy. Current receipt-backed review detects changed objects against the generated
+baseline and proposes supported text, geometry and named semantic changes.
 
-Future reconciliation compares three inputs: the canonical source and generated
+Reconciliation compares three inputs: the canonical source and generated
 native state at the recorded baseline, the current source, and the manually edited
 PPTX. Map native changes through stable object keys; do not infer identity only
 from shape index, slide order, bounding box, or visible text. Supported edits become
 reviewable proposals against named source fields.
 
-| Source versus baseline | PPTX versus baseline | Proposed handling |
+| Source versus baseline | PPTX versus baseline | Handling contract |
 | --- | --- | --- |
 | Unchanged | Supported text/data changed | Propose promotion into source, then rebuild/review |
 | Changed | Unchanged | Build current source; preserve existing baseline/history |
@@ -332,8 +384,13 @@ No silent overwrite or automatic general merge. Unmatched/deleted/duplicated obj
 are ambiguous, not proof that the author deleted a source field. Table cell/item
 mapping needs stable row keys and cell roles; slides added in PowerPoint need an
 explicit import/adoption decision. A native retained variant is an explicitly
-separate route with editable-native capabilities and limits, not a fake shared
-template. Full reconciliation implementation is after the source/identity adapter.
+separate route with editable-native capabilities and limits. Geometry adoption
+does not infer reporting, membership, dates, units or source observations. Named
+team, Gantt, assessment and quantitative semantic reviews require their explicit
+supported decisions and reject stale/ambiguous or conflicting inputs. See the
+[native review runbook](../../skills/west-monroe-presentations/references/native-semantic-review.md)
+and [native semantic scope](../native-semantic-reconciliation.md). This remains a
+bounded source adapter, not arbitrary reverse compilation of PowerPoint.
 
 ## 11. Implemented runtime boundary
 
@@ -342,9 +399,9 @@ validation, shared/local resolution, original/derived asset validation, stable
 object mapping, exact runtime/bundle/font/asset locks, immutable scene/native
 builds, hash-bound scoped approvals and invalidation, resumption, local fork,
 bounded shared detach, and maintainer/client/offline/reviewer ZIP exports.
-Existing JSON APIs remain available. The current source bundle is v5
-(`wmds-library.v5`, 587 templates at
-`d83bd58a9f9de68ebd8d6b3c9b0272c16ed516cf`); the calibrated Go engine remains
+Existing JSON APIs remain available. This development slice pins V11
+(`wmds-library.v11`, 649 retained templates; exact catalog hash in the
+[delivery matrix](../v4.3.0-completion-matrix.json)); the calibrated Go engine remains
 `wmds-go-foundation.v2`.
 
 The loader rejects duplicate keys, nonstring mapping keys, unknown fields,
@@ -374,10 +431,13 @@ verified ancestry for generic source scenes; legacy typed card/metric IR and
 source-note/stamp chrome detach remain explicitly unsupported. Build preserves
 raw YAML; fork/detach serialize it and preserve exact predecessor snapshots.
 
-The current reviewer ZIP contains technical build evidence and visible draft
-bindings; it does not automatically assemble isolated outline/content/audience
-packets or run fresh reviewers. Automatic PDF import/export and arbitrary edited
-PowerPoint reconciliation are not implemented. Offline execution requires the
+Review exports contain named source/build evidence and review context according
+to the selected packet. Running independent reviewers is a separate agent action.
+Native render/export depends on an available qualified PowerPoint environment;
+arbitrary PDF import and arbitrary edited PowerPoint reverse compilation are
+unsupported. Numbered snapshots and colleague shares preserve complete source,
+pins and shared asset objects; see [portable projects](../portable-projects.md).
+Offline execution requires the
 pinned compiler's original OS/architecture and does not install PowerPoint or
 system fonts. Technical fit/build success leaves native appearance, visual review
 and arbitrary-content qualification separate.

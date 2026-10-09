@@ -17,11 +17,13 @@ type DiagramPort struct {
 	Y            float64 `json:"y_pt"`
 }
 type DiagramConnection struct {
-	Route  string       `json:"route"`
-	Points [][2]float64 `json:"points"`
-	Node   string       `json:"node"`
-	From   DiagramPort  `json:"from"`
-	To     DiagramPort  `json:"to"`
+	Route          string       `json:"route"`
+	Representation string       `json:"representation,omitempty"`
+	NativeParts    []string     `json:"native_parts,omitempty"`
+	Points         [][2]float64 `json:"points"`
+	Node           string       `json:"node"`
+	From           DiagramPort  `json:"from"`
+	To             DiagramPort  `json:"to"`
 }
 
 func diagramPorts(n string, b wmdesign.Rect, native string) []DiagramPort {
@@ -73,8 +75,9 @@ func addDiagramPorts(out *DiagramInspection, c wmdesign.Document) error {
 			continue
 		}
 		var src struct {
-			Type     string `json:"type"`
-			From, To struct{ Node, Site string }
+			Type      string       `json:"type"`
+			Waypoints [][2]float64 `json:"waypoints,omitempty"`
+			From, To  struct{ Node, Site string }
 		}
 		if e := json.Unmarshal(node.Scene.Node, &src); e != nil {
 			return e
@@ -88,7 +91,7 @@ func addDiagramPorts(out *DiagramInspection, c wmdesign.Document) error {
 			connection := DiagramConnection{Node: node.ID, From: a, To: z, Route: "straight"}
 			if connector, exists := native[node.ID]; exists {
 				if connector.Geometry.Route != nil {
-					connection.Route = "bentConnector3"
+					connection.Route = connector.Geometry.Route.Preset
 				}
 				for _, point := range nativeConnectorPoints(connector.Geometry) {
 					xy, e := nativeObjectPoint(objects, node.ID, point[0], point[1])
@@ -98,6 +101,54 @@ func addDiagramPorts(out *DiagramInspection, c wmdesign.Document) error {
 					connection.Points = append(connection.Points, xy)
 				}
 			}
+			if _, single := native[node.ID]; !single {
+				count := len(src.Waypoints) + 1
+				if count < 2 || count > 127 {
+					return fmt.Errorf("multipart connection lacks bounded authored waypoint count")
+				}
+				connection.Route = "polyline"
+				connection.Representation = "attached-native-segments"
+				expected := map[string]bool{}
+				for i := 1; i <= count; i++ {
+					name := fmt.Sprintf("%s.segment-%03d", node.ID, i)
+					expected[name] = true
+					segment, ok := native[name]
+					if !ok || segment.Geometry.Kind != "cxnSp" || segment.Geometry.Route != nil {
+						return fmt.Errorf("multipart route segment missing or unsupported: %s", name)
+					}
+					connection.NativeParts = append(connection.NativeParts, name)
+					points := nativeConnectorPoints(segment.Geometry)
+					for j, point := range points {
+						world, e := nativeObjectPoint(objects, name, point[0], point[1])
+						if e != nil {
+							return e
+						}
+						if i > 1 && j == 0 {
+							prior := connection.Points[len(connection.Points)-1]
+							if math.Hypot(prior[0]-world[0], prior[1]-world[1]) > .02 {
+								return fmt.Errorf("multipart native segments are disconnected")
+							}
+							continue
+						}
+						connection.Points = append(connection.Points, world)
+					}
+					if i < count {
+						guide := fmt.Sprintf("%s.waypoint-%03d", node.ID, i)
+						expected[guide] = true
+						g, ok := native[guide]
+						if !ok || g.Geometry.Kind != "sp" {
+							return fmt.Errorf("multipart waypoint guide missing: %s", guide)
+						}
+						connection.NativeParts = append(connection.NativeParts, guide)
+					}
+				}
+				for name := range native {
+					if (strings.HasPrefix(name, node.ID+".segment-") || strings.HasPrefix(name, node.ID+".waypoint-")) && !expected[name] {
+						return fmt.Errorf("unexpected multipart route namespace object: %s", name)
+					}
+				}
+			}
+
 			out.Connections = append(out.Connections, connection)
 		}
 	}

@@ -458,14 +458,15 @@ func addChartDefinition(target *PresSlide, cc *chartCounter, chartType ChartType
 		}
 	}
 
-	// Validate the additive sparse-line API before mutating the chart model.
+	// Validate additive sparse line / explicit gap bar data before mutation.
 	validateMissing := func(kind ChartType, series []ChartData, options *ChartOptions) error {
 		for _, d := range series {
 			if len(d.MissingValues) == 0 {
 				continue
 			}
-			if kind != ChartTypeLine || len(d.MissingValues) != len(d.Values) || len(d.Labels) != 1 || len(d.Labels[0]) != len(d.Values) || len(d.Values) == 0 || len(d.Values) > 10000 {
-				return fmt.Errorf("chart missing values require an aligned bounded single-level line series")
+			supported := kind == ChartTypeLine || kind == ChartTypeBar && options != nil && options.DisplayBlanksAs == "gap"
+			if !supported || len(d.MissingValues) != len(d.Values) || len(d.Labels) != 1 || len(d.Labels[0]) != len(d.Values) || len(d.Values) == 0 || len(d.Values) > 10000 {
+				return fmt.Errorf("chart missing values require an aligned bounded single-level line or explicit gap bar series")
 			}
 
 			if options != nil && (options.BarGrouping == "stacked" || options.BarGrouping == "percentStacked") {
@@ -1288,8 +1289,22 @@ func addShapeDefinition(target *PresSlide, shapeName ShapeType, opts *ShapeProps
 	}
 	for name, value := range opts.Adjustments {
 		valid := name == "adj" && value >= 0 && value <= 100000
-		if shapeName == ShapeTypeBentConnector3 {
-			valid = name == "adj1" && value >= -2147483647 && value <= 2147483647
+		if strings.HasPrefix(string(shapeName), "bentConnector") {
+			count := 0
+			switch shapeName {
+			case "bentConnector2":
+				count = 0
+			case "bentConnector3":
+				count = 1
+			case "bentConnector4":
+				count = 2
+			case "bentConnector5":
+				count = 3
+			}
+			valid = false
+			for i := 1; i <= count; i++ {
+				valid = valid || name == fmt.Sprintf("adj%d", i) && value >= -2147483647 && value <= 2147483647
+			}
 		}
 		if !valid {
 			return errors.New("shape adjustment name or value is unsupported for this preset")

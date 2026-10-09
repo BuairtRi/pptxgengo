@@ -56,7 +56,17 @@ lock and the slides/templates, asset-object and versions directories. Other
 files appear when authored or produced by their command; the tree is a
 convention, not a claim that an empty project contains everything above.
 Working-copy and render directory names are operator conventions; record which
-build each copy belongs to. Put outgoing ZIPs outside the project root.
+build each copy belongs to. Generated builds are immutable and may be read-only.
+After copying a build into `working/`, make only that owned working copy writable:
+
+```sh
+mkdir -p ./deck/working
+cp ./deck/builds/BUILD_ID/deck.pptx ./deck/working/BUILD_ID-edited.pptx
+chmod 600 ./deck/working/BUILD_ID-edited.pptx
+```
+
+On Windows, clear `IsReadOnly` on the copied working file only. Do not alter the
+build baseline or its receipt. Put outgoing ZIPs outside the project root.
 Complete shares and snapshots include additional retained project files, so
 keep unrelated downloads and experiments elsewhere.
 

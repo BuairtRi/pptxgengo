@@ -10,7 +10,9 @@ import (
 // available height. Split diagrams can spend the unused body space below them.
 func intakeVennRoomierGeometry(n intakeVennSource, ctx SceneContext, radius float64, centers [][2]float64) (float64, [][2]float64, [2]float64) {
 	area := Rect{n.X, n.Y, n.W, n.H}
-	if strings.HasPrefix(ctx.Path, "/body/") && ctx.Zone.Y == n.Y && ctx.Zone.W >= n.W && ctx.Zone.W <= n.W+36 {
+	if n.CompositionAreaH != nil {
+		area.H = *n.CompositionAreaH
+	} else if strings.HasPrefix(ctx.Path, "/body/") && ctx.Zone.Y == n.Y && ctx.Zone.W >= n.W && ctx.Zone.W <= n.W+36 {
 		area.H = math.Max(area.H, ctx.Zone.Y+ctx.Zone.H-n.Y)
 	}
 	x, y := area.X+area.W/2, area.Y+area.H/2

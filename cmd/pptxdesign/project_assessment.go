@@ -9,6 +9,9 @@ import (
 )
 
 func runProjectAssessment(args []string) error {
+	if len(args) > 0 && args[0] == "reconcile" {
+		return runProjectAssessmentReconcile(args[1:])
+	}
 	if len(args) == 0 || (args[0] != "inspect" && args[0] != "patch") {
 		return fmt.Errorf("usage: project assessment inspect --project PATH --slide ID --node ID; project assessment patch --project PATH --slide ID --patch FILE [--apply]")
 	}

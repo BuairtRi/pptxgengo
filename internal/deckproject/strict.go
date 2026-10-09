@@ -135,10 +135,13 @@ func (p *Project) shapeType(v any, t reflect.Type, path string) error {
 				return e
 			}
 		}
-	case reflect.Slice:
+	case reflect.Slice, reflect.Array:
 		a, ok := v.([]any)
 		if !ok {
 			return p.fail(path, "expected array")
+		}
+		if t.Kind() == reflect.Array && len(a) != t.Len() {
+			return p.fail(path, "expected array of length %d", t.Len())
 		}
 		for i, item := range a {
 			if e := p.shapeType(item, t.Elem(), fmt.Sprintf("%s/%d", path, i)); e != nil {

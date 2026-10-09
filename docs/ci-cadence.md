@@ -64,7 +64,7 @@ glab ci run --branch '<mirrored-branch>' --variables PPTXGENGO_CI_JOB:developer-
 Available selectors include `developer`, `pr-relay-unit`, `workflow-lint`, `installation-process`,
 `installation-process-arm64`, `offline-model`, `offline-model-arm64`,
 `search-performance`, `search-performance-arm64`, `cross-platform-build`,
-`developer-race`, `security:go`, `security:secrets`, `security:offline-model`,
+`developer-race`, `composition-catalog`, `security:go`, `security:secrets`, `security:offline-model`,
 `macos-cli`, `macos-model`, and `macos-race`. Performance/model scans also select
 the model job they need. Native Mac selectors require protected main.
 `PPTXGENGO_CI_JOB=full` explicitly requests all supported qualification jobs;
@@ -126,3 +126,33 @@ units at 282.1 seconds and Mac CLI tests at 873.2 seconds. These are old job
 durations, not promises for current pipelines. The v4.2.1 release pipeline took
 793 seconds across 28 successful jobs; future durations can vary, especially
 release signing and notarization.
+
+## Semantic source catalog lane
+
+`composition-catalog` runs the exhaustive V11 quantitative/commercial source
+inventory exercises nightly and on explicit `PPTXGENGO_CI_JOB=composition-catalog`
+or `full` API/web pipelines. The active 1 a.m. Pacific schedule selects this job
+without `PPTXGENGO_FULL_TESTS`; it uses bundled inputs on Linux and no desktop or
+private branding runner. Main/tag short units retain representative composition
+regressions and skip those two full inventory sweeps. Retain a complete local
+source audit before release tagging; release resource generation separately
+regenerates the full template browsing deck. This lane does not add race work to
+PR/main/tag pipelines.
+
+The 2026-10-09 read-only GitLab audit found no `PPTXGENGO_FULL_TESTS` variable
+on active schedule 12 or the project (a user namespace, so there are no inherited
+group variables). The normal nightly therefore runs the two uninstrumented
+inventory sweeps once in `composition-catalog`; it does not select the
+`exhaustive` matrix. No remote schedule variable was changed.
+
+An explicit protected-main schedule/web `PPTXGENGO_FULL_TESTS=true` selects
+`exhaustive/test-integration`, whose non-short suite already includes both
+catalog tests. In that case `composition-catalog` is skipped before its other
+rules, preventing a second uninstrumented run. API catalog requests remain
+available because API does not select that exhaustive matrix. The separately
+opted-in full race target remains an instrumented qualification, not normal
+nightly or release work. At this audit, no project-enabled online runner had the
+`pptxgengo-integration` tag; enabling the full matrix requires provisioning that
+lane and its private inputs first. The untagged Linux catalog runner and the
+Mac mini Linux ARM64 runner were online. Runner availability is an observation
+at audit time, not a permanent capacity guarantee.

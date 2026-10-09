@@ -114,7 +114,7 @@ func TestGanttCompositionCatalogPreviewApplyStableReorder(t *testing.T) {
 		order = append(order, inspect.Schedule.Groups[i].Key)
 	}
 	gate := GanttGateValue{Key: "approval", At: 4.5, Label: "Approve", Callout: true}
-	patch := ganttPatch(p, id, GanttOperation{Action: "reorder", Entity: "group", Order: order}, GanttOperation{Action: "set", Entity: "gate", Key: "approval", Gate: &gate})
+	patch := ganttPatch(p, id, GanttOperation{Action: "remove", Entity: "gate", Key: ganttKey(inspect.Schedule.Gates[1].Key)}, GanttOperation{Action: "reorder", Entity: "group", Order: order}, GanttOperation{Action: "set", Entity: "gate", Key: "approval", Gate: &gate})
 	preview, e := PatchGantt(p, "plan-slide", patch, bundle(t), wmdesign.CandidateEngine, false)
 	if e != nil {
 		t.Fatal(e)
@@ -326,4 +326,20 @@ func TestGanttCompositionDemo(t *testing.T) {
 		}
 	}
 	t.Log("Retained Gantt qualification packet:", out)
+}
+
+func TestGanttCompositionRejectsCollidingGateLabels(t *testing.T) {
+	p, id := ganttCompositionFixture(t)
+	inspect, e := InspectGantt(p, "plan-slide", id, bundle(t), wmdesign.CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	original := inspect.Schedule.Gates[1]
+	for _, offset := range []float64{0, 0.1} {
+		gate := GanttGateValue{Key: "collision", At: original.At + offset, Label: "Approve"}
+		_, e = PatchGantt(p, "plan-slide", ganttPatch(p, id, GanttOperation{Action: "set", Entity: "gate", Key: gate.Key, Gate: &gate}), bundle(t), wmdesign.CandidateEngine, false)
+		if e == nil || !strings.Contains(e.Error(), "gantt_gate_labels_overlap") {
+			t.Fatal("unreadable measured gate preview accepted", offset, e)
+		}
+	}
 }

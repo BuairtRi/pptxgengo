@@ -232,6 +232,9 @@ func (p *Project) validate() error {
 			return p.fail("/context/"+escape(k), "%v", e)
 		}
 	}
+	if err := validateScaffoldPlaceholderAssets(d.Assets); err != nil {
+		return p.fail("/assets", "%v", err)
+	}
 	for id, a := range d.Assets {
 		path := "/assets/" + escape(id)
 		if a.Focus != nil {
@@ -451,6 +454,20 @@ func (p *Project) validate() error {
 				if n.Placement == nil || (n.Placement.Rect == nil) == (n.Placement.Span == nil) {
 					return p.fail(np, "node requires exactly one rect or span placement")
 				}
+				if n.Placement.Zone == "source_container" {
+					if e := validateSourceContainerLocal(t, n); e != nil {
+						return p.fail(np, "%v", e)
+					}
+				}
+				if n.Placement.Zone == "source_canvas" && ((n.Kind != "component" && n.Kind != "composite") || t.Provenance == nil || t.Provenance.SourceFile == "" || t.Provenance.Parent.Scope != "shared") {
+					return p.fail(np, "source_canvas requires a pinned source-derived scene component; review intentional margin/header interaction")
+				}
+				if n.Placement.Zone == "source_body" && (n.Kind != "component" && n.Kind != "composite") {
+					return p.fail(np, "source_body requires an explicit scene component; review intentional header interaction")
+				}
+				if n.Placement.Zone == "tall_plot" && (n.Kind != "component" && n.Kind != "composite" || n.Definition == nil || n.Definition.ID != "wmds/component/chart") {
+					return p.fail(np, "tall_plot is reserved for typed quadrant charts")
+				}
 				switch n.Kind {
 				case "text":
 					if n.Style == "" || n.Text == nil {
@@ -469,7 +486,7 @@ func (p *Project) validate() error {
 						return p.fail(np, "rule requires ink/positive weight")
 					}
 				case "component", "composite":
-					if n.Definition == nil || n.Definition.Scope != "shared" || n.Arguments == nil {
+					if n.Definition == nil || n.Definition.Scope != "shared" || (n.Arguments == nil && n.Definition.ID != "wmds/component/rule") {
 						return p.fail(np, "typed definition and arguments required")
 					}
 				default:

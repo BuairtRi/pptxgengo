@@ -145,6 +145,7 @@ func ganttSource(n *Node, values map[string]any) (wmdesign.GanttSpec, map[string
 	if e != nil {
 		return s, nil, bound, e
 	}
+	delete(args, wmdesign.SceneSourceGeometryArgument)
 	if e = strictInto(args, &s); e != nil {
 		return s, nil, bound, e
 	}
@@ -327,6 +328,9 @@ func PatchGantt(p *Project, slideID string, patch GanttPatch, bundle, engine str
 	}
 	for _, reserved := range []string{"type", "x", "y", "w"} {
 		delete(args, reserved)
+	}
+	if geometry, exists := n.Arguments[wmdesign.SceneSourceGeometryArgument]; exists {
+		args[wmdesign.SceneSourceGeometryArgument] = geometry
 	}
 	n.Arguments, n.Keys = args, keys
 	return CompositionCandidate(p, slideID, "gantt", patch.Actor, patch.Reason, clone, bundle, engine, apply)

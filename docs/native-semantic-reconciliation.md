@@ -1,8 +1,10 @@
 # Reviewed native semantic reconciliation
 
-This source slice adds `project gantt reconcile`. It is not included in the
-promoted v4.2.1 package. The operator workflow is maintained in the
-[Gantt runbook](../skills/west-monroe-presentations/references/gantt-composition.md).
+The v4.3.0 source work supports explicit semantic review for Gantt retiming,
+pod membership, ordinal assessments and native chart values. These additions
+are not included in the promoted v4.2.1 package. The operator entry point is
+[native semantic review](../skills/west-monroe-presentations/references/native-semantic-review.md),
+with specialized interpretation and source operations in each family runbook.
 
 ## Bounded contract
 
@@ -53,19 +55,36 @@ baseline before subsequent reconciliation.
 ## Team and reporting boundary
 
 Pod crossing alone cannot distinguish reassignment from spacing, shared roles,
-resized containers or transient dragging. A future proposal would require stable
-role/pod identity, unchanged frame/container coordinate systems, unambiguous
-containment and an explicit acceptance that changes source membership. It must
-retain uncertainty when the role overlaps, sits outside pods or the source has
-changed. No pod-crossing inference ships in this slice.
+resized containers or transient dragging. `project team reconcile` proposes
+membership only when the original role surface and text move together by the
+same translation, every relevant pod/frame allocation is unchanged, and exactly
+one target contains the moved role. Overlap, resizing, partial movement, changed
+ownership and stale source remain unresolved. A reviewed `reassign` decision
+changes membership and regenerates its layout; the source transaction retains
+the native geometry as evidence rather than applying the movement twice.
 
-Reporting changes require relationships rather than position. A future stronger
+Reporting changes require relationships rather than position. A stronger
 signal could use authenticated native connector endpoint IDs, explicit edge
 meaning and known node identity to propose a parent change. It must retain tree
 root/cycle/multiple-parent guards. Native arrow movement, shape proximity and
 untagged imports do not establish reporting authority. Current
 [team commands](../skills/west-monroe-presentations/references/team-composition.md)
 provide explicit reviewed membership and reparent operations.
+
+## Assessment and chart facts
+
+`project assessment reconcile` recognizes canonical visible integer scores
+within the declared ordinal domain, or an empty cell as unassessed. Zero remains
+a score. Header/row identities, formatting and table structure must retain the
+authenticated baseline; a score decision regenerates dependent fills and legend.
+
+`project quantitative reconcile` recognizes numeric facts in column, bar, line,
+pie, doughnut and scatter charts only when their original keyed cache and
+embedded workbook agree. The worksheet/reference/table shells, axes, labels,
+units and styling retain their baseline. Native formatting, formulas, renamed
+categories, copied charts or inconsistent cache/workbook edits remain manual.
+Commercial values are derived outputs: edit explicit source inputs/formulas,
+rather than adopting a manually typed monetary result as a new model input.
 
 ## Qualification
 

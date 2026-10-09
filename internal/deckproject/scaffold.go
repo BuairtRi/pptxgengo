@@ -10,17 +10,38 @@ import (
 )
 
 type TemplateScaffold struct {
-	Schema                string         `json:"schema"`
-	Template              LocalTemplate  `json:"template"`
-	SyntheticSourceValues map[string]any `json:"synthetic_source_values"`
-	Policy                []string       `json:"policy"`
-	OmittedNodes          []string       `json:"omitted_nodes,omitempty"`
+	Schema                string                       `json:"schema"`
+	Template              LocalTemplate                `json:"template"`
+	SyntheticSourceValues map[string]any               `json:"synthetic_source_values"`
+	Policy                []string                     `json:"policy"`
+	OmittedNodes          []string                     `json:"omitted_nodes,omitempty"`
+	Assets                map[string]Asset             `json:"assets,omitempty"`
+	AssetPayloads         map[string][]byte            `json:"asset_payloads,omitempty"`
+	PlaceholderMedia      []ScaffoldPlaceholder        `json:"placeholder_media,omitempty"`
+	GeometryAdjustments   []ScaffoldGeometryAdjustment `json:"geometry_adjustments,omitempty"`
+}
+
+type ScaffoldGeometryAdjustment struct {
+	NodeID   string        `json:"node_id"`
+	Original wmdesign.Rect `json:"original_measured_allocation"`
+	Authored wmdesign.Rect `json:"authored_allocation"`
+	Reason   string        `json:"reason"`
 }
 
 // ScaffoldTemplate derives editable scene components from the actual catalog
 // definition before attempting to fit a particular slide's content. It never
 // installs synthetic values into a project or changes the shared definition.
+type ScaffoldOptions struct {
+	PlaceholderMedia            bool
+	OmitNodes                   []string
+	SourceContainerClearanceFit bool
+}
+
 func ScaffoldTemplate(bundle, key, engine, reason string, year int, omitNodes ...string) (TemplateScaffold, error) {
+	return ScaffoldTemplateWithOptions(bundle, key, engine, reason, year, ScaffoldOptions{OmitNodes: omitNodes})
+}
+
+func ScaffoldTemplateWithOptions(bundle, key, engine, reason string, year int, options ScaffoldOptions) (TemplateScaffold, error) {
 	out := TemplateScaffold{Schema: "pptxgengo.local-template-scaffold.v1", SyntheticSourceValues: map[string]any{}, Policy: []string{"Synthetic source values illustrate the original contract; replace them with supplied content before use.", "The shared parent is pinned; topology or geometry edits require a reason and supplied-content native review.", "This scaffold is not applied to a project automatically."}}
 	if strings.TrimSpace(reason) == "" {
 		return out, fmt.Errorf("template scaffold requires an explicit adaptation reason")
@@ -67,7 +88,7 @@ func ScaffoldTemplate(bundle, key, engine, reason string, year int, omitNodes ..
 		return out, fmt.Errorf("source specimen unavailable for %s", key)
 	}
 	omitted := map[string]bool{}
-	for _, id := range omitNodes {
+	for _, id := range options.OmitNodes {
 		found := false
 		for _, node := range compiled.Nodes {
 			if node.ID == id {
@@ -84,9 +105,27 @@ func ScaffoldTemplate(bundle, key, engine, reason string, year int, omitNodes ..
 		return out, fmt.Errorf("template scaffold does not yet support source-note, stamp or tint chrome; shared definition remains unchanged")
 	}
 	doc.Slides = []wmdesign.SlideSpec{*compiled}
-	_, report, err := wmdesign.BuildWithEngine(bundle, "", doc, engine)
+	var placeholders map[string]wmdesign.AssetData
+	if options.PlaceholderMedia {
+		placeholders, err = wmdesign.TemplatePlaceholderAssets()
+		if err != nil {
+			return out, err
+		}
+		for key := range placeholders {
+			if strings.HasPrefix(key, "icon/") || strings.HasPrefix(key, "arrow-") {
+				delete(placeholders, key)
+			}
+		}
+		out.Policy = append(out.Policy, "Explicit schematic placeholders replace only non-icon/non-arrow registered media; they are not original artwork and must be reviewed/replaced before delivery.")
+	}
+	payload, report, err := wmdesign.BuildWithEngineAndAssets(bundle, "", doc, engine, placeholders)
 	if err != nil {
 		return out, err
+	}
+	if options.PlaceholderMedia {
+		if err = addScaffoldPlaceholderPayloads(&out, payload, placeholders, omitted); err != nil {
+			return out, err
+		}
 	}
 	frame := report.Slides[0].Frame
 	frameOptions := compiled.Frame
@@ -152,13 +191,24 @@ func ScaffoldTemplate(bundle, key, engine, reason string, year int, omitNodes ..
 		if !ok {
 			return out, fmt.Errorf("measured scene bounds missing: %s", node.ID)
 		}
-		b, errBounds := editableSceneAllocation(kind, args, b)
+		b, errBounds := editableSceneAllocation(kind, args, b, frame)
 		if errBounds != nil {
 			return out, fmt.Errorf("%s: %w", node.ID, errBounds)
 		}
-		zone, origin, err := chooseZone(b, frame)
+		if options.SourceContainerClearanceFit && (kind == "container" || kind == "frame") && b.Y+b.H > frame.Body.Y+frame.Body.H {
+			limit := sourceContainerZone(frame)
+			if b.X >= limit.X && b.X+b.W <= limit.X+limit.W && b.Y < limit.H && b.Y+b.H <= frame.Body.Y+frame.Body.H+6 {
+				adjusted := b
+				adjusted.H = limit.H - b.Y
+				if adjusted.H < b.H {
+					out.GeometryAdjustments = append(out.GeometryAdjustments, ScaffoldGeometryAdjustment{NodeID: node.ID, Original: b, Authored: adjusted, Reason: "Explicit source-container clearance fit: shrink original height to retain six-point caption/footer clearance; not unchanged-source visual fidelity"})
+					b = adjusted
+				}
+			}
+		}
+		zone, origin, err := chooseSourceSceneZone(kind, args, b, frame)
 		if err != nil {
-			return out, fmt.Errorf("template scaffold %s: %w", node.ID, err)
+			return out, fmt.Errorf("template scaffold %s bounds %+v original geometry %s: %w", node.ID, b, node.Scene.Node, err)
 		}
 		for _, slot := range def.Slots {
 			if !strings.HasPrefix(slot.SourcePointer, node.Scene.Path+"/") {

@@ -3,15 +3,17 @@
 Project release artifacts and CI are private in GitLab. Dates below use the
 release pipeline's UTC date; release tags and signed artifacts are immutable.
 
-## Unreleased
+## Unreleased — v4.3.0 candidate
 
-- Add reviewed, receipt-backed Gantt bar/gate retiming proposals with guarded period-value adoption and retained native evidence; ambiguous edits remain explicit review findings.
-- Add keyed cycle composition and explicit ordinal assessment models with guarded source patches, measured fit and specialized operator runbooks.
-- Add measured, source-hash-guarded team/pod/reporting/governance and period-based Gantt composition commands with stable identities and explicit binding materialization.
-- Add bounded native text-shape imports with explicit design styling, exact retained source packages and atomic decisions.
-- Integrate family runbooks and PowerPoint recovery into the West Monroe presentation skill; add repository `AGENTS.md` routing to the failure catalog.
-- Preserve last observed macOS helper phase across worker cancellation, correct timeout guidance, and retain nested source comments by identity.
-- Desktop qualification is specimen specific. General native imports, semantic interpretation of arbitrary PowerPoint edits, Windows desktop tests and external GUI transport causes remain pending.
+- Add quantitative chart composition, exact decimal commercial models and explicit mappings that keep generated pricing summaries consistent with authored facts.
+- Add measured layer stacks, maturity and staffing curves, branching processes, road forks, journeys and portfolio roadmaps with stable identities and guarded changes to counts, scales and topology.
+- Add keyed component/table customization and specialized runbooks covering every catalog family; retain template provenance, source geometry and explicit schematic media aliases.
+- Route connectors through native presets or attached multipart segments, with bounded obstacle-aware routing and reviewed native geometry adoption.
+- Add explicit native chart, assessment score and team membership reviews alongside Gantt retiming; preserve unsupported formatting, relationships and objects as review findings.
+- Group native Gantt items and process steps with their captions. Reject colliding gate labels, out-of-frame geometry and ambiguous semantic changes.
+- Package the current presentation skill, installation/update helper and registered diagram graphics alongside the SQLite catalog and regenerated template browsing deck.
+- Keep exhaustive catalog sweeps in nightly/on-demand GitLab jobs and lightweight representative checks in ordinary pipelines.
+- Retain specimen-specific macOS edit/Save As evidence and a documented PowerPoint failure catalog. Windows PowerPoint qualification, content-complete reusable slides and external branding/photo distribution remain deferred.
 
 ## [v4.2.1](https://gitlab.samcott.com/riscott/pptxgengo/-/releases/v4.2.1) — 2026-10-08
 

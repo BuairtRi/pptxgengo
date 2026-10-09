@@ -4,7 +4,10 @@
 // delegates to the gen-objects package functions, mirroring slide.ts exactly.
 package pptx
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // Slide is the user-facing handle for a single slide. Obtain one from
 // Presentation.AddSlide. Ports the TS Slide class.
@@ -54,11 +57,35 @@ func (s *Slide) AddConnector(opts *ConnectorProps) error {
 	}
 	preset := ShapeTypeLine
 	if opts.Route != nil {
-		if opts.Route.Preset != "bentConnector3" || opts.Route.Adjustment < -2147483647 || opts.Route.Adjustment > 2147483647 || (shape.Rotate != 0 && shape.Rotate != 90) {
-			return errors.New("unsupported native connector route")
+		if opts.Route.Preset == "polyline" {
+			var e error
+			preset, shape, e = NativePolylineConnectorPreset(shape, opts.Route.Points)
+			if e != nil {
+				return e
+			}
+		} else {
+			if len(opts.Route.Points) != 0 || (shape.Rotate != 0 && shape.Rotate != 90) {
+				return errors.New("unsupported native connector route")
+			}
+			switch opts.Route.Preset {
+			case "bentConnector2", "bentConnector3", "bentConnector4", "bentConnector5":
+				preset = ShapeType(opts.Route.Preset)
+			default:
+				return errors.New("unsupported native connector preset")
+			}
+			shape.Adjustments = map[string]int{}
+			count := int(opts.Route.Preset[len(opts.Route.Preset)-1] - '2')
+			for i, value := range []int{opts.Route.Adjustment, opts.Route.Adjustment2, opts.Route.Adjustment3} {
+				if i < count {
+					if value < -2147483647 || value > 2147483647 {
+						return errors.New("invalid native connector adjustment")
+					}
+					shape.Adjustments[fmt.Sprintf("adj%d", i+1)] = value
+				} else if value != 0 {
+					return errors.New("unused native connector adjustment")
+				}
+			}
 		}
-		preset = ShapeTypeBentConnector3
-		shape.Adjustments = map[string]int{"adj1": opts.Route.Adjustment}
 	} else if shape.Rotate != 0 {
 		return errors.New("native straight connector does not support rotation")
 	}

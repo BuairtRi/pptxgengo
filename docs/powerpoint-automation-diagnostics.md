@@ -15,6 +15,8 @@ reliability work. A workaround succeeding once is not a durable root-cause fix.
 | Observed failure | Recognize it | Recovery or implemented fix | Status and remaining limit |
 |---|---|---|---|
 | Agent policy rejects an operation | Exact tool rejection plus effective policy | Inspect effective permissions and writable roots; retain the rejection and selected launch/profile settings | No permission drift reproduced. Saved defaults differing from an injected policy are not evidence of a reset. |
+| CLI stalls before entering its own command | Owned process is idle; native sample shows dyld/libSystem initialization waiting on XPC bundle path resolution | Retain the sample and exact executable path; run the identical development executable from the managed slot cache, keeping deck inputs under Documents | Observed v4.3.0 qualification workaround. No evidence establishes a PowerPoint timeout, denied file permission or the underlying macOS cause. |
+| PowerPoint requests presentation repair | Native Open displays the repair dialog; repaired copy loses content | Retain original and repaired files; isolate generated XML differences and correct serialization before qualification | New custom connector geometry caused this in the process specimen; preset elbows open cleanly. Native preset elbows and multipart attached straight segments now open cleanly in the named v4.3.0 process and multipart specimens. Arbitrary custom connection geometry is no longer emitted or adopted. Do not accept a repaired slide as a passing baseline. |
 | GUI transport cannot initialize | Native-pipe startup error | Reinitialize through the supported computer-use entry point once; obtain fresh state | Earlier occurrence; underlying transport cause unresolved. |
 | GUI capture stops after successful use | ComputerUse `-10005`, ScreenCaptureKit `SCStreamErrorDomain -3811` | Record the failure; test other GUI surfaces and Apple events separately. An exact owned-document close/reopen recovered this specimen | Empirical recovery, not a framework fix or proof of a permission change. |
 | Old app binding has no window | `noWindowsAvailable` after document close | Select the app again and acquire fresh state | Observed successful recovery; old element handles remain invalid. |
@@ -102,6 +104,28 @@ the result. Check Apple-event health separately when authorized; a successful
 health response must not be described as successful document access. Do not
 quit or kill PowerPoint, close unrelated presentations, reset privacy databases,
 or change privacy settings as a speculative recovery step.
+
+## Verified GUI export fallback (2026-10-09)
+
+The 29-family qualification export timed out after entering `open_document`;
+its separate exact-task cleanup also returned `-1712` and remained unconfirmed.
+The retained error is under
+`~/Documents/pptxgengo-qualification/v430-native-gui-20261009/render-families-edited-01`.
+Individual version and presentation-name Apple events still answered, and the
+same session's GUI remained operational. No visible folder grant or Automation
+denial was observed. These observations do not establish the underlying cause.
+
+For that specimen, GUI **Save As → PDF → Best for printing** wrote a local PDF
+successfully. The electronic-distribution option explicitly uses Microsoft's
+online service; use the local printing option for this private qualification.
+Retain the original PPTX separately: PDF export is visual evidence, not a
+replacement editable project. Independently verify the PDF's page count and
+rasterize it using the repository's `scripts/render-pdf.swift` or an available
+PDF renderer. The edited and reconciled/rebuilt decks each exported 29 pages;
+the corresponding 1920×1080 PNGs were identical for all 29 pages. This qualifies
+that saved specimen's visual equivalence, not every catalog variant or native
+semantic operation. Failed staging files remain retained when cleanup identity
+cannot be confirmed.
 
 ## Resume after compaction or a new session
 
@@ -229,3 +253,91 @@ failure. It does not establish denied Automation or a failed document open.
 Native exports and individual Apple events remained usable in this attempt;
 GUI recovery and the underlying window/capture cause are unresolved. Private
 live qualification records retain the owned paths and cleanup observations.
+
+## Chart workbook/cache disagreement (2026-10-09)
+
+In the genuine V11 `chart-column-rail` qualification project, PowerPoint's
+**Edit Data in Excel** opened its embedded workbook. Changing `Sheet1!B2`
+from 14 to 15 and closing that owned workbook persisted 15 in the PPTX's
+embedded XLSX after GUI Save As, while `chart1.xml` retained 14 in the numeric
+cache and the visible chart label remained 14. The chart has `numRef` formulas
+and an embedded workbook; it is not a literal-cache-only chart. PowerPoint's
+**Refresh Data** control was disabled. The edited package is retained under
+`~/Documents/pptxgengo-qualification/v430-quantitative-commercial-cli-20261009/chart-column-rail/working/chart-column-rail-gui.pptx`.
+
+This package is inconsistent and must not be adopted as coherent numeric source
+truth. Verify workbook values and chart caches together. A successful Excel edit
+or PowerPoint Save As alone does not establish that the displayed chart updated.
+The cause and durable binding/refresh resolution remain under investigation.
+
+After opening the fresh team qualification baseline, computer use again returned
+`-10005` with ScreenCaptureKit `SCStreamErrorDomain -3811` during the next action.
+Accessibility retrieval and one fresh PowerPoint binding also failed with that
+capture error. App inventory remained available. No new permission denial was
+observed; this does not establish a folder or Apple-event access failure. Preserve
+the last successful document URL and avoid speculative privacy changes or closing
+unrelated presentations while continuing independent source qualification.
+
+### Bounded fallback probes after capture failure
+
+A bounded direct Apple event opened the corrected 29-family writable Documents
+copy successfully. Exact presentation names and `full name` still answered.
+A new PDF export and explicit Open XML Save As each timed out with `-1712`;
+no output file was present. A basic in-place save returned without error, but
+independent hashes showed unchanged bytes and setting `saved` to false remained
+false afterward. None of those calls establishes a native saved/exported result.
+The failed PDF/Open XML paths are retained; they must not be recorded as accepted
+qualification or replaced by a successful health probe.
+
+A separately bounded System Events window-name probe returned
+`osascript is not allowed assistive access` (`-1728`). That is an observed denial
+for **osascript/System Events UI access**, distinct from PowerPoint Apple events
+and the computer-use capture stream. No Accessibility setting was changed.
+The PowerPoint dictionary exposes child shape collections, but querying a nested
+group's shapes also returned `-1728` object-not-found while its root name and
+geometry could be read; preserve that object-model limitation separately from
+an Accessibility denial with the same numeric error.
+
+### Observed folder-grant resolution
+
+When desktop capture recovered, PowerPoint displayed **Grant File Access** for
+`v430-families-29-corrected-20261009`. Selecting that exact task folder and granting
+access twice resolved the queued prompts. A new bounded Apple-event PDF export
+then succeeded in under one second and independently produced a 407,194-byte
+PDF; all 29 pages rasterized at 1920×1080. This establishes the observed folder
+prompt as the blocker for those latest export attempts. It does not establish
+why ScreenCaptureKit capture failed, nor explain every historical `-1712`.
+
+The same pattern was reproduced for the full-source eleven-slide layers/curves
+folder: GUI Open/Save As succeeded, Apple-event PDF export prompted for its exact
+folder, and the export completed after granting that folder. Reuse a stable owned
+working/export folder, inspect prompts before blind retries, and verify actual
+bytes/page counts. A GUI Save As grant for one file does not necessarily authorize
+Apple-event creation of sibling output files. No global Documents access,
+Accessibility changes, privacy reset or PowerPoint restart was needed.
+
+For embedded charts, the original no-explicit-Excel-save attempt remains an
+inconsistent retained artifact. The successful repeat explicitly saved in Excel,
+closed the owned workbook and performed PowerPoint Save As; the chart then showed
+15 and both cache and workbook contained 15. Both explicit automatic-update
+settings passed that complete workflow. The immediate pre-Save-As display can
+lag; verify the final saved package and reopened/native-exported display. Numeric
+reconciliation adopts only authenticated values and retains manual styling findings.
+
+### Reproduced stale presentation reference after native Save As
+
+An owned multipart rebuild opened through Apple events and saved as Open XML
+to a new filename. Reading `full name` through the original name-bound reference
+then returned **-1728, object does not exist**. The new PPTX existed, passed ZIP
+integrity checks and had the expected native window title. Resolving a fresh
+reference by the new name, checking its exact full path, and exporting it to PDF
+succeeded. The edited and rebuilt native PNGs were byte-identical; see the
+[named multipart roundtrip](native-multipart-roundtrip-qualification-20261009.md).
+
+The corrected bounded workflow discards the old name-bound reference after
+Save As and verifies the saved presentation through a fresh reference before
+further operations. It passed subsequent owned native saves. The accessibility
+window URL was also observed to retain the old source path while the title had
+updated, so an AX title/URL alone is insufficient for ownership. This resolves
+this reproduced stale-reference sequence; it does not establish the cause of
+unrelated object-not-found, assistive-access, capture or open-timeout failures.

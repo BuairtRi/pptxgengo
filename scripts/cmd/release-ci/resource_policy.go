@@ -138,7 +138,7 @@ func addScopedBrowsingFiles(files map[string]Input, root, version, commit string
 
 func browsingContentDescription(kind, policy string) string {
 	if policy == "templates-only" {
-		return "Every installation archive includes the generated template browsing deck and a pinned source catalog, SQLite discovery index and fonts. Reusable-slide inventory and private branding/photo originals are not included. Template slides contain illustrative placeholders and are not native PowerPoint qualification."
+		return "Every installation archive includes the generated template browsing deck and a pinned source catalog, SQLite discovery index, fonts, registered SVG diagram icons/arrows and Codex/Claude skill installation materials. Reusable-slide inventory and private branding/photo originals are not included. Template slides contain illustrative placeholders and are not native PowerPoint qualification."
 	}
 	if policy == "deferred" {
 		return "Browsing decks, reusable-slide inventory and branding/graphics/photo distribution are deferred to the following release. CLI-only archives omit authoring libraries, fonts and skills; presentation builds require an existing pinned authoring bundle and its fonts."

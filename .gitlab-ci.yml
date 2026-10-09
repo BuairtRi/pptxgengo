@@ -379,3 +379,33 @@ security:offline-model:
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
     - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "security:offline-model")'
     - when: never
+
+# Exhaustive semantic source catalog exercises are separate from lightweight
+# main/tag units. This lane needs bundled fixtures only, never desktop Office.
+composition-catalog:
+  stage: test
+  needs: []
+  image: golang:1.27.1
+  timeout: 15 minutes
+  interruptible: true
+  variables:
+    GOTOOLCHAIN: local
+    CGO_ENABLED: '0'
+    GOMODCACHE: $CI_PROJECT_DIR/.cache/go-mod
+    GOCACHE: $CI_PROJECT_DIR/.cache/go-build
+  cache:
+    policy: pull
+    key:
+      files: [go.mod, go.sum]
+      prefix: go-linux-fast-v1
+    paths: [.cache/go-mod, .cache/go-build]
+  script:
+    - go test -count=1 -timeout=12m -run '^(TestQuantitativeCatalogV11EveryChartSource|TestCommercialCatalogV11EveryCommercialAndValueVariant)$' ./internal/deckproject
+  rules:
+    # Opt-in full integration already runs these uninstrumented sweeps. A full
+    # race pass remains a separate deliberate instrumented opt-in.
+    - if: '$PPTXGENGO_FULL_TESTS == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE =~ /^(schedule|web)$/'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(api|web)$/ && ($PPTXGENGO_CI_JOB == "full" || $PPTXGENGO_CI_JOB == "composition-catalog")'
+    - when: never

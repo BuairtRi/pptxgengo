@@ -39,6 +39,7 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 	for _, d := range catalog {
 		defs[d.Key] = d
 	}
+	sourceContainers := map[string]TemplateScaffold{}
 	for id, t := range p.Document.LocalTemplates {
 		if t.Provenance == nil {
 			continue
@@ -91,6 +92,9 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 	for _, r := range wmdesign.PrimitiveAssetCatalog() {
 		registry[r.Key] = r
 	}
+	if err := validateScaffoldPlaceholderAssets(p.Document.Assets); err != nil {
+		return c, err
+	}
 	for id, a := range p.Document.Assets {
 		if a.RegistryID != "" {
 			r, ok := registry[a.RegistryID]
@@ -113,6 +117,9 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 			return c, p.fail("/assets/"+escape(id), "asset hash mismatch")
 		}
 		key := "project:" + id
+		if a.PlaceholderFor != "" {
+			key = a.PlaceholderFor
+		}
 		assetKeys[id] = key
 		c.AssetHashes[id] = hash
 		mime, e := assetMIME(data)
@@ -318,6 +325,26 @@ func Compile(p *Project, bundle, engine string) (Compilation, error) {
 					if e != nil {
 						return e
 					}
+					if n.Placement.Zone == "tall_plot" && (n.Definition.ID != "wmds/component/chart" || args["kind"] != "quadrant") {
+						return fmt.Errorf("tall_plot is only supported for typed quadrant charts")
+					}
+					if n.Placement.Zone == "source_container" {
+						if err := validateSourceContainerLocal(t, n); err != nil {
+							return err
+						}
+						key := t.Provenance.Parent.ID
+						original, ok := sourceContainers[key]
+						if !ok {
+							original, e = ScaffoldTemplateWithOptions(bundle, key, engine, "Verify actual original source container geometry", p.Document.Year, ScaffoldOptions{PlaceholderMedia: true, SourceContainerClearanceFit: true})
+							if e != nil {
+								return e
+							}
+							sourceContainers[key] = original
+						}
+						if e := validateSourceContainerOriginal(t, n, original); e != nil {
+							return e
+						}
+					}
 					resolveAssetFields(args, assetKeys)
 					switch n.Definition.ID {
 					case "text.block":
@@ -472,6 +499,12 @@ func placementRect(p Placement, f wmdesign.ResolvedFrame, g wmdesign.Grid) (wmde
 	switch p.Zone {
 	case "body":
 		z = f.Body
+	case "source_container":
+		z = sourceContainerZone(f)
+	case "source_canvas":
+		z = wmdesign.Rect{X: 0, Y: 0, W: 960, H: f.Body.Y + f.Body.H}
+	case "source_body":
+		z = wmdesign.Rect{X: f.Body.X, Y: 0, W: f.Body.W, H: f.Body.Y + f.Body.H}
 	case "rail":
 		z = f.Rail
 		scope = "rail"
@@ -480,6 +513,14 @@ func placementRect(p Placement, f wmdesign.ResolvedFrame, g wmdesign.Grid) (wmde
 		scope = "short"
 	case "tall_body":
 		z = f.TallBody
+		scope = "tall"
+	case "tall_plot":
+		if f.Request.Split == "" {
+			return z, "", fmt.Errorf("tall_plot requires split frame")
+		}
+		z = f.TallBody
+		z.Y -= 9
+		z.H += 9
 		scope = "tall"
 	default:
 		return z, "", fmt.Errorf("unsupported local placement zone %s (body/rail/short_body/tall_body implemented)", p.Zone)

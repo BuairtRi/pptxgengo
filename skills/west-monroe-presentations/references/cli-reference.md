@@ -99,7 +99,7 @@ pptxgengo design library-fit --spec alternatives.json --out ./candidate-review
 | `project resume` | Save the recomputed state |
 | `project approve --stage S --actor NAME [--slides IDS]` | Record an operator approval |
 | `project scaffold --stock --template KEY --id ID --out FILE` | New slide file on a shared template, with alias and capacity comments |
-| `project scaffold --bundle v11 --template KEY --reason R [--omit-nodes IDS] --out FILE.json` | Local derivative of a source-scene template; match the project's lock |
+| `project scaffold --bundle v11 --template KEY --reason R [--omit-nodes IDS] [--placeholder-media] [--source-container-clearance-fit] --out FILE.json` | Local derivative; match the lock. Schematic media and original-container height fitting require explicit flags and return receipts. |
 | `project slide add\|move\|remove\|hide\|show --id ID [--as NEW-ID] [--before\|--after ID] [--into-section S] [--reanchor] [--check-fit]` | Slide operations; see [editing slides](editing-slides.md) |
 | `project slide draft-review set\|show\|clear --id ID` | Slide-owned status, label, color, owner and internal notes; see [Draft Review Notes](draft-review-notes.md) |
 | `project swap --slide ID --template KEY [--apply [--allow-unmapped]]` | Propose a template change; `--apply` only when nothing is missing; `--allow-unmapped` deletes leftover copy |
@@ -236,11 +236,14 @@ toolchain migration and offline runtime export remain separate commands.
 
 ## Diagram editing (geometry development build)
 
-`project diagram inspect|patch|connect|arrange|contain|uncontain` uses `--project` and `--slide`.
+`project diagram inspect|patch|connect|route|arrange|contain|uncontain` uses `--project` and `--slide`.
 Mutations preview by default; `--apply` commits validated source changes.
 `connect` accepts `--route straight|horizontal|vertical`; elbows optionally take
 `--bend` in `[0,1]` (default `.5`). Inspection returns final calculated path points.
-Supported literal native elbow guide changes join geometry reconciliation.
+`route --patch FILE` previews obstacle avoidance with explicit clearances, labels,
+reserved allocations and reviewed exclusions. Presets2–5 and complete multipart
+segment/waypoint movement join geometry reconciliation; inspection reports final
+world paths. Source rerouting requires resolving/resetting adopted native layout.
 `contain` declares native members/container and uniform or per-edge padding;
 `uncontain` explicitly removes selected memberships. Both preview before `--apply`
 and require `--actor`/`--reason`. Inspection includes clearances and sibling

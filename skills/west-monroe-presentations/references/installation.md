@@ -2,7 +2,7 @@
 
 ## Skill setup for Codex and Claude Code
 
-From an authenticated source checkout, run
+From an authenticated source checkout or an extracted v4.3.0 archive, run
 `python3 scripts/install-skill.py --agent both` (Windows: `py -3`). Select
 `--agent codex` or `--agent claude` for one agent; rerun after updating the checkout
 to update the skill. The helper copies the whole reference folder, preserves the
@@ -11,8 +11,8 @@ when inspecting an existing setup; `--project PATH` installs for that project.
 Restart the agent and invoke `west-monroe-presentations` (Claude Code:
 `/west-monroe-presentations`). CLI and project pins are unchanged.
 
-The helper and its detailed setup guide are source-checkout resources, not
-files in the v4.2.1 CLI/template archives. If given the skill folder alone, copy
+v4.3.0 archives include the complete skill, helper and `SKILL-INSTALL.md`;
+v4.2.1 archives require the source checkout for these materials. If given the skill folder alone, copy
 the complete folder to `~/.agents/skills/west-monroe-presentations` for Codex or
 `~/.claude/skills/west-monroe-presentations` for Claude Code. Preserve the previous
 folder outside agent discovery roots before replacement. For an older Codex
@@ -29,8 +29,9 @@ not installed; check availability before copying an example or opening a site.
 
 The current template archives contain three executables, the V11 source bundle,
 SQLite index, specimen gallery, fonts and `browsing/template-library.pptx`.
-The skill, upstream docs site, private media originals and curated reusable-slide
-inventory are separate resources. Font files in an archive are not proof that
+The v4.3.0 archive also carries skill installation/update materials and selected
+registered SVG diagram icons/arrows. The upstream docs site, external private
+media originals and curated reusable-slide inventory are separate resources. Font files in an archive are not proof that
 PowerPoint has those fonts installed.
 
 After authenticating the private GitLab release's signed manifest and archive

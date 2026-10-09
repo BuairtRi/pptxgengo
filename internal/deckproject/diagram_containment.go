@@ -106,7 +106,15 @@ func checkDiagramContainment(objects map[string]*geometryObject, rules map[strin
 		rule := rules[name]
 		container := objects[rule.Container]
 		member := objects[name]
-		if container == nil || member == nil {
+		owned := []string{name}
+		if member == nil {
+			var e error
+			owned, e = multipartNativeRouteNames(objects, name)
+			if e != nil {
+				return nil, nil, e
+			}
+		}
+		if container == nil || len(owned) == 0 {
 			return nil, nil, fmt.Errorf("containment %s -> %s references a missing object; revise the declared relationship", name, rule.Container)
 		}
 		g := container.geometry
@@ -154,8 +162,10 @@ func checkDiagramContainment(objects map[string]*geometryObject, rules map[strin
 			}
 			return nil
 		}
-		if e = include(name); e != nil {
-			return nil, nil, e
+		for _, part := range owned {
+			if e = include(part); e != nil {
+				return nil, nil, e
+			}
 		}
 		p := rule.Padding
 		clearance := wmdesign.DiagramPadding{Top: y0 - g.Y, Right: g.X + g.W - x1, Bottom: g.Y + g.H - y1, Left: x0 - g.X}
@@ -265,4 +275,48 @@ func ContainDiagram(p *Project, slideID string, members []string, container stri
 	changes[out.Decision] = canonical(out)
 	_, e = commitSourceChanges(p, changes, func(c *Project) error { _, e := InspectDiagram(c, slideID, bundle, engine); return e })
 	return out, e
+}
+
+// A logical route may own several native parts, but only its exact closed
+// namespace can stand in for a containment member. Unknown or missing parts
+// cannot disappear from the allocation check.
+func multipartNativeRouteNames(objects map[string]*geometryObject, id string) ([]string, error) {
+	count := 0
+	for name := range objects {
+		if strings.HasPrefix(name, id+".segment-") {
+			count++
+		}
+	}
+	if count == 0 {
+		return nil, nil
+	}
+	if count < 2 || count > 127 {
+		return nil, fmt.Errorf("multipart containment route exceeds bounded namespace")
+	}
+	expected := map[string]bool{}
+	parts := []string{}
+	for i := 1; i <= count; i++ {
+		name := fmt.Sprintf("%s.segment-%03d", id, i)
+		o := objects[name]
+		if o == nil || o.geometry.Kind != "cxnSp" || o.geometry.Route != nil {
+			return nil, fmt.Errorf("multipart containment segment missing or unsupported: %s", name)
+		}
+		expected[name] = true
+		parts = append(parts, name)
+		if i < count {
+			name = fmt.Sprintf("%s.waypoint-%03d", id, i)
+			o = objects[name]
+			if o == nil || o.geometry.Kind != "sp" {
+				return nil, fmt.Errorf("multipart containment guide missing: %s", name)
+			}
+			expected[name] = true
+			parts = append(parts, name)
+		}
+	}
+	for name := range objects {
+		if (strings.HasPrefix(name, id+".segment-") || strings.HasPrefix(name, id+".waypoint-")) && !expected[name] {
+			return nil, fmt.Errorf("unexpected multipart containment namespace object: %s", name)
+		}
+	}
+	return parts, nil
 }

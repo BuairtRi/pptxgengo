@@ -87,6 +87,11 @@ func addTemplateCatalogFiles(files map[string]Input, root, version, commit strin
 		return e
 	}
 	want := map[string]bool{"browsing": true, "library": true, browsingartifact.TemplateCatalogInventoryName: true, resourcePolicyName: true}
+	for _, entry := range entries {
+		if entry.Name() == "skills" || entry.Name() == "scripts" || entry.Name() == "SKILL-INSTALL.md" {
+			want[entry.Name()] = true
+		}
+	}
 	if len(entries) != len(want) {
 		return fmt.Errorf("template-only resource directory has unexpected files")
 	}
@@ -102,6 +107,9 @@ func addTemplateCatalogFiles(files map[string]Input, root, version, commit strin
 	in, e := browsingartifact.ReadTemplateCatalogInventory(raw)
 	if e != nil {
 		return e
+	}
+	if len(want) > 4 && !in.SkillIncluded {
+		return fmt.Errorf("skill materials require explicit closed inventory")
 	}
 	if in.ReleaseIdentity != commit {
 		return fmt.Errorf("template catalog release identity differs from release commit")

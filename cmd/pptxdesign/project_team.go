@@ -10,6 +10,9 @@ import (
 )
 
 func runProjectTeam(args []string) error {
+	if len(args) > 0 && args[0] == "reconcile" {
+		return runProjectTeamReconcile(args[1:])
+	}
 	if len(args) == 0 || (args[0] != "inspect" && args[0] != "patch") {
 		return fmt.Errorf("usage: project team <inspect|patch> --project PATH --slide ID; patch --patch FILE [--apply]")
 	}

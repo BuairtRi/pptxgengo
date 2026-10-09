@@ -79,6 +79,16 @@ func (p *scenePreserveCategories) UnmarshalJSON(raw []byte) error {
 	return nil
 }
 
+type sceneAutoUpdateWorkbook bool
+
+func (p *sceneAutoUpdateWorkbook) UnmarshalJSON(raw []byte) error {
+	if string(raw) != "true" && string(raw) != "false" {
+		return fmt.Errorf("scene.chart_auto_update_workbook_boolean")
+	}
+	*p = string(raw) == "true"
+	return nil
+}
+
 type sceneChartSource struct {
 	Type                  string                     `json:"type"`
 	Kind                  string                     `json:"kind"`
@@ -92,6 +102,7 @@ type sceneChartSource struct {
 	Categories            []string                   `json:"categories,omitempty"`
 	PreserveCategories    scenePreserveCategories    `json:"preserveCategories,omitempty"`
 	PreserveWorkbookZeros scenePreserveWorkbookZeros `json:"preserveWorkbookZeros,omitempty"`
+	AutoUpdateWorkbook    sceneAutoUpdateWorkbook    `json:"autoUpdateWorkbook,omitempty"`
 	Series                []sceneChartSeries         `json:"series,omitempty"`
 	Colors                []string                   `json:"colors,omitempty"`
 	Highlight             []int                      `json:"highlight,omitempty"`
@@ -99,6 +110,10 @@ type sceneChartSource struct {
 	Format                *NumberFormatSpec          `json:"format,omitempty"`
 	ValueSuffix           string                     `json:"valueSuffix,omitempty"`
 	YMin                  *float64                   `json:"yMin,omitempty"`
+	YMax                  *float64                   `json:"yMax,omitempty"`
+	XMin                  *float64                   `json:"xMin,omitempty"`
+	XMax                  *float64                   `json:"xMax,omitempty"`
+	AllowMissing          bool                       `json:"allowMissing,omitempty"`
 	XTitle                string                     `json:"xTitle,omitempty"`
 	YTitle                string                     `json:"yTitle,omitempty"`
 	Target                *struct {
@@ -351,6 +366,7 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 		return nil, err
 	}
 	o.PreserveWorkbookZeros = bool(n.PreserveWorkbookZeros)
+	o.AutoUpdateWorkbook = bool(n.AutoUpdateWorkbook)
 	o.DataLabelFormatCode, err = sceneChartFormatCode(n)
 	if isV5OrLaterLibrary(r.source.Revision) {
 		// PowerPoint's optional decimals can display integers as "1." or
@@ -422,9 +438,9 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 			return nil, err
 		}
 	}
-	allowMissingLine := n.Kind == "line" && isExpandedLibrary(r.source.Revision)
+	allowMissingLine := (n.Kind == "line" || n.AllowMissing && (n.Kind == "column" || n.Kind == "bar")) && isExpandedLibrary(r.source.Revision)
 	data := make([]pptx.ChartData, len(n.Series))
-	allowSignedLine := n.Kind == "line" && isExpandedLibrary(r.source.Revision) && n.YMin != nil && !math.IsNaN(*n.YMin) && !math.IsInf(*n.YMin, 0)
+	allowSignedLine := (n.Kind == "line" || n.Kind == "column" || n.Kind == "bar") && isExpandedLibrary(r.source.Revision) && n.YMin != nil && !math.IsNaN(*n.YMin) && !math.IsInf(*n.YMin, 0)
 	colors := make([]string, len(n.Series))
 	max := 0.
 	nameSet := map[string]bool{}
@@ -480,6 +496,9 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 		// Frozen source joins recorded observations across blanks.
 		if missing != nil {
 			o.DisplayBlanksAs = "span"
+			if n.Kind != "line" {
+				o.DisplayBlanksAs = "gap"
+			}
 		}
 		labels := append([]string(nil), n.Categories...)
 		if !n.PreserveCategories && (n.Kind == "column" || n.Kind == "line") {
@@ -595,6 +614,11 @@ func (r *renderer) sceneSourceChart(id string, n sceneChartSource, ctx SceneCont
 				color, _ := r.sceneColor(surface, ref)
 				o.ChartColors = append(o.ChartColors, color)
 			}
+		}
+	}
+	if n.Kind == "column" || n.Kind == "bar" || n.Kind == "line" {
+		if err := applyQuantitativeAxes(&o, n, false); err != nil {
+			return nil, err
 		}
 	}
 	if n.Kind == "line" {
@@ -727,8 +751,35 @@ func (r *renderer) sceneLineEndLabels(p *scenePlan, id string, n sceneChartSourc
 	st.ID = "source.chart-direct.11.14"
 	st.Size = 11
 	st.Leading = 14
+	heights := make([]float64, len(list))
 	for i, it := range list {
-		if _, err := r.sceneDataText(p, fmt.Sprintf("%s.direct-%d", id, i+1), it.name+it.value, st, Rect{b.X + b.W - 96, it.y, 96, 0}, surface, "primary", "left"); err != nil {
+		layout, e := r.measureText(it.name+it.value, st, 96)
+		if e != nil {
+			return e
+		}
+		heights[i] = math.Max(layout.AllocationHeight, layout.OccupiedTop+layout.EstimatedOccupiedHeight)
+	}
+	// Reordering or changing values can put direct labels at the low/high edges.
+	// Pack their measured heights inside the same chart allocation rather than
+	// leaving long/wrapped labels underneath the reserved footer.
+	for i := range list {
+		list[i].y = math.Max(b.Y, math.Min(list[i].y, b.Y+b.H-heights[i]))
+		if i > 0 {
+			list[i].y = math.Max(list[i].y, list[i-1].y+heights[i-1]+2)
+		}
+	}
+	for i := len(list) - 1; i >= 0; i-- {
+		limit := b.Y + b.H - heights[i]
+		if i+1 < len(list) {
+			limit = math.Min(limit, list[i+1].y-heights[i]-2)
+		}
+		list[i].y = math.Min(list[i].y, limit)
+		if list[i].y < b.Y-.02 {
+			return fmt.Errorf("scene.chart_direct_labels_exceed_measured_capacity")
+		}
+	}
+	for i, it := range list {
+		if _, err := r.sceneDataText(p, fmt.Sprintf("%s.direct-%d", id, i+1), it.name+it.value, st, Rect{b.X + b.W - 96, it.y, 96, heights[i]}, surface, "primary", "left"); err != nil {
 			return err
 		}
 	}
@@ -807,13 +858,16 @@ func (r *renderer) sceneScatterChart(p *scenePlan, id string, n sceneChartSource
 			return nil, fmt.Errorf("scene.chart_scatter_point_requires_pair_or_label")
 		}
 		var x, y float64
+		if strings.TrimSpace(string(point[0])) == "null" || strings.TrimSpace(string(point[1])) == "null" {
+			return nil, fmt.Errorf("scene.chart_scatter_requires_observed_coordinates")
+		}
 		if err := json.Unmarshal(point[0], &x); err != nil {
 			return nil, err
 		}
 		if err := json.Unmarshal(point[1], &y); err != nil {
 			return nil, err
 		}
-		if x < 0 || y < 0 {
+		if (x < 0 && (n.XMin == nil || x < *n.XMin)) || (y < 0 && (n.YMin == nil || y < *n.YMin)) {
 			return nil, fmt.Errorf("scene.chart_scatter_positive_domain")
 		}
 		xs = append(xs, x)
@@ -843,6 +897,9 @@ func (r *renderer) sceneScatterChart(p *scenePlan, id string, n sceneChartSource
 	o.ValAxisHidden = ptrSceneBool(false)
 	o.CatGridLine.Style = "solid"
 	o.ValGridLine.Style = "solid"
+	if err := applyQuantitativeAxes(&o, n, true); err != nil {
+		return nil, err
+	}
 	o.DataLabelFormatScatter = "custom"
 	o.ShowLabel = ptrSceneBool(true)
 	o.ShowValue = ptrSceneBool(false)

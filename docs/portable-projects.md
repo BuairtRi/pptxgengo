@@ -13,10 +13,11 @@ The sections below retain the implementation contract and original requirements
 for context; historical requested scope is not a claim that every requested
 artifact shipped.
 
-## Two regenerated PowerPoint libraries
+## Packaged template library and deferred reusable library
 
-Generate these during private GitLab release CI and include both in installation
-archives:
+Private GitLab release CI regenerates the template browsing deck and includes it
+in installation archives. The separate reusable content-complete library remains
+deferred; its intended contract is retained below for the later release:
 
 1. A complete template library: native editable placeholder slides for every
    retained template variant in the pinned library, organized with family dividers and a
@@ -40,10 +41,12 @@ Dividers/instructions must explain inherited formatting, placeholders,
 approved reuse scope and the provenance limits of a copied slide.
 
 Use exact bundle/content pins rather than fixed catalog counts. Produce a
-coverage manifest and hashes alongside both decks. Release CI must regenerate
-them when inputs change and scan/attest the final archived bytes. All artifacts
-remain private in GitLab. Missing private assets/content must be actionable
-release blockers; an incomplete deck cannot claim complete coverage.
+coverage manifest and hashes alongside the packaged template deck. Release CI
+regenerates it when pinned inputs change and scans/attests final archived bytes.
+All artifacts remain private in GitLab. Declared schematic placeholders are
+identified in coverage and do not claim original artwork fidelity. Unavailable
+reusable content and excluded external branding/photos do not block the current
+template-only release. An incomplete deck cannot claim complete template coverage.
 
 The existing library-reference/frame-reference and finished-slide compilation
 are starting points. Derive valid frame/rail combinations from contracts and
@@ -66,6 +69,20 @@ withdrawal history so a newer withdrawal cannot resurrect an older approval.
 ## Consistent portable project layout
 
 The operator skill includes the complete [canonical folder tree and repair workflow](../skills/west-monroe-presentations/references/project-structure.md), including the limits of current layout migration.
+
+Explicit schematic adaptations retain `placeholder_for` asset descriptors and
+their exact content-addressed bytes with the project. A share or snapshot must
+include these objects and preserve descriptions that identify them as schematic.
+Use [scaffold media](../skills/west-monroe-presentations/references/scaffold-media.md)
+to install the emitted payloads; do not silently replace a missing original or
+change source copy that happens to match an asset ID. Registered original icons
+and arrows are distinct from these declared placeholders.
+
+Source-derived geometry metadata and stable collection keys belong to authored
+template state and travel with numbered snapshots. They retain source geometry
+when measured ink differs, while family commands support intentional topology
+changes. Retain them alongside facts, units and semantic relationships; native
+movement does not establish a new date, membership or source value.
 
 Projects should have a predictable layout:
 
@@ -116,20 +133,21 @@ describes; proposed commands must stay clearly labeled until implemented.
 ## PowerPoint qualification location
 
 Use an owned stable folder under ~/Documents/pptxgengo-qualification for Mac
-desktop fixtures rather than global temporary folders. Ri is granting PowerPoint
-Full Disk Access. Permission state alone is not a qualification result: record
+desktop fixtures rather than global temporary folders. Permission state,
+including Full Disk Access, is not a qualification result: record
 actual native open/Save As/render output, app version and file hashes.
 Bound waits, close only exact task copies and preserve failed evidence.
 
-## Acceptance evidence
+## Current acceptance evidence and deferred desktop scope
 
 - Default coverage proves every pinned retained template variant and every declared
-  frame/rail gallery variant is present, and both browsing decks open in
-  PowerPoint. Explicit exhaustive coverage separately closes all compatible
+  frame/rail gallery variant is present, and the packaged template deck opens in
+  the named qualified PowerPoint environment. Explicit exhaustive coverage separately closes all compatible
   frame/rail variants without silently labeling the default as exhaustive.
-- A colleague copies a template and an authored slide into another deck with
-  expected copy, native objects and assets on Mac and Windows.
-- Release archives contain both decks, matching coverage pins, hashes and signed
+- A colleague copies a template into another deck with expected native objects
+  and assets. Windows desktop and content-complete reusable slide qualification
+  remain deferred; they are not current v4.3.0 acceptance claims.
+- Release archives contain the template deck, matching coverage pins, hashes and signed
   release inventory.
 - New projects use the declared layout; migration preserves older project
   semantics, approvals, lineage and immutable history.

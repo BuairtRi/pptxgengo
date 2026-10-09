@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/buairtri/pptxgengo/internal/assetregistry"
 	"github.com/buairtri/pptxgengo/pptx"
 	"golang.org/x/image/vector"
 	"image"
@@ -56,10 +57,7 @@ func applyPrimitiveLibraryRefinement(key string, doc *SlideSpec) error {
 	return nil
 }
 
-type primitiveAsset struct {
-	Path, SHA256 string
-	Crop         [4]int
-}
+type primitiveAsset = assetregistry.Reference
 
 func primitiveAssetBytes(key string) ([]byte, primitiveAsset, error) {
 	a, ok := primitiveAssetRegistry[key]

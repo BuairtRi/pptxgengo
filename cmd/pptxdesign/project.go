@@ -17,7 +17,7 @@ func runProject(args []string) error {
 		return runProjectNativeImport(args[1:])
 	}
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|diagram|team|gantt|cycle|assessment|native-import|reconcile|editability> --project PATH [--bundle v11|PATH]")
+		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|diagram|component|table|team|gantt|cycle|assessment|quantitative|commercial|process|journey|portfolio|layer|maturity|staffing|native-import|reconcile|editability> --project PATH [--bundle v11|PATH]")
 	}
 	if args[0] == "create" {
 		return runProjectCreate(args[1:])
@@ -31,6 +31,12 @@ func runProject(args []string) error {
 	if args[0] == "diagram" {
 		return runProjectDiagram(args[1:])
 	}
+	if args[0] == "table" {
+		return runProjectTable(args[1:])
+	}
+	if args[0] == "component" {
+		return runProjectComponent(args[1:])
+	}
 	if args[0] == "team" {
 		return runProjectTeam(args[1:])
 	}
@@ -42,6 +48,30 @@ func runProject(args []string) error {
 	}
 	if args[0] == "gantt" {
 		return runProjectGantt(args[1:])
+	}
+	if args[0] == "quantitative" {
+		return runProjectQuantitative(args[1:])
+	}
+	if args[0] == "commercial" {
+		return runProjectCommercial(args[1:])
+	}
+	if args[0] == "process" {
+		return runProjectProcess(args[1:])
+	}
+	if args[0] == "journey" {
+		return runProjectJourney(args[1:])
+	}
+	if args[0] == "portfolio" {
+		return runProjectPortfolio(args[1:])
+	}
+	if args[0] == "layer" {
+		return runProjectLayer(args[1:])
+	}
+	if args[0] == "maturity" {
+		return runProjectMaturity(args[1:])
+	}
+	if args[0] == "staffing" {
+		return runProjectStaffing(args[1:])
 	}
 	if args[0] == "reconcile" {
 		return runProjectReconcile(args[1:])

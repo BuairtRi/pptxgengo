@@ -26,6 +26,7 @@ type teamCurvePhase struct {
 	Label string   `json:"label"`
 	Sub   string   `json:"sub,omitempty"`
 	At    *float64 `json:"at,omitempty"`
+	Point string   `json:"point,omitempty"`
 }
 type teamCurveSource struct {
 	Type        string            `json:"type"`
@@ -37,12 +38,17 @@ type teamCurveSource struct {
 	At          []float64         `json:"at,omitempty"`
 	Max         *float64          `json:"max,omitempty"`
 	Curve       string            `json:"curve,omitempty"`
+	LineBasis   string            `json:"lineBasis,omitempty"`
 	Smooth      *float64          `json:"smooth,omitempty"`
 	Tension     *float64          `json:"tension,omitempty"`
 	PhaseH      *float64          `json:"phaseH,omitempty"`
 	PhaseLabels *bool             `json:"phaseLabels,omitempty"`
 	Series      []teamCurveSeries `json:"series"`
 	Phases      []teamCurvePhase  `json:"phases,omitempty"`
+	Unit        string            `json:"unit,omitempty"`
+	TimeUnit    string            `json:"timeUnit,omitempty"`
+	Source      string            `json:"source,omitempty"`
+	PointLabels []string          `json:"pointLabels,omitempty"`
 	CanvasH     float64           `json:"_h,omitempty"`
 }
 type curvePoint struct{ x, y float64 }
@@ -239,6 +245,9 @@ func (r *renderer) planIntakeCurveScene(id string, raw json.RawMessage, ctx Scen
 			mode = "monotone"
 		}
 	}
+	if n.LineBasis != "" && n.LineBasis != "above_stack" && n.LineBasis != "independent" {
+		return bad("line_basis")
+	}
 	if mode != "monotone" && mode != "catmull" {
 		return bad("curve_mode")
 	}
@@ -283,6 +292,39 @@ func (r *renderer) planIntakeCurveScene(id string, raw json.RawMessage, ctx Scen
 			return bad("sample_positions")
 		}
 	}
+	if len(n.PointLabels) > 0 && len(n.PointLabels) != np {
+		return bad("point_label_count")
+	}
+	if len(n.Unit) > 128 || len(n.TimeUnit) > 128 || len(n.Source) > 1024 {
+		return bad("scale_labels")
+	}
+	for _, label := range n.PointLabels {
+		if len(label) > 128 {
+			return bad("point_labels")
+		}
+	}
+	// Optional semantic declarations reserve a native bottom caption, preserving the
+	// exact legacy visual when no declaration is authored. Facts are not inferred.
+	allocation := Rect{n.X, n.Y, n.W, n.H}
+	heading := &scenePlan{}
+	if n.Unit != "" || n.TimeUnit != "" || n.Source != "" {
+		if n.Unit == "" || n.TimeUnit == "" || n.Source == "" {
+			return bad("scale_declaration")
+		}
+		st, e := r.sceneStyle("small")
+		if e != nil {
+			return nil, true, e
+		}
+		label := n.Unit + " · " + n.TimeUnit + " · " + n.Source
+		if e = r.sceneText(heading, id+".scale", label, st, Rect{n.X, n.Y + n.H - 18, n.W, 18}, ctx.Surface, "primary", "left"); e != nil {
+			return nil, true, e
+		}
+		n.H -= 22
+		if n.H <= 0 {
+			return bad("scale_capacity")
+		}
+	}
+
 	phaseH, tension := 54., .5
 	if n.PhaseH != nil {
 		phaseH = *n.PhaseH
@@ -322,7 +364,8 @@ func (r *renderer) planIntakeCurveScene(id string, raw json.RawMessage, ctx Scen
 	}
 	// Browser maxima include independent line values in the auto-scale. Bounds
 	// validation below uses the actual cumulative bands rather than that sum.
-	p := &scenePlan{ID: id, Bounds: Rect{n.X, n.Y, n.W, n.H}}
+	p := &scenePlan{ID: id, Bounds: allocation}
+	p.Items = append(p.Items, heading.Items...)
 	p.Warnings = append(p.Warnings, "Adapter resolution wmds.teamcurve-smoothing.v1: "+mode+"; frozen v1/v2/v3 defaults remain catmull, explicit monotone or expanded v4/v5 libraries use shape-preserving cubics.")
 	base := make([]float64, np)
 	var denseBase []float64
@@ -361,11 +404,16 @@ func (r *renderer) planIntakeCurveScene(id string, raw json.RawMessage, ctx Scen
 		up, dn := make([]curvePoint, np), make([]curvePoint, np)
 		for i, v := range se.Values {
 			top := base[i] + v
+			bottom := base[i]
+			if se.Style == "line" && n.LineBasis == "independent" {
+				top = v
+				bottom = 0
+			}
 			if top > maxT && (top-maxT)/maxT > 1e-10 {
 				return bad("value_exceeds_max")
 			}
 			up[i] = curvePoint{at[i] * n.W, plotH - top/maxT*plotH}
-			dn[np-1-i] = curvePoint{at[i] * n.W, plotH - base[i]/maxT*plotH}
+			dn[np-1-i] = curvePoint{at[i] * n.W, plotH - bottom/maxT*plotH}
 			if !intakeFinite(up[i].x, up[i].y, dn[np-1-i].x, dn[np-1-i].y) {
 				return bad("nonfinite_derived_geometry")
 			}
@@ -373,7 +421,11 @@ func (r *renderer) planIntakeCurveScene(id string, raw json.RawMessage, ctx Scen
 		labelUp, labelDn := up, dn
 		if dense {
 			var hi, lo []float64
-			hi, lo, denseBase = teamCurveGaussianEdges(at, se.Values, denseBase, smooth, se.Style == "line")
+			if se.Style == "line" && n.LineBasis == "independent" {
+				hi, lo, _ = teamCurveGaussianEdges(at, se.Values, make([]float64, len(denseBase)), smooth, true)
+			} else {
+				hi, lo, denseBase = teamCurveGaussianEdges(at, se.Values, denseBase, smooth, se.Style == "line")
+			}
 			up, dn = make([]curvePoint, 241), make([]curvePoint, 241)
 			for i := range up {
 				u := at[0] + (at[np-1]-at[0])*float64(i)/240
@@ -450,6 +502,9 @@ func (r *renderer) planIntakeCurveScene(id string, raw json.RawMessage, ctx Scen
 			}
 			x = boundedX
 			y := n.Y + (labelUp[labelIndex].y+labelDn[np-1-labelIndex].y)/2 - 8
+			if se.Style == "line" && n.LineBasis == "independent" {
+				y = n.Y + labelUp[labelIndex].y - 8
+			}
 			ink, surface := "primary", "light"
 			if color == "070154" || color == "0047FF" || color == "05013F" {
 				surface = "inverse"

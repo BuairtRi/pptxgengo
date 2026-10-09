@@ -27,7 +27,7 @@ func ganttSemanticFixture(t *testing.T) (*Project, *TextBaseline, string, string
 		break
 	}
 	lane.Items = []wmdesign.GanttItem{{Key: "delivery-task", Kind: kind, Label: "Deliver", From: 1, To: 3}}
-	patch := ganttPatch(p, node, GanttOperation{Action: "set", Entity: "lane", Group: group.Key, Key: lane.Key, LaneValue: &lane, Cascade: true}, GanttOperation{Action: "set", Entity: "gate", Key: "approval", Gate: &GanttGateValue{Key: "approval", Label: "Approve", At: 4}})
+	patch := ganttPatch(p, node, GanttOperation{Action: "remove", Entity: "gate", Key: ganttKey(inspection.Schedule.Gates[1].Key)}, GanttOperation{Action: "set", Entity: "lane", Group: group.Key, Key: lane.Key, LaneValue: &lane, Cascade: true}, GanttOperation{Action: "set", Entity: "gate", Key: "approval", Gate: &GanttGateValue{Key: "approval", Label: "Approve", At: 4}})
 	if _, e = PatchGantt(p, "plan-slide", patch, bundle(t), wmdesign.CandidateEngine, true); e != nil {
 		t.Fatal(e)
 	}
@@ -531,5 +531,52 @@ func TestGanttSemanticIntervalEventMixtureCannotInferMeaning(t *testing.T) {
 	}
 	if len(report.UnresolvedGeometryIDs) == 0 {
 		t.Fatal("invalid semantic source disappeared")
+	}
+}
+
+func TestGanttSemanticOriginalItemGroupHorizontalMovement(t *testing.T) {
+	p, b, node, bar := ganttSemanticFixture(t)
+	objects, _ := geometryFromPackage(t, b.files["deck.pptx"])
+	parent := strings.TrimSuffix(bar, ".segment-0")
+	original, exists := objects[parent]
+	if !exists {
+		t.Fatal("original stable item group missing", parent)
+	}
+	width := 0.0
+	for name, o := range objects {
+		if strings.HasPrefix(name, node+".periods.") && strings.HasSuffix(name, ".label") {
+			width = o.geometry.W
+			break
+		}
+	}
+	moved := original.geometry
+	moved.X += width * .25
+	packet := ganttSemanticPacket(t, p, b, map[string]NativeGeometry{parent: moved})
+	report, e := ProposeGanttSemantics(p, packet, "plan-slide", node, bundle(t), wmdesign.CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	found := false
+	for _, q := range report.Proposals {
+		if q.SourceObject == bar {
+			found = true
+			if q.Status != "proposed" || math.Abs(*q.ProposedFrom-1.25) > .000002 || math.Abs(*q.ProposedTo-3.25) > .000002 {
+				t.Fatal("group translation did not preserve authored duration", q)
+			}
+		}
+	}
+	if !found {
+		t.Fatal("group movement omitted task proposal", report)
+	}
+	moved.Y++
+	packet = ganttSemanticPacket(t, p, b, map[string]NativeGeometry{parent: moved})
+	report, e = ProposeGanttSemantics(p, packet, "plan-slide", node, bundle(t), wmdesign.CandidateEngine)
+	if e != nil {
+		t.Fatal(e)
+	}
+	for _, q := range report.Proposals {
+		if q.SourceObject == bar && q.Status != "manual_review" {
+			t.Fatal("vertical group change became time", q)
+		}
 	}
 }

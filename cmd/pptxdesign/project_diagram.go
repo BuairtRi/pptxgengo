@@ -12,8 +12,8 @@ import (
 )
 
 func runProjectDiagram(args []string) error {
-	if len(args) == 0 || (args[0] != "inspect" && args[0] != "patch" && args[0] != "connect" && args[0] != "arrange" && args[0] != "contain" && args[0] != "uncontain") {
-		return fmt.Errorf("usage: project diagram <inspect|patch|connect|arrange|contain|uncontain> --project PATH --slide ID; patch --patch FILE [--apply]")
+	if len(args) == 0 || (args[0] != "inspect" && args[0] != "patch" && args[0] != "connect" && args[0] != "arrange" && args[0] != "contain" && args[0] != "uncontain" && args[0] != "route") {
+		return fmt.Errorf("usage: project diagram <inspect|patch|connect|arrange|contain|uncontain|route> --project PATH --slide ID; patch --patch FILE [--apply]")
 	}
 	f := flag.NewFlagSet("project diagram "+args[0], flag.ContinueOnError)
 	project := f.String("project", ".", "project directory or deck.yaml")
@@ -46,7 +46,7 @@ func runProjectDiagram(args []string) error {
 		return e
 	}
 	common := map[string]bool{"project": true, "slide": true, "bundle": true, "engine": true}
-	allowed := map[string]map[string]bool{"inspect": {}, "patch": {"patch": true, "apply": true}, "connect": {"id": true, "from": true, "to": true, "from-site": true, "to-site": true, "head": true, "style": true, "route": true, "bend": true, "actor": true, "reason": true, "apply": true}, "contain": {"container": true, "nodes": true, "padding": true, "padding-top": true, "padding-right": true, "padding-bottom": true, "padding-left": true, "actor": true, "reason": true, "apply": true}, "uncontain": {"nodes": true, "actor": true, "reason": true, "apply": true}, "arrange": {"nodes": true, "align": true, "distribute": true, "actor": true, "reason": true, "apply": true}}
+	allowed := map[string]map[string]bool{"inspect": {}, "route": {"patch": true, "apply": true}, "patch": {"patch": true, "apply": true}, "connect": {"id": true, "from": true, "to": true, "from-site": true, "to-site": true, "head": true, "style": true, "route": true, "bend": true, "actor": true, "reason": true, "apply": true}, "contain": {"container": true, "nodes": true, "padding": true, "padding-top": true, "padding-right": true, "padding-bottom": true, "padding-left": true, "actor": true, "reason": true, "apply": true}, "uncontain": {"nodes": true, "actor": true, "reason": true, "apply": true}, "arrange": {"nodes": true, "align": true, "distribute": true, "actor": true, "reason": true, "apply": true}}
 	var flagErr error
 	f.Visit(func(v *flag.Flag) {
 		if !common[v.Name] && !allowed[args[0]][v.Name] {
@@ -73,6 +73,19 @@ func runProjectDiagram(args []string) error {
 	var result any
 	if args[0] == "inspect" {
 		result, e = deckproject.InspectDiagram(p, *slide, b, en)
+	} else if args[0] == "route" {
+		if *patch == "" {
+			return fmt.Errorf("diagram route requires --patch FILE")
+		}
+		raw, err := readReconciliationInput(*patch, 1<<20)
+		if err != nil {
+			return err
+		}
+		request, err := deckproject.DecodeDiagramRoutePatch(raw, *patch)
+		if err != nil {
+			return err
+		}
+		result, e = deckproject.PlanDiagramRoute(p, *slide, request, b, en, *apply)
 	} else if args[0] == "connect" {
 		var bendValue *float64
 		f.Visit(func(v *flag.Flag) {

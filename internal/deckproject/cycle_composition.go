@@ -103,26 +103,27 @@ type cycleSourceLoop struct {
 	Ink   string   `json:"ink,omitempty"`
 }
 type cycleSourceSpec struct {
-	Type     string            `json:"type,omitempty"`
-	ID       string            `json:"id,omitempty"`
-	On       string            `json:"on,omitempty"`
-	X        float64           `json:"x,omitempty"`
-	Y        float64           `json:"y,omitempty"`
-	W        float64           `json:"w,omitempty"`
-	H        float64           `json:"h,omitempty"`
-	CanvasH  float64           `json:"_h,omitempty"`
-	Items    []cycleSourceStep `json:"items"`
-	Loops    []cycleSourceLoop `json:"loops,omitempty"`
-	Center   *CycleCenter      `json:"center,omitempty"`
-	Active   *int              `json:"active,omitempty"`
-	NodeW    *float64          `json:"nodeW,omitempty"`
-	NodeH    *float64          `json:"nodeH,omitempty"`
-	Start    *float64          `json:"start,omitempty"`
-	Closed   *bool             `json:"closed,omitempty"`
-	Ring     *bool             `json:"ring,omitempty"`
-	Numbered bool              `json:"numbered,omitempty"`
-	Align    string            `json:"align,omitempty"`
-	Surface  string            `json:"surface,omitempty"`
+	SourceGeometry json.RawMessage   `json:"_source_geometry,omitempty"`
+	Type           string            `json:"type,omitempty"`
+	ID             string            `json:"id,omitempty"`
+	On             string            `json:"on,omitempty"`
+	X              float64           `json:"x,omitempty"`
+	Y              float64           `json:"y,omitempty"`
+	W              float64           `json:"w,omitempty"`
+	H              float64           `json:"h,omitempty"`
+	CanvasH        float64           `json:"_h,omitempty"`
+	Items          []cycleSourceStep `json:"items"`
+	Loops          []cycleSourceLoop `json:"loops,omitempty"`
+	Center         *CycleCenter      `json:"center,omitempty"`
+	Active         *int              `json:"active,omitempty"`
+	NodeW          *float64          `json:"nodeW,omitempty"`
+	NodeH          *float64          `json:"nodeH,omitempty"`
+	Start          *float64          `json:"start,omitempty"`
+	Closed         *bool             `json:"closed,omitempty"`
+	Ring           *bool             `json:"ring,omitempty"`
+	Numbered       bool              `json:"numbered,omitempty"`
+	Align          string            `json:"align,omitempty"`
+	Surface        string            `json:"surface,omitempty"`
 }
 
 func cycleFields(action, entity string) (map[string]bool, error) {
