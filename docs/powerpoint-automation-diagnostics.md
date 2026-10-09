@@ -123,3 +123,15 @@ failure or establish a PowerPoint hang. The saved PPTX remained a valid ZIP.
 Reconciliation reported known geometry/text as unchanged but also package and
 non-text differences. Office normalization needs independent qualification;
 a successful Save As alone does not complete a moved/edited/rebuilt round trip.
+
+The successful GUI actions and subsequent capture failure occurred in the same
+turn with no intervening compaction. This occurrence therefore does not require
+compaction to explain the loss of computer-use access. Later, a bounded
+AppleScript `activate` succeeded, followed by separately bounded version,
+presentation count, names and exact full-path queries. An owned-slide shape
+inspection also returned the expected object names and positions. An earlier
+combined full-name query had timed out. These observations show that some
+Apple-event operations recovered while PowerPoint computer-use capture remained
+unavailable; they do not establish a permanently hung application or resolved
+privacy settings. Splitting diagnostic events isolates failures more clearly
+than sending one compound query and treating its timeout as total app failure.
