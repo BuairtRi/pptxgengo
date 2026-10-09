@@ -155,8 +155,11 @@ func addCopyReconciliation(p *Project, b *TextBaseline, native NativeLineageInsp
 			}
 		}
 		a, z := copyObjectTree(original.shape), copyObjectTree(edited.shape)
-		if len(a) != len(z) || !geometryOnlyChange(original.shape, edited.shape) {
-			return native, fmt.Errorf("native copy differs in style, structure, route or unsupported content")
+		if len(a) != len(z) {
+			return native, fmt.Errorf("native copy differs in style, structure, route or unsupported content: native object count %d != %d", len(a), len(z))
+		}
+		if mismatch := geometryCompatibilityMismatch(original.shape, edited.shape); mismatch != "" {
+			return native, fmt.Errorf("native copy differs in style, structure, route or unsupported content: %s", mismatch)
 		}
 		owned := map[*xmlNode]ObjectRecord{}
 		for _, o := range b.inspection.Objects {

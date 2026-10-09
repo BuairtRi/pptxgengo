@@ -143,6 +143,31 @@ changes (`node-06`, `node-08`, and their attached `service-edge` connector), wit
 39 geometry no-ops. PowerPoint also adjusted that connector's elbow guide from
 65000 to 50000 and its endpoint Y from 252 to 246 points. A fresh export using
 the diagnostic development CLI subsequently produced native PDF and PNG output
-without changing the original source hash. This qualifies the observed
-application-API edit/save and export operations; actual GUI dragging remains
-pending. The 63 package/non-text normalization review items also remain open.
+without changing the original source hash.
+
+After closing only the exact owned saved presentation, computer use recovered
+through its home/reopen sequence without quitting PowerPoint or changing privacy
+settings. A GUI two-key Left nudge of the selected block, followed by Save,
+changed `node06` X from 4381500 to 4361404 EMU in the saved file. Three geometry
+changes were adopted and rebuilt; actual PowerPoint PNG exports of the edited
+and rebuilt decks were byte-identical (SHA-256
+`1bc26f9ae5c4baf4470db57568130c8d74d8d6a0bd18fa8aaf1a5f54615df2d2`).
+This is specimen-specific GUI nudge, API move/resize, connector and rebuild
+evidence. The drag attempt selected text without changing geometry and is excluded.
+All 63 package/non-text review findings remain retained, not blanket-qualified.
+
+A later GUI duplicate retained the source object's names and caused ambiguous
+accessibility refetch. Coordinate selection and a unique root rename recovered
+selection. Copy reconciliation then exposed narrowly classifiable Office
+serialization differences. A fresh exact-pinned baseline with the narrow fix
+subsequently passed actual GUI Save As/copy/delete, adoption and native
+edited/rebuilt PNG comparison, while retaining 25 manual findings; see
+[Save As equivalence](native-save-as-equivalence.md) for its precise scope.
+Private `attempt-01/qualification-summary.json` records these phases and limits.
+The capture stream's underlying failure and Windows qualification remain open.
+
+After a later exact-owned document close, the old GUI binding returned
+`ComputerUse -10005: noWindowsAvailable`; selecting PowerPoint again immediately
+returned its home view. Rebind the app after closing a document when the prior
+binding reports no window. This observed window-lifecycle failure does not
+establish permission denial or require changing privacy settings.

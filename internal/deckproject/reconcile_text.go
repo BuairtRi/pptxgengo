@@ -249,6 +249,9 @@ func supportedEditedPlainText(kind string, paragraphs []NativeParagraph) bool {
 // Normalize only lineage metadata and physical diagnostics. Text leaves are
 // removed for the structural comparison; formatting and geometry stay intact.
 func reconcileStructureHash(shape *xmlNode) string {
+	return digest(canonical(reconcileStructureView(shape)))
+}
+func reconcileStructureView(shape *xmlNode) *xmlNode {
 	var clone func(*xmlNode) *xmlNode
 	clone = func(n *xmlNode) *xmlNode {
 		c := &xmlNode{Name: n.Name, Text: n.Text, Attrs: nil, Children: nil}
@@ -276,7 +279,7 @@ func reconcileStructureHash(shape *xmlNode) string {
 		}
 		return c
 	}
-	return digest(canonical(clone(shape)))
+	return clone(shape)
 }
 
 func reconcilePackageChanges(before, after []byte, baseline, edited NativeLineageInspection, add func(string, string, string, string, string)) error {

@@ -42,6 +42,9 @@ func threeWayStatus(a, b, c any) string {
 	}
 }
 func geometryOnlyChange(a, b *xmlNode) bool {
+	return geometryCompatibilityMismatch(a, b) == ""
+}
+func geometryCompatibilityMismatch(a, b *xmlNode) string {
 	var clone func(*xmlNode, bool) *xmlNode
 	clone = func(n *xmlNode, routeSupported bool) *xmlNode {
 		if n.Name.Local == "cxnSp" && n.Name.Space == lineagePML {
@@ -61,7 +64,9 @@ func geometryOnlyChange(a, b *xmlNode) bool {
 		}
 		return &c
 	}
-	return reconcileStructureHash(clone(a, false)) == reconcileStructureHash(clone(b, false))
+	x := reconcileStructureView(normalizePowerPointSerialization(clone(a, false)))
+	y := reconcileStructureView(normalizePowerPointSerialization(clone(b, false)))
+	return nativeViewMismatch(x, y, "/"+a.Name.Local)
 }
 
 // Geometry proposals use exact tagged identity. Current YAML is rendered with

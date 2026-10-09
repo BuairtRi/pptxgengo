@@ -52,10 +52,10 @@ examples are not evidence that an equivalent supported project command exists.
 | `project edit`, explicit bindings and `--check-fit` | Change source copy/values and measure changed slides | Complete family composition transactions, relationship-aware add/remove/reorder, useful layout proposals |
 | Local scene components and project-owned templates | Use current typed renderers; keep installed catalog immutable | Domain models that keep related components and identities consistent when topology changes |
 | `project detach` and `project diagram inspect/patch/arrange` | Local node additions/deletions, placement changes and align/distribute | These operations manipulate geometry; they do not define staffing, dates, decision rights or process meaning |
-| Attached straight/horizontal/vertical connectors | Known block endpoints, calculated paths, native elbow guides | Obstacle routing, crossings/clearance, connector labels and broader endpoint classes |
+| Attached straight/horizontal/vertical connectors | Known block endpoints, calculated paths, native elbow guides, advisory crossing/allocation-clearance diagnostics | Obstacle-aware rerouting, connector labels, ink bounds and broader endpoint classes |
 | Logical containment | Explicit memberships, padding and allocation checks | General composition fit and exact ink/stroke bounds; good layout is not inferred from containment alone |
 | Eligible native lists/cards/tables | Better human text/cell editing, with documented retention reasons | Native editability does not establish domain item insertion or semantic reconciliation |
-| Receipt-backed native reconciliation | Known mapped text/transforms/order; supported whole local deletions and explicitly mapped block copies | Family semantic adoption, arbitrary inserted objects, partial deletions, reparenting and real GUI Save As qualification |
+| Receipt-backed native reconciliation | Known mapped text/transforms/order; supported whole local deletions and explicitly mapped block copies; one macOS GUI nudge/API geometry rebuild specimen | Family semantic adoption, arbitrary inserted objects, partial deletions, reparenting and broader desktop qualification |
 
 The geometry development work is on this main basis. The promoted v4.2.1 binary
 does not include that newer geometry surface. Operator guidance must state the
@@ -64,13 +64,21 @@ required CLI version rather than presenting main-only capabilities as released.
 An unedited macOS GUI Save As succeeded on 2026-10-08. The retained packet reported
 42 geometry no-ops and 10 text no-ops, plus 63 manual package/format findings
 (including relationship ID rewrites and text/default serialization changes).
-This establishes saved-file identity/geometry retention evidence only. It does
-not qualify deliberate GUI manipulation, adoption or rebuilt visual comparison.
-Office serialization normalization still needs classification fixtures/tests
-while preserving unknown changes. Evidence is retained privately under
+Later in that same qualification, exact-owned close/reopen recovered computer use
+without app quit or privacy changes. A GUI Left-key nudge plus API move/resize and
+attached-elbow edits produced three adopted changes; actual PowerPoint PNG
+exports of edited and rebuilt decks were byte-identical. This qualifies that
+specimen's observed operations; all 63 manual findings remain retained. A GUI
+duplicate caused ambiguous-name accessibility refetch, recovered through
+coordinate selection and unique root naming. A fresh baseline with the narrow
+[Save As compatibility rules](native-save-as-equivalence.md) then passed actual
+GUI copy/delete adoption and identical native edited/rebuilt PNG comparison,
+retaining 25 manual package/format findings.
+This does not qualify family-specific semantic composition or Windows behavior.
+Evidence is retained privately under
 `~/Documents/pptxgengo-qualification/gui-save-as-20261008/attempt-01` in
-`receipt.json`, `gui-phase-evidence.json`, `reconcile-save-as.stdout` and
-`save-as-review/`. The source was the horizontal elbow fixture build
+`receipt.json`, `qualification-summary.json`, `gui-phase-evidence.json`,
+`reconcile-save-as.stdout` and `save-as-review/`. The source was the horizontal elbow fixture build
 `build-20261008T155717-f4ccfb3cc5507957`; exact files/hashes are pinned in the receipt.
 
 Generic known-object reconciliation evidence should be inherited as a foundation,
