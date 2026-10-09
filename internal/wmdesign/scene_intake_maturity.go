@@ -53,6 +53,7 @@ type maturitySource struct {
 	Branch          *maturityBranch `json:"branch,omitempty"`
 	LabelW          *float64        `json:"labelW,omitempty"`
 	Here            *maturityHere   `json:"here,omitempty"`
+	Target          *maturityHere   `json:"target,omitempty"`
 	CanvasH         float64         `json:"_h,omitempty"`
 }
 
@@ -275,10 +276,10 @@ func (r *renderer) planIntakeMaturityScene(id string, raw json.RawMessage, ctx S
 		}
 	}
 	indexOK := func(v *int) bool { return v == nil || *v >= 0 && *v < ns }
-	if !indexOK(n.Active) || !indexOK(n.Inflection) || n.Here != nil && !indexOK(n.Here.Stage) {
+	if !indexOK(n.Active) || !indexOK(n.Inflection) || n.Here != nil && !indexOK(n.Here.Stage) || n.Target != nil && (n.Target.Stage == nil || !indexOK(n.Target.Stage)) {
 		return bad("stage_index")
 	}
-	if len(n.AxisLabel) > 4096 || len(n.InflectionLabel) > 4096 || n.Here != nil && len(n.Here.Label) > 4096 {
+	if len(n.AxisLabel) > 4096 || len(n.InflectionLabel) > 4096 || n.Here != nil && len(n.Here.Label) > 4096 || n.Target != nil && len(n.Target.Label) > 4096 {
 		return bad("label_text")
 	}
 	if n.Branch != nil && (len(n.Branch.Label) > 4096 || len(n.Branch.Text) > 16384) {
@@ -510,6 +511,57 @@ func (r *renderer) planIntakeMaturityScene(id string, raw json.RawMessage, ctx S
 			return nil, true, err
 		}
 	}
+	if n.Target != nil {
+		q := positions[*n.Target.Stage]
+		label := n.Target.Label
+		if label == "" {
+			label = "Target"
+		}
+		// A target is explicit intent. It remains distinct from the observed
+		// current marker and never changes the curve or stage observations.
+		y := q.y + 24
+		if n.Here != nil {
+			hi := 0
+			if n.Active != nil {
+				hi = *n.Active
+			}
+			if n.Here.Stage != nil {
+				hi = *n.Here.Stage
+			}
+			if hi == *n.Target.Stage {
+				y += 34
+			}
+		}
+		st, e := r.sceneStyle("label")
+		if e != nil {
+			return nil, true, e
+		}
+		st.Weight = 600
+		width := math.Min(120., n.W)
+		layout, e := r.measureText(label, st, width)
+		if e != nil {
+			return nil, true, e
+		}
+		height := math.Max(layout.AllocationHeight, layout.OccupiedTop+layout.EstimatedOccupiedHeight)
+		box := Rect{math.Max(n.X, math.Min(q.x-width/2, n.X+n.W-width)), y, width, height}
+		// Use the actual rendered polyline, including its incoming slope. A
+		// fixed offset from the marker crosses the label for steep curves.
+		box.Y = math.Max(box.Y, maturityCurveBottom(pts, box.X-6, box.X+box.W+6)+6)
+		bottom := n.Y + n.H
+		if n.Axis == nil || *n.Axis {
+			bottom -= 36
+		}
+		if box.Y+box.H > bottom+.02 {
+			return bad("target_label_clearance")
+		}
+		if err = r.diagramShape(p, id+".target.tick", Rect{q.x - .75, q.y + 12, 1.5, math.Max(0., box.Y-q.y-14)}, pptx.ShapeTypeRect, "0047FF", "", 0, "", nil); err != nil {
+			return nil, true, err
+		}
+		if err = r.sceneText(p, id+".target.label", label, st, box, ctx.Surface, "#0047FF", "center"); err != nil {
+			return nil, true, err
+		}
+	}
+
 	if n.Inflection != nil {
 		q := positions[*n.Inflection]
 		label := n.InflectionLabel
@@ -539,4 +591,22 @@ func (r *renderer) planIntakeMaturityScene(id string, raw json.RawMessage, ctx S
 		}
 	}
 	return p, true, nil
+}
+
+// maturityCurveBottom returns the largest world y on the rendered monotone-x
+// polyline inside the horizontal label interval, including clipped segments.
+func maturityCurveBottom(points []curvePoint, left, right float64) float64 {
+	bottom := math.Inf(-1)
+	for i := 1; i < len(points); i++ {
+		a, b := points[i-1], points[i]
+		lo, hi := math.Max(left, a.x), math.Min(right, b.x)
+		if hi < lo || b.x <= a.x {
+			continue
+		}
+		for _, x := range []float64{lo, hi} {
+			y := a.y + (b.y-a.y)*(x-a.x)/(b.x-a.x)
+			bottom = math.Max(bottom, y)
+		}
+	}
+	return bottom
 }

@@ -342,7 +342,11 @@ func makeXmlCharts(rel *SlideRelChart) string {
 	strXml.WriteString(`</c:spPr>`)
 
 	// E: DATA (Add relID)
-	strXml.WriteString(`<c:externalData r:id="rId1"><c:autoUpdate val="0"/></c:externalData>`)
+	autoUpdate := "0"
+	if opts.AutoUpdateWorkbook {
+		autoUpdate = "1"
+	}
+	strXml.WriteString(`<c:externalData r:id="rId1"><c:autoUpdate val="` + autoUpdate + `"/></c:externalData>`)
 
 	// LAST: chartSpace end
 	strXml.WriteString(`</c:chartSpace>`)

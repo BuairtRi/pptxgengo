@@ -57,7 +57,7 @@ func geometryCompatibilityMismatch(a, b *xmlNode) string {
 			if x.Name.Local == "xfrm" && (x.Name.Space == drawingML || x.Name.Space == lineagePML) {
 				continue
 			}
-			if routeSupported && n.Name.Space == lineagePML && n.Name.Local == "spPr" && x.Name.Space == drawingML && x.Name.Local == "prstGeom" {
+			if routeSupported && n.Name.Space == lineagePML && n.Name.Local == "spPr" && x.Name.Space == drawingML && (x.Name.Local == "prstGeom" || x.Name.Local == "custGeom") {
 				continue
 			}
 			c.Children = append(c.Children, clone(x, routeSupported))

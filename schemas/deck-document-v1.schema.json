@@ -348,6 +348,9 @@
             "path": {
               "$ref": "#/$defs/relativePath"
             },
+            "placeholder_for": {
+              "$ref": "#/$defs/definitionId"
+            },
             "sha256": {
               "$ref": "#/$defs/sha256"
             },
@@ -365,6 +368,7 @@
             }
           },
           "dependentRequired": {
+            "placeholder_for": ["sha256", "description"],
             "derived_from": [
               "derivation_receipt"
             ],
@@ -758,8 +762,12 @@
             "body",
             "rail",
             "panel",
+            "source_body",
+            "source_canvas",
+            "source_container",
             "short_body",
             "tall_body",
+            "tall_plot",
             "whiteboard",
             "source"
           ]

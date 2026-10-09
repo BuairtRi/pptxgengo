@@ -284,7 +284,7 @@ func (r *renderer) planSceneNode(id string, raw json.RawMessage, ctx SceneContex
 	if r.typeEngine.engine != CandidateEngine {
 		return nil, fmt.Errorf("scene.requires_v2")
 	}
-	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planAssessmentScene, r.planNativeEditingScene, r.planRoadForkScene, r.planIntakeGaugeScene, r.planIntakeCycleScene, r.planIntakeRoadScene, r.planIntakeScoreLegendScene, r.planIntakeRound12Scene, r.planIntakeVennScene, r.planIntakeMaturityScene, r.planIntakeArchitectureScene, r.planIntakeGeographyScene, r.planIntakeCurveScene, r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
+	for _, handler := range []func(string, json.RawMessage, SceneContext) (*scenePlan, bool, error){r.planPortfolioScene, r.planCommercialScene, r.planProcessScene, r.planAssessmentScene, r.planNativeEditingScene, r.planRoadForkScene, r.planIntakeGaugeScene, r.planIntakeCycleScene, r.planIntakeRoadScene, r.planIntakeScoreLegendScene, r.planIntakeRound12Scene, r.planIntakeVennScene, r.planIntakeMaturityScene, r.planIntakeArchitectureScene, r.planIntakeGeographyScene, r.planIntakeCurveScene, r.planAnnotationScene, r.planSourceRule, r.planPrimitiveScene, r.planMediaScene, r.planCardScene, r.planTableScene, r.planChartScene, r.planDiagramScene, r.planSequenceScene, r.planPeopleScene} {
 		plan, handled, err := handler(id, raw, ctx)
 		if handled || err != nil {
 			if err == nil && r.contrastProbe == nil {

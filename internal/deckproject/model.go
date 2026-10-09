@@ -18,6 +18,7 @@ type Reference struct {
 	Revision string `json:"revision,omitempty"`
 }
 type Asset struct {
+	PlaceholderFor    string      `json:"placeholder_for,omitempty"`
 	RegistryID        string      `json:"registry_id,omitempty"`
 	Path              string      `json:"path,omitempty"`
 	SHA256            string      `json:"sha256,omitempty"`

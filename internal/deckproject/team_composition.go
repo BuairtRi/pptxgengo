@@ -180,7 +180,7 @@ func teamBound(args map[string]any) bool {
 	return bound
 }
 func InspectTeam(p *Project, id, bundle, engine string) (TeamInspection, error) {
-	out := TeamInspection{Schema: "pptxgengo.team-inspection.v1", Components: []TeamComponent{}, SemanticReconciliation: "Native transforms and supported copy edits do not imply reporting, membership, cadence or decision changes; apply those explicitly in source."}
+	out := TeamInspection{Schema: "pptxgengo.team-inspection.v1", Components: []TeamComponent{}, SemanticReconciliation: "Native transforms and supported copy edits do not imply reporting, membership, cadence or decision changes. Project team reconcile proposes authenticated role translations between unchanged pods for explicit membership review; other meaning requires source operations."}
 	idx, t, err := diagramSlide(p, id)
 	if err != nil {
 		return out, err
@@ -502,7 +502,9 @@ func teamOrder(items []any, keys, order []string) ([]any, []string, error) {
 	return out, append([]string(nil), order...), nil
 }
 func teamRemove(items []any, keys []string, i int) ([]any, []string) {
-	return append(items[:i], items[i+1:]...), append(keys[:i], keys[i+1:]...)
+	remainingItems := append([]any(nil), items[:i]...)
+	remainingKeys := append([]string(nil), keys[:i]...)
+	return append(remainingItems, items[i+1:]...), append(remainingKeys, keys[i+1:]...)
 }
 func teamObject(v any) map[string]any { var out map[string]any; _ = strictInto(v, &out); return out }
 

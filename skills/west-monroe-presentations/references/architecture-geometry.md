@@ -147,22 +147,58 @@ accept `--bend`. `inspect` returns the final calculated path points in slide
 coordinates, including adopted transforms and bend positions. These are single
 native attached connectors, not separate line fragments.
 
-A supported native elbow bend edit can be reviewed through `reconcile propose
---geometry`; adoption persists its `bentConnector3` preset and literal `adj1`
-guide in `native_geometry/<name>/route`. Guides outside the endpoint rectangle
-are permitted only when their calculated allocation still fits the frame and
-any declared container. A source layout reset removes adopted bend overrides
-along with transforms, returning to the source-authored route.
+Use `project diagram route --project ./deck --slide architecture --patch route.yaml`
+to preview a measured obstacle detour. Its strict patch declares the current source
+SHA256, connection ID, actor and reason; new connections also declare `from` and
+`to` node/site pairs. Review `world_points`, obstacles, clearances and exclusions
+before repeating with `--apply`. Reserved rectangles and justified exact-object
+exclusions are explicit inputs. Automatic routing does not infer relationships
+or determine that a crossing is semantically appropriate.
 
-Obstacle avoidance, custom paths, curved/other elbow presets, connector labels,
-and container connection sites are not implemented. Unsupported metadata or
-attachment changes remain review items. Inspect crossings and inner-container
-clearance visually; allocation checks do not establish stroke/arrowhead or native
-Save As fidelity.
+```yaml
+schema: pptxgengo.diagram-route-patch.v1
+expected_source_sha256: COPY_CURRENT_SOURCE_SHA256
+actor: deck-author
+reason: Route the dependency around the shared service
+id: service-edge
+clearance_pt: 6
+label: Sends events
+label_width: 100
+```
+
+For direct source authoring, `route: polyline` takes intermediate `[x,y]`
+`waypoints` relative to the connector's allocated rectangle. Endpoints remain
+attached to their declared node sites. `label`, `label_position` and `label_width`
+are explicit text controls; check their measured fit and crossings in the preview.
+
+Alternating orthogonal paths with 3–6 vertices use native `bentConnector2` through
+`bentConnector5` presets. Literal `adj1`/`adj2`/`adj3` bend edits can be reviewed
+through `reconcile propose --geometry`; adoption retains the native route in
+`native_geometry/<name>/route`. Guides use 100000ths of the endpoint extent and
+can extend outside it only while their final allocation fits the frame/container.
+
+Longer routes, diagonal paths and U detours whose endpoints share an axis use
+ordered attached native line segments and invisible waypoint rectangles. They
+remain one logical YAML connection. `inspect` returns
+`representation: attached-native-segments`, the complete `native_parts` namespace,
+and actual final world points. Keep all `.segment-NNN` and `.waypoint-NNN` objects
+when editing. Arrows occur only at the logical start/end. Moving a junction and
+its adjacent attached segments is reconciled as persistent native geometry; it
+does not rewrite source waypoints or change endpoint relationships. Review the
+full packet before adoption. Source composition/rerouting requires an explicit
+reviewed `reset_native_layout` once native overrides exist.
+
+Custom connector geometry, curved presets, formula guides, reattachment and
+unknown objects remain manual review. Container sites are not automatic targets.
+Review strokes, labels and arrowheads in PowerPoint; measured centerline clearance
+is not a desktop rendering qualification.
 
 ## Reconcile native geometry
 
-Build a baseline, then edit a separate working copy under `working/`:
+Build a baseline, then edit a separate writable working copy under `working/`.
+A copy can inherit the immutable build's read-only mode: set `chmod 600` on
+only the owned working file, following [project structure](project-structure.md).
+Keep the generated baseline unchanged:
 
 ```sh
 pptxgengo design project reconcile propose --project ./deck --geometry \
@@ -278,3 +314,16 @@ plain-text rectangles as editable blocks, follow [native imports](native-imports
 It replaces styling explicitly and retains the original package; it does not
 import arbitrary architecture groups or connectors. Check installed help for
 these new development commands. For access failures, use [PowerPoint recovery](powerpoint-recovery.md).
+# Retaining original frame containers
+
+An original pinned container/frame can use `source_container`: up to six points
+below the body, with six-point clearance before the source caption and footer.
+Preserve its source/parent hashes, stable node ID and `_source_geometry`.
+Materialize bound copy before changing it. Other components use normal zones.
+Do not invent this zone or inflate metadata to bypass fit.
+
+The V11 `architecture/layer-map` original container has only three-point caption
+clearance. To adapt it deliberately, scaffold with
+`--source-container-clearance-fit --reason "Retain six-point source clearance"`.
+The emitted `geometry_adjustments` receipt records the 294-to-291 height change.
+Review that authored adjustment; do not describe it as unchanged source fidelity.

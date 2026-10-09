@@ -17,18 +17,20 @@ import (
 // inventory itself is covered by the signed platform archive; Files closes the
 // browsing deck and authoring source tree beneath it.
 type TemplateCatalogInventory struct {
-	Schema            string            `json:"schema"`
-	Files             map[string]string `json:"files_sha256"`
-	Bundle            string            `json:"bundle"`
-	SourceRevision    string            `json:"source_revision"`
-	SourceCommit      string            `json:"source_commit"`
-	BundleSHA256      string            `json:"bundle_sha256"`
-	Compiler          string            `json:"compiler"`
-	ReleaseIdentity   string            `json:"release_identity"`
-	AsOf              string            `json:"as_of"`
-	PipelineCreatedAt string            `json:"pipeline_created_at"`
-	EditingProfile    string            `json:"editing_profile"`
-	MediaPolicy       string            `json:"media_policy"`
+	SkillIncluded      bool              `json:"skill_included,omitempty"`
+	RegisteredGraphics bool              `json:"registered_graphics,omitempty"`
+	Schema             string            `json:"schema"`
+	Files              map[string]string `json:"files_sha256"`
+	Bundle             string            `json:"bundle"`
+	SourceRevision     string            `json:"source_revision"`
+	SourceCommit       string            `json:"source_commit"`
+	BundleSHA256       string            `json:"bundle_sha256"`
+	Compiler           string            `json:"compiler"`
+	ReleaseIdentity    string            `json:"release_identity"`
+	AsOf               string            `json:"as_of"`
+	PipelineCreatedAt  string            `json:"pipeline_created_at"`
+	EditingProfile     string            `json:"editing_profile"`
+	MediaPolicy        string            `json:"media_policy"`
 }
 
 const TemplateCatalogInventoryName = "template-catalog-manifest.json"
@@ -64,14 +66,20 @@ func ReadTemplateCatalogInventory(raw []byte) (TemplateCatalogInventory, error) 
 	}
 	for name, sum := range in.Files {
 		bundleRoot := "library/wm-design-system/" + in.Bundle + "/"
-		if !portable(name) || (!strings.HasPrefix(name, "browsing/") && !strings.HasPrefix(name, bundleRoot)) || !hash(sum) {
+		if !portable(name) || (!strings.HasPrefix(name, "browsing/") && !strings.HasPrefix(name, bundleRoot) && !(in.SkillIncluded && (strings.HasPrefix(name, "skills/west-monroe-presentations/") || name == "scripts/install-skill.py" || name == "SKILL-INSTALL.md"))) || !hash(sum) {
 			return in, fmt.Errorf("browsing.template_catalog_path_or_hash_invalid: %s", name)
 		}
 		lower := strings.ToLower(name)
-		for _, private := range []string{"/photos/", "/branding/", "/reusable", "/catalog/assets/"} {
+		for _, private := range []string{"/photos/", "/branding/", "/reusable"} {
 			if strings.Contains(lower, private) {
 				return in, fmt.Errorf("browsing.template_catalog_private_asset_path: %s", name)
 			}
+		}
+		if strings.Contains(lower, "/catalog/assets/") {
+			if !in.RegisteredGraphics || !strings.HasPrefix(name, bundleRoot+"catalog/assets/") || (filepath.Ext(name) != ".svg" && name != bundleRoot+"catalog/assets/assets.json") {
+				return in, fmt.Errorf("browsing.template_catalog_unapproved_catalog_asset: %s", name)
+			}
+			continue
 		}
 		if strings.Contains(lower, "/assets/") {
 			base := filepath.Base(name)
@@ -105,6 +113,18 @@ func ValidateTemplateCatalogInventory(root string, in TemplateCatalogInventory, 
 	if _, ok := in.Files["browsing/native-editing-coverage.json"]; !ok {
 		return fmt.Errorf("browsing.template_catalog_native_coverage_missing")
 	}
+	if in.SkillIncluded {
+		for _, name := range []string{"skills/west-monroe-presentations/SKILL.md", "skills/west-monroe-presentations/references/installation.md", "scripts/install-skill.py", "SKILL-INSTALL.md"} {
+			if _, ok := in.Files[name]; !ok {
+				return fmt.Errorf("browsing.template_catalog_skill_material_missing: %s", name)
+			}
+		}
+	}
+	if in.RegisteredGraphics {
+		if e := validateRegisteredGraphics(root, in); e != nil {
+			return e
+		}
+	}
 	seen := map[string]bool{}
 	for rel, want := range in.Files {
 		path := filepath.Join(root, filepath.FromSlash(rel))
@@ -123,7 +143,11 @@ func ValidateTemplateCatalogInventory(root string, in TemplateCatalogInventory, 
 		}
 		seen[rel] = true
 	}
-	for _, subtree := range []string{"browsing", "library"} {
+	subtrees := []string{"browsing", "library"}
+	if in.SkillIncluded {
+		subtrees = append(subtrees, "skills", "scripts")
+	}
+	for _, subtree := range subtrees {
 		base := filepath.Join(root, subtree)
 		st, e := os.Lstat(base)
 		if e != nil || !st.IsDir() || st.Mode()&os.ModeSymlink != 0 {

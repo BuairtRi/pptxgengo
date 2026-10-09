@@ -81,13 +81,13 @@ func TestStagedTemplateOnlyResourcesArchiveClosure(t *testing.T) {
 	if err := addScopedBrowsingFiles(files, root, version, commit); err != nil {
 		t.Fatal(err)
 	}
-	for _, required := range []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/native-editing-coverage.json", "library/wm-design-system/v11/library.sqlite", "library/wm-design-system/v11/bundle.json", "library/wm-design-system/v11/fonts/IBMPlexSans-Regular.ttf", browsingartifact.TemplateCatalogInventoryName} {
+	for _, required := range []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/native-editing-coverage.json", "library/wm-design-system/v11/library.sqlite", "library/wm-design-system/v11/bundle.json", "library/wm-design-system/v11/fonts/IBMPlexSans-Regular.ttf", browsingartifact.TemplateCatalogInventoryName, "skills/west-monroe-presentations/SKILL.md", "scripts/install-skill.py", "SKILL-INSTALL.md", "library/wm-design-system/v11/catalog/assets/assets.json"} {
 		if _, ok := files[required]; !ok {
 			t.Fatalf("staged archive closure omitted %s", required)
 		}
 	}
 	for name := range files {
-		if strings.Contains(name, "reusable-slides") || strings.Contains(name, "catalog/assets/") {
+		if strings.Contains(name, "reusable-slides") || strings.Contains(name, "/photos/") || strings.Contains(name, "/branding/") {
 			t.Fatalf("deferred resource entered templates-only archive: %s", name)
 		}
 	}

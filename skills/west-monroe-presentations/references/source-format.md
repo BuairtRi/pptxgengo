@@ -101,6 +101,16 @@ bindings:
 
 Design custom pages with [custom slide design](custom-slide-design.md) first. Start from `project scaffold --bundle v11 --template KEY --reason R` when a shared template is close ([editing slides](editing-slides.md#change-a-slides-layout)); use the project's locked bundle for a historical project.
 
+The `source_container` allocation is reserved for a genuine pinned catalog
+container/frame: at most six points below the body and at least six before
+caption/footer zones. Its original node identity, parent/source hashes and
+captured `_source_geometry` are verified; a claimed frozen snapshot does not
+bypass these checks. The original V11 `architecture/layer-map` container has
+only three-point caption clearance. Explicit scaffold
+`--source-container-clearance-fit` deliberately changes its height 294 to 291
+and emits `geometry_adjustments`. Preserve and review that receipt rather than
+claiming unchanged source fidelity. Other components use ordinary allocations.
+
 A local template declares:
 
 - `frame`: `{scope: shared, id: wmds/frame/<rail>-<footer>}`, where rail is `none`, `left`, `right` or `nav` and footer is `compact`, `tall` or source-supported `slim`. Optional `frame_options` sets `title_lines`, `source_lines`, header density, nav and split composition; `frame_chrome` keeps custom whiteboard geometry and emphasis. Use only allocations supported by the pinned source; these local-template options do not automatically modify stock frames or expand them during fitting.
@@ -190,16 +200,25 @@ complete project shares carry them with the slide YAML.
 ### Attached elbow routes (development build)
 
 `wmds/component/attached-connector` arguments include endpoint node/site pairs,
-`route: straight|horizontal|vertical` (default straight), and an optional elbow
+`route: straight|horizontal|vertical|polyline` (default straight), and an optional elbow
 `bend` fraction in `[0,1]` (default `.5`). Do not supply a bend for a straight
-connector. Use `project diagram connect` to preview these options.
+connector. `polyline` takes intermediate `waypoints: [[x,y], ...]` relative to its
+allocated rectangle; endpoint sites still determine the start/end. Use `project
+diagram connect` for simple options, or `diagram route --patch FILE` for measured
+obstacle avoidance. Optional labels have explicit `label_position`/`label_width`.
 
 Reviewed native elbow edits persist an optional `native_geometry/<name>/route`:
-`{preset: bentConnector3, adj1: 65000}`. `adj1` is a literal DrawingML guide in
-100000ths of the native width, before flips/rotation. Native guides may extend
+`{preset: bentConnector3, adj1: 65000}`. Presets `bentConnector2` through
+`bentConnector5` use zero through three literal guides (`adj1`, `adj2`, `adj3`)
+in 100000ths of alternating native width/height, before flips/rotation. Native guides may extend
 past the endpoint rectangle; calculated route allocations must still fit the
 frame and declared containment. Unknown presets/formulas remain manual review.
-Use reconciliation to write these overrides and their source basis pins.
+Use reconciliation to write these overrides and their source basis pins. Longer
+paths and same-axis endpoint detours are a single logical connection backed by
+`.segment-NNN` native lines and `.waypoint-NNN` transparent attachment guides.
+Adopt moved parts through geometry review; native overrides retain precedence
+until an explicit reviewed layout reset. Do not hand-author custom connector
+geometry or delete individual pieces of that namespace.
 
 ## Family and import patch files
 

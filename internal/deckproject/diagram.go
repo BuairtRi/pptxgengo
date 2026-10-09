@@ -446,6 +446,13 @@ func preserveDiagramComments(old, current *yaml.Node) {
 	}
 	current.HeadComment, current.LineComment, current.FootComment = old.HeadComment, old.LineComment, old.FootComment
 	if old.Kind == yaml.MappingNode && current.Kind == yaml.MappingNode {
+		oldDef, newDef := mappingNode(old, "definition"), mappingNode(current, "definition")
+		if newDef != nil && mappingNode(newDef, "id") != nil && mappingNode(newDef, "id").Value == "wmds/component/commercial" && (oldDef == nil || mappingNode(oldDef, "id") == nil || mappingNode(oldDef, "id").Value != "wmds/component/commercial") {
+			preserveDiagramComments(mappingNode(old, "arguments"), mappingNode(mappingNode(current, "arguments"), "presentation"))
+		}
+	}
+
+	if old.Kind == yaml.MappingNode && current.Kind == yaml.MappingNode {
 		for i := 0; i+1 < len(current.Content); i += 2 {
 			for j := 0; j+1 < len(old.Content); j += 2 {
 				if old.Content[j].Value == current.Content[i].Value {
@@ -494,6 +501,7 @@ func preserveDiagramComments(old, current *yaml.Node) {
 			}
 		}
 	}
+	preserveDiagramKeyedArgumentComments(old, current)
 }
 
 // updateDiagramNodes writes a typed local definition and prunes only unused

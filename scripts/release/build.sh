@@ -5,7 +5,7 @@ if [[ "${CI:-}" == true ]]; then require_release_identity; fi
 target="${1:?usage: build.sh OS-ARCH}"
 case "$target" in linux-amd64|linux-arm64|windows-amd64|windows-arm64|darwin-amd64|darwin-arm64) ;; *) exit 2 ;; esac
 os="${target%-*}"; arch="${target#*-}"
-[[ "$(go env GOVERSION)" == go1.27.1 ]] || { echo 'Release requires Go 1.27.1' >&2; exit 1; }
+[[ "$(go env GOVERSION)" == go1.27.2 ]] || { echo 'Release requires Go 1.27.2' >&2; exit 1; }
 tmp="$(mktemp -d)"; trap 'chmod -R u+w "$tmp"; rm -rf "$tmp"' EXIT
 out="$release_root/dist/unsigned/$target"
 [[ ! -e "$out" ]] || { echo 'Unsigned output must be new' >&2; exit 1; }

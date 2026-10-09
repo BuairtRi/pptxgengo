@@ -21,13 +21,15 @@ func runProjectScaffold(args []string) error {
 	year := f.Int("year", 2026, "source specimen year")
 	out := f.String("out", "", "optional new JSON file; default stdout")
 	omit := f.String("omit-nodes", "", "comma-separated source node IDs deliberately excluded from the local derivative; requires adaptation reason")
+	placeholderMedia := f.Bool("placeholder-media", false, "explicitly use schematic private media placeholders, retaining original registered icons/arrows; output includes payloads and descriptors")
+	containerFit := f.Bool("source-container-clearance-fit", false, "explicitly shrink an original frame/container height if needed for six-point caption/footer clearance; emits geometry adjustment receipt")
 	stock := f.Bool("stock", false, "emit editable slide YAML using the unchanged shared template")
 	id := f.String("id", "", "slide ID for --stock")
 	if err := f.Parse(args); err != nil {
 		return err
 	}
 	if *stock {
-		if f.NArg() != 0 || *key == "" || *id == "" || *reason != "" || *omit != "" {
+		if f.NArg() != 0 || *key == "" || *id == "" || *reason != "" || *omit != "" || *placeholderMedia || *containerFit {
 			return fmt.Errorf("project scaffold --stock requires --template --id; adaptation flags are not applicable")
 		}
 		if *bundle == "" {
@@ -53,7 +55,7 @@ func runProjectScaffold(args []string) error {
 			omitNodes = append(omitNodes, strings.TrimSpace(id))
 		}
 	}
-	result, err := deckproject.ScaffoldTemplate(deckproject.BundlePath(*bundle), *key, *engine, *reason, *year, omitNodes...)
+	result, err := deckproject.ScaffoldTemplateWithOptions(deckproject.BundlePath(*bundle), *key, *engine, *reason, *year, deckproject.ScaffoldOptions{PlaceholderMedia: *placeholderMedia, OmitNodes: omitNodes, SourceContainerClearanceFit: *containerFit})
 	if err != nil {
 		return err
 	}

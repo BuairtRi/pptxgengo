@@ -154,13 +154,14 @@ func assessmentSource(n *Node, values map[string]any) (wmdesign.AssessmentSpec, 
 	if e != nil {
 		return out, bound, e
 	}
+	delete(args, wmdesign.SceneSourceGeometryArgument)
 	if e = strictInto(args, &out); e != nil {
 		return out, bound, e
 	}
 	return out, bound, wmdesign.ValidateAssessment(out)
 }
 func InspectAssessment(p *Project, slideID, nodeID, bundle, engine string) (AssessmentInspection, error) {
-	out := AssessmentInspection{Schema: "pptxgengo.assessment-inspection.v1", SlideID: slideID, NodeID: nodeID, SourceSHA256: p.SourceHash(), Contract: "Ordinal integer scores 0..max; nil/absent scores are not assessed and remain distinct from numeric zero. No averaging, weighting, percentage or native-cell semantic inference."}
+	out := AssessmentInspection{Schema: "pptxgengo.assessment-inspection.v1", SlideID: slideID, NodeID: nodeID, SourceSHA256: p.SourceHash(), Contract: "Ordinal integer scores 0..max; nil/absent scores are not assessed and remain distinct from numeric zero. No averaging, weighting or percentage inference. Receipt-backed native visible score edits require explicit project assessment reconcile decisions; geometry alone does not establish a score."}
 	idx, t, e := diagramSlide(p, slideID)
 	if e != nil {
 		return out, e
@@ -252,6 +253,9 @@ func PatchAssessment(p *Project, slideID string, patch AssessmentPatch, bundle, 
 	if e = json.Unmarshal(canonical(s), &args); e != nil {
 		return empty, e
 	}
+	if geometry, exists := n.Arguments[wmdesign.SceneSourceGeometryArgument]; exists {
+		args[wmdesign.SceneSourceGeometryArgument] = geometry
+	}
 	n.Arguments = args
 	n.Keys = nil
 	return CompositionCandidate(p, slideID, "assessment", patch.Actor, patch.Reason, clone, bundle, engine, apply)
@@ -268,6 +272,7 @@ func initializeAssessment(t *LocalTemplate, n *Node, op AssessmentOperation, val
 	if e != nil {
 		return e
 	}
+	delete(args, wmdesign.SceneSourceGeometryArgument)
 	for field := range args {
 		switch field {
 		case "header", "rowHeader", "dense", "rowH", "cols", "rows", "heatMin", "heatMax", "rowGroups", "groups":

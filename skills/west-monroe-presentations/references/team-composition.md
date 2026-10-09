@@ -62,6 +62,13 @@ Native geometry/order overrides must first be reviewed and explicitly reset
 with the [diagram workflow](architecture-geometry.md); team composition refuses
 to silently overwrite them.
 
+After changing composition, review the entire slide's title, captions, count
+claims, legends and companion tables. A stock title describing three pods or
+four roles becomes false if the adapted source has two pods and three roles.
+Use `project edit --check-fit` for the reviewed narrative update and rebuild;
+do not rewrite an earlier native baseline or reconciliation receipt. Semantic
+adoption updates the reviewed membership, not every narrative claim by inference.
+
 ## Preview and apply one source transaction
 
 ```yaml
@@ -223,10 +230,13 @@ a passed team-family semantic round trip.
 Review the operator's intent before selecting `reassign-role` or
 `reparent-report`. A role moved entirely inside another pod can be evidence for
 an explicit membership question, but spacing, overlapping containers and shared
-leadership make proximity ambiguous. There is currently no automatic pod
-crossing proposal or accepted-membership adoption command. Persist confirmed
-membership with stable keyed team operations and rebuild; preserve native
-geometry as evidence rather than adopting the same move twice.
+leadership make proximity ambiguous. Use `project team reconcile` with a closed
+geometry review packet to propose an original role's complete translation into
+exactly one unchanged pod. An explicit `reassign` decision confirms membership;
+partial movement, resizing, overlap and stale source remain unresolved. Follow
+[native semantic review](native-semantic-review.md) for decisions, measured
+preview and guarded application. Rebuild from the confirmed membership and
+preserve the original geometry as evidence rather than applying the move twice.
 
 For reporting, a verified connector endpoint reassignment would be stronger
 evidence than placing one node beneath another. Connector topology is not
@@ -234,5 +244,5 @@ currently reconciled into the org-chart tree. Do not infer a reporting change
 from arrow direction, relative position, or an imported untagged line. Confirm
 role identities/parent and use `reparent-report`; preserve cycle/root guards.
 The bounded [Gantt semantic review](gantt-composition.md#review-native-bars-as-possible-schedule-changes)
-handles only period-based task/gate proposals and does not expand these team
+handles period-based task/gate proposals separately from these membership
 contracts.

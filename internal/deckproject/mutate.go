@@ -215,11 +215,11 @@ func Detach(p *Project, slideID, newID, bundle, engine, reason string) (Mutation
 		if !ok {
 			return Mutation{}, fmt.Errorf("measured scene bounds missing: %s", n.ID)
 		}
-		b, errBounds := editableSceneAllocation(kind, args, b)
+		b, errBounds := editableSceneAllocation(kind, args, b, frame)
 		if errBounds != nil {
 			return Mutation{}, fmt.Errorf("%s: %w", n.ID, errBounds)
 		}
-		zone, origin, e := chooseZone(b, frame)
+		zone, origin, e := chooseSourceSceneZone(kind, args, b, frame)
 		if e != nil {
 			return Mutation{}, fmt.Errorf("detach %s: %w", n.ID, e)
 		}
@@ -272,6 +272,25 @@ func chooseZone(b wmdesign.Rect, f wmdesign.ResolvedFrame) (string, wmdesign.Rec
 		if r.W > 0 && r.H > 0 && b.X >= r.X-.02 && b.Y >= r.Y-.02 && b.X+b.W <= r.X+r.W+.02 && b.Y+b.H <= r.Y+r.H+.02 {
 			return z.name, r, nil
 		}
+	}
+	// The published split quadrant deliberately starts nine points above the
+	// tall column. Preserve that named plot allocation when detaching/scaffolding;
+	// compile restricts this zone to typed quadrant charts.
+	if f.Request.Split != "" && f.TallBody.W > 0 {
+		r := f.TallBody
+		r.Y -= 9
+		r.H += 9
+		if b.X >= r.X-.02 && b.Y >= r.Y-.02 && b.X+b.W <= r.X+r.W+.02 && b.Y+b.H <= r.Y+r.H+.02 {
+			return "tall_plot", r, nil
+		}
+	}
+	r := wmdesign.Rect{X: f.Body.X, Y: 0, W: f.Body.W, H: f.Body.Y + f.Body.H}
+	if b.X >= r.X-.02 && b.Y >= r.Y-.02 && b.X+b.W <= r.X+r.W+.02 && b.Y+b.H <= r.Y+r.H+.02 {
+		return "source_body", r, nil
+	}
+	r = wmdesign.Rect{X: 0, Y: 0, W: 960, H: f.Body.Y + f.Body.H}
+	if b.X >= r.X-.02 && b.Y >= r.Y-.02 && b.X+b.W <= r.X+r.W+.02 && b.Y+b.H <= r.Y+r.H+.02 {
+		return "source_canvas", r, nil
 	}
 	return "", wmdesign.Rect{}, fmt.Errorf("source bounds extend outside supported local frame zones; no source mutation applied")
 }

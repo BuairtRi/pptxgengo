@@ -1,0 +1,223 @@
+{
+  "precision": 0,
+  "rounding": "half_even",
+  "rows": [
+    {
+      "key": "investment",
+      "label": "investment",
+      "unit": "USD",
+      "value": "4200000",
+      "assumption": "Explicit illustrative assumption, not an approved estimate"
+    },
+    {
+      "key": "annual",
+      "label": "annual",
+      "unit": "USD",
+      "value": "2600000",
+      "assumption": "Explicit illustrative assumption, not an approved estimate"
+    },
+    {
+      "key": "years",
+      "label": "years",
+      "unit": "ratio",
+      "value": "5",
+      "assumption": "Explicit illustrative assumption, not an approved estimate"
+    },
+    {
+      "key": "discount",
+      "label": "discount",
+      "unit": "ratio",
+      "value": "0.08",
+      "assumption": "Explicit illustrative assumption, not an approved estimate"
+    },
+    {
+      "key": "negative",
+      "label": "negative",
+      "unit": "ratio",
+      "value": "-1",
+      "assumption": "Explicit illustrative assumption, not an approved estimate"
+    },
+    {
+      "key": "months-per-year",
+      "label": "months-per-year",
+      "unit": "ratio",
+      "value": "12",
+      "assumption": "Explicit illustrative assumption, not an approved estimate"
+    },
+    {
+      "key": "benefit",
+      "label": "benefit",
+      "unit": "USD",
+      "formula": {
+        "operation": "multiply",
+        "inputs": [
+          "annual",
+          "years"
+        ]
+      }
+    },
+    {
+      "key": "net",
+      "label": "net",
+      "unit": "USD",
+      "formula": {
+        "operation": "subtract",
+        "inputs": [
+          "benefit",
+          "investment"
+        ]
+      }
+    },
+    {
+      "key": "value-dollar",
+      "label": "value-dollar",
+      "unit": "ratio",
+      "formula": {
+        "operation": "divide",
+        "inputs": [
+          "benefit",
+          "investment"
+        ]
+      }
+    },
+    {
+      "key": "roi",
+      "label": "roi",
+      "unit": "ratio",
+      "formula": {
+        "operation": "roi",
+        "inputs": [
+          "benefit",
+          "investment"
+        ]
+      }
+    },
+    {
+      "key": "payback-years",
+      "label": "payback-years",
+      "unit": "years",
+      "formula": {
+        "operation": "payback",
+        "inputs": [
+          "investment",
+          "annual"
+        ]
+      },
+      "assumption": "Upfront investment and constant annual net benefit; undiscounted simple payback"
+    },
+    {
+      "key": "payback-months",
+      "label": "payback-months",
+      "unit": "months",
+      "formula": {
+        "operation": "convert",
+        "inputs": [
+          "payback-years",
+          "months-per-year"
+        ]
+      },
+      "assumption": "12months per year"
+    },
+    {
+      "key": "initial",
+      "label": "initial",
+      "unit": "USD",
+      "formula": {
+        "operation": "multiply",
+        "inputs": [
+          "investment",
+          "negative"
+        ]
+      }
+    },
+    {
+      "key": "npv",
+      "label": "npv",
+      "unit": "USD",
+      "formula": {
+        "operation": "npv",
+        "inputs": [
+          "discount",
+          "initial",
+          "annual",
+          "annual",
+          "annual",
+          "annual",
+          "annual"
+        ]
+      }
+    }
+  ],
+  "targets": [
+    {
+      "node_id": "node02",
+      "row": "investment",
+      "path": "/text",
+      "scale": "1000000",
+      "prefix": "$",
+      "suffix": "M",
+      "precision": 1
+    },
+    {
+      "node_id": "node06",
+      "row": "annual",
+      "path": "/text",
+      "scale": "1000000",
+      "prefix": "$",
+      "suffix": "M",
+      "precision": 1
+    },
+    {
+      "node_id": "node09",
+      "row": "value-dollar",
+      "path": "/text",
+      "suffix": "x",
+      "precision": 1
+    },
+    {
+      "node_id": "node12",
+      "row": "roi",
+      "path": "/value",
+      "scale": "0.01",
+      "suffix": "%",
+      "precision": 0
+    },
+    {
+      "node_id": "node13",
+      "row": "payback-months",
+      "path": "/value",
+      "precision": 0
+    },
+    {
+      "node_id": "node14",
+      "row": "npv",
+      "path": "/value",
+      "scale": "1000000",
+      "prefix": "$",
+      "suffix": "M",
+      "precision": 1
+    },
+    {
+      "node_id": "node15",
+      "row": "benefit",
+      "path": "/value",
+      "scale": "1000000",
+      "prefix": "$",
+      "suffix": "M",
+      "precision": 1
+    },
+    {
+      "node_id": "node16",
+      "row": "annual",
+      "path": "/body",
+      "scale": "1000000",
+      "prefix": "Five annual benefits of $",
+      "suffix": "M; all investment at inception.",
+      "precision": 1
+    }
+  ],
+  "assumptions": [
+    "USD4.2M at inception; USD2.6M constant annual net benefit for five years.",
+    "NPV uses8% annual discount, period0 investment then five annual benefits. ROI/value-dollar are five-year undiscounted; simple payback assumes constant accrual; excludes taxes and strategic benefits."
+  ]
+}

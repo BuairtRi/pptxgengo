@@ -75,6 +75,76 @@ func TestTemplateCatalogInventoryClosesSourceAndTemplateDeck(t *testing.T) {
 	if err = browsingartifact.ValidateTemplateCatalogInventory(root, parsed, files, "unit-test-only"); err != nil {
 		t.Fatal(err)
 	}
+	// New releases close their operator materials and approved diagram pieces
+	// in the same signed inventory. Older inventories remain readable above.
+	for _, name := range []string{"skills/west-monroe-presentations/SKILL.md", "skills/west-monroe-presentations/references/installation.md", "scripts/install-skill.py", "SKILL-INSTALL.md"} {
+		files[name] = put(name, []byte("operator material"))
+	}
+	prefix := "library/wm-design-system/v11/catalog/assets/"
+	graphic := prefix + "assets/fixture.svg"
+	originalGraphic, err := os.ReadFile("../../library/wm-design-system/v11/catalog/assets/assets/001-01.svg")
+	if err != nil {
+		t.Fatal(err)
+	}
+	graphicHash := put(graphic, originalGraphic)
+	files[graphic] = graphicHash
+	registry := []any{map[string]any{"id": "arrow-connecting", "kind": "graphic", "variants": []any{map[string]any{"id": "arrow-connecting", "sha256": graphicHash, "thumbnail_path": "assets/fixture.svg", "thumbnail_sha256": graphicHash, "thumbnail_state": "verified_registered_original", "thumbnail_mime": "image/svg+xml"}}}}
+	registryRaw, _ := json.Marshal(registry)
+	files[prefix+"assets.json"] = put(prefix+"assets.json", registryRaw)
+	in.SkillIncluded, in.RegisteredGraphics = true, true
+	raw, _ = json.Marshal(in)
+	parsed, err = browsingartifact.ReadTemplateCatalogInventory(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = browsingartifact.ValidateTemplateCatalogInventory(root, parsed, files, "unit-test-only"); err != nil {
+		t.Fatal("complete skill/graphics inventory rejected", err)
+	}
+
+	// Signed closure alone cannot establish registered-original provenance.
+	// Forged catalog rows must be rejected even when every staged digest agrees.
+	for _, variantID := range []string{"icon/fixture", "icon/ai-atom/navy"} {
+		variant := registry[0].(map[string]any)["variants"].([]any)[0].(map[string]any)
+		variant["id"] = variantID
+		registry[0].(map[string]any)["kind"] = "icon"
+		forgedRaw, _ := json.Marshal(registry)
+		files[prefix+"assets.json"] = put(prefix+"assets.json", forgedRaw)
+		candidate := parsed
+		candidate.Files = files
+		if err = browsingartifact.ValidateTemplateCatalogInventory(root, candidate, files, "unit-test-only"); err == nil || !strings.Contains(err.Error(), "registered_graphics_unapproved_original") {
+			t.Fatal("forged provenance was not rejected by canonical registry", variantID, err)
+		}
+	}
+	registry[0].(map[string]any)["kind"] = "graphic"
+	registry[0].(map[string]any)["variants"].([]any)[0].(map[string]any)["id"] = "arrow-connecting"
+	files[prefix+"assets.json"] = put(prefix+"assets.json", registryRaw)
+	for _, target := range []string{"scripts/install-skill.py", graphic} {
+		original, _ := os.ReadFile(filepath.Join(root, filepath.FromSlash(target)))
+		put(target, []byte("tampered"))
+		if err = browsingartifact.ValidateTemplateCatalogInventory(root, parsed, files, "unit-test-only"); err == nil {
+			t.Fatal("tampered release material accepted", target)
+		}
+		put(target, original)
+	}
+	unlisted := "skills/west-monroe-presentations/unlisted.md"
+	put(unlisted, []byte("stale"))
+	if err = browsingartifact.ValidateTemplateCatalogInventory(root, parsed, files, "unit-test-only"); err == nil {
+		t.Fatal("unlisted operator material accepted")
+	}
+	if err = os.Remove(filepath.Join(root, filepath.FromSlash(unlisted))); err != nil {
+		t.Fatal(err)
+	}
+	for _, mutate := range []func(*browsingartifact.TemplateCatalogInventory){
+		func(v *browsingartifact.TemplateCatalogInventory) { v.SkillIncluded = false },
+		func(v *browsingartifact.TemplateCatalogInventory) { v.RegisteredGraphics = false },
+	} {
+		candidate := parsed
+		mutate(&candidate)
+		candidateRaw, _ := json.Marshal(candidate)
+		if _, err = browsingartifact.ReadTemplateCatalogInventory(candidateRaw); err == nil {
+			t.Fatal("extra payload accepted without its explicit inclusion flag")
+		}
+	}
 	if err = os.WriteFile(filepath.Join(root, "library/wm-design-system/v11/library.sqlite"), []byte("tampered SQLite"), 0644); err != nil {
 		t.Fatal(err)
 	}

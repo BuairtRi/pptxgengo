@@ -301,7 +301,7 @@ func (r *renderer) roadForkPin(p *scenePlan, id string, q curvePoint, number str
 
 func (r *renderer) roadFork(id string, n roadForkSpec, ctx SceneContext) (*scenePlan, error) {
 	bad := func(reason string) (*scenePlan, error) { return nil, fmt.Errorf("scene.roadfork_%s: %s", reason, id) }
-	if !intakeFinite(n.X, n.Y, n.W, n.H, n.CanvasH) || math.Abs(n.X) > 3840 || math.Abs(n.Y) > 2160 || n.CanvasH < 0 || n.CanvasH > 2160 || n.W <= 100 || n.W > 1920 || n.H <= 80 || n.H > 1080 || len(n.Trunk) > 3 || len(n.Branches) < 2 || len(n.Branches) > 3 {
+	if !intakeFinite(n.X, n.Y, n.W, n.H, n.CanvasH) || math.Abs(n.X) > 3840 || math.Abs(n.Y) > 2160 || n.CanvasH < 0 || n.CanvasH > 2160 || n.W <= 100 || n.W > 1920 || n.H <= 80 || n.H > 1080 || len(n.Trunk) > 12 || len(n.Branches) < 2 || len(n.Branches) > 3 {
 		return bad("geometry_or_count")
 	}
 	budget := 0

@@ -31,6 +31,30 @@ if [[ "$policy" == templates-only ]]; then
   cp "$bundle_source/catalog/index.json" "$bundle_source/catalog/publication-report.json" "$bundle_source/catalog/design-system.html" "$dest/catalog/"
   cp -R "$bundle_source/catalog/design-system" "$dest/catalog/"
   if [[ -f "$tmp/template-browsing/native-editing-coverage.json" ]]; then cp "$tmp/template-browsing/native-editing-coverage.json" dist/resources/browsing/; fi
+  mkdir -p dist/resources/skills dist/resources/scripts
+  cp -R skills/west-monroe-presentations dist/resources/skills/
+  cp scripts/install-skill.py dist/resources/scripts/
+  cp release/SKILL-INSTALL.md dist/resources/SKILL-INSTALL.md
+  python3 - "$bundle_source" "$dest" <<'PYGRAPHICS'
+import json, hashlib, shutil, sys
+from pathlib import Path
+source=Path(sys.argv[1])/'catalog/assets'; target=Path(sys.argv[2])/'catalog/assets'
+selected=[]
+for row in json.loads((source/'assets.json').read_text()):
+    variants=[]
+    for v in row['variants']:
+        eligible=(row['kind']=='icon' and v['id'].startswith('icon/')) or (row['kind']=='graphic' and v['id'].startswith('arrow-'))
+        if not eligible: continue
+        if v.get('thumbnail_state')!='verified_registered_original' or v.get('thumbnail_mime')!='image/svg+xml' or v.get('thumbnail_sha256')!=v['sha256']: raise SystemExit('Registered SVG provenance mismatch: '+v['id'])
+        path=Path(v['thumbnail_path'])
+        if path.is_absolute() or '..' in path.parts or path.parts[0]!='assets' or path.suffix!='.svg': raise SystemExit('Unsafe registered SVG path')
+        original=source/path
+        if original.is_symlink() or hashlib.sha256(original.read_bytes()).hexdigest()!=v['sha256']: raise SystemExit('Registered SVG original mismatch: '+v['id'])
+        (target/path).parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(original,target/path); variants.append(v)
+    if variants: selected.append({**row,'variants':variants})
+if not selected: raise SystemExit('Registered SVG set is empty')
+(target/'assets.json').write_text(json.dumps(selected,indent=2)+'\n')
+PYGRAPHICS
   "$tmp/pptxdesign" library-index --bundle "$dest" --gallery "$dest/catalog" --out "$dest/library.sqlite" >/dev/null
   python3 - "$dest" "$bundle_revision" <<'PY'
 import json, sqlite3, sys
@@ -60,15 +84,16 @@ from pathlib import Path
 manifest=json.loads(Path(sys.argv[1]).read_text())
 root=Path(sys.argv[2])
 files={}
-for subtree in ('browsing','library'):
+for subtree in ('browsing','library','skills','scripts'):
     base=root/subtree
     for path in sorted(base.rglob('*')):
         if path.is_symlink(): raise SystemExit(f'linked resource refused: {path}')
         if path.is_file():
             rel=path.relative_to(root).as_posix()
             files[rel]=hashlib.sha256(path.read_bytes()).hexdigest()
+files['SKILL-INSTALL.md']=hashlib.sha256((root/'SKILL-INSTALL.md').read_bytes()).hexdigest()
 bundle=Path(manifest['source_revision'].removeprefix('wmds-library.'))
-out={'schema':'pptxgengo.template-catalog-release.v1','files_sha256':files,'bundle':bundle.name,'source_revision':manifest['source_revision'],'source_commit':manifest['source_commit'],'bundle_sha256':manifest['bundle_sha256'],'compiler':manifest['compiler'],'release_identity':manifest['release_identity'],'as_of':manifest['as_of'],'pipeline_created_at':os.environ['CI_PIPELINE_CREATED_AT'],'editing_profile':manifest['editing_profile'],'media_policy':manifest['media_policy']}
+out={'skill_included':True,'registered_graphics':True,'schema':'pptxgengo.template-catalog-release.v1','files_sha256':files,'bundle':bundle.name,'source_revision':manifest['source_revision'],'source_commit':manifest['source_commit'],'bundle_sha256':manifest['bundle_sha256'],'compiler':manifest['compiler'],'release_identity':manifest['release_identity'],'as_of':manifest['as_of'],'pipeline_created_at':os.environ['CI_PIPELINE_CREATED_AT'],'editing_profile':manifest['editing_profile'],'media_policy':manifest['media_policy']}
 (root/'template-catalog-manifest.json').write_text(json.dumps(out,indent=2)+'\n')
 PY
   release_ci prepare-resource-policy dist/resources "$release_version" "$release_commit"

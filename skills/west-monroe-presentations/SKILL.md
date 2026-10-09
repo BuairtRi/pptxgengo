@@ -33,12 +33,24 @@ In short: sentence-case titles that state the conclusion as a full sentence; per
 | Find templates, browse the packaged template deck, match page content, compare alternatives | [Template selection](references/template-selection.md) |
 | Find or register photos, icons, graphics and logos | [Assets](references/assets.md) |
 | Build a page no template fits, or fork a template | [Custom slide design](references/custom-slide-design.md) |
+| Adapt a template whose external media is unavailable, with explicit schematic assets | [Scaffold media](references/scaffold-media.md) |
 | Change, add, move, hide, remove or re-layout individual slides; manage sections; rebuild an existing PowerPoint | [Editing slides](references/editing-slides.md) |
 | Customize architecture nodes/arrows or reconcile native geometry | [Architecture and geometry](references/architecture-geometry.md) |
 | Compose teams, pods, reporting lines or governance tiers | [Team, pod and governance composition](references/team-composition.md) |
 | Compose Gantt workstreams, tasks, phases and gates | [Gantt composition](references/gantt-composition.md) |
 | Change cycle stages, feedback loops or the active step | [Cycle composition](references/cycle-composition.md) |
 | Compose an ordinal assessment with stable axes, scores and legend | [Assessment composition](references/assessment-composition.md) |
+| Compose charts with keyed series, categories, axes and explicit gaps | [Quantitative charts](references/quantitative-charts.md) |
+| Calculate and present pricing, value, ROI or commercial scenarios | [Commercial models](references/commercial-models.md) |
+| Compose variable architecture layers and their controls | [Layer composition](references/layer-composition.md) |
+| Compose maturity stages, current/target markers or staffing curves | [Maturity](references/maturity-composition.md), [staffing](references/staffing-composition.md) |
+| Compose branching processes, decisions, lanes and joins | [Process composition](references/process-composition.md) |
+| Compose roads, forks, milestones and chosen paths | [Journey composition](references/journey-composition.md) |
+| Compose explicit roadmap horizons, initiatives and dependencies | [Portfolio composition](references/portfolio-composition.md) |
+| Customize communication/content families by their intended job | [Communication family runbooks](references/communication-family-runbooks.md) |
+| Add/reorder/remove typed content, phase stages, Venn members or matrix columns | [Component composition](references/component-composition.md) |
+| Add/reorder/remove native table rows/columns while preserving values and domains | [Table composition](references/table-composition.md) |
+| Review native pod reassignment, assessment scores or chart data | [Native semantic review](references/native-semantic-review.md) |
 | Import selected native rectangles or plain text into authored source | [Native imports](references/native-imports.md) |
 | Diagnose a PowerPoint render, GUI, AppleScript or permission failure | [PowerPoint recovery](references/powerpoint-recovery.md) |
 | Look up `deck.yaml`, slide file or local template fields | [Source format](references/source-format.md) |
@@ -80,6 +92,12 @@ Approvals record real decisions; do not ask again for something already approved
 
 ## Family composition
 
-Treat templates as starting examples. Choose the actual roles, reporting relationships, workstreams and gates from the operator's source before arranging their geometry. Use the family runbook's inspect → preview → measure → guarded apply → build/render sequence. Keep stable keys when reordering and make binding materialization explicit. Native movement changes layout; confirmed Gantt retiming uses the [reviewed semantic workflow](references/gantt-composition.md#review-native-bars-as-possible-schedule-changes). Reporting and membership changes require explicit family operations, and period labels do not establish calendar dates.
+Treat templates as starting examples. Choose the actual roles, reporting relationships, workstreams and gates from the operator's source before arranging their geometry. Use the family runbook's inspect → preview → measure → guarded apply → build/render sequence. Keep stable keys when reordering and make binding materialization explicit. Native movement changes layout; confirmed Gantt retiming uses the [reviewed semantic workflow](references/gantt-composition.md#review-native-bars-as-possible-schedule-changes). Use explicit semantic review for authenticated pod reassignment, visible assessment scores and chart workbook/cache edits. Confirm meaning before applying a proposal; reporting changes require explicit source relationships, and period labels do not establish calendar dates.
+
+After changing counts, order, scores, dates or model inputs, review the whole
+slide: titles, labels, legends, callouts and source notes must still agree.
+Numbered cards can encode chronology; their order is a content decision.
+Replace illustrative stock claims with supported copy. A successful component
+update does not rewrite unmapped narrative or establish its accuracy.
 
 Check installed help and the project toolchain before using new composition or import commands. Main-only capability is not available in an older release just because this skill documents it.

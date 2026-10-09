@@ -16,21 +16,26 @@ type nativeEditingEndpoint struct {
 	Site string `json:"site"`
 }
 type nativeEditingSource struct {
-	Route   string                 `json:"route,omitempty"`
-	Bend    *float64               `json:"bend,omitempty"`
-	Type    string                 `json:"type"`
-	X       float64                `json:"x"`
-	Y       float64                `json:"y"`
-	W       float64                `json:"w"`
-	H       float64                `json:"h"`
-	Surface string                 `json:"surface,omitempty"`
-	Text    string                 `json:"text,omitempty"`
-	Style   string                 `json:"style,omitempty"`
-	Align   string                 `json:"align,omitempty"`
-	Ink     string                 `json:"ink,omitempty"`
-	Head    string                 `json:"head,omitempty"`
-	From    *nativeEditingEndpoint `json:"from,omitempty"`
-	To      *nativeEditingEndpoint `json:"to,omitempty"`
+	Waypoints     [][2]float64            `json:"waypoints,omitempty"`
+	Label         string                  `json:"label,omitempty"`
+	LabelPosition *[2]float64             `json:"label_position,omitempty"`
+	LabelWidth    float64                 `json:"label_width,omitempty"`
+	RoutingPolicy *ConnectorRoutingPolicy `json:"routing_policy,omitempty"`
+	Route         string                  `json:"route,omitempty"`
+	Bend          *float64                `json:"bend,omitempty"`
+	Type          string                  `json:"type"`
+	X             float64                 `json:"x"`
+	Y             float64                 `json:"y"`
+	W             float64                 `json:"w"`
+	H             float64                 `json:"h"`
+	Surface       string                  `json:"surface,omitempty"`
+	Text          string                  `json:"text,omitempty"`
+	Style         string                  `json:"style,omitempty"`
+	Align         string                  `json:"align,omitempty"`
+	Ink           string                  `json:"ink,omitempty"`
+	Head          string                  `json:"head,omitempty"`
+	From          *nativeEditingEndpoint  `json:"from,omitempty"`
+	To            *nativeEditingEndpoint  `json:"to,omitempty"`
 }
 
 // Register authored top-level editable-block IDs before planning/paint. This
@@ -123,7 +128,7 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 		return nil, true, fmt.Errorf("scene.invalid_native_editing_allocation")
 	}
 	if n.Type == "editable-block" {
-		if n.Text == "" || n.From != nil || n.To != nil || n.Head != "" || n.Ink != "" || n.Route != "" || n.Bend != nil {
+		if n.Text == "" || n.From != nil || n.To != nil || n.Head != "" || n.Ink != "" || n.Route != "" || n.Bend != nil || len(n.Waypoints) > 0 || n.Label != "" || n.LabelPosition != nil || n.LabelWidth != 0 || n.RoutingPolicy != nil {
 			return nil, true, fmt.Errorf("scene.editable_block_requires_plain_text_and_no_connection_options")
 		}
 		// Reuse the existing measured block typography/padding, then fold its one
@@ -159,6 +164,9 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 		p.Definition = "scene.editable-block"
 		p.Warnings = append(p.Warnings, "Editable block pilot combines fill and plain text in one native rectangle; desktop move/resize and visual qualification remain pending.")
 		return p, true, nil
+	}
+	if e := validateConnectorRoutingPolicy(n.RoutingPolicy); e != nil {
+		return nil, true, e
 	}
 	if n.From == nil || n.To == nil || !validPartKey(n.From.Node) || !validPartKey(n.To.Node) || n.From.Node == n.To.Node || n.Text != "" || n.Surface != "" || n.Align != "" {
 		return nil, true, fmt.Errorf("scene.attached_connector_requires_distinct_editable_block_endpoints")
@@ -227,18 +235,19 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 	}
 	connection := &pptx.ConnectorConnection{Begin: pptx.ConnectorEndpoint{ObjectName: fromName, Site: start}, End: pptx.ConnectorEndpoint{ObjectName: toName, Site: end}}
 	route, rotation := (*pptx.ConnectorRoute)(nil), 0.
+	var polylinePoints [][2]float64
 	position := bounds
 	mode := n.Route
 	if mode == "" {
 		mode = "straight"
 	}
-	if mode != "straight" && mode != "horizontal" && mode != "vertical" {
-		return nil, true, fmt.Errorf("scene.native_connector_route_requires_straight_horizontal_or_vertical")
+	if mode != "straight" && mode != "horizontal" && mode != "vertical" && mode != "polyline" {
+		return nil, true, fmt.Errorf("scene.native_connector_route_requires_straight_horizontal_vertical_or_polyline")
 	}
 	if mode == "straight" && n.Bend != nil {
 		return nil, true, fmt.Errorf("scene.straight_connector_has_no_bend")
 	}
-	if mode != "straight" {
+	if mode == "horizontal" || mode == "vertical" {
 		bend := .5
 		if n.Bend != nil {
 			bend = *n.Bend
@@ -253,8 +262,68 @@ func (r *renderer) planNativeEditingScene(id string, raw json.RawMessage, ctx Sc
 			flipH, flipV = a[1] > z[1], a[0] < z[0]
 		}
 	}
+	if mode != "polyline" && len(n.Waypoints) > 0 {
+		return nil, true, fmt.Errorf("scene.waypoints_require_polyline_route")
+	}
+	if mode == "polyline" {
+		if n.Bend != nil || len(n.Waypoints) < 1 || len(n.Waypoints) > 126 {
+			return nil, true, fmt.Errorf("scene.polyline_requires_1_126_interior_waypoints_and_no_bend")
+		}
+		points := [][2]float64{a}
+		for _, point := range n.Waypoints {
+			if math.IsNaN(point[0]+point[1]) || math.IsInf(point[0]+point[1], 0) {
+				return nil, true, fmt.Errorf("scene.invalid_waypoint")
+			}
+			points = append(points, [2]float64{n.X + point[0], n.Y + point[1]})
+		}
+		points = append(points, z)
+		bounds = nativeRouteEnvelope(points)
+		position = bounds
+		flipH, flipV, rotation = false, false, 0
+		polylinePoints = points
+	}
+
 	shape := &sceneShape{Route: route, Type: pptx.ShapeTypeLine, Props: pptx.ShapeProps{PositionProps: pos(position), Rotate: rotation, ObjectNameProps: pptx.ObjectNameProps{ObjectName: id}, Line: line, FlipH: &flipH, FlipV: &flipV}, Record: ShapeRecord{ID: id, Rect: bounds, Color: color, Geometry: "native-" + mode + "-connector"}, Connection: connection}
 	p := &scenePlan{Definition: "scene.attached-connector", ID: id, Bounds: bounds, Items: []sceneItem{{Shape: shape}}, Warnings: []string{"Native attached connector pilot uses explicit same-slide rectangular sites; routing, node movement and Save As require desktop qualification."}}
+	if mode == "polyline" {
+
+		p.Items = nil
+		if err := appendNativeRoute(p, id, polylinePoints, line, color, *connection); err != nil {
+			return nil, true, err
+		}
+	}
+
+	if n.LabelPosition != nil && n.Label == "" || n.LabelWidth != 0 && n.Label == "" {
+		return nil, true, fmt.Errorf("scene.connector_label_options_require_label")
+	}
+	if n.Label != "" {
+		w := n.LabelWidth
+		if w == 0 {
+			w = 120
+		}
+		if w <= 24 || w > n.W {
+			return nil, true, fmt.Errorf("scene.invalid_connector_label_width")
+		}
+		at := [2]float64{bounds.X + bounds.W/2 - w/2, bounds.Y + bounds.H/2 - 24}
+		if n.LabelPosition != nil {
+			at = [2]float64{n.X + n.LabelPosition[0], n.Y + n.LabelPosition[1]}
+		}
+		// Measured text is an explicit obstacle in subsequent route inspection.
+		labelRaw, _ := json.Marshal(map[string]any{"type": "text", "x": at[0], "y": at[1], "w": w, "text": n.Label, "style": "body"})
+		labelPlan, err := r.planSceneNode(id+".label", labelRaw, ctx)
+		if err != nil {
+			return nil, true, err
+		}
+		p.Items = append(p.Items, labelPlan.Items...)
+		l := labelPlan.Bounds
+		right := math.Max(p.Bounds.X+p.Bounds.W, l.X+l.W)
+		bottom := math.Max(p.Bounds.Y+p.Bounds.H, l.Y+l.H)
+		p.Bounds.X = math.Min(p.Bounds.X, l.X)
+		p.Bounds.Y = math.Min(p.Bounds.Y, l.Y)
+		p.Bounds.W = right - p.Bounds.X
+		p.Bounds.H = bottom - p.Bounds.Y
+	}
+
 	if strings.Contains(ctx.Path, "/body/") {
 		p.Warnings = append(p.Warnings, "Shared-library connector rollout is not qualified by this authoring pilot.")
 	}

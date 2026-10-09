@@ -23,7 +23,11 @@ planners; no modified catalog bundle or invented provenance is required.
 
 See the [operator runbook](../skills/west-monroe-presentations/references/assessment-composition.md)
 for actual command schemas and fit decisions. Generic geometry/native cell
-changes do not imply score changes. Native score reconciliation remains pending.
+changes do not imply score changes. Closed receipt-backed native ordinal score
+review is implemented with explicit decisions, stable cell identities and strict
+source/formatting guards. Actual macOS score edit/Save As/adoption qualification
+is pending independently of the focused source/XML tests; arbitrary Office cell
+imports and fill-to-score inference remain unsupported.
 
 ## Catalog exceptions
 
@@ -39,10 +43,10 @@ leaves installed catalog sources immutable.
 | Workstream | Concrete model/operation needs |
 | --- | --- |
 | Weighted assessments | Dimension weights, explicit missing policy, comparable rubric, score denominator and traceable aggregation; no default averaging |
-| Quantitative charts | Keyed categories/series, units and measurement basis, source records, missing-vs-zero points, chart/table synchronization, explicit axis/scale changes; existing chart primitives do not establish those coupled domain operations |
-| Commercial models | Rates, quantity units, period/currency conventions, phase identity, formulas, totals, rounding and authoritative assumptions; editable fee/rate tables alone do not establish validated calculation semantics |
+| Quantitative charts | Implemented keyed categories/series, units, source records, missing-vs-zero observations and guarded axis/scale operations; see [exact chart applicability](quantitative-composition-scope.md). Native adoption is bounded to supported authored chart models and independently qualified desktop inputs. |
+| Commercial models | Implemented declared rate/quantity/period/currency models, rational calculations, rounding and explicit display mappings; see [commercial applicability](commercial-composition-scope.md). Existing fee/rate tables require explicit mapping and do not establish inferred formulas. |
 | Grouped heat assessments | Keyed groups and membership, contiguous-vs-free ordering policy, legend synchronization and caption/annotation dependencies |
-| Assessment native adoption | Receipt-backed cell identity and explicit score proposals; no inference from cell fill or geometry alone |
+| Assessment native adoption | Implemented receipt-backed cell identity and explicit score proposals; no inference from cell fill or geometry alone; actual desktop score edits remain a separate qualification gate. |
 
 These workstreams can proceed independently of architecture/process composition.
 

@@ -112,7 +112,7 @@ func binaryIdentity(path, target, version string) error {
 		settings[s.Key] = s.Value
 	}
 	parts := strings.Split(target, "-")
-	if info.GoVersion != "go1.27.1" || settings["GOOS"] != parts[0] || settings["GOARCH"] != parts[1] || settings["CGO_ENABLED"] != "0" {
+	if info.GoVersion != "go1.27.2" || settings["GOOS"] != parts[0] || settings["GOARCH"] != parts[1] || settings["CGO_ENABLED"] != "0" {
 		return fmt.Errorf("wrong Go build identity for %s", path)
 	}
 	return nil

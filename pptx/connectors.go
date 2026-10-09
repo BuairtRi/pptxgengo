@@ -57,7 +57,7 @@ func validateNativeConnectors(slide *PresSlide) error {
 			continue
 		}
 		connection := *object.Options.NativeConnection
-		if object.Type != SlideObjectTypeText || (object.Shape != ShapeTypeLine && object.Shape != ShapeTypeBentConnector3) || !validConnectorConnection(connection) || !validConnectorBounds(object.Options.PositionProps, false) {
+		if object.Type != SlideObjectTypeText || (object.Shape != ShapeTypeLine && object.Shape != "bentConnector2" && object.Shape != "bentConnector3" && object.Shape != "bentConnector4" && object.Shape != "bentConnector5") || !validConnectorConnection(connection) || !validConnectorBounds(object.Options.PositionProps, false) {
 			return fmt.Errorf("invalid native connector")
 		}
 		for _, endpoint := range []ConnectorEndpoint{connection.Begin, connection.End} {
@@ -66,8 +66,8 @@ func validateNativeConnectors(slide *PresSlide) error {
 				return fmt.Errorf("native connector target missing or ambiguous: %s", endpoint.ObjectName)
 			}
 			target := matches[0]
-			if target.Type != SlideObjectTypeText || target.Shape != ShapeTypeRect || target.Options.NativeConnection != nil || target.Options.Placeholder != "" || target.Options.Rotate != 0 || boolDeref(target.Options.FlipH) || boolDeref(target.Options.FlipV) || !validConnectorBounds(target.Options.PositionProps, true) {
-				return fmt.Errorf("native connector target must be an unrotated named rectangle with positive finite bounds: %s", endpoint.ObjectName)
+			if target.Type != SlideObjectTypeText || (target.Shape != ShapeTypeRect && target.Shape != ShapeTypeDiamond) || target.Options.NativeConnection != nil || target.Options.Placeholder != "" || target.Options.Rotate != 0 || boolDeref(target.Options.FlipH) || boolDeref(target.Options.FlipV) || !validConnectorBounds(target.Options.PositionProps, true) {
+				return fmt.Errorf("native connector target must be an unrotated named rectangle or diamond with positive finite bounds: %s", endpoint.ObjectName)
 			}
 		}
 	}

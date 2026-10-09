@@ -11,8 +11,10 @@ by `.gitlab-ci.yml`. GitHub Actions remains disabled.
 
 The project 17 poller is activated as a Kubernetes CronJob. It discovers same-repository
 PRs every three minutes and creates only PR-tier pipelines. The live capability
-ConfigMap approves six complete exact-hash profiles; the current `.gitlab-ci.yml`
-hash is `385bf5aec0bd6461adbde6631fba44ccae47a279f1de7217f1e5da677d1b7142`.
+ConfigMap holds complete exact-hash profiles of reviewed merged CI configurations.
+After a CI change passes explicit qualification and merges, append its complete
+profile from the exact mirrored main commit; preserve existing approved profiles
+and the journal. A historical hash does not approve a newer CI graph.
 The remaining steps below document deployment and recovery for maintainers; they
 are not outstanding activation work.
 

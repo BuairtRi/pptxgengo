@@ -336,8 +336,12 @@ type ConnectorConnection struct {
 // ConnectorRoute retains a supported native preset and its bend guide. A nil
 // route is the existing straight line. BentConnector3 uses adj1/100000 of width.
 type ConnectorRoute struct {
-	Preset     string `json:"preset"`
-	Adjustment int    `json:"adj1"`
+	Preset      string `json:"preset"`
+	Adjustment  int    `json:"adj1"`
+	Adjustment2 int    `json:"adj2,omitempty"`
+	Adjustment3 int    `json:"adj3,omitempty"`
+	// Polyline points are normalized to the positive connector allocation.
+	Points [][2]float64 `json:"points,omitempty"`
 }
 
 type ConnectorProps struct {
@@ -617,6 +621,11 @@ type ChartOptions struct {
 	// PreserveWorkbookZeros keeps observed zero values as numeric workbook
 	// cells. False retains historical serialization; missing indices stay blank.
 	PreserveWorkbookZeros bool
+
+	// AutoUpdateWorkbook requests automatic updates of the embedded chart data.
+	// False preserves historical serialization. Callers must still verify cache
+	// and workbook agreement after an Office edit; this flag is not that proof.
+	AutoUpdateWorkbook bool
 
 	// --- OptsChartGridLine (top-level; Color/Style shared w/ TextBaseProps.Color) ---
 	Cap   string

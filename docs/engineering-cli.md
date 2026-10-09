@@ -1,11 +1,11 @@
 # Engineering command reference
 
-These examples target the current `0.1.0-local.21/v11` package and use its `pptxgengo` wrapper. New projects default to native-v1 wherever the measured template records support safe conversion; this implementation default does not establish native visual qualification. V11 native review remains pending. Output paths marked `NEW-DIR` must not already exist. Commands that inspect PPTX or project sources do not edit those inputs.
+These examples describe the V11 design CLI, including the v4.3.0 development additions. Inspect installed help and a project's toolchain lock before using an addition from main; development source support does not establish desktop qualification or release promotion. New projects default to native-v1 wherever measured template records support conversion. Output paths marked `NEW-DIR` must not already exist. Inspection commands leave inputs unchanged. See the [delivery matrix](v4.3.0-completion-matrix.json) for exact qualification gates.
 
 ## Wrapper defaults and project pins
 
 The installed wrapper reads `release/default-bundle.txt` for the default
-published library (`v11` in local.21). Bundle-backed `pptxgengo design` commands
+published library (`v11` for this development slice). Bundle-backed `pptxgengo design` commands
 receive that bundle path and the Go engine `wmds-go-foundation.v2` unless you
 pass explicit flags. Project commands use the project lock: `project init`
 creates a new lock against the published default and candidate engine; later
@@ -26,7 +26,7 @@ focused template search, set `--kinds template`; asset summaries use
 `--kinds asset --summary --asset-kind icon|photo|graphic|logo` and rank
 curated terms and filename-derived tags with partial matches.
 
-The photo registry covers all 521 originals in the local
+The source photo registry describes all 521 originals in the local
 `~/Documents/branding/West Monroe Photos` collection, within 523 photo catalog
 records and 1,204 total asset variants. Their descriptive
 sidecars supply the subject labels and the checked-in registry pins the local
@@ -35,6 +35,58 @@ opaque stock filenames but has no mapping to these renamed files, and the
 sidecars do not retain original asset IDs, URLs, or licensing records. Registry
 membership is not a license or approval assertion; confirm those records before
 external publication.
+
+Templates-only archives carry a filtered registry and hash-verified registered
+original icon/arrow SVGs. A catalog photo or graphic record does not establish
+that its bytes are installed. When intentionally making a schematic adaptation,
+`project scaffold --template KEY --reason REASON --placeholder-media` emits
+explicit project asset descriptors, content-addressed payloads and placeholder
+receipts; it retains genuine registered icons/arrows. Install the emitted payloads
+before loading the project. Normal scaffold/build does not silently substitute
+missing media. See [schematic scaffold media](../skills/west-monroe-presentations/references/scaffold-media.md).
+
+## Guarded family composition
+
+Start with an actual catalog template and detach or scaffold its supported source
+model. Inspect identifies source fields and stable keys; a strict family patch
+declares the inspected source SHA-256, actor and reason. Preview runs without
+`--apply`; apply remeasures fit and writes through the guarded source transaction.
+It retains predecessor evidence, pins and unrelated content. Explicitly
+materialize bindable source when the chosen operation requires it; do not turn
+PowerPoint movement into inferred membership, dates or source facts.
+
+```bash
+pptxgengo design project maturity inspect --project PROJECT --slide SLIDE --node NODE
+pptxgengo design project maturity patch --project PROJECT --slide SLIDE --patch PATCH.yaml
+pptxgengo design project maturity patch --project PROJECT --slide SLIDE --patch PATCH.yaml --apply
+```
+
+The same inspect/patch forms apply below for node-based models. Team inspection
+uses `--project` and `--slide`, without `--node`; its patch targets named semantic
+entities. Node-based patch documents carry `node_id`; layer
+inspection instead accepts `--selection FILE.json`, a JSON array of explicitly
+mapped layer selections. Use the linked runbook's exact schema and supported
+operations, rather than exchanging patch files between commands.
+
+| Project command | Authored model and runbook |
+| --- | --- |
+| `team`, `gantt`, `cycle`, `assessment` | [Teams/pods/governance](../skills/west-monroe-presentations/references/team-composition.md), [Gantt](../skills/west-monroe-presentations/references/gantt-composition.md), [cycles](../skills/west-monroe-presentations/references/cycle-composition.md), [assessments](../skills/west-monroe-presentations/references/assessment-composition.md) |
+| `layer`, `maturity`, `staffing` | [Layer stacks](../skills/west-monroe-presentations/references/layer-composition.md), [maturity curves](../skills/west-monroe-presentations/references/maturity-composition.md), [staffing series](../skills/west-monroe-presentations/references/staffing-composition.md) |
+| `process`, `journey`, `portfolio` | [Process topology](../skills/west-monroe-presentations/references/process-composition.md), [roads/forks](../skills/west-monroe-presentations/references/journey-composition.md), [portfolio models](../skills/west-monroe-presentations/references/portfolio-composition.md) |
+| `quantitative`, `commercial` | [Charts](../skills/west-monroe-presentations/references/quantitative-charts.md), [commercial calculations and presentation mappings](../skills/west-monroe-presentations/references/commercial-models.md) |
+| `component`, `table` | [Keyed typed content](../skills/west-monroe-presentations/references/component-composition.md), [table rows/columns](../skills/west-monroe-presentations/references/table-composition.md) |
+
+Catalog families contain companions with different actual models: an assessment
+table is not a maturity curve, a SIPOC table is not a process graph, and pricing
+copy is not an initialized commercial calculation. Follow the [communication
+family runbooks](../skills/west-monroe-presentations/references/communication-family-runbooks.md)
+and the applicability tables linked from [delivery](v4.3.0-delivery.md).
+
+Source-derived scene adapters retain `_source_geometry` provenance so measured
+ink bounds do not replace true source anchors or card item widths. Preserve this
+guarded metadata through edits. `source_canvas`, `source_body` and `tall_plot`
+are narrowly validated allocations for intentional source geometry; ordinary
+new nodes use the normal frame zones. Their limits are in the [source contract](skill-planning/deck-source-contract.md#3-content-zones-and-composition-vocabulary).
 
 To upgrade an existing YAML project to the current V11 source:
 

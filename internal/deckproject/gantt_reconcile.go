@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/buairtri/pptxgengo/internal/wmdesign"
 	"gopkg.in/yaml.v3"
 )
 
@@ -259,7 +260,14 @@ func ProposeGanttSemantics(p *Project, packet *TextReviewPacket, slideID, nodeID
 		supported[nativeID+".gates."+key+".line"] = GanttSemanticProposal{Entity: "gate", Key: key, BeforeAt: &at}
 	}
 	for _, f := range packet.Report.Geometry {
-		if f.SlideID != slideID || (f.Status != "native_only" && f.Status != "conflict" && f.Status != "manual_review") {
+		parentField, parentExists := fields[func() string {
+			if f.Baseline != nil {
+				return f.Baseline.Parent
+			}
+			return ""
+		}()]
+		groupedMovement := parentExists && parentField.Status == "native_only" && f.Status == "no_op"
+		if f.SlideID != slideID || (f.Status != "native_only" && f.Status != "conflict" && f.Status != "manual_review" && !groupedMovement) {
 			continue
 		}
 		proposal, ok := supported[f.Name]
@@ -271,17 +279,21 @@ func ProposeGanttSemantics(p *Project, packet *TextReviewPacket, slideID, nodeID
 		proposal.SourceObject = f.Name
 		proposal.Status = "manual_review"
 		proposal.Reason = "A horizontal-only edit of the original single bar/guide is required; rotation, grouping, vertical/lane changes and source conflicts remain explicit review."
-		if f.Status == "native_only" && !blockedTokens[f.ShapeToken] && f.Baseline != nil && f.Baseline.Parent == out.AxisParent && sameVerticalGeometry(f.Baseline, f.EditedNative) {
-			a := semanticPeriod(f.EditedNative.X, out.AxisLeftPT, out.PeriodWidthPT)
+		beforeGeom, afterGeom, frameOK := ganttItemAxisGeometry(f, fields, out.AxisParent, proposal.Entity)
+		if (f.Status == "native_only" || groupedMovement) && !blockedTokens[f.ShapeToken] && (!parentExists || !blockedTokens[parentField.ShapeToken]) && frameOK && sameVerticalGeometry(beforeGeom, afterGeom) {
+			if groupedMovement {
+				proposal.GeometryFieldID = parentField.ID
+			}
+			a := semanticPeriod(afterGeom.X, out.AxisLeftPT, out.PeriodWidthPT)
 			if proposal.Entity == "task" {
-				b := semanticPeriod(f.EditedNative.X+f.EditedNative.W, out.AxisLeftPT, out.PeriodWidthPT)
-				if math.Abs(f.Baseline.X-(out.AxisLeftPT+*proposal.BeforeFrom*out.PeriodWidthPT)) < .001 && math.Abs(f.Baseline.W-(*proposal.BeforeTo-*proposal.BeforeFrom)*out.PeriodWidthPT) < .001 && a >= 0 && b <= float64(len(s.Periods.Labels)) && b > a {
+				b := semanticPeriod(afterGeom.X+afterGeom.W, out.AxisLeftPT, out.PeriodWidthPT)
+				if math.Abs(beforeGeom.X-(out.AxisLeftPT+*proposal.BeforeFrom*out.PeriodWidthPT)) < .001 && math.Abs(beforeGeom.W-(*proposal.BeforeTo-*proposal.BeforeFrom)*out.PeriodWidthPT) < .001 && a >= 0 && b <= float64(len(s.Periods.Labels)) && b > a {
 					proposal.ProposedFrom = &a
 					proposal.ProposedTo = &b
 					proposal.Status = "proposed"
 					proposal.Reason = "Single solid bar maps to this fractional period interval. Explicit retime acceptance regenerates associated labels/layout; geometry is not adopted as an override."
 				}
-			} else if math.Abs(f.Baseline.X-(out.AxisLeftPT+*proposal.BeforeAt*out.PeriodWidthPT)) < .001 && f.EditedNative.W == 0 && a >= 0 && a <= float64(len(s.Periods.Labels)) {
+			} else if math.Abs(beforeGeom.X-(out.AxisLeftPT+*proposal.BeforeAt*out.PeriodWidthPT)) < .001 && afterGeom.W == 0 && a >= 0 && a <= float64(len(s.Periods.Labels)) {
 				proposal.ProposedAt = &a
 				proposal.Status = "proposed"
 				proposal.Reason = "Unchanged vertical gate guide maps to this fractional period. Explicit retime acceptance regenerates its guide, chip and label."
@@ -417,6 +429,9 @@ func AdoptGanttSemantics(p *Project, packet *TextReviewPacket, slideID, nodeID s
 	for _, k := range []string{"type", "x", "y", "w"} {
 		delete(args, k)
 	}
+	if geometry, exists := n.Arguments[wmdesign.SceneSourceGeometryArgument]; exists {
+		args[wmdesign.SceneSourceGeometryArgument] = geometry
+	}
 	n.Arguments, n.Keys = args, keys
 	reportRaw := canonical(report)
 	evidence := struct {
@@ -445,4 +460,50 @@ func AdoptGanttSemantics(p *Project, packet *TextReviewPacket, slideID, nodeID s
 		guards["builds/"+b.Receipt.BuildID+"/"+name] = data
 	}
 	return compositionCandidate(p, slideID, "gantt-semantic-reconcile", decisions.Actor, decisions.Reason, clone, bundle, engine, apply, evidence, map[string][]byte{evidence.RetainedPPTX: packet.Edited, evidence.RetainedReport: reportRaw, evidence.RetainedDecisions: raw, evidence.RetainedGeometryReport: packet.files["report.json"]}, guards)
+}
+
+// Rebase only the original direct keyed task group into the unchanged axis
+// coordinate space. A real group scale, vertical move, rotation or reparenting
+// cannot become authored time merely because its bar happens to look horizontal.
+func ganttItemAxisGeometry(f GeometryReconciliationField, fields map[string]GeometryReconciliationField, axisParent, entity string) (*NativeGeometry, *NativeGeometry, bool) {
+	if f.Baseline == nil || f.EditedNative == nil {
+		return nil, nil, false
+	}
+	if f.Baseline.Parent == axisParent {
+		return f.Baseline, f.EditedNative, true
+	}
+	if entity != "task" || !strings.HasSuffix(f.Name, ".segment-0") || f.Baseline.Parent != strings.TrimSuffix(f.Name, ".segment-0") || f.EditedNative.Parent != f.Baseline.Parent {
+		return nil, nil, false
+	}
+	group, exists := fields[f.Baseline.Parent]
+	if !exists || group.Baseline == nil || group.EditedNative == nil || group.Baseline.Parent != axisParent || group.EditedNative.Parent != axisParent || group.Status != "no_op" && group.Status != "native_only" {
+		return nil, nil, false
+	}
+	affine := func(g *NativeGeometry) ([4]float64, bool) {
+		if g.Kind != "grpSp" || g.Child == nil || g.Rotation != 0 || g.FlipH || g.FlipV || g.W <= 0 || g.H <= 0 || g.Child.W <= 0 || g.Child.H <= 0 {
+			return [4]float64{}, false
+		}
+		sx, sy := g.W/g.Child.W, g.H/g.Child.H
+		return [4]float64{sx, sy, g.X - sx*g.Child.X, g.Y - sy*g.Child.Y}, true
+	}
+	before, ok := affine(group.Baseline)
+	after, ok2 := affine(group.EditedNative)
+	if !ok || !ok2 {
+		return nil, nil, false
+	}
+	for _, i := range []int{0, 1, 3} {
+		if math.Abs(before[i]-after[i]) > 0.000001 {
+			return nil, nil, false
+		}
+	}
+	rebase := func(g *NativeGeometry, a [4]float64) *NativeGeometry {
+		copy := *g
+		copy.Parent = axisParent
+		copy.X = a[0]*g.X + a[2]
+		copy.Y = a[1]*g.Y + a[3]
+		copy.W = a[0] * g.W
+		copy.H = a[1] * g.H
+		return &copy
+	}
+	return rebase(f.Baseline, before), rebase(f.EditedNative, after), true
 }
