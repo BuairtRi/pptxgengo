@@ -95,6 +95,7 @@ func journeyTestPatch(p *Project, ops ...JourneyOperation) JourneyPatch {
 	return JourneyPatch{Schema: JourneyPatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Test", Reason: "Illustrative journey customization", NodeID: "journey", Operations: ops}
 }
 func TestJourneyCompositionRoadCatalogRoundTrip(t *testing.T) {
+	t.Parallel()
 	p, id := journeyCatalogFixture(t, "road/right")
 	m, e := InspectJourney(p, "journey-slide", id, journeyBundle(t), wmdesign.CandidateEngine)
 	if e != nil {
@@ -126,6 +127,7 @@ func TestJourneyCompositionRoadCatalogRoundTrip(t *testing.T) {
 	}
 }
 func TestJourneyCompositionForkChosenFollowsReorder(t *testing.T) {
+	t.Parallel()
 	p, id := journeyCatalogFixture(t, "road-fork/decision")
 	m, e := InspectJourney(p, "journey-slide", id, journeyBundle(t), wmdesign.CandidateEngine)
 	if e != nil {
@@ -156,6 +158,7 @@ func TestJourneyCompositionForkChosenFollowsReorder(t *testing.T) {
 	}
 }
 func TestJourneyCompositionAllCatalogTypedModels(t *testing.T) {
+	t.Parallel()
 	keys := []string{"road/right", "road/left", "road/phases", "road/cards", "road/narrative-split", "road/here", "road-fork/parallel", "road-fork/decision", "road-fork/decision-chosen", "road-fork/parallel-split", "road-fork/decision-criteria", "road-fork/parallel-detail", "road-fork/foundation-then-waves"}
 	for _, key := range keys {
 		t.Run(key, func(t *testing.T) {
@@ -182,6 +185,7 @@ func TestJourneyCompositionAllCatalogTypedModels(t *testing.T) {
 }
 
 func TestJourneyCompositionFourTrunkAndUnequalOptions(t *testing.T) {
+	t.Parallel()
 	p, id := journeyCatalogFixture(t, "road-fork/decision-chosen")
 	m, e := InspectJourney(p, "journey-slide", id, journeyBundle(t), wmdesign.CandidateEngine)
 	if e != nil {

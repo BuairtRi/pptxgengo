@@ -83,6 +83,7 @@ func assessmentPatch(p *Project, id string, ops ...AssessmentOperation) Assessme
 	return AssessmentPatch{Schema: AssessmentPatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Assessment qualification", Reason: "Customize synthetic capability comparison", NodeID: id, Operations: ops}
 }
 func TestAssessmentCompositionInitializePreviewApplyReorderRebuild(t *testing.T) {
+	t.Parallel()
 	p, id := assessmentFixture(t)
 	before := append([]byte(nil), p.Raw...)
 	m := assessmentModel()
@@ -127,6 +128,7 @@ func TestAssessmentCompositionInitializePreviewApplyReorderRebuild(t *testing.T)
 	}
 }
 func TestAssessmentCompositionOperationMeaningAndCascade(t *testing.T) {
+	t.Parallel()
 	s := assessmentModel()
 	if e := applyAssessmentOperation(&s, AssessmentOperation{Action: "remove", Entity: "column", Key: "north"}); e == nil {
 		t.Fatal("zero scored column deleted without cascade")
@@ -153,6 +155,7 @@ func TestAssessmentCompositionOperationMeaningAndCascade(t *testing.T) {
 	}
 }
 func TestAssessmentCompositionStrictDecode(t *testing.T) {
+	t.Parallel()
 	p, id := assessmentFixture(t)
 	good := assessmentPatch(p, id, AssessmentOperation{Action: "set", Entity: "score", Key: "access", Column: "north", Score: assessmentScore(0)})
 	if _, e := DecodeAssessmentPatch(canonical(good), "patch"); e != nil {
@@ -170,6 +173,7 @@ func TestAssessmentCompositionStrictDecode(t *testing.T) {
 	}
 }
 func TestAssessmentCompositionRefusesOverflowAndBadLegend(t *testing.T) {
+	t.Parallel()
 	p, id := assessmentFixture(t)
 	m := assessmentModel()
 	m.Rows[0].Label = strings.Repeat("Long capability label ", 30)
@@ -186,6 +190,7 @@ func TestAssessmentCompositionRefusesOverflowAndBadLegend(t *testing.T) {
 }
 
 func TestAssessmentCompositionSafetyAndLegendOrder(t *testing.T) {
+	t.Parallel()
 	for _, name := range []string{"legend-first", "shared", "pinned", "native", "unacknowledged", "palette-drift", "global-min", "global-max", "show-scores-drift", "inline-group", "inline-total", "inline-scale", "inline-ink", "inline-h"} {
 		t.Run(name, func(t *testing.T) {
 			p, id := assessmentFixture(t)

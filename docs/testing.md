@@ -1,16 +1,23 @@
 # Testing lanes
 
-Current snapshot — 2026-10-08: v4.2.1 (`66229bd1`), default template bundle
+Current snapshot — 2026-10-09: v4.2.1 (`66229bd1`), default template bundle
 v11. Stable private GitLab pipeline 21443 passed all 28 jobs in 793 seconds.
 GitHub Actions is disabled; historical GitHub run links elsewhere are not active
-CI gates. V11 native render/visual qualification remains a separate pending
-gate. See [release status](release-status.md).
+CI gates. The v4.3.0 candidate retains bounded native qualification across all
+29 frozen V11 families; publication is still gated on CI. See
+[the delivery record](v4.3.0-delivery.md) and [release status](release-status.md).
 
 Run `make test` for everyday development. It runs the repository suite with Go's
 `-short` mode, `-count=1`, and a five-minute per-package timeout. It should fit
 within a normal short development loop. Only specifically marked exhaustive or
 resource-dependent integration tests skip in short mode; ordinary unit and
 focused regression coverage still runs.
+
+Independent composition tests own separate temporary projects and may overlap.
+`make test` bounds them to four at a time (`UNIT_TEST_PARALLEL=4`); use
+`UNIT_TEST_PARALLEL=1` to diagnose serial behavior. The complete short-suite
+assertions and five-minute package ceiling remain unchanged. External font and
+source content hashes are verified on every catalog reuse.
 
 ## Lanes
 

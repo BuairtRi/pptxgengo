@@ -32,6 +32,7 @@ func tablePatch(p *Project, ops ...TableOperation) TablePatch {
 	return TablePatch{Schema: TablePatchSchema, ExpectedSourceSHA256: p.SourceHash(), Actor: "Test", Reason: "Illustrative table customization", SemanticReview: "Scores retain 0..4 risk domain; independent rows and status legend remain consistent", NodeID: "flow", Operations: ops}
 }
 func TestTableCompositionReorderRetainsCellsMetadataAndGroups(t *testing.T) {
+	t.Parallel()
 	p := tableFixture(t)
 	inspection, e := InspectTable(p, "flow-slide", "flow", journeyBundle(t), wmdesign.CandidateEngine)
 	if e != nil || inspection.RenderError != "" {
@@ -62,6 +63,7 @@ func TestTableCompositionReorderRetainsCellsMetadataAndGroups(t *testing.T) {
 	}
 }
 func TestTableCompositionVariableRowsColumnsAndExplicitNull(t *testing.T) {
+	t.Parallel()
 	p := tableFixture(t)
 	row := map[string]any{"name": "Four", "status": "pass", "score": nil}
 	patch := tablePatch(p, TableOperation{Action: "set", Entity: "row", Key: "four", Row: row}, TableOperation{Action: "set", Entity: "cell", Key: "one", Column: "score", Value: nil})
@@ -80,6 +82,7 @@ func TestTableCompositionVariableRowsColumnsAndExplicitNull(t *testing.T) {
 	}
 }
 func TestTableCompositionInvalidDependenciesDomainsAndPresence(t *testing.T) {
+	t.Parallel()
 	p := tableFixture(t)
 	cases := []TableOperation{{Action: "reorder", Entity: "row", Order: []string{"one", "three", "two"}}, {Action: "remove", Entity: "column", Key: "score"}, {Action: "set", Entity: "cell", Key: "one", Column: "score", Value: 5}, {Action: "set", Entity: "cell", Key: "one", Column: "missing", Value: 0}, {Action: "set", Entity: "row", Key: "new", Row: map[string]any{"name": "Incomplete"}}, {Action: "set", Entity: "row", Key: "one", Row: map[string]any{"name": strings.Repeat("Too long ", 200)}}}
 	for _, op := range cases {
@@ -98,6 +101,7 @@ func TestTableCompositionInvalidDependenciesDomainsAndPresence(t *testing.T) {
 }
 
 func TestTableCompositionHeatDomainsAndHeaderMeaning(t *testing.T) {
+	t.Parallel()
 	p := tableFixture(t)
 	for _, op := range []TableOperation{
 		{Action: "reorder", Entity: "column", Order: []string{"status", "name", "score"}},
@@ -123,6 +127,7 @@ func TestTableCompositionHeatDomainsAndHeaderMeaning(t *testing.T) {
 }
 
 func TestTableCompositionNestedCellKeysFollowRows(t *testing.T) {
+	t.Parallel()
 	p := tableFixture(t)
 	local := p.Document.LocalTemplates["process"]
 	n := &local.Nodes[0]
@@ -162,6 +167,7 @@ func TestTableCompositionNestedCellKeysFollowRows(t *testing.T) {
 }
 
 func TestTableCompositionSourceGeometryRetained(t *testing.T) {
+	t.Parallel()
 	p := tableFixture(t)
 	local := p.Document.LocalTemplates["process"]
 	metadata := map[string]any{"schema": wmdesign.SceneSourceGeometrySchema, "x_fraction": 0, "y_fraction": 0, "width_fraction": 1}
