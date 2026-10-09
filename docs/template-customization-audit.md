@@ -340,6 +340,26 @@ remaining family requires representative composition and desktop qualification.
 
 ## Proposed implementation order
 
+### Implementation checkpoint after this inventory
+
+The inventory above retains its dated source-review basis. Subsequent source
+work implements [teams/pods/governance and Gantt operators](composition-operators.md),
+[reviewed Gantt period adoption](native-semantic-reconciliation.md),
+[keyed cycle composition](cycle-composition-scope.md) and
+[explicit ordinal assessments](assessment-composition-scope.md). These are bounded
+composition contracts, not qualification of every assigned catalog variant.
+The promoted v4.2.1 package remains unchanged.
+
+Continue implementation from this inventory rather than repeating the overall
+audit. Each assignment should review its actual source model, exercise variable
+counts/relationships and document variant exceptions. Independent data and
+structural workstreams can proceed concurrently; there is no requirement to
+finish diagrams before assessments, quantitative charts or commercial models.
+For quantitative work, preserve categories/series, units and source links. For
+commercial work, define calculation, rounding and assumption contracts before
+editing rates, quantities or phase totals. Neither workstream is implemented by
+the ordinal assessment commands.
+
 1. **PowerPoint access and actual Save As qualification.** Establish repeatable
    application lifecycle diagnostics and real saved-file evidence. This is a
    separate workstream, not a requirement that authoring operations invoke Office.

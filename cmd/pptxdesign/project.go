@@ -17,7 +17,7 @@ func runProject(args []string) error {
 		return runProjectNativeImport(args[1:])
 	}
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|diagram|team|gantt|native-import|reconcile|editability> --project PATH [--bundle v11|PATH]")
+		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|diagram|team|gantt|cycle|assessment|native-import|reconcile|editability> --project PATH [--bundle v11|PATH]")
 	}
 	if args[0] == "create" {
 		return runProjectCreate(args[1:])
@@ -33,6 +33,12 @@ func runProject(args []string) error {
 	}
 	if args[0] == "team" {
 		return runProjectTeam(args[1:])
+	}
+	if args[0] == "cycle" {
+		return runProjectCycle(args[1:])
+	}
+	if args[0] == "assessment" {
+		return runProjectAssessment(args[1:])
 	}
 	if args[0] == "gantt" {
 		return runProjectGantt(args[1:])

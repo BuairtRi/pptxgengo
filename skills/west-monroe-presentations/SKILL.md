@@ -37,6 +37,8 @@ In short: sentence-case titles that state the conclusion as a full sentence; per
 | Customize architecture nodes/arrows or reconcile native geometry | [Architecture and geometry](references/architecture-geometry.md) |
 | Compose teams, pods, reporting lines or governance tiers | [Team, pod and governance composition](references/team-composition.md) |
 | Compose Gantt workstreams, tasks, phases and gates | [Gantt composition](references/gantt-composition.md) |
+| Change cycle stages, feedback loops or the active step | [Cycle composition](references/cycle-composition.md) |
+| Compose an ordinal assessment with stable axes, scores and legend | [Assessment composition](references/assessment-composition.md) |
 | Import selected native rectangles or plain text into authored source | [Native imports](references/native-imports.md) |
 | Diagnose a PowerPoint render, GUI, AppleScript or permission failure | [PowerPoint recovery](references/powerpoint-recovery.md) |
 | Look up `deck.yaml`, slide file or local template fields | [Source format](references/source-format.md) |
@@ -78,6 +80,6 @@ Approvals record real decisions; do not ask again for something already approved
 
 ## Family composition
 
-Treat templates as starting examples. Choose the actual roles, reporting relationships, workstreams and gates from the operator's source before arranging their geometry. Use the family runbook's inspect → preview → measure → guarded apply → build/render sequence. Keep stable keys when reordering and make binding materialization explicit. Native movement changes layout; it does not infer task dates, reporting lines or governance membership.
+Treat templates as starting examples. Choose the actual roles, reporting relationships, workstreams and gates from the operator's source before arranging their geometry. Use the family runbook's inspect → preview → measure → guarded apply → build/render sequence. Keep stable keys when reordering and make binding materialization explicit. Native movement changes layout; confirmed Gantt retiming uses the [reviewed semantic workflow](references/gantt-composition.md#review-native-bars-as-possible-schedule-changes). Reporting and membership changes require explicit family operations, and period labels do not establish calendar dates.
 
 Check installed help and the project toolchain before using new composition or import commands. Main-only capability is not available in an older release just because this skill documents it.

@@ -263,11 +263,17 @@ pptxgengo design project team inspect --project ./deck --slide team
 pptxgengo design project team patch --project ./deck --slide team --patch team-patch.yaml
 pptxgengo design project gantt inspect --project ./deck --slide plan --node schedule
 pptxgengo design project gantt patch --project ./deck --slide plan --patch gantt-patch.yaml
+pptxgengo design project gantt reconcile --project ./deck --slide plan --node schedule --packet ./native-review
+pptxgengo design project cycle inspect --project ./deck --slide lifecycle --node cycle
+pptxgengo design project cycle patch --project ./deck --slide lifecycle --patch cycle-patch.yaml
+pptxgengo design project assessment inspect --project ./deck --slide assessment --node scores
+pptxgengo design project assessment patch --project ./deck --slide assessment --patch assessment-patch.yaml
 pptxgengo design project native-import inspect --in source.pptx
 pptxgengo design project native-import patch --project ./deck --slide architecture --in source.pptx --map import-map.yaml
 ```
 
-Use the specialized [team](team-composition.md), [Gantt](gantt-composition.md) and
+Use the specialized [team](team-composition.md), [Gantt](gantt-composition.md),
+[cycle](cycle-composition.md), [assessment](assessment-composition.md) and
 [import](native-imports.md) runbooks for topology, units, keys, materialization,
 fit and native-edit boundaries. For structured render error phases, caller access,
 capture/Apple-event failures and bounded recovery, read [PowerPoint recovery](powerpoint-recovery.md).

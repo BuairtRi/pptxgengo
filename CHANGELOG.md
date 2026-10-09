@@ -5,6 +5,8 @@ release pipeline's UTC date; release tags and signed artifacts are immutable.
 
 ## Unreleased
 
+- Add reviewed, receipt-backed Gantt bar/gate retiming proposals with guarded period-value adoption and retained native evidence; ambiguous edits remain explicit review findings.
+- Add keyed cycle composition and explicit ordinal assessment models with guarded source patches, measured fit and specialized operator runbooks.
 - Add measured, source-hash-guarded team/pod/reporting/governance and period-based Gantt composition commands with stable identities and explicit binding materialization.
 - Add bounded native text-shape imports with explicit design styling, exact retained source packages and atomic decisions.
 - Integrate family runbooks and PowerPoint recovery into the West Monroe presentation skill; add repository `AGENTS.md` routing to the failure catalog.

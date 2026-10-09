@@ -216,3 +216,23 @@ visible and use explicit team operations to persist their meaning. Arbitrary
 native objects/SmartArt/imported charts and rich-format semantic imports are
 not supported by this slice. Do not describe generic geometry qualification as
 a passed team-family semantic round trip.
+
+
+### When native movement might change meaning
+
+Review the operator's intent before selecting `reassign-role` or
+`reparent-report`. A role moved entirely inside another pod can be evidence for
+an explicit membership question, but spacing, overlapping containers and shared
+leadership make proximity ambiguous. There is currently no automatic pod
+crossing proposal or accepted-membership adoption command. Persist confirmed
+membership with stable keyed team operations and rebuild; preserve native
+geometry as evidence rather than adopting the same move twice.
+
+For reporting, a verified connector endpoint reassignment would be stronger
+evidence than placing one node beneath another. Connector topology is not
+currently reconciled into the org-chart tree. Do not infer a reporting change
+from arrow direction, relative position, or an imported untagged line. Confirm
+role identities/parent and use `reparent-report`; preserve cycle/root guards.
+The bounded [Gantt semantic review](gantt-composition.md#review-native-bars-as-possible-schedule-changes)
+handles only period-based task/gate proposals and does not expand these team
+contracts.

@@ -468,9 +468,13 @@ func preserveDiagramComments(old, current *yaml.Node) {
 					}
 				}
 			}
-			copy := *n
-			copy.HeadComment, copy.LineComment, copy.FootComment = "", "", ""
-			return "value:" + string(canonical(copy))
+			// Parsed and regenerated nodes have different source positions,
+			// scalar styles and nested comments. Compare their authored values.
+			p := &Project{Positions: map[string]Position{}}
+			if value, err := p.yamlValue(n, "", 0); err == nil {
+				return "value:" + string(canonical(value))
+			}
+			return "unmatched:" + string(canonical(n))
 		}
 		previous := map[string]*yaml.Node{}
 		counts := map[string]int{}
@@ -479,9 +483,13 @@ func preserveDiagramComments(old, current *yaml.Node) {
 			previous[key] = n
 			counts[key]++
 		}
+		currentCounts := map[string]int{}
+		for _, n := range current.Content {
+			currentCounts[identity(n)]++
+		}
 		for _, n := range current.Content {
 			key := identity(n)
-			if counts[key] == 1 {
+			if counts[key] == 1 && currentCounts[key] == 1 {
 				preserveDiagramComments(previous[key], n)
 			}
 		}
