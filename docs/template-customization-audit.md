@@ -51,7 +51,7 @@ examples are not evidence that an equivalent supported project command exists.
 | --- | --- | --- |
 | `project edit`, explicit bindings and `--check-fit` | Change source copy/values and measure changed slides | Complete family composition transactions, relationship-aware add/remove/reorder, useful layout proposals |
 | Local scene components and project-owned templates | Use current typed renderers; keep installed catalog immutable | Domain models that keep related components and identities consistent when topology changes |
-| `project template detach` and `project diagram inspect/patch/arrange` | Local node additions/deletions, placement changes and align/distribute | These operations manipulate geometry; they do not define staffing, dates, decision rights or process meaning |
+| `project detach` and `project diagram inspect/patch/arrange` | Local node additions/deletions, placement changes and align/distribute | These operations manipulate geometry; they do not define staffing, dates, decision rights or process meaning |
 | Attached straight/horizontal/vertical connectors | Known block endpoints, calculated paths, native elbow guides | Obstacle routing, crossings/clearance, connector labels and broader endpoint classes |
 | Logical containment | Explicit memberships, padding and allocation checks | General composition fit and exact ink/stroke bounds; good layout is not inferred from containment alone |
 | Eligible native lists/cards/tables | Better human text/cell editing, with documented retention reasons | Native editability does not establish domain item insertion or semantic reconciliation |

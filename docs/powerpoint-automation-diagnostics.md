@@ -135,3 +135,14 @@ Apple-event operations recovered while PowerPoint computer-use capture remained
 unavailable; they do not establish a permanently hung application or resolved
 privacy settings. Splitting diagnostic events isolates failures more clearly
 than sending one compound query and treating its timeout as total app failure.
+
+The later owned-document AppleScript editing sequence moved `node-06` from top
+234 to 228 points and resized `node-08` from width 144 to 132 points, then saved
+through PowerPoint successfully. Reconciliation identified three native-only
+changes (`node-06`, `node-08`, and their attached `service-edge` connector), with
+39 geometry no-ops. PowerPoint also adjusted that connector's elbow guide from
+65000 to 50000 and its endpoint Y from 252 to 246 points. A fresh export using
+the diagnostic development CLI subsequently produced native PDF and PNG output
+without changing the original source hash. This qualifies the observed
+application-API edit/save and export operations; actual GUI dragging remains
+pending. The 63 package/non-text normalization review items also remain open.
