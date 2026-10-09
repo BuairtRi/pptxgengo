@@ -160,7 +160,7 @@ func TestUnknownDialogVisibilityRemainsUnknown(t *testing.T) {
 }
 
 func TestDoctorOperationalFileAccessProbe(t *testing.T) {
-	for _, name := range []string{"pass", "grant", "unknown", "no-pdf", "invalid-pdf"} {
+	for _, name := range []string{"pass", "grant", "caller-identity-preparation", "unknown", "no-pdf", "invalid-pdf"} {
 		t.Run(name, func(t *testing.T) {
 			root := t.TempDir()
 			calls := 0
@@ -177,6 +177,9 @@ func TestDoctorOperationalFileAccessProbe(t *testing.T) {
 				}
 				if name == "grant" {
 					return nil, errors.New("file_access_denied: Grant File Access")
+				}
+				if name == "caller-identity-preparation" {
+					return nil, errors.New("native_phase=prepare_identity; file_access_denied: staging file stat")
 				}
 				if name == "unknown" {
 					return nil, context.DeadlineExceeded
@@ -195,11 +198,14 @@ func TestDoctorOperationalFileAccessProbe(t *testing.T) {
 			if name == "grant" {
 				want = "fail"
 			}
-			if name == "unknown" || name == "no-pdf" || name == "invalid-pdf" {
+			if name == "caller-identity-preparation" || name == "unknown" || name == "no-pdf" || name == "invalid-pdf" {
 				want = "unknown"
 			}
-			if check.Status != want || (name != "pass" && !strings.Contains(check.Fix, "Select/Grant")) {
+			if check.Status != want || (name != "pass" && name != "caller-identity-preparation" && !strings.Contains(check.Fix, "Select/Grant")) {
 				t.Fatal(check)
+			}
+			if name == "caller-identity-preparation" && (!strings.Contains(check.Fix, "calling terminal or agent") || strings.Contains(check.Fix, "Select/Grant") || strings.Contains(check.Detail, "select/grant PowerPoint")) {
+				t.Fatal("caller access failure mislabeled as PowerPoint grant failure", check)
 			}
 			if calls != 1 && calls != 2 {
 				t.Fatal(calls)

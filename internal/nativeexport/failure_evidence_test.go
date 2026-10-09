@@ -22,6 +22,8 @@ func TestNativeFailurePhaseAndLayer(t *testing.T) {
 		{"native_phase=identify_document; open_identity_timeout", "identify_document", "powerpoint_document", "document_open_or_identity_timeout", 0},
 		{"native_phase=close_document; identity_changed", "close_document", "document_identity", "identity_unconfirmed", 0},
 		{"file_access_denied: Grant File Access", "unknown", "powerpoint_file_access", "file_access_blocked", 0},
+		{"native_phase=prepare_identity; file_access_denied: staging file stat", "prepare_identity", "filesystem_access", "filesystem_permission_denied", 0},
+		{"native_phase=open_document; file_access_denied: Grant File Access", "open_document", "powerpoint_file_access", "file_access_blocked", 0},
 		{"open /documents/file: permission denied", "unknown", "filesystem_access", "filesystem_permission_denied", 0},
 		{"context deadline exceeded", "unknown", "unknown", "deadline_exceeded", 0},
 	} {
@@ -41,6 +43,10 @@ func TestNativeFailurePhaseAndLayer(t *testing.T) {
 	}
 	message = exportFailure(errors.New("open /source.pptx: permission denied"), "/staging/task.pptx").Error()
 	if strings.Contains(message, "grant PowerPoint") || !strings.Contains(message, "filesystem_permission_denied") {
+		t.Fatal(message)
+	}
+	message = exportFailure(errors.New("native_phase=prepare_identity; file_access_denied: staging file stat"), "/staging/task.pptx").Error()
+	if strings.Contains(message, "select/grant PowerPoint") || !strings.Contains(message, "filesystem_permission_denied") || !strings.Contains(message, "caller staging identity") {
 		t.Fatal(message)
 	}
 }

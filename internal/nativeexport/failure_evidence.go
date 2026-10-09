@@ -45,6 +45,8 @@ func classifyNativeFailure(message, taskID string) FailureEvidence {
 		evidence.Layer, evidence.Classification = "apple_events", "automation_denied"
 	case strings.Contains(lower, "-10827"):
 		evidence.Layer, evidence.Classification = "application_dispatch", "application_dispatch_failed"
+	case evidence.Phase == "prepare_identity" && strings.Contains(lower, "file_access_denied"):
+		evidence.Layer, evidence.Classification = "filesystem_access", "filesystem_permission_denied"
 	case strings.Contains(lower, "file_access_denied"):
 		evidence.Layer, evidence.Classification = "powerpoint_file_access", "file_access_blocked"
 	case strings.Contains(lower, "permission denied"):

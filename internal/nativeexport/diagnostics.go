@@ -338,8 +338,11 @@ func doctorFileAccess(ctx context.Context, root, taskID string, run runner) Diag
 		detail += "; exact-task close unconfirmed; retained diagnostic copy: " + path
 	}
 	status := "unknown"
-	if strings.Contains(strings.ToLower(err.Error()), "file_access_denied") {
+	evidence := classifyNativeFailure(err.Error(), "")
+	if evidence.Layer == "powerpoint_file_access" {
 		status = "fail"
+	} else if evidence.Layer == "filesystem_access" {
+		fix = "Check the calling terminal or agent's filesystem access to the staging copy in " + root + "; rerun render-doctor from the same caller after resolving the file operation. PowerPoint file access remains unverified."
 	}
 	return Diagnostic{"powerpoint-file-access", status, detail, fix}
 }
@@ -357,6 +360,8 @@ func exportFailure(err error, taskPath string) error {
 		return fmt.Errorf("%s: application_dispatch_failed (-10827): this caller could not send an operational command to PowerPoint; file-access and Automation permission are unconfirmed. Open PowerPoint from the signed-in macOS desktop and rerun render-doctor from that same user session: %w", prefix, err)
 	case strings.Contains(message, "-1743") || strings.Contains(message, "not authorized") || strings.Contains(message, "automation denied"):
 		return fmt.Errorf("%s: automation_denied: allow the calling terminal or agent host in System Settings > Privacy & Security > Automation > Microsoft PowerPoint: %w", prefix, err)
+	case evidence.Phase == "prepare_identity" && evidence.Layer == "filesystem_access":
+		return fmt.Errorf("%s: filesystem_permission_denied during caller staging identity preparation; check caller access to %s. PowerPoint file access and the underlying cause are unconfirmed: %w", prefix, taskPath, err)
 	case strings.Contains(message, "file_access_denied"):
 		return fmt.Errorf("%s: file_access_denied for %s; select/grant PowerPoint access to the stable staging folder %s, then rerun render-doctor with that same --staging-dir: %w", prefix, taskPath, stagingRoot, err)
 	case strings.Contains(message, "identity_ambiguous"):
