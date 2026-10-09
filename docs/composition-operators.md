@@ -9,7 +9,9 @@ from this source; operators must inspect their installed help/toolchain pins.
 | Task | Command | Skill runbook |
 | --- | --- | --- |
 | Teams, pods, reporting and governance | `project team inspect/patch` | [Teams, pods and governance](../skills/west-monroe-presentations/references/team-composition.md) |
-| Period-based workstreams, tasks, phases and gates | `project gantt inspect/patch` | [Gantt composition](../skills/west-monroe-presentations/references/gantt-composition.md) |
+| Period-based workstreams, tasks, phases and gates; reviewed native retiming | `project gantt inspect/patch/reconcile` | [Gantt composition](../skills/west-monroe-presentations/references/gantt-composition.md) |
+| Cycle steps, keyed feedback loops and active marker | `project cycle inspect/patch` | [Cycle composition](../skills/west-monroe-presentations/references/cycle-composition.md) |
+| Ordinal assessment axes, scores and coupled legend | `project assessment inspect/patch` | [Assessment composition](../skills/west-monroe-presentations/references/assessment-composition.md) |
 | Selected foreign rectangular text shapes | `project native-import inspect/patch` | [Native imports](../skills/west-monroe-presentations/references/native-imports.md) |
 | Source geometry and tagged native edits | `project diagram`, `project reconcile` | [Architecture and geometry](../skills/west-monroe-presentations/references/architecture-geometry.md) |
 | Native rendering/access failures | `render`, `render-doctor` | [PowerPoint recovery](../skills/west-monroe-presentations/references/powerpoint-recovery.md) |
@@ -54,7 +56,12 @@ Full project sharing must preserve those private source materials.
 
 Existing receipt-backed text and geometry reconciliation remains separate from
 semantic composition. Moving a pod role does not establish a new pod membership;
-moving an org-chart node does not reparent it; resizing a task does not retime it.
+moving an org-chart node does not reparent it. For an authenticated single solid
+Gantt bar or gate guide on an unchanged timeline, `project gantt reconcile`
+proposes period changes for explicit acceptance. It regenerates coupled labels
+and layout from accepted facts; ordinary geometry adoption alone does not retime
+tasks. [The semantic contract](native-semantic-reconciliation.md) documents
+coordinate checks, partial-adoption evidence and unresolved edits.
 Unsupported copied bars, subshape deletions and imported SmartArt remain review
 findings. Explicit family patches persist the operator's confirmed meaning.
 
@@ -105,3 +112,31 @@ GUI capture separately reported `cgWindowNotFound`; bounded Apple events returne
 version/count, opened the exact owned copy and verified its full path. Fresh GUI
 binding still failed. Only that identified working copy was closed; successful
 exports do not establish a durable GUI recovery.
+
+### Semantic and additional-family specimens (2026-10-09)
+
+A single development CLI with SHA256
+`56855b0b8ba6980c1b1e489f666c39e2ee40390c58e719a8d3f9e34a79aaa13c`
+qualified fresh V11-pinned local examples. CLI previews, guarded applies and
+rebuilds succeeded for a task interval/gate retiming, a four-to-five cycle with
+preserved active-step/feedback identities, and a three-row assessment expanded
+to five comparison columns with explicit zero and unassessed cells.
+
+Actual macOS PowerPoint exports succeeded and were visually inspected. The
+assessment retained native cells and its risk-gap palette; the missing-value
+legend uses an outlined white swatch matching blank cells. The cycle retained
+its native editable diagram and frame. This qualifies these selected examples,
+not all variants assigned to either composition type.
+
+Gantt edits were made in XML, **not GUI Save As**. Reviewed bar/gate transforms
+became fractional period values; EMU quantization affected the sixth decimal.
+Other native changes stayed explicitly unresolved. Regeneration repositioned
+the coupled task label from the accepted interval, so edited/rebuilt PNGs are
+not byte-identical. This is semantic adoption with regenerated layout, not a
+claim of adopting every native transform or inferring calendar dates.
+
+Exact commands, source/build hashes, packets, decisions and native receipts are
+retained privately under
+`~/Documents/pptxgengo-qualification/semantic-composition-20261009/final/`.
+Windows desktop tests, native assessment-score adoption, membership/reporting
+inference and external GUI-capture recovery remain pending.

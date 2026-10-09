@@ -28,6 +28,9 @@ CI infrastructure and qualification ledgers belong in the repository docs below.
 | Family composition, stable identities and guarded source edits | [Composition operators](composition-operators.md), [teams/pods/governance runbook](../skills/west-monroe-presentations/references/team-composition.md), [Gantt runbook](../skills/west-monroe-presentations/references/gantt-composition.md) |
 | Geometry changes and bounded native imports | [Geometry editing](geometry-editing.md), [native imports](../skills/west-monroe-presentations/references/native-imports.md) |
 | Native ownership and text adoption | [Lineage](native-lineage.md), [field mapping](native-field-mapping.md), [text reconciliation](text-reconciliation.md) |
+| Reviewed native Gantt interval/gate adoption and semantic limits | [Native semantic reconciliation](native-semantic-reconciliation.md), [Gantt runbook](../skills/west-monroe-presentations/references/gantt-composition.md) |
+| Variable cycle steps, feedback relationships and active marker | [Cycle contract](cycle-composition-scope.md), [cycle runbook](../skills/west-monroe-presentations/references/cycle-composition.md) |
+| Ordinal assessment axes, explicit score domains and missing values | [Assessment contract](assessment-composition-scope.md), [assessment runbook](../skills/west-monroe-presentations/references/assessment-composition.md) |
 | Operator-provided maintained slide revisions | [Finished slides](finished-slides.md) |
 | Discovery/index and optional offline search | [Template discovery](semantic-template-discovery.md), [performance](search-performance.md) |
 | CLI APIs and template engineering | [CLI engineering](engineering-cli.md), [new templates](engineering-new-templates.md) |

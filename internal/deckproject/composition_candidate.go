@@ -31,7 +31,7 @@ func CompositionCandidate(p *Project, slideID, operation, actor, reason string, 
 }
 
 // Additional private evidence is committed atomically with authored source.
-func compositionCandidate(p *Project, slideID, operation, actor, reason string, template LocalTemplate, bundle, engine string, apply bool, evidence any, artifacts map[string][]byte) (CompositionResult, error) {
+func compositionCandidate(p *Project, slideID, operation, actor, reason string, template LocalTemplate, bundle, engine string, apply bool, evidence any, artifacts map[string][]byte, evidenceGuards ...map[string][]byte) (CompositionResult, error) {
 	out := CompositionResult{Schema: "pptxgengo.composition-result.v1", Operation: operation, Actor: actor, Reason: reason, BeforeSHA256: p.SourceHash(), Evidence: evidence}
 	if !stableID.MatchString(operation) || strings.TrimSpace(actor) == "" || len(actor) > 256 || strings.TrimSpace(reason) == "" || len(reason) > 4096 {
 		return out, fmt.Errorf("composition requires a stable operation, actor and reason")
@@ -121,6 +121,14 @@ func compositionCandidate(p *Project, slideID, operation, actor, reason string, 
 	}
 	out.Decision = "decisions/" + operation + "-" + time.Now().UTC().Format("20060102T150405") + "-" + nonce() + ".json"
 	guarded := map[string][]byte{}
+	for _, input := range evidenceGuards {
+		for path, data := range input {
+			if previous, exists := guarded[path]; exists && !bytes.Equal(previous, data) {
+				return out, fmt.Errorf("conflicting immutable evidence guards")
+			}
+			guarded[path] = data
+		}
+	}
 	for path, data := range artifacts {
 		if path != "assets/objects/sha256/"+digest(data) {
 			return out, fmt.Errorf("evidence must use a content-addressed asset path")

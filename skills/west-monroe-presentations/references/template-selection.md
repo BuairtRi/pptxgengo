@@ -203,8 +203,10 @@ provides and follow [maintained authored slides](editing-slides.md#reuse-maintai
 
 ## Templates with variable structure
 
-A team, pod, governance or Gantt match is a visual starting point. Inspect the
+A team, pod, governance, Gantt, cycle or assessment match is a visual starting point. Inspect the
 selected variant's typed components before assuming it supports a family command.
-Read [team composition](team-composition.md) or [Gantt composition](gantt-composition.md)
-to change count, topology and scale. Loose-shape variants need an explicit local
+Read [team composition](team-composition.md), [Gantt composition](gantt-composition.md),
+[cycle composition](cycle-composition.md) or [assessment composition](assessment-composition.md)
+to change count, topology and scale. Assessment commands require the explicit
+ordinal model; a generic heat table must be deliberately initialized first. Loose-shape variants need an explicit local
 derivative; a family label alone does not qualify the command. Check installed help.

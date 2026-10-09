@@ -118,7 +118,7 @@ Node kinds:
 
 Component `<type>` is the scene node type, not the catalog name (`stepper`, not `seq.stepper`). Accepted types:
 
-`text`, `textblock`, `bullets`, `ol`, `list`, `schedule`, `grouplabel`, `numhead`, `colhead`, `strongnum`, `pullquote`, `imageframe`, `logo`, `art`, `square`, `mark`, `thumbnail`, `table`, `chart`, `card`, `cardrow`, `metric`, `callout`, `feesummary`, `block`, `frame`, `chevron`, `textarrow`, `connector`, `container`, `cylinder`, `node`, `layerrow`, `matrix`, `beforeafter`, `stepper`, `vstepper`, `phasehead`, `phases`, `timeaxis`, `pyramid`, `funnel`, `cycle`, `road`, `roadfork`, `gauge`, `bracket`, `scorelegend`, `gantt`, `swimlane`, `legend`, `pod`, `role`, `person`, `orgchart`, `governance`, `logoslot`, `device`, `plane`, `dotmap`, `teamcurve`, `venn`, `maturity`.
+`text`, `textblock`, `bullets`, `ol`, `list`, `schedule`, `grouplabel`, `numhead`, `colhead`, `strongnum`, `pullquote`, `imageframe`, `logo`, `art`, `square`, `mark`, `thumbnail`, `table`, `chart`, `card`, `cardrow`, `metric`, `callout`, `feesummary`, `block`, `frame`, `chevron`, `textarrow`, `connector`, `container`, `cylinder`, `node`, `layerrow`, `matrix`, `assessment`, `beforeafter`, `stepper`, `vstepper`, `phasehead`, `phases`, `timeaxis`, `pyramid`, `funnel`, `cycle`, `road`, `roadfork`, `gauge`, `bracket`, `scorelegend`, `gantt`, `swimlane`, `legend`, `pod`, `role`, `person`, `orgchart`, `governance`, `logoslot`, `device`, `plane`, `dotmap`, `teamcurve`, `venn`, `maturity`.
 
 - Component arguments take literal values or `{binding: zone}`. They cannot set `type`, `id`, `x`, `y`, `w` or `h`; the placement sets the allocation. List-like components (bullets, tables, steppers, gantt and similar) take their height from content.
 - Diagram-internal geometry (stage positions, connector endpoints) is set explicitly in the arguments.
@@ -205,10 +205,12 @@ Use reconciliation to write these overrides and their source basis pins.
 
 Keep reusable source in local templates under `slides/templates/`. Team patches
 use `pptxgengo.team-patch.v1`; Gantt patches use `pptxgengo.gantt-patch.v1` with
-`timebase: periods`; native import maps use `pptxgengo.native-import-map.v1`.
+`timebase: periods`; cycle patches use `pptxgengo.cycle-patch.v1`; ordinal
+assessment patches use `pptxgengo.assessment-patch.v1`; native import maps use `pptxgengo.native-import-map.v1`.
 Each requires actor/reason and the current source SHA256; imports also require
 the input PPTX SHA256 and explicit formatting policy. These are command inputs,
 not replacement deck schemas. Read the [team](team-composition.md),
-[Gantt](gantt-composition.md) or [import](native-imports.md) contract for operations.
+[Gantt](gantt-composition.md), [cycle](cycle-composition.md),
+[assessment](assessment-composition.md) or [import](native-imports.md) contract for operations.
 Explicit materialization changes selected copy from bindings to local constants.
 These commands require the newer development CLI.

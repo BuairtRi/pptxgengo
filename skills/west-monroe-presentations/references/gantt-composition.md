@@ -175,13 +175,81 @@ lanes, overlapping tasks, fractional gates, start/end milestones, long right-edg
 labels and an intentionally oversized schedule for the actual presentation.
 Automated source tests are not desktop qualification.
 
-Use a separate PowerPoint working copy. Receipt-backed reconciliation can report
-known text/geometry changes, but **moving or resizing a native bar does not
-automatically retime a task**. Added untagged bars are not imported as tasks;
-deleted subshapes are not task deletion instructions. Review the native edits,
-confirm their semantic meaning with the operator, then use a keyed Gantt patch
-to change the task/gate/phase source. Preserve the native copy as evidence and
-rebuild a fresh baseline before further reconciliation. See
+## Review native bars as possible schedule changes
+
+Use a separate PowerPoint working copy of an immutable build. Prepare the local
+component first: materialize bound source explicitly, inspect its stable keys,
+and build a fresh baseline. Use `project gantt reconcile --help` to confirm the
+installed CLI includes this additional development command.
+
+```sh
+pptxgengo design project reconcile propose --geometry --project ./deck-project \
+  --edited ./working-copy.pptx --out ./native-review
+pptxgengo design project gantt reconcile --project ./deck-project --slide plan \
+  --node node01 --packet ./native-review > schedule-review.json
+```
+
+The second command replays the receipt-backed packet and reports **proposals**.
+A horizontal move/resize of an original, single solid task bar can propose new
+`from/to` periods. A horizontal move of the original vertical gate guide can
+propose a new `at`. A gate chip or label alone does not establish its period.
+All tagged period anchors and their parent group transforms must be unchanged.
+Select the authored node ID discovered by inspection; `native_node_id` in the
+semantic report retains its qualified namespace through nested local groups.
+Coordinates remain in that common parent space and are converted to fractional
+periods rounded to six decimal places; no week/day/integer snapping is applied.
+DrawingML quantization can affect the last decimal. Confirm the proposed
+coordinates against the intended schedule; use an explicit keyed patch when a
+clean integer/date-derived coordinate is required.
+
+The command does not infer calendar dates, dependencies, lane membership,
+progress, soft starts/ends or task creation/deletion. Rotated, vertically moved,
+segmented, hatched or progress bars remain manual or unresolved findings. It
+refuses concurrent authored changes, active native overrides or bound source;
+review those independently and rebuild a baseline first. Do not reset native
+layout merely to suppress that refusal.
+
+Write a decisions YAML using `report_sha256` and proposal IDs from the returned
+report. `retime` confirms a proposed meaning; `keep_source` records that the
+movement does not change the schedule. A manual finding cannot be retimed.
+
+```yaml
+schema: pptxgengo.gantt-semantic-decisions.v1
+report_sha256: REPLACE_WITH_SEMANTIC_REPORT_HASH
+actor: Named operator
+reason: Confirm the updated work plan after native editing
+decisions:
+  - proposal_id: REPLACE_WITH_PROPOSAL_ID
+    action: retime
+    reason: The task now starts one quarter-period later
+```
+
+```sh
+pptxgengo design project gantt reconcile --project ./deck-project --slide plan \
+  --node node01 --packet ./native-review --decisions ./schedule-decisions.yaml
+pptxgengo design project gantt reconcile --project ./deck-project --slide plan \
+  --node node01 --packet ./native-review --decisions ./schedule-decisions.yaml --apply
+pptxgengo design project build --project ./deck-project
+```
+
+Preview measures the complete regenerated model without changing source. Apply
+rechecks source, toolchain and immutable build evidence, persists only accepted
+schedule facts and retains the exact edited PPTX, semantic report, geometry
+report and decisions in the shared content-addressed asset store. Associated
+labels/chips/packing are regenerated from those facts; the movement is not also
+stored as a native layout override.
+
+Inspect `manual_review`, `unresolved_geometry_ids`, `unresolved_text_ids` and
+`unresolved_structure_ids`, plus unselected proposals. This command does **not**
+adopt those changes. Preserve the original native copy and review remaining
+copy/format/layout separately against the new baseline. The old packet becomes
+stale after a source change. Do not apply the old generic geometry decisions
+on top of semantic adoption or imply the rebuilt deck contains all native edits.
+
+Added untagged bars are not imported as tasks; deleted subshapes are not task
+deletion instructions. Use keyed Gantt patches for those confirmed changes.
+Build and review the new deck through PowerPoint; the source/XML round-trip
+qualification does not establish a GUI Save As or Windows qualification. See
 [architecture and geometry](architecture-geometry.md),
 [editing slides](editing-slides.md) and
 [PowerPoint recovery](powerpoint-recovery.md).
