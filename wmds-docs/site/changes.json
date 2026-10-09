@@ -188,10 +188,22 @@
     "families-2026-10-08": {
       "summary": "New sections: Product backlogs (software, backlog/* x10), Product strategy roadmaps (roadmaps, roadmap-strategy/* x9), Resource plans (team, resource-plan/* x9). All compact density, no per-component sizes; contrast sweep clean at every density. Resource plans show FTE and allocation; cost only at team level.",
       "pptx": "New templates only; composed from existing nodes (tables with rowGroups, priority, status, heat FTE cells, gantt, teamcurve, cards, blocks)."
+    },
+    "toclist": {
+      "summary": "New node toclist: table of contents rows with dot leaders and right-aligned mono page numbers, two levels, optional rules between sections. Used by toc/levels-pages (replacing hand-placed dotted connectors whose start was estimated from text length). Update 2026-10-09: n (number or letter) may appear on any level (level 2: mono 600 Blue at body size); used for A-Z letters in index-topics/alphabetical.",
+      "pptx": "Draw each row as one paragraph with a right-aligned tab stop at x + w and a dot leader (PowerPoint tab leader dots); text then tab then page. Level 1: section number (IBM Plex Mono SemiBold, Blue) in a numW-wide (36 pt) first column, title in subhead, page in number style Blue; level 2: body, secondary colour, indented by numW, page in body mono. Rules: 0.75 pt line colour hairline above each level-1 row after the first, 12 pt above the text. n on level-2 rows: body-size IBM Plex Mono SemiBold Blue in the numW column."
+    },
+    "families-2026-10-09": {
+      "summary": "Openers family reorganized: sections Covers, Tables of contents (agenda/index moves here, key unchanged), Agendas, Deck and section guides, Section dividers, Progress dividers, Appendix, Closings. New: toc/* x8 (narrative rows, columns, panel; levels columns, pages, blocks, split; you-are-here), cover/* x6, closing/* x5, appendix/* x4.",
+      "pptx": "New templates; agenda/index changes gallery section only. toc/levels-pages uses the new toclist node."
+    },
+    "families-2026-10-09b": {
+      "summary": "New family indexes (Openers group): index-slides (page, continued, continued-last, with-type, with-type-continued, thumbnails), index-sections (overview, nav), index-topics/alphabetical, index-exhibits/list, index-appendix/full. Covers: toc/levels-blocks removed; toc/you-are-here renamed divider/progress-contents (Progress dividers); guide/section-guide strip moved to the top (rev 3); new guide/section-guide-nav and guide/section-opener-nav; narrative TOC padding widened.",
+      "pptx": "Add the indexes family; delete toc/levels-blocks; rename toc/you-are-here to divider/progress-contents; update guide/section-guide layout; new guides use the nav rail."
     }
   },
   "summary": {
-    "added": 580,
+    "added": 615,
     "revised": 37,
     "deprecated": 1,
     "removed": 0,
@@ -2130,10 +2142,100 @@
       "pptx": "Density migration: Set slide density \"compact\" (body 12/17, small 11/15, subhead 16/21, label 8/11, table cells 12/10 per tokens.density); title zone stays comfortable. Drop the per-component small sizes on: bullets at x 363 y 144 (“Finance: bring close calendar and pain…”) size=small; bullets at x 363 y 198 (“Finance: define rules, controls, accep…”) size=small; bullets at x 363 y 252 (“Finance: explain intent and open quest…”) size=small; bullets at x 363 y 306 (“Finance: review each increment against…”) size=small; bullets at x 363 y 360 (“Finance: name operating-model implicat…”) size=small. Those nodes now take the slide's body/small roles, so their text size is unchanged (12 pt) while the other text on the slide steps down to the same scale. Geometry unchanged."
     },
     {
+      "key": "appendix/contents",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Appendix contents A1-A6 with descriptions and page numbers.",
+      "pptx": "Six ruled rows: code, title, one-line description, right-aligned 'p. N' via schedule keys."
+    },
+    {
+      "key": "appendix/divider-inverse",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Appendix divider on Grounded Blue.",
+      "pptx": "Same layout, inverse surface, underscore mark; A is white so Magenta appears once."
+    },
+    {
+      "key": "appendix/divider-light",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Appendix divider on White.",
+      "pptx": "Stat 'A', eyebrow, display with highlight, lead, photo square over dots."
+    },
+    {
+      "key": "appendix/reference-divider",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Reference-material divider: Grounded panel with Magenta edge and list of four items.",
+      "pptx": "Inverse block 0,72 561x396, Magenta 6 pt edge rule, four rows (code, title, description) at right."
+    },
+    {
+      "key": "closing/inverse-logo",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Inverse closing with reversed logo, tagline art and dot field.",
+      "pptx": "Logo rev 198 wide, tagline art 414 wide, dot field right."
+    },
+    {
+      "key": "closing/next-steps",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Next steps and contacts slide.",
+      "pptx": "Three numbered steps (strongnum), decision-requested text block, tinted contacts panel."
+    },
+    {
+      "key": "closing/photo",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Closing over full-bleed photo with an inverse panel holding next step and contact.",
+      "pptx": "Full-bleed image, inverse block 57,252 450x216, white text inset 18."
+    },
+    {
+      "key": "closing/questions",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Questions closing with two contacts and a photo square on dots.",
+      "pptx": "Display with highlight, lead, rule, two contacts, square 216."
+    },
+    {
       "key": "closing/tagline",
       "change": "moved",
       "family": "covers",
       "movedFrom": "openers"
+    },
+    {
+      "key": "closing/thank-you",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Thank-you closing with three role-based contacts.",
+      "pptx": "Display with highlight; three ruled person rows (initial tile, role, email)."
+    },
+    {
+      "key": "cover/breakout",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Cover with Grounded left panel and photo square breaking onto dots.",
+      "pptx": "Inverse block 0,0 543x468; square 234 at 489,90; contacts on white side."
     },
     {
       "key": "cover/grid",
@@ -2142,10 +2244,55 @@
       "movedFrom": "openers"
     },
     {
+      "key": "cover/inverse",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Inverse full-bleed cover with dots, preparer, contacts, date.",
+      "pptx": "Inverse surface, reversed logo, display title (underscore), dot field on right."
+    },
+    {
       "key": "cover/photo",
       "change": "moved",
       "family": "covers",
       "movedFrom": "openers"
+    },
+    {
+      "key": "cover/proposal-rfp",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Proposal cover with RFP reference eyebrow and a tinted facts panel.",
+      "pptx": "Subtle block with four label/value pairs (RFP ref, issuer, submitted, valid through)."
+    },
+    {
+      "key": "cover/split-photo",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Cover with the photo filling the right half edge to edge.",
+      "pptx": "Image 489,0 471x468; left text column; highlight on title."
+    },
+    {
+      "key": "cover/type-grid",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Type-only cover on whiteboard dots with ruled facts row.",
+      "pptx": "Display title, rule, four-column row (prepared by, two contacts, date)."
+    },
+    {
+      "key": "cover/workshop",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Workshop or readout cover with photo and date/location/participants row.",
+      "pptx": "Photo 324x252 right; ruled facts row; facilitator line."
     },
     {
       "key": "divider/full-photo",
@@ -2195,6 +2342,15 @@
       "change": "moved",
       "family": "covers",
       "movedFrom": "openers"
+    },
+    {
+      "key": "divider/progress-contents",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Former toc/you-are-here: section or progress divider styled as a contents list with the current section highlighted.",
+      "pptx": "Same layout as before, now filed under dividers."
     },
     {
       "key": "divider/progress-dots",
@@ -2291,9 +2447,27 @@
       "family": "covers",
       "change": "added",
       "date": "2026-10-03",
-      "rev": 2,
-      "summary": "Rebuilt from four tiles into a true index: a Narrative of this section paragraph (14pt, two lines), then a 12pt table with one row per slide (slide number, title, the point it makes, when to use; 6-8 rows), and a subtle text-only section progress line at the bottom (active label primary with a short accent rule, others muted). Slots changed: tiles/purpose/note replaced by narrative and index.",
-      "pptx": "Replace the four cards, purpose and recommended-use block with a narrative text block (y144) and a dense table (y198, rowH 28, cols 54/198/378/216). Replace the pill strip with five muted 12pt labels on the 5-up columns at y441 and a 36pt wide 3pt accent rule under the active one."
+      "rev": 3,
+      "summary": "Rebuilt from four tiles into a true index: a Narrative of this section paragraph (14pt, two lines), then a 12pt table with one row per slide (slide number, title, the point it makes, when to use; 6-8 rows), and a subtle text-only section progress line at the bottom (active label primary with a short accent rule, others muted). Slots changed: tiles/purpose/note replaced by narrative and index. Round 21: Section strip moved from the bottom to the top of the body (y 126, underline y 147); narrative and table move down (table y 234).",
+      "pptx": "Replace the four cards, purpose and recommended-use block with a narrative text block (y144) and a dense table (y198, rowH 28, cols 54/198/378/216). Replace the pill strip with five muted 12pt labels on the 5-up columns at y441 and a 36pt wide 3pt accent rule under the active one. Round 21: Strip above 'Narrative of this section'; table at y 234, row height 28."
+    },
+    {
+      "key": "guide/section-guide-nav",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Section guide using the nav rail (active = third section) instead of a strip.",
+      "pptx": "Nav rail with five tabs; narrative at y 126, table at y 198, row height 32."
+    },
+    {
+      "key": "guide/section-opener-nav",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Section opener on the nav rail: subtle panel with headline, narrative and time to present; right column lists five slides with one line each.",
+      "pptx": "Nav rail, 324 pt subtle panel (18 pt inset), five 60 pt rows with rules."
     },
     {
       "key": "guide/section-overview",
@@ -2303,6 +2477,60 @@
       "rev": 1,
       "summary": "New internal overview for one section: compact 'How to use this deck' band (four short steps on a Light Gray block), then a 'How to use this section' table index (Slide, Title, What it covers, When to use; 5-7 rows at 12pt, rowH 28). Keeps the For internal use stamp.",
       "pptx": "Add layout: header with stamp; subtle block x57 y126 w846 h72 holding an eyebrow label and four 12pt step lines in two columns (x273, x597); eyebrow at y216; dense 12pt table at y234, columns 54/198/378/216, header rule plus hairline rows."
+    },
+    {
+      "key": "toc/levels-columns",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Hierarchical contents in three columns, two sections each, 3-4 indented subsections.",
+      "pptx": "Section header (number+title) with indented 14 pt subsection lines, ruled between rows."
+    },
+    {
+      "key": "toc/levels-pages",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Hierarchical contents with dotted leaders and right-aligned page numbers. Rebuilt on the toclist node (exact dot leaders, mono page numbers).",
+      "pptx": "Two columns; dotted connector leaders between text end and right-aligned page numbers (schedule keys); leader start is estimated from text length. Use toclist (see _frames toclist): tabbed rows with dot leaders."
+    },
+    {
+      "key": "toc/levels-split",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Hierarchical contents in tall-right split frame; subsections run in on one line.",
+      "pptx": "Split tall-right: title, lead and photo in short column; six 72 pt rows in tall column."
+    },
+    {
+      "key": "toc/narrative-columns",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Contents: two columns of three sections with descriptions. Round 21: Description text blocks narrowed from 360 to 342 pt so each ends 36 pt before the next column and 18 pt inside the rule edge.",
+      "pptx": "Two 414 pt columns; ruled blocks 108 pt tall with number, title and two-line description. Round 21: Description width 342 pt."
+    },
+    {
+      "key": "toc/narrative-panel",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Contents: left inverse panel with breakout photo and narrative rows (agenda/index feel). Round 21: Description width 444 to 426 pt (18 pt inside the rule edge).",
+      "pptx": "Left panel rail, photo breaking the panel edge, six 72 pt rows at x 417; compact density. Round 21: Description width 426 pt."
+    },
+    {
+      "key": "toc/narrative-rows",
+      "family": "covers",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Contents: full-width numbered rows with a description each.",
+      "pptx": "Eyebrow+title header; six ruled rows (mono blue number, 18 pt semibold title, 14 pt secondary description in 441 pt column). Comfortable density."
     },
     {
       "key": "adr/left",
@@ -2980,6 +3208,105 @@
       "rev": 2,
       "summary": "Survey heat map, split with narrative: A tall survey heat map in the wide column, with the finding and three short points beside the title. Density migration (2026-10-06): removed 1 component-level small override; slide density compact. Every component now shares the slide's typography.",
       "pptx": "Build a heat-shaded grid: each cell is filled from the five-step ramp (seq = light gray-blue to Blue to Grounded, White text on steps 3-4; risk = neutral to Magenta, Grounded text), with a thin white gap, centered mono value or short word; step = round(value/max*4). Split frame: title zone covers the short column only; the tall column runs from y 36. Density migration: Set slide density \"compact\" (body 12/17, small 11/15, subhead 16/21, label 8/11, table cells 12/10 per tokens.density); title zone stays comfortable. Drop the per-component small sizes on: bullets at x 57 y 180 (“Clinicians struggle most.”) size=small. Those nodes now take the slide's body/small roles, so their text size is unchanged (12 pt) while the other text on the slide steps down to the same scale. Geometry unchanged."
+    },
+    {
+      "key": "index-appendix/full",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Appendix index on one page: twelve numbered appendix items with a short description of what each contains and its page.",
+      "pptx": "Build to the template slide JSON: table with the listed columns, tag chips and row groups; stamp and page number as in the slide."
+    },
+    {
+      "key": "index-exhibits/list",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "List of exhibits, figures and tables for a long deck: twenty numbered exhibits in two columns, each with its title and page.",
+      "pptx": "Build to the template slide JSON: toclist columns (section header rows with blue mono number and range, indented slide rows, dotted leader, right-aligned mono page); stamp and page number as in the slide."
+    },
+    {
+      "key": "index-sections/nav",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Index of one section on the nav rail: the rail shows which section, and the section's slides are listed in three grouped columns with page numbers and neighbouring sections below.",
+      "pptx": "Build to the template slide JSON: toclist columns (section header rows with blue mono number and range, indented slide rows, dotted leader, right-aligned mono page); stamp and page number as in the slide."
+    },
+    {
+      "key": "index-sections/overview",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "One-page map of a long deck: each section with its numbered badge, what it covers, page range, slide count and share of the deck.",
+      "pptx": "Build to the template slide JSON: table with the listed columns, tag chips and row groups; stamp and page number as in the slide."
+    },
+    {
+      "key": "index-slides/continued",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Continuation page of the slide index: same two-column grid, section headers marked 'continued' where a section carries over from the previous page, and 'Index 2 of 3' in the stamp.",
+      "pptx": "Build to the template slide JSON: toclist columns (section header rows with blue mono number and range, indented slide rows, dotted leader, right-aligned mono page); stamp and page number as in the slide."
+    },
+    {
+      "key": "index-slides/continued-last",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Final page of the slide index: the last sections including the appendix, with 'Index 3 of 3' in the stamp.",
+      "pptx": "Build to the template slide JSON: toclist columns (section header rows with blue mono number and range, indented slide rows, dotted leader, right-aligned mono page); stamp and page number as in the slide."
+    },
+    {
+      "key": "index-slides/page",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "First page of a multi-page slide index for a long deck: about 24 slides in two columns, grouped by section with a numbered section header and page range, each slide with its title and page.",
+      "pptx": "Build to the template slide JSON: toclist columns (section header rows with blue mono number and range, indented slide rows, dotted leader, right-aligned mono page); stamp and page number as in the slide."
+    },
+    {
+      "key": "index-slides/thumbnails",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Visual slide index: twelve small slide thumbnails per page in two section bands of six, each captioned with its number and title.",
+      "pptx": "Build to the template slide JSON: table with the listed columns, tag chips and row groups; stamp and page number as in the slide."
+    },
+    {
+      "key": "index-slides/with-type",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Slide index as a table: slide reference, title, a short type tag and page, grouped by section with vertical row-group cells; first of a multi-page set.",
+      "pptx": "Build to the template slide JSON: table with the listed columns, tag chips and row groups; stamp and page number as in the slide."
+    },
+    {
+      "key": "index-slides/with-type-continued",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Continuation page of the typed slide index: the section group carries over from the previous page and the stamp shows the page of pages.",
+      "pptx": "Build to the template slide JSON: table with the listed columns, tag chips and row groups; stamp and page number as in the slide."
+    },
+    {
+      "key": "index-topics/alphabetical",
+      "family": "indexes",
+      "change": "added",
+      "date": "2026-10-09",
+      "rev": 1,
+      "summary": "Back-of-book topic index: forty-five terms in three alphabetical columns with a blue letter at each new initial, a dotted leader and the pages where the term appears.",
+      "pptx": "Build to the template slide JSON: toclist columns (section header rows with blue mono number and range, indented slide rows, dotted leader, right-aligned mono page); stamp and page number as in the slide."
     },
     {
       "key": "interviews-access/board",

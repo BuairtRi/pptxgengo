@@ -6,6 +6,7 @@
       "name": "Openers",
       "families": [
         "covers",
+        "indexes",
         "understanding"
       ]
     },
@@ -63,13 +64,29 @@
       "name": "Covers and section dividers",
       "summary": "Covers, agendas, section dividers and closings: the slides that open and structure a deck.",
       "file": "templates/library/covers.json",
-      "count": 28,
+      "count": 52,
       "sections": [
-        "Covers and closings",
+        "Covers",
+        "Tables of contents",
         "Agendas",
         "Deck and section guides",
         "Section dividers",
-        "Progress dividers"
+        "Progress dividers",
+        "Appendix",
+        "Closings"
+      ]
+    },
+    {
+      "id": "indexes",
+      "name": "Indexes",
+      "summary": "Multi-page indexes for long decks: slide-by-slide indexes (dense lists, typed tables and thumbnails), section maps, an A to Z topic index, an exhibit list and an appendix index, for the sample Northfield Health System proposal.",
+      "file": "templates/library/indexes.json",
+      "count": 11,
+      "sections": [
+        "Slide indexes",
+        "Section indexes",
+        "Topic and exhibit indexes",
+        "Appendix indexes"
       ]
     },
     {
@@ -475,7 +492,7 @@
       "key": "cover/photo",
       "name": "Cover · photo with contacts",
       "family": "covers",
-      "section": "Covers and closings",
+      "section": "Covers",
       "tier": "core",
       "frame": "none rail · compact footer",
       "surface": "light",
@@ -515,7 +532,7 @@
       "key": "cover/grid",
       "name": "Cover · whiteboard grid and stat square",
       "family": "covers",
-      "section": "Covers and closings",
+      "section": "Covers",
       "tier": "core",
       "frame": "none rail · compact footer",
       "surface": "light",
@@ -553,7 +570,7 @@
       "key": "agenda/index",
       "name": "Agenda · left panel with photo",
       "family": "covers",
-      "section": "Agendas",
+      "section": "Tables of contents",
       "tier": "core",
       "frame": "left rail · compact footer",
       "surface": "light",
@@ -1482,9 +1499,9 @@
         "marks": 0
       },
       "legacy": "new 2026-10-03; from pick-deck mapping",
-      "rev": 2,
+      "rev": 3,
       "added": "2026-10-03",
-      "revised": "2026-10-03",
+      "revised": "2026-10-09",
       "status": "active",
       "replacedBy": null
     },
@@ -1492,7 +1509,7 @@
       "key": "closing/tagline",
       "name": "Closing · tagline",
       "family": "covers",
-      "section": "Covers and closings",
+      "section": "Closings",
       "tier": "core",
       "frame": "none rail · compact footer",
       "surface": "inverse",
@@ -1519,6 +1536,1310 @@
       "legacy": "closing",
       "rev": 1,
       "added": null,
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "toc/narrative-rows",
+      "name": "Contents · numbered rows with narrative",
+      "family": "covers",
+      "section": "Tables of contents",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Classic table of contents for a proposal: each section is a numbered row with a one- to two-sentence description of what it contains.",
+      "nodes": [
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "text.block",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "sections"
+      ],
+      "budget": {
+        "words": 106,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "toc/narrative-columns",
+      "name": "Contents · two columns with narrative",
+      "family": "covers",
+      "section": "Tables of contents",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Table of contents in two columns of three sections; each shows its number, title and a short description of what it contains.",
+      "nodes": [
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "text.block",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "sections"
+      ],
+      "budget": {
+        "words": 108,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "toc/narrative-panel",
+      "name": "Contents · left panel with photo and narrative",
+      "family": "covers",
+      "section": "Tables of contents",
+      "tier": "core",
+      "frame": "left rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Table of contents on the agenda/index layout: the title on a dark left panel with a breakout photo, and six numbered sections with a short description each.",
+      "nodes": [
+        "imageframe",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "list.set (numbered rows)",
+        "image.frame",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "intro",
+        "sections",
+        "photo"
+      ],
+      "budget": {
+        "words": 113,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "toc/levels-columns",
+      "name": "Contents · two levels in three columns",
+      "family": "covers",
+      "section": "Tables of contents",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Hierarchical table of contents: six top-level sections in three columns, each with three or four indented subsections beneath.",
+      "nodes": [
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "text.block",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "sections"
+      ],
+      "budget": {
+        "words": 84,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "toc/levels-pages",
+      "name": "Contents · two levels with leaders and page numbers",
+      "family": "covers",
+      "section": "Tables of contents",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Printed-style table of contents: section headings with subsections beneath, dotted leaders and right-aligned page numbers.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "text.block",
+        "schedule",
+        "connector (dotted leader)"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "sections"
+      ],
+      "budget": {
+        "words": 112,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "toc/levels-split",
+      "name": "Contents · split frame with detail",
+      "family": "covers",
+      "section": "Tables of contents",
+      "tier": "core",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Split-frame table of contents: the title and a photo in the short column, and six section rows in the tall column, each with its subsections run in on one line.",
+      "nodes": [
+        "imageframe",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "text.block",
+        "image.frame"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "intro",
+        "sections",
+        "photo"
+      ],
+      "budget": {
+        "words": 110,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "divider/progress-contents",
+      "name": "Divider · progress contents",
+      "family": "covers",
+      "section": "Progress dividers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Section or progress divider styled as a contents list: the current section is highlighted on a Grounded bar and opens to show its subsections; the other sections stay as a quiet list.",
+      "nodes": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.display",
+        "block",
+        "rule",
+        "list.set"
+      ],
+      "slots": [
+        "number",
+        "title",
+        "intro",
+        "sections",
+        "active"
+      ],
+      "budget": {
+        "words": 51,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "cover/inverse",
+      "name": "Cover · inverse full bleed",
+      "family": "covers",
+      "section": "Covers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "inverse",
+      "density": "comfortable",
+      "purpose": "Opening slide on Grounded Blue: reversed logo, client, display title, preparer, two contacts and date, beside a field of dots.",
+      "nodes": [
+        "logo",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "text.block",
+        "grid.whiteboard"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "preparedBy",
+        "contacts",
+        "date"
+      ],
+      "budget": {
+        "words": 30,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "cover/split-photo",
+      "name": "Cover · half-page photo",
+      "family": "covers",
+      "section": "Covers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Opening slide with the photo filling the right half edge to edge and the title, preparer and contacts on White.",
+      "nodes": [
+        "imageframe",
+        "logo",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "text.block",
+        "image.frame"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "preparedBy",
+        "contacts",
+        "photo"
+      ],
+      "budget": {
+        "words": 25,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "cover/type-grid",
+      "name": "Cover · type only on the whiteboard grid",
+      "family": "covers",
+      "section": "Covers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Minimal cover: no photo, a large display title on White over a field of dots, with a ruled row of preparer, contacts and date beneath.",
+      "nodes": [
+        "logo",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "grid.whiteboard",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "preparedBy",
+        "contacts",
+        "date"
+      ],
+      "budget": {
+        "words": 30,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "cover/breakout",
+      "name": "Cover · deep panel with photo breakout",
+      "family": "covers",
+      "section": "Covers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Opening slide with a Grounded panel on the left holding the logo and title, and a photo square breaking across the panel edge onto a field of dots.",
+      "nodes": [
+        "block",
+        "logo",
+        "square",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "logo",
+        "header.display",
+        "image.square",
+        "grid.whiteboard"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "preparedBy",
+        "contacts",
+        "photo"
+      ],
+      "budget": {
+        "words": 27,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "cover/proposal-rfp",
+      "name": "Cover · proposal with RFP reference",
+      "family": "covers",
+      "section": "Covers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Proposal cover for a formal bid: the RFP reference leads the title, and a tinted panel carries the reference, issuer, submission date and validity.",
+      "nodes": [
+        "block",
+        "logo",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "text.block",
+        "block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "preparedBy",
+        "contacts",
+        "rfpFacts"
+      ],
+      "budget": {
+        "words": 44,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "cover/workshop",
+      "name": "Cover · workshop or readout",
+      "family": "covers",
+      "section": "Covers",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Opening slide for a workshop or readout: title and a working-session photo above a ruled row of date, location, participants and facilitator.",
+      "nodes": [
+        "imageframe",
+        "logo",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "text.block",
+        "image.frame",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "details",
+        "photo"
+      ],
+      "budget": {
+        "words": 34,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "closing/thank-you",
+      "name": "Closing · thank you with contacts",
+      "family": "covers",
+      "section": "Closings",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Closing slide on White: a large thank-you with a short invitation, and three role-based contacts ruled in a column.",
+      "nodes": [
+        "logo",
+        "person",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "person",
+        "rule"
+      ],
+      "slots": [
+        "title",
+        "invitation",
+        "contacts"
+      ],
+      "budget": {
+        "words": 25,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "closing/next-steps",
+      "name": "Closing · next steps and contacts",
+      "family": "covers",
+      "section": "Closings",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Closing content slide: three numbered next steps with dates beside a tinted panel of role-based contacts.",
+      "nodes": [
+        "block",
+        "rule",
+        "strongnum",
+        "text",
+        "textblock"
+      ],
+      "uses": [
+        "header.slide",
+        "list.strongnum",
+        "block",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "steps",
+        "contacts"
+      ],
+      "budget": {
+        "words": 81,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "closing/inverse-logo",
+      "name": "Closing · inverse with tagline and logo",
+      "family": "covers",
+      "section": "Closings",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "inverse",
+      "density": "comfortable",
+      "purpose": "Brand sign-off on Grounded Blue: reversed logo, thank-you line, the tagline at display size and a field of dots filling the right side.",
+      "nodes": [
+        "art",
+        "logo",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "tagline art",
+        "grid.whiteboard"
+      ],
+      "slots": [
+        "thanks",
+        "url"
+      ],
+      "budget": {
+        "words": 12,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "closing/photo",
+      "name": "Closing · full-bleed photo with panel",
+      "family": "covers",
+      "section": "Closings",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Closing slide over a full-bleed photo: a Grounded panel at lower left holds the next step and one contact.",
+      "nodes": [
+        "block",
+        "imageframe",
+        "text"
+      ],
+      "uses": [
+        "image.frame",
+        "block",
+        "text.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "nextStep",
+        "contact",
+        "photo"
+      ],
+      "budget": {
+        "words": 12,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "closing/questions",
+      "name": "Closing · questions",
+      "family": "covers",
+      "section": "Closings",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Closing slide for discussion: a large Questions line, a short invitation and two role-based contacts beside a photo square on dots.",
+      "nodes": [
+        "logo",
+        "rule",
+        "square",
+        "text"
+      ],
+      "uses": [
+        "logo",
+        "header.display",
+        "text.block",
+        "grid.squares"
+      ],
+      "slots": [
+        "title",
+        "invitation",
+        "contacts",
+        "photo"
+      ],
+      "budget": {
+        "words": 25,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "appendix/divider-light",
+      "name": "Appendix · divider on White",
+      "family": "covers",
+      "section": "Appendix",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Marks the start of the appendix on White: an oversized A, the display title Appendix, a line on what follows and a photo square over dots.",
+      "nodes": [
+        "square",
+        "text"
+      ],
+      "uses": [
+        "header.display",
+        "grid.squares"
+      ],
+      "slots": [
+        "letter",
+        "eyebrow",
+        "title",
+        "summary",
+        "photo"
+      ],
+      "budget": {
+        "words": 17,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "appendix/divider-inverse",
+      "name": "Appendix · divider inverse",
+      "family": "covers",
+      "section": "Appendix",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "inverse",
+      "density": "comfortable",
+      "purpose": "Marks the start of the appendix on Grounded Blue: an oversized A, the display title Appendix, a line on what follows and a photo square over dots.",
+      "nodes": [
+        "square",
+        "text"
+      ],
+      "uses": [
+        "header.display",
+        "grid.squares"
+      ],
+      "slots": [
+        "letter",
+        "eyebrow",
+        "title",
+        "summary",
+        "photo"
+      ],
+      "budget": {
+        "words": 17,
+        "marks": 1
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "appendix/contents",
+      "name": "Appendix · contents with page numbers",
+      "family": "covers",
+      "section": "Appendix",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Appendix contents: items A1 to A6, each with a one-line description and its page number, in ruled rows.",
+      "nodes": [
+        "rule",
+        "schedule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "text.block",
+        "rule",
+        "schedule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "items"
+      ],
+      "budget": {
+        "words": 76,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "appendix/reference-divider",
+      "name": "Appendix · reference material divider",
+      "family": "covers",
+      "section": "Appendix",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Divider for a reference block inside the appendix: a Grounded panel with the title, and the four items it holds listed beside it.",
+      "nodes": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "block",
+        "header.display",
+        "text.block",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "summary",
+        "items"
+      ],
+      "budget": {
+        "words": 63,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "guide/section-guide-nav",
+      "name": "Guide · section opener · nav rail",
+      "family": "covers",
+      "section": "Deck and section guides",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Section guide that shows the current section on the nav rail instead of a strip: a short narrative, then an index with one row per slide (number, title, the point it makes, when to use it). Not for clients.",
+      "nodes": [
+        "table",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "stamp",
+        "table",
+        "text",
+        "rail.nav"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "stamp",
+        "narrative",
+        "index",
+        "active",
+        "nav"
+      ],
+      "budget": {
+        "words": 162,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "guide/section-opener-nav",
+      "name": "Guide · section opener · nav rail",
+      "family": "covers",
+      "section": "Deck and section guides",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Guide-style section opener that uses the nav rail to show the current section: the section title, a short narrative of the section and a list of the slides inside, one line each.",
+      "nodes": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "stamp",
+        "block",
+        "text",
+        "rule",
+        "rail.nav"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "stamp",
+        "headline",
+        "narrative",
+        "slides",
+        "nav",
+        "active"
+      ],
+      "budget": {
+        "words": 162,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/page",
+      "name": "Slide index · two columns, first page",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "First page of a multi-page slide index for a long deck: about 24 slides in two columns, grouped by section with a numbered section header and page range, each slide with its title and page.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section header",
+        "slide row",
+        "page of pages"
+      ],
+      "budget": {
+        "words": 149,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/continued",
+      "name": "Slide index · continued page",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Continuation page of the slide index: same two-column grid, section headers marked 'continued' where a section carries over from the previous page, and 'Index 2 of 3' in the stamp.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section header",
+        "slide row",
+        "page of pages"
+      ],
+      "budget": {
+        "words": 124,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/continued-last",
+      "name": "Slide index · last page",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Final page of the slide index: the last sections including the appendix, with 'Index 3 of 3' in the stamp.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section header",
+        "slide row",
+        "page of pages"
+      ],
+      "budget": {
+        "words": 121,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/with-type",
+      "name": "Slide index · table with type",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Slide index as a table: slide reference, title, a short type tag and page, grouped by section with vertical row-group cells; first of a multi-page set.",
+      "nodes": [
+        "num",
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table.standard",
+        "rowGroups"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "row",
+        "section group"
+      ],
+      "budget": {
+        "words": 142,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/with-type-continued",
+      "name": "Slide index · table with type, continued",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Continuation page of the typed slide index: the section group carries over from the previous page and the stamp shows the page of pages.",
+      "nodes": [
+        "num",
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table.standard",
+        "rowGroups"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "row",
+        "section group"
+      ],
+      "budget": {
+        "words": 128,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/thumbnails",
+      "name": "Slide index · thumbnails",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Visual slide index: twelve small slide thumbnails per page in two section bands of six, each captioned with its number and title.",
+      "nodes": [
+        "grouplabel",
+        "rule",
+        "thumbnail"
+      ],
+      "uses": [
+        "thumbnail",
+        "grouplabel",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section band",
+        "thumbnail"
+      ],
+      "budget": {
+        "words": 80,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-sections/overview",
+      "name": "Section map · pages, slides and share",
+      "family": "indexes",
+      "section": "Section indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "One-page map of a long deck: each section with its numbered badge, what it covers, page range, slide count and share of the deck.",
+      "nodes": [
+        "allocation",
+        "num",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table.standard",
+        "allocation"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section row",
+        "summary line"
+      ],
+      "budget": {
+        "words": 122,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-sections/nav",
+      "name": "Section index · nav rail",
+      "family": "indexes",
+      "section": "Section indexes",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Index of one section on the nav rail: the rail shows which section, and the section's slides are listed in three grouped columns with page numbers and neighbouring sections below.",
+      "nodes": [
+        "block",
+        "text",
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist",
+        "shape.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "group",
+        "slide row",
+        "neighbours",
+        "nav"
+      ],
+      "budget": {
+        "words": 106,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-topics/alphabetical",
+      "name": "Topic index · A to Z, three columns",
+      "family": "indexes",
+      "section": "Topic and exhibit indexes",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "dense",
+      "purpose": "Back-of-book topic index: forty-five terms in three alphabetical columns with a blue letter at each new initial, a dotted leader and the pages where the term appears.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "term"
+      ],
+      "budget": {
+        "words": 171,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-exhibits/list",
+      "name": "Exhibit index · figures and tables",
+      "family": "indexes",
+      "section": "Topic and exhibit indexes",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "List of exhibits, figures and tables for a long deck: twenty numbered exhibits in two columns, each with its title and page.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "exhibit"
+      ],
+      "budget": {
+        "words": 115,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-appendix/full",
+      "name": "Appendix index · A1 to A12",
+      "family": "indexes",
+      "section": "Appendix indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Appendix index on one page: twelve numbered appendix items with a short description of what each contains and its page.",
+      "nodes": [
+        "num",
+        "table",
+        "tag",
+        "text"
+      ],
+      "uses": [
+        "table.standard",
+        "tag"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "item"
+      ],
+      "budget": {
+        "words": 171,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
       "revised": null,
       "status": "active",
       "replacedBy": null
