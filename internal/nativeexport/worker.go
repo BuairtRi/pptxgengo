@@ -64,13 +64,22 @@ func writeRenderFailure(failure renderFailure) error {
 	if err = os.MkdirAll(out, 0755); err != nil {
 		return err
 	}
-	path := filepath.Join(out, "render-error.txt")
-	if info, e := os.Lstat(path); e == nil && !info.Mode().IsRegular() {
-		return fmt.Errorf("render-error.txt is not a regular file")
-	} else if e != nil && !os.IsNotExist(e) {
-		return e
+	for _, name := range []string{"render-error.txt", "render-error.json"} {
+		path := filepath.Join(out, name)
+		if info, e := os.Lstat(path); e == nil && !info.Mode().IsRegular() {
+			return fmt.Errorf("%s is not a regular file", name)
+		} else if e != nil && !os.IsNotExist(e) {
+			return e
+		}
 	}
-	return os.WriteFile(path, []byte(failure.Message+"\n"), 0644)
+	if err = os.WriteFile(filepath.Join(out, "render-error.txt"), []byte(failure.Message+"\n"), 0644); err != nil {
+		return err
+	}
+	data, err := json.MarshalIndent(classifyNativeFailure(failure.Message, failure.TaskID), "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(out, "render-error.json"), append(data, '\n'), 0644)
 }
 
 var validTaskID = regexp.MustCompile(`^\.native-work-[0-9a-f]{32}$`)
