@@ -28,7 +28,7 @@ workflow:
 
 developer:
   stage: test
-  image: golang:1.27.1
+  image: golang:1.27.2
   timeout: 10 minutes
   interruptible: true
   variables:
@@ -102,7 +102,7 @@ developer-race:
 
 installation-process:
   stage: test
-  image: golang:1.27.1
+  image: golang:1.27.2
   timeout: 10 minutes
   interruptible: true
   variables:
@@ -150,7 +150,7 @@ installation-process-arm64:
 
 workflow-lint:
   stage: test
-  image: golang:1.27.1
+  image: golang:1.27.2
   timeout: 5 minutes
   interruptible: true
   # A pod startup failure does not execute CI validation. Retry infrastructure
@@ -170,7 +170,7 @@ workflow-lint:
 
 offline-model:
   stage: test
-  image: golang:1.27.1
+  image: golang:1.27.2
   timeout: 15 minutes
   interruptible: true
   variables:
@@ -385,7 +385,7 @@ security:offline-model:
 composition-catalog:
   stage: test
   needs: []
-  image: golang:1.27.1
+  image: golang:1.27.2
   timeout: 15 minutes
   interruptible: true
   variables:

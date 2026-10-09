@@ -1,7 +1,7 @@
 # Private native execution; no ordinary branch/main push uses a scarce desktop runner.
 cross-platform-build:
   stage: test
-  image: golang:1.27.1
+  image: golang:1.27.2
   timeout: 15 minutes
   interruptible: true
   variables:
@@ -125,7 +125,7 @@ windows-cli-arm64:
     - when: never
 
 # Intel native execution is available when a private Intel Mac runner is added.
-# Its Go 1.27.1 toolchain must be provisioned by the runner owner.
+# Its Go 1.27.2 toolchain must be provisioned by the runner owner.
 .native-macos-intel:
   extends: .native-macos
   tags: [macos, darwin-amd64]
@@ -136,7 +136,7 @@ windows-cli-arm64:
       allow_failure: false
     - when: never
   before_script:
-    - test "$(go version)" = 'go version go1.27.1 darwin/amd64'
+    - test "$(go version)" = 'go version go1.27.2 darwin/amd64'
     - mkdir -p "$WMDS_BRANDING_ROOT"
 
 macos-intel-cli:

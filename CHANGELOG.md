@@ -5,6 +5,8 @@ release pipeline's UTC date; release tags and signed artifacts are immutable.
 
 ## Unreleased — v4.3.0 candidate
 
+- Pin release builds and CI to Go 1.27.2 to resolve the pre-tag standard-library vulnerability findings.
+
 - Add quantitative chart composition, exact decimal commercial models and explicit mappings that keep generated pricing summaries consistent with authored facts.
 - Add measured layer stacks, maturity and staffing curves, branching processes, road forks, journeys and portfolio roadmaps with stable identities and guarded changes to counts, scales and topology.
 - Add keyed component/table customization and specialized runbooks covering every catalog family; retain template provenance, source geometry and explicit schematic media aliases.
