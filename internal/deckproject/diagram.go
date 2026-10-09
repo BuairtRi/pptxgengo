@@ -33,6 +33,7 @@ type DiagramPatch struct {
 	Operations []DiagramOperation `json:"operations"`
 }
 type DiagramInspection struct {
+	Routing             *DiagramRoutingInspection                `json:"routing,omitempty"`
 	Containment         []wmdesign.DiagramContainmentObservation `json:"containment,omitempty"`
 	Overlaps            []DiagramOverlap                         `json:"overlaps,omitempty"`
 	SourceGeometryBasis map[string]string                        `json:"source_geometry_basis"`
@@ -188,6 +189,7 @@ func InspectDiagram(p *Project, id, bundle, engine string) (DiagramInspection, e
 	if e = addDiagramPorts(&out, c.Document); e != nil {
 		return out, e
 	}
+	addDiagramRoutingDiagnostics(&out, objects, s.DiagramContainment)
 	out.Warnings = append(out.Warnings, report.Warnings...)
 	return out, nil
 }

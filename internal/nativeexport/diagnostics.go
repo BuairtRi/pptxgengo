@@ -347,18 +347,23 @@ func doctorFileAccess(ctx context.Context, root, taskID string, run runner) Diag
 func exportFailure(err error, taskPath string) error {
 	message := strings.ToLower(err.Error())
 	stagingRoot := filepath.Dir(taskPath)
+	evidence := classifyNativeFailure(err.Error(), "")
+	prefix := "PowerPoint native operation failed"
+	if evidence.Phase != "unknown" {
+		prefix += " during " + evidence.Phase
+	}
 	switch {
 	case strings.Contains(message, "-10827"):
-		return fmt.Errorf("PowerPoint PDF export failed: application_dispatch_failed (-10827): this caller could not send an operational command to PowerPoint; file-access and Automation permission are unconfirmed. Open PowerPoint from the signed-in macOS desktop and rerun render-doctor from that same user session: %w", err)
+		return fmt.Errorf("%s: application_dispatch_failed (-10827): this caller could not send an operational command to PowerPoint; file-access and Automation permission are unconfirmed. Open PowerPoint from the signed-in macOS desktop and rerun render-doctor from that same user session: %w", prefix, err)
 	case strings.Contains(message, "-1743") || strings.Contains(message, "not authorized") || strings.Contains(message, "automation denied"):
-		return fmt.Errorf("PowerPoint PDF export failed: automation_denied: allow the calling terminal or agent host in System Settings > Privacy & Security > Automation > Microsoft PowerPoint: %w", err)
-	case strings.Contains(message, "file_access_denied") || strings.Contains(message, "permission denied"):
-		return fmt.Errorf("PowerPoint PDF export failed: file_access_denied for %s; select/grant PowerPoint access to the stable staging folder %s, then rerun render-doctor with that same --staging-dir: %w", taskPath, stagingRoot, err)
+		return fmt.Errorf("%s: automation_denied: allow the calling terminal or agent host in System Settings > Privacy & Security > Automation > Microsoft PowerPoint: %w", prefix, err)
+	case strings.Contains(message, "file_access_denied"):
+		return fmt.Errorf("%s: file_access_denied for %s; select/grant PowerPoint access to the stable staging folder %s, then rerun render-doctor with that same --staging-dir: %w", prefix, taskPath, stagingRoot, err)
 	case strings.Contains(message, "identity_ambiguous"):
-		return fmt.Errorf("PowerPoint PDF export failed: multiple presentations identify the exact task copy; close duplicate task copies and rerun: %w", err)
+		return fmt.Errorf("%s: multiple presentations identify the exact task copy; close duplicate task copies and rerun: %w", prefix, err)
 	case strings.Contains(message, "open_identity_timeout") || strings.Contains(message, "-1712") || strings.Contains(message, "deadline exceeded"):
-		return fmt.Errorf("PowerPoint PDF export failed: PowerPoint did not answer or identify the task copy within the bounded wait; a blocking dialog or file-access prompt is possible but unconfirmed. Inspect PowerPoint, grant access to the stable staging folder %s if requested, then rerun: %w", stagingRoot, err)
+		return fmt.Errorf("%s: PowerPoint did not answer or identify the task copy within the bounded wait; a blocking dialog or file-access prompt is possible but unconfirmed. Inspect PowerPoint, grant access to the stable staging folder %s if requested, then rerun: %w", prefix, stagingRoot, err)
 	default:
-		return fmt.Errorf("PowerPoint PDF export failed: %w", err)
+		return fmt.Errorf("%s: %s; cause unconfirmed. Basic Apple-event delivery does not prove document access; preserve this error and the exact staging folder for diagnosis: %w", prefix, evidence.Classification, err)
 	}
 }

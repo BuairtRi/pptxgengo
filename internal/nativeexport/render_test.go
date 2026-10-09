@@ -182,7 +182,7 @@ func TestRenderFailures(t *testing.T) {
 		want           string
 	}{
 		{"unsupported", "linux", nil, "requires macOS"},
-		{"native-error", "darwin", func(context.Context, string, ...string) ([]byte, error) { return nil, errors.New("automation denied") }, "PowerPoint PDF export failed"},
+		{"native-error", "darwin", func(context.Context, string, ...string) ([]byte, error) { return nil, errors.New("automation denied") }, "PowerPoint native operation failed"},
 		{"missing-pdf", "darwin", func(context.Context, string, ...string) ([]byte, error) { return nil, nil }, "without a PDF"},
 		{"bad-pdf", "darwin", func(_ context.Context, _ string, args ...string) ([]byte, error) {
 			return nil, os.WriteFile(args[2], []byte("bad"), 0600)

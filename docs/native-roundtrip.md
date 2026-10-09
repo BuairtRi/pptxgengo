@@ -1,5 +1,8 @@
 # Native PowerPoint round-trip qualification fixture
 
+For phase-specific failures, separate GUI/Apple-event/file evidence and a
+resumption checklist, see [PowerPoint automation diagnostics](powerpoint-automation-diagnostics.md).
+
 This harness exercises the handoff's Save As, three supported text edits and
 slide reordering criteria against a disposable synthetic project. It records
 actual package identity/text/order

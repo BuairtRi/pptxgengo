@@ -3,6 +3,8 @@
 use framework "Foundation"
 use scripting additions
 on run argv
+ set nativePhase to "prepare_identity"
+ try
  set sourceFile to POSIX file (item 1 of argv)
  set pdfFile to POSIX file (item 2 of argv)
  set secondsAllowed to (item 4 of argv) as integer
@@ -20,15 +22,17 @@ on run argv
  with timeout of secondsAllowed seconds
   tell application "/Applications/Microsoft PowerPoint.app"
    if not closeOnly then
+    set nativePhase to "open_document"
     try
      with timeout of 12 seconds
       open sourceFile
      end timeout
     on error messageText number errorNumber
-     if errorNumber is -1712 then error "open_identity_timeout: PowerPoint open did not answer; inspect PowerPoint for a blocking dialog or file-access prompt" number 67
+     if errorNumber is -1712 then error "open_identity_timeout: PowerPoint open did not answer; inspect PowerPoint for a blocking dialog or file-access prompt" number errorNumber
      error messageText number errorNumber
     end try
    end if
+   set nativePhase to "identify_document"
    set matchedIndex to 0
    repeat with attempt from 1 to 40
     set matchCount to 0
@@ -50,24 +54,32 @@ on run argv
    if matchCount is not 1 then error "open_identity_timeout: no presentation identified the exact task-copy file within 10 seconds" number 67
    set taskPresentation to presentation matchedIndex
    if closeOnly or probeOnly then
+    set nativePhase to "close_document"
     if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before cleanup" number 68
     close taskPresentation saving no
     return
    end if
    try
+    set nativePhase to "export_pdf"
     if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before export" number 68
     save taskPresentation in pdfFile as save as PDF
    on error messageText number errorNumber
+    set failedPhase to nativePhase
     try
      if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before error cleanup" number 68
      close taskPresentation saving no
     end try
+    set nativePhase to failedPhase
     error messageText number errorNumber
    end try
+   set nativePhase to "close_document"
    if my fileIdentity(full name of taskPresentation) is not expectedIdentity then error "identity_changed: task presentation index changed before close" number 68
    close taskPresentation saving no
   end tell
  end timeout
+ on error messageText number errorNumber
+  error "native_phase=" & nativePhase & "; native_error_code=" & errorNumber & "; " & messageText number errorNumber
+ end try
 end run
 
 on fileIdentity(livePath)
