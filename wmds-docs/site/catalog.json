@@ -6,6 +6,7 @@
       "name": "Openers",
       "families": [
         "covers",
+        "indexes",
         "understanding"
       ]
     },
@@ -63,7 +64,7 @@
       "name": "Covers and section dividers",
       "summary": "Covers, agendas, section dividers and closings: the slides that open and structure a deck.",
       "file": "templates/library/covers.json",
-      "count": 51,
+      "count": 52,
       "sections": [
         "Covers",
         "Tables of contents",
@@ -73,6 +74,19 @@
         "Progress dividers",
         "Appendix",
         "Closings"
+      ]
+    },
+    {
+      "id": "indexes",
+      "name": "Indexes",
+      "summary": "Multi-page indexes for long decks: slide-by-slide indexes (dense lists, typed tables and thumbnails), section maps, an A to Z topic index, an exhibit list and an appendix index, for the sample Northfield Health System proposal.",
+      "file": "templates/library/indexes.json",
+      "count": 11,
+      "sections": [
+        "Slide indexes",
+        "Section indexes",
+        "Topic and exhibit indexes",
+        "Appendix indexes"
       ]
     },
     {
@@ -1485,9 +1499,9 @@
         "marks": 0
       },
       "legacy": "new 2026-10-03; from pick-deck mapping",
-      "rev": 2,
+      "rev": 3,
       "added": "2026-10-03",
-      "revised": "2026-10-03",
+      "revised": "2026-10-09",
       "status": "active",
       "replacedBy": null
     },
@@ -1705,40 +1719,6 @@
       "replacedBy": null
     },
     {
-      "key": "toc/levels-blocks",
-      "name": "Contents · section blocks",
-      "family": "covers",
-      "section": "Tables of contents",
-      "tier": "core",
-      "frame": "none rail · compact footer",
-      "surface": "light",
-      "density": "compact",
-      "purpose": "Grid of section blocks: each block has a Grounded header band with the section number and title and its subsections listed beneath.",
-      "nodes": [
-        "card"
-      ],
-      "uses": [
-        "header.slide",
-        "card.band",
-        "list.bullets"
-      ],
-      "slots": [
-        "eyebrow",
-        "title",
-        "sections"
-      ],
-      "budget": {
-        "words": 90,
-        "marks": 0
-      },
-      "legacy": "new 2026-10-09",
-      "rev": 1,
-      "added": "2026-10-09",
-      "revised": null,
-      "status": "active",
-      "replacedBy": null
-    },
-    {
       "key": "toc/levels-split",
       "name": "Contents · split frame with detail",
       "family": "covers",
@@ -1777,15 +1757,15 @@
       "replacedBy": null
     },
     {
-      "key": "toc/you-are-here",
-      "name": "Contents · you are here",
+      "key": "divider/progress-contents",
+      "name": "Divider · progress contents",
       "family": "covers",
-      "section": "Tables of contents",
+      "section": "Progress dividers",
       "tier": "core",
       "frame": "none rail · compact footer",
       "surface": "light",
       "density": "comfortable",
-      "purpose": "Section opener built from the table of contents: the current section is highlighted on a Grounded bar and opens to show its subsections; the other sections stay as a quiet list.",
+      "purpose": "Section or progress divider styled as a contents list: the current section is highlighted on a Grounded bar and opens to show its subsections; the other sections stay as a quiet list.",
       "nodes": [
         "block",
         "rule",
@@ -2378,6 +2358,483 @@
       ],
       "budget": {
         "words": 63,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "guide/section-guide-nav",
+      "name": "Guide · section opener · nav rail",
+      "family": "covers",
+      "section": "Deck and section guides",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Section guide that shows the current section on the nav rail instead of a strip: a short narrative, then an index with one row per slide (number, title, the point it makes, when to use it). Not for clients.",
+      "nodes": [
+        "table",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "stamp",
+        "table",
+        "text",
+        "rail.nav"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "stamp",
+        "narrative",
+        "index",
+        "active",
+        "nav"
+      ],
+      "budget": {
+        "words": 162,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "guide/section-opener-nav",
+      "name": "Guide · section opener · nav rail",
+      "family": "covers",
+      "section": "Deck and section guides",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "standard",
+      "purpose": "Guide-style section opener that uses the nav rail to show the current section: the section title, a short narrative of the section and a list of the slides inside, one line each.",
+      "nodes": [
+        "block",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "header.slide",
+        "stamp",
+        "block",
+        "text",
+        "rule",
+        "rail.nav"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "stamp",
+        "headline",
+        "narrative",
+        "slides",
+        "nav",
+        "active"
+      ],
+      "budget": {
+        "words": 162,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/page",
+      "name": "Slide index · two columns, first page",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "First page of a multi-page slide index for a long deck: about 24 slides in two columns, grouped by section with a numbered section header and page range, each slide with its title and page.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section header",
+        "slide row",
+        "page of pages"
+      ],
+      "budget": {
+        "words": 149,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/continued",
+      "name": "Slide index · continued page",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Continuation page of the slide index: same two-column grid, section headers marked 'continued' where a section carries over from the previous page, and 'Index 2 of 3' in the stamp.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section header",
+        "slide row",
+        "page of pages"
+      ],
+      "budget": {
+        "words": 124,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/continued-last",
+      "name": "Slide index · last page",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Final page of the slide index: the last sections including the appendix, with 'Index 3 of 3' in the stamp.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section header",
+        "slide row",
+        "page of pages"
+      ],
+      "budget": {
+        "words": 121,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/with-type",
+      "name": "Slide index · table with type",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Slide index as a table: slide reference, title, a short type tag and page, grouped by section with vertical row-group cells; first of a multi-page set.",
+      "nodes": [
+        "num",
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table.standard",
+        "rowGroups"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "row",
+        "section group"
+      ],
+      "budget": {
+        "words": 142,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/with-type-continued",
+      "name": "Slide index · table with type, continued",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Continuation page of the typed slide index: the section group carries over from the previous page and the stamp shows the page of pages.",
+      "nodes": [
+        "num",
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table.standard",
+        "rowGroups"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "row",
+        "section group"
+      ],
+      "budget": {
+        "words": 128,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-slides/thumbnails",
+      "name": "Slide index · thumbnails",
+      "family": "indexes",
+      "section": "Slide indexes",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Visual slide index: twelve small slide thumbnails per page in two section bands of six, each captioned with its number and title.",
+      "nodes": [
+        "grouplabel",
+        "rule",
+        "thumbnail"
+      ],
+      "uses": [
+        "thumbnail",
+        "grouplabel",
+        "rule"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section band",
+        "thumbnail"
+      ],
+      "budget": {
+        "words": 80,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-sections/overview",
+      "name": "Section map · pages, slides and share",
+      "family": "indexes",
+      "section": "Section indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "One-page map of a long deck: each section with its numbered badge, what it covers, page range, slide count and share of the deck.",
+      "nodes": [
+        "allocation",
+        "num",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table.standard",
+        "allocation"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "section row",
+        "summary line"
+      ],
+      "budget": {
+        "words": 122,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-sections/nav",
+      "name": "Section index · nav rail",
+      "family": "indexes",
+      "section": "Section indexes",
+      "tier": "core",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Index of one section on the nav rail: the rail shows which section, and the section's slides are listed in three grouped columns with page numbers and neighbouring sections below.",
+      "nodes": [
+        "block",
+        "text",
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist",
+        "shape.block"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "group",
+        "slide row",
+        "neighbours",
+        "nav"
+      ],
+      "budget": {
+        "words": 106,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-topics/alphabetical",
+      "name": "Topic index · A to Z, three columns",
+      "family": "indexes",
+      "section": "Topic and exhibit indexes",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "dense",
+      "purpose": "Back-of-book topic index: forty-five terms in three alphabetical columns with a blue letter at each new initial, a dotted leader and the pages where the term appears.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "term"
+      ],
+      "budget": {
+        "words": 171,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-exhibits/list",
+      "name": "Exhibit index · figures and tables",
+      "family": "indexes",
+      "section": "Topic and exhibit indexes",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "List of exhibits, figures and tables for a long deck: twenty numbered exhibits in two columns, each with its title and page.",
+      "nodes": [
+        "toclist"
+      ],
+      "uses": [
+        "header.slide",
+        "toclist"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "exhibit"
+      ],
+      "budget": {
+        "words": 115,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-09",
+      "rev": 1,
+      "added": "2026-10-09",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "index-appendix/full",
+      "name": "Appendix index · A1 to A12",
+      "family": "indexes",
+      "section": "Appendix indexes",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "comfortable",
+      "purpose": "Appendix index on one page: twelve numbered appendix items with a short description of what each contains and its page.",
+      "nodes": [
+        "num",
+        "table",
+        "tag",
+        "text"
+      ],
+      "uses": [
+        "table.standard",
+        "tag"
+      ],
+      "slots": [
+        "eyebrow",
+        "title",
+        "item"
+      ],
+      "budget": {
+        "words": 171,
         "marks": 0
       },
       "legacy": "new 2026-10-09",
