@@ -24,7 +24,10 @@ stale source, shared/pinned templates and active native overrides.
 - `initiatives`: stable `key`, `label`, `horizon` key, `owner`, `status` key,
   explicit `confidence` label, and nonnegative `slot` within that horizon.
 - `dependencies`: stable `key`, `from`/`to` initiative keys, optional `label` and
-  component-local intermediate `route` waypoints.
+  intermediate `route` waypoints; optional `label_position` centers the measured
+  label patch. Coordinates are local to the initiative area below the 42 pt
+  horizon header, matching the existing route coordinate system. Every waypoint
+  and label anchor requires exactly two finite numbers.
 - `card_height_pt`: measured native card allocation; count limits are not fit
   guarantees. Add height or split the view rather than shrink text.
 
@@ -32,6 +35,19 @@ stale source, shared/pinned templates and active native overrides.
 `reorder` includes every key of the entity exactly once. Horizon reordering
 changes columns while dependencies and initiative membership retain identity.
 Initiative source order does not change an explicit `slot`.
+
+Dense adjacent horizons may have room for an arrow but not its label. Preview
+refuses label patches within 2 pt of cards, route segments through card bodies
+or unrelated-card clearance, and labels outside the initiative allocation.
+Preserve the intended horizon order and membership; do not move initiatives to
+different horizons to avoid a fit failure. Use `set/dependency` with the same
+key, endpoints and label to author an explicit clear detour and label position.
+For a five-horizon 846×300 pt example with 72 pt cards, Access in Now and Data in
+Next at slot 0 and another initiative at slot 1, the dependency can use
+`route: [[159.6,9], [169.2,9], [169.2,64.5]]` and
+`label_position: [169.2,9]`. This keeps its label above both cards; inspect and
+remeasure those coordinates when allocation, slots or counts change. A label
+position requires nonempty authored label text and changes geometry only.
 
 ```yaml
 schema: pptxgengo.portfolio-patch.v1

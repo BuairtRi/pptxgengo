@@ -3,7 +3,9 @@ package deckproject
 import (
 	"bytes"
 	"github.com/buairtri/pptxgengo/internal/wmdesign"
+	"math"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -71,7 +73,21 @@ func TestPortfolioCompositionFiveHorizonsAndCascade(t *testing.T) {
 	p := portfolioFixture(t)
 	op1 := PortfolioOperation{Action: "set", Entity: "horizon", Key: "discover", Horizon: &wmdesign.PortfolioHorizon{Key: "discover", Label: "Discover", Meaning: "Ideas under review"}}
 	op2 := PortfolioOperation{Action: "set", Entity: "horizon", Key: "explore", Horizon: &wmdesign.PortfolioHorizon{Key: "explore", Label: "Explore", Meaning: "Evidence needed"}}
-	if _, e := PatchPortfolio(p, "flow-slide", portfolioPatch(p, op1, op2), bundle(t), wmdesign.CandidateEngine, true); e != nil {
+	before := append([]byte{}, p.Raw...)
+	if _, err := PatchPortfolio(p, "flow-slide", portfolioPatch(p, op1, op2), bundle(t), wmdesign.CandidateEngine, true); err == nil || !strings.Contains(err.Error(), "measured outcome label") {
+		t.Fatal("unreadable adjacent dependency label accepted", err)
+	}
+	disk, _ := os.ReadFile(p.SourcePath)
+	if !bytes.Equal(before, disk) {
+		t.Fatal("refusal mutated source")
+	}
+	// Keep five horizons in their authored order and all memberships unchanged.
+	// Route the named dependency through open space above the adjacent cards.
+	dependency := portfolioTestModel().Dependencies[0]
+	dependency.Route = [][2]float64{{159.6, 9}, {169.2, 9}, {169.2, 64.5}}
+	dependency.LabelPosition = &[2]float64{169.2, 9}
+	route := PortfolioOperation{Action: "set", Entity: "dependency", Key: dependency.Key, Dependency: &dependency}
+	if _, e := PatchPortfolio(p, "flow-slide", portfolioPatch(p, op1, op2, route), bundle(t), wmdesign.CandidateEngine, true); e != nil {
 		t.Fatal(e)
 	}
 	p, _ = Load(p.SourcePath)
@@ -79,6 +95,21 @@ func TestPortfolioCompositionFiveHorizonsAndCascade(t *testing.T) {
 	if e != nil || len(m.Model.Horizons) != 5 {
 		t.Fatalf("five horizons %v", e)
 	}
+	if m.Model.Dependencies[0].From != "access" || m.Model.Dependencies[0].To != "data" || m.Model.Dependencies[0].Label != "Informs" || m.Model.Initiatives[0].Horizon != "now" || m.Model.Initiatives[1].Horizon != "next" {
+		t.Fatal("spacing changed portfolio facts")
+	}
+	for i, key := range []string{"now", "next", "later", "discover", "explore"} {
+		if m.Model.Horizons[i].Key != key {
+			t.Fatal("routing changed horizon order")
+		}
+	}
+	if !bytes.Equal(canonical(m.Model.Initiatives), canonical(portfolioTestModel().Initiatives)) || m.Model.Dependencies[0].LabelPosition == nil || *m.Model.Dependencies[0].LabelPosition != [2]float64{169.2, 9} {
+		t.Fatal("routing changed initiative facts or lost explicit label anchor")
+	}
+	if _, err := Build(p, BuildOptions{Bundle: bundle(t), Engine: wmdesign.CandidateEngine}); err != nil {
+		t.Fatal("five-horizon applied source did not build", err)
+	}
+	writeProcessJourneyQualification(t, p, "portfolio-five-horizons-explicit-dependency")
 	if e = removePortfolioInitiative(&m.Model, "access", false); e == nil {
 		t.Fatal("incident deletion accepted")
 	}
@@ -127,5 +158,93 @@ func TestPortfolioCompositionCapturedSourceGeometryRetained(t *testing.T) {
 	p, _ = Load(p.SourcePath)
 	if !bytes.Equal(canonical(geometry), canonical(p.Document.LocalTemplates["process"].Nodes[0].Arguments[wmdesign.SceneSourceGeometryArgument])) {
 		t.Fatal("source geometry lost")
+	}
+}
+
+func TestPortfolioDependencyLabelPositionStrictCoordinatesAndGuards(t *testing.T) {
+	p := portfolioFixture(t)
+	dependency := portfolioTestModel().Dependencies[0]
+	dependency.LabelPosition = &[2]float64{1, 2}
+	raw := canonical(portfolioPatch(p, PortfolioOperation{Action: "set", Entity: "dependency", Key: dependency.Key, Dependency: &dependency}))
+	for _, bad := range []string{"[1]", "[1,2,3]", "null", "[null,2]", "[\"1\",2]"} {
+		changed := bytes.Replace(raw, []byte(`"label_position":[1,2]`), []byte(`"label_position":`+bad), 1)
+		if _, err := DecodePortfolioPatch(changed, "invalid-label-anchor"); err == nil {
+			t.Fatal("invalid dependency anchor accepted", bad)
+		}
+	}
+	dependency.Route = [][2]float64{{1, 2}}
+	raw = canonical(portfolioPatch(p, PortfolioOperation{Action: "set", Entity: "dependency", Key: dependency.Key, Dependency: &dependency}))
+	for _, bad := range []string{"[[1]]", "[[1,2,3]]", "[[null,2]]", "[null]"} {
+		changed := bytes.Replace(raw, []byte(`"route":[[1,2]]`), []byte(`"route":`+bad), 1)
+		if _, err := DecodePortfolioPatch(changed, "invalid-dependency-route"); err == nil {
+			t.Fatal("invalid dependency waypoint accepted", bad)
+		}
+	}
+	before := append([]byte{}, p.Raw...)
+	for _, anchor := range [][2]float64{{141, 64.5}, {-20, 9}} {
+		dependency.Route = nil
+		dependency.LabelPosition = &anchor
+		if _, err := PatchPortfolio(p, "flow-slide", portfolioPatch(p, PortfolioOperation{Action: "set", Entity: "dependency", Key: dependency.Key, Dependency: &dependency}), bundle(t), wmdesign.CandidateEngine, true); err == nil {
+			t.Fatal("unsafe dependency label accepted", anchor)
+		}
+		disk, _ := os.ReadFile(p.SourcePath)
+		if !bytes.Equal(before, disk) {
+			t.Fatal("refusal altered source")
+		}
+	}
+	m := portfolioTestModel()
+	m.Dependencies[0].LabelPosition = &[2]float64{math.Inf(1), 9}
+	if wmdesign.ValidatePortfolio(m) == nil {
+		t.Fatal("nonfinite anchor accepted")
+	}
+	m.Dependencies[0].LabelPosition = &[2]float64{169, 9}
+	m.Dependencies[0].Label = ""
+	if wmdesign.ValidatePortfolio(m) == nil {
+		t.Fatal("unnamed dependency anchor accepted")
+	}
+}
+
+func TestPortfolioDependencyNonadjacentRoutePreservesMembership(t *testing.T) {
+	p := portfolioFixture(t)
+	before := append([]byte{}, p.Raw...)
+	dependency := wmdesign.PortfolioDependency{Key: "access-enable", From: "access", To: "enable", Label: "Supports"}
+	patch := func(d wmdesign.PortfolioDependency) PortfolioPatch {
+		return portfolioPatch(p, PortfolioOperation{Action: "set", Entity: "dependency", Key: d.Key, Dependency: &d})
+	}
+	if _, err := PatchPortfolio(p, "flow-slide", patch(dependency), bundle(t), wmdesign.CandidateEngine, true); err == nil || !strings.Contains(err.Error(), "crosses step data") {
+		t.Fatal("default route hid behind intermediate card", err)
+	}
+	dependency.Route = [][2]float64{{427, 64.5}, {427, 193.5}}
+	if _, err := PatchPortfolio(p, "flow-slide", patch(dependency), bundle(t), wmdesign.CandidateEngine, true); err == nil {
+		t.Fatal("explicit route through intermediate card accepted")
+	}
+	disk, _ := os.ReadFile(p.SourcePath)
+	if !bytes.Equal(before, disk) {
+		t.Fatal("crossing refusal changed source")
+	}
+	dependency.Route = [][2]float64{{225, 64.5}, {225, 9}, {621, 9}, {621, 193.5}}
+	dependency.LabelPosition = &[2]float64{423, 9}
+	accepted := patch(dependency)
+	if _, err := PatchPortfolio(p, "flow-slide", accepted, bundle(t), wmdesign.CandidateEngine, true); err != nil {
+		t.Fatal("clear nonadjacent route refused", err)
+	}
+	p, _ = Load(p.SourcePath)
+	inspection, err := InspectPortfolio(p, "flow-slide", "flow", bundle(t), wmdesign.CandidateEngine)
+	if err != nil || inspection.RenderError != "" {
+		t.Fatal(err, inspection.RenderError)
+	}
+	if !bytes.Equal(canonical(inspection.Model.Horizons), canonical(portfolioTestModel().Horizons)) || !bytes.Equal(canonical(inspection.Model.Initiatives), canonical(portfolioTestModel().Initiatives)) {
+		t.Fatal("routing reclassified initiatives or horizons")
+	}
+	if len(inspection.Model.Dependencies) != 2 || !bytes.Equal(canonical(inspection.Model.Dependencies[1]), canonical(dependency)) {
+		t.Fatal("clear route/label was not persistent")
+	}
+	after := append([]byte{}, p.Raw...)
+	if _, err = PatchPortfolio(p, "flow-slide", accepted, bundle(t), wmdesign.CandidateEngine, true); err == nil {
+		t.Fatal("stale route accepted")
+	}
+	disk, _ = os.ReadFile(p.SourcePath)
+	if !bytes.Equal(after, disk) {
+		t.Fatal("stale refusal changed source")
 	}
 }

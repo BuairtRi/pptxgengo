@@ -139,3 +139,59 @@ in `raster-review/process-routes-clearance-v3-native-review.json`.
 
 This final serialization used AppleScript, not GUI Save As buttons. No new
 human-style drag editing or universal native-import claim is inferred from it.
+
+## Portfolio dependency placement after count growth
+
+The final short manifest suite exposed another bounded source case: five
+horizons leave only 19.2 pt between adjacent initiative cards, insufficient for
+the named INFORMS patch. Portfolio uses the checked process renderer for its
+initiative geometry. The default collision refusal is retained; it is not
+resolved by silently moving initiatives or reclassifying their horizons.
+
+`PortfolioDependency` now forwards its existing explicit `route` and optional
+`label_position` to that measured renderer. Both use coordinates local to the
+initiative area below the 42 pt horizon header. Strict decoding requires every
+coordinate pair to contain exactly two numbers; finite/named-label, allocation,
+step-body and clearance guards remain active. Operator guidance explains the
+coordinate origin and explicit dependency patch.
+
+Focused run `897763e8e613aa3b044a6c27cee37d0d` passed source/renderer/CLI in
+5.173/0.307/1.400 seconds. It includes:
+
+- Five horizons with their original authored order, unchanged initiative
+  membership/owner/status/confidence and Access→Data INFORMS; clear route/label,
+  applied-source inspection and genuine source build.
+- Default adjacent-label collision refusal without source changes.
+- Nonadjacent dependency routing around an intervening card with unchanged
+  source facts; default/explicit crossings and stale changes refused.
+- Strict coordinate, unnamed/nonfinite anchor and out-of-allocation checks.
+- Generic CLI init/check/build/export and portable project creation workflows.
+
+The five-horizon source was exported (`94429fc11b52e461e42583248b16a9d3`) and
+genuinely migrated to the V11 bundle (`f53496392488320552abfcaf2865b36e`).
+Immutable executable SHA
+`a4d3d4f276f615dce01e4882c8bde3b4cc048becc6651f44bbee9eafd7c99e57`
+built `build-20261009T170732-8c482948127c524f`
+(`47ec23d347f09ca88181cec69c6f26c6`), source SHA
+`5b6e3f63f6cb2f7e03f27ba1091c6e9eb1797a5ad84f35afc6bc182f128ab5a4`.
+Private `v430-portfolio-five-horizons-20261009/portfolio-five-horizons-preparation.json`
+records exact inputs and preserves the test-runtime and migration predecessors.
+This count-growth input completed actual PowerPoint AppleScript Open XML Save As
+and native PDF export. The release owner and portfolio owner independently
+reviewed its 1920×1080 PNG: INFORMS is readable above Access/Data and below the
+header, all five authored horizons are clear, and all three initiative facts
+and memberships are retained without reclassification. Title/footer/frame are
+unclipped. This accepts only the named five-horizon input; the previous
+three-horizon native result remains scoped to its original input.
+
+Saved native PPTX: 45,902 bytes, SHA
+`f079861599ea3f4fa7729a5d1eb43229d386c6f2ea75e778b537d80589f31e23`.
+Native PDF: 37,139 bytes, SHA
+`a19bde6a2a6c4e521817c5d72a5da385ea61a3cd540312eee8813987e550a3e7`.
+Reviewed PNG SHA:
+`a08495c9edf02bd66fc2f57dd5b64ad7b15ab74fa45118f32876e9c25a97901f`.
+Files are `portfolio-five-horizons-native.pptx`,
+`portfolio-five-horizons-native.pdf`, and
+`portfolio-five-horizons-native/png/slide-001.png` under the private
+`v430-native-final-review-20261009` directory. This save used AppleScript, not
+GUI Save As buttons; no new GUI-drag or arbitrary-import claim is inferred.

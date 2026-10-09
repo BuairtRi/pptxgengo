@@ -1,6 +1,7 @@
 package wmdesign
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -27,12 +28,46 @@ type PortfolioInitiative struct {
 	Slot       int    `json:"slot"`
 }
 type PortfolioDependency struct {
-	Key   string       `json:"key"`
-	From  string       `json:"from"`
-	To    string       `json:"to"`
-	Label string       `json:"label,omitempty"`
-	Route [][2]float64 `json:"route,omitempty"`
+	Key           string       `json:"key"`
+	From          string       `json:"from"`
+	To            string       `json:"to"`
+	Label         string       `json:"label,omitempty"`
+	Route         [][2]float64 `json:"route,omitempty"`
+	LabelPosition *[2]float64  `json:"label_position,omitempty"`
 }
+
+func (dependency *PortfolioDependency) UnmarshalJSON(raw []byte) error {
+	type plain PortfolioDependency
+	var value plain
+	d := json.NewDecoder(bytes.NewReader(raw))
+	d.DisallowUnknownFields()
+	if err := d.Decode(&value); err != nil {
+		return err
+	}
+	// Reuse the checked process coordinate contract without accepting process
+	// outcome names or unrelated fields in the portfolio source schema.
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &fields); err != nil {
+		return err
+	}
+	coordinates := map[string]json.RawMessage{}
+	for _, key := range []string{"route", "label_position"} {
+		if v, present := fields[key]; present {
+			coordinates[key] = v
+		}
+	}
+	encoded, err := json.Marshal(coordinates)
+	if err != nil {
+		return err
+	}
+	var checked ProcessLink
+	if err = json.Unmarshal(encoded, &checked); err != nil {
+		return fmt.Errorf("portfolio dependency coordinates: %w", err)
+	}
+	*dependency = PortfolioDependency(value)
+	return nil
+}
+
 type PortfolioSpec struct {
 	Type         string                `json:"type,omitempty"`
 	X            float64               `json:"x,omitempty"`
@@ -76,6 +111,9 @@ func ValidatePortfolio(s PortfolioSpec) error {
 			return fmt.Errorf("invalid portfolio dependency %s", e.Key)
 		}
 		edges[e.Key] = true
+		if e.LabelPosition != nil && (strings.TrimSpace(e.Label) == "" || !intakeFinite(e.LabelPosition[0], e.LabelPosition[1])) {
+			return fmt.Errorf("portfolio dependency %s label_position requires a finite named label", e.Key)
+		}
 		for _, p := range e.Route {
 			if !intakeFinite(p[0], p[1]) {
 				return fmt.Errorf("nonfinite portfolio route")
@@ -166,7 +204,7 @@ func (r *renderer) planPortfolioScene(id string, raw json.RawMessage, ctx SceneC
 		pm.Steps = append(pm.Steps, ProcessStep{Key: v.Key, Label: label, Lane: fmt.Sprintf("slot-%d", v.Slot), Column: hidx[v.Horizon], Kind: "process", Surface: st.Surface})
 	}
 	for _, d := range s.Dependencies {
-		pm.Links = append(pm.Links, ProcessLink{Key: d.Key, From: d.From, To: d.To, Outcome: d.Label, Route: d.Route})
+		pm.Links = append(pm.Links, ProcessLink{Key: d.Key, From: d.From, To: d.To, Outcome: d.Label, Route: d.Route, LabelPosition: d.LabelPosition})
 	}
 	rr, _ := json.Marshal(pm)
 	child, _, e := r.planProcessScene(id+".initiatives", rr, ctx)
