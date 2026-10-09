@@ -49,11 +49,15 @@ func TestNativeFailurePhaseAndLayer(t *testing.T) {
 	if strings.Contains(message, "select/grant PowerPoint") || !strings.Contains(message, "filesystem_permission_denied") || !strings.Contains(message, "caller staging identity") {
 		t.Fatal(message)
 	}
+	message = exportFailure(errors.New("native_phase=export_pdf; native_error_code=-1712; timed out (-1712)"), "/staging/task.pptx").Error()
+	if !strings.Contains(message, "during export_pdf") || strings.Contains(message, "did not answer or identify") || strings.Contains(message, "grant access") {
+		t.Fatal("export timeout misreported as document opening/access failure", message)
+	}
 }
 
 func TestRenderFailureStructuredEvidence(t *testing.T) {
 	out := t.TempDir()
-	message := "native_phase=open_document; native_error_code=-9074; Unknown error (-9074)"
+	message := "native_last_helper_phase=open_document; native_phase=open_document; native_error_code=-9074; Unknown error (-9074)"
 	if err := writeRenderFailure(renderFailure{Out: out, Message: message, TaskID: "task"}); err != nil {
 		t.Fatal(err)
 	}
@@ -65,7 +69,7 @@ func TestRenderFailureStructuredEvidence(t *testing.T) {
 	if err = json.Unmarshal(data, &evidence); err != nil {
 		t.Fatal(err)
 	}
-	if evidence.SchemaVersion != 1 || evidence.Phase != "open_document" || evidence.ErrorCode != -9074 || evidence.CauseConfirmed || evidence.Message != message {
+	if evidence.SchemaVersion != 1 || evidence.Phase != "open_document" || evidence.LastHelperPhase != "open_document" || evidence.ErrorCode != -9074 || evidence.CauseConfirmed || evidence.Message != message {
 		t.Fatal(evidence)
 	}
 	text, err := os.ReadFile(filepath.Join(out, "render-error.txt"))

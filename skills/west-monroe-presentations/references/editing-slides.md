@@ -244,3 +244,13 @@ The command retains the raw decision and predecessor manifest in a new revision.
 It does not authenticate the reviewer or establish native acceptance. Never
 invent approval or an initial curated content set. Deprecation/draft revisions
 retain decision history; earlier inserted copies keep their original lineage.
+
+## Persist family semantics and selected imports
+
+Native movement does not infer membership, reporting, task dates or gate criteria.
+Use explicit [team](team-composition.md) or [Gantt](gantt-composition.md) source
+operations for confirmed semantic changes. For selected foreign plain-text
+rectangles, use [native imports](native-imports.md), with explicit reauthoring
+styling and retained source evidence. Preserve native findings that these routes
+do not support. Diagnose failed native operations with [PowerPoint recovery](powerpoint-recovery.md).
+These additions require the newer development CLI.

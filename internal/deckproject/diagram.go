@@ -447,8 +447,42 @@ func preserveDiagramComments(old, current *yaml.Node) {
 	current.HeadComment, current.LineComment, current.FootComment = old.HeadComment, old.LineComment, old.FootComment
 	if old.Kind == yaml.MappingNode && current.Kind == yaml.MappingNode {
 		for i := 0; i+1 < len(current.Content); i += 2 {
+			for j := 0; j+1 < len(old.Content); j += 2 {
+				if old.Content[j].Value == current.Content[i].Value {
+					preserveDiagramComments(old.Content[j], current.Content[i])
+					break
+				}
+			}
 			if v := mappingNode(old, current.Content[i].Value); v != nil {
 				preserveDiagramComments(v, current.Content[i+1])
+			}
+		}
+	}
+	if old.Kind == yaml.SequenceNode && current.Kind == yaml.SequenceNode {
+		// Match authored records by identity, never by their position after reorder.
+		identity := func(n *yaml.Node) string {
+			if n.Kind == yaml.MappingNode {
+				for _, field := range []string{"id", "key"} {
+					if key := mappingNode(n, field); key != nil && key.Kind == yaml.ScalarNode {
+						return field + ":" + key.Tag + ":" + key.Value
+					}
+				}
+			}
+			copy := *n
+			copy.HeadComment, copy.LineComment, copy.FootComment = "", "", ""
+			return "value:" + string(canonical(copy))
+		}
+		previous := map[string]*yaml.Node{}
+		counts := map[string]int{}
+		for _, n := range old.Content {
+			key := identity(n)
+			previous[key] = n
+			counts[key]++
+		}
+		for _, n := range current.Content {
+			key := identity(n)
+			if counts[key] == 1 {
+				preserveDiagramComments(previous[key], n)
 			}
 		}
 	}

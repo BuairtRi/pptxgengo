@@ -29,3 +29,17 @@ New v2 projects and template generation use native-v1 where supported. Existing
 projects retain their profile. Inspect conversion/retention reasons rather than
 assuming every component is one object. Keep all media and template pins with
 the project, and use complete shares for private colleague handoff.
+
+## Family operators and native reliability
+
+For source-based teams/pods/reporting/governance and period-based Gantt edits,
+use the West Monroe skill's [team](../west-monroe-presentations/references/team-composition.md)
+and [Gantt](../west-monroe-presentations/references/gantt-composition.md) runbooks.
+For explicit foreign text-shape reauthoring, read
+[native imports](../west-monroe-presentations/references/native-imports.md).
+These are development additions: inspect installed help and toolchain pins.
+Geometry changes do not infer membership, reporting or dates.
+
+Preserve native render failures and use the
+[PowerPoint recovery runbook](../west-monroe-presentations/references/powerpoint-recovery.md);
+do not diagnose every timeout as a folder permission failure.

@@ -11,24 +11,44 @@ import (
 // settings or the calling agent's sandbox. In particular -9074 is not evidence
 // of a denied permission, and a basic Apple event is not proof of file access.
 type FailureEvidence struct {
-	SchemaVersion  int    `json:"schema_version"`
-	RecordedAt     string `json:"recorded_at"`
-	TaskID         string `json:"task_id,omitempty"`
-	Operation      string `json:"operation"`
-	Phase          string `json:"phase"`
-	Layer          string `json:"layer"`
-	Classification string `json:"classification"`
-	ErrorCode      int    `json:"error_code,omitempty"`
-	CauseConfirmed bool   `json:"cause_confirmed"`
-	Message        string `json:"message"`
+	SchemaVersion   int    `json:"schema_version"`
+	RecordedAt      string `json:"recorded_at"`
+	TaskID          string `json:"task_id,omitempty"`
+	Operation       string `json:"operation"`
+	Phase           string `json:"phase"`
+	LastHelperPhase string `json:"last_helper_phase,omitempty"`
+	Layer           string `json:"layer"`
+	Classification  string `json:"classification"`
+	ErrorCode       int    `json:"error_code,omitempty"`
+	CauseConfirmed  bool   `json:"cause_confirmed"`
+	Message         string `json:"message"`
 }
 
 var nativePhasePattern = regexp.MustCompile(`native_phase=(prepare_identity|open_document|identify_document|export_pdf|close_document);`)
+var nativeEnteredPhasePattern = regexp.MustCompile(`native_phase_entered=(prepare_identity|open_document|identify_document|export_pdf|close_document);`)
+var nativeObservedPhasePattern = regexp.MustCompile(`(?m)^native_helper_entered=(prepare_identity|open_document|identify_document|export_pdf|close_document);$`)
+var nativeLastPhasePattern = regexp.MustCompile(`native_last_helper_phase=(prepare_identity|open_document|identify_document|export_pdf|close_document);`)
+
+// An entry marker proves only that the helper reached this phase. It does not
+// identify the failing call, establish completion, or diagnose a permission.
+func lastHelperPhase(message string) string {
+	matches := nativeEnteredPhasePattern.FindAllStringSubmatch(message, -1)
+	if len(matches) == 0 {
+		return ""
+	}
+	return matches[len(matches)-1][1]
+}
+
 var nativeErrorCodePattern = regexp.MustCompile(`\((-?[0-9]+)\)`)
 var nativeExplicitErrorCodePattern = regexp.MustCompile(`native_error_code=(-?[0-9]+);`)
 
 func classifyNativeFailure(message, taskID string) FailureEvidence {
 	evidence := FailureEvidence{SchemaVersion: 1, RecordedAt: time.Now().UTC().Format(time.RFC3339Nano), TaskID: taskID, Operation: "native_render", Phase: "unknown", Layer: "unknown", Classification: "unclassified", Message: message}
+	// The parent snapshots primary-operation progress before cleanup. Prefer
+	// its first snapshot so later cleanup errors cannot replace that evidence.
+	if match := nativeLastPhasePattern.FindStringSubmatch(message); len(match) == 2 {
+		evidence.LastHelperPhase = match[1]
+	}
 	if match := nativePhasePattern.FindStringSubmatch(message); len(match) == 2 {
 		evidence.Phase = match[1]
 		evidence.Layer = "powerpoint_document"

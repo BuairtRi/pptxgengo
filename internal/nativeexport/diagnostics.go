@@ -366,8 +366,10 @@ func exportFailure(err error, taskPath string) error {
 		return fmt.Errorf("%s: file_access_denied for %s; select/grant PowerPoint access to the stable staging folder %s, then rerun render-doctor with that same --staging-dir: %w", prefix, taskPath, stagingRoot, err)
 	case strings.Contains(message, "identity_ambiguous"):
 		return fmt.Errorf("%s: multiple presentations identify the exact task copy; close duplicate task copies and rerun: %w", prefix, err)
-	case strings.Contains(message, "open_identity_timeout") || strings.Contains(message, "-1712") || strings.Contains(message, "deadline exceeded"):
+	case strings.Contains(message, "open_identity_timeout") || ((strings.Contains(message, "-1712") || strings.Contains(message, "deadline exceeded")) && (evidence.Phase == "open_document" || evidence.Phase == "identify_document")):
 		return fmt.Errorf("%s: PowerPoint did not answer or identify the task copy within the bounded wait; a blocking dialog or file-access prompt is possible but unconfirmed. Inspect PowerPoint, grant access to the stable staging folder %s if requested, then rerun: %w", prefix, stagingRoot, err)
+	case strings.Contains(message, "-1712") || strings.Contains(message, "deadline exceeded"):
+		return fmt.Errorf("%s: operation did not answer within the bounded wait; blocking dialogs, permissions and the underlying cause are unconfirmed. Inspect the exact owned task and preserve phase evidence before retrying: %w", prefix, err)
 	default:
 		return fmt.Errorf("%s: %s; cause unconfirmed. Basic Apple-event delivery does not prove document access; preserve this error and the exact staging folder for diagnosis: %w", prefix, evidence.Classification, err)
 	}

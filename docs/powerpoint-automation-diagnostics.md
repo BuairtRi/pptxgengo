@@ -5,6 +5,45 @@ headless PPTX generation, source editing, inspection and reconciliation. Keep
 their evidence separate. A failed GUI connection does not establish that YAML
 editing or Apple-event automation is unavailable.
 
+For the agent's operational sequence, use the West Monroe skill's
+[PowerPoint recovery reference](../skills/west-monroe-presentations/references/powerpoint-recovery.md).
+This document owns the implementation details, evidence history and unresolved
+reliability work. A workaround succeeding once is not a durable root-cause fix.
+
+## Failure catalog and resolution status
+
+| Observed failure | Recognize it | Recovery or implemented fix | Status and remaining limit |
+|---|---|---|---|
+| Agent policy rejects an operation | Exact tool rejection plus effective policy | Inspect effective permissions and writable roots; retain the rejection and selected launch/profile settings | No permission drift reproduced. Saved defaults differing from an injected policy are not evidence of a reset. |
+| GUI transport cannot initialize | Native-pipe startup error | Reinitialize through the supported computer-use entry point once; obtain fresh state | Earlier occurrence; underlying transport cause unresolved. |
+| GUI capture stops after successful use | ComputerUse `-10005`, ScreenCaptureKit `SCStreamErrorDomain -3811` | Record the failure; test other GUI surfaces and Apple events separately. An exact owned-document close/reopen recovered this specimen | Empirical recovery, not a framework fix or proof of a permission change. |
+| Old app binding has no window | `noWindowsAvailable` after document close | Select the app again and acquire fresh state | Observed successful recovery; old element handles remain invalid. |
+| GUI cannot find a corresponding captured window | Fresh ComputerUse `-10005: cgWindowNotFound` | Record this distinct window/capture failure and probe Apple events independently; retain exact owned-document state | New fresh bindings still failed while individual Apple events and an owned open succeeded. Root cause and durable GUI recovery remain unresolved. |
+| GUI object lookup is ambiguous | Refetch reports multiple matching elements after duplication | Use fresh Selection Pane state, select the copied root unambiguously and give it a unique name | Repeatable operator pattern for tested copy; accessibility framework ambiguity itself is unchanged. |
+| JavaScript handle is missing after REPL reset | `ReferenceError` or undeclared binding | Reinitialize documented API and declare the new app/tab binding | Agent execution-state error, distinct from app permissions. |
+| Automation delivery denied | Explicit `-1743` / Automation denial for actual caller | Resolve the reported Automation permission for that caller; repeat the bounded probe | CLI reports this layer; permissions are owned by macOS/operator. |
+| Assistive access denied | System Events says `osascript` not allowed assistive access (`-1728`) | Use a permitted path for the authorized action; resolve the actual caller's access only if that path is needed | Denied probe not resolved. It did not prove that Apple events or document access were unavailable. |
+| Caller cannot stat/read staging file | `prepare_identity`, explicit filesystem failure | Check local read/write access using the same caller and stable staging folder | Fixed misleading PowerPoint-grant advice; underlying filesystem cause remains task-specific. |
+| Visible PowerPoint folder prompt | The visibility monitor reports Grant File Access, or an observed prompt | Resolve only the displayed folder request, then rerun with that same explicit stable staging path and a new output directory | Folder-scoped staging implemented; an unobserved prompt must not be assumed. |
+| Open/identity timeout or unexplained open failure | `open_document`, `identify_document`, `-1712`, `-9074`, `open_identity_timeout` | Split health queries; inspect for a modal prompt; retain the phase/error and exact owned paths | Basic events can succeed while open fails. `-9074` alone does not establish denial. |
+| Worker deadline loses helper's returned error | `context deadline exceeded` / cancellation | Phase-entry observations stream to the parent before blocking calls; failure JSON retains `last_helper_phase` when observed | Implemented and subprocess-tested. Last entry is not the failing/completed phase; an unobserved phase stays unknown. |
+| Export or close fails | `export_pdf` or `close_document` plus original error | Retain original phase/code; separately bounded cleanup targets only the exact owned task | Implemented identity guards; cleanup can remain unconfirmed and retain files. |
+| Office Save As/copy normalization blocks reconciliation | Explicit style/structure/route refusal | Only the three qualified serialization equivalences are normalized; unsupported findings remain manual | Regression-tested and actual GUI copy/delete round trip passed. Arbitrary imports/general edits remain unqualified. |
+
+## Implementation and acceptance boundaries
+
+The CLI owns staging, identity checks, deadlines, structured evidence and narrow
+reconciliation behavior. It does not fix ScreenCaptureKit, the computer-use
+transport, macOS privacy settings, or Codex's effective execution policy.
+
+The automated checks for this slice use fake helpers and owned subprocesses;
+they do not manipulate PowerPoint or request privacy permissions. They verify
+that fragmented phase markers are forwarded, unrelated stderr is not streamed,
+successful worker JSON stays valid, cancellation preserves the last observed
+entry, and unknown phases remain unknown. Actual PowerPoint lifecycle recovery
+still needs repeated trials across document open/save/close, app rebind and
+session resume. Windows remains a separate qualification lane.
+
 ## Classify the failing layer
 
 | Layer | Evidence to retain | What it establishes |
@@ -29,8 +68,15 @@ code, classification and full returned error. `cause_confirmed` remains false:
 classification identifies the observed failure mechanism, not the underlying
 cause. The timestamp is when evidence was recorded, not when a GUI event began.
 
-Unknown phases stay `unknown`, including worker termination before a helper
-returns. The JSON does not invent a last completed phase. Windows helpers do
+Unknown failing phases stay `unknown`, including worker termination before a
+helper returns. macOS helpers also emit `native_phase_entered` before blocking
+calls; the worker forwards these observations on stderr independently of its
+JSON stdout. Deadline errors retain them in `render-error.json` as
+`last_helper_phase`. This is the last observed entry, not a completed phase or
+proof that the subsequent Apple event was delivered. Cleanup calls do not stream
+render progress; the parent snapshots primary-operation observations before its
+separate cleanup worker, so cleanup errors cannot replace that entry evidence.
+If cancellation precedes observation, the field is omitted. Windows helpers do
 not yet emit these macOS stage markers. Doctor output remains independent:
 an explicit denial can fail its access check, while an unexplained open failure
 leaves permission status unknown.
@@ -171,3 +217,15 @@ After a later exact-owned document close, the old GUI binding returned
 returned its home view. Rebind the app after closing a document when the prior
 binding reports no window. This observed window-lifecycle failure does not
 establish permission denial or require changing privacy settings.
+
+During the next synthetic team-composition qualification, two native render
+attempts succeeded. A fresh computer-use PowerPoint selection then returned
+`ComputerUse -10005: cgWindowNotFound`. Separately bounded Apple events returned
+PowerPoint version `16.113.4` and presentation count zero; an exact owned working
+copy subsequently opened through AppleScript. Another fresh computer-use
+selection still returned `cgWindowNotFound`. This is an additional observed
+window/capture failure, distinct from the earlier ScreenCaptureKit `-3811` stream
+failure. It does not establish denied Automation or a failed document open.
+Native exports and individual Apple events remained usable in this attempt;
+GUI recovery and the underlying window/capture cause are unresolved. Private
+live qualification records retain the owned paths and cleanup observations.

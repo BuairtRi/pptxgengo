@@ -89,3 +89,12 @@ Render with `pptxgengo design render --png --contact-sheet` (use `--slides` for 
 10. **Log.** Every page has a current composition-log entry that matches what was built.
 
 Report what remains unresolved plainly. A successful build, a Go fit report and native measurement are each different kinds of evidence; none of them alone is visual approval.
+
+## Customize family topology
+
+Choose the actual structure before placing it. For variable roles, pods, reporting
+and governance, use [team composition](team-composition.md); for task intervals,
+workstreams, phases and gates, use [Gantt composition](gantt-composition.md).
+The family operators preserve the frame, preview fit and require explicit source
+ownership changes. A catalog example does not define the new engagement's count
+or relationships. These commands require the newer development CLI.

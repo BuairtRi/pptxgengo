@@ -200,3 +200,15 @@ Reviewed native elbow edits persist an optional `native_geometry/<name>/route`:
 past the endpoint rectangle; calculated route allocations must still fit the
 frame and declared containment. Unknown presets/formulas remain manual review.
 Use reconciliation to write these overrides and their source basis pins.
+
+## Family and import patch files
+
+Keep reusable source in local templates under `slides/templates/`. Team patches
+use `pptxgengo.team-patch.v1`; Gantt patches use `pptxgengo.gantt-patch.v1` with
+`timebase: periods`; native import maps use `pptxgengo.native-import-map.v1`.
+Each requires actor/reason and the current source SHA256; imports also require
+the input PPTX SHA256 and explicit formatting policy. These are command inputs,
+not replacement deck schemas. Read the [team](team-composition.md),
+[Gantt](gantt-composition.md) or [import](native-imports.md) contract for operations.
+Explicit materialization changes selected copy from bindings to local constants.
+These commands require the newer development CLI.
