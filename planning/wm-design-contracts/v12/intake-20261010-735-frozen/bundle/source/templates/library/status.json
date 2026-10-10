@@ -1,0 +1,1365 @@
+{
+  "family": "status",
+  "name": "Status, steering and RAID",
+  "summary": "Status reports, steering updates, RAID logs, milestones by workstream and four-panel dashboards.",
+  "templates": [
+    {
+      "id": "status",
+      "variant": "four-panel",
+      "name": "Status dashboard, four panels",
+      "tier": "core",
+      "purpose": "Four panels on one grid: two metric cards with status, a wave table and an adoption card.",
+      "uses": [
+        "card.presets (metric)",
+        "data.metric+ (status)",
+        "table.standard (status cells)"
+      ],
+      "legacy": "Slides 43, 133",
+      "budget": {
+        "words": 70,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "metric value",
+          "maxChars": 8
+        },
+        {
+          "slot": "metric label",
+          "maxChars": 40
+        },
+        {
+          "slot": "table rows",
+          "maxChars": 3
+        },
+        {
+          "slot": "source",
+          "maxChars": 90
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Program status",
+        "title": "Wave 1 is on track; journal review is the one risk",
+        "source": {
+          "text": "Program office status report, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "h": 144,
+            "pad": 18,
+            "surface": "subtle",
+            "metric": {
+              "value": "7 days",
+              "label": "to close, target 5",
+              "status": "risk"
+            }
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 126,
+            "w": 414,
+            "h": 144,
+            "pad": 18,
+            "surface": "outline",
+            "metric": {
+              "value": "$2.1M",
+              "label": "run-rate savings of $4.2M",
+              "status": "on"
+            }
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 288,
+            "w": 414,
+            "header": "light",
+            "cols": [
+              {
+                "k": "wave",
+                "label": "Wave",
+                "w": 126
+              },
+              {
+                "k": "ent",
+                "label": "Entities",
+                "w": 108,
+                "type": "num"
+              },
+              {
+                "k": "status",
+                "label": "Status",
+                "w": 180,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "wave": "Wave 1",
+                "ent": "5",
+                "status": "on"
+              },
+              {
+                "wave": "Wave 2",
+                "ent": "9",
+                "status": "risk"
+              },
+              {
+                "wave": "Wave 3",
+                "ent": "14",
+                "status": "off"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 288,
+            "w": 414,
+            "h": 144,
+            "pad": 18,
+            "surface": "subtle",
+            "metric": {
+              "value": "92%",
+              "label": "of entries checked at posting",
+              "status": "on"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "status",
+      "variant": "four-panel-tall",
+      "name": "Status dashboard, four panels · tall footer",
+      "tier": "core",
+      "purpose": "The four status panels with a decision strip beneath them, using the full body height of the tall footer.",
+      "uses": [
+        "card.presets (metric)",
+        "data.metric+ (status)",
+        "table.standard (status cells)"
+      ],
+      "legacy": "tall footer variant of status/four-panel",
+      "budget": {
+        "words": 65,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "metric value",
+          "maxChars": 8
+        },
+        {
+          "slot": "metric label",
+          "maxChars": 40
+        },
+        {
+          "slot": "table rows",
+          "maxChars": 3
+        },
+        {
+          "slot": "source",
+          "maxChars": 90
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Program status",
+        "title": "Wave 1 is on track; journal review is the one risk",
+        "source": {
+          "text": "Program office status report, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "h": 126,
+            "pad": 18,
+            "surface": "subtle",
+            "metric": {
+              "value": "7 days",
+              "label": "to close, target 5",
+              "status": "risk"
+            }
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 126,
+            "w": 414,
+            "h": 126,
+            "pad": 18,
+            "surface": "outline",
+            "metric": {
+              "value": "$2.1M",
+              "label": "run-rate savings of $4.2M",
+              "status": "on"
+            }
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 270,
+            "w": 414,
+            "header": "light",
+            "cols": [
+              {
+                "k": "wave",
+                "label": "Wave",
+                "w": 126
+              },
+              {
+                "k": "ent",
+                "label": "Entities",
+                "w": 108,
+                "type": "num"
+              },
+              {
+                "k": "status",
+                "label": "Status",
+                "w": 180,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "wave": "Wave 1",
+                "ent": "5",
+                "status": "on"
+              },
+              {
+                "wave": "Wave 2",
+                "ent": "9",
+                "status": "risk"
+              },
+              {
+                "wave": "Wave 3",
+                "ent": "14",
+                "status": "off"
+              }
+            ],
+            "dense": true,
+            "rowH": 28
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 270,
+            "w": 414,
+            "h": 126,
+            "pad": 18,
+            "surface": "subtle",
+            "metric": {
+              "value": "92%",
+              "label": "of entries checked at posting",
+              "status": "on"
+            }
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 36,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Decision needed: add two journal reviewers by 16 Oct, or Wave 2 cutover slips six days."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "status",
+      "variant": "four-panel-right",
+      "name": "Status dashboard, four panels · right panel",
+      "tier": "core",
+      "purpose": "The four status panels on a 2 x 2 grid beside a right panel that states the takeaway and the decision needed.",
+      "uses": [
+        "card.presets (metric)",
+        "data.metric+ (status)",
+        "table.standard (status cells)"
+      ],
+      "legacy": "right panel variant of status/four-panel",
+      "budget": {
+        "words": 71,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 24
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "metric value",
+          "maxChars": 8
+        },
+        {
+          "slot": "metric label",
+          "maxChars": 40
+        },
+        {
+          "slot": "table rows",
+          "maxChars": 3
+        },
+        {
+          "slot": "source",
+          "maxChars": 90
+        },
+        {
+          "slot": "panel content",
+          "note": "key message on the 273 pt panel, inverse inks"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "footer": "compact",
+        "eyebrow": "Program status",
+        "title": "Wave 1 is on track; journal review is the one risk",
+        "source": {
+          "text": "Program office status report, Sep 2026."
+        },
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 162,
+            "w": 270,
+            "h": 126,
+            "pad": 18,
+            "surface": "subtle",
+            "metric": {
+              "value": "7 days",
+              "label": "to close, target 5",
+              "status": "risk"
+            }
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 162,
+            "w": 270,
+            "h": 126,
+            "pad": 18,
+            "surface": "outline",
+            "metric": {
+              "value": "$2.1M",
+              "label": "run-rate savings of $4.2M",
+              "status": "on"
+            }
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 306,
+            "w": 270,
+            "header": "light",
+            "cols": [
+              {
+                "k": "wave",
+                "label": "Wave",
+                "w": 78
+              },
+              {
+                "k": "ent",
+                "label": "Entities",
+                "w": 60,
+                "type": "num"
+              },
+              {
+                "k": "status",
+                "label": "Status",
+                "w": 132,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "wave": "Wave 1",
+                "ent": "5",
+                "status": "on"
+              },
+              {
+                "wave": "Wave 2",
+                "ent": "9",
+                "status": "risk"
+              },
+              {
+                "wave": "Wave 3",
+                "ent": "14",
+                "status": "off"
+              }
+            ],
+            "dense": true,
+            "rowH": 28
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 306,
+            "w": 270,
+            "h": 126,
+            "pad": 18,
+            "surface": "subtle",
+            "metric": {
+              "value": "92%",
+              "label": "of entries checked at posting",
+              "status": "on"
+            }
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 162,
+            "w": 198,
+            "text": "Takeaway",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 705,
+            "y": 180,
+            "w": 198,
+            "text": "On track, with one decision to make.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 306,
+            "w": 198,
+            "text": "Add two journal reviewers by 16 Oct or Wave 2 cutover slips by six days.",
+            "on": "inverse"
+          }
+        ],
+        "railSurface": "inverse",
+        "titleLines": 2
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "status",
+      "variant": "classic",
+      "name": "Status dashboard, classic",
+      "tier": "working",
+      "purpose": "A traditional status page: overall status in the header, status by area with a one-line note, activities completed and planned, a risk register and the decisions needed.",
+      "uses": [
+        "table.standard (status cells)",
+        "list.bullets",
+        "text.grouplabel"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 165,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "area note",
+          "maxChars": 30
+        },
+        {
+          "slot": "activity",
+          "maxChars": 28
+        },
+        {
+          "slot": "risk",
+          "maxChars": 24
+        },
+        {
+          "slot": "mitigation",
+          "maxChars": 20
+        },
+        {
+          "slot": "decision",
+          "maxChars": 26
+        },
+        {
+          "slot": "owner and date",
+          "maxChars": 24
+        },
+        {
+          "slot": "source",
+          "maxChars": 70
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Program status · Sep 2026",
+        "title": "One schedule slip puts the program at risk",
+        "source": {
+          "text": "Northfield program office status report, 30 Sep 2026."
+        },
+        "body": [
+          {
+            "x": 705,
+            "y": 36,
+            "w": 198,
+            "header": "light",
+            "dense": true,
+            "rowH": 28,
+            "cols": [
+              {
+                "k": "s",
+                "label": "Overall status",
+                "w": 198,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "s": "risk"
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "header": "light",
+            "dense": true,
+            "rowH": 28,
+            "groups": [
+              {
+                "from": 0,
+                "to": 2,
+                "label": "Status by area"
+              }
+            ],
+            "cols": [
+              {
+                "k": "area",
+                "label": "Area",
+                "w": 78
+              },
+              {
+                "k": "st",
+                "label": "Status",
+                "w": 108,
+                "type": "status"
+              },
+              {
+                "k": "note",
+                "label": "This period",
+                "w": 228
+              }
+            ],
+            "rows": [
+              {
+                "area": "Scope",
+                "st": "on",
+                "note": "Two change requests approved"
+              },
+              {
+                "area": "Schedule",
+                "st": "risk",
+                "note": "Wave 2 cutover slips six days"
+              },
+              {
+                "area": "Budget",
+                "st": "on",
+                "note": "$0.2M under plan to date"
+              },
+              {
+                "area": "Risks",
+                "st": "risk",
+                "note": "Two high risks, both owned"
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "type": "grouplabel",
+            "x": 489,
+            "y": 126,
+            "w": 198,
+            "text": "Completed this period"
+          },
+          {
+            "type": "bullets",
+            "x": 489,
+            "y": 156,
+            "w": 198,
+            "items": [
+              "Wave 1 entities live",
+              "Journal rules signed off",
+              "Close calendar published",
+              "Training cohort one done"
+            ]
+          },
+          {
+            "type": "grouplabel",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Planned next period"
+          },
+          {
+            "type": "bullets",
+            "x": 705,
+            "y": 156,
+            "w": 198,
+            "items": [
+              "Wave 2 data migration",
+              "User acceptance testing",
+              "Cutover go or no-go",
+              "Cockpit design review"
+            ]
+          },
+          {
+            "x": 57,
+            "y": 306,
+            "w": 558,
+            "header": "light",
+            "dense": true,
+            "rowH": 28,
+            "groups": [
+              {
+                "from": 0,
+                "to": 4,
+                "label": "Risk register"
+              }
+            ],
+            "cols": [
+              {
+                "k": "risk",
+                "label": "Risk",
+                "w": 144
+              },
+              {
+                "k": "li",
+                "label": "Likelihood",
+                "w": 84
+              },
+              {
+                "k": "own",
+                "label": "Owner",
+                "w": 96
+              },
+              {
+                "k": "mit",
+                "label": "Mitigation",
+                "w": 144
+              },
+              {
+                "k": "st",
+                "label": "Status",
+                "w": 90,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "risk": "Late data extracts",
+                "li": "High",
+                "own": "Finance IT",
+                "mit": "Daily extract check",
+                "st": "risk"
+              },
+              {
+                "risk": "Reviewer capacity",
+                "li": "Medium",
+                "own": "Controller",
+                "mit": "Add two reviewers",
+                "st": "on"
+              },
+              {
+                "risk": "Cutover freeze clash",
+                "li": "Medium",
+                "own": "PMO lead",
+                "mit": "Reset freeze date",
+                "st": "risk"
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "type": "grouplabel",
+            "x": 633,
+            "y": 306,
+            "w": 270,
+            "text": "Decisions needed"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 336,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Approve new cutover date",
+                "text": "CFO, by 9 Oct"
+              },
+              {
+                "lead": "Fund two extra reviewers",
+                "text": "Controller, by 16 Oct"
+              },
+              {
+                "lead": "Confirm freeze window",
+                "text": "CIO, by 16 Oct"
+              },
+              {
+                "lead": "Release Wave 3 budget",
+                "text": "CFO, by 30 Oct"
+              }
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-02",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "status",
+      "variant": "steering-update",
+      "name": "Steering update, one page",
+      "tier": "core",
+      "purpose": "An executive one-pager for a steering committee: overall status, the period's key messages, decisions requested, the top three risks and the next milestones.",
+      "uses": [
+        "card.presets (metric)",
+        "list.bullets",
+        "table.standard (status cells)",
+        "list.schedule"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 106,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "status value",
+          "maxChars": 8
+        },
+        {
+          "slot": "status label",
+          "maxChars": 32
+        },
+        {
+          "slot": "key message",
+          "maxChars": 34
+        },
+        {
+          "slot": "decision",
+          "maxChars": 30
+        },
+        {
+          "slot": "risk",
+          "maxChars": 24
+        },
+        {
+          "slot": "milestone",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "nav": {
+          "items": [
+            "Update",
+            "Plan",
+            "Risks",
+            "Asks"
+          ],
+          "active": 0
+        },
+        "footer": "tall",
+        "eyebrow": "Steering committee · Sep 2026",
+        "title": "Program is at risk until Wave 2 cutover is reset",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "h": 144,
+            "pad": 12,
+            "surface": "subtle",
+            "label": "Overall status",
+            "metric": {
+              "value": "Wave 2",
+              "label": "of 3, cutover date at risk",
+              "status": "risk"
+            }
+          },
+          {
+            "type": "grouplabel",
+            "x": 273,
+            "y": 126,
+            "w": 342,
+            "text": "Key messages"
+          },
+          {
+            "type": "bullets",
+            "x": 273,
+            "y": 156,
+            "w": 342,
+            "items": [
+              "Wave 1 is live in five entities",
+              "Budget is $0.2M under plan",
+              "Wave 2 data extracts are late"
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "h": 144,
+            "pad": 12,
+            "surface": "inverse",
+            "title": "Decisions requested",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "bullets": [
+                  "Approve the new cutover date",
+                  "Fund two extra reviewers",
+                  "Confirm the year-end freeze window"
+                ]
+              }
+            ]
+          },
+          {
+            "x": 57,
+            "y": 288,
+            "w": 558,
+            "header": "light",
+            "dense": true,
+            "rowH": 28,
+            "groups": [
+              {
+                "from": 0,
+                "to": 3,
+                "label": "Top three risks"
+              }
+            ],
+            "cols": [
+              {
+                "k": "risk",
+                "label": "Risk",
+                "w": 192
+              },
+              {
+                "k": "own",
+                "label": "Owner",
+                "w": 108
+              },
+              {
+                "k": "due",
+                "label": "Due",
+                "w": 78
+              },
+              {
+                "k": "st",
+                "label": "Status",
+                "w": 180,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "risk": "Late data extracts",
+                "own": "Finance IT",
+                "due": "9 Oct",
+                "st": "risk"
+              },
+              {
+                "risk": "Reviewer capacity",
+                "own": "Controller",
+                "due": "16 Oct",
+                "st": "on"
+              },
+              {
+                "risk": "Cutover freeze clash",
+                "own": "PMO lead",
+                "due": "16 Oct",
+                "st": "risk"
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "type": "grouplabel",
+            "x": 633,
+            "y": 288,
+            "w": 270,
+            "text": "Next milestones"
+          },
+          {
+            "type": "schedule",
+            "x": 633,
+            "y": 318,
+            "w": 270,
+            "keyW": 72,
+            "rowHeight": 30,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "9 Oct",
+                "t": "Wave 2 data frozen"
+              },
+              {
+                "k": "30 Oct",
+                "t": "Acceptance testing"
+              },
+              {
+                "k": "13 Nov",
+                "t": "Cutover decision"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 2,
+      "added": "2026-10-02",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "status",
+      "variant": "raid-log",
+      "name": "RAID log",
+      "tier": "working",
+      "purpose": "A dense log of risks, assumptions, issues and dependencies, each with an owner, due date, next action and status.",
+      "uses": [
+        "table.standard (status and tag cells)"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 141,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "item",
+          "maxChars": 38
+        },
+        {
+          "slot": "owner",
+          "maxChars": 13
+        },
+        {
+          "slot": "next action",
+          "maxChars": 26
+        },
+        {
+          "slot": "source",
+          "maxChars": 70
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "nav": {
+          "items": [
+            "Update",
+            "Plan",
+            "RAID",
+            "Asks"
+          ],
+          "active": 2
+        },
+        "footer": "compact",
+        "eyebrow": "RAID log · Sep 2026",
+        "title": "One issue needs escalation this week",
+        "source": {
+          "text": "Northfield program office RAID log, 30 Sep 2026."
+        },
+        "body": [
+          {
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 30,
+            "cols": [
+              {
+                "k": "type",
+                "label": "Type",
+                "w": 108,
+                "type": "tag"
+              },
+              {
+                "k": "item",
+                "label": "Item",
+                "w": 264
+              },
+              {
+                "k": "own",
+                "label": "Owner",
+                "w": 114
+              },
+              {
+                "k": "due",
+                "label": "Due",
+                "w": 72
+              },
+              {
+                "k": "act",
+                "label": "Next action",
+                "w": 174
+              },
+              {
+                "k": "st",
+                "label": "Status",
+                "w": 114,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "type": "Risk",
+                "item": "Late Wave 2 data extracts",
+                "own": "Finance IT",
+                "due": "9 Oct",
+                "act": "Daily extract check",
+                "st": "risk"
+              },
+              {
+                "type": "Risk",
+                "item": "Reviewer capacity at quarter end",
+                "own": "Controller",
+                "due": "16 Oct",
+                "act": "Add two reviewers",
+                "st": "on"
+              },
+              {
+                "type": "Assumption",
+                "item": "Wave 1 rules carry over",
+                "own": "Program lead",
+                "due": "2 Oct",
+                "act": "Confirm in testing",
+                "st": "on"
+              },
+              {
+                "type": "Assumption",
+                "item": "Source ERP stays frozen",
+                "own": "Finance IT",
+                "due": "30 Oct",
+                "act": "Hold change board",
+                "st": "on"
+              },
+              {
+                "type": "Issue",
+                "item": "Cutover overlaps year-end freeze",
+                "own": "PMO lead",
+                "due": "9 Oct",
+                "act": "Escalate to CIO",
+                "st": "off"
+              },
+              {
+                "type": "Issue",
+                "item": "Two entities miss mapping sign-off",
+                "own": "Controller",
+                "due": "6 Oct",
+                "act": "Workshop on 4 Oct",
+                "st": "risk"
+              },
+              {
+                "type": "Dependency",
+                "item": "Payroll interface from HR systems",
+                "own": "HR systems",
+                "due": "23 Oct",
+                "act": "Weekly sync",
+                "st": "risk"
+              },
+              {
+                "type": "Dependency",
+                "item": "Bank file format approval",
+                "own": "Treasury",
+                "due": "16 Oct",
+                "act": "Vendor test file in",
+                "st": "on"
+              },
+              {
+                "type": "Dependency",
+                "item": "Security review of cockpit",
+                "own": "CISO office",
+                "due": "30 Oct",
+                "act": "Book review slot",
+                "st": "on"
+              }
+            ],
+            "type": "table"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    },
+    {
+      "id": "status",
+      "variant": "milestones-workstreams",
+      "name": "Workstreams and milestones",
+      "tier": "core",
+      "purpose": "Workstream status by month, the milestone path with what is done and what is next, and the next steps.",
+      "uses": [
+        "table.standard (status cells)",
+        "process.vstepper",
+        "list.bullets"
+      ],
+      "legacy": "new 2026-10-02",
+      "budget": {
+        "words": 118,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "workstream",
+          "maxChars": 22
+        },
+        {
+          "slot": "milestone title",
+          "maxChars": 22
+        },
+        {
+          "slot": "milestone note",
+          "maxChars": 24
+        },
+        {
+          "slot": "next step",
+          "maxChars": 50
+        },
+        {
+          "slot": "source",
+          "maxChars": 70
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Workstreams · Sep 2026",
+        "title": "Three of five workstreams are on track",
+        "source": {
+          "text": "Northfield program office status report, 30 Sep 2026."
+        },
+        "body": [
+          {
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "header": "light",
+            "dense": true,
+            "rowH": 28,
+            "groups": [
+              {
+                "from": 1,
+                "to": 4,
+                "label": "Status by month"
+              }
+            ],
+            "cols": [
+              {
+                "k": "ws",
+                "label": "Workstream",
+                "w": 150
+              },
+              {
+                "k": "m1",
+                "label": "Jul",
+                "w": 102,
+                "type": "status"
+              },
+              {
+                "k": "m2",
+                "label": "Aug",
+                "w": 102,
+                "type": "status"
+              },
+              {
+                "k": "m3",
+                "label": "Sep",
+                "w": 102,
+                "type": "status"
+              },
+              {
+                "k": "m4",
+                "label": "Oct",
+                "w": 102,
+                "type": "status"
+              }
+            ],
+            "rows": [
+              {
+                "ws": "Process design",
+                "m1": "on",
+                "m2": "on",
+                "m3": "on",
+                "m4": "on"
+              },
+              {
+                "ws": "Data migration",
+                "m1": "on",
+                "m2": "on",
+                "m3": "risk",
+                "m4": "risk"
+              },
+              {
+                "ws": "Controls",
+                "m1": "on",
+                "m2": "on",
+                "m3": "on",
+                "m4": "on"
+              },
+              {
+                "ws": "Change and training",
+                "m1": "on",
+                "m2": "on",
+                "m3": "on",
+                "m4": "risk"
+              },
+              {
+                "ws": "Close cockpit",
+                "m1": "on",
+                "m2": "on",
+                "m3": "on",
+                "m4": "on"
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "type": "grouplabel",
+            "x": 57,
+            "y": 342,
+            "w": 558,
+            "text": "Next steps"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 372,
+            "w": 558,
+            "items": [
+              "Reset the Wave 2 data freeze with Finance IT",
+              "Run the second training cohort in October",
+              "Confirm the cutover go or no-go on 13 Nov"
+            ]
+          },
+          {
+            "type": "grouplabel",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "Milestones"
+          },
+          {
+            "type": "vstepper",
+            "x": 633,
+            "y": 156,
+            "w": 270,
+            "steps": [
+              {
+                "label": "12 Aug",
+                "title": "Wave 1 go-live",
+                "text": "Five entities live.",
+                "state": "done"
+              },
+              {
+                "label": "20 Sep",
+                "title": "Rules signed off",
+                "text": "Controller approved.",
+                "state": "done"
+              },
+              {
+                "label": "30 Oct",
+                "title": "Acceptance testing",
+                "text": "Wave 2 entities.",
+                "state": "current"
+              },
+              {
+                "label": "13 Nov",
+                "title": "Cutover decision",
+                "text": "Go or no-go.",
+                "state": "next"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-02"
+    }
+  ]
+}

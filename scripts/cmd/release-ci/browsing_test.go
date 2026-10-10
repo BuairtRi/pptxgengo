@@ -81,7 +81,7 @@ func TestStagedTemplateOnlyResourcesArchiveClosure(t *testing.T) {
 	if err := addScopedBrowsingFiles(files, root, version, commit); err != nil {
 		t.Fatal(err)
 	}
-	for _, required := range []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/native-editing-coverage.json", "library/wm-design-system/v11/library.sqlite", "library/wm-design-system/v11/bundle.json", "library/wm-design-system/v11/fonts/IBMPlexSans-Regular.ttf", browsingartifact.TemplateCatalogInventoryName, "skills/west-monroe-presentations/SKILL.md", "scripts/install-skill.py", "SKILL-INSTALL.md", "library/wm-design-system/v11/catalog/assets/assets.json"} {
+	for _, required := range []string{"browsing/template-library.pptx", "browsing/template-library.manifest.json", "browsing/native-editing-coverage.json", "library/wm-design-system/v12/library.sqlite", "library/wm-design-system/v12/bundle.json", "library/wm-design-system/v12/fonts/IBMPlexSans-Regular.ttf", browsingartifact.TemplateCatalogInventoryName, "skills/west-monroe-presentations/SKILL.md", "scripts/install-skill.py", "SKILL-INSTALL.md", "library/wm-design-system/v12/catalog/assets/assets.json"} {
 		if _, ok := files[required]; !ok {
 			t.Fatalf("staged archive closure omitted %s", required)
 		}

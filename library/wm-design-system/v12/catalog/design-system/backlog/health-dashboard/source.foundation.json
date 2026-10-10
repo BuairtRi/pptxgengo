@@ -1,0 +1,285 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-071",
+      "density": "compact",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "standard",
+        "source_lines": 1,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Backlog health",
+      "title": "The next two sprints are ready; the tail is aging",
+      "source": "Source: Northfield digital front door backlog, Oct 2026. Sample figures for layout only.",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "metric",
+              "x": 57.0,
+              "y": 126,
+              "w": 154.8,
+              "value": "42",
+              "label": "ready items, of 118 open"
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "metric",
+              "x": 229.8,
+              "y": 126,
+              "w": 154.8,
+              "value": "88%",
+              "label": "refined for the next two sprints"
+            },
+            "source_pointer": "/body/1"
+          }
+        },
+        {
+          "id": "node03",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "metric",
+              "x": 402.6,
+              "y": 126,
+              "w": 154.8,
+              "value": "47",
+              "label": "days average backlog age",
+              "status": "risk"
+            },
+            "source_pointer": "/body/2"
+          }
+        },
+        {
+          "id": "node04",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "metric",
+              "x": 575.4,
+              "y": 126,
+              "w": 154.8,
+              "value": "6",
+              "label": "blocked items",
+              "status": "risk"
+            },
+            "source_pointer": "/body/3"
+          }
+        },
+        {
+          "id": "node05",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "metric",
+              "x": 748.2,
+              "y": 126,
+              "w": 154.8,
+              "value": "28%",
+              "label": "of open items are bugs, 72% features"
+            },
+            "source_pointer": "/body/4"
+          }
+        },
+        {
+          "id": "node06",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "rule",
+              "x": 57,
+              "y": 234,
+              "w": 846,
+              "weight": 1.5
+            },
+            "source_pointer": "/body/5"
+          }
+        },
+        {
+          "id": "node07",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "chart",
+              "kind": "column",
+              "x": 57,
+              "y": 252,
+              "w": 414,
+              "h": 198,
+              "title": "Open items by age",
+              "units": "Items",
+              "categories": [
+                "0 to 30 days",
+                "31 to 60",
+                "61 to 90",
+                "Over 90"
+              ],
+              "series": [
+                {
+                  "name": "Items",
+                  "values": [
+                    52,
+                    34,
+                    19,
+                    13
+                  ]
+                }
+              ],
+              "highlight": [
+                3
+              ]
+            },
+            "source_pointer": "/body/6"
+          }
+        },
+        {
+          "id": "node08",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "strongnum",
+              "x": 489,
+              "y": 252,
+              "w": 414,
+              "numInk": "emphasis",
+              "items": [
+                {
+                  "title": "Refinement is on track",
+                  "text": "Next two sprints hold 88% refined stories."
+                },
+                {
+                  "title": "Messaging is stuck",
+                  "text": "Five of six blocked items wait on the vendor API."
+                },
+                {
+                  "title": "Old items need a verdict",
+                  "text": "13 items over 90 days: close, split or schedule."
+                }
+              ]
+            },
+            "source_pointer": "/body/7"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-071",
+        "template": "backlog/health-dashboard",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/software.json",
+        "source_sha256": "7ee122ddd1821607b04297a42096dd7246def1b5a589d89972f60a8500dacaf3",
+        "source_revision": "wmds-library.v12",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "metric"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "metric"
+          },
+          {
+            "id": "node03",
+            "source_pointer": "/body/2",
+            "expected_type": "metric"
+          },
+          {
+            "id": "node04",
+            "source_pointer": "/body/3",
+            "expected_type": "metric"
+          },
+          {
+            "id": "node05",
+            "source_pointer": "/body/4",
+            "expected_type": "metric"
+          },
+          {
+            "id": "node06",
+            "source_pointer": "/body/5",
+            "expected_type": "rule"
+          },
+          {
+            "id": "node07",
+            "source_pointer": "/body/6",
+            "expected_type": "chart"
+          },
+          {
+            "id": "node08",
+            "source_pointer": "/body/7",
+            "expected_type": "strongnum"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

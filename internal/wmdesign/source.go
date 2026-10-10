@@ -29,9 +29,10 @@ const LibraryRevisionV8 = "wmds-library.v8"
 const LibraryRevisionV9 = "wmds-library.v9"
 const LibraryRevisionV10 = "wmds-library.v10"
 const LibraryRevisionV11 = "wmds-library.v11"
+const LibraryRevisionV12 = "wmds-library.v12"
 
 func isV6OrLaterLibrary(revision string) bool {
-	return revision == LibraryRevisionV6 || revision == LibraryRevisionV7 || revision == LibraryRevisionV8 || revision == LibraryRevisionV9 || revision == LibraryRevisionV10 || revision == LibraryRevisionV11
+	return revision == LibraryRevisionV6 || revision == LibraryRevisionV7 || revision == LibraryRevisionV8 || revision == LibraryRevisionV9 || revision == LibraryRevisionV10 || revision == LibraryRevisionV11 || revision == LibraryRevisionV12
 }
 
 // V6 carries the accepted V5 rendering semantics for unchanged compositions.
@@ -55,6 +56,8 @@ type sourcePin struct {
 }
 
 var sourcePins = map[string]sourcePin{
+	"e55c458085740c01ad7a2bb272882929134b572751cf7a19bd470dc25c862479": {"18a669a402cd6d8ce1bf61c62d87f5ec15127f0daafc4845d1b568651e58a573", LibraryRevisionV12},
+	"f075ebab63501ddaa26de9e1f1edec141e0784fee9c483b7f6a81213e5041779": {"dd2354e663b9327fd30a5961509d442c6f049774faaff94a4cc778ad5534caab", LibraryRevisionV12},
 	"eb7dbb02d78b0a32b8bba552ba54bfd96f60e462985d7829f6fe91b4d00ff633": {"5fd96a039055e8d281c95fbb55fc472ca816308dfde34c62a0b869f223cacba1", LibraryRevisionV11},
 	"c913e0bc7c50312d6f4ab549477aed0006a574840af34e65cf62ec27315cb252": {"379b1462076ecaca7c0858979afd1efebbfaee5112ffc2f20b3a8078cd3e2b7d", LibraryRevisionV11},
 	"45d25e4d920165425a661aa8ceea36a24b979070b673f547f2294d0a65d109c0": {"aea092e8e5e1aca02900ab87b90b294d014ac2c19937049f735e1ad30a7c9124", LibraryRevisionV10},

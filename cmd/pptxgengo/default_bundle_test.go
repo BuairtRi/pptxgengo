@@ -9,18 +9,18 @@ import (
 
 func TestPublishedBundleDefaultsAndClosedMetadata(t *testing.T) {
 	root := t.TempDir()
-	if got, err := publishedBundle(root); err != nil || got != "v11" {
+	if got, err := publishedBundle(root); err != nil || got != "v12" {
 		t.Fatalf("latest default: %q %v", got, err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "../v11", "v11 v3", ""} {
+	for _, value := range []string{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v12", "../v12", "v12 v3", ""} {
 		if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte(value+"\n"), 0600); err != nil {
 			t.Fatal(err)
 		}
 		got, err := publishedBundle(root)
-		if value == "v11" {
+		if value == "v12" {
 			if err != nil || got != value {
 				t.Errorf("metadata %q: %q %v", value, got, err)
 			}
@@ -43,12 +43,12 @@ func TestEmbeddingMaintenanceWrapperArguments(t *testing.T) {
 	}
 }
 
-func TestDesignArgsUseStagedV11ButRespectProjectPins(t *testing.T) {
+func TestDesignArgsUseStagedV12ButRespectProjectPins(t *testing.T) {
 	root := t.TempDir()
 	if err := os.Mkdir(filepath.Join(root, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte("v11\n"), 0600); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "release/default-bundle.txt"), []byte("v12\n"), 0600); err != nil {
 		t.Fatal(err)
 	}
 	for _, command := range []string{"library-catalog", "library-search", "library-index", "library-find", "library-inspect", "library-preview", "library-fit", "build"} {
@@ -56,7 +56,7 @@ func TestDesignArgsUseStagedV11ButRespectProjectPins(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		want := filepath.Join(root, "library", "wm-design-system", "v11")
+		want := filepath.Join(root, "library", "wm-design-system", "v12")
 		found := false
 		for i := range args {
 			if args[i] == "--bundle" && i+1 < len(args) && args[i+1] == want {
@@ -94,7 +94,7 @@ func TestDiscoveryDefaultsUseOnlyLatestLibraryResources(t *testing.T) {
 		for i := 1; i+1 < len(got); i += 2 {
 			values[got[i]] = got[i+1]
 		}
-		bundle := filepath.Join(root, "library", "wm-design-system", "v11")
+		bundle := filepath.Join(root, "library", "wm-design-system", "v12")
 		if values["--bundle"] != bundle || values["--index"] != filepath.Join(bundle, "library.sqlite") || values["--gallery"] != filepath.Join(bundle, "catalog") {
 			t.Fatalf("latest discovery paths: %v", got)
 		}

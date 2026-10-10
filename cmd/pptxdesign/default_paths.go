@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-const currentDesignBundle = "v11"
+const currentDesignBundle = "v12"
 
 // Installed tools can be invoked directly as well as through the wrapper.
 // Repository development keeps relative paths when no release tree is present.
@@ -26,7 +26,7 @@ func releaseRootForDesignExecutable(executable string) string {
 		return ""
 	}
 	root := filepath.Dir(filepath.Dir(resolved))
-	for _, revision := range []string{currentDesignBundle, "v10", "v9"} {
+	for _, revision := range []string{currentDesignBundle, "v11", "v10", "v9"} {
 		info, err := os.Stat(filepath.Join(root, "library", "wm-design-system", revision, "bundle.json"))
 		if err == nil && info.Mode().IsRegular() {
 			return root

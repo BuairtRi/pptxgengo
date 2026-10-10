@@ -175,7 +175,7 @@ func bindLibraryTemplate(def LibraryTemplate, bound BoundSlide) (SlideSpec, Temp
 		return SlideSpec{}, record, err
 	}
 	slide.ID, slide.ContentKind, slide.TemplateBinding = bound.ID, bound.ContentKind, &record
-	if err := applyLibraryRefinements(def.Key, def.SourceRevision, &slide); err != nil {
+	if err := applyLibraryRefinements(def.Key, def.SourceRevision, &slide, def.Revision); err != nil {
 		return SlideSpec{}, record, err
 	}
 	return slide, record, nil
@@ -255,7 +255,7 @@ func LibrarySourceReference(bundle, override, family string, year int) (Document
 		slide.ID = fmt.Sprintf("source-%03d", len(doc.Slides)+1)
 		slide.ContentKind = "synthetic_example"
 		slide.TemplateBinding = &TemplateSlideRecord{SlideID: slide.ID, Template: def.Key, Contract: LibraryBindingsContract, SourceFile: def.SourceFile, SourceSHA256: def.SourceSHA256, SourceRevision: def.SourceRevision, ContentKind: "synthetic_example", Identities: def.Identities}
-		if e := applyLibraryRefinements(def.Key, def.SourceRevision, &slide); e != nil {
+		if e := applyLibraryRefinements(def.Key, def.SourceRevision, &slide, def.Revision); e != nil {
 			return Document{}, e
 		}
 		doc.Slides = append(doc.Slides, slide)

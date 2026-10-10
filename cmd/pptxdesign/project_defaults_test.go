@@ -124,7 +124,7 @@ func TestPublishedProjectBundleMetadata(t *testing.T) {
 	}
 }
 
-func TestProjectPublishedV11PreservesLockedRevisions(t *testing.T) {
+func TestProjectPublishedV12PreservesLockedRevisions(t *testing.T) {
 	stage := t.TempDir()
 	repoPlanning, err := filepath.Abs("../../planning/wm-design-contracts")
 	if err != nil {
@@ -142,7 +142,7 @@ func TestProjectPublishedV11PreservesLockedRevisions(t *testing.T) {
 		copyBundleFixture(t, from, to)
 	}
 	currentBundle := filepath.Join(stage, "library/wm-design-system", currentDesignBundle)
-	copyBundleFixture(t, filepath.Join(repoPlanning, currentDesignBundle, "intake-20261006-649-frozen", "bundle"), currentBundle)
+	copyBundleFixture(t, filepath.Join("..", "..", "library", "wm-design-system", currentDesignBundle), currentBundle)
 	if err := os.Mkdir(filepath.Join(stage, "release"), 0700); err != nil {
 		t.Fatal(err)
 	}

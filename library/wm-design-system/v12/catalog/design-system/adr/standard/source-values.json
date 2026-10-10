@@ -1,0 +1,49 @@
+{
+  "schema": "pptxgengo.wmds-template-document.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "library-018",
+      "template": "adr/standard",
+      "content_kind": "synthetic_example",
+      "values": {
+        "slots": {
+          "eyebrow": "Architecture decision record",
+          "node01.text": "Status",
+          "node02.text": "Accepted",
+          "node03.text": "Date",
+          "node04.text": "12 Sep 2026",
+          "node05.text": "Deciders",
+          "node06.text": "Architecture review board",
+          "node07.text": "Supersedes",
+          "node08.text": "ADR-009 Point-to-point HL7 feeds",
+          "node10.text": "Context",
+          "node11.text": "Northfield runs 14 clinical and revenue systems, and every pair that exchanges data has its own interface. The 61 feeds fail in different ways, and each new system adds more.",
+          "node12.body.item01.p": "Publish clinical and revenue events to one managed event bus. Systems subscribe to the events they need, so a new feed no longer changes the sending system.",
+          "node12.label": "Decision",
+          "node13.text": "Positive consequences",
+          "node14.items.item01": "One place to monitor and replay every event",
+          "node14.items.item02": "New systems connect in weeks, not quarters",
+          "node15.text": "Negative consequences",
+          "node16.items.item01": "The platform team must run a new service around the clock",
+          "node16.items.item02": "Interface teams need training in event design",
+          "node17.text": "Review in September 2027, or sooner if feed incidents rise.",
+          "title": "ADR-014: Route clinical events through a [[shared event bus]]"
+        },
+        "keys": {
+          "node12.body": [
+            "example-001"
+          ],
+          "node14.items": [
+            "example-001",
+            "example-002"
+          ],
+          "node16.items": [
+            "example-001",
+            "example-002"
+          ]
+        }
+      }
+    }
+  ]
+}

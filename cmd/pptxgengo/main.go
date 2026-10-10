@@ -15,7 +15,7 @@ import (
 var version = "dev"
 var releaseIdentity = "dev"
 
-const currentBundle = "v11"
+const currentBundle = "v12"
 
 var tools = map[string]string{
 	"design": "pptxdesign",

@@ -850,7 +850,8 @@ func (r *renderer) planDiagramConnector(p *scenePlan, id string, n diagramSpec, 
 		y := mid[1] - 6
 		if n.LabelPos == "above" {
 			y -= 9
-		} else if n.LabelPos != "" {
+			// The pinned browser leaves end at the longest segment midpoint.
+		} else if n.LabelPos != "" && !(r.source.Revision == LibraryRevisionV12 && n.LabelPos == "end") {
 			return fmt.Errorf("scene.unknown_connector_label_position")
 		}
 		b := Rect{mid[0] - w/2, y, w, 0}

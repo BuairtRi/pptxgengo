@@ -1,0 +1,1830 @@
+{
+  "key": "toc/levels-pages",
+  "source_file": "templates/library/covers.json",
+  "source_sha256": "624024f1b990b589574608c5db75943bc8c4e8ecdfe4b1e808468a27680ec622",
+  "source_revision": "wmds-library.v12",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "toclist"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "toclist"
+    }
+  ],
+  "family": "covers",
+  "tier": "core",
+  "name": "Contents · two levels with leaders and page numbers",
+  "purpose": "Printed-style table of contents: section headings with subsections beneath, dotted leaders and right-aligned page numbers.",
+  "uses": [
+    "header.slide",
+    "text.block",
+    "schedule",
+    "connector (dotted leader)"
+  ],
+  "source_advisory_budget": {
+    "words": 112,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "eyebrow",
+      "maxChars": 20
+    },
+    {
+      "slot": "title",
+      "maxChars": 48
+    },
+    {
+      "slot": "sections",
+      "minItems": 4,
+      "maxItems": 6,
+      "note": "number, title (maxChars 24), three subsections (maxChars 30), page numbers"
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "content",
+      "headline",
+      "key-message"
+    ],
+    "structures": [
+      "repeated-items"
+    ],
+    "visual_forms": [],
+    "component_types": [
+      "toclist"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/items",
+        "component_type": "toclist",
+        "role": "content",
+        "exact_count": 12,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/1/items",
+        "component_type": "toclist",
+        "role": "content",
+        "exact_count": 12,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "toclist",
+        "role": "content",
+        "source_bounds": {
+          "w": 414,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "toclist",
+        "role": "content",
+        "source_bounds": {
+          "w": 414,
+          "x": 489,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v12",
+    "source_sha256": "624024f1b990b589574608c5db75943bc8c4e8ecdfe4b1e808468a27680ec622",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "unknown",
+    "groups": [
+      {
+        "alias": "/toclists/item_01/items",
+        "role": "content",
+        "cardinality": 12,
+        "source_pointer": "/body/0/items",
+        "basis": "semantic_closed_binding_array"
+      },
+      {
+        "alias": "/toclists/item_02/items",
+        "role": "content",
+        "cardinality": 12,
+        "source_pointer": "/body/1/items",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item01.n",
+        "alias": "/toclists/item_01/items/item_01/n",
+        "source_pointer": "/body/0/items/0/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/toclists/item_01/items",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "value (string) at /toclists/item_01/items/item_01/n",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item01.page",
+        "alias": "/toclists/item_01/items/item_01/page",
+        "source_pointer": "/body/0/items/0/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_01/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item01.text",
+        "alias": "/toclists/item_01/items/item_01/text",
+        "source_pointer": "/body/0/items/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item02.page",
+        "alias": "/toclists/item_01/items/item_02/page",
+        "source_pointer": "/body/0/items/1/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_02/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item02.text",
+        "alias": "/toclists/item_01/items/item_02/text",
+        "source_pointer": "/body/0/items/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item03.page",
+        "alias": "/toclists/item_01/items/item_03/page",
+        "source_pointer": "/body/0/items/2/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_03/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item03.text",
+        "alias": "/toclists/item_01/items/item_03/text",
+        "source_pointer": "/body/0/items/2/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_03/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item04.page",
+        "alias": "/toclists/item_01/items/item_04/page",
+        "source_pointer": "/body/0/items/3/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_04/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item04.text",
+        "alias": "/toclists/item_01/items/item_04/text",
+        "source_pointer": "/body/0/items/3/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_04/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item05.n",
+        "alias": "/toclists/item_01/items/item_05/n",
+        "source_pointer": "/body/0/items/4/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/toclists/item_01/items",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "value (string) at /toclists/item_01/items/item_05/n",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item05.page",
+        "alias": "/toclists/item_01/items/item_05/page",
+        "source_pointer": "/body/0/items/4/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_05/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item05.text",
+        "alias": "/toclists/item_01/items/item_05/text",
+        "source_pointer": "/body/0/items/4/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_05/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item06.page",
+        "alias": "/toclists/item_01/items/item_06/page",
+        "source_pointer": "/body/0/items/5/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_06/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item06.text",
+        "alias": "/toclists/item_01/items/item_06/text",
+        "source_pointer": "/body/0/items/5/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_06/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item07.page",
+        "alias": "/toclists/item_01/items/item_07/page",
+        "source_pointer": "/body/0/items/6/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_07/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item07.text",
+        "alias": "/toclists/item_01/items/item_07/text",
+        "source_pointer": "/body/0/items/6/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_07/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item08.page",
+        "alias": "/toclists/item_01/items/item_08/page",
+        "source_pointer": "/body/0/items/7/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_08/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item08.text",
+        "alias": "/toclists/item_01/items/item_08/text",
+        "source_pointer": "/body/0/items/7/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_08/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item09.n",
+        "alias": "/toclists/item_01/items/item_09/n",
+        "source_pointer": "/body/0/items/8/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/toclists/item_01/items",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "value (string) at /toclists/item_01/items/item_09/n",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item09.page",
+        "alias": "/toclists/item_01/items/item_09/page",
+        "source_pointer": "/body/0/items/8/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_09/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item09.text",
+        "alias": "/toclists/item_01/items/item_09/text",
+        "source_pointer": "/body/0/items/8/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_09/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item10.page",
+        "alias": "/toclists/item_01/items/item_10/page",
+        "source_pointer": "/body/0/items/9/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_10/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item10.text",
+        "alias": "/toclists/item_01/items/item_10/text",
+        "source_pointer": "/body/0/items/9/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_10/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item11.page",
+        "alias": "/toclists/item_01/items/item_11/page",
+        "source_pointer": "/body/0/items/10/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_11/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item11.text",
+        "alias": "/toclists/item_01/items/item_11/text",
+        "source_pointer": "/body/0/items/10/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_11/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item12.page",
+        "alias": "/toclists/item_01/items/item_12/page",
+        "source_pointer": "/body/0/items/11/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_01/items",
+        "group_index": 11,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_01/items/item_12/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.items.item12.text",
+        "alias": "/toclists/item_01/items/item_12/text",
+        "source_pointer": "/body/0/items/11/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_01/items",
+        "group_index": 11,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_01/items/item_12/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item01.n",
+        "alias": "/toclists/item_02/items/item_01/n",
+        "source_pointer": "/body/1/items/0/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/toclists/item_02/items",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "value (string) at /toclists/item_02/items/item_01/n",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item01.page",
+        "alias": "/toclists/item_02/items/item_01/page",
+        "source_pointer": "/body/1/items/0/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_01/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item01.text",
+        "alias": "/toclists/item_02/items/item_01/text",
+        "source_pointer": "/body/1/items/0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item02.page",
+        "alias": "/toclists/item_02/items/item_02/page",
+        "source_pointer": "/body/1/items/1/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_02/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item02.text",
+        "alias": "/toclists/item_02/items/item_02/text",
+        "source_pointer": "/body/1/items/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_02/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item03.page",
+        "alias": "/toclists/item_02/items/item_03/page",
+        "source_pointer": "/body/1/items/2/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_03/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item03.text",
+        "alias": "/toclists/item_02/items/item_03/text",
+        "source_pointer": "/body/1/items/2/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_03/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item04.page",
+        "alias": "/toclists/item_02/items/item_04/page",
+        "source_pointer": "/body/1/items/3/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_04/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item04.text",
+        "alias": "/toclists/item_02/items/item_04/text",
+        "source_pointer": "/body/1/items/3/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_04/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item05.n",
+        "alias": "/toclists/item_02/items/item_05/n",
+        "source_pointer": "/body/1/items/4/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/toclists/item_02/items",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "value (string) at /toclists/item_02/items/item_05/n",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item05.page",
+        "alias": "/toclists/item_02/items/item_05/page",
+        "source_pointer": "/body/1/items/4/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_05/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item05.text",
+        "alias": "/toclists/item_02/items/item_05/text",
+        "source_pointer": "/body/1/items/4/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_05/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item06.page",
+        "alias": "/toclists/item_02/items/item_06/page",
+        "source_pointer": "/body/1/items/5/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_06/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item06.text",
+        "alias": "/toclists/item_02/items/item_06/text",
+        "source_pointer": "/body/1/items/5/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_06/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item07.page",
+        "alias": "/toclists/item_02/items/item_07/page",
+        "source_pointer": "/body/1/items/6/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_07/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item07.text",
+        "alias": "/toclists/item_02/items/item_07/text",
+        "source_pointer": "/body/1/items/6/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_07/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item08.page",
+        "alias": "/toclists/item_02/items/item_08/page",
+        "source_pointer": "/body/1/items/7/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_08/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item08.text",
+        "alias": "/toclists/item_02/items/item_08/text",
+        "source_pointer": "/body/1/items/7/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_08/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item09.n",
+        "alias": "/toclists/item_02/items/item_09/n",
+        "source_pointer": "/body/1/items/8/n",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/toclists/item_02/items",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "value (string) at /toclists/item_02/items/item_09/n",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item09.page",
+        "alias": "/toclists/item_02/items/item_09/page",
+        "source_pointer": "/body/1/items/8/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_09/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item09.text",
+        "alias": "/toclists/item_02/items/item_09/text",
+        "source_pointer": "/body/1/items/8/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_09/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item10.page",
+        "alias": "/toclists/item_02/items/item_10/page",
+        "source_pointer": "/body/1/items/9/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_10/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item10.text",
+        "alias": "/toclists/item_02/items/item_10/text",
+        "source_pointer": "/body/1/items/9/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_10/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item11.page",
+        "alias": "/toclists/item_02/items/item_11/page",
+        "source_pointer": "/body/1/items/10/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_11/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item11.text",
+        "alias": "/toclists/item_02/items/item_11/text",
+        "source_pointer": "/body/1/items/10/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_11/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item12.page",
+        "alias": "/toclists/item_02/items/item_12/page",
+        "source_pointer": "/body/1/items/11/page",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "page",
+        "group": "/toclists/item_02/items",
+        "group_index": 11,
+        "cardinality": 12,
+        "description": "page (string) at /toclists/item_02/items/item_12/page",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.items.item12.text",
+        "alias": "/toclists/item_02/items/item_12/text",
+        "source_pointer": "/body/1/items/11/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/toclists/item_02/items",
+        "group_index": 11,
+        "cardinality": 12,
+        "description": "body (string) at /toclists/item_02/items/item_12/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Contents"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Where to find each part of the proposal"
+    },
+    {
+      "name": "node01.items.item01.n",
+      "source_pointer": "/body/0/items/0/n",
+      "kind": "string",
+      "synthetic_source_example": "01"
+    },
+    {
+      "name": "node01.items.item01.page",
+      "source_pointer": "/body/0/items/0/page",
+      "kind": "string",
+      "synthetic_source_example": "3"
+    },
+    {
+      "name": "node01.items.item01.text",
+      "source_pointer": "/body/0/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Our understanding"
+    },
+    {
+      "name": "node01.items.item02.page",
+      "source_pointer": "/body/0/items/1/page",
+      "kind": "string",
+      "synthetic_source_example": "3"
+    },
+    {
+      "name": "node01.items.item02.text",
+      "source_pointer": "/body/0/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Your goals and constraints"
+    },
+    {
+      "name": "node01.items.item03.page",
+      "source_pointer": "/body/0/items/2/page",
+      "kind": "string",
+      "synthetic_source_example": "4"
+    },
+    {
+      "name": "node01.items.item03.text",
+      "source_pointer": "/body/0/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "The close cycle today"
+    },
+    {
+      "name": "node01.items.item04.page",
+      "source_pointer": "/body/0/items/3/page",
+      "kind": "string",
+      "synthetic_source_example": "6"
+    },
+    {
+      "name": "node01.items.item04.text",
+      "source_pointer": "/body/0/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Pain points by entity"
+    },
+    {
+      "name": "node01.items.item05.n",
+      "source_pointer": "/body/0/items/4/n",
+      "kind": "string",
+      "synthetic_source_example": "02"
+    },
+    {
+      "name": "node01.items.item05.page",
+      "source_pointer": "/body/0/items/4/page",
+      "kind": "string",
+      "synthetic_source_example": "9"
+    },
+    {
+      "name": "node01.items.item05.text",
+      "source_pointer": "/body/0/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Approach"
+    },
+    {
+      "name": "node01.items.item06.page",
+      "source_pointer": "/body/0/items/5/page",
+      "kind": "string",
+      "synthetic_source_example": "9"
+    },
+    {
+      "name": "node01.items.item06.text",
+      "source_pointer": "/body/0/items/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Guiding principles"
+    },
+    {
+      "name": "node01.items.item07.page",
+      "source_pointer": "/body/0/items/6/page",
+      "kind": "string",
+      "synthetic_source_example": "10"
+    },
+    {
+      "name": "node01.items.item07.text",
+      "source_pointer": "/body/0/items/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Three-wave plan"
+    },
+    {
+      "name": "node01.items.item08.page",
+      "source_pointer": "/body/0/items/7/page",
+      "kind": "string",
+      "synthetic_source_example": "12"
+    },
+    {
+      "name": "node01.items.item08.text",
+      "source_pointer": "/body/0/items/7/text",
+      "kind": "string",
+      "synthetic_source_example": "Governance and cadence"
+    },
+    {
+      "name": "node01.items.item09.n",
+      "source_pointer": "/body/0/items/8/n",
+      "kind": "string",
+      "synthetic_source_example": "03"
+    },
+    {
+      "name": "node01.items.item09.page",
+      "source_pointer": "/body/0/items/8/page",
+      "kind": "string",
+      "synthetic_source_example": "14"
+    },
+    {
+      "name": "node01.items.item09.text",
+      "source_pointer": "/body/0/items/8/text",
+      "kind": "string",
+      "synthetic_source_example": "Solution"
+    },
+    {
+      "name": "node01.items.item10.page",
+      "source_pointer": "/body/0/items/9/page",
+      "kind": "string",
+      "synthetic_source_example": "14"
+    },
+    {
+      "name": "node01.items.item10.text",
+      "source_pointer": "/body/0/items/9/text",
+      "kind": "string",
+      "synthetic_source_example": "Target operating model"
+    },
+    {
+      "name": "node01.items.item11.page",
+      "source_pointer": "/body/0/items/10/page",
+      "kind": "string",
+      "synthetic_source_example": "15"
+    },
+    {
+      "name": "node01.items.item11.text",
+      "source_pointer": "/body/0/items/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Systems and automation"
+    },
+    {
+      "name": "node01.items.item12.page",
+      "source_pointer": "/body/0/items/11/page",
+      "kind": "string",
+      "synthetic_source_example": "18"
+    },
+    {
+      "name": "node01.items.item12.text",
+      "source_pointer": "/body/0/items/11/text",
+      "kind": "string",
+      "synthetic_source_example": "Controls and audit readiness"
+    },
+    {
+      "name": "node02.items.item01.n",
+      "source_pointer": "/body/1/items/0/n",
+      "kind": "string",
+      "synthetic_source_example": "04"
+    },
+    {
+      "name": "node02.items.item01.page",
+      "source_pointer": "/body/1/items/0/page",
+      "kind": "string",
+      "synthetic_source_example": "22"
+    },
+    {
+      "name": "node02.items.item01.text",
+      "source_pointer": "/body/1/items/0/text",
+      "kind": "string",
+      "synthetic_source_example": "Team"
+    },
+    {
+      "name": "node02.items.item02.page",
+      "source_pointer": "/body/1/items/1/page",
+      "kind": "string",
+      "synthetic_source_example": "22"
+    },
+    {
+      "name": "node02.items.item02.text",
+      "source_pointer": "/body/1/items/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Engagement leadership"
+    },
+    {
+      "name": "node02.items.item03.page",
+      "source_pointer": "/body/1/items/2/page",
+      "kind": "string",
+      "synthetic_source_example": "23"
+    },
+    {
+      "name": "node02.items.item03.text",
+      "source_pointer": "/body/1/items/2/text",
+      "kind": "string",
+      "synthetic_source_example": "Delivery team"
+    },
+    {
+      "name": "node02.items.item04.page",
+      "source_pointer": "/body/1/items/3/page",
+      "kind": "string",
+      "synthetic_source_example": "25"
+    },
+    {
+      "name": "node02.items.item04.text",
+      "source_pointer": "/body/1/items/3/text",
+      "kind": "string",
+      "synthetic_source_example": "Your team's role"
+    },
+    {
+      "name": "node02.items.item05.n",
+      "source_pointer": "/body/1/items/4/n",
+      "kind": "string",
+      "synthetic_source_example": "05"
+    },
+    {
+      "name": "node02.items.item05.page",
+      "source_pointer": "/body/1/items/4/page",
+      "kind": "string",
+      "synthetic_source_example": "26"
+    },
+    {
+      "name": "node02.items.item05.text",
+      "source_pointer": "/body/1/items/4/text",
+      "kind": "string",
+      "synthetic_source_example": "Commercials"
+    },
+    {
+      "name": "node02.items.item06.page",
+      "source_pointer": "/body/1/items/5/page",
+      "kind": "string",
+      "synthetic_source_example": "26"
+    },
+    {
+      "name": "node02.items.item06.text",
+      "source_pointer": "/body/1/items/5/text",
+      "kind": "string",
+      "synthetic_source_example": "Fees by phase"
+    },
+    {
+      "name": "node02.items.item07.page",
+      "source_pointer": "/body/1/items/6/page",
+      "kind": "string",
+      "synthetic_source_example": "27"
+    },
+    {
+      "name": "node02.items.item07.text",
+      "source_pointer": "/body/1/items/6/text",
+      "kind": "string",
+      "synthetic_source_example": "Assumptions"
+    },
+    {
+      "name": "node02.items.item08.page",
+      "source_pointer": "/body/1/items/7/page",
+      "kind": "string",
+      "synthetic_source_example": "28"
+    },
+    {
+      "name": "node02.items.item08.text",
+      "source_pointer": "/body/1/items/7/text",
+      "kind": "string",
+      "synthetic_source_example": "Business case and payback"
+    },
+    {
+      "name": "node02.items.item09.n",
+      "source_pointer": "/body/1/items/8/n",
+      "kind": "string",
+      "synthetic_source_example": "06"
+    },
+    {
+      "name": "node02.items.item09.page",
+      "source_pointer": "/body/1/items/8/page",
+      "kind": "string",
+      "synthetic_source_example": "30"
+    },
+    {
+      "name": "node02.items.item09.text",
+      "source_pointer": "/body/1/items/8/text",
+      "kind": "string",
+      "synthetic_source_example": "Why West Monroe"
+    },
+    {
+      "name": "node02.items.item10.page",
+      "source_pointer": "/body/1/items/9/page",
+      "kind": "string",
+      "synthetic_source_example": "30"
+    },
+    {
+      "name": "node02.items.item10.text",
+      "source_pointer": "/body/1/items/9/text",
+      "kind": "string",
+      "synthetic_source_example": "Healthcare finance experience"
+    },
+    {
+      "name": "node02.items.item11.page",
+      "source_pointer": "/body/1/items/10/page",
+      "kind": "string",
+      "synthetic_source_example": "31"
+    },
+    {
+      "name": "node02.items.item11.text",
+      "source_pointer": "/body/1/items/10/text",
+      "kind": "string",
+      "synthetic_source_example": "Comparable client results"
+    },
+    {
+      "name": "node02.items.item12.page",
+      "source_pointer": "/body/1/items/11/page",
+      "kind": "string",
+      "synthetic_source_example": "33"
+    },
+    {
+      "name": "node02.items.item12.text",
+      "source_pointer": "/body/1/items/11/text",
+      "kind": "string",
+      "synthetic_source_example": "References"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.items",
+      "source_pointer": "/body/0/items",
+      "count": 12
+    },
+    {
+      "name": "node02.items",
+      "source_pointer": "/body/1/items",
+      "count": 12
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-09",
+  "status": "active"
+}

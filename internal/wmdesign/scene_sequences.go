@@ -626,6 +626,7 @@ type ganttSpec struct {
 	X               float64 `json:"x"`
 	Y               float64 `json:"y"`
 	W               float64 `json:"w"`
+	GroupLabelInset float64 `json:"groupLabelInset,omitempty"`
 	TrackPitch      float64 `json:"trackPitch,omitempty"`
 	LegendSize      float64 `json:"legendSize,omitempty"`
 	LegendFullWidth bool    `json:"legendFullWidth,omitempty"`
@@ -705,7 +706,7 @@ func (r *renderer) sequenceHatch(p *scenePlan, id string, b Rect, fill, strong s
 }
 func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneContext) (*scenePlan, error) {
 	var n ganttSpec
-	if e := diagramDecode(raw, "x y w cols periods phases gates today sidebarLabel kinds events groups trackPitch legendSize legendFullWidth", &n); e != nil {
+	if e := diagramDecode(raw, "x y w cols periods phases gates today sidebarLabel kinds events groups trackPitch groupLabelInset legendSize legendFullWidth", &n); e != nil {
 		return nil, e
 	}
 	trackPitch := n.TrackPitch
@@ -1021,7 +1022,14 @@ func (r *renderer) planGanttScene(id string, raw json.RawMessage, ctx SceneConte
 			if contrast("FFFFFF", col) >= 4.5 {
 				textColor = "FFFFFF"
 			}
-			if e = r.sequenceLiteralText(p, id+".groups."+L.gkey+".label", strings.ToUpper(L.group.Label), st, Rect{n.X + gw/2 - (bottom-L.top-12)/2, L.top + (bottom-L.top)/2 - 6, bottom - L.top - 12, 12}, textColor, "center", false); e != nil {
+			labelInset := 12.
+			if n.GroupLabelInset != 0 {
+				if r.source.Revision != LibraryRevisionV12 || n.GroupLabelInset != 6 {
+					return nil, fmt.Errorf("scene.invalid_group_label_inset")
+				}
+				labelInset = n.GroupLabelInset
+			}
+			if e = r.sequenceLiteralText(p, id+".groups."+L.gkey+".label", strings.ToUpper(L.group.Label), st, Rect{n.X + gw/2 - (bottom-L.top-labelInset)/2, L.top + (bottom-L.top)/2 - 6, bottom - L.top - labelInset, 12}, textColor, "center", false); e != nil {
 				return nil, e
 			}
 			p.Items[len(p.Items)-1].Text.Rotation = -90

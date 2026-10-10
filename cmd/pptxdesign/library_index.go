@@ -14,7 +14,7 @@ import (
 
 func runLibraryIndex(command string, args []string) error {
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", "", "pinned bundle path or v11; new indices default to v11")
+	bundle := f.String("bundle", "", "pinned bundle path or v12; new indices default to v12")
 	source := f.String("source", "", "matching source override")
 	legacy := f.String("legacy-index", "", "optional legacy catalog-library.sqlite projection")
 	legacyRoot := f.String("legacy-root", "", "original/relocated release root for legacy contract resource paths")

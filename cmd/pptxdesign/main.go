@@ -76,7 +76,7 @@ func run() error {
 		return runLibrarySearch(os.Args[2:])
 	}
 	f := flag.NewFlagSet(command, flag.ContinueOnError)
-	bundle := f.String("bundle", currentDesignBundle, "pinned foundation bundle path or v11 (default)")
+	bundle := f.String("bundle", currentDesignBundle, "pinned foundation bundle path or v12 (default)")
 	engine := f.String("engine", wmdesign.CandidateEngine, "typography engine: wmds-go-foundation.v1 or wmds-go-foundation.v2 (candidate)")
 	editing := f.String("editing-profile", wmdesign.NativeEditingProfile, "template rendering: native-v1 (default) or stock")
 	source := f.String("source", "", "optional WMDS source override; must match pinned snapshot")

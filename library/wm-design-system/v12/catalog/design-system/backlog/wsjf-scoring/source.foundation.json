@@ -1,0 +1,229 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-078",
+      "density": "compact",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "standard",
+        "source_lines": 1,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Prioritization",
+      "title": "Weighted scoring puts bill pay and reschedule at the top",
+      "source": "Source: Northfield digital front door backlog, Oct 2026. Sample figures for layout only.",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "cols": [
+                {
+                  "k": "i",
+                  "label": "Backlog item",
+                  "w": 210
+                },
+                {
+                  "k": "v",
+                  "label": "Value",
+                  "type": "num",
+                  "w": 84
+                },
+                {
+                  "k": "t",
+                  "label": "Time criticality",
+                  "type": "num",
+                  "w": 120
+                },
+                {
+                  "k": "r",
+                  "label": "Risk reduction",
+                  "type": "num",
+                  "w": 120
+                },
+                {
+                  "k": "z",
+                  "label": "Job size",
+                  "type": "num",
+                  "w": 84
+                },
+                {
+                  "k": "w",
+                  "label": "WSJF score",
+                  "type": "num",
+                  "w": 96
+                },
+                {
+                  "k": "k",
+                  "label": "Rank",
+                  "type": "num",
+                  "w": 60
+                },
+                {
+                  "k": "p",
+                  "label": "Tier",
+                  "type": "priority",
+                  "w": 72
+                }
+              ],
+              "dense": true,
+              "header": "dark",
+              "rowH": 30,
+              "rows": [
+                {
+                  "i": "Saved cards for bill pay",
+                  "k": "1",
+                  "p": "P1",
+                  "r": "3",
+                  "t": "5",
+                  "v": "5",
+                  "w": "6.5",
+                  "z": "2"
+                },
+                {
+                  "i": "Reschedule from reminder",
+                  "k": "2",
+                  "p": "P1",
+                  "r": "3",
+                  "t": "8",
+                  "v": "8",
+                  "w": "6.3",
+                  "z": "3"
+                },
+                {
+                  "i": "Open-slot filters",
+                  "k": "3",
+                  "p": "P2",
+                  "r": "2",
+                  "t": "3",
+                  "v": "5",
+                  "w": "3.3",
+                  "z": "3"
+                },
+                {
+                  "i": "Estimate at booking",
+                  "k": "4",
+                  "p": "P2",
+                  "r": "8",
+                  "t": "13",
+                  "v": "13",
+                  "w": "2.6",
+                  "z": "13"
+                },
+                {
+                  "i": "Intake pre-fill",
+                  "k": "5",
+                  "p": "P2",
+                  "r": "5",
+                  "t": "5",
+                  "v": "8",
+                  "w": "2.2",
+                  "z": "8"
+                },
+                {
+                  "i": "Proxy invite reminders",
+                  "k": "6",
+                  "p": "P3",
+                  "r": "3",
+                  "t": "2",
+                  "v": "3",
+                  "w": "1.6",
+                  "z": "5"
+                },
+                {
+                  "i": "Message attachments",
+                  "k": "7",
+                  "p": "P3",
+                  "r": "2",
+                  "t": "2",
+                  "v": "3",
+                  "w": "1.4",
+                  "z": "5"
+                },
+                {
+                  "i": "Wayfinding maps",
+                  "k": "8",
+                  "p": "P4",
+                  "r": "1",
+                  "t": "1",
+                  "v": "2",
+                  "w": "0.5",
+                  "z": "8"
+                }
+              ],
+              "type": "table",
+              "w": 846,
+              "x": 57,
+              "y": 126
+            },
+            "source_pointer": "/body/0",
+            "resolutions": [
+              "wmds.v12.source-allocation.table-columns"
+            ]
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "text",
+              "style": "body",
+              "ink": "secondary",
+              "x": 57,
+              "y": 414,
+              "w": 846,
+              "text": "WSJF = (value + time criticality + risk reduction) divided by job size, each on a 1, 2, 3, 5, 8, 13 scale."
+            },
+            "source_pointer": "/body/1"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-078",
+        "template": "backlog/wsjf-scoring",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/software.json",
+        "source_sha256": "7ee122ddd1821607b04297a42096dd7246def1b5a589d89972f60a8500dacaf3",
+        "source_revision": "wmds-library.v12",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "text"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}
