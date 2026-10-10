@@ -17,7 +17,7 @@ func runProject(args []string) error {
 		return runProjectNativeImport(args[1:])
 	}
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|diagram|component|table|team|gantt|cycle|assessment|quantitative|commercial|process|journey|portfolio|layer|maturity|staffing|native-import|reconcile|editability> --project PATH [--bundle v11|PATH]")
+		return fmt.Errorf("usage: pptxdesign project <create|layout|version|share|share-extract|share-verify|init|migrate|check|build|status|resume|approve|export|review|view|attach-render|section|slide|asset|swap|titles|split|scaffold|edit|fork|detach|measure|diagram|component|table|team|gantt|cycle|assessment|quantitative|commercial|process|journey|portfolio|layer|maturity|staffing|native-import|reconcile|editability> --project PATH [--bundle v12|PATH]")
 	}
 	if args[0] == "create" {
 		return runProjectCreate(args[1:])
@@ -115,7 +115,7 @@ func runProject(args []string) error {
 	cmd := args[0]
 	f := flag.NewFlagSet("project "+cmd, flag.ContinueOnError)
 	path := f.String("project", ".", "project directory or deck.yaml")
-	bundle := f.String("bundle", "", "bundle path or v1/v2/v3/v4/v5/v6/v7/v8/v9/v10/v11 (defaults to project lock; new projects use published bundle)")
+	bundle := f.String("bundle", "", "bundle path or v1/v2/v3/v4/v5/v6/v7/v8/v9/v10/v11/v12 (defaults to project lock; new projects use published bundle)")
 	engine := f.String("engine", "", "engine (defaults to existing lock; init uses candidate v2)")
 	out := f.String("out", "", "new export ZIP path")
 	stage := f.String("stage", "", "approval stage")
@@ -266,7 +266,7 @@ func validPublishedBundle(value string) bool {
 }
 
 func validLockedBundle(value string) bool {
-	return value == "v1" || value == "v2" || value == "v3" || value == "v4" || value == "v5" || value == "v6" || value == "v7" || value == "v8" || value == "v9" || value == "v10" || value == currentDesignBundle
+	return value == "v1" || value == "v2" || value == "v3" || value == "v4" || value == "v5" || value == "v6" || value == "v7" || value == "v8" || value == "v9" || value == "v10" || value == "v11" || value == "v12" || value == currentDesignBundle
 }
 
 func publishedProjectBundle(root string) (string, error) {

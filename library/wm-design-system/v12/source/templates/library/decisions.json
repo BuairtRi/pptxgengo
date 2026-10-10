@@ -1,0 +1,2422 @@
+{
+  "schema": "wmds.templates.v2",
+  "family": "decisions",
+  "name": "Decision records",
+  "summary": "Architecture decision records, options considered, decision paths, logs, superseded decisions and decision requests.",
+  "templates": [
+    {
+      "id": "adr",
+      "variant": "standard",
+      "name": "Architecture decision record",
+      "tier": "core",
+      "purpose": "One-slide ADR: status, date and deciders in a strip, then context, decision and consequences.",
+      "uses": [
+        "card.plain",
+        "list.bullets",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-03",
+      "rev": 2,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 138,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "status",
+          "note": "proposed, accepted or superseded; Accepted is the inverse block, the others subtle or outline"
+        },
+        {
+          "slot": "date",
+          "maxChars": 14
+        },
+        {
+          "slot": "deciders",
+          "maxChars": 32
+        },
+        {
+          "slot": "supersedes",
+          "maxChars": 40
+        },
+        {
+          "slot": "context",
+          "maxChars": 190
+        },
+        {
+          "slot": "decision",
+          "maxChars": 170
+        },
+        {
+          "slot": "positive consequences",
+          "note": "2-3 bullets, 52 chars each"
+        },
+        {
+          "slot": "negative consequences",
+          "note": "2-3 bullets, 52 chars each"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Architecture decision record",
+        "title": "ADR-014: Route clinical events through a [[shared event bus]]",
+        "emphasis": "highlight",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "Status"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 144,
+            "w": 126,
+            "h": 36,
+            "surface": "inverse",
+            "style": "label",
+            "align": "left",
+            "text": "Accepted"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 273,
+            "y": 126,
+            "w": 198,
+            "text": "Date"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 273,
+            "y": 144,
+            "w": 198,
+            "text": "12 Sep 2026"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 126,
+            "w": 198,
+            "text": "Deciders"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 489,
+            "y": 144,
+            "w": 198,
+            "text": "Architecture review board"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Supersedes"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 144,
+            "w": 198,
+            "text": "ADR-009 Point-to-point HL7 feeds"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 198,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 216,
+            "w": 270,
+            "text": "Context"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 234,
+            "w": 270,
+            "text": "Northfield runs 14 clinical and revenue systems, and every pair that exchanges data has its own interface. The 61 feeds fail in different ways, and each new system adds more."
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 216,
+            "w": 270,
+            "h": 180,
+            "surface": "subtle",
+            "edge": {
+              "side": "top",
+              "weight": 6,
+              "ink": "emphasis"
+            },
+            "label": "Decision",
+            "body": [
+              {
+                "p": "Publish clinical and revenue events to one managed event bus. Systems subscribe to the events they need, so a new feed no longer changes the sending system."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 216,
+            "w": 270,
+            "text": "Positive consequences"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 234,
+            "w": 270,
+            "items": [
+              "One place to monitor and replay every event",
+              "New systems connect in weeks, not quarters"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 306,
+            "w": 270,
+            "text": "Negative consequences"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 324,
+            "w": 270,
+            "items": [
+              "The platform team must run a new service around the clock",
+              "Interface teams need training in event design"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 54,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Review in September 2027, or sooner if feed incidents rise."
+          }
+        ],
+        "density": "compact"
+      },
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "adr",
+      "variant": "left",
+      "name": "Architecture decision record \u00b7 left panel",
+      "tier": "working",
+      "purpose": "The ADR with its metadata in the left panel and the reasoning on the right.",
+      "uses": [
+        "card.plain",
+        "list.bullets",
+        "header.slide"
+      ],
+      "legacy": "left variant of adr/standard",
+      "rev": 2,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 129,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "status",
+          "note": "proposed, accepted or superseded; Accepted is the inverse block, the others subtle or outline"
+        },
+        {
+          "slot": "date",
+          "maxChars": 14
+        },
+        {
+          "slot": "deciders",
+          "maxChars": 32
+        },
+        {
+          "slot": "supersedes",
+          "maxChars": 40
+        },
+        {
+          "slot": "context",
+          "maxChars": 190
+        },
+        {
+          "slot": "decision",
+          "maxChars": 170
+        },
+        {
+          "slot": "positive consequences",
+          "note": "2-3 bullets, 52 chars each"
+        },
+        {
+          "slot": "negative consequences",
+          "note": "2-3 bullets, 52 chars each"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "railSurface": "inverse",
+        "footer": "compact",
+        "eyebrow": "Architecture decision record",
+        "title": "ADR-014: Route clinical events through a [[shared bus]]",
+        "emphasis": "highlight",
+        "titleLines": 2,
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "ADR",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 198,
+            "text": "014",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 198,
+            "w": 198,
+            "text": "Status",
+            "on": "inverse"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 216,
+            "w": 126,
+            "h": 36,
+            "surface": "subtle",
+            "style": "label",
+            "align": "left",
+            "text": "Accepted"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 270,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 288,
+            "w": 198,
+            "text": "Date",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 306,
+            "w": 198,
+            "text": "12 Sep 2026",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 342,
+            "w": 198,
+            "text": "Deciders",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 360,
+            "w": 198,
+            "text": "Architecture review board",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 396,
+            "w": 198,
+            "text": "Supersedes",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 414,
+            "w": 198,
+            "text": "ADR-009 Point-to-point HL7 feeds",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 345,
+            "y": 162,
+            "w": 558,
+            "text": "Context"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 345,
+            "y": 180,
+            "w": 558,
+            "text": "Northfield runs 14 clinical and revenue systems, and every pair that exchanges data has its own interface. The 61 feeds fail in different ways, and each new system adds more."
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 252,
+            "w": 558,
+            "h": 90,
+            "surface": "subtle",
+            "edge": {
+              "side": "left",
+              "weight": 6,
+              "ink": "emphasis"
+            },
+            "label": "Decision",
+            "body": [
+              {
+                "p": "Publish clinical and revenue events to one managed event bus. Systems subscribe to the events they need, so a new feed no longer changes the sending system."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 345,
+            "y": 360,
+            "w": 270,
+            "text": "Positive consequences"
+          },
+          {
+            "type": "bullets",
+            "x": 345,
+            "y": 378,
+            "w": 270,
+            "items": [
+              "One place to monitor and replay every event",
+              "New systems connect in weeks, not quarters"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 360,
+            "w": 270,
+            "text": "Negative consequences"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 378,
+            "w": 270,
+            "items": [
+              "The platform team must run a new service around the clock",
+              "Interface teams need training in event design"
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "adr",
+      "variant": "split",
+      "name": "Architecture decision record \u00b7 split",
+      "tier": "working",
+      "purpose": "The ADR with the title and metadata in the short column and the reasoning in the tall column.",
+      "uses": [
+        "card.plain",
+        "list.bullets",
+        "header.slide"
+      ],
+      "legacy": "split variant of adr/standard",
+      "rev": 2,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 151,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "status",
+          "note": "proposed, accepted or superseded; Accepted is the inverse block, the others subtle or outline"
+        },
+        {
+          "slot": "date",
+          "maxChars": 14
+        },
+        {
+          "slot": "deciders",
+          "maxChars": 32
+        },
+        {
+          "slot": "supersedes",
+          "maxChars": 40
+        },
+        {
+          "slot": "context",
+          "maxChars": 190
+        },
+        {
+          "slot": "decision",
+          "maxChars": 170
+        },
+        {
+          "slot": "positive consequences",
+          "note": "2-3 bullets, 52 chars each"
+        },
+        {
+          "slot": "negative consequences",
+          "note": "2-3 bullets, 52 chars each"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "split": "tall-right",
+        "titleLines": 3,
+        "eyebrow": "Architecture decision record",
+        "title": "ADR-014: Route clinical events through a [[shared event bus]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Status"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 198,
+            "w": 126,
+            "h": 36,
+            "surface": "inverse",
+            "style": "label",
+            "align": "left",
+            "text": "Accepted"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 252,
+            "w": 124,
+            "text": "Date"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 270,
+            "w": 124,
+            "text": "12 Sep 2026"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 203,
+            "y": 252,
+            "w": 124,
+            "text": "Deciders"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 203,
+            "y": 270,
+            "w": 124,
+            "text": "Architecture board"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 324,
+            "w": 270,
+            "text": "Supersedes"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 342,
+            "w": 270,
+            "text": "ADR-009 Point-to-point HL7 feeds"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Review in 12 months or when the platform team changes."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 345,
+            "y": 36,
+            "w": 558,
+            "text": "Context"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 345,
+            "y": 54,
+            "w": 558,
+            "text": "Northfield runs 14 clinical and revenue systems, and every pair that exchanges data has its own interface. The 61 feeds fail in different ways, and each new system adds more."
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 126,
+            "w": 558,
+            "h": 126,
+            "surface": "subtle",
+            "edge": {
+              "side": "left",
+              "weight": 6,
+              "ink": "emphasis"
+            },
+            "label": "Decision",
+            "body": [
+              {
+                "p": "Publish clinical and revenue events to one managed event bus. Systems subscribe to the events they need, so a new feed no longer changes the sending system."
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 345,
+            "y": 288,
+            "w": 270,
+            "text": "Positive consequences"
+          },
+          {
+            "type": "bullets",
+            "x": 345,
+            "y": 306,
+            "w": 270,
+            "items": [
+              "One place to monitor and replay every event",
+              "New systems connect in weeks, not quarters",
+              "Failed deliveries are visible in one dashboard"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 288,
+            "w": 270,
+            "text": "Negative consequences"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 306,
+            "w": 270,
+            "items": [
+              "The platform team must run a new service around the clock",
+              "Interface teams need training in event design",
+              "Short period of running both models"
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "options",
+      "variant": "cards",
+      "name": "Options considered \u00b7 cards",
+      "tier": "core",
+      "purpose": "Three option cards with pros, cons and scores, the chosen one featured, and the rationale below.",
+      "uses": [
+        "card.plan",
+        "list.bullets",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-03",
+      "rev": 2,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 145,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "options",
+          "note": "3 options; name 28 chars, 2 pros and 2 cons of 34 chars"
+        },
+        {
+          "slot": "scores",
+          "note": "criterion scores 1-5"
+        },
+        {
+          "slot": "chosen option",
+          "note": "one option highlighted"
+        },
+        {
+          "slot": "rationale",
+          "maxChars": 200
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Options considered",
+        "title": "Three ways to connect 14 systems; [[the bus]] wins",
+        "emphasis": "underscore",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "h": 270,
+            "surface": "outline",
+            "label": "Option A",
+            "title": "Keep point-to-point",
+            "body": [
+              {
+                "label": "Pros"
+              },
+              {
+                "bullets": [
+                  "Known to every interface team",
+                  "No new platform to run"
+                ]
+              },
+              {
+                "label": "Cons"
+              },
+              {
+                "bullets": [
+                  "Feeds grow with every new system",
+                  "Failures hard to trace"
+                ]
+              }
+            ],
+            "fee": {
+              "value": "2.6 / 5",
+              "label": "Fit 3 \u00b7 Cost 2 \u00b7 Risk 2"
+            }
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "h": 270,
+            "surface": "subtle",
+            "label": "Option B",
+            "title": "Managed event bus",
+            "body": [
+              {
+                "label": "Pros"
+              },
+              {
+                "bullets": [
+                  "One place to monitor and replay",
+                  "New systems connect in weeks"
+                ]
+              },
+              {
+                "label": "Cons"
+              },
+              {
+                "bullets": [
+                  "A new service to operate",
+                  "Event design skills needed"
+                ]
+              }
+            ],
+            "fee": {
+              "value": "4.1 / 5",
+              "label": "Fit 5 \u00b7 Cost 3 \u00b7 Risk 4"
+            },
+            "state": "featured",
+            "tag": "Chosen"
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "h": 270,
+            "surface": "outline",
+            "label": "Option C",
+            "title": "Integration platform suite",
+            "body": [
+              {
+                "label": "Pros"
+              },
+              {
+                "bullets": [
+                  "Rich tooling and connectors",
+                  "Vendor-supported runtime"
+                ]
+              },
+              {
+                "label": "Cons"
+              },
+              {
+                "bullets": [
+                  "Highest licence cost",
+                  "Locks flows into one product"
+                ]
+              }
+            ],
+            "fee": {
+              "value": "3.3 / 5",
+              "label": "Fit 4 \u00b7 Cost 2 \u00b7 Risk 3"
+            }
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 414,
+            "w": 846,
+            "h": 54,
+            "surface": "inverse",
+            "style": "body",
+            "align": "left",
+            "text": "Why we chose it: Option B fits 14 systems at a manageable cost and removes the feed growth behind most incidents."
+          }
+        ],
+        "density": "compact"
+      },
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "options",
+      "variant": "table",
+      "name": "Options considered \u00b7 scored table",
+      "tier": "working",
+      "purpose": "Criteria scored with dots across three options, the chosen column highlighted, and a recommendation band.",
+      "uses": [
+        "table.dots",
+        "header.slide"
+      ],
+      "legacy": "table variant of options/cards; new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 113,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "options",
+          "note": "3 options; name 28 chars, 2 pros and 2 cons of 34 chars"
+        },
+        {
+          "slot": "scores",
+          "note": "criterion scores 1-5"
+        },
+        {
+          "slot": "chosen option",
+          "note": "one option highlighted"
+        },
+        {
+          "slot": "rationale",
+          "maxChars": 200
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Options considered",
+        "title": "The event bus scores highest on speed and resilience",
+        "titleLines": 1,
+        "source": {
+          "text": "Scores from the 4 September architecture workshop, 1 (weak) to 5 (strong)."
+        },
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "dense": true,
+            "rowH": 54,
+            "highlight": "b",
+            "cols": [
+              {
+                "k": "c",
+                "label": "Criterion",
+                "w": 234
+              },
+              {
+                "k": "a",
+                "label": "A \u00b7 Point-to-point",
+                "w": 204,
+                "type": "dots"
+              },
+              {
+                "k": "b",
+                "label": "B \u00b7 Event bus",
+                "w": 204,
+                "type": "dots"
+              },
+              {
+                "k": "c2",
+                "label": "C \u00b7 Integration suite",
+                "w": 204,
+                "type": "dots"
+              }
+            ],
+            "rows": [
+              {
+                "c": "Speed to connect a new system",
+                "a": {
+                  "value": 2,
+                  "max": 5,
+                  "text": "Each feed takes a quarter"
+                },
+                "b": {
+                  "value": 5,
+                  "max": 5,
+                  "text": "Subscribe in weeks"
+                },
+                "c2": {
+                  "value": 4,
+                  "max": 5,
+                  "text": "Connectors speed set-up"
+                }
+              },
+              {
+                "c": "Three-year run cost",
+                "a": {
+                  "value": 3,
+                  "max": 5,
+                  "text": "Low build, rising upkeep"
+                },
+                "b": {
+                  "value": 3,
+                  "max": 5,
+                  "text": "New service to operate"
+                },
+                "c2": {
+                  "value": 1,
+                  "max": 5,
+                  "text": "Highest licence cost"
+                }
+              },
+              {
+                "c": "Resilience and replay",
+                "a": {
+                  "value": 2,
+                  "max": 5,
+                  "text": "Failures hard to trace"
+                },
+                "b": {
+                  "value": 5,
+                  "max": 5,
+                  "text": "One place to replay"
+                },
+                "c2": {
+                  "value": 4,
+                  "max": 5,
+                  "text": "Vendor-supported"
+                }
+              },
+              {
+                "c": "Skills Northfield has today",
+                "a": {
+                  "value": 5,
+                  "max": 5,
+                  "text": "Known to every team"
+                },
+                "b": {
+                  "value": 3,
+                  "max": 5,
+                  "text": "Event design to learn"
+                },
+                "c2": {
+                  "value": 3,
+                  "max": 5,
+                  "text": "Product training needed"
+                }
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 396,
+            "w": 846,
+            "h": 54,
+            "surface": "inverse",
+            "style": "body",
+            "align": "left",
+            "text": "Recommendation: Option B scores 4.1 of 5 against 2.6 and 3.3. Retire the 61 feeds in three waves."
+          }
+        ]
+      }
+    },
+    {
+      "id": "options",
+      "variant": "weighted",
+      "name": "Options considered \u00b7 weighted criteria",
+      "tier": "working",
+      "purpose": "Weighted criteria table with totals and the rationale for the chosen option beside it.",
+      "uses": [
+        "table.num",
+        "card.plain",
+        "header.slide"
+      ],
+      "legacy": "weighted variant of options/table; new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 132,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "options",
+          "note": "3 options; name 28 chars, 2 pros and 2 cons of 34 chars"
+        },
+        {
+          "slot": "scores",
+          "note": "criterion scores 1-5"
+        },
+        {
+          "slot": "chosen option",
+          "note": "one option highlighted"
+        },
+        {
+          "slot": "rationale",
+          "maxChars": 200
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Options considered",
+        "title": "Weighting the criteria puts the event bus clearly ahead",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "dense": true,
+            "rowH": 45,
+            "highlight": "b",
+            "cols": [
+              {
+                "k": "c",
+                "label": "Criterion",
+                "w": 198
+              },
+              {
+                "k": "w",
+                "label": "Weight",
+                "w": 72,
+                "type": "num"
+              },
+              {
+                "k": "a",
+                "label": "A \u00b7 P2P",
+                "w": 96,
+                "type": "num"
+              },
+              {
+                "k": "b",
+                "label": "B \u00b7 Bus",
+                "w": 96,
+                "type": "num"
+              },
+              {
+                "k": "c2",
+                "label": "C \u00b7 Suite",
+                "w": 96,
+                "type": "num"
+              }
+            ],
+            "rows": [
+              {
+                "c": "Speed to connect a system",
+                "w": "30%",
+                "a": "2",
+                "b": "5",
+                "c2": "4"
+              },
+              {
+                "c": "Three-year run cost",
+                "w": "25%",
+                "a": "3",
+                "b": "3",
+                "c2": "1"
+              },
+              {
+                "c": "Resilience and replay",
+                "w": "20%",
+                "a": "2",
+                "b": "5",
+                "c2": "4"
+              },
+              {
+                "c": "Skills Northfield has today",
+                "w": "15%",
+                "a": "5",
+                "b": "3",
+                "c2": "3"
+              },
+              {
+                "c": "Audit and compliance",
+                "w": "10%",
+                "a": "2",
+                "b": "4",
+                "c2": "4"
+              },
+              {
+                "c": "Weighted score",
+                "w": "100%",
+                "a": "2.6",
+                "b": "4.1",
+                "c2": "3.3"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 444,
+            "w": 558,
+            "text": "Scores run 1 (weak) to 5 (strong); weights were set before scoring."
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "h": 342,
+            "surface": "subtle",
+            "edge": {
+              "side": "top",
+              "weight": 6,
+              "ink": "emphasis"
+            },
+            "label": "Why we chose it",
+            "title": "Option B, the event bus",
+            "body": [
+              {
+                "p": "It leads on speed and resilience, which carry half the weight, and ties Option A on cost."
+              },
+              {
+                "bullets": [
+                  "Cost is level with Option A over three years",
+                  "Skills gap is closed by a two-quarter ramp-up",
+                  "Replay supports audit requests",
+                  "Fits the existing cloud contract"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decision-path",
+      "variant": "timeline",
+      "name": "Decision path \u00b7 timeline",
+      "tier": "core",
+      "purpose": "One decision traced from the question raised to its review date, with participants and evidence.",
+      "uses": [
+        "sequence.stepper",
+        "person",
+        "list.bullets",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-03",
+      "rev": 2,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 118,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "stages",
+          "note": "5 stages: question, options, evaluation, decision, review; date, title and one line"
+        },
+        {
+          "slot": "participants",
+          "note": "up to 4 people with role"
+        },
+        {
+          "slot": "evidence",
+          "note": "3-4 items, 48 chars each"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "How the decision was made",
+        "title": "Six weeks from question to a decision on the [[event bus]]",
+        "emphasis": "underscore",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "stepper",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "steps": [
+              {
+                "label": "4 Aug",
+                "title": "Question raised",
+                "state": "done"
+              },
+              {
+                "label": "11 Aug",
+                "title": "Options framed",
+                "state": "done"
+              },
+              {
+                "label": "4 Sep",
+                "title": "Evaluation",
+                "state": "done"
+              },
+              {
+                "label": "12 Sep",
+                "title": "Decision",
+                "state": "done"
+              },
+              {
+                "label": "12 Sep 2027",
+                "title": "Review date",
+                "state": "next"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 198,
+            "w": 150,
+            "text": "Integration incidents reach the board."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 226,
+            "y": 198,
+            "w": 150,
+            "text": "Three options and criteria agreed."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 395,
+            "y": 198,
+            "w": 150,
+            "text": "Workshop scores and a cost model."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 564,
+            "y": 198,
+            "w": 150,
+            "text": "Review board accepts Option B."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 733,
+            "y": 198,
+            "w": 150,
+            "text": "Check cost and incident targets."
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 270,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 288,
+            "w": 414,
+            "text": "Who took part"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 288,
+            "w": 414,
+            "text": "Evidence reviewed"
+          },
+          {
+            "type": "person",
+            "x": 57,
+            "y": 324,
+            "w": 198,
+            "size": 36,
+            "initials": "MO",
+            "name": "Maya Okafor",
+            "role": "Chief architect"
+          },
+          {
+            "type": "person",
+            "x": 273,
+            "y": 324,
+            "w": 198,
+            "size": 36,
+            "initials": "LS",
+            "name": "Lena Soto",
+            "role": "Clinical informatics"
+          },
+          {
+            "type": "person",
+            "x": 57,
+            "y": 396,
+            "w": 198,
+            "size": 36,
+            "initials": "DH",
+            "name": "Dev Hartley",
+            "role": "Platform lead"
+          },
+          {
+            "type": "person",
+            "x": 273,
+            "y": 396,
+            "w": 198,
+            "size": 36,
+            "initials": "RK",
+            "name": "Rui Kato",
+            "role": "Finance partner"
+          },
+          {
+            "type": "bullets",
+            "x": 489,
+            "y": 324,
+            "w": 414,
+            "items": [
+              "Integration incident log, last 12 months",
+              "Cost model for all three options",
+              "Architecture workshop scores",
+              "Reference check with two peer systems",
+              "Vendor briefings for Option C"
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "decision-path",
+      "variant": "vertical-nav",
+      "name": "Decision path \u00b7 vertical \u00b7 nav rail",
+      "tier": "working",
+      "purpose": "The decision path as a vertical sequence with the participants and evidence beside it, in the nav rail.",
+      "uses": [
+        "sequence.vstepper",
+        "person",
+        "header.slide"
+      ],
+      "legacy": "nav variant of decision-path/timeline",
+      "rev": 2,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 107,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "stages",
+          "note": "5 stages: question, options, evaluation, decision, review; date, title and one line"
+        },
+        {
+          "slot": "participants",
+          "note": "up to 4 people with role"
+        },
+        {
+          "slot": "evidence",
+          "note": "3-4 items, 48 chars each"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "nav": {
+          "items": [
+            "Principles",
+            "Decisions",
+            "Standards",
+            "Roadmap"
+          ],
+          "active": 1
+        },
+        "footer": "compact",
+        "eyebrow": "How the decision was made",
+        "title": "Six weeks from question to a decision",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "vstepper",
+            "x": 57,
+            "y": 126,
+            "w": 414,
+            "steps": [
+              {
+                "label": "4 Aug",
+                "title": "Question raised",
+                "text": "Integration incidents reach the board.",
+                "state": "done"
+              },
+              {
+                "label": "11 Aug",
+                "title": "Options framed",
+                "text": "Three options and criteria agreed.",
+                "state": "done"
+              },
+              {
+                "label": "4 Sep",
+                "title": "Evaluation",
+                "text": "Workshop scores and a cost model.",
+                "state": "done"
+              },
+              {
+                "label": "12 Sep",
+                "title": "Decision",
+                "text": "Review board accepts Option B.",
+                "state": "done"
+              },
+              {
+                "label": "12 Sep 2027",
+                "title": "Review date",
+                "text": "Check cost and incident targets.",
+                "state": "next"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 126,
+            "w": 414,
+            "text": "Who took part"
+          },
+          {
+            "type": "person",
+            "x": 489,
+            "y": 162,
+            "w": 198,
+            "size": 36,
+            "initials": "MO",
+            "name": "Maya Okafor",
+            "role": "Chief architect"
+          },
+          {
+            "type": "person",
+            "x": 705,
+            "y": 162,
+            "w": 198,
+            "size": 36,
+            "initials": "LS",
+            "name": "Lena Soto",
+            "role": "Clinical informatics"
+          },
+          {
+            "type": "person",
+            "x": 489,
+            "y": 234,
+            "w": 198,
+            "size": 36,
+            "initials": "DH",
+            "name": "Dev Hartley",
+            "role": "Platform lead"
+          },
+          {
+            "type": "person",
+            "x": 705,
+            "y": 234,
+            "w": 198,
+            "size": 36,
+            "initials": "RK",
+            "name": "Rui Kato",
+            "role": "Finance partner"
+          },
+          {
+            "type": "rule",
+            "x": 489,
+            "y": 306,
+            "w": 414
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 324,
+            "w": 414,
+            "text": "Evidence reviewed"
+          },
+          {
+            "type": "bullets",
+            "x": 489,
+            "y": 342,
+            "w": 414,
+            "items": [
+              "Integration incident log, last 12 months",
+              "Cost model for all three options",
+              "Architecture workshop scores"
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "decision-log",
+      "variant": "table-nav",
+      "name": "Decision log \u00b7 nav rail",
+      "tier": "core",
+      "purpose": "A register of decisions with ID, date, owner, status and the link to each ADR, in the nav rail.",
+      "uses": [
+        "table.tag",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 120,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "log rows",
+          "note": "8 rows (10 in split); ID, date, decision 44 chars, owner, status tag, ADR link"
+        },
+        {
+          "slot": "summary",
+          "note": "split only: counts and note"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "nav",
+        "nav": {
+          "items": [
+            "Principles",
+            "Decisions",
+            "Standards",
+            "Roadmap"
+          ],
+          "active": 1
+        },
+        "footer": "compact",
+        "eyebrow": "Decision log",
+        "title": "Platform decisions at a glance, newest first",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "dense": true,
+            "rowH": 36,
+            "header": "dark",
+            "cols": [
+              {
+                "k": "id",
+                "label": "ID",
+                "w": 72
+              },
+              {
+                "k": "d",
+                "label": "Date",
+                "w": 108
+              },
+              {
+                "k": "t",
+                "label": "Decision",
+                "w": 306
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 150
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 114,
+                "type": "tag"
+              },
+              {
+                "k": "adr",
+                "label": "ADR link",
+                "w": 96
+              }
+            ],
+            "rows": [
+              {
+                "id": "D-021",
+                "d": "29 Sep",
+                "t": "Standardize on FHIR R4 for new APIs",
+                "o": "Data architect",
+                "s": "Accepted",
+                "adr": "ADR-021"
+              },
+              {
+                "id": "D-020",
+                "d": "26 Sep",
+                "t": "Retire the legacy scheduling database",
+                "o": "Platform lead",
+                "s": "Proposed",
+                "adr": "ADR-020"
+              },
+              {
+                "id": "D-019",
+                "d": "24 Sep",
+                "t": "Adopt single sign-on for clinician apps",
+                "o": "Security lead",
+                "s": "Accepted",
+                "adr": "ADR-019"
+              },
+              {
+                "id": "D-018",
+                "d": "22 Sep",
+                "t": "Keep nightly batch for payer remittance",
+                "o": "Finance partner",
+                "s": "Rejected",
+                "adr": "ADR-018"
+              },
+              {
+                "id": "D-017",
+                "d": "19 Sep",
+                "t": "Host the analytics platform in a private cloud",
+                "o": "Infrastructure lead",
+                "s": "Accepted",
+                "adr": "ADR-017"
+              },
+              {
+                "id": "D-015",
+                "d": "15 Sep",
+                "t": "Move interface monitoring to one console",
+                "o": "Platform lead",
+                "s": "Accepted",
+                "adr": "ADR-015"
+              },
+              {
+                "id": "D-014",
+                "d": "12 Sep",
+                "t": "Route clinical events through an event bus",
+                "o": "Chief architect",
+                "s": "Accepted",
+                "adr": "ADR-014"
+              },
+              {
+                "id": "D-009",
+                "d": "11 Mar 2024",
+                "t": "Connect systems with point-to-point HL7 feeds",
+                "o": "Chief architect",
+                "s": "Superseded",
+                "adr": "ADR-009"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decision-log",
+      "variant": "table-split",
+      "name": "Decision log \u00b7 split",
+      "tier": "working",
+      "purpose": "The decision register in a tall column with status counts beside the title.",
+      "uses": [
+        "table.tag",
+        "data.metric",
+        "header.slide"
+      ],
+      "legacy": "split variant of decision-log/table-nav",
+      "rev": 1,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 130,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "log rows",
+          "note": "8 rows (10 in split); ID, date, decision 44 chars, owner, status tag, ADR link"
+        },
+        {
+          "slot": "summary",
+          "note": "split only: counts and note"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "split": "tall-left",
+        "titleLines": 2,
+        "eyebrow": "Decision log",
+        "title": "Eight platform decisions, newest first",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 36,
+            "w": 558,
+            "dense": true,
+            "rowH": 49.5,
+            "header": "dark",
+            "cols": [
+              {
+                "k": "id",
+                "label": "ID \u00b7 ADR",
+                "w": 84
+              },
+              {
+                "k": "d",
+                "label": "Date",
+                "w": 78
+              },
+              {
+                "k": "t",
+                "label": "Decision \u00b7 owner",
+                "w": 288
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 108,
+                "type": "tag"
+              }
+            ],
+            "rows": [
+              {
+                "id": {
+                  "text": "D-021",
+                  "sub": "ADR-021"
+                },
+                "d": "29 Sep",
+                "t": {
+                  "text": "Standardize on FHIR R4 for new APIs",
+                  "sub": "Data architect"
+                },
+                "s": "Accepted"
+              },
+              {
+                "id": {
+                  "text": "D-020",
+                  "sub": "ADR-020"
+                },
+                "d": "26 Sep",
+                "t": {
+                  "text": "Retire the legacy scheduling database",
+                  "sub": "Platform lead"
+                },
+                "s": "Proposed"
+              },
+              {
+                "id": {
+                  "text": "D-019",
+                  "sub": "ADR-019"
+                },
+                "d": "24 Sep",
+                "t": {
+                  "text": "Adopt single sign-on for clinician apps",
+                  "sub": "Security lead"
+                },
+                "s": "Accepted"
+              },
+              {
+                "id": {
+                  "text": "D-018",
+                  "sub": "ADR-018"
+                },
+                "d": "22 Sep",
+                "t": {
+                  "text": "Keep nightly batch for payer remittance",
+                  "sub": "Finance partner"
+                },
+                "s": "Rejected"
+              },
+              {
+                "id": {
+                  "text": "D-017",
+                  "sub": "ADR-017"
+                },
+                "d": "19 Sep",
+                "t": {
+                  "text": "Host the analytics platform in a private cloud",
+                  "sub": "Infrastructure lead"
+                },
+                "s": "Accepted"
+              },
+              {
+                "id": {
+                  "text": "D-015",
+                  "sub": "ADR-015"
+                },
+                "d": "15 Sep",
+                "t": {
+                  "text": "Move interface monitoring to one console",
+                  "sub": "Platform lead"
+                },
+                "s": "Accepted"
+              },
+              {
+                "id": {
+                  "text": "D-014",
+                  "sub": "ADR-014"
+                },
+                "d": "12 Sep",
+                "t": {
+                  "text": "Route clinical events through an event bus",
+                  "sub": "Chief architect"
+                },
+                "s": "Accepted"
+              },
+              {
+                "id": {
+                  "text": "D-009",
+                  "sub": "ADR-009"
+                },
+                "d": "Mar 2024",
+                "t": {
+                  "text": "Connect systems with point-to-point HL7 feeds",
+                  "sub": "Chief architect"
+                },
+                "s": "Superseded"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 144,
+            "w": 270,
+            "text": "Status of the eight"
+          },
+          {
+            "type": "metric",
+            "x": 633,
+            "y": 180,
+            "w": 126,
+            "value": "5",
+            "label": "accepted"
+          },
+          {
+            "type": "metric",
+            "x": 777,
+            "y": 180,
+            "w": 126,
+            "value": "1",
+            "label": "proposed"
+          },
+          {
+            "type": "metric",
+            "x": 633,
+            "y": 270,
+            "w": 126,
+            "value": "1",
+            "label": "rejected"
+          },
+          {
+            "type": "metric",
+            "x": 777,
+            "y": 270,
+            "w": 126,
+            "value": "1",
+            "label": "superseded"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 396,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "style": "small",
+            "align": "left",
+            "text": "Every row links to its ADR in the architecture wiki."
+          }
+        ]
+      }
+    },
+    {
+      "id": "superseded",
+      "variant": "compare",
+      "name": "Superseded decision \u00b7 old versus new",
+      "tier": "core",
+      "purpose": "The old decision beside its replacement, with the reasons it changed.",
+      "uses": [
+        "card.plain",
+        "textblock",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-03",
+      "rev": 2,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 113,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "old decision",
+          "note": "label, name 30 chars, 2 bullets of 40 chars"
+        },
+        {
+          "slot": "new decision",
+          "note": "label, name 30 chars, 2 bullets of 40 chars"
+        },
+        {
+          "slot": "reasons",
+          "note": "3 reasons: title 24 chars, text 90 chars"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Superseded decision",
+        "title": "ADR-014 replaces the 2024 choice of point-to-point feeds",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 378,
+            "h": 180,
+            "surface": "subtle",
+            "label": "Superseded \u00b7 ADR-009 \u00b7 Mar 2024",
+            "title": "Point-to-point HL7 feeds",
+            "body": [
+              {
+                "bullets": [
+                  "Each system connects directly to the others",
+                  "Chosen when Northfield ran 6 systems",
+                  "Retired in 3 waves from Q1 2027"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "mark",
+            "mark": "arrow-straight",
+            "x": 453,
+            "y": 207,
+            "w": 54
+          },
+          {
+            "type": "card",
+            "x": 525,
+            "y": 126,
+            "w": 378,
+            "h": 180,
+            "surface": "inverse",
+            "label": "Current \u00b7 ADR-014 \u00b7 Sep 2026",
+            "title": "Shared event bus",
+            "body": [
+              {
+                "bullets": [
+                  "Systems publish and subscribe to events",
+                  "Fits 14 systems and growing",
+                  "Owned by the platform team"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 324,
+            "w": 846
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 342,
+            "w": 846,
+            "text": "Why it changed"
+          },
+          {
+            "type": "textblock",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "title": "The estate outgrew it",
+            "body": "Systems grew from 6 to 14 and feeds from 9 to 61."
+          },
+          {
+            "type": "textblock",
+            "x": 345,
+            "y": 360,
+            "w": 270,
+            "title": "Incidents followed feeds",
+            "body": "Most clinical interface incidents traced to one broken feed."
+          },
+          {
+            "type": "textblock",
+            "x": 633,
+            "y": 360,
+            "w": 270,
+            "title": "Cost per feed rose",
+            "body": "Each new feed took a quarter and a test cycle across teams."
+          }
+        ],
+        "density": "compact"
+      },
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "decision-request",
+      "variant": "ask-right",
+      "name": "Decision request \u00b7 right panel",
+      "tier": "core",
+      "purpose": "An ask to a steering committee: the recommendation, the options, and the decision date in the right panel.",
+      "uses": [
+        "table.tag",
+        "header.slide"
+      ],
+      "legacy": "new 2026-10-03",
+      "rev": 1,
+      "added": "2026-10-03",
+      "budget": {
+        "words": 119,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "eyebrow",
+          "maxChars": 32
+        },
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "recommendation",
+          "maxChars": 190
+        },
+        {
+          "slot": "options table",
+          "note": "3 rows: option, cost, duration, tag"
+        },
+        {
+          "slot": "rail ask",
+          "maxChars": 50
+        },
+        {
+          "slot": "decision date",
+          "maxChars": 10
+        },
+        {
+          "slot": "consequence of delay",
+          "maxChars": 80
+        },
+        {
+          "slot": "source",
+          "maxChars": 70
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "railSurface": "inverse",
+        "footer": "tall",
+        "eyebrow": "Decision request",
+        "title": "[[Approve]] the event bus by 17 October",
+        "emphasis": "highlight",
+        "titleLines": 1,
+        "source": {
+          "text": "Costs are sample figures for layout only; replace with current estimates before use."
+        },
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "text": "Our recommendation"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 144,
+            "w": 558,
+            "text": "Fund Option B and retire the 61 point-to-point feeds in three waves. It scores highest against the criteria and is the only option that stops feed growth."
+          },
+          {
+            "type": "table",
+            "x": 57,
+            "y": 234,
+            "w": 558,
+            "dense": true,
+            "rowH": 36,
+            "header": "dark",
+            "cols": [
+              {
+                "k": "o",
+                "label": "Option",
+                "w": 210
+              },
+              {
+                "k": "c",
+                "label": "3-year cost",
+                "w": 120
+              },
+              {
+                "k": "d",
+                "label": "Duration",
+                "w": 108
+              },
+              {
+                "k": "t",
+                "label": "Stance",
+                "w": 120,
+                "type": "tag"
+              }
+            ],
+            "rows": [
+              {
+                "o": "A \u00b7 Keep point-to-point",
+                "c": "$6.2M",
+                "d": "None",
+                "t": "Not advised"
+              },
+              {
+                "o": "B \u00b7 Managed event bus",
+                "c": "$4.4M",
+                "d": "9 months",
+                "t": "Recommended"
+              },
+              {
+                "o": "C \u00b7 Integration suite",
+                "c": "$7.1M",
+                "d": "14 months",
+                "t": "Alternative"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 396,
+            "w": 558,
+            "text": "If we wait"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 414,
+            "w": 558,
+            "text": "Each quarter adds about four feeds and delays the 2027 scheduling migration."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "The ask",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 705,
+            "y": 144,
+            "w": 198,
+            "text": "Approve Option B and its $4.4M budget",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 705,
+            "y": 252,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 270,
+            "w": 198,
+            "text": "Decision needed by",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat-sm",
+            "ink": "display",
+            "x": 705,
+            "y": 288,
+            "w": 198,
+            "text": "17 Oct",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 342,
+            "w": 198,
+            "text": "Next steering committee meeting.",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 705,
+            "y": 378,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 396,
+            "w": 198,
+            "text": "Decision owner",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 414,
+            "w": 198,
+            "text": "Steering committee chair",
+            "on": "inverse"
+          }
+        ]
+      }
+    }
+  ]
+}

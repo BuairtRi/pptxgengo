@@ -1,0 +1,236 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-481",
+      "density": "compact",
+      "frame": {
+        "rail": "nav",
+        "footer": "tall",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "standard",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false,
+        "nav": [
+          {
+            "id": "section-01",
+            "label": "Context"
+          },
+          {
+            "id": "section-02",
+            "label": "Approach"
+          },
+          {
+            "id": "section-03",
+            "label": "Team"
+          },
+          {
+            "id": "section-04",
+            "label": "Commercials"
+          },
+          {
+            "id": "section-05",
+            "label": "Next steps"
+          }
+        ],
+        "active": "section-03"
+      },
+      "eyebrow": "Resource plan",
+      "title": "Two roles are short at peak and one is over-resourced",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "table",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "header": "dark",
+              "rowHeader": true,
+              "rowH": 30,
+              "deltaUnit": " FTE",
+              "cols": [
+                {
+                  "k": "r",
+                  "label": "Role",
+                  "w": 216
+                },
+                {
+                  "k": "d",
+                  "label": "Peak demand (FTE)",
+                  "w": 162,
+                  "type": "num"
+                },
+                {
+                  "k": "c",
+                  "label": "Planned capacity (FTE)",
+                  "w": 180,
+                  "type": "num"
+                },
+                {
+                  "k": "v",
+                  "label": "Variance",
+                  "w": 126,
+                  "type": "delta"
+                },
+                {
+                  "k": "s",
+                  "label": "Status",
+                  "w": 162,
+                  "type": "status",
+                  "labels": {
+                    "on": "Covered",
+                    "off": "Gap",
+                    "risk": "Over"
+                  }
+                }
+              ],
+              "rows": [
+                {
+                  "r": "Engagement lead",
+                  "d": "0.5",
+                  "c": "0.5",
+                  "v": 0.0,
+                  "s": {
+                    "status": "on",
+                    "label": "Covered"
+                  }
+                },
+                {
+                  "r": "Product manager",
+                  "d": "1",
+                  "c": "1",
+                  "v": 0,
+                  "s": {
+                    "status": "on",
+                    "label": "Covered"
+                  }
+                },
+                {
+                  "r": "Solution architect",
+                  "d": "1",
+                  "c": "1",
+                  "v": 0,
+                  "s": {
+                    "status": "on",
+                    "label": "Covered"
+                  }
+                },
+                {
+                  "r": "Data engineer",
+                  "d": "1",
+                  "c": "0.5",
+                  "v": -0.5,
+                  "s": {
+                    "status": "off",
+                    "label": "Gap"
+                  }
+                },
+                {
+                  "r": "Business analysts",
+                  "d": "2",
+                  "c": "2",
+                  "v": 0,
+                  "s": {
+                    "status": "on",
+                    "label": "Covered"
+                  }
+                },
+                {
+                  "r": "Developers",
+                  "d": "3",
+                  "c": "2",
+                  "v": -1,
+                  "s": {
+                    "status": "off",
+                    "label": "Gap"
+                  }
+                },
+                {
+                  "r": "QA lead",
+                  "d": "1",
+                  "c": "1",
+                  "v": 0,
+                  "s": {
+                    "status": "on",
+                    "label": "Covered"
+                  }
+                },
+                {
+                  "r": "Change lead",
+                  "d": "1",
+                  "c": "1.5",
+                  "v": 0.5,
+                  "s": {
+                    "status": "risk",
+                    "label": "Over"
+                  }
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        },
+        {
+          "id": "node02",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "text",
+              "style": "body",
+              "ink": "secondary",
+              "x": 57,
+              "y": 420,
+              "w": 846,
+              "text": "Net peak position: 1.5 FTE short on developers and data engineering, 0.5 FTE over on change."
+            },
+            "source_pointer": "/body/1"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-481",
+        "template": "resource-plan/capacity-demand-nav",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/team.json",
+        "source_sha256": "3fef6b2c460de14859962b06820ae77ac1b74b385c0430363c80e44e2ba84b21",
+        "source_revision": "wmds-library.v12",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "table"
+          },
+          {
+            "id": "node02",
+            "source_pointer": "/body/1",
+            "expected_type": "text"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

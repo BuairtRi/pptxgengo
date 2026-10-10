@@ -1,0 +1,50 @@
+{
+  "schema": "pptxgengo.wmds-template-document.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "library-016",
+      "template": "adr/left",
+      "content_kind": "synthetic_example",
+      "values": {
+        "slots": {
+          "eyebrow": "Architecture decision record",
+          "node01.text": "ADR",
+          "node02.text": "014",
+          "node03.text": "Status",
+          "node04.text": "Accepted",
+          "node06.text": "Date",
+          "node07.text": "12 Sep 2026",
+          "node08.text": "Deciders",
+          "node09.text": "Architecture review board",
+          "node10.text": "Supersedes",
+          "node11.text": "ADR-009 Point-to-point HL7 feeds",
+          "node12.text": "Context",
+          "node13.text": "Northfield runs 14 clinical and revenue systems, and every pair that exchanges data has its own interface. The 61 feeds fail in different ways, and each new system adds more.",
+          "node14.body.item01.p": "Publish clinical and revenue events to one managed event bus. Systems subscribe to the events they need, so a new feed no longer changes the sending system.",
+          "node14.label": "Decision",
+          "node15.text": "Positive consequences",
+          "node16.items.item01": "One place to monitor and replay every event",
+          "node16.items.item02": "New systems connect in weeks, not quarters",
+          "node17.text": "Negative consequences",
+          "node18.items.item01": "The platform team must run a new service around the clock",
+          "node18.items.item02": "Interface teams need training in event design",
+          "title": "ADR-014: Route clinical events through a [[shared bus]]"
+        },
+        "keys": {
+          "node14.body": [
+            "example-001"
+          ],
+          "node16.items": [
+            "example-001",
+            "example-002"
+          ],
+          "node18.items": [
+            "example-001",
+            "example-002"
+          ]
+        }
+      }
+    }
+  ]
+}

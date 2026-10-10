@@ -1,0 +1,112 @@
+{
+  "schema": "pptxgengo.wmds-template-document.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "library-555",
+      "template": "runbook/rollback-steps-nav",
+      "content_kind": "synthetic_example",
+      "values": {
+        "slots": {
+          "eyebrow": "Cutover runbook",
+          "node01.cols.item01.label": "Step",
+          "node01.cols.item02.label": "Rollback action",
+          "node01.cols.item03.label": "Owner",
+          "node01.cols.item04.label": "Budget",
+          "node01.cols.item05.label": "Verification check",
+          "node01.cols.item06.label": "Done",
+          "node01.rows.item01.a": "Call the rollback on the bridge",
+          "node01.rows.item01.d": true,
+          "node01.rows.item01.n": "1",
+          "node01.rows.item01.o": "Cutover lead",
+          "node01.rows.item01.t": "5 min",
+          "node01.rows.item01.v": "Call logged with time and reason",
+          "node01.rows.item02.a": "Stop postings in the new ledger",
+          "node01.rows.item02.d": true,
+          "node01.rows.item02.n": "2",
+          "node01.rows.item02.o": "Controller",
+          "node01.rows.item02.t": "10 min",
+          "node01.rows.item02.v": "Subledger lock report is clean",
+          "node01.rows.item03.a": "Disable the new interfaces",
+          "node01.rows.item03.d": false,
+          "node01.rows.item03.n": "3",
+          "node01.rows.item03.o": "Integration lead",
+          "node01.rows.item03.t": "15 min",
+          "node01.rows.item03.v": "Queues show zero in flight",
+          "node01.rows.item04.a": "Repoint feeds to the legacy endpoints",
+          "node01.rows.item04.d": false,
+          "node01.rows.item04.n": "4",
+          "node01.rows.item04.o": "Integration lead",
+          "node01.rows.item04.t": "20 min",
+          "node01.rows.item04.v": "Test postings reach legacy",
+          "node01.rows.item05.a": "Restore the legacy snapshot",
+          "node01.rows.item05.d": false,
+          "node01.rows.item05.n": "5",
+          "node01.rows.item05.o": "Finance IT",
+          "node01.rows.item05.t": "60 min",
+          "node01.rows.item05.v": "Checksums match the backup",
+          "node01.rows.item06.a": "Tie legacy to the pre-cutover trial balance",
+          "node01.rows.item06.d": false,
+          "node01.rows.item06.n": "6",
+          "node01.rows.item06.o": "Data lead",
+          "node01.rows.item06.t": "45 min",
+          "node01.rows.item06.v": "Zero variance by entity",
+          "node01.rows.item07.a": "Reopen the legacy ledger to users",
+          "node01.rows.item07.d": false,
+          "node01.rows.item07.n": "7",
+          "node01.rows.item07.o": "Controller",
+          "node01.rows.item07.t": "15 min",
+          "node01.rows.item07.v": "First posting accepted",
+          "node01.rows.item08.a": "Notify users and Steering",
+          "node01.rows.item08.d": false,
+          "node01.rows.item08.n": "8",
+          "node01.rows.item08.o": "Comms lead",
+          "node01.rows.item08.t": "10 min",
+          "node01.rows.item08.v": "Notice sent and acknowledged",
+          "title": "Eight steps return the ledger to legacy in [[three hours]]"
+        },
+        "keys": {
+          "node01.cols": [
+            "example-001",
+            "example-002",
+            "example-003",
+            "example-004",
+            "example-005",
+            "example-006"
+          ],
+          "node01.rows": [
+            "example-001",
+            "example-002",
+            "example-003",
+            "example-004",
+            "example-005",
+            "example-006",
+            "example-007",
+            "example-008"
+          ]
+        },
+        "nav": {
+          "items": [
+            {
+              "key": "section-01",
+              "label": "Prepare"
+            },
+            {
+              "key": "section-02",
+              "label": "Cutover"
+            },
+            {
+              "key": "section-03",
+              "label": "Rollback"
+            },
+            {
+              "key": "section-04",
+              "label": "Hypercare"
+            }
+          ],
+          "active": "section-03"
+        }
+      }
+    }
+  ]
+}

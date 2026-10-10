@@ -1,20 +1,31 @@
 # Release status and qualification
 
-## v4.3.0 candidate
+## v4.3.1
 
-The semantic composition capabilities and specialized skill runbooks are merged
-to main. [The completion matrix](v4.3.0-completion-matrix.json) records all 29
-frozen V11 runtime families and the named native qualification cases; see the
-[delivery record](v4.3.0-delivery.md) for scope and limitations. This does not
-claim exhaustive desktop acceptance of every browsing slide.
+The release source uses V12 at upstream commit
+`36132d5637abdbdeb70945ad650b795cabea05ef`: 735 templates (734 active).
+The prior 677-template V12 intake is preserved. All V11 identities remain;
+86 additions and two revised templates are incorporated.
 
-Publication remains pending the final GitLab gates and independent download
-verification. The release compiler is pinned to Go 1.27.2 after pre-tag standard
-library vulnerability findings. The template browsing deck, SQLite catalog,
-registered schematic SVG originals and installable presentation skill are in
-scope. Windows runtime/PowerPoint, content-complete reusable slides and external
-branding/photo distribution remain deferred. The newer documentation-site
-catalog is independently versioned; this release retains the frozen V11 runtime.
+All 735 source specimens and 734 active bindings build with native-v1.
+88 new/revised stock and native-v1 specimens exported through macOS PowerPoint;
+all pages were visually reviewed. Stock/native-v1 differ on 17 pages in native
+bullet treatment; those stock pages were also reviewed. The gallery publisher
+accepted 88 fresh native previews and verified 647 retained V11 previews by
+exact composition and paired rendered dependency comparison. The regenerated
+SQLite index contains 735 templates; the browsing deck contains 804 slides.
+See [the intake evidence](../planning/wm-design-contracts/v12/intake-20261010-735-frozen/README.md).
+
+Publication and independent download verification await the protected GitLab
+release pipeline. Go 1.27.2 is the release compiler. The presentation skill and
+registered schematic SVG originals remain in package scope. This record does
+not qualify arbitrary supplied copy, every density, Windows PowerPoint or
+native Save As/edit round trips for the new template families.
+
+The semantic composition capabilities and specialized skill runbooks from
+v4.3.0 source are included. [The completion matrix](v4.3.0-completion-matrix.json)
+records the frozen V11 family qualification; see the
+[delivery record](v4.3.0-delivery.md) for its bounded scope.
 
 ## v4.2.1
 

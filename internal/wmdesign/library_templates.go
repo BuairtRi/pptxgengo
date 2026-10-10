@@ -316,6 +316,12 @@ func buildLibraryCatalog(s *Source) ([]LibraryTemplate, error) {
 	if s.Revision == LibraryRevisionV10 || s.Revision == LibraryRevisionV11 {
 		expected = 649
 	}
+	if s.Revision == LibraryRevisionV12 {
+		expected = 677
+		if s.Commit == "36132d5637abdbdeb70945ad650b795cabea05ef" {
+			expected = 735
+		}
+	}
 	if len(out) != expected {
 		return nil, fmt.Errorf("library.inventory_migration_required: %d templates", len(out))
 	}
@@ -328,7 +334,7 @@ func v4UnversionedFamily(revision, path string, catalog templateSourceCatalog) b
 	if !isExpandedLibrary(revision) || catalog.Schema != "" || path != "templates/library/"+catalog.Family+".json" {
 		return false
 	}
-	if (revision == LibraryRevisionV10 || revision == LibraryRevisionV11) && catalog.Family == "roadmaps" {
+	if (revision == LibraryRevisionV10 || revision == LibraryRevisionV11 || revision == LibraryRevisionV12) && catalog.Family == "roadmaps" {
 		return true
 	}
 	switch catalog.Family {
@@ -384,7 +390,7 @@ func libraryObject(raw []byte) (map[string]any, error) {
 
 // The content projection is closed by a source-pinned definition. A token,
 // geometry or structural discriminator never becomes an editable content slot.
-var libraryFixedString = map[string]bool{"target": true, "placement": true, "arrow": true, "type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numTile": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "headerDensity": true, "densityLimit": true, "corner": true, "event": true}
+var libraryFixedString = map[string]bool{"shape": true, "labelSide": true, "target": true, "placement": true, "arrow": true, "type": true, "key": true, "from": true, "to": true, "id": true, "k": true, "style": true, "surface": true, "on": true, "ink": true, "titleInk": true, "titleStyle": true, "numInk": true, "numTile": true, "numStyle": true, "keyInk": true, "markInk": true, "size": true, "bodySize": true, "band": true, "bands": true, "edge": true, "rule": true, "layout": true, "variant": true, "mode": true, "kind": true, "org": true, "state": true, "status": true, "color": true, "colors": true, "swatch": true, "fill": true, "head": true, "elbow": true, "dir": true, "labelPos": true, "labels": true, "numbering": true, "emphasis": true, "mark": true, "icon": true, "focus": true, "align": true, "valign": true, "header": true, "preset": true, "side": true, "rail": true, "footer": true, "railSurface": true, "density": true, "headerDensity": true, "densityLimit": true, "corner": true, "event": true}
 var libraryNumbers = map[string]bool{"values": true, "value": true, "alloc": true, "from": true, "to": true, "at": true, "softStart": true, "softEnd": true}
 var libraryIntakeFixedString = map[string]bool{"curve": true, "labelStyle": true, "scale": true, "heatScale": true, "orient": true, "ramp": true, "direction": true, "rowHeader": true}
 
@@ -547,7 +553,14 @@ func libraryTableCellWalk(def *LibraryTemplate, v any, pointer, name, kind strin
 			}
 			found := false
 			for i, value := range values {
-				found = libraryScalarSlot(def, value, pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1), scalar) || found
+				itemPointer, itemName := pointer+"/"+strconv.Itoa(i), name+fmt.Sprintf(".item%02d", i+1)
+				if obj, ok := value.(map[string]any); ok && kind == "bullets" && def.SourceRevision == LibraryRevisionV12 {
+					for _, field := range []string{"lead", "text"} {
+						found = libraryScalarSlot(def, obj[field], itemPointer+"/"+field, itemName+"."+field, "string") || found
+					}
+				} else {
+					found = libraryScalarSlot(def, value, itemPointer, itemName, scalar) || found
+				}
 			}
 			if found {
 				def.Arrays = append(def.Arrays, LibraryArray{Name: name, SourcePointer: pointer, Count: len(values)})

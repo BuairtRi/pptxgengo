@@ -69,7 +69,7 @@ func (r *renderer) planRoadForkScene(id string, raw json.RawMessage, ctx SceneCo
 	if tag.Type != "roadfork" {
 		return nil, false, nil
 	}
-	if r.source.Revision != LibraryRevisionV10 && r.source.Revision != LibraryRevisionV11 {
+	if r.source.Revision != LibraryRevisionV10 && r.source.Revision != LibraryRevisionV11 && r.source.Revision != LibraryRevisionV12 {
 		return nil, true, fmt.Errorf("scene.roadfork_requires_v10")
 	}
 	var fields map[string]json.RawMessage

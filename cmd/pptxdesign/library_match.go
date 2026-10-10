@@ -18,7 +18,7 @@ import (
 func runLibraryMatch(args []string) error {
 	flags := flag.NewFlagSet("library-match", flag.ContinueOnError)
 	pagePath := flags.String("page", "", "one semantic page YAML or JSON file")
-	bundle := flags.String("bundle", currentDesignBundle, "shared bundle path or v11 (default)")
+	bundle := flags.String("bundle", currentDesignBundle, "shared bundle path or v12 (default)")
 	engine := flags.String("engine", wmdesign.CandidateEngine, "Go build engine")
 	templates := flags.String("templates", "", "comma-separated exact candidate template keys")
 	limit := flags.Int("limit", 4, "maximum passing automatic candidates, 1..100")

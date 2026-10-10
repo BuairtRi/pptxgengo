@@ -1,0 +1,228 @@
+{
+  "schema": "pptxgengo.wmds-foundation.v1",
+  "year": 2026,
+  "slides": [
+    {
+      "id": "source-485",
+      "density": "compact",
+      "frame": {
+        "rail": "none",
+        "footer": "compact",
+        "surface": "",
+        "rail_surface": "",
+        "title_lines": 1,
+        "density": "standard",
+        "source_lines": 0,
+        "no_header": false,
+        "no_page": false
+      },
+      "eyebrow": "Resource plan",
+      "title": "Roles join as work needs them and roll off early",
+      "nodes": [
+        {
+          "id": "node01",
+          "kind": "scene",
+          "rect": {
+            "x_pt": 0,
+            "y_pt": 0,
+            "width_pt": 0,
+            "height_pt": 0
+          },
+          "scene": {
+            "node": {
+              "type": "gantt",
+              "x": 57,
+              "y": 126,
+              "w": 846,
+              "cols": {
+                "group": 24,
+                "lane": 186
+              },
+              "periods": {
+                "labels": [
+                  "W1",
+                  "W2",
+                  "W3",
+                  "W4",
+                  "W5",
+                  "W6",
+                  "W7",
+                  "W8",
+                  "W9",
+                  "W10",
+                  "W11",
+                  "W12",
+                  "W13",
+                  "W14",
+                  "W15",
+                  "W16"
+                ]
+              },
+              "phases": [
+                {
+                  "label": "Mobilize",
+                  "from": 0,
+                  "to": 2,
+                  "rule": "line"
+                },
+                {
+                  "label": "Design",
+                  "from": 2,
+                  "to": 6,
+                  "rule": "strong"
+                },
+                {
+                  "label": "Build and test",
+                  "from": 6,
+                  "to": 12,
+                  "rule": "emphasis"
+                },
+                {
+                  "label": "Launch",
+                  "from": 12,
+                  "to": 16,
+                  "rule": "callout"
+                }
+              ],
+              "events": {
+                "diamond": {
+                  "fill": "#0047FF",
+                  "label": "Milestone"
+                }
+              },
+              "kinds": {
+                "core": {
+                  "fill": "#070154",
+                  "text": "#FFFFFF",
+                  "label": "Full or near full-time"
+                },
+                "support": {
+                  "fill": "#CED7E6",
+                  "text": "#070154",
+                  "label": "Part-time, ramping"
+                }
+              },
+              "groups": [
+                {
+                  "label": "Leadership",
+                  "fill": "#070154",
+                  "lanes": [
+                    {
+                      "title": "Engagement lead and PM",
+                      "items": [
+                        {
+                          "kind": "core",
+                          "from": 0,
+                          "to": 16,
+                          "label": "1.5 FTE"
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Solution architect",
+                      "items": [
+                        {
+                          "kind": "core",
+                          "from": 0,
+                          "to": 12,
+                          "label": "1.0 FTE"
+                        },
+                        {
+                          "event": "diamond",
+                          "at": 12.2,
+                          "label": "UAT exit"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": "Delivery",
+                  "fill": "#50658E",
+                  "lanes": [
+                    {
+                      "title": "Data engineer",
+                      "items": [
+                        {
+                          "kind": "core",
+                          "from": 1,
+                          "to": 14,
+                          "label": "0.5 to 1.0 FTE"
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Business analysts",
+                      "items": [
+                        {
+                          "kind": "core",
+                          "from": 0,
+                          "to": 14,
+                          "label": "2.0 FTE"
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Developers",
+                      "items": [
+                        {
+                          "kind": "core",
+                          "from": 4,
+                          "to": 15,
+                          "label": "3.0 FTE"
+                        },
+                        {
+                          "event": "diamond",
+                          "at": 0.5,
+                          "label": "Kickoff"
+                        }
+                      ]
+                    },
+                    {
+                      "title": "QA lead",
+                      "items": [
+                        {
+                          "kind": "support",
+                          "from": 6,
+                          "to": 16,
+                          "label": "0.5 to 1.0 FTE"
+                        },
+                        {
+                          "event": "diamond",
+                          "at": 5.6,
+                          "label": "Design sign-off",
+                          "labelSide": "left"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_pointer": "/body/0"
+          }
+        }
+      ],
+      "content_kind": "synthetic_example",
+      "template_binding": {
+        "slide_id": "source-485",
+        "template": "resource-plan/ramp",
+        "contract": "pptxgengo.wmds-library-bindings.v1",
+        "source_file": "templates/library/team.json",
+        "source_sha256": "3fef6b2c460de14859962b06820ae77ac1b74b385c0430363c80e44e2ba84b21",
+        "source_revision": "wmds-library.v12",
+        "content_kind": "synthetic_example",
+        "identities": [
+          {
+            "id": "node01",
+            "source_pointer": "/body/0",
+            "expected_type": "gantt"
+          }
+        ],
+        "assignments": null,
+        "native_qualified": false
+      },
+      "library_chrome": {}
+    }
+  ]
+}

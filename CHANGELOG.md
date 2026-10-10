@@ -3,7 +3,15 @@
 Project release artifacts and CI are private in GitLab. Dates below use the
 release pipeline's UTC date; release tags and signed artifacts are immutable.
 
-## Unreleased — v4.3.0 candidate
+## v4.3.1 — 2026-10-10
+
+- Promote V12 pinned to WMDS `36132d5637abdbdeb70945ad650b795cabea05ef`: 735 templates, 734 active. Preserve the original 677-template V12 intake and historical project pins.
+- Add 86 templates and two revisions over V11: openers, contents and indexes, milestones/deliverables, milestone timelines, backlog, strategy roadmaps and resource planning.
+- Add measured editable contents lists, source preset markers, page-only schedule keys and rich table bullet cells. Apply named source allocation repairs without changing authored dates, relationships or copy.
+- Verify all 735 source and 734 active bound specimens; publish the gallery with 88 freshly reviewed native PowerPoint pages and 647 retained previews checked against rendered dependencies. Regenerate the 735-template SQLite index and 804-slide browsing deck.
+- Make release resources portable physical files and set V12 as the new-project/package default. Protected signing/publication gates remain authoritative; local checks do not claim signed artifact acceptance.
+
+## v4.3.0 source capabilities (included in v4.3.1)
 
 - Pin release builds and CI to Go 1.27.2 to resolve the pre-tag standard-library vulnerability findings.
 

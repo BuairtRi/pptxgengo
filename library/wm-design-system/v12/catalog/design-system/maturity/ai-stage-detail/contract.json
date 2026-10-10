@@ -1,0 +1,1731 @@
+{
+  "key": "maturity/ai-stage-detail",
+  "source_file": "templates/library/maturity.json",
+  "source_sha256": "8316cfc9bdcc4f4887a02f7bfb6d8830149e0f0573fc96c9d8a66243d4942fce",
+  "source_revision": "wmds-library.v12",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    }
+  ],
+  "family": "maturity",
+  "tier": "core",
+  "name": "AI-native stage detail table",
+  "purpose": "A table of what changes in people, process, tooling and governance at each of the five stages.",
+  "uses": [
+    "table.standard"
+  ],
+  "source_advisory_budget": {
+    "words": 126,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 56
+    },
+    {
+      "slot": "column head",
+      "count": 5,
+      "maxChars": 16
+    },
+    {
+      "slot": "row header",
+      "count": 4,
+      "maxChars": 12
+    },
+    {
+      "slot": "cell",
+      "count": 20,
+      "maxChars": 44
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "tabular-data"
+    ],
+    "structures": [
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table"
+    ],
+    "component_types": [
+      "table"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 6,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v12",
+    "source_sha256": "8316cfc9bdcc4f4887a02f7bfb6d8830149e0f0573fc96c9d8a66243d4942fce",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "table",
+    "groups": [
+      {
+        "alias": "/tables/item_01/cols",
+        "role": "column",
+        "cardinality": 6,
+        "source_pointer": "/body/0/cols",
+        "basis": "semantic_closed_binding_array"
+      },
+      {
+        "alias": "/tables/item_01/rows",
+        "role": "tabular-data",
+        "cardinality": 4,
+        "source_pointer": "/body/0/rows",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 10,
+            "leading": 12,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.8
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 32,
+            "leading": 36,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.64
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item01.label",
+        "alias": "/tables/item_01/columns/item_01/label",
+        "source_pointer": "/body/0/cols/0/label",
+        "kind": "string",
+        "allow_empty": true,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 0,
+        "cardinality": 6,
+        "description": "label (string) at /tables/item_01/columns/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 102,
+          "height_pt": 28,
+          "line_budget": 2,
+          "approx_characters": 34,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item02.label",
+        "alias": "/tables/item_01/columns/item_02/label",
+        "source_pointer": "/body/0/cols/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 1,
+        "cardinality": 6,
+        "description": "label (string) at /tables/item_01/columns/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 28,
+          "line_budget": 2,
+          "approx_characters": 40,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item03.label",
+        "alias": "/tables/item_01/columns/item_03/label",
+        "source_pointer": "/body/0/cols/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 2,
+        "cardinality": 6,
+        "description": "label (string) at /tables/item_01/columns/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 28,
+          "line_budget": 2,
+          "approx_characters": 40,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item04.label",
+        "alias": "/tables/item_01/columns/item_04/label",
+        "source_pointer": "/body/0/cols/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 3,
+        "cardinality": 6,
+        "description": "label (string) at /tables/item_01/columns/item_04/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 28,
+          "line_budget": 2,
+          "approx_characters": 40,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.label",
+        "alias": "/tables/item_01/columns/item_05/label",
+        "source_pointer": "/body/0/cols/4/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 4,
+        "cardinality": 6,
+        "description": "label (string) at /tables/item_01/columns/item_05/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 28,
+          "line_budget": 2,
+          "approx_characters": 40,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item06.label",
+        "alias": "/tables/item_01/columns/item_06/label",
+        "source_pointer": "/body/0/cols/5/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 5,
+        "cardinality": 6,
+        "description": "label (string) at /tables/item_01/columns/item_06/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 28,
+          "line_budget": 2,
+          "approx_characters": 40,
+          "style": {
+            "id": "label",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 12,
+            "tracking": "0.06em",
+            "case": "upper",
+            "use": "Tabs, axes, tags, column labels",
+            "tracking_pt": 0.54
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.a",
+        "alias": "/tables/item_01/rows/item_01/1__manual",
+        "source_pointer": "/body/0/rows/0/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "a (string) at /tables/item_01/rows/item_01/1__manual",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.b",
+        "alias": "/tables/item_01/rows/item_01/2__ai_assisted",
+        "source_pointer": "/body/0/rows/0/b",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "b",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "b (string) at /tables/item_01/rows/item_01/2__ai_assisted",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.c",
+        "alias": "/tables/item_01/rows/item_01/3__team_practice",
+        "source_pointer": "/body/0/rows/0/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_01/3__team_practice",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.d",
+        "alias": "/tables/item_01/rows/item_01/4__integrated",
+        "source_pointer": "/body/0/rows/0/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "d",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "d (string) at /tables/item_01/rows/item_01/4__integrated",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.dim",
+        "alias": "/tables/item_01/rows/item_01/dim",
+        "source_pointer": "/body/0/rows/0/dim",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "dim",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "dim (string) at /tables/item_01/rows/item_01/dim",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 102,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 72,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.e",
+        "alias": "/tables/item_01/rows/item_01/5__self_improving",
+        "source_pointer": "/body/0/rows/0/e",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "e",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "e (string) at /tables/item_01/rows/item_01/5__self_improving",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.a",
+        "alias": "/tables/item_01/rows/item_02/1__manual",
+        "source_pointer": "/body/0/rows/1/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "a (string) at /tables/item_01/rows/item_02/1__manual",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.b",
+        "alias": "/tables/item_01/rows/item_02/2__ai_assisted",
+        "source_pointer": "/body/0/rows/1/b",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "b",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "b (string) at /tables/item_01/rows/item_02/2__ai_assisted",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.c",
+        "alias": "/tables/item_01/rows/item_02/3__team_practice",
+        "source_pointer": "/body/0/rows/1/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_02/3__team_practice",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.d",
+        "alias": "/tables/item_01/rows/item_02/4__integrated",
+        "source_pointer": "/body/0/rows/1/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "d",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "d (string) at /tables/item_01/rows/item_02/4__integrated",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.dim",
+        "alias": "/tables/item_01/rows/item_02/dim",
+        "source_pointer": "/body/0/rows/1/dim",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "dim",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "dim (string) at /tables/item_01/rows/item_02/dim",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 102,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 72,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.e",
+        "alias": "/tables/item_01/rows/item_02/5__self_improving",
+        "source_pointer": "/body/0/rows/1/e",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "e",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "e (string) at /tables/item_01/rows/item_02/5__self_improving",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.a",
+        "alias": "/tables/item_01/rows/item_03/1__manual",
+        "source_pointer": "/body/0/rows/2/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "a (string) at /tables/item_01/rows/item_03/1__manual",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.b",
+        "alias": "/tables/item_01/rows/item_03/2__ai_assisted",
+        "source_pointer": "/body/0/rows/2/b",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "b",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "b (string) at /tables/item_01/rows/item_03/2__ai_assisted",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.c",
+        "alias": "/tables/item_01/rows/item_03/3__team_practice",
+        "source_pointer": "/body/0/rows/2/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_03/3__team_practice",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.d",
+        "alias": "/tables/item_01/rows/item_03/4__integrated",
+        "source_pointer": "/body/0/rows/2/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "d",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "d (string) at /tables/item_01/rows/item_03/4__integrated",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.dim",
+        "alias": "/tables/item_01/rows/item_03/dim",
+        "source_pointer": "/body/0/rows/2/dim",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "dim",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "dim (string) at /tables/item_01/rows/item_03/dim",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 102,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 72,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.e",
+        "alias": "/tables/item_01/rows/item_03/5__self_improving",
+        "source_pointer": "/body/0/rows/2/e",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "e",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "e (string) at /tables/item_01/rows/item_03/5__self_improving",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.a",
+        "alias": "/tables/item_01/rows/item_04/1__manual",
+        "source_pointer": "/body/0/rows/3/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "a (string) at /tables/item_01/rows/item_04/1__manual",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.b",
+        "alias": "/tables/item_01/rows/item_04/2__ai_assisted",
+        "source_pointer": "/body/0/rows/3/b",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "b",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "b (string) at /tables/item_01/rows/item_04/2__ai_assisted",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.c",
+        "alias": "/tables/item_01/rows/item_04/3__team_practice",
+        "source_pointer": "/body/0/rows/3/c",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "c",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "c (string) at /tables/item_01/rows/item_04/3__team_practice",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.d",
+        "alias": "/tables/item_01/rows/item_04/4__integrated",
+        "source_pointer": "/body/0/rows/3/d",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "d",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "d (string) at /tables/item_01/rows/item_04/4__integrated",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.dim",
+        "alias": "/tables/item_01/rows/item_04/dim",
+        "source_pointer": "/body/0/rows/3/dim",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "dim",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "dim (string) at /tables/item_01/rows/item_04/dim",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 102,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 72,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.e",
+        "alias": "/tables/item_01/rows/item_04/5__self_improving",
+        "source_pointer": "/body/0/rows/3/e",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "e",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "e (string) at /tables/item_01/rows/item_04/5__self_improving",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_go_shaping",
+          "basis": "pinned_plain_native_table_cell_plan",
+          "density": "comfortable",
+          "width_pt": 120,
+          "height_pt": 72,
+          "line_budget": 4,
+          "approx_characters": 88,
+          "style": {
+            "id": "small",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 18,
+            "tracking": "0",
+            "use": "Roles, notes, table cells",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Source-fixed column widths and row heights; actual native table planner tokens, weights and insets.",
+            "Plain string cells only. Rich cells, marks, merged groups and content-dependent padding reductions require build measurement.",
+            "Go shaping is advisory, not native PowerPoint fit; fixed type size and no automatic shrinking.",
+            "Preferred authored density only; automatic density adjustment is not included in this estimate.",
+            "Approximate characters use a mixed case Latin prose probe including spaces; this is not a maximum character count."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "AI-native PDLC"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "What changes in each stage"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "allow_empty": true,
+      "synthetic_source_example": ""
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "1  Manual"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "2  AI-assisted"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "3  Team practice"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "4  Integrated"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "5  Self-improving"
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "Individuals own all work and context"
+    },
+    {
+      "name": "node01.rows.item01.b",
+      "source_pointer": "/body/0/rows/0/b",
+      "kind": "string",
+      "synthetic_source_example": "Individuals pick their own AI tools"
+    },
+    {
+      "name": "node01.rows.item01.c",
+      "source_pointer": "/body/0/rows/0/c",
+      "kind": "string",
+      "synthetic_source_example": "Named workflow owners and shared standards"
+    },
+    {
+      "name": "node01.rows.item01.d",
+      "source_pointer": "/body/0/rows/0/d",
+      "kind": "string",
+      "synthetic_source_example": "Agentic process architects lead cross-team flow"
+    },
+    {
+      "name": "node01.rows.item01.dim",
+      "source_pointer": "/body/0/rows/0/dim",
+      "kind": "string",
+      "synthetic_source_example": "People"
+    },
+    {
+      "name": "node01.rows.item01.e",
+      "source_pointer": "/body/0/rows/0/e",
+      "kind": "string",
+      "synthetic_source_example": "Teams curate skills; agents handle routine work"
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "Manual handoffs and meetings"
+    },
+    {
+      "name": "node01.rows.item02.b",
+      "source_pointer": "/body/0/rows/1/b",
+      "kind": "string",
+      "synthetic_source_example": "Workflows unchanged; tasks faster"
+    },
+    {
+      "name": "node01.rows.item02.c",
+      "source_pointer": "/body/0/rows/1/c",
+      "kind": "string",
+      "synthetic_source_example": "Shared workflows with defined review"
+    },
+    {
+      "name": "node01.rows.item02.d",
+      "source_pointer": "/body/0/rows/1/d",
+      "kind": "string",
+      "synthetic_source_example": "Humans and agents share one flow"
+    },
+    {
+      "name": "node01.rows.item02.dim",
+      "source_pointer": "/body/0/rows/1/dim",
+      "kind": "string",
+      "synthetic_source_example": "Process"
+    },
+    {
+      "name": "node01.rows.item02.e",
+      "source_pointer": "/body/0/rows/1/e",
+      "kind": "string",
+      "synthetic_source_example": "Telemetry reshapes the flow itself"
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "Documents and trackers"
+    },
+    {
+      "name": "node01.rows.item03.b",
+      "source_pointer": "/body/0/rows/2/b",
+      "kind": "string",
+      "synthetic_source_example": "Chat assistants and code helpers"
+    },
+    {
+      "name": "node01.rows.item03.c",
+      "source_pointer": "/body/0/rows/2/c",
+      "kind": "string",
+      "synthetic_source_example": "Shared prompts, templates and skills"
+    },
+    {
+      "name": "node01.rows.item03.d",
+      "source_pointer": "/body/0/rows/2/d",
+      "kind": "string",
+      "synthetic_source_example": "Agents connected to PM, repo and CI"
+    },
+    {
+      "name": "node01.rows.item03.dim",
+      "source_pointer": "/body/0/rows/2/dim",
+      "kind": "string",
+      "synthetic_source_example": "Tooling"
+    },
+    {
+      "name": "node01.rows.item03.e",
+      "source_pointer": "/body/0/rows/2/e",
+      "kind": "string",
+      "synthetic_source_example": "Monitoring agents tune skills and runbooks"
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "Review by the manager"
+    },
+    {
+      "name": "node01.rows.item04.b",
+      "source_pointer": "/body/0/rows/3/b",
+      "kind": "string",
+      "synthetic_source_example": "Personal judgment on AI use"
+    },
+    {
+      "name": "node01.rows.item04.c",
+      "source_pointer": "/body/0/rows/3/c",
+      "kind": "string",
+      "synthetic_source_example": "Review rules by risk"
+    },
+    {
+      "name": "node01.rows.item04.d",
+      "source_pointer": "/body/0/rows/3/d",
+      "kind": "string",
+      "synthetic_source_example": "Controls built into the flow"
+    },
+    {
+      "name": "node01.rows.item04.dim",
+      "source_pointer": "/body/0/rows/3/dim",
+      "kind": "string",
+      "synthetic_source_example": "Governance"
+    },
+    {
+      "name": "node01.rows.item04.e",
+      "source_pointer": "/body/0/rows/3/e",
+      "kind": "string",
+      "synthetic_source_example": "Evidence loop guides policy changes"
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 6
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-03",
+  "status": "active"
+}

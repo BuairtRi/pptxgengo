@@ -1,0 +1,7303 @@
+{
+  "schema": "wmds.templates.v2",
+  "family": "approach",
+  "name": "Approach and plan",
+  "summary": "Phases, phase detail, gates, roadmaps, work plans and cutover.",
+  "templates": [
+    {
+      "id": "plan",
+      "variant": "gantt",
+      "name": "Work plan · eight weeks",
+      "tier": "core",
+      "purpose": "An eight-week work plan: three workstreams, phase bands, gates, workshops and soft starts, for the detailed plan a steering group signs off.",
+      "uses": [
+        "advanced.gantt"
+      ],
+      "legacy": "Timelines, slides 68–98",
+      "budget": {
+        "words": 120,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 64
+        },
+        {
+          "slot": "workstream",
+          "maxChars": 28
+        },
+        {
+          "slot": "activity",
+          "maxChars": 32
+        },
+        {
+          "slot": "gate",
+          "maxChars": 28
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "density": "appendix",
+        "eyebrow": "Work plan",
+        "title": "Eight weeks from kickoff to a signed-off roadmap",
+        "body": [
+          {
+            "type": "gantt",
+            "x": 57,
+            "y": 108,
+            "w": 846,
+            "cols": {
+              "group": 24,
+              "lane": 210
+            },
+            "periods": {
+              "labels": [
+                "W1",
+                "W2",
+                "W3",
+                "W4",
+                "W5",
+                "W6",
+                "W7",
+                "W8"
+              ],
+              "sublabels": [
+                "Oct 5",
+                "Oct 12",
+                "Oct 19",
+                "Oct 26",
+                "Nov 2",
+                "Nov 9",
+                "Nov 16",
+                "Nov 23"
+              ]
+            },
+            "phases": [
+              {
+                "label": "Mobilize",
+                "from": 0,
+                "to": 1,
+                "rule": "line"
+              },
+              {
+                "label": "Diagnose",
+                "from": 1,
+                "to": 4,
+                "rule": "strong"
+              },
+              {
+                "label": "Design",
+                "from": 4,
+                "to": 7,
+                "rule": "emphasis"
+              },
+              {
+                "label": "Roadmap",
+                "from": 7,
+                "to": 8,
+                "rule": "callout"
+              }
+            ],
+            "gates": [
+              {
+                "at": 1,
+                "label": "G1 · Mobilized"
+              },
+              {
+                "at": 4,
+                "label": "G2 · Readout",
+                "key": true
+              },
+              {
+                "at": 8,
+                "label": "G3 · Final"
+              }
+            ],
+            "kinds": {
+              "core": {
+                "fill": "#070154",
+                "text": "#FFFFFF",
+                "label": "Core activity"
+              },
+              "support": {
+                "fill": "#CED7E6",
+                "text": "#070154",
+                "label": "Supporting activity"
+              }
+            },
+            "events": {
+              "star": {
+                "fill": "#F900D3",
+                "label": "Workshop"
+              },
+              "triangle": {
+                "fill": "#0047FF",
+                "label": "Review"
+              }
+            },
+            "groups": [
+              {
+                "label": "Finance",
+                "fill": "#070154",
+                "lanes": [
+                  {
+                    "title": "Current-state diagnostic",
+                    "sub": "Interviews, close calendar",
+                    "icon": "people",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 1,
+                        "to": 4,
+                        "label": "Interviews and close mapping",
+                        "softEnd": 0.25
+                      },
+                      {
+                        "event": "star",
+                        "at": 4.3,
+                        "label": "Controller workshop"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Future-state design",
+                    "sub": "Operating model",
+                    "icon": "layers",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 4,
+                        "to": 6,
+                        "label": "Design sprints"
+                      },
+                      {
+                        "event": "triangle",
+                        "at": 6.3,
+                        "label": "Design review"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Roadmap and business case",
+                    "sub": "Waves, value, cost",
+                    "icon": "chart",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 6,
+                        "to": 8,
+                        "label": "Roadmap",
+                        "softStart": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Data",
+                "fill": "#05013F",
+                "lanes": [
+                  {
+                    "title": "Systems and architecture",
+                    "sub": "14 business units",
+                    "icon": "database",
+                    "items": [
+                      {
+                        "kind": "core",
+                        "from": 1,
+                        "to": 3,
+                        "label": "Systems inventory"
+                      },
+                      {
+                        "kind": "support",
+                        "from": 3,
+                        "to": 4,
+                        "label": "Profiling"
+                      },
+                      {
+                        "kind": "core",
+                        "from": 4,
+                        "to": 7,
+                        "label": "Target architecture",
+                        "softStart": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "Change",
+                "fill": "#50658E",
+                "lanes": [
+                  {
+                    "title": "Stakeholder engagement",
+                    "sub": "Steering, working sessions",
+                    "icon": "people",
+                    "items": [
+                      {
+                        "event": "star",
+                        "at": 0.1,
+                        "label": "Kickoff"
+                      },
+                      {
+                        "kind": "support",
+                        "from": 1,
+                        "to": 8,
+                        "label": "Weekly working sessions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 2,
+      "revised": "2026-10-10"
+    },
+    {
+      "id": "phases",
+      "variant": "four",
+      "name": "Phased approach · four phases",
+      "tier": "core",
+      "purpose": "The approach as four phases, each with objective, activities, deliverables and a closing gate.",
+      "uses": [
+        "phase.columns"
+      ],
+      "legacy": "Slides 44, 60, 64–66; proposal 24–27, 36",
+      "budget": {
+        "words": 95,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "phase name",
+          "maxChars": 14
+        },
+        {
+          "slot": "objective",
+          "maxChars": 44
+        },
+        {
+          "slot": "activity",
+          "maxChars": 30
+        },
+        {
+          "slot": "deliverable",
+          "maxChars": 30
+        },
+        {
+          "slot": "gate",
+          "maxChars": 24
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "tall",
+        "eyebrow": "Approach",
+        "title": "Four phases take the close from [[12 days to 5]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "phases",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "phases": [
+              {
+                "n": "Phase 1",
+                "name": "Mobilize",
+                "duration": "1 wk",
+                "rule": "strong",
+                "objective": "Team, data access and plan in place.",
+                "activities": [
+                  "Kickoff and interviews",
+                  "Data access"
+                ],
+                "deliverables": [
+                  "Project plan"
+                ],
+                "gate": "G1 · Mobilized"
+              },
+              {
+                "n": "Phase 2",
+                "name": "Diagnose",
+                "duration": "3 wks",
+                "rule": "strong",
+                "objective": "Know where the 12 days go.",
+                "activities": [
+                  "Close calendar mapping",
+                  "Delay ranking"
+                ],
+                "deliverables": [
+                  "Diagnostic readout"
+                ],
+                "gate": "G2 · Readout"
+              },
+              {
+                "n": "Phase 3",
+                "name": "Design",
+                "duration": "3 wks",
+                "rule": "strong",
+                "objective": "A five-day close, designed.",
+                "activities": [
+                  "Rules and routing",
+                  "Operating model"
+                ],
+                "deliverables": [
+                  "Target design"
+                ],
+                "gate": "G3 · Sign-off"
+              },
+              {
+                "n": "Phase 4",
+                "name": "Roadmap",
+                "duration": "1 wk",
+                "rule": "emphasis",
+                "objective": "Waves 1–3 planned and funded.",
+                "activities": [
+                  "Wave sequencing",
+                  "Business case"
+                ],
+                "deliverables": [
+                  "$4.2M business case"
+                ],
+                "gate": "G4 · Final"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "phases",
+      "variant": "activities-outcomes",
+      "name": "Phases · key activities and outcome",
+      "tier": "working",
+      "purpose": "Three consecutive phases as arrows sized to their weeks, each with a number, name, key activities and one outcome, so a steering group reads the whole arc at once.",
+      "uses": [
+        "shape.chevron",
+        "list.set",
+        "heading.group",
+        "shape.block",
+        "mark.highlight"
+      ],
+      "legacy": "pptxgengo t085-uhg-022",
+      "budget": {
+        "words": 128,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 100
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "phase name",
+          "maxChars": 38
+        },
+        {
+          "slot": "activity",
+          "maxChars": 32
+        },
+        {
+          "slot": "outcome",
+          "maxChars": 32
+        },
+        {
+          "slot": "scope note",
+          "maxChars": 96
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "titleLines": 2,
+        "emphasis": "highlight",
+        "title": "Our [[three-phase]] approach turns a defined architecture into a Northfield-owned enterprise service",
+        "body": [
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 162,
+            "w": 300,
+            "h": 36,
+            "first": true,
+            "surface": "inverse",
+            "text": "Weeks 0–16",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 204,
+            "w": 252,
+            "text": "01"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 228,
+            "w": 252,
+            "text": "Data platform foundation"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 264,
+            "w": 252,
+            "text": "Key activities"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 282,
+            "w": 252,
+            "items": [
+              "Define target architecture",
+              "Set enterprise guardrails",
+              "Establish ingestion patterns",
+              "Validate patterns via pilots",
+              "Choose early-adopter workloads"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 408,
+            "w": 252,
+            "text": "Outcome"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 426,
+            "w": 252,
+            "items": [
+              "Approved platform foundation"
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 162,
+            "w": 300,
+            "h": 36,
+            "first": false,
+            "surface": "strong",
+            "text": "Weeks 17–34",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 204,
+            "w": 252,
+            "text": "02"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 345,
+            "y": 228,
+            "w": 252,
+            "text": "Scale and early adoption"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 264,
+            "w": 252,
+            "text": "Key activities"
+          },
+          {
+            "type": "bullets",
+            "x": 345,
+            "y": 282,
+            "w": 252,
+            "items": [
+              "Automate provisioning",
+              "Operationalize governance",
+              "Stand up support and cost controls",
+              "Onboard early adopters",
+              "Refine standards from pilots"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 408,
+            "w": 252,
+            "text": "Outcome"
+          },
+          {
+            "type": "bullets",
+            "x": 345,
+            "y": 426,
+            "w": 252,
+            "items": [
+              "Repeatable platform services"
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 633,
+            "y": 162,
+            "w": 270,
+            "h": 36,
+            "first": false,
+            "surface": "callout",
+            "text": "Weeks 30–42",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "number",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 204,
+            "w": 252,
+            "text": "03"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 633,
+            "y": 228,
+            "w": 252,
+            "text": "General availability"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 264,
+            "w": 252,
+            "text": "Key activities"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 282,
+            "w": 252,
+            "items": [
+              "Launch as a supported service",
+              "Hand ownership to Northfield",
+              "Transition operations and support",
+              "Optimize cost and adoption",
+              "Plan the next wave of teams"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 633,
+            "y": 408,
+            "w": 252,
+            "text": "Outcome"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 426,
+            "w": 252,
+            "items": [
+              "Platform ready to scale"
+            ]
+          }
+        ],
+        "source": {
+          "text": "Fixed platform scope is priced once; workload scope scales with the number of early adopters."
+        },
+        "density": "compact"
+      },
+      "rev": 2,
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "phases",
+      "variant": "summary-bands",
+      "name": "Phases · summary, activities and deliverables",
+      "tier": "working",
+      "purpose": "Three phase columns under arrow heads: a one-line summary band, a block of activities and a block of deliverables, aligned across phases so they compare row by row.",
+      "uses": [
+        "shape.chevron",
+        "shape.block",
+        "card.presets",
+        "list.set"
+      ],
+      "legacy": "pptxgengo t031-graphics-and-layouts-065",
+      "budget": {
+        "words": 146,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "phase head",
+          "maxChars": 24
+        },
+        {
+          "slot": "summary line",
+          "maxChars": 40
+        },
+        {
+          "slot": "activity",
+          "maxChars": 40
+        },
+        {
+          "slot": "deliverable",
+          "maxChars": 32
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Approach",
+        "title": "Three phases from baseline to a funded roadmap",
+        "body": [
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 126,
+            "w": 300,
+            "h": 54,
+            "first": true,
+            "surface": "inverse",
+            "text": "Phase 1 · Baseline",
+            "style": "subhead"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "h": 36,
+            "surface": "strong",
+            "text": "6–8 weeks · establish the fact base",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 216,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "label": "Activities",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Gather data and benchmarks",
+                  "Interview finance leaders",
+                  "Size the opportunity by function",
+                  "Map workflows and handoffs",
+                  "Test findings with sponsors"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 360,
+            "w": 270,
+            "h": 108,
+            "surface": "outline",
+            "pad": 12,
+            "label": "Deliverables",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Baseline and benchmark report",
+                  "Opportunity sizing model",
+                  "Fact-base readout"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 345,
+            "y": 126,
+            "w": 300,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Phase 2 · Design",
+            "style": "subhead"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 180,
+            "w": 270,
+            "h": 36,
+            "surface": "strong",
+            "text": "2–3 weeks · shape the options",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 216,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "label": "Activities",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Develop recommendations per area",
+                  "Set savings and value targets",
+                  "Define the target mix of roles",
+                  "Rank options by impact and effort",
+                  "Align leaders on the options"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 360,
+            "w": 270,
+            "h": 108,
+            "surface": "outline",
+            "pad": 12,
+            "label": "Deliverables",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Prioritized value opportunities",
+                  "Target role-mix view",
+                  "Value-target summary"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Phase 3 · Roadmap",
+            "style": "subhead"
+          },
+          {
+            "type": "block",
+            "x": 633,
+            "y": 180,
+            "w": 270,
+            "h": 36,
+            "surface": "strong",
+            "text": "1–2 weeks · agree the plan",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 216,
+            "w": 270,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "label": "Activities",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Facilitate a trade-off workshop",
+                  "Build the integrated roadmap",
+                  "Sequence initiatives by value",
+                  "Name owners and dependencies",
+                  "Read out the priorities"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 360,
+            "w": 270,
+            "h": 108,
+            "surface": "outline",
+            "pad": 12,
+            "label": "Deliverables",
+            "gap": 3,
+            "body": [
+              {
+                "bullets": [
+                  "Value-creation roadmap",
+                  "Initiative owner register",
+                  "Executive readout deck"
+                ]
+              }
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "phase-detail",
+      "variant": "rail-table",
+      "name": "Phase detail · activities and work products",
+      "tier": "working",
+      "purpose": "One phase on one page: a rail with the phase name, objective and exit criteria; activities and work products by workstream; deliverable thumbnails and assumptions.",
+      "uses": [
+        "frame.rail-left",
+        "shape.chevron",
+        "table.standard",
+        "prim.thumbnail",
+        "card.presets"
+      ],
+      "legacy": "pptxgengo t086-uhg-024",
+      "budget": {
+        "words": 130,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "phase name",
+          "maxChars": 28
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "objective",
+          "maxChars": 170
+        },
+        {
+          "slot": "exit criterion",
+          "maxChars": 32
+        },
+        {
+          "slot": "stream",
+          "maxChars": 10
+        },
+        {
+          "slot": "activity",
+          "maxChars": 52
+        },
+        {
+          "slot": "work product",
+          "maxChars": 28
+        },
+        {
+          "slot": "deliverable caption",
+          "maxChars": 22
+        },
+        {
+          "slot": "assumption",
+          "maxChars": 48
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "inverse",
+        "page": "24",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 36,
+            "w": 198,
+            "text": "Our approach",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "callout",
+            "x": 57,
+            "y": 60,
+            "w": 198,
+            "text": "Phase 01",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 57,
+            "y": 84,
+            "w": 198,
+            "text": "Data Platform Foundation",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 150,
+            "w": 198,
+            "text": "Weeks 0–16",
+            "on": "inverse"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": true,
+            "surface": "callout",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 129,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 180,
+            "w": 54,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "text": "Objective",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 243,
+            "w": 198,
+            "text": "Stand up and validate the enterprise data platform: target architecture, security, governance and onboarding patterns for the first finance workloads.",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 360,
+            "w": 198,
+            "text": "Phase 01 exit",
+            "on": "inverse"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 387,
+            "w": 198,
+            "on": "inverse",
+            "items": [
+              "Architecture patterns approved",
+              "Foundation environments live",
+              "Integrations demonstrated",
+              "Three pilot workloads chosen"
+            ]
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 54,
+            "w": 378,
+            "header": "light",
+            "dense": true,
+            "rowH": 96,
+            "rowHeader": true,
+            "cols": [
+              {
+                "k": "w",
+                "label": "Stream",
+                "w": 78
+              },
+              {
+                "k": "a",
+                "label": "Activities",
+                "w": 174,
+                "type": "bullets"
+              },
+              {
+                "k": "p",
+                "label": "Work products",
+                "w": 126,
+                "type": "bullets"
+              }
+            ],
+            "rows": [
+              {
+                "w": "Design",
+                "a": [
+                  "Define target architecture and capacity",
+                  "Create the placement framework"
+                ],
+                "p": [
+                  "Reference architecture",
+                  "Placement framework"
+                ]
+              },
+              {
+                "w": "Build",
+                "a": [
+                  "Configure environments and pipelines",
+                  "Set up health and cost telemetry"
+                ],
+                "p": [
+                  "Configured environments",
+                  "Telemetry baseline"
+                ]
+              },
+              {
+                "w": "Govern",
+                "a": [
+                  "Define security and catalog patterns",
+                  "Set lineage and classification rules"
+                ],
+                "p": [
+                  "Access control framework",
+                  "Lineage standards"
+                ]
+              },
+              {
+                "w": "Launch",
+                "a": [
+                  "Define the service catalog and onboarding",
+                  "Set adopter criteria; plan Phase 02"
+                ],
+                "p": [
+                  "Service catalog and kit",
+                  "Early-adopter cohort"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "emphasis",
+            "x": 741,
+            "y": 54,
+            "w": 162,
+            "text": "Deliverables"
+          },
+          {
+            "type": "thumbnail",
+            "x": 741,
+            "y": 108,
+            "w": 126,
+            "h": 72,
+            "kind": "diagram",
+            "stack": true,
+            "caption": "Onboarding framework"
+          },
+          {
+            "type": "thumbnail",
+            "x": 741,
+            "y": 234,
+            "w": 126,
+            "h": 72,
+            "kind": "text",
+            "stack": true,
+            "caption": "Reference design"
+          },
+          {
+            "type": "card",
+            "x": 741,
+            "y": 342,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Assumptions",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "bullets": [
+                  "Access is provided",
+                  "Pilots test patterns only"
+                ]
+              }
+            ]
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "phase-detail",
+      "variant": "rail-matrix",
+      "name": "Phase detail · repeatable process matrix",
+      "tier": "working",
+      "purpose": "A phase rail beside a step-by-step matrix of platform service, workload activity and evidence, with the fixed and variable scope stated underneath.",
+      "uses": [
+        "frame.rail-left",
+        "table.standard",
+        "shape.chevron",
+        "shape.block"
+      ],
+      "legacy": "pptxgengo t090-uhg-032",
+      "budget": {
+        "words": 183,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "phase name",
+          "maxChars": 28
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "objective",
+          "maxChars": 150
+        },
+        {
+          "slot": "step",
+          "maxChars": 10
+        },
+        {
+          "slot": "service",
+          "maxChars": 56
+        },
+        {
+          "slot": "activity",
+          "maxChars": 62
+        },
+        {
+          "slot": "evidence",
+          "maxChars": 46
+        },
+        {
+          "slot": "scope line",
+          "maxChars": 96
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "subtle",
+        "page": "32",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 36,
+            "w": 198,
+            "text": "Our approach",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 60,
+            "w": 198,
+            "text": "Phase 02",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 57,
+            "y": 84,
+            "w": 198,
+            "text": "Scale and Early Adoption",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 150,
+            "w": 198,
+            "text": "Weeks 17–34",
+            "on": "subtle"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": true,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 129,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": false,
+            "surface": "inverse",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 180,
+            "w": 54,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "text": "Objective",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 243,
+            "w": 198,
+            "text": "Prove that Northfield can assess, onboard, enable, govern and support a workload through one repeatable enterprise process.",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 342,
+            "w": 198,
+            "text": "Fixed or variable",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 369,
+            "w": 198,
+            "text": "Shared services are fixed and priced once.",
+            "on": "subtle"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 414,
+            "w": 198,
+            "text": "Workload delivery varies with the number of early adopters.",
+            "on": "subtle"
+          },
+          {
+            "type": "table",
+            "x": 345,
+            "y": 54,
+            "w": 558,
+            "header": "dark",
+            "dense": true,
+            "rowH": 60,
+            "rowHeader": true,
+            "cols": [
+              {
+                "k": "s",
+                "label": "Step",
+                "w": 90
+              },
+              {
+                "k": "p",
+                "label": "Platform service",
+                "w": 156
+              },
+              {
+                "k": "w",
+                "label": "Workload activity",
+                "w": 156
+              },
+              {
+                "k": "e",
+                "label": "Evidence",
+                "w": 156
+              }
+            ],
+            "rows": [
+              {
+                "s": "Assess",
+                "p": "Intake, workload placement and readiness assessment",
+                "w": "Confirm outcomes, data and team readiness; list dependencies",
+                "e": "Approved placement decision and scope"
+              },
+              {
+                "s": "Design",
+                "p": "Approved patterns, security model and governance",
+                "w": "Complete solution design and confirm component ownership",
+                "e": "Signed design, exceptions and delivery backlog"
+              },
+              {
+                "s": "Provision",
+                "p": "Workspace automation, access and policy assignment",
+                "w": "Confirm users, roles, connections and monitoring needs",
+                "e": "Compliant environment with controls active"
+              },
+              {
+                "s": "Validate",
+                "p": "Production-readiness criteria and governance checks",
+                "w": "Test the workload, resolve defects, secure acceptance",
+                "e": "Readiness decision and acceptance record"
+              },
+              {
+                "s": "Operate",
+                "p": "Monitoring, support, escalation and service management",
+                "w": "Assume ownership; respond to issues; track value and usage",
+                "e": "Support model validated; lessons defined"
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 396,
+            "w": 558,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Fixed shared services: intake · placement · provisioning · governance · monitoring · support",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 432,
+            "w": 558,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Variable delivery: solution design · build · data integration · testing · launch · hypercare",
+            "style": "small",
+            "align": "left"
+          }
+        ]
+      }
+    },
+    {
+      "id": "phase-detail",
+      "variant": "rail-cohort",
+      "name": "Phase detail · scorecard and cohort",
+      "tier": "working",
+      "purpose": "A phase rail carrying the selection scorecard, beside three illustrative workloads that each validate one pattern, with a thumbnail of the architecture each touches.",
+      "uses": [
+        "frame.rail-left",
+        "shape.chevron",
+        "card.presets",
+        "shape.block",
+        "prim.thumbnail"
+      ],
+      "legacy": "pptxgengo t087-uhg-027",
+      "budget": {
+        "words": 126,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "phase name",
+          "maxChars": 28
+        },
+        {
+          "slot": "weeks",
+          "maxChars": 14
+        },
+        {
+          "slot": "scorecard criterion",
+          "maxChars": 22
+        },
+        {
+          "slot": "scorecard text",
+          "maxChars": 32
+        },
+        {
+          "slot": "workload label",
+          "maxChars": 26
+        },
+        {
+          "slot": "workload title",
+          "maxChars": 20
+        },
+        {
+          "slot": "workload text",
+          "maxChars": 52
+        },
+        {
+          "slot": "validation",
+          "maxChars": 56
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "left",
+        "footer": "compact",
+        "railSurface": "inverse",
+        "page": "27",
+        "body": [
+          {
+            "type": "text",
+            "style": "eyebrow",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 36,
+            "w": 198,
+            "text": "Our approach",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "callout",
+            "x": 57,
+            "y": 60,
+            "w": 198,
+            "text": "Phase 01",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 57,
+            "y": 84,
+            "w": 198,
+            "text": "Data Platform Foundation",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 150,
+            "w": 198,
+            "text": "Weeks 0–16",
+            "on": "inverse"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": true,
+            "surface": "callout",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 129,
+            "y": 180,
+            "w": 72,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "chevron",
+            "x": 201,
+            "y": 180,
+            "w": 54,
+            "h": 18,
+            "first": false,
+            "surface": "strong",
+            "text": ""
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "text": "Early-adopter scorecard",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 252,
+            "w": 198,
+            "text": "Strategic value",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 265,
+            "w": 198,
+            "text": "Outcomes and sponsorship",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 287,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 294,
+            "w": 198,
+            "text": "Pattern coverage",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 307,
+            "w": 198,
+            "text": "Warehouse, lakehouse or both",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 329,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 336,
+            "w": 198,
+            "text": "Technical readiness",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 349,
+            "w": 198,
+            "text": "Data, security, dependencies",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 371,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 378,
+            "w": 198,
+            "text": "Team readiness",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 391,
+            "w": 198,
+            "text": "Owner, engineers, timeline",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 413,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 420,
+            "w": 198,
+            "text": "Learning value",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 433,
+            "w": 198,
+            "text": "Reusable patterns and controls",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 455,
+            "w": 198,
+            "ink": "line",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "heading",
+            "ink": "display",
+            "x": 345,
+            "y": 54,
+            "w": 558,
+            "text": "Three workloads prove the platform patterns"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 345,
+            "y": 90,
+            "w": 558,
+            "text": "Selected to maximize enterprise learning and to test each architecture pattern once."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 345,
+            "y": 126,
+            "w": 162,
+            "text": "Warehouse A to platform"
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 144,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Analytics",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "p": "Build analytics models on curated warehouse data."
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 345,
+            "y": 270,
+            "w": 162,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Validates data movement and lineage.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "thumbnail",
+            "x": 345,
+            "y": 342,
+            "w": 162,
+            "h": 90,
+            "kind": "diagram",
+            "stack": false,
+            "caption": "Warehouse A architecture"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 543,
+            "y": 126,
+            "w": 162,
+            "text": "Lakehouse B to platform"
+          },
+          {
+            "type": "card",
+            "x": 543,
+            "y": 144,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Reporting",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "p": "Rebuild reports and dashboards on curated data."
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 543,
+            "y": 270,
+            "w": 162,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Validates ownership of curated layers.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "thumbnail",
+            "x": 543,
+            "y": 342,
+            "w": 162,
+            "h": 90,
+            "kind": "diagram",
+            "stack": false,
+            "caption": "Lakehouse B architecture"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 741,
+            "y": 126,
+            "w": 162,
+            "text": "End to end on platform"
+          },
+          {
+            "type": "card",
+            "x": 741,
+            "y": 144,
+            "w": 162,
+            "h": 126,
+            "surface": "subtle",
+            "pad": 12,
+            "title": "Engineering",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "p": "Net-new ingestion, curation and BI for one use case."
+              }
+            ]
+          },
+          {
+            "type": "block",
+            "x": 741,
+            "y": 270,
+            "w": 162,
+            "h": 54,
+            "surface": "inverse",
+            "text": "Validates engineering standards.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "thumbnail",
+            "x": 741,
+            "y": 342,
+            "w": 162,
+            "h": 90,
+            "kind": "diagram",
+            "stack": false,
+            "caption": "End-to-end architecture"
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "phase-detail",
+      "variant": "team-handoff",
+      "name": "Phase · team handoff over time",
+      "tier": "working",
+      "purpose": "Show how responsibility shifts between consulting and client teams across two phases, with an effort curve, a callout and a row per team.",
+      "uses": [
+        "numhead",
+        "seq.stepper",
+        "chart.line",
+        "shape.chevron",
+        "shape.block",
+        "container (region)"
+      ],
+      "legacy": "pptxgengo t095-uhg-037",
+      "budget": {
+        "words": 145,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "phase name",
+          "maxChars": 40
+        },
+        {
+          "slot": "team description",
+          "maxChars": 90
+        },
+        {
+          "slot": "callout",
+          "maxChars": 90
+        },
+        {
+          "slot": "exit criterion",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Approach",
+        "title": "Phase 3 hands platform ownership to the Northfield team",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "text": "Phase 03 · Weeks 35–42"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 144,
+            "w": 198,
+            "text": "General availability and optimization"
+          },
+          {
+            "type": "stepper",
+            "x": 57,
+            "y": 216,
+            "w": 198,
+            "steps": [
+              {
+                "label": "1–14",
+                "title": "Build",
+                "state": "done"
+              },
+              {
+                "label": "15–34",
+                "title": "Scale",
+                "state": "done"
+              },
+              {
+                "label": "35–42",
+                "title": "Run",
+                "state": "current"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 324,
+            "w": 198,
+            "h": 144,
+            "surface": "subtle",
+            "pad": 12,
+            "body": [
+              {
+                "bullets": [
+                  "Runbooks accepted",
+                  "Northfield on call",
+                  "Benefits tracked",
+                  "Risks transferred"
+                ]
+              }
+            ],
+            "label": "Exit criteria"
+          },
+          {
+            "type": "chart",
+            "kind": "line",
+            "x": 273,
+            "y": 126,
+            "w": 414,
+            "h": 126,
+            "categories": [
+              "Wk 1",
+              "Wk 14",
+              "Wk 28",
+              "Wk 35",
+              "Wk 42"
+            ],
+            "series": [
+              {
+                "name": "West Monroe effort",
+                "values": [
+                  2,
+                  6,
+                  7,
+                  4,
+                  2
+                ],
+                "color": "series.1"
+              },
+              {
+                "name": "Northfield effort",
+                "values": [
+                  1,
+                  3,
+                  5,
+                  6,
+                  7
+                ],
+                "dashed": true,
+                "color": "deemph.3"
+              }
+            ],
+            "yMin": 0
+          },
+          {
+            "type": "block",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "h": 126,
+            "surface": "subtle",
+            "text": "West Monroe tapers its driving role so the Northfield core team owns execution. Effort crosses at about week 30, when Northfield staff lead more work than West Monroe.",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "chevron",
+            "x": 273,
+            "y": 270,
+            "w": 300,
+            "h": 36,
+            "first": true,
+            "surface": "strong",
+            "text": "Phase 2 · Scalability and early adoption",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 579,
+            "y": 270,
+            "w": 324,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Phase 3 · General availability",
+            "style": "small"
+          },
+          {
+            "type": "block",
+            "x": 273,
+            "y": 324,
+            "w": 630,
+            "h": 18,
+            "surface": "subtle",
+            "text": "West Monroe team",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 348,
+            "w": 294,
+            "text": "Deploying provisioning and monitoring, and onboarding the first business units."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 348,
+            "w": 306,
+            "text": "Optimizing performance, cost and adoption while transferring ownership and operations."
+          },
+          {
+            "type": "block",
+            "x": 273,
+            "y": 396,
+            "w": 630,
+            "h": 18,
+            "surface": "subtle",
+            "text": "Northfield team",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 420,
+            "w": 294,
+            "text": "Refining standards and overseeing the early adopter program."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 597,
+            "y": 420,
+            "w": 306,
+            "text": "Dedicated staff are learning to support the platform and beginning to lead."
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 3,
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "phase-gate",
+      "variant": "evidence-matrix",
+      "name": "Phase gate · criteria, exit and owner",
+      "tier": "working",
+      "purpose": "The decision rule for a phase gate: five numbered criteria, the evidence each requires, an illustrative exit and one named decision owner.",
+      "uses": [
+        "card.numbered",
+        "shape.block",
+        "heading.group"
+      ],
+      "legacy": "pptxgengo t091-uhg-033",
+      "budget": {
+        "words": 147,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 100
+        },
+        {
+          "slot": "criterion",
+          "maxChars": 14
+        },
+        {
+          "slot": "evidence item",
+          "maxChars": 23
+        },
+        {
+          "slot": "exit statement",
+          "maxChars": 36
+        },
+        {
+          "slot": "decision owner",
+          "maxChars": 22
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Phase 02 · Weeks 17–34",
+        "titleLines": 2,
+        "title": "Evidence from three early adopters decides whether the platform is ready for general availability",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "01",
+            "title": "Platform",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Patterns validated",
+              "Integrations reliable",
+              "Exceptions understood",
+              "Standards adopted"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Priority patterns approved for GA",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 57,
+            "y": 444,
+            "w": 154.8,
+            "text": "Chief architect"
+          },
+          {
+            "type": "card",
+            "x": 229.8,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "02",
+            "title": "Operations",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 229.8,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "x": 229.8,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Provisioning automated",
+              "Telemetry active",
+              "Runbooks exercised",
+              "Alerts routed"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 229.8,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 229.8,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Core services supportable",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 229.8,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 229.8,
+            "y": 444,
+            "w": 154.8,
+            "text": "Platform owner"
+          },
+          {
+            "type": "card",
+            "x": 402.6,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "03",
+            "title": "Governance",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 402.6,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "x": 402.6,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Controls applied",
+              "Lineage and evidence",
+              "Access reviews done",
+              "Gaps closed"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 402.6,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 402.6,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "No unresolved critical gaps",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 402.6,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 402.6,
+            "y": 444,
+            "w": 154.8,
+            "text": "Governance lead"
+          },
+          {
+            "type": "card",
+            "x": 575.4,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "04",
+            "title": "Service",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 575.4,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "x": 575.4,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Ownership clear",
+              "Support tiers tested",
+              "Onboarding working",
+              "Handover agreed"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 575.4,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 575.4,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Support accepted by Northfield",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 575.4,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 575.4,
+            "y": 444,
+            "w": 154.8,
+            "text": "Service owner"
+          },
+          {
+            "type": "card",
+            "x": 748.2,
+            "y": 162,
+            "w": 154.8,
+            "h": 54,
+            "surface": "inverse",
+            "pad": 12,
+            "inlineNumber": "05",
+            "title": "Financial",
+            "titleStyle": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 748.2,
+            "y": 228,
+            "w": 154.8,
+            "text": "Evidence required"
+          },
+          {
+            "type": "bullets",
+            "x": 748.2,
+            "y": 246,
+            "w": 154.8,
+            "items": [
+              "Cost visible",
+              "Demand forecastable",
+              "Value demonstrated",
+              "Savings tracked"
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 748.2,
+            "y": 342,
+            "w": 154.8,
+            "text": "Illustrative exit"
+          },
+          {
+            "type": "block",
+            "x": 748.2,
+            "y": 360,
+            "w": 154.8,
+            "h": 54,
+            "surface": "subtle",
+            "text": "Sustainable operating basis",
+            "style": "small",
+            "align": "left"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 748.2,
+            "y": 426,
+            "w": 154.8,
+            "text": "Decision owner"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 748.2,
+            "y": 444,
+            "w": 154.8,
+            "text": "Finance sponsor"
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "cutover",
+      "variant": "wave-matrix",
+      "name": "Cutover · AI support and wave matrix",
+      "tier": "working",
+      "purpose": "How a phased cutover is run: three kinds of AI support across every wave, then a slice-by-wave matrix showing legacy, coexistence and modern state.",
+      "uses": [
+        "heading.group",
+        "shape.block",
+        "text.block"
+      ],
+      "legacy": "pptxgengo t027-software-modernization-035",
+      "budget": {
+        "words": 107,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 100
+        },
+        {
+          "slot": "support title",
+          "maxChars": 14
+        },
+        {
+          "slot": "support text",
+          "maxChars": 90
+        },
+        {
+          "slot": "slice",
+          "maxChars": 28
+        },
+        {
+          "slot": "state",
+          "maxChars": 14
+        },
+        {
+          "slot": "source",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Phase 03 approach",
+        "titleLines": 2,
+        "title": "AI sequences each cutover wave and watches coexistence; people hold every go or no-go decision",
+        "source": {
+          "text": "Illustrative. The migration unit is a business-viable capability slice, not a single technical component."
+        },
+        "body": [
+          {
+            "type": "numhead",
+            "x": 57,
+            "y": 162,
+            "w": 252,
+            "n": "1",
+            "text": "Sequence",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 198,
+            "w": 252,
+            "text": "Find viable capability slices, expose hidden dependencies and simulate fallback paths."
+          },
+          {
+            "type": "numhead",
+            "x": 345,
+            "y": 162,
+            "w": 252,
+            "n": "2",
+            "text": "Prepare",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 345,
+            "y": 198,
+            "w": 252,
+            "text": "Profile and map data; draft test scenarios, runbooks, communications and support."
+          },
+          {
+            "type": "numhead",
+            "x": 633,
+            "y": 162,
+            "w": 252,
+            "n": "3",
+            "text": "Monitor",
+            "numInk": "emphasis"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 633,
+            "y": 198,
+            "w": 252,
+            "text": "Compare transactions and outcomes, flag exceptions and trace anomalies to dependencies."
+          },
+          {
+            "type": "grouplabel",
+            "x": 57,
+            "y": 264,
+            "w": 846,
+            "text": "Illustrative phased cutover"
+          },
+          {
+            "type": "matrix",
+            "x": 57,
+            "y": 288,
+            "w": 846,
+            "labels": "left",
+            "labelW": 216,
+            "cols": [
+              "Current state",
+              "Wave 1",
+              "Wave 2",
+              "Wave 3"
+            ],
+            "cellH": 36,
+            "gap": 18,
+            "rowGap": 18,
+            "rows": [
+              {
+                "label": "Close and consolidation",
+                "cells": [
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Coexistence",
+                    "surface": "callout"
+                  },
+                  {
+                    "text": "Modern",
+                    "surface": "inverse"
+                  },
+                  {
+                    "text": "Modern",
+                    "surface": "inverse"
+                  }
+                ]
+              },
+              {
+                "label": "Intercompany and payables",
+                "cells": [
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Coexistence",
+                    "surface": "callout"
+                  },
+                  {
+                    "text": "Modern",
+                    "surface": "inverse"
+                  }
+                ]
+              },
+              {
+                "label": "Planning and reporting",
+                "cells": [
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Legacy",
+                    "surface": "outline"
+                  },
+                  {
+                    "text": "Coexistence",
+                    "surface": "callout"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "phases",
+      "variant": "four-right",
+      "name": "Phased approach · four phases · right panel",
+      "tier": "working",
+      "purpose": "The four-phase approach with the engagement commitment, duration and what we can be held to on a right panel.",
+      "uses": [
+        "phase.columns",
+        "text"
+      ],
+      "legacy": "right panel variant of phases/four",
+      "budget": {
+        "words": 123,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "phase name",
+          "maxChars": 14
+        },
+        {
+          "slot": "objective",
+          "maxChars": 44
+        },
+        {
+          "slot": "activity",
+          "maxChars": 30
+        },
+        {
+          "slot": "deliverable",
+          "maxChars": 30
+        },
+        {
+          "slot": "gate",
+          "maxChars": 24
+        },
+        {
+          "slot": "panel content",
+          "note": "commitment on the 273 pt panel, inverse inks"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "right",
+        "railSurface": "inverse",
+        "footer": "tall",
+        "eyebrow": "Approach",
+        "title": "Four phases to a [[5-day close]]",
+        "emphasis": "highlight",
+        "titleLines": 1,
+        "body": [
+          {
+            "type": "phases",
+            "x": 57,
+            "y": 126,
+            "w": 558,
+            "phases": [
+              {
+                "n": "Phase 1",
+                "name": "Mobilize",
+                "duration": "1 wk",
+                "rule": "strong",
+                "objective": "Team, data access and plan in place.",
+                "activities": [
+                  "Kickoff and interviews",
+                  "Data access"
+                ],
+                "deliverables": [
+                  "Project plan"
+                ],
+                "gate": "G1 · Mobilized"
+              },
+              {
+                "n": "Phase 2",
+                "name": "Diagnose",
+                "duration": "3 wks",
+                "rule": "strong",
+                "objective": "Know where the 12 days go.",
+                "activities": [
+                  "Close calendar mapping",
+                  "Delay ranking"
+                ],
+                "deliverables": [
+                  "Diagnostic readout"
+                ],
+                "gate": "G2 · Readout"
+              },
+              {
+                "n": "Phase 3",
+                "name": "Design",
+                "duration": "3 wks",
+                "rule": "strong",
+                "objective": "A five-day close, designed.",
+                "activities": [
+                  "Rules and routing",
+                  "Operating model"
+                ],
+                "deliverables": [
+                  "Target design"
+                ],
+                "gate": "G3 · Sign-off"
+              },
+              {
+                "n": "Phase 4",
+                "name": "Roadmap",
+                "duration": "1 wk",
+                "rule": "emphasis",
+                "objective": "Waves 1–3 planned and funded.",
+                "activities": [
+                  "Wave sequencing",
+                  "Business case"
+                ],
+                "deliverables": [
+                  "$4.2M business case"
+                ],
+                "gate": "G4 · Final"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "text": "Our commitment",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "stat",
+            "ink": "display",
+            "x": 705,
+            "y": 144,
+            "w": 198,
+            "text": "8 weeks",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 705,
+            "y": 198,
+            "w": 198,
+            "text": "from kickoff to a funded roadmap",
+            "on": "inverse"
+          },
+          {
+            "type": "rule",
+            "x": 705,
+            "y": 252,
+            "w": 198,
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 270,
+            "w": 198,
+            "text": "What you can hold us to",
+            "on": "inverse"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 705,
+            "y": 288,
+            "w": 198,
+            "text": "A five-day close designed with your team, and a business case your board can approve at Gate 4.",
+            "on": "inverse"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "roles",
+      "variant": "dot-scores",
+      "name": "Roles by phase · dot scores",
+      "tier": "working",
+      "purpose": "Who does what in each phase for three parties (the firm, the client team and AI agents), with a dot score for relative team size and two bullets per cell. Each party's dots take their own color.",
+      "uses": [
+        "table.standard",
+        "prim.icon"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 102,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "party",
+          "count": 3,
+          "maxChars": 18
+        },
+        {
+          "slot": "phase",
+          "count": 3,
+          "maxChars": 14
+        },
+        {
+          "slot": "dot score",
+          "count": 9,
+          "maxChars": 1
+        },
+        {
+          "slot": "bullet",
+          "count": 18,
+          "maxChars": 32
+        },
+        {
+          "slot": "caption",
+          "maxChars": 110
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "title": "Roles shift as the build hands over to [[Northfield]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "rowH": 90,
+            "rowHeader": true,
+            "cols": [
+              {
+                "k": "p",
+                "label": "",
+                "w": 198,
+                "type": "icon"
+              },
+              {
+                "k": "a",
+                "label": "Rationalize",
+                "w": 216,
+                "type": "dots",
+                "max": 5
+              },
+              {
+                "k": "b",
+                "label": "Build",
+                "w": 216,
+                "type": "dots",
+                "max": 5
+              },
+              {
+                "k": "c",
+                "label": "Sustain",
+                "w": 216,
+                "type": "dots",
+                "max": 5
+              }
+            ],
+            "rows": [
+              {
+                "p": {
+                  "icon": "teamwork",
+                  "text": "West Monroe"
+                },
+                "ink": "strong",
+                "a": {
+                  "value": 2,
+                  "max": 5,
+                  "text": [
+                    "Portfolio and architecture review",
+                    "Business case and roadmap"
+                  ]
+                },
+                "b": {
+                  "value": 5,
+                  "max": 5,
+                  "text": [
+                    "Onshore and nearshore delivery",
+                    "Design, build, test, release"
+                  ]
+                },
+                "c": {
+                  "value": 2,
+                  "max": 5,
+                  "text": [
+                    "Part-time expert support",
+                    "AI oversight and validation"
+                  ]
+                }
+              },
+              {
+                "p": {
+                  "icon": "people-network",
+                  "text": "Northfield team"
+                },
+                "ink": "emphasis",
+                "a": {
+                  "value": 2,
+                  "max": 5,
+                  "text": [
+                    "Priorities and target outcomes",
+                    "Process and data context"
+                  ]
+                },
+                "b": {
+                  "value": 3,
+                  "max": 5,
+                  "text": [
+                    "Validates workflows",
+                    "Owns business trade-offs"
+                  ]
+                },
+                "c": {
+                  "value": 4,
+                  "max": 5,
+                  "text": [
+                    "Owns the product roadmap",
+                    "Accepts enhancements"
+                  ]
+                }
+              },
+              {
+                "p": {
+                  "icon": "robot",
+                  "text": "AI agents"
+                },
+                "ink": "callout",
+                "a": {
+                  "value": 1,
+                  "max": 5,
+                  "text": [
+                    "Code and dependency analysis",
+                    "Candidate scoring"
+                  ]
+                },
+                "b": {
+                  "value": 3,
+                  "max": 5,
+                  "text": [
+                    "Code generation and testing",
+                    "Documentation at speed"
+                  ]
+                },
+                "c": {
+                  "value": 5,
+                  "max": 5,
+                  "text": [
+                    "Routine sustainment automated",
+                    "Expert-validated on call"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 444,
+            "w": 846,
+            "text": "Dot scale: five dots show relative team size in each phase; more filled dots means a larger share of the work."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "roles",
+      "variant": "dot-scores-harvey",
+      "name": "Roles by phase · Harvey balls",
+      "tier": "working",
+      "purpose": "The same roles-by-phase table with a Harvey ball in place of the dot score, kept beside two short bullets; use when the scale is a share rather than a count.",
+      "uses": [
+        "table.standard",
+        "prim.icon"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 83,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "party",
+          "count": 3,
+          "maxChars": 18
+        },
+        {
+          "slot": "phase",
+          "count": 3,
+          "maxChars": 14
+        },
+        {
+          "slot": "harvey score",
+          "count": 9,
+          "maxChars": 1
+        },
+        {
+          "slot": "bullet",
+          "count": 18,
+          "maxChars": 24
+        },
+        {
+          "slot": "caption",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "title": "Roles shift as the build hands over to [[Northfield]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "light",
+            "rowH": 84,
+            "rowHeader": true,
+            "cols": [
+              {
+                "k": "p",
+                "label": "",
+                "w": 162,
+                "type": "icon"
+              },
+              {
+                "k": "ah",
+                "label": "Share",
+                "w": 54,
+                "type": "harvey"
+              },
+              {
+                "k": "a",
+                "label": "Role",
+                "w": 174,
+                "type": "bullets"
+              },
+              {
+                "k": "bh",
+                "label": "Share",
+                "w": 54,
+                "type": "harvey"
+              },
+              {
+                "k": "b",
+                "label": "Role",
+                "w": 174,
+                "type": "bullets"
+              },
+              {
+                "k": "ch",
+                "label": "Share",
+                "w": 54,
+                "type": "harvey"
+              },
+              {
+                "k": "c",
+                "label": "Role",
+                "w": 174,
+                "type": "bullets"
+              }
+            ],
+            "groups": [
+              {
+                "from": 1,
+                "to": 2,
+                "label": "Rationalize"
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "label": "Build"
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "label": "Sustain"
+              }
+            ],
+            "rows": [
+              {
+                "p": {
+                  "icon": "teamwork",
+                  "text": "West Monroe"
+                },
+                "ink": "strong",
+                "ah": 1,
+                "a": [
+                  "Portfolio review",
+                  "Business case, roadmap"
+                ],
+                "bh": 4,
+                "b": [
+                  "Nearshore delivery",
+                  "Design, build, test"
+                ],
+                "ch": 1,
+                "c": [
+                  "Part-time experts",
+                  "AI oversight"
+                ]
+              },
+              {
+                "p": {
+                  "icon": "people-network",
+                  "text": "Northfield team"
+                },
+                "ink": "emphasis",
+                "ah": 1,
+                "a": [
+                  "Priorities, outcomes",
+                  "Process and data context"
+                ],
+                "bh": 2,
+                "b": [
+                  "Validates workflows",
+                  "Owns trade-offs"
+                ],
+                "ch": 3,
+                "c": [
+                  "Owns the roadmap",
+                  "Accepts enhancements"
+                ]
+              },
+              {
+                "p": {
+                  "icon": "robot",
+                  "text": "AI agents"
+                },
+                "ink": "callout",
+                "ah": 0,
+                "a": [
+                  "Code analysis",
+                  "Candidate scoring"
+                ],
+                "bh": 2,
+                "b": [
+                  "Code and test generation",
+                  "Documentation"
+                ],
+                "ch": 4,
+                "c": [
+                  "Routine sustainment",
+                  "Expert-validated"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 444,
+            "w": 846,
+            "text": "Harvey ball: relative share of the work in each phase, from empty (none) to full (most)."
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "sequence",
+      "variant": "steps-detail",
+      "name": "Step sequence · detail by step",
+      "tier": "working",
+      "purpose": "A phase as a stepper with one detail column per step: the step name on the line, then the question it answers and what it produces, closing with the package the phase delivers.",
+      "uses": [
+        "seq.stepper",
+        "text.standard"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 113,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 52
+        },
+        {
+          "slot": "phase tag",
+          "maxChars": 16
+        },
+        {
+          "slot": "phase statement",
+          "maxChars": 64
+        },
+        {
+          "slot": "step name",
+          "count": 4,
+          "maxChars": 24
+        },
+        {
+          "slot": "question",
+          "count": 4,
+          "maxChars": 48
+        },
+        {
+          "slot": "output",
+          "count": 4,
+          "maxChars": 48
+        },
+        {
+          "slot": "package label",
+          "maxChars": 18
+        },
+        {
+          "slot": "package items",
+          "maxChars": 84
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "title": "Four steps make the portfolio [[actionable]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "block",
+            "x": 57,
+            "y": 126,
+            "w": 144,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Rationalize",
+            "style": "label"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 219,
+            "y": 135,
+            "w": 684,
+            "text": "Build the shared context that makes modernization actionable"
+          },
+          {
+            "type": "stepper",
+            "x": 57,
+            "y": 180,
+            "w": 864,
+            "steps": [
+              {
+                "label": "Step 01",
+                "title": "Align the thesis",
+                "state": "done"
+              },
+              {
+                "label": "Step 02",
+                "title": "Reconstruct reality",
+                "state": "done"
+              },
+              {
+                "label": "Step 03",
+                "title": "Reimagine the capability",
+                "state": "done"
+              },
+              {
+                "label": "Step 04",
+                "title": "Plan the path",
+                "state": "done"
+              }
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 270,
+            "w": 198,
+            "weight": 1.5,
+            "ink": "strong"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 282,
+            "w": 198,
+            "text": "Key question"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 300,
+            "w": 198,
+            "text": "What outcome would justify action?"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 360,
+            "w": 198,
+            "text": "Produces"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 378,
+            "w": 198,
+            "text": "Decision thesis and assessment questions"
+          },
+          {
+            "type": "rule",
+            "x": 273,
+            "y": 270,
+            "w": 198,
+            "weight": 1.5,
+            "ink": "strong"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 273,
+            "y": 282,
+            "w": 198,
+            "text": "Key question"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 273,
+            "y": 300,
+            "w": 198,
+            "text": "How do work and systems operate today?"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 273,
+            "y": 360,
+            "w": 198,
+            "text": "Produces"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 273,
+            "y": 378,
+            "w": 198,
+            "text": "Current-state process, risk and cost baseline"
+          },
+          {
+            "type": "rule",
+            "x": 489,
+            "y": 270,
+            "w": 198,
+            "weight": 1.5,
+            "ink": "strong"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 282,
+            "w": 198,
+            "text": "Key question"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 489,
+            "y": 300,
+            "w": 198,
+            "text": "What should the future capability become?"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 360,
+            "w": 198,
+            "text": "Produces"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 489,
+            "y": 378,
+            "w": 198,
+            "text": "Testable process and experience options"
+          },
+          {
+            "type": "rule",
+            "x": 705,
+            "y": 270,
+            "w": 198,
+            "weight": 1.5,
+            "ink": "strong"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 282,
+            "w": 198,
+            "text": "Key question"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 705,
+            "y": 300,
+            "w": 198,
+            "text": "Which disposition and first wave make sense?"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 360,
+            "w": 198,
+            "text": "Produces"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 705,
+            "y": 378,
+            "w": 198,
+            "text": "Disposition, economics and roadmap"
+          },
+          {
+            "type": "block",
+            "x": 57,
+            "y": 432,
+            "w": 162,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Decision package",
+            "style": "label"
+          },
+          {
+            "type": "block",
+            "x": 219,
+            "y": 432,
+            "w": 684,
+            "h": 36,
+            "surface": "subtle",
+            "text": "Baseline  •  target process  •  dispositions  •  economics  •  roadmap  •  first wave",
+            "style": "small",
+            "align": "left"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-03"
+    },
+    {
+      "id": "sequence",
+      "variant": "seven-r",
+      "name": "Step sequence · seven options in three groups",
+      "tier": "working",
+      "purpose": "A neutral choice set of seven numbered options in three labelled groups, shown as one chevron row with a line on each, and a lower band showing where AI accelerates each option.",
+      "uses": [
+        "seq.chevron",
+        "card.presets"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 142,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "group label",
+          "count": 3,
+          "maxChars": 20
+        },
+        {
+          "slot": "option name",
+          "count": 7,
+          "maxChars": 12
+        },
+        {
+          "slot": "option description",
+          "count": 7,
+          "maxChars": 40
+        },
+        {
+          "slot": "AI line",
+          "count": 7,
+          "maxChars": 44
+        },
+        {
+          "slot": "band heading",
+          "maxChars": 36
+        },
+        {
+          "slot": "closing line",
+          "maxChars": 120
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Modernization options",
+        "title": "Seven options, one common [[decision language]]",
+        "emphasis": "highlight",
+        "body": [
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 126,
+            "w": 216,
+            "text": "KEEP OR RETIRE"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 150,
+            "w": 216,
+            "weight": 3,
+            "ink": "emphasis"
+          },
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 162,
+            "w": 114,
+            "h": 54,
+            "first": true,
+            "surface": "inverse",
+            "text": "Retain",
+            "number": "1",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 228,
+            "w": 102,
+            "text": "Keep and manage deliberately"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 342,
+            "w": 102,
+            "h": 90,
+            "surface": "subtle",
+            "pad": 9,
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "emphasis"
+            },
+            "body": [
+              {
+                "p": "Scores cost and usage to confirm the keep"
+              }
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 165,
+            "y": 162,
+            "w": 108,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Retire",
+            "number": "2",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 165,
+            "y": 228,
+            "w": 102,
+            "text": "Remove obsolete software or work"
+          },
+          {
+            "type": "card",
+            "x": 165,
+            "y": 342,
+            "w": 102,
+            "h": 90,
+            "surface": "subtle",
+            "pad": 9,
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "emphasis"
+            },
+            "body": [
+              {
+                "p": "Finds dead code and unused features"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 309,
+            "y": 126,
+            "w": 324,
+            "text": "MOVE AND IMPROVE"
+          },
+          {
+            "type": "rule",
+            "x": 309,
+            "y": 150,
+            "w": 324,
+            "weight": 3,
+            "ink": "callout"
+          },
+          {
+            "type": "chevron",
+            "x": 309,
+            "y": 162,
+            "w": 114,
+            "h": 54,
+            "first": true,
+            "surface": "inverse",
+            "text": "Rehost",
+            "number": "3",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 309,
+            "y": 228,
+            "w": 102,
+            "text": "Move infrastructure; limit change"
+          },
+          {
+            "type": "card",
+            "x": 309,
+            "y": 342,
+            "w": 102,
+            "h": 90,
+            "surface": "subtle",
+            "pad": 9,
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "callout"
+            },
+            "body": [
+              {
+                "p": "Maps dependencies and plans the move"
+              }
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 417,
+            "y": 162,
+            "w": 114,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Replatform",
+            "number": "4",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 417,
+            "y": 228,
+            "w": 102,
+            "text": "Change the runtime; keep behavior"
+          },
+          {
+            "type": "card",
+            "x": 417,
+            "y": 342,
+            "w": 102,
+            "h": 90,
+            "surface": "subtle",
+            "pad": 9,
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "callout"
+            },
+            "body": [
+              {
+                "p": "Tests runtime changes against behavior"
+              }
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 525,
+            "y": 162,
+            "w": 108,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Refactor",
+            "number": "5",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 525,
+            "y": 228,
+            "w": 102,
+            "text": "Improve structure; keep function"
+          },
+          {
+            "type": "card",
+            "x": 525,
+            "y": 342,
+            "w": 102,
+            "h": 90,
+            "surface": "subtle",
+            "pad": 9,
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "callout"
+            },
+            "body": [
+              {
+                "p": "Refactors in bulk with generated tests"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 669,
+            "y": 126,
+            "w": 234,
+            "text": "REBUILD THE DESIGN"
+          },
+          {
+            "type": "rule",
+            "x": 669,
+            "y": 150,
+            "w": 234,
+            "weight": 3,
+            "ink": "strong"
+          },
+          {
+            "type": "chevron",
+            "x": 669,
+            "y": 162,
+            "w": 114,
+            "h": 54,
+            "first": true,
+            "surface": "inverse",
+            "text": "Rearchitect",
+            "number": "6",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 669,
+            "y": 228,
+            "w": 102,
+            "text": "Change structure and boundaries"
+          },
+          {
+            "type": "card",
+            "x": 669,
+            "y": 342,
+            "w": 102,
+            "h": 90,
+            "surface": "subtle",
+            "pad": 9,
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "strong"
+            },
+            "body": [
+              {
+                "p": "Recovers the design from code and evidence"
+              }
+            ]
+          },
+          {
+            "type": "chevron",
+            "x": 777,
+            "y": 162,
+            "w": 126,
+            "h": 54,
+            "first": false,
+            "surface": "inverse",
+            "text": "Rebuild",
+            "number": "7",
+            "style": "small"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 777,
+            "y": 228,
+            "w": 102,
+            "text": "Redesign and rewrite the capability"
+          },
+          {
+            "type": "card",
+            "x": 777,
+            "y": 342,
+            "w": 126,
+            "h": 90,
+            "surface": "subtle",
+            "pad": 9,
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "strong"
+            },
+            "body": [
+              {
+                "p": "Generates code, tests and documentation"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 306,
+            "w": 846,
+            "text": "Where AI accelerates each option"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 444,
+            "w": 846,
+            "text": "The framework still guides the decision; AI broadens the feasible set, and leaders remain accountable for the choice."
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "sequence",
+      "variant": "evidence-to-model",
+      "name": "Evidence to model · gather, synthesize, review, activate",
+      "tier": "working",
+      "purpose": "Inputs stack on the left and flow into one synthesis step, then an expert review, then the validated outputs, under a numbered chevron row of the four stages.",
+      "uses": [
+        "seq.chevron",
+        "shape.connector",
+        "card.presets"
+      ],
+      "legacy": "new 2026-10-03; from pick-deck review",
+      "budget": {
+        "words": 116,
+        "marks": 1
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 56
+        },
+        {
+          "slot": "stage name",
+          "count": 4,
+          "maxChars": 16
+        },
+        {
+          "slot": "input title",
+          "count": 3,
+          "maxChars": 20
+        },
+        {
+          "slot": "input detail",
+          "count": 3,
+          "maxChars": 40
+        },
+        {
+          "slot": "synthesis title",
+          "maxChars": 52
+        },
+        {
+          "slot": "synthesis point",
+          "count": 3,
+          "maxChars": 20
+        },
+        {
+          "slot": "review title",
+          "maxChars": 16
+        },
+        {
+          "slot": "review text",
+          "maxChars": 90
+        },
+        {
+          "slot": "output title",
+          "maxChars": 20
+        },
+        {
+          "slot": "output",
+          "count": 4,
+          "maxChars": 30
+        },
+        {
+          "slot": "handoff",
+          "maxChars": 56
+        },
+        {
+          "slot": "guardrail note",
+          "maxChars": 100
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "rail": "none",
+        "footer": "compact",
+        "eyebrow": "Our approach",
+        "title": "Three evidence streams become [[one validated model]]",
+        "emphasis": "highlight",
+        "source": {
+          "notes": [
+            "Observation requires consent and appropriate privacy, security and retention controls."
+          ]
+        },
+        "body": [
+          {
+            "type": "chevron",
+            "x": 57,
+            "y": 126,
+            "w": 240,
+            "h": 36,
+            "first": true,
+            "surface": "strong",
+            "number": "1",
+            "text": "Gather evidence",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 291,
+            "y": 126,
+            "w": 222,
+            "h": 36,
+            "first": false,
+            "surface": "inverse",
+            "number": "2",
+            "text": "Synthesize",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 507,
+            "y": 126,
+            "w": 222,
+            "h": 36,
+            "first": false,
+            "surface": "strong",
+            "number": "3",
+            "text": "Review",
+            "style": "small"
+          },
+          {
+            "type": "chevron",
+            "x": 723,
+            "y": 126,
+            "w": 180,
+            "h": 36,
+            "first": false,
+            "surface": "inverse",
+            "number": "4",
+            "text": "Activate",
+            "style": "small"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 180,
+            "w": 198,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "title": "Observed work[^1]",
+            "titleStyle": "label",
+            "edge": {
+              "side": "left",
+              "weight": 3,
+              "ink": "callout"
+            },
+            "body": [
+              {
+                "p": "Recordings, traces and artifacts"
+              }
+            ]
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                255,
+                216
+              ],
+              [
+                291,
+                216
+              ]
+            ],
+            "head": "end"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 270,
+            "w": 198,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "title": "Encoded behavior",
+            "titleStyle": "label",
+            "edge": {
+              "side": "left",
+              "weight": 3,
+              "ink": "emphasis"
+            },
+            "body": [
+              {
+                "p": "Source, configuration, data and jobs"
+              }
+            ]
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                255,
+                306
+              ],
+              [
+                291,
+                306
+              ]
+            ],
+            "head": "end"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 360,
+            "w": 198,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 9,
+            "title": "Expert context",
+            "titleStyle": "label",
+            "edge": {
+              "side": "left",
+              "weight": 3,
+              "ink": "strong"
+            },
+            "body": [
+              {
+                "p": "Interviews, policies and procedures"
+              }
+            ]
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                255,
+                396
+              ],
+              [
+                291,
+                396
+              ]
+            ],
+            "head": "end"
+          },
+          {
+            "type": "card",
+            "x": 291,
+            "y": 180,
+            "w": 180,
+            "h": 252,
+            "surface": "inverse",
+            "pad": 12,
+            "title": "AI builds a candidate process and logic model",
+            "titleStyle": "subhead",
+            "body": [
+              {
+                "bullets": [
+                  "Source-linked",
+                  "Confidence-scored",
+                  "Gaps flagged"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                471,
+                216
+              ],
+              [
+                507,
+                216
+              ]
+            ],
+            "head": "end"
+          },
+          {
+            "type": "block",
+            "x": 507,
+            "y": 180,
+            "w": 180,
+            "h": 72,
+            "surface": "callout",
+            "text": "Expert review",
+            "style": "subhead"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 507,
+            "y": 264,
+            "w": 180,
+            "text": "Operators and technology experts mark each item accurate, obsolete, material or missing."
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "display",
+            "x": 507,
+            "y": 324,
+            "w": 180,
+            "text": "Human judgment governs the model."
+          },
+          {
+            "type": "connector",
+            "points": [
+              [
+                687,
+                216
+              ],
+              [
+                723,
+                216
+              ]
+            ],
+            "head": "end"
+          },
+          {
+            "type": "block",
+            "x": 723,
+            "y": 180,
+            "w": 180,
+            "h": 72,
+            "surface": "inverse",
+            "text": "Validated model",
+            "style": "subhead"
+          },
+          {
+            "type": "bullets",
+            "x": 723,
+            "y": 264,
+            "w": 180,
+            "items": [
+              "Current-state process",
+              "Business rules and exceptions",
+              "Dependencies and risks",
+              "Open decisions for design"
+            ]
+          },
+          {
+            "type": "block",
+            "x": 507,
+            "y": 396,
+            "w": 396,
+            "h": 36,
+            "surface": "inverse",
+            "text": "Feeds target design, prototyping and test planning",
+            "style": "label"
+          }
+        ],
+        "density": "compact"
+      },
+      "rev": 2,
+      "added": "2026-10-03",
+      "revised": "2026-10-06"
+    },
+    {
+      "id": "milestones",
+      "variant": "table",
+      "name": "Milestones and deliverables · table by phase",
+      "tier": "core",
+      "purpose": "Every program milestone with its date, the deliverables that prove it (each described in a line), the owner and the acceptance criteria, grouped by phase.",
+      "uses": [
+        "table (rowGroups, ref cells, bullets)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 242,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "milestone row",
+          "count": "6-8"
+        },
+        {
+          "slot": "phase group",
+          "count": "2-4"
+        },
+        {
+          "slot": "deliverable bullet",
+          "count": "1-2 per row",
+          "maxChars": 44
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Eight milestones, each proved by named deliverables",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "groupW": 24,
+            "cols": [
+              {
+                "k": "m",
+                "label": "Milestone",
+                "w": 180
+              },
+              {
+                "k": "d",
+                "label": "Date",
+                "w": 90
+              },
+              {
+                "k": "dl",
+                "label": "Deliverables",
+                "w": 246,
+                "type": "bullets"
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 108
+              },
+              {
+                "k": "a",
+                "label": "Acceptance criteria",
+                "w": 192
+              }
+            ],
+            "rows": [
+              {
+                "m": {
+                  "text": "Mobilize complete",
+                  "ref": "M1"
+                },
+                "d": "W2 · Nov 13",
+                "dl": [
+                  {
+                    "lead": "Charter and plan:",
+                    "text": "scope, RACI, 24-week plan"
+                  },
+                  {
+                    "lead": "Change map:",
+                    "text": "roles and impacts by site"
+                  }
+                ],
+                "o": "WM program lead",
+                "a": "Sponsor signs charter; team and data access in place",
+                "h": 42
+              },
+              {
+                "m": {
+                  "text": "Current state signed off",
+                  "ref": "M2"
+                },
+                "d": "W6 · Dec 11",
+                "dl": [
+                  {
+                    "lead": "Current-state assessment:",
+                    "text": "6 areas"
+                  },
+                  {
+                    "lead": "Baseline metrics:",
+                    "text": "denials, AR, cash"
+                  }
+                ],
+                "o": "Revenue cycle VP",
+                "a": "Steering committee accepts findings and baseline",
+                "h": 42
+              },
+              {
+                "m": {
+                  "text": "Design approved",
+                  "ref": "M3"
+                },
+                "d": "W10 · Jan 8",
+                "dl": [
+                  {
+                    "lead": "Future-state design:",
+                    "text": "processes and roles"
+                  },
+                  {
+                    "lead": "Business case:",
+                    "text": "payback by wave"
+                  }
+                ],
+                "o": "WM design lead",
+                "a": "All design decisions logged; CFO accepts business case",
+                "h": 42
+              },
+              {
+                "m": {
+                  "text": "Build complete",
+                  "ref": "M4"
+                },
+                "d": "W15 · Feb 12",
+                "dl": [
+                  {
+                    "lead": "Build specs:",
+                    "text": "config, interfaces, reports"
+                  },
+                  {
+                    "lead": "Test plan:",
+                    "text": "320 scripts"
+                  }
+                ],
+                "o": "IT apps lead",
+                "a": "All specs built and unit tested; test pack ready",
+                "h": 42
+              },
+              {
+                "m": {
+                  "text": "UAT exit",
+                  "ref": "M5"
+                },
+                "d": "W17 · Feb 26",
+                "dl": [
+                  {
+                    "lead": "UAT exit report:",
+                    "text": "go or no-go recommendation"
+                  }
+                ],
+                "o": "WM test lead",
+                "a": "No open severity 1 or 2 defects; go decision recorded",
+                "h": 34
+              },
+              {
+                "m": {
+                  "text": "Go-live wave 1",
+                  "ref": "M6"
+                },
+                "d": "W18 · Mar 5",
+                "dl": [
+                  {
+                    "lead": "Training:",
+                    "text": "role guides, super-user kit"
+                  },
+                  {
+                    "lead": "Cutover runbook:",
+                    "text": "rollback, command center"
+                  }
+                ],
+                "o": "WM cutover lead",
+                "a": "Wave 1 sites live; 90% of staff trained",
+                "h": 42
+              },
+              {
+                "m": {
+                  "text": "Go-live wave 2",
+                  "ref": "M7"
+                },
+                "d": "W21 · Mar 26",
+                "dl": [
+                  {
+                    "lead": "Wave 2 readiness review:",
+                    "text": "6 sites scored"
+                  }
+                ],
+                "o": "WM change lead",
+                "a": "Wave 2 sites live; wave 1 issues closed",
+                "h": 34
+              },
+              {
+                "m": {
+                  "text": "Hypercare exit",
+                  "ref": "M8"
+                },
+                "d": "W24 · Apr 16",
+                "dl": [
+                  {
+                    "lead": "Hypercare report:",
+                    "text": "handover to support"
+                  }
+                ],
+                "o": "PMO lead",
+                "a": "Metrics at baseline or better for four weeks",
+                "h": 34
+              }
+            ],
+            "rowHeader": true,
+            "rowGroups": [
+              {
+                "label": "ASSESS",
+                "from": 0,
+                "to": 1
+              },
+              {
+                "label": "DESIGN AND BUILD",
+                "from": 2,
+                "to": 4,
+                "fill": "#50658E"
+              },
+              {
+                "label": "DEPLOY",
+                "from": 5,
+                "to": 7
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "cards",
+      "name": "Milestones · cards with deliverables",
+      "tier": "core",
+      "purpose": "One card per major milestone: a mono date, the milestone, what it means in a sentence and the deliverables that prove it. The Magenta edge marks the milestone that matters most.",
+      "uses": [
+        "card (label, edge, bullets)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 170,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 66
+        },
+        {
+          "slot": "card",
+          "count": "4-6"
+        },
+        {
+          "slot": "card description",
+          "maxChars": 70
+        },
+        {
+          "slot": "deliverable bullet",
+          "count": "2",
+          "maxChars": 30
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Six milestones carry the program to a stable go-live",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M2 · W6 · Dec 11",
+            "title": "Current state signed off",
+            "body": [
+              {
+                "p": "Assessment findings and the baseline are accepted."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Assessment:",
+                    "text": "6 areas"
+                  },
+                  {
+                    "lead": "Baseline:",
+                    "text": "denials, AR, cash"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M3 · W10 · Jan 8",
+            "title": "Design approved",
+            "body": [
+              {
+                "p": "Target processes and the business case are approved."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Design:",
+                    "text": "processes, roles"
+                  },
+                  {
+                    "lead": "Business case:",
+                    "text": "payback"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M4 · W15 · Feb 12",
+            "title": "Build complete",
+            "body": [
+              {
+                "p": "Configuration, interfaces and reports are built and unit tested."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Build specs:",
+                    "text": "traced to design"
+                  },
+                  {
+                    "lead": "Test pack:",
+                    "text": "320 scripts"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 306,
+            "w": 270,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M5 · W17 · Feb 26",
+            "title": "UAT exit",
+            "body": [
+              {
+                "p": "Users accept the build and the go decision is recorded."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "UAT exit report:",
+                    "text": "no Sev 1 or 2"
+                  },
+                  {
+                    "lead": "Defect log:",
+                    "text": "owners, dates"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 306,
+            "w": 270,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M6 · W18 · Mar 5",
+            "title": "Go-live wave 1",
+            "body": [
+              {
+                "p": "Three sites go live with trained staff and a command center."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Training:",
+                    "text": "role guides"
+                  },
+                  {
+                    "lead": "Runbook:",
+                    "text": "rollback plan"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "callout"
+            }
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 306,
+            "w": 270,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M8 · W24 · Apr 16",
+            "title": "Hypercare exit",
+            "body": [
+              {
+                "p": "Metrics hold at baseline and support takes over."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Hypercare report:",
+                    "text": "4 weeks stable"
+                  },
+                  {
+                    "lead": "Handover:",
+                    "text": "to support"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "cards-split",
+      "name": "Milestones · split with narrative and cards",
+      "tier": "working",
+      "purpose": "The program story and phase summary in the short column; the sign-off milestones as cards with their deliverables in the tall column.",
+      "uses": [
+        "split tall-right",
+        "card (label, edge, bullets)",
+        "rule",
+        "text"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 194,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 70
+        },
+        {
+          "slot": "narrative",
+          "maxChars": 150
+        },
+        {
+          "slot": "phase row",
+          "count": "3"
+        },
+        {
+          "slot": "card",
+          "count": "4"
+        },
+        {
+          "slot": "deliverable bullet",
+          "count": "3",
+          "maxChars": 40
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "split": "tall-right",
+        "titleLines": 3,
+        "title": "Four sign-offs gate the program, each backed by named deliverables",
+        "body": [
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "secondary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "The steering committee meets the week after each sign-off. Deliverables reach members five working days before."
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 252,
+            "w": 270
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 264,
+            "w": 270,
+            "text": "Phase 1 · W1–W6"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 279,
+            "w": 270,
+            "text": "Assess"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 300,
+            "w": 270,
+            "text": "2 milestones · 4 deliverables"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 324,
+            "w": 270
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 336,
+            "w": 270,
+            "text": "Phase 2 · W7–W17"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 351,
+            "w": 270,
+            "text": "Design and build"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 372,
+            "w": 270,
+            "text": "3 milestones · 5 deliverables"
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 396,
+            "w": 270
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "emphasis",
+            "x": 57,
+            "y": 408,
+            "w": 270,
+            "text": "Phase 3 · W18–W24"
+          },
+          {
+            "type": "text",
+            "style": "subhead",
+            "ink": "display",
+            "x": 57,
+            "y": 423,
+            "w": 270,
+            "text": "Deploy and stabilize"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "secondary",
+            "x": 57,
+            "y": 444,
+            "w": 270,
+            "text": "3 milestones · 4 deliverables"
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 36,
+            "w": 270,
+            "h": 198,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M2 · W6 · Dec 11",
+            "title": "Current state signed off",
+            "body": [
+              {
+                "p": "Findings and baseline accepted."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Current-state assessment:",
+                    "text": "6 areas"
+                  },
+                  {
+                    "lead": "Baseline metrics pack:",
+                    "text": "12 months"
+                  },
+                  {
+                    "lead": "Change map:",
+                    "text": "14 roles"
+                  },
+                  {
+                    "lead": "Site walk-throughs:",
+                    "text": "3 sites"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 36,
+            "w": 270,
+            "h": 198,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M3 · W10 · Jan 8",
+            "title": "Design approved",
+            "body": [
+              {
+                "p": "Target design and business case approved."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Future-state design:",
+                    "text": "processes, roles"
+                  },
+                  {
+                    "lead": "Business case:",
+                    "text": "payback by wave"
+                  },
+                  {
+                    "lead": "Decision log:",
+                    "text": "42 decisions"
+                  },
+                  {
+                    "lead": "Workshop outputs:",
+                    "text": "4 sessions"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 252,
+            "w": 270,
+            "h": 198,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M5 · W17 · Feb 26",
+            "title": "UAT exit",
+            "body": [
+              {
+                "p": "Users accept the build; go decision recorded."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "UAT exit report:",
+                    "text": "no Sev 1 or 2"
+                  },
+                  {
+                    "lead": "Defect log:",
+                    "text": "owners, dates"
+                  },
+                  {
+                    "lead": "Build specifications:",
+                    "text": "as built"
+                  },
+                  {
+                    "lead": "Cutover runbook:",
+                    "text": "rehearsed"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "callout"
+            }
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 252,
+            "w": 270,
+            "h": 198,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M8 · W24 · Apr 16",
+            "title": "Hypercare exit",
+            "body": [
+              {
+                "p": "Metrics stable; support takes over."
+              },
+              {
+                "bullets": [
+                  {
+                    "lead": "Hypercare report:",
+                    "text": "4 weeks stable"
+                  },
+                  {
+                    "lead": "Wave 2 readiness:",
+                    "text": "lessons applied"
+                  },
+                  {
+                    "lead": "Support handover:",
+                    "text": "signed"
+                  },
+                  {
+                    "lead": "Lessons learned:",
+                    "text": "both waves"
+                  }
+                ]
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "deliverable-one-pager",
+      "name": "Deliverable · one-pager",
+      "tier": "core",
+      "purpose": "One major deliverable in depth: purpose, format, audience, the sections it contains, its inputs and dependencies, the review and acceptance steps and the milestone it supports.",
+      "uses": [
+        "thumbnail",
+        "strongnum",
+        "bullets",
+        "vstepper",
+        "card (inverse)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 158,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "purpose",
+          "maxChars": 110
+        },
+        {
+          "slot": "section",
+          "count": "4-6"
+        },
+        {
+          "slot": "input",
+          "count": "3-4"
+        },
+        {
+          "slot": "review step",
+          "count": "3-4"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Deliverable D05",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Future-state design: the blueprint the build is held to",
+        "body": [
+          {
+            "type": "thumbnail",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "h": 108,
+            "kind": "diagram",
+            "stack": true
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 252,
+            "w": 270,
+            "text": "Purpose"
+          },
+          {
+            "type": "text",
+            "style": "body",
+            "ink": "primary",
+            "x": 57,
+            "y": 270,
+            "w": 270,
+            "text": "Sets the target processes, roles and system changes the build is specified, tested and accepted against."
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 342,
+            "w": 126,
+            "text": "Format"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 57,
+            "y": 360,
+            "w": 126,
+            "text": "Design document, about 60 pages"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 201,
+            "y": 342,
+            "w": 126,
+            "text": "Audience"
+          },
+          {
+            "type": "text",
+            "style": "small",
+            "ink": "primary",
+            "x": 201,
+            "y": 360,
+            "w": 126,
+            "text": "Steering committee, area leads, IT"
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 396,
+            "w": 270,
+            "h": 72,
+            "surface": "subtle",
+            "pad": 18,
+            "edge": {
+              "side": "left",
+              "weight": 3,
+              "ink": "display"
+            },
+            "label": "Supports M3 · W10 · Jan 8",
+            "title": "Design approved"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "text": "What it contains"
+          },
+          {
+            "type": "strongnum",
+            "x": 345,
+            "y": 150,
+            "w": 270,
+            "numInk": "emphasis",
+            "items": [
+              {
+                "title": "Design principles",
+                "text": "Eight rules every decision is tested against"
+              },
+              {
+                "title": "Future-state processes",
+                "text": "Scheduling to cash posting, 6 areas"
+              },
+              {
+                "title": "Roles and staffing",
+                "text": "Who does each step, by site"
+              },
+              {
+                "title": "System changes",
+                "text": "Configuration, interfaces and reports"
+              },
+              {
+                "title": "Decision log",
+                "text": "42 decisions, each with an owner"
+              },
+              {
+                "title": "Benefits link",
+                "text": "Each change tied to a baseline metric"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "text": "Inputs and dependencies"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 150,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Current-state assessment",
+                "text": "(D03), signed off W6"
+              },
+              {
+                "lead": "Baseline metrics pack",
+                "text": "(D04)"
+              },
+              {
+                "lead": "Design workshops",
+                "text": "four, weeks 7 to 9"
+              },
+              {
+                "lead": "Vendor roadmap",
+                "text": "from IT apps lead"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 288,
+            "w": 270,
+            "text": "Review and acceptance"
+          },
+          {
+            "type": "vstepper",
+            "x": 633,
+            "y": 312,
+            "w": 270,
+            "steps": [
+              {
+                "label": "W8 · Dec 25",
+                "title": "Draft to area leads",
+                "state": "done"
+              },
+              {
+                "label": "W9 · Jan 1",
+                "title": "Revenue cycle VP review",
+                "state": "current"
+              },
+              {
+                "label": "W10 · Jan 8",
+                "title": "Steering committee approval",
+                "state": "next"
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "deliverables-catalog",
+      "name": "Deliverables · catalog",
+      "tier": "core",
+      "purpose": "Every program deliverable in one dense table: reference, name, a one-line description, format, the milestone it is due at, owner and reviewer, grouped by phase.",
+      "uses": [
+        "table (rowGroups, ref cells, tag)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 258,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "deliverable row",
+          "count": "10-14"
+        },
+        {
+          "slot": "description",
+          "maxChars": 50
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Thirteen deliverables, each owned and reviewed",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 24,
+            "groupW": 24,
+            "cols": [
+              {
+                "k": "i",
+                "label": "Deliverable",
+                "w": 192
+              },
+              {
+                "k": "s",
+                "label": "Description",
+                "w": 222
+              },
+              {
+                "k": "f",
+                "label": "Format",
+                "w": 96,
+                "type": "tag"
+              },
+              {
+                "k": "m",
+                "label": "Due",
+                "w": 72
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 120
+              },
+              {
+                "k": "r",
+                "label": "Reviewer",
+                "w": 114
+              }
+            ],
+            "rows": [
+              {
+                "i": {
+                  "text": "Program charter and plan",
+                  "ref": "D01"
+                },
+                "s": "Scope, governance and 24-week plan",
+                "f": "Plan",
+                "m": "M1 · W2",
+                "o": "WM program lead",
+                "r": "PMO lead"
+              },
+              {
+                "i": {
+                  "text": "Stakeholder and change map",
+                  "ref": "D02"
+                },
+                "s": "Roles, impacts and cadence by site",
+                "f": "Workbook",
+                "m": "M1 · W2",
+                "o": "WM change lead",
+                "r": "Access director"
+              },
+              {
+                "i": {
+                  "text": "Current-state assessment",
+                  "ref": "D03"
+                },
+                "s": "Process, systems and data baseline",
+                "f": "Report",
+                "m": "M2 · W6",
+                "o": "WM process lead",
+                "r": "Revenue cycle VP"
+              },
+              {
+                "i": {
+                  "text": "Baseline metrics pack",
+                  "ref": "D04"
+                },
+                "s": "Denials, errors, cash and days in AR",
+                "f": "Dashboard",
+                "m": "M2 · W6",
+                "o": "WM analytics lead",
+                "r": "Finance director"
+              },
+              {
+                "i": {
+                  "text": "Future-state design",
+                  "ref": "D05"
+                },
+                "s": "Target processes, roles and systems",
+                "f": "Design doc",
+                "m": "M3 · W10",
+                "o": "WM design lead",
+                "r": "Revenue cycle VP"
+              },
+              {
+                "i": {
+                  "text": "Business case",
+                  "ref": "D06"
+                },
+                "s": "Benefits, cost and payback by wave",
+                "f": "Model",
+                "m": "M3 · W10",
+                "o": "WM program lead",
+                "r": "Finance director"
+              },
+              {
+                "i": {
+                  "text": "Build specifications",
+                  "ref": "D07"
+                },
+                "s": "Configuration, interface, report specs",
+                "f": "Specs",
+                "m": "M4 · W15",
+                "o": "IT apps lead",
+                "r": "WM architect"
+              },
+              {
+                "i": {
+                  "text": "Test plan and scripts",
+                  "ref": "D08"
+                },
+                "s": "Entry and exit criteria, 320 scripts",
+                "f": "Test pack",
+                "m": "M4 · W15",
+                "o": "WM test lead",
+                "r": "QA manager"
+              },
+              {
+                "i": {
+                  "text": "UAT exit report",
+                  "ref": "D09"
+                },
+                "s": "Results, defects, go or no-go view",
+                "f": "Report",
+                "m": "M5 · W17",
+                "o": "WM test lead",
+                "r": "QA manager"
+              },
+              {
+                "i": {
+                  "text": "Training materials",
+                  "ref": "D10"
+                },
+                "s": "Role guides, e-learning, super-users",
+                "f": "Courseware",
+                "m": "M6 · W18",
+                "o": "Training lead",
+                "r": "Access director"
+              },
+              {
+                "i": {
+                  "text": "Cutover runbook",
+                  "ref": "D11"
+                },
+                "s": "Cutover, rollback, command center",
+                "f": "Runbook",
+                "m": "M6 · W18",
+                "o": "WM cutover lead",
+                "r": "IT apps lead"
+              },
+              {
+                "i": {
+                  "text": "Wave 2 readiness review",
+                  "ref": "D12"
+                },
+                "s": "Site readiness, wave 1 lessons",
+                "f": "Scorecard",
+                "m": "M7 · W21",
+                "o": "WM change lead",
+                "r": "PMO lead"
+              },
+              {
+                "i": {
+                  "text": "Hypercare report",
+                  "ref": "D13"
+                },
+                "s": "Stability metrics, support handover",
+                "f": "Report",
+                "m": "M8 · W24",
+                "o": "WM program lead",
+                "r": "PMO lead"
+              }
+            ],
+            "rowHeader": true,
+            "rowGroups": [
+              {
+                "label": "ASSESS",
+                "from": 0,
+                "to": 3
+              },
+              {
+                "label": "DESIGN AND BUILD",
+                "from": 4,
+                "to": 8,
+                "fill": "#50658E"
+              },
+              {
+                "label": "DEPLOY",
+                "from": 9,
+                "to": 12
+              }
+            ]
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "acceptance",
+      "name": "Deliverables · acceptance tracker",
+      "tier": "working",
+      "purpose": "Who reviews and who approves each deliverable, the criteria it is accepted against and where it stands: Accepted, In review or Not started.",
+      "uses": [
+        "table (ref cells, status labels)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 267,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "deliverable row",
+          "count": "10-14"
+        },
+        {
+          "slot": "criteria",
+          "maxChars": 42
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Deliverable acceptance · week 11",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Four deliverables are accepted and three are in review",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 24,
+            "cols": [
+              {
+                "k": "i",
+                "label": "Deliverable",
+                "w": 198
+              },
+              {
+                "k": "m",
+                "label": "Due",
+                "w": 90
+              },
+              {
+                "k": "r",
+                "label": "Reviewer",
+                "w": 114
+              },
+              {
+                "k": "a",
+                "label": "Approver",
+                "w": 132
+              },
+              {
+                "k": "c",
+                "label": "Acceptance criteria",
+                "w": 216
+              },
+              {
+                "k": "s",
+                "label": "Status",
+                "w": 96,
+                "type": "status",
+                "labels": {
+                  "done": "Accepted",
+                  "progress": "In review",
+                  "notstarted": "Not started"
+                }
+              }
+            ],
+            "rows": [
+              {
+                "i": {
+                  "text": "Program charter and plan",
+                  "ref": "D01"
+                },
+                "m": "W2 · Nov 13",
+                "r": "PMO lead",
+                "a": "Steering committee",
+                "c": "Scope, plan, RACI signed by sponsor",
+                "s": "done"
+              },
+              {
+                "i": {
+                  "text": "Stakeholder and change map",
+                  "ref": "D02"
+                },
+                "m": "W2 · Nov 13",
+                "r": "Access director",
+                "a": "PMO lead",
+                "c": "All 6 sites and 14 roles mapped",
+                "s": "done"
+              },
+              {
+                "i": {
+                  "text": "Current-state assessment",
+                  "ref": "D03"
+                },
+                "m": "W6 · Dec 11",
+                "r": "Revenue cycle VP",
+                "a": "Steering committee",
+                "c": "Validated in 3 site walk-throughs",
+                "s": "done"
+              },
+              {
+                "i": {
+                  "text": "Baseline metrics pack",
+                  "ref": "D04"
+                },
+                "m": "W6 · Dec 11",
+                "r": "Finance director",
+                "a": "CFO",
+                "c": "12 months reconciled to the GL",
+                "s": "done"
+              },
+              {
+                "i": {
+                  "text": "Future-state design",
+                  "ref": "D05"
+                },
+                "m": "W10 · Jan 8",
+                "r": "Revenue cycle VP",
+                "a": "Steering committee",
+                "c": "Every design decision has an owner",
+                "s": "progress"
+              },
+              {
+                "i": {
+                  "text": "Business case",
+                  "ref": "D06"
+                },
+                "m": "W10 · Jan 8",
+                "r": "Finance director",
+                "a": "CFO",
+                "c": "Benefits tied to the baseline pack",
+                "s": "progress"
+              },
+              {
+                "i": {
+                  "text": "Build specifications",
+                  "ref": "D07"
+                },
+                "m": "W15 · Feb 12",
+                "r": "WM architect",
+                "a": "CIO",
+                "c": "Specs traced to approved design",
+                "s": "progress"
+              },
+              {
+                "i": {
+                  "text": "Test plan and scripts",
+                  "ref": "D08"
+                },
+                "m": "W15 · Feb 12",
+                "r": "QA manager",
+                "a": "CIO",
+                "c": "Scripts cover all in-scope flows",
+                "s": "notstarted"
+              },
+              {
+                "i": {
+                  "text": "UAT exit report",
+                  "ref": "D09"
+                },
+                "m": "W17 · Feb 26",
+                "r": "QA manager",
+                "a": "Steering committee",
+                "c": "No open severity 1 or 2 defects",
+                "s": "notstarted"
+              },
+              {
+                "i": {
+                  "text": "Training materials",
+                  "ref": "D10"
+                },
+                "m": "W18 · Mar 5",
+                "r": "Access director",
+                "a": "Revenue cycle VP",
+                "c": "90% of wave 1 staff trained",
+                "s": "notstarted"
+              },
+              {
+                "i": {
+                  "text": "Cutover runbook",
+                  "ref": "D11"
+                },
+                "m": "W18 · Mar 5",
+                "r": "IT apps lead",
+                "a": "CIO",
+                "c": "Two dress rehearsals run to time",
+                "s": "notstarted"
+              },
+              {
+                "i": {
+                  "text": "Wave 2 readiness review",
+                  "ref": "D12"
+                },
+                "m": "W21 · Mar 26",
+                "r": "PMO lead",
+                "a": "Steering committee",
+                "c": "All wave 2 sites scored ready",
+                "s": "notstarted"
+              },
+              {
+                "i": {
+                  "text": "Hypercare report",
+                  "ref": "D13"
+                },
+                "m": "W24 · Apr 16",
+                "r": "PMO lead",
+                "a": "Steering committee",
+                "c": "Metrics stable for 4 weeks",
+                "s": "notstarted"
+              }
+            ],
+            "rowHeader": true
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "milestone-deliverable-map",
+      "name": "Milestones × deliverables · map",
+      "tier": "working",
+      "purpose": "A matrix of deliverables (rows) by milestones (columns), with a check where each deliverable is due or updated, a one-line description per deliverable and a milestone key. One milestone column is highlighted.",
+      "uses": [
+        "table (check, groups, highlight, ref cells)",
+        "text (key)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 187,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "deliverable row",
+          "count": "10-13"
+        },
+        {
+          "slot": "milestone column",
+          "count": "6-8"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Hypercare exit re-tests the baseline and business case",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 20,
+            "highlight": "m7",
+            "cols": [
+              {
+                "k": "i",
+                "label": "Deliverable",
+                "w": 198
+              },
+              {
+                "k": "s",
+                "label": "Description",
+                "w": 216
+              },
+              {
+                "k": "m0",
+                "label": "M1",
+                "w": 54,
+                "type": "check"
+              },
+              {
+                "k": "m1",
+                "label": "M2",
+                "w": 54,
+                "type": "check"
+              },
+              {
+                "k": "m2",
+                "label": "M3",
+                "w": 54,
+                "type": "check"
+              },
+              {
+                "k": "m3",
+                "label": "M4",
+                "w": 54,
+                "type": "check"
+              },
+              {
+                "k": "m4",
+                "label": "M5",
+                "w": 54,
+                "type": "check"
+              },
+              {
+                "k": "m5",
+                "label": "M6",
+                "w": 54,
+                "type": "check"
+              },
+              {
+                "k": "m6",
+                "label": "M7",
+                "w": 54,
+                "type": "check"
+              },
+              {
+                "k": "m7",
+                "label": "M8",
+                "w": 54,
+                "type": "check"
+              }
+            ],
+            "groups": [
+              {
+                "label": "Assess",
+                "from": 2,
+                "to": 3
+              },
+              {
+                "label": "Design and build",
+                "from": 4,
+                "to": 6
+              },
+              {
+                "label": "Deploy",
+                "from": 7,
+                "to": 9
+              }
+            ],
+            "rows": [
+              {
+                "i": {
+                  "text": "Program charter and plan",
+                  "ref": "D01"
+                },
+                "s": "Scope, governance and 24-week plan",
+                "m0": true
+              },
+              {
+                "i": {
+                  "text": "Stakeholder and change map",
+                  "ref": "D02"
+                },
+                "s": "Roles, impacts and cadence by site",
+                "m0": true,
+                "m1": true
+              },
+              {
+                "i": {
+                  "text": "Current-state assessment",
+                  "ref": "D03"
+                },
+                "s": "Process, systems and data baseline",
+                "m1": true
+              },
+              {
+                "i": {
+                  "text": "Baseline metrics pack",
+                  "ref": "D04"
+                },
+                "s": "Denials, errors, cash and days in AR",
+                "m1": true,
+                "m7": true
+              },
+              {
+                "i": {
+                  "text": "Future-state design",
+                  "ref": "D05"
+                },
+                "s": "Target processes, roles and systems",
+                "m2": true
+              },
+              {
+                "i": {
+                  "text": "Business case",
+                  "ref": "D06"
+                },
+                "s": "Benefits, cost and payback by wave",
+                "m2": true,
+                "m7": true
+              },
+              {
+                "i": {
+                  "text": "Build specifications",
+                  "ref": "D07"
+                },
+                "s": "Configuration, interface, report specs",
+                "m3": true
+              },
+              {
+                "i": {
+                  "text": "Test plan and scripts",
+                  "ref": "D08"
+                },
+                "s": "Entry and exit criteria, 320 scripts",
+                "m3": true,
+                "m4": true
+              },
+              {
+                "i": {
+                  "text": "UAT exit report",
+                  "ref": "D09"
+                },
+                "s": "Results, defects, go or no-go view",
+                "m4": true
+              },
+              {
+                "i": {
+                  "text": "Training materials",
+                  "ref": "D10"
+                },
+                "s": "Role guides, e-learning, super-users",
+                "m5": true,
+                "m6": true
+              },
+              {
+                "i": {
+                  "text": "Cutover runbook",
+                  "ref": "D11"
+                },
+                "s": "Cutover, rollback, command center",
+                "m5": true,
+                "m6": true
+              },
+              {
+                "i": {
+                  "text": "Wave 2 readiness review",
+                  "ref": "D12"
+                },
+                "s": "Site readiness, wave 1 lessons",
+                "m6": true
+              },
+              {
+                "i": {
+                  "text": "Hypercare report",
+                  "ref": "D13"
+                },
+                "s": "Stability metrics, support handover",
+                "m7": true
+              }
+            ],
+            "rowHeader": true
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 444,
+            "w": 198,
+            "text": "M1 Mobilize complete · W2"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 273,
+            "y": 444,
+            "w": 198,
+            "text": "M2 Current state signed off · W6"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 444,
+            "w": 198,
+            "text": "M3 Design approved · W10"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 444,
+            "w": 198,
+            "text": "M4 Build complete · W15"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 456,
+            "w": 198,
+            "text": "M5 UAT exit · W17"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 273,
+            "y": 456,
+            "w": 198,
+            "text": "M6 Go-live wave 1 · W18"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 489,
+            "y": 456,
+            "w": 198,
+            "text": "M7 Go-live wave 2 · W21"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 705,
+            "y": 456,
+            "w": 198,
+            "text": "M8 Hypercare exit · W24"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "phase-deliverables",
+      "name": "Milestones · deliverables by phase",
+      "tier": "core",
+      "purpose": "Three phases as columns: each with its weeks, the milestones that close it (date and name) and the deliverables it produces, each described in a few words.",
+      "uses": [
+        "colhead",
+        "schedule",
+        "bullets",
+        "rule"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 157,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "phase column",
+          "count": "3"
+        },
+        {
+          "slot": "milestone",
+          "count": "2-3 per phase"
+        },
+        {
+          "slot": "deliverable bullet",
+          "count": "3-5 per phase",
+          "maxChars": 46
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Each phase closes on milestones its deliverables prove",
+        "body": [
+          {
+            "type": "colhead",
+            "x": 57,
+            "y": 126,
+            "w": 270,
+            "rule": "display",
+            "weight": 3,
+            "label": "Phase 1 · W1–W6",
+            "title": "Assess"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 180,
+            "w": 270,
+            "text": "Milestones"
+          },
+          {
+            "type": "schedule",
+            "x": 57,
+            "y": 198,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Nov 13",
+                "t": "M1 Mobilize complete"
+              }
+            ]
+          },
+          {
+            "type": "schedule",
+            "x": 57,
+            "y": 219,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Dec 11",
+                "t": "M2 Current state signed off"
+              }
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 57,
+            "y": 270,
+            "w": 270
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 57,
+            "y": 279,
+            "w": 270,
+            "text": "Deliverables"
+          },
+          {
+            "type": "bullets",
+            "x": 57,
+            "y": 300,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Charter and plan:",
+                "text": "scope, RACI, plan"
+              },
+              {
+                "lead": "Change map:",
+                "text": "14 roles, 6 sites"
+              },
+              {
+                "lead": "Current-state assessment:",
+                "text": "6 areas"
+              },
+              {
+                "lead": "Baseline metrics:",
+                "text": "12 months, reconciled"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "pad": 18,
+            "body": [
+              {
+                "p": "Exit: findings and baseline accepted"
+              }
+            ],
+            "edge": {
+              "side": "left",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "colhead",
+            "x": 345,
+            "y": 126,
+            "w": 270,
+            "rule": "display",
+            "weight": 3,
+            "label": "Phase 2 · W7–W17",
+            "title": "Design and build"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 345,
+            "y": 180,
+            "w": 270,
+            "text": "Milestones"
+          },
+          {
+            "type": "schedule",
+            "x": 345,
+            "y": 198,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Jan 8",
+                "t": "M3 Design approved"
+              }
+            ]
+          },
+          {
+            "type": "schedule",
+            "x": 345,
+            "y": 219,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Feb 12",
+                "t": "M4 Build complete"
+              }
+            ]
+          },
+          {
+            "type": "schedule",
+            "x": 345,
+            "y": 240,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Feb 26",
+                "t": "M5 UAT exit"
+              }
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 345,
+            "y": 270,
+            "w": 270
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 345,
+            "y": 279,
+            "w": 270,
+            "text": "Deliverables"
+          },
+          {
+            "type": "bullets",
+            "x": 345,
+            "y": 300,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Future-state design:",
+                "text": "processes, roles"
+              },
+              {
+                "lead": "Business case:",
+                "text": "payback by wave"
+              },
+              {
+                "lead": "Build specifications:",
+                "text": "traced to design"
+              },
+              {
+                "lead": "Test plan:",
+                "text": "320 scripts"
+              },
+              {
+                "lead": "UAT exit report:",
+                "text": "go or no-go"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 345,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "pad": 18,
+            "body": [
+              {
+                "p": "Exit: go decision recorded at UAT"
+              }
+            ],
+            "edge": {
+              "side": "left",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "colhead",
+            "x": 633,
+            "y": 126,
+            "w": 270,
+            "rule": "display",
+            "weight": 3,
+            "label": "Phase 3 · W18–W24",
+            "title": "Deploy and stabilize"
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 180,
+            "w": 270,
+            "text": "Milestones"
+          },
+          {
+            "type": "schedule",
+            "x": 633,
+            "y": 198,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Mar 5",
+                "t": "M6 Go-live wave 1"
+              }
+            ]
+          },
+          {
+            "type": "schedule",
+            "x": 633,
+            "y": 219,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Mar 26",
+                "t": "M7 Go-live wave 2"
+              }
+            ]
+          },
+          {
+            "type": "schedule",
+            "x": 633,
+            "y": 240,
+            "w": 270,
+            "keyW": 54,
+            "rowHeight": 21,
+            "keyInk": "emphasis",
+            "items": [
+              {
+                "k": "Apr 16",
+                "t": "M8 Hypercare exit"
+              }
+            ]
+          },
+          {
+            "type": "rule",
+            "x": 633,
+            "y": 270,
+            "w": 270
+          },
+          {
+            "type": "text",
+            "style": "label",
+            "ink": "secondary",
+            "x": 633,
+            "y": 279,
+            "w": 270,
+            "text": "Deliverables"
+          },
+          {
+            "type": "bullets",
+            "x": 633,
+            "y": 300,
+            "w": 270,
+            "items": [
+              {
+                "lead": "Training materials:",
+                "text": "role guides, e-learning"
+              },
+              {
+                "lead": "Cutover runbook:",
+                "text": "rollback, command center"
+              },
+              {
+                "lead": "Wave 2 readiness:",
+                "text": "6 sites scored"
+              },
+              {
+                "lead": "Hypercare report:",
+                "text": "handover to support"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "x": 633,
+            "y": 414,
+            "w": 270,
+            "h": 54,
+            "surface": "subtle",
+            "pad": 18,
+            "body": [
+              {
+                "p": "Exit: support signs the handover"
+              }
+            ],
+            "edge": {
+              "side": "left",
+              "weight": 3,
+              "ink": "callout"
+            }
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "continued-page-1",
+      "name": "Milestones and deliverables · list, page 1",
+      "tier": "working",
+      "purpose": "A dense list of deliverables grouped under their milestones, with description, format, owner and approver. Page 1 of a multi-page list.",
+      "uses": [
+        "table (group rows, ref cells, tag)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 174,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "milestone group",
+          "count": "3-4"
+        },
+        {
+          "slot": "deliverable row",
+          "count": "8-9"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Milestones and deliverables: mobilize to build complete",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 126,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 26,
+            "cols": [
+              {
+                "k": "i",
+                "label": "Deliverable",
+                "w": 216
+              },
+              {
+                "k": "s",
+                "label": "Description",
+                "w": 264
+              },
+              {
+                "k": "f",
+                "label": "Format",
+                "w": 102,
+                "type": "tag"
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 138
+              },
+              {
+                "k": "a",
+                "label": "Approver",
+                "w": 126
+              }
+            ],
+            "rows": [
+              {
+                "group": "M1 · Mobilize complete · W2 · Nov 13",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Program charter and plan",
+                  "ref": "D01"
+                },
+                "s": "Scope, governance and 24-week plan",
+                "f": "Plan",
+                "o": "WM program lead",
+                "a": "Steering committee"
+              },
+              {
+                "i": {
+                  "text": "Stakeholder and change map",
+                  "ref": "D02"
+                },
+                "s": "Roles, impacts and cadence by site",
+                "f": "Workbook",
+                "o": "WM change lead",
+                "a": "PMO lead"
+              },
+              {
+                "group": "M2 · Current state signed off · W6 · Dec 11",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Current-state assessment",
+                  "ref": "D03"
+                },
+                "s": "Process, systems and data baseline",
+                "f": "Report",
+                "o": "WM process lead",
+                "a": "Steering committee"
+              },
+              {
+                "i": {
+                  "text": "Baseline metrics pack",
+                  "ref": "D04"
+                },
+                "s": "Denials, errors, cash and days in AR",
+                "f": "Dashboard",
+                "o": "WM analytics lead",
+                "a": "CFO"
+              },
+              {
+                "group": "M3 · Design approved · W10 · Jan 8",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Future-state design",
+                  "ref": "D05"
+                },
+                "s": "Target processes, roles and systems",
+                "f": "Design doc",
+                "o": "WM design lead",
+                "a": "Steering committee"
+              },
+              {
+                "i": {
+                  "text": "Business case",
+                  "ref": "D06"
+                },
+                "s": "Benefits, cost and payback by wave",
+                "f": "Model",
+                "o": "WM program lead",
+                "a": "CFO"
+              },
+              {
+                "group": "M4 · Build complete · W15 · Feb 12",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Build specifications",
+                  "ref": "D07"
+                },
+                "s": "Configuration, interface, report specs",
+                "f": "Specs",
+                "o": "IT apps lead",
+                "a": "CIO"
+              },
+              {
+                "i": {
+                  "text": "Test plan and scripts",
+                  "ref": "D08"
+                },
+                "s": "Entry and exit criteria, 320 scripts",
+                "f": "Test pack",
+                "o": "WM test lead",
+                "a": "CIO"
+              }
+            ],
+            "rowHeader": true
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "continued-page-2",
+      "name": "Milestones and deliverables · list, continued page",
+      "tier": "working",
+      "purpose": "The continued page of the milestones-and-deliverables list: a continued marker above the same table columns, picking up at the next milestone.",
+      "uses": [
+        "table (continued, group rows, ref cells, tag)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 164,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "continued marker",
+          "maxChars": 40
+        },
+        {
+          "slot": "milestone group",
+          "count": "3-4"
+        },
+        {
+          "slot": "deliverable row",
+          "count": "6-9"
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "none",
+        "footer": "compact",
+        "density": "compact",
+        "title": "Milestones and deliverables: UAT exit to hypercare exit",
+        "body": [
+          {
+            "type": "table",
+            "x": 57,
+            "y": 144,
+            "w": 846,
+            "header": "dark",
+            "dense": true,
+            "rowH": 26,
+            "cols": [
+              {
+                "k": "i",
+                "label": "Deliverable",
+                "w": 216
+              },
+              {
+                "k": "s",
+                "label": "Description",
+                "w": 264
+              },
+              {
+                "k": "f",
+                "label": "Format",
+                "w": 102,
+                "type": "tag"
+              },
+              {
+                "k": "o",
+                "label": "Owner",
+                "w": 138
+              },
+              {
+                "k": "a",
+                "label": "Approver",
+                "w": 126
+              }
+            ],
+            "rows": [
+              {
+                "group": "M5 · UAT exit · W17 · Feb 26",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Test plan and scripts, final",
+                  "ref": "D08"
+                },
+                "s": "Rerun results and the defect log",
+                "f": "Test pack",
+                "o": "WM test lead",
+                "a": "CIO"
+              },
+              {
+                "i": {
+                  "text": "UAT exit report",
+                  "ref": "D09"
+                },
+                "s": "Results, defects, go or no-go view",
+                "f": "Report",
+                "o": "WM test lead",
+                "a": "Steering committee"
+              },
+              {
+                "group": "M6 · Go-live wave 1 · W18 · Mar 5",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Training materials",
+                  "ref": "D10"
+                },
+                "s": "Role guides, e-learning, super-users",
+                "f": "Courseware",
+                "o": "Training lead",
+                "a": "Revenue cycle VP"
+              },
+              {
+                "i": {
+                  "text": "Cutover runbook",
+                  "ref": "D11"
+                },
+                "s": "Cutover, rollback, command center",
+                "f": "Runbook",
+                "o": "WM cutover lead",
+                "a": "CIO"
+              },
+              {
+                "group": "M7 · Go-live wave 2 · W21 · Mar 26",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Wave 2 readiness review",
+                  "ref": "D12"
+                },
+                "s": "Site readiness, wave 1 lessons",
+                "f": "Scorecard",
+                "o": "WM change lead",
+                "a": "Steering committee"
+              },
+              {
+                "i": {
+                  "text": "Cutover runbook, wave 2",
+                  "ref": "D11"
+                },
+                "s": "Updated for wave 2 sites and lessons",
+                "f": "Runbook",
+                "o": "WM cutover lead",
+                "a": "CIO"
+              },
+              {
+                "group": "M8 · Hypercare exit · W24 · Apr 16",
+                "h": 22
+              },
+              {
+                "i": {
+                  "text": "Hypercare report",
+                  "ref": "D13"
+                },
+                "s": "Stability metrics, support handover",
+                "f": "Report",
+                "o": "WM program lead",
+                "a": "Steering committee"
+              }
+            ],
+            "rowHeader": true,
+            "continued": "Milestones and deliverables · continued"
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    },
+    {
+      "id": "milestones",
+      "variant": "nav",
+      "name": "Milestones · nav rail cards",
+      "tier": "working",
+      "purpose": "All eight milestones as compact cards in a long proposal with the nav rail: date, milestone and the deliverables due.",
+      "uses": [
+        "nav rail",
+        "card (label, edge, bullets)"
+      ],
+      "legacy": "new 2026-10-10",
+      "budget": {
+        "words": 157,
+        "marks": 0
+      },
+      "slots": [
+        {
+          "slot": "title",
+          "maxChars": 60
+        },
+        {
+          "slot": "card",
+          "count": "6-8"
+        },
+        {
+          "slot": "deliverable",
+          "count": "2-3",
+          "maxChars": 26
+        }
+      ],
+      "slide": {
+        "type": "slide",
+        "eyebrow": "Milestones and deliverables",
+        "rail": "nav",
+        "footer": "compact",
+        "density": "compact",
+        "nav": {
+          "items": [
+            "Approach",
+            "Milestones",
+            "Team",
+            "Commercials"
+          ],
+          "active": 1
+        },
+        "title": "Eight milestones over 24 weeks, each with its deliverables",
+        "body": [
+          {
+            "type": "card",
+            "x": 57,
+            "y": 126,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M1 · W2 · Nov 13",
+            "title": "Mobilize complete",
+            "body": [
+              {
+                "bullets": [
+                  "Charter and plan",
+                  "Change map"
+                ]
+              },
+              {
+                "label": "Sign-off · Sponsor"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 273,
+            "y": 126,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M2 · W6 · Dec 11",
+            "title": "Baseline signed off",
+            "body": [
+              {
+                "bullets": [
+                  "Current-state assessment",
+                  "Baseline metrics"
+                ]
+              },
+              {
+                "label": "Sign-off · Steering"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 126,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M3 · W10 · Jan 8",
+            "title": "Design approved",
+            "body": [
+              {
+                "bullets": [
+                  "Future-state design",
+                  "Business case"
+                ]
+              },
+              {
+                "label": "Sign-off · Steering"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 705,
+            "y": 126,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M4 · W15 · Feb 12",
+            "title": "Build complete",
+            "body": [
+              {
+                "bullets": [
+                  "Build specifications",
+                  "Test plan, 320 scripts"
+                ]
+              },
+              {
+                "label": "Sign-off · CIO"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 57,
+            "y": 306,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M5 · W17 · Feb 26",
+            "title": "UAT exit",
+            "body": [
+              {
+                "bullets": [
+                  "UAT exit report",
+                  "Go decision record"
+                ]
+              },
+              {
+                "label": "Sign-off · Steering"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 273,
+            "y": 306,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M6 · W18 · Mar 5",
+            "title": "Go-live wave 1",
+            "body": [
+              {
+                "bullets": [
+                  "Training materials",
+                  "Cutover runbook"
+                ]
+              },
+              {
+                "label": "Sign-off · Go-live board"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "callout"
+            }
+          },
+          {
+            "type": "card",
+            "x": 489,
+            "y": 306,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M7 · W21 · Mar 26",
+            "title": "Go-live wave 2",
+            "body": [
+              {
+                "bullets": [
+                  "Wave 2 readiness review",
+                  "Runbook update"
+                ]
+              },
+              {
+                "label": "Sign-off · Go-live board"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          },
+          {
+            "type": "card",
+            "x": 705,
+            "y": 306,
+            "w": 198,
+            "h": 162,
+            "surface": "subtle",
+            "pad": 18,
+            "label": "M8 · W24 · Apr 16",
+            "title": "Hypercare exit",
+            "body": [
+              {
+                "bullets": [
+                  "Hypercare report",
+                  "Support handover"
+                ]
+              },
+              {
+                "label": "Sign-off · Steering"
+              }
+            ],
+            "edge": {
+              "side": "top",
+              "weight": 3,
+              "ink": "display"
+            }
+          }
+        ]
+      },
+      "rev": 1,
+      "added": "2026-10-10"
+    }
+  ]
+}

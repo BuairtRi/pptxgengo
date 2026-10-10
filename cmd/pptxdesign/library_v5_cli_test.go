@@ -28,7 +28,7 @@ func TestCatalogAndIndexV5AndCurrentDefaults(t *testing.T) {
 			catalog := route == "catalog" || route == "catalog-default"
 			wantCount, wantRevision := 587, wmdesign.LibraryRevisionV5
 			if route == "catalog-default" || route == "index-default" {
-				wantCount, wantRevision = 649, wmdesign.LibraryRevisionV11
+				wantCount, wantRevision = 735, wmdesign.LibraryRevisionV12
 			}
 			if catalog {
 				os.Args = []string{"pptxdesign", "library-catalog", "--include-deprecated"}

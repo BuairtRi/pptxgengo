@@ -3,7 +3,8 @@
 All downloads are in the **private GitLab project** `riscott/pptxgengo` (project
 17). GitHub remains the canonical source/review mirror. No GitHub release assets
 are created. All builds, tests, security scans and release operations run in
-GitLab; GitHub Actions is disabled. The latest stable release is v4.2.1. Its protected
+GitLab; GitHub Actions is disabled. The v4.3.1 source selects V12 (735 templates, 734 active; 804 browsing slides).
+The last independently verified stable package is v4.2.1. Its protected
 GitLab pipeline generated template browsing resources without requiring the
 private original-photo/branding collection or a reusable-slide inventory.
 

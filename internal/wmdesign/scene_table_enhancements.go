@@ -191,7 +191,18 @@ func (r *renderer) sceneTableHeatCell(p *scenePlan, id string, c sceneTableColum
 	var scalar float64
 	if len(raw) > 0 && raw[0] != '{' {
 		if e := json.Unmarshal(raw, &scalar); e != nil {
-			return pptx.TableCell{}, TextRecord{}, e
+			// V12 staffing totals author numeric strings; the browser uses
+			// numeric coercion for heat while preserving the displayed string.
+			var value string
+			if r.source.Revision != LibraryRevisionV12 || json.Unmarshal(raw, &value) != nil {
+				return pptx.TableCell{}, TextRecord{}, e
+			}
+			var err error
+			scalar, err = strconv.ParseFloat(value, 64)
+			if err != nil || math.IsNaN(scalar) || math.IsInf(scalar, 0) {
+				return pptx.TableCell{}, TextRecord{}, fmt.Errorf("scene.table_heat_requires_finite_number")
+			}
+			n.Text = &value
 		}
 		n.Value = &scalar
 	} else if e := sceneDecode(raw, &n); e != nil {

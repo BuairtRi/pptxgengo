@@ -101,7 +101,8 @@ func (r *renderer) sceneTable(id string, n sceneTableSource, ctx SceneContext) (
 	default:
 		return nil, fmt.Errorf("scene.table_unknown_preset: %s", n.Preset)
 	}
-	if n.DeltaUnit != "" && n.DeltaUnit != "$M" {
+	// The pinned browser accepts FTE metadata but only formats the $M unit.
+	if n.DeltaUnit != "" && n.DeltaUnit != "$M" && !(r.source.Revision == LibraryRevisionV12 && n.DeltaUnit == " FTE") {
 		return nil, fmt.Errorf("scene.table_unknown_delta_unit: %s", n.DeltaUnit)
 	}
 	surface := ctx.Surface
@@ -929,15 +930,32 @@ func (r *renderer) sceneTableBulletCellForToken(id string, raw json.RawMessage, 
 		if err != nil {
 			return cell, tr, err
 		}
-		var text string
-		if err := json.Unmarshal(item, &text); err != nil || strings.TrimSpace(text) == "" {
+		var text, lead string
+		if err := json.Unmarshal(item, &text); err != nil && r.source.Revision == LibraryRevisionV12 {
+			var bullet struct {
+				Lead string `json:"lead"`
+				Text string `json:"text"`
+			}
+			if e := sceneDecode(item, &bullet); e != nil {
+				return cell, tr, e
+			}
+			text, lead = bullet.Text, bullet.Lead
+		}
+		if strings.TrimSpace(text) == "" {
 			return cell, tr, fmt.Errorf("scene.table_bullet_requires_nonempty_string: %s", id)
 		}
 		if strings.Contains(text, "[[") || strings.Contains(text, "]]") {
 			return cell, tr, fmt.Errorf("scene.table_cell_marks_unsupported: %s", id)
 		}
 		tmp := &scenePlan{}
-		if err := r.primitiveRichText(tmp, id+"."+key, text, st, Rect{b.X + 12 + indent, b.Y, b.W - 24 - indent, 0}, surface, "primary", "left", "", "", ctx); err != nil {
+		box := Rect{b.X + 12 + indent, b.Y, b.W - 24 - indent, 0}
+		if lead != "" {
+			record, e := r.primitiveMeasureRuns(id+"."+key, []primitiveRun{{Text: lead, Weight: 600, Ink: "primary"}, {Text: " " + text, Ink: "secondary"}}, st, box, surface, "primary", "left")
+			if e != nil {
+				return cell, tr, e
+			}
+			tmp.Items = append(tmp.Items, sceneItem{Text: &record})
+		} else if err := r.primitiveRichText(tmp, id+"."+key, text, st, box, surface, "primary", "left", "", "", ctx); err != nil {
 			return cell, tr, err
 		}
 		var part TextRecord

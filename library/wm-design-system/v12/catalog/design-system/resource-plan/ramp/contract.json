@@ -1,0 +1,2186 @@
+{
+  "key": "resource-plan/ramp",
+  "source_file": "templates/library/team.json",
+  "source_sha256": "3fef6b2c460de14859962b06820ae77ac1b74b385c0430363c80e44e2ba84b21",
+  "source_revision": "wmds-library.v12",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "gantt"
+    }
+  ],
+  "family": "team",
+  "tier": "working",
+  "name": "Resource plan · ramp-on and ramp-off",
+  "purpose": "Roles as bars across the program weeks showing when each joins and leaves, with phase bands and milestones.",
+  "uses": [
+    "advanced.gantt (group rails, gates, phases)"
+  ],
+  "source_advisory_budget": {
+    "words": 90,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 68
+    },
+    {
+      "slot": "role",
+      "maxChars": 24
+    },
+    {
+      "slot": "bar label",
+      "maxChars": 16
+    },
+    {
+      "slot": "milestone",
+      "maxChars": 24
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "sequence-item"
+    ],
+    "structures": [
+      "gantt",
+      "repeated-items",
+      "sequence",
+      "timeline"
+    ],
+    "visual_forms": [],
+    "component_types": [
+      "gantt"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/groups/0/lanes/0/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 1,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/0/lanes/1/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/0/lanes",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/1/lanes/0/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 1,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/1/lanes/1/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 1,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/1/lanes/2/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/1/lanes/3/items",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 2,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/groups/1/lanes",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "nested",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/phases",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "exact_count": 4,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "gantt",
+        "role": "sequence-item",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v12",
+    "source_sha256": "3fef6b2c460de14859962b06820ae77ac1b74b385c0430363c80e44e2ba84b21",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "sequence",
+    "groups": [
+      {
+        "alias": "/gantts",
+        "role": "sequence-item",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/gantts/item_01/phases",
+        "role": "sequence-item",
+        "cardinality": 4,
+        "source_pointer": "/body/0/phases",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 11,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.72
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 28,
+            "leading": 32,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.56
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.events.diamond.label",
+        "alias": "/gantts/item_01/events/diamond/label",
+        "source_pointer": "/body/0/events/diamond/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/events/diamond/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.label",
+        "alias": "/gantts/item_01/groups/item_01/label",
+        "source_pointer": "/body/0/groups/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item01.items.item01.from",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_01/items/item_01/from",
+        "source_pointer": "/body/0/groups/0/lanes/0/items/0/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "from (number) at /gantts/item_01/groups/item_01/lanes/item_01/items/item_01/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item01.items.item01.label",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_01/items/item_01/label",
+        "source_pointer": "/body/0/groups/0/lanes/0/items/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_01/lanes/item_01/items/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item01.items.item01.to",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_01/items/item_01/to",
+        "source_pointer": "/body/0/groups/0/lanes/0/items/0/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "to (number) at /gantts/item_01/groups/item_01/lanes/item_01/items/item_01/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item01.title",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_01/title",
+        "source_pointer": "/body/0/groups/0/lanes/0/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "lead (string) at /gantts/item_01/groups/item_01/lanes/item_01/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item02.items.item01.from",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_02/items/item_01/from",
+        "source_pointer": "/body/0/groups/0/lanes/1/items/0/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "from (number) at /gantts/item_01/groups/item_01/lanes/item_02/items/item_01/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item02.items.item01.label",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_02/items/item_01/label",
+        "source_pointer": "/body/0/groups/0/lanes/1/items/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_01/lanes/item_02/items/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item02.items.item01.to",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_02/items/item_01/to",
+        "source_pointer": "/body/0/groups/0/lanes/1/items/0/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "to (number) at /gantts/item_01/groups/item_01/lanes/item_02/items/item_01/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item02.items.item02.at",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_02/items/item_02/at",
+        "source_pointer": "/body/0/groups/0/lanes/1/items/1/at",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "at",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "at (number) at /gantts/item_01/groups/item_01/lanes/item_02/items/item_02/at",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item02.items.item02.label",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_02/items/item_02/label",
+        "source_pointer": "/body/0/groups/0/lanes/1/items/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_01/lanes/item_02/items/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item01.lanes.item02.title",
+        "alias": "/gantts/item_01/groups/item_01/lanes/item_02/title",
+        "source_pointer": "/body/0/groups/0/lanes/1/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "lead (string) at /gantts/item_01/groups/item_01/lanes/item_02/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.label",
+        "alias": "/gantts/item_01/groups/item_02/label",
+        "source_pointer": "/body/0/groups/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item01.items.item01.from",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_01/items/item_01/from",
+        "source_pointer": "/body/0/groups/1/lanes/0/items/0/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "from (number) at /gantts/item_01/groups/item_02/lanes/item_01/items/item_01/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item01.items.item01.label",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_01/items/item_01/label",
+        "source_pointer": "/body/0/groups/1/lanes/0/items/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_02/lanes/item_01/items/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item01.items.item01.to",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_01/items/item_01/to",
+        "source_pointer": "/body/0/groups/1/lanes/0/items/0/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "to (number) at /gantts/item_01/groups/item_02/lanes/item_01/items/item_01/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item01.title",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_01/title",
+        "source_pointer": "/body/0/groups/1/lanes/0/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "lead (string) at /gantts/item_01/groups/item_02/lanes/item_01/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item02.items.item01.from",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_02/items/item_01/from",
+        "source_pointer": "/body/0/groups/1/lanes/1/items/0/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "from (number) at /gantts/item_01/groups/item_02/lanes/item_02/items/item_01/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item02.items.item01.label",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_02/items/item_01/label",
+        "source_pointer": "/body/0/groups/1/lanes/1/items/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_02/lanes/item_02/items/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item02.items.item01.to",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_02/items/item_01/to",
+        "source_pointer": "/body/0/groups/1/lanes/1/items/0/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "to (number) at /gantts/item_01/groups/item_02/lanes/item_02/items/item_01/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item02.title",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_02/title",
+        "source_pointer": "/body/0/groups/1/lanes/1/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "lead (string) at /gantts/item_01/groups/item_02/lanes/item_02/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item03.items.item01.from",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_03/items/item_01/from",
+        "source_pointer": "/body/0/groups/1/lanes/2/items/0/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "from (number) at /gantts/item_01/groups/item_02/lanes/item_03/items/item_01/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item03.items.item01.label",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_03/items/item_01/label",
+        "source_pointer": "/body/0/groups/1/lanes/2/items/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_02/lanes/item_03/items/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item03.items.item01.to",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_03/items/item_01/to",
+        "source_pointer": "/body/0/groups/1/lanes/2/items/0/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "to (number) at /gantts/item_01/groups/item_02/lanes/item_03/items/item_01/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item03.items.item02.at",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_03/items/item_02/at",
+        "source_pointer": "/body/0/groups/1/lanes/2/items/1/at",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "at",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "at (number) at /gantts/item_01/groups/item_02/lanes/item_03/items/item_02/at",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item03.items.item02.label",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_03/items/item_02/label",
+        "source_pointer": "/body/0/groups/1/lanes/2/items/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_02/lanes/item_03/items/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item03.title",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_03/title",
+        "source_pointer": "/body/0/groups/1/lanes/2/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "lead (string) at /gantts/item_01/groups/item_02/lanes/item_03/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item04.items.item01.from",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_04/items/item_01/from",
+        "source_pointer": "/body/0/groups/1/lanes/3/items/0/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "from (number) at /gantts/item_01/groups/item_02/lanes/item_04/items/item_01/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item04.items.item01.label",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_04/items/item_01/label",
+        "source_pointer": "/body/0/groups/1/lanes/3/items/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_02/lanes/item_04/items/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item04.items.item01.to",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_04/items/item_01/to",
+        "source_pointer": "/body/0/groups/1/lanes/3/items/0/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "to (number) at /gantts/item_01/groups/item_02/lanes/item_04/items/item_01/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item04.items.item02.at",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_04/items/item_02/at",
+        "source_pointer": "/body/0/groups/1/lanes/3/items/1/at",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "at",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "at (number) at /gantts/item_01/groups/item_02/lanes/item_04/items/item_02/at",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item04.items.item02.label",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_04/items/item_02/label",
+        "source_pointer": "/body/0/groups/1/lanes/3/items/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/groups/item_02/lanes/item_04/items/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.groups.item02.lanes.item04.title",
+        "alias": "/gantts/item_01/groups/item_02/lanes/item_04/title",
+        "source_pointer": "/body/0/groups/1/lanes/3/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "lead",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "lead (string) at /gantts/item_01/groups/item_02/lanes/item_04/title",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.kinds.core.label",
+        "alias": "/gantts/item_01/kinds/core/label",
+        "source_pointer": "/body/0/kinds/core/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/kinds/core/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.kinds.support.label",
+        "alias": "/gantts/item_01/kinds/support/label",
+        "source_pointer": "/body/0/kinds/support/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /gantts/item_01/kinds/support/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item01",
+        "alias": "/gantts/item_01/periods/labels/item_01",
+        "source_pointer": "/body/0/periods/labels/0",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "0",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "0 (string) at /gantts/item_01/periods/labels/item_01",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item02",
+        "alias": "/gantts/item_01/periods/labels/item_02",
+        "source_pointer": "/body/0/periods/labels/1",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "1",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "1 (string) at /gantts/item_01/periods/labels/item_02",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item03",
+        "alias": "/gantts/item_01/periods/labels/item_03",
+        "source_pointer": "/body/0/periods/labels/2",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "2",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "2 (string) at /gantts/item_01/periods/labels/item_03",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item04",
+        "alias": "/gantts/item_01/periods/labels/item_04",
+        "source_pointer": "/body/0/periods/labels/3",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "3",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "3 (string) at /gantts/item_01/periods/labels/item_04",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item05",
+        "alias": "/gantts/item_01/periods/labels/item_05",
+        "source_pointer": "/body/0/periods/labels/4",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "4",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "4 (string) at /gantts/item_01/periods/labels/item_05",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item06",
+        "alias": "/gantts/item_01/periods/labels/item_06",
+        "source_pointer": "/body/0/periods/labels/5",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "5",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "5 (string) at /gantts/item_01/periods/labels/item_06",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item07",
+        "alias": "/gantts/item_01/periods/labels/item_07",
+        "source_pointer": "/body/0/periods/labels/6",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "6",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "6 (string) at /gantts/item_01/periods/labels/item_07",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item08",
+        "alias": "/gantts/item_01/periods/labels/item_08",
+        "source_pointer": "/body/0/periods/labels/7",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "7",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "7 (string) at /gantts/item_01/periods/labels/item_08",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item09",
+        "alias": "/gantts/item_01/periods/labels/item_09",
+        "source_pointer": "/body/0/periods/labels/8",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "8",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "8 (string) at /gantts/item_01/periods/labels/item_09",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item10",
+        "alias": "/gantts/item_01/periods/labels/item_10",
+        "source_pointer": "/body/0/periods/labels/9",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "9",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "9 (string) at /gantts/item_01/periods/labels/item_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item11",
+        "alias": "/gantts/item_01/periods/labels/item_11",
+        "source_pointer": "/body/0/periods/labels/10",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "10",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "10 (string) at /gantts/item_01/periods/labels/item_11",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item12",
+        "alias": "/gantts/item_01/periods/labels/item_12",
+        "source_pointer": "/body/0/periods/labels/11",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "11",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "11 (string) at /gantts/item_01/periods/labels/item_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item13",
+        "alias": "/gantts/item_01/periods/labels/item_13",
+        "source_pointer": "/body/0/periods/labels/12",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "12",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "12 (string) at /gantts/item_01/periods/labels/item_13",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item14",
+        "alias": "/gantts/item_01/periods/labels/item_14",
+        "source_pointer": "/body/0/periods/labels/13",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "13",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "13 (string) at /gantts/item_01/periods/labels/item_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item15",
+        "alias": "/gantts/item_01/periods/labels/item_15",
+        "source_pointer": "/body/0/periods/labels/14",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "14",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "14 (string) at /gantts/item_01/periods/labels/item_15",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.periods.labels.item16",
+        "alias": "/gantts/item_01/periods/labels/item_16",
+        "source_pointer": "/body/0/periods/labels/15",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "15",
+        "group": "/gantts",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "15 (string) at /gantts/item_01/periods/labels/item_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item01.from",
+        "alias": "/gantts/item_01/phases/item_01/from",
+        "source_pointer": "/body/0/phases/0/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts/item_01/phases",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "from (number) at /gantts/item_01/phases/item_01/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item01.label",
+        "alias": "/gantts/item_01/phases/item_01/label",
+        "source_pointer": "/body/0/phases/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts/item_01/phases",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "label (string) at /gantts/item_01/phases/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item01.to",
+        "alias": "/gantts/item_01/phases/item_01/to",
+        "source_pointer": "/body/0/phases/0/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts/item_01/phases",
+        "group_index": 0,
+        "cardinality": 4,
+        "description": "to (number) at /gantts/item_01/phases/item_01/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item02.from",
+        "alias": "/gantts/item_01/phases/item_02/from",
+        "source_pointer": "/body/0/phases/1/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts/item_01/phases",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "from (number) at /gantts/item_01/phases/item_02/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item02.label",
+        "alias": "/gantts/item_01/phases/item_02/label",
+        "source_pointer": "/body/0/phases/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts/item_01/phases",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "label (string) at /gantts/item_01/phases/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item02.to",
+        "alias": "/gantts/item_01/phases/item_02/to",
+        "source_pointer": "/body/0/phases/1/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts/item_01/phases",
+        "group_index": 1,
+        "cardinality": 4,
+        "description": "to (number) at /gantts/item_01/phases/item_02/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item03.from",
+        "alias": "/gantts/item_01/phases/item_03/from",
+        "source_pointer": "/body/0/phases/2/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts/item_01/phases",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "from (number) at /gantts/item_01/phases/item_03/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item03.label",
+        "alias": "/gantts/item_01/phases/item_03/label",
+        "source_pointer": "/body/0/phases/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts/item_01/phases",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "label (string) at /gantts/item_01/phases/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item03.to",
+        "alias": "/gantts/item_01/phases/item_03/to",
+        "source_pointer": "/body/0/phases/2/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts/item_01/phases",
+        "group_index": 2,
+        "cardinality": 4,
+        "description": "to (number) at /gantts/item_01/phases/item_03/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item04.from",
+        "alias": "/gantts/item_01/phases/item_04/from",
+        "source_pointer": "/body/0/phases/3/from",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "from",
+        "group": "/gantts/item_01/phases",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "from (number) at /gantts/item_01/phases/item_04/from",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item04.label",
+        "alias": "/gantts/item_01/phases/item_04/label",
+        "source_pointer": "/body/0/phases/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/gantts/item_01/phases",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "label (string) at /gantts/item_01/phases/item_04/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.phases.item04.to",
+        "alias": "/gantts/item_01/phases/item_04/to",
+        "source_pointer": "/body/0/phases/3/to",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "to",
+        "group": "/gantts/item_01/phases",
+        "group_index": 3,
+        "cardinality": 4,
+        "description": "to (number) at /gantts/item_01/phases/item_04/to",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Resource plan"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Roles join as work needs them and roll off early"
+    },
+    {
+      "name": "node01.events.diamond.label",
+      "source_pointer": "/body/0/events/diamond/label",
+      "kind": "string",
+      "synthetic_source_example": "Milestone"
+    },
+    {
+      "name": "node01.groups.item01.label",
+      "source_pointer": "/body/0/groups/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Leadership"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item01.from",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item01.label",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "1.5 FTE"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.items.item01.to",
+      "source_pointer": "/body/0/groups/0/lanes/0/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 16
+    },
+    {
+      "name": "node01.groups.item01.lanes.item01.title",
+      "source_pointer": "/body/0/groups/0/lanes/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Engagement lead and PM"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item01.from",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item01.label",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "1.0 FTE"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item01.to",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 12
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item02.at",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/1/at",
+      "kind": "number",
+      "synthetic_source_example": 12.2
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items.item02.label",
+      "source_pointer": "/body/0/groups/0/lanes/1/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "UAT exit"
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.title",
+      "source_pointer": "/body/0/groups/0/lanes/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Solution architect"
+    },
+    {
+      "name": "node01.groups.item02.label",
+      "source_pointer": "/body/0/groups/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Delivery"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items.item01.from",
+      "source_pointer": "/body/0/groups/1/lanes/0/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items.item01.label",
+      "source_pointer": "/body/0/groups/1/lanes/0/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "0.5 to 1.0 FTE"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items.item01.to",
+      "source_pointer": "/body/0/groups/1/lanes/0/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 14
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.title",
+      "source_pointer": "/body/0/groups/1/lanes/0/title",
+      "kind": "string",
+      "synthetic_source_example": "Data engineer"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item02.items.item01.from",
+      "source_pointer": "/body/0/groups/1/lanes/1/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.groups.item02.lanes.item02.items.item01.label",
+      "source_pointer": "/body/0/groups/1/lanes/1/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "2.0 FTE"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item02.items.item01.to",
+      "source_pointer": "/body/0/groups/1/lanes/1/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 14
+    },
+    {
+      "name": "node01.groups.item02.lanes.item02.title",
+      "source_pointer": "/body/0/groups/1/lanes/1/title",
+      "kind": "string",
+      "synthetic_source_example": "Business analysts"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item03.items.item01.from",
+      "source_pointer": "/body/0/groups/1/lanes/2/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 4
+    },
+    {
+      "name": "node01.groups.item02.lanes.item03.items.item01.label",
+      "source_pointer": "/body/0/groups/1/lanes/2/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "3.0 FTE"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item03.items.item01.to",
+      "source_pointer": "/body/0/groups/1/lanes/2/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 15
+    },
+    {
+      "name": "node01.groups.item02.lanes.item03.items.item02.at",
+      "source_pointer": "/body/0/groups/1/lanes/2/items/1/at",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.groups.item02.lanes.item03.items.item02.label",
+      "source_pointer": "/body/0/groups/1/lanes/2/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Kickoff"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item03.title",
+      "source_pointer": "/body/0/groups/1/lanes/2/title",
+      "kind": "string",
+      "synthetic_source_example": "Developers"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item04.items.item01.from",
+      "source_pointer": "/body/0/groups/1/lanes/3/items/0/from",
+      "kind": "number",
+      "synthetic_source_example": 6
+    },
+    {
+      "name": "node01.groups.item02.lanes.item04.items.item01.label",
+      "source_pointer": "/body/0/groups/1/lanes/3/items/0/label",
+      "kind": "string",
+      "synthetic_source_example": "0.5 to 1.0 FTE"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item04.items.item01.to",
+      "source_pointer": "/body/0/groups/1/lanes/3/items/0/to",
+      "kind": "number",
+      "synthetic_source_example": 16
+    },
+    {
+      "name": "node01.groups.item02.lanes.item04.items.item02.at",
+      "source_pointer": "/body/0/groups/1/lanes/3/items/1/at",
+      "kind": "number",
+      "synthetic_source_example": 5.6
+    },
+    {
+      "name": "node01.groups.item02.lanes.item04.items.item02.label",
+      "source_pointer": "/body/0/groups/1/lanes/3/items/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Design sign-off"
+    },
+    {
+      "name": "node01.groups.item02.lanes.item04.title",
+      "source_pointer": "/body/0/groups/1/lanes/3/title",
+      "kind": "string",
+      "synthetic_source_example": "QA lead"
+    },
+    {
+      "name": "node01.kinds.core.label",
+      "source_pointer": "/body/0/kinds/core/label",
+      "kind": "string",
+      "synthetic_source_example": "Full or near full-time"
+    },
+    {
+      "name": "node01.kinds.support.label",
+      "source_pointer": "/body/0/kinds/support/label",
+      "kind": "string",
+      "synthetic_source_example": "Part-time, ramping"
+    },
+    {
+      "name": "node01.periods.labels.item01",
+      "source_pointer": "/body/0/periods/labels/0",
+      "kind": "string",
+      "synthetic_source_example": "W1"
+    },
+    {
+      "name": "node01.periods.labels.item02",
+      "source_pointer": "/body/0/periods/labels/1",
+      "kind": "string",
+      "synthetic_source_example": "W2"
+    },
+    {
+      "name": "node01.periods.labels.item03",
+      "source_pointer": "/body/0/periods/labels/2",
+      "kind": "string",
+      "synthetic_source_example": "W3"
+    },
+    {
+      "name": "node01.periods.labels.item04",
+      "source_pointer": "/body/0/periods/labels/3",
+      "kind": "string",
+      "synthetic_source_example": "W4"
+    },
+    {
+      "name": "node01.periods.labels.item05",
+      "source_pointer": "/body/0/periods/labels/4",
+      "kind": "string",
+      "synthetic_source_example": "W5"
+    },
+    {
+      "name": "node01.periods.labels.item06",
+      "source_pointer": "/body/0/periods/labels/5",
+      "kind": "string",
+      "synthetic_source_example": "W6"
+    },
+    {
+      "name": "node01.periods.labels.item07",
+      "source_pointer": "/body/0/periods/labels/6",
+      "kind": "string",
+      "synthetic_source_example": "W7"
+    },
+    {
+      "name": "node01.periods.labels.item08",
+      "source_pointer": "/body/0/periods/labels/7",
+      "kind": "string",
+      "synthetic_source_example": "W8"
+    },
+    {
+      "name": "node01.periods.labels.item09",
+      "source_pointer": "/body/0/periods/labels/8",
+      "kind": "string",
+      "synthetic_source_example": "W9"
+    },
+    {
+      "name": "node01.periods.labels.item10",
+      "source_pointer": "/body/0/periods/labels/9",
+      "kind": "string",
+      "synthetic_source_example": "W10"
+    },
+    {
+      "name": "node01.periods.labels.item11",
+      "source_pointer": "/body/0/periods/labels/10",
+      "kind": "string",
+      "synthetic_source_example": "W11"
+    },
+    {
+      "name": "node01.periods.labels.item12",
+      "source_pointer": "/body/0/periods/labels/11",
+      "kind": "string",
+      "synthetic_source_example": "W12"
+    },
+    {
+      "name": "node01.periods.labels.item13",
+      "source_pointer": "/body/0/periods/labels/12",
+      "kind": "string",
+      "synthetic_source_example": "W13"
+    },
+    {
+      "name": "node01.periods.labels.item14",
+      "source_pointer": "/body/0/periods/labels/13",
+      "kind": "string",
+      "synthetic_source_example": "W14"
+    },
+    {
+      "name": "node01.periods.labels.item15",
+      "source_pointer": "/body/0/periods/labels/14",
+      "kind": "string",
+      "synthetic_source_example": "W15"
+    },
+    {
+      "name": "node01.periods.labels.item16",
+      "source_pointer": "/body/0/periods/labels/15",
+      "kind": "string",
+      "synthetic_source_example": "W16"
+    },
+    {
+      "name": "node01.phases.item01.from",
+      "source_pointer": "/body/0/phases/0/from",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.phases.item01.label",
+      "source_pointer": "/body/0/phases/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Mobilize"
+    },
+    {
+      "name": "node01.phases.item01.to",
+      "source_pointer": "/body/0/phases/0/to",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.phases.item02.from",
+      "source_pointer": "/body/0/phases/1/from",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.phases.item02.label",
+      "source_pointer": "/body/0/phases/1/label",
+      "kind": "string",
+      "synthetic_source_example": "Design"
+    },
+    {
+      "name": "node01.phases.item02.to",
+      "source_pointer": "/body/0/phases/1/to",
+      "kind": "number",
+      "synthetic_source_example": 6
+    },
+    {
+      "name": "node01.phases.item03.from",
+      "source_pointer": "/body/0/phases/2/from",
+      "kind": "number",
+      "synthetic_source_example": 6
+    },
+    {
+      "name": "node01.phases.item03.label",
+      "source_pointer": "/body/0/phases/2/label",
+      "kind": "string",
+      "synthetic_source_example": "Build and test"
+    },
+    {
+      "name": "node01.phases.item03.to",
+      "source_pointer": "/body/0/phases/2/to",
+      "kind": "number",
+      "synthetic_source_example": 12
+    },
+    {
+      "name": "node01.phases.item04.from",
+      "source_pointer": "/body/0/phases/3/from",
+      "kind": "number",
+      "synthetic_source_example": 12
+    },
+    {
+      "name": "node01.phases.item04.label",
+      "source_pointer": "/body/0/phases/3/label",
+      "kind": "string",
+      "synthetic_source_example": "Launch"
+    },
+    {
+      "name": "node01.phases.item04.to",
+      "source_pointer": "/body/0/phases/3/to",
+      "kind": "number",
+      "synthetic_source_example": 16
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.groups.item01.lanes.item01.items",
+      "source_pointer": "/body/0/groups/0/lanes/0/items",
+      "count": 1
+    },
+    {
+      "name": "node01.groups.item01.lanes.item02.items",
+      "source_pointer": "/body/0/groups/0/lanes/1/items",
+      "count": 2
+    },
+    {
+      "name": "node01.groups.item01.lanes",
+      "source_pointer": "/body/0/groups/0/lanes",
+      "count": 2
+    },
+    {
+      "name": "node01.groups.item02.lanes.item01.items",
+      "source_pointer": "/body/0/groups/1/lanes/0/items",
+      "count": 1
+    },
+    {
+      "name": "node01.groups.item02.lanes.item02.items",
+      "source_pointer": "/body/0/groups/1/lanes/1/items",
+      "count": 1
+    },
+    {
+      "name": "node01.groups.item02.lanes.item03.items",
+      "source_pointer": "/body/0/groups/1/lanes/2/items",
+      "count": 2
+    },
+    {
+      "name": "node01.groups.item02.lanes.item04.items",
+      "source_pointer": "/body/0/groups/1/lanes/3/items",
+      "count": 2
+    },
+    {
+      "name": "node01.groups.item02.lanes",
+      "source_pointer": "/body/0/groups/1/lanes",
+      "count": 4
+    },
+    {
+      "name": "node01.groups",
+      "source_pointer": "/body/0/groups",
+      "count": 2
+    },
+    {
+      "name": "node01.periods.labels",
+      "source_pointer": "/body/0/periods/labels",
+      "count": 16
+    },
+    {
+      "name": "node01.phases",
+      "source_pointer": "/body/0/phases",
+      "count": 4
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-08",
+  "status": "active"
+}

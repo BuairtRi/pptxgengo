@@ -1,16 +1,14 @@
-# Current West Monroe design system
+# West Monroe design system
 
-The only retained library is [v9](v9/): **631 templates**, all individually
-reviewed in native PowerPoint. The CLI and next local release default to v9.
+The default bundle is [V12](v12/README.md): 735 source templates (734 active),
+pinned to `36132d5637abdbdeb70945ad650b795cabea05ef`.
+The gallery has 88 freshly reviewed PowerPoint specimens and 647 retained
+previews verified by exact composition and rendered dependency comparison.
 
-- [Visual template gallery](v9/catalog/design-system.html)
-- [SQLite discovery index](v9/library.sqlite)
-- [Semantic search workflow](../../docs/semantic-template-discovery.md)
-- [Final converted decks and YAML](../../samples/final/README.md)
-- [Local release instructions](../../release/README.md)
+- [V12 native gallery](v12/catalog/design-system.html)
+- [V12 intake and qualification](../../planning/wm-design-contracts/v12/intake-20261010-735-frozen/README.md)
+- [Historical V11 bundle](v11/README.md)
+- [Semantic discovery](../../docs/semantic-template-discovery.md)
+- [Release and qualification status](../../docs/release-status.md)
 
-The README inside the frozen v9 bundle records its intake checkpoint. This page
-and the release instructions describe the current status. Supplied content still
-requires its own fit and native visual review.
-
-The published documentation board is [wmds-docs](../../wmds-docs/README.md), served by `pptxgengo docs`. It shares the native library's upstream source commit. The workshop category has 29 layouts.
+Supplied content requires its own fit/build and native visual review.

@@ -491,7 +491,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 				err = fmt.Errorf("scene.unsupported_list_variant: %s", id)
 				break
 			}
-		} else if n.KeyW <= 0 || n.KeyW+18 >= n.W {
+		} else if n.KeyW <= 0 || (n.KeyW+18 >= n.W && !(r.source.Revision == LibraryRevisionV12 && n.KeyW == n.W)) {
 			err = fmt.Errorf("scene.invalid_schedule_columns: %s", id)
 			break
 		}
@@ -506,7 +506,8 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 				if err = sceneDecode(item, &it); err != nil {
 					break
 				}
-				if it.K == "" || it.T == "" {
+				keyOnly := r.source.Revision == LibraryRevisionV12 && n.KeyW == n.W && it.T == ""
+				if it.K == "" || (it.T == "" && !keyOnly) || (n.KeyW == n.W && !keyOnly) {
 					err = fmt.Errorf("scene.missing_schedule_row_content: %s.%s", id, key)
 					break
 				}
@@ -517,7 +518,7 @@ func (r *renderer) planPrimitiveScene(id string, raw json.RawMessage, ctx SceneC
 				}
 				st.Weight = 700
 				err = r.primitiveRichText(p, id+"."+key+".key", it.K, st, Rect{X: n.X, Y: y, W: n.KeyW, H: n.RowHeight}, surface, n.KeyInk, "right", "", "", ctx)
-				if err == nil {
+				if err == nil && !keyOnly {
 					err = add(key+".text", it.T, "body", "display", n.X+n.KeyW+18, n.W-n.KeyW-18, n.RowHeight, 600)
 				}
 			} else {

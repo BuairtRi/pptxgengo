@@ -1,0 +1,4072 @@
+{
+  "key": "resource-plan/staffing-fortnight",
+  "source_file": "templates/library/team.json",
+  "source_sha256": "3fef6b2c460de14859962b06820ae77ac1b74b385c0430363c80e44e2ba84b21",
+  "source_revision": "wmds-library.v12",
+  "identities": [
+    {
+      "id": "node01",
+      "source_pointer": "/body/0",
+      "expected_type": "table"
+    },
+    {
+      "id": "node02",
+      "source_pointer": "/body/1",
+      "expected_type": "text"
+    }
+  ],
+  "family": "team",
+  "tier": "working",
+  "name": "Resource plan · staffing by fortnight",
+  "purpose": "Role-by-fortnight staffing table at finer grain, with FTE heat cells and totals per period and per role.",
+  "uses": [
+    "table.standard (heat cells, rowGroups, total row)"
+  ],
+  "source_advisory_budget": {
+    "words": 92,
+    "marks": 0
+  },
+  "source_advisory_slots": [
+    {
+      "slot": "title",
+      "maxChars": 68
+    },
+    {
+      "slot": "role",
+      "maxChars": 24
+    },
+    {
+      "slot": "FTE",
+      "maxChars": 5
+    }
+  ],
+  "discovery": {
+    "schema": "pptxgengo.wmds-discovery.v1",
+    "basis": "derived_from_pinned_source_structure; labels_are_soft_signals",
+    "content_roles": [
+      "headline",
+      "key-message",
+      "point",
+      "tabular-data"
+    ],
+    "structures": [
+      "heatmap",
+      "repeated-items",
+      "table"
+    ],
+    "visual_forms": [
+      "table",
+      "text"
+    ],
+    "component_types": [
+      "table",
+      "text"
+    ],
+    "content_groups": [
+      {
+        "source_pointer": "/body/0/cols",
+        "component_type": "table",
+        "role": "column",
+        "exact_count": 10,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      },
+      {
+        "source_pointer": "/body/0/rows",
+        "component_type": "table",
+        "role": "tabular-data",
+        "exact_count": 12,
+        "basis": "semantic_closed_binding_array",
+        "scope": "primary",
+        "scope_basis": "array_position_within_source_component"
+      }
+    ],
+    "zones": [
+      {
+        "source_pointer": "/body/0",
+        "component_type": "table",
+        "role": "tabular-data",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 126
+        }
+      },
+      {
+        "source_pointer": "/body/1",
+        "component_type": "text",
+        "role": "point",
+        "source_bounds": {
+          "w": 846,
+          "x": 57,
+          "y": 444
+        }
+      }
+    ],
+    "frame": {
+      "rail": "none",
+      "footer": "compact",
+      "navigation": false,
+      "basis": "pinned_source_slide_chrome"
+    },
+    "capability": {
+      "content_adapter": "defined_closed_binding",
+      "build_for_query": "not_executed",
+      "specimen_review": "not_loaded_by_discovery",
+      "content_envelope": "not_established_by_discovery",
+      "capacity_basis": "source_advisory_not_measured"
+    }
+  },
+  "authoring": {
+    "schema": "pptxgengo.library-authoring.v1",
+    "source_revision": "wmds-library.v12",
+    "source_sha256": "3fef6b2c460de14859962b06820ae77ac1b74b385c0430363c80e44e2ba84b21",
+    "review_status": "inferred_from_pinned_source",
+    "semantic_status": "structural_inference_requires_review",
+    "relationship": "table",
+    "groups": [
+      {
+        "alias": "/paragraphs",
+        "role": "point",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/tables",
+        "role": "tabular-data",
+        "cardinality": 1,
+        "source_pointer": "/body",
+        "basis": "same_component_type_source_siblings"
+      },
+      {
+        "alias": "/tables/item_01/cols",
+        "role": "column",
+        "cardinality": 10,
+        "source_pointer": "/body/0/cols",
+        "basis": "semantic_closed_binding_array"
+      },
+      {
+        "alias": "/tables/item_01/rows",
+        "role": "tabular-data",
+        "cardinality": 12,
+        "source_pointer": "/body/0/rows",
+        "basis": "semantic_closed_binding_array"
+      }
+    ],
+    "slots": [
+      {
+        "name": "eyebrow",
+        "alias": "/section_label",
+        "source_pointer": "/eyebrow",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "eyebrow",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "eyebrow (string) at /section_label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 12,
+          "line_budget": 1,
+          "style": {
+            "id": "eyebrow",
+            "font": "IBM Plex Mono",
+            "weight": 600,
+            "italic": false,
+            "size": 9,
+            "leading": 11,
+            "tracking": "0.08em",
+            "case": "upper",
+            "use": "Eyebrows above titles",
+            "tracking_pt": 0.72
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "title",
+        "alias": "/headline",
+        "source_pointer": "/title",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "headline",
+        "group_index": -1,
+        "cardinality": 1,
+        "description": "headline (string) at /headline",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "source_geometry_and_pinned_type_style",
+          "density": "comfortable",
+          "width_pt": 846,
+          "height_pt": 54,
+          "line_budget": 1,
+          "style": {
+            "id": "title",
+            "font": "IBM Plex Sans",
+            "weight": 600,
+            "italic": false,
+            "size": 28,
+            "leading": 32,
+            "tracking": "-0.02em",
+            "use": "Slide titles, ≤ 2 lines",
+            "tracking_pt": -0.56
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Capacity uses the preferred header density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item01.label",
+        "alias": "/tables/item_01/columns/item_01/label",
+        "source_pointer": "/body/0/cols/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 0,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item02.label",
+        "alias": "/tables/item_01/columns/item_02/label",
+        "source_pointer": "/body/0/cols/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 1,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item03.label",
+        "alias": "/tables/item_01/columns/item_03/label",
+        "source_pointer": "/body/0/cols/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 2,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item04.label",
+        "alias": "/tables/item_01/columns/item_04/label",
+        "source_pointer": "/body/0/cols/3/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 3,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_04/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item05.label",
+        "alias": "/tables/item_01/columns/item_05/label",
+        "source_pointer": "/body/0/cols/4/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 4,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_05/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item06.label",
+        "alias": "/tables/item_01/columns/item_06/label",
+        "source_pointer": "/body/0/cols/5/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 5,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_06/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item07.label",
+        "alias": "/tables/item_01/columns/item_07/label",
+        "source_pointer": "/body/0/cols/6/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 6,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_07/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item08.label",
+        "alias": "/tables/item_01/columns/item_08/label",
+        "source_pointer": "/body/0/cols/7/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 7,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_08/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item09.label",
+        "alias": "/tables/item_01/columns/item_09/label",
+        "source_pointer": "/body/0/cols/8/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 8,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_09/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.cols.item10.label",
+        "alias": "/tables/item_01/columns/item_10/label",
+        "source_pointer": "/body/0/cols/9/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables/item_01/cols",
+        "group_index": 9,
+        "cardinality": 10,
+        "description": "label (string) at /tables/item_01/columns/item_10/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rowGroups.item01.label",
+        "alias": "/tables/item_01/rowgroups/item_01/label",
+        "source_pointer": "/body/0/rowGroups/0/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /tables/item_01/rowgroups/item_01/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rowGroups.item02.label",
+        "alias": "/tables/item_01/rowgroups/item_02/label",
+        "source_pointer": "/body/0/rowGroups/1/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /tables/item_01/rowgroups/item_02/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rowGroups.item03.label",
+        "alias": "/tables/item_01/rowgroups/item_03/label",
+        "source_pointer": "/body/0/rowGroups/2/label",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "label",
+        "group": "/tables",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "label (string) at /tables/item_01/rowgroups/item_03/label",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.a",
+        "alias": "/tables/item_01/rows/item_01/avg_fte",
+        "source_pointer": "/body/0/rows/0/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_01/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.r",
+        "alias": "/tables/item_01/rows/item_01/role",
+        "source_pointer": "/body/0/rows/0/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_01/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w0",
+        "alias": "/tables/item_01/rows/item_01/w1_2",
+        "source_pointer": "/body/0/rows/0/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_01/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w1",
+        "alias": "/tables/item_01/rows/item_01/w3_4",
+        "source_pointer": "/body/0/rows/0/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_01/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w2",
+        "alias": "/tables/item_01/rows/item_01/w5_6",
+        "source_pointer": "/body/0/rows/0/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_01/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w3",
+        "alias": "/tables/item_01/rows/item_01/w7_8",
+        "source_pointer": "/body/0/rows/0/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_01/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w4",
+        "alias": "/tables/item_01/rows/item_01/w9_10",
+        "source_pointer": "/body/0/rows/0/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_01/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w5",
+        "alias": "/tables/item_01/rows/item_01/w11_12",
+        "source_pointer": "/body/0/rows/0/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_01/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w6",
+        "alias": "/tables/item_01/rows/item_01/w13_14",
+        "source_pointer": "/body/0/rows/0/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_01/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item01.w7",
+        "alias": "/tables/item_01/rows/item_01/w15_16",
+        "source_pointer": "/body/0/rows/0/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 0,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_01/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.a",
+        "alias": "/tables/item_01/rows/item_02/avg_fte",
+        "source_pointer": "/body/0/rows/1/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_02/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.r",
+        "alias": "/tables/item_01/rows/item_02/role",
+        "source_pointer": "/body/0/rows/1/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_02/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w0",
+        "alias": "/tables/item_01/rows/item_02/w1_2",
+        "source_pointer": "/body/0/rows/1/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_02/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w1",
+        "alias": "/tables/item_01/rows/item_02/w3_4",
+        "source_pointer": "/body/0/rows/1/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_02/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w2",
+        "alias": "/tables/item_01/rows/item_02/w5_6",
+        "source_pointer": "/body/0/rows/1/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_02/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w3",
+        "alias": "/tables/item_01/rows/item_02/w7_8",
+        "source_pointer": "/body/0/rows/1/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_02/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w4",
+        "alias": "/tables/item_01/rows/item_02/w9_10",
+        "source_pointer": "/body/0/rows/1/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_02/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w5",
+        "alias": "/tables/item_01/rows/item_02/w11_12",
+        "source_pointer": "/body/0/rows/1/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_02/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w6",
+        "alias": "/tables/item_01/rows/item_02/w13_14",
+        "source_pointer": "/body/0/rows/1/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_02/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item02.w7",
+        "alias": "/tables/item_01/rows/item_02/w15_16",
+        "source_pointer": "/body/0/rows/1/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 1,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_02/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.a",
+        "alias": "/tables/item_01/rows/item_03/avg_fte",
+        "source_pointer": "/body/0/rows/2/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_03/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.r",
+        "alias": "/tables/item_01/rows/item_03/role",
+        "source_pointer": "/body/0/rows/2/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_03/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w0",
+        "alias": "/tables/item_01/rows/item_03/w1_2",
+        "source_pointer": "/body/0/rows/2/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_03/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w1",
+        "alias": "/tables/item_01/rows/item_03/w3_4",
+        "source_pointer": "/body/0/rows/2/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_03/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w2",
+        "alias": "/tables/item_01/rows/item_03/w5_6",
+        "source_pointer": "/body/0/rows/2/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_03/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w3",
+        "alias": "/tables/item_01/rows/item_03/w7_8",
+        "source_pointer": "/body/0/rows/2/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_03/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w4",
+        "alias": "/tables/item_01/rows/item_03/w9_10",
+        "source_pointer": "/body/0/rows/2/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_03/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w5",
+        "alias": "/tables/item_01/rows/item_03/w11_12",
+        "source_pointer": "/body/0/rows/2/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_03/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w6",
+        "alias": "/tables/item_01/rows/item_03/w13_14",
+        "source_pointer": "/body/0/rows/2/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_03/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item03.w7",
+        "alias": "/tables/item_01/rows/item_03/w15_16",
+        "source_pointer": "/body/0/rows/2/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 2,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_03/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.a",
+        "alias": "/tables/item_01/rows/item_04/avg_fte",
+        "source_pointer": "/body/0/rows/3/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_04/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.r",
+        "alias": "/tables/item_01/rows/item_04/role",
+        "source_pointer": "/body/0/rows/3/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_04/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w0",
+        "alias": "/tables/item_01/rows/item_04/w1_2",
+        "source_pointer": "/body/0/rows/3/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_04/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w1",
+        "alias": "/tables/item_01/rows/item_04/w3_4",
+        "source_pointer": "/body/0/rows/3/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_04/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w2",
+        "alias": "/tables/item_01/rows/item_04/w5_6",
+        "source_pointer": "/body/0/rows/3/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_04/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w3",
+        "alias": "/tables/item_01/rows/item_04/w7_8",
+        "source_pointer": "/body/0/rows/3/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_04/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w4",
+        "alias": "/tables/item_01/rows/item_04/w9_10",
+        "source_pointer": "/body/0/rows/3/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_04/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w5",
+        "alias": "/tables/item_01/rows/item_04/w11_12",
+        "source_pointer": "/body/0/rows/3/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_04/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w6",
+        "alias": "/tables/item_01/rows/item_04/w13_14",
+        "source_pointer": "/body/0/rows/3/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_04/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item04.w7",
+        "alias": "/tables/item_01/rows/item_04/w15_16",
+        "source_pointer": "/body/0/rows/3/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 3,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_04/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.a",
+        "alias": "/tables/item_01/rows/item_05/avg_fte",
+        "source_pointer": "/body/0/rows/4/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_05/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.r",
+        "alias": "/tables/item_01/rows/item_05/role",
+        "source_pointer": "/body/0/rows/4/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_05/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w0",
+        "alias": "/tables/item_01/rows/item_05/w1_2",
+        "source_pointer": "/body/0/rows/4/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_05/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w1",
+        "alias": "/tables/item_01/rows/item_05/w3_4",
+        "source_pointer": "/body/0/rows/4/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_05/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w2",
+        "alias": "/tables/item_01/rows/item_05/w5_6",
+        "source_pointer": "/body/0/rows/4/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_05/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w3",
+        "alias": "/tables/item_01/rows/item_05/w7_8",
+        "source_pointer": "/body/0/rows/4/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_05/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w4",
+        "alias": "/tables/item_01/rows/item_05/w9_10",
+        "source_pointer": "/body/0/rows/4/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_05/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w5",
+        "alias": "/tables/item_01/rows/item_05/w11_12",
+        "source_pointer": "/body/0/rows/4/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_05/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w6",
+        "alias": "/tables/item_01/rows/item_05/w13_14",
+        "source_pointer": "/body/0/rows/4/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_05/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item05.w7",
+        "alias": "/tables/item_01/rows/item_05/w15_16",
+        "source_pointer": "/body/0/rows/4/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 4,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_05/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.a",
+        "alias": "/tables/item_01/rows/item_06/avg_fte",
+        "source_pointer": "/body/0/rows/5/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_06/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.r",
+        "alias": "/tables/item_01/rows/item_06/role",
+        "source_pointer": "/body/0/rows/5/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_06/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w0.value",
+        "alias": "/tables/item_01/rows/item_06/w1_2/value",
+        "source_pointer": "/body/0/rows/5/w0/value",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "value (number) at /tables/item_01/rows/item_06/w1_2/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w0.text",
+        "alias": "/tables/item_01/rows/item_06/w1_2/text",
+        "source_pointer": "/body/0/rows/5/w0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "body (string) at /tables/item_01/rows/item_06/w1_2/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w1.value",
+        "alias": "/tables/item_01/rows/item_06/w3_4/value",
+        "source_pointer": "/body/0/rows/5/w1/value",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "value (number) at /tables/item_01/rows/item_06/w3_4/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w1.text",
+        "alias": "/tables/item_01/rows/item_06/w3_4/text",
+        "source_pointer": "/body/0/rows/5/w1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "body (string) at /tables/item_01/rows/item_06/w3_4/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w2",
+        "alias": "/tables/item_01/rows/item_06/w5_6",
+        "source_pointer": "/body/0/rows/5/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_06/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w3",
+        "alias": "/tables/item_01/rows/item_06/w7_8",
+        "source_pointer": "/body/0/rows/5/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_06/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w4",
+        "alias": "/tables/item_01/rows/item_06/w9_10",
+        "source_pointer": "/body/0/rows/5/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_06/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w5",
+        "alias": "/tables/item_01/rows/item_06/w11_12",
+        "source_pointer": "/body/0/rows/5/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_06/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w6",
+        "alias": "/tables/item_01/rows/item_06/w13_14",
+        "source_pointer": "/body/0/rows/5/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_06/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item06.w7",
+        "alias": "/tables/item_01/rows/item_06/w15_16",
+        "source_pointer": "/body/0/rows/5/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 5,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_06/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.a",
+        "alias": "/tables/item_01/rows/item_07/avg_fte",
+        "source_pointer": "/body/0/rows/6/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_07/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.r",
+        "alias": "/tables/item_01/rows/item_07/role",
+        "source_pointer": "/body/0/rows/6/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_07/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w0.value",
+        "alias": "/tables/item_01/rows/item_07/w1_2/value",
+        "source_pointer": "/body/0/rows/6/w0/value",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "value (number) at /tables/item_01/rows/item_07/w1_2/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w0.text",
+        "alias": "/tables/item_01/rows/item_07/w1_2/text",
+        "source_pointer": "/body/0/rows/6/w0/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "body (string) at /tables/item_01/rows/item_07/w1_2/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w1.value",
+        "alias": "/tables/item_01/rows/item_07/w3_4/value",
+        "source_pointer": "/body/0/rows/6/w1/value",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "value",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "value (number) at /tables/item_01/rows/item_07/w3_4/value",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w1.text",
+        "alias": "/tables/item_01/rows/item_07/w3_4/text",
+        "source_pointer": "/body/0/rows/6/w1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "body (string) at /tables/item_01/rows/item_07/w3_4/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w2",
+        "alias": "/tables/item_01/rows/item_07/w5_6",
+        "source_pointer": "/body/0/rows/6/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_07/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w3",
+        "alias": "/tables/item_01/rows/item_07/w7_8",
+        "source_pointer": "/body/0/rows/6/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_07/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w4",
+        "alias": "/tables/item_01/rows/item_07/w9_10",
+        "source_pointer": "/body/0/rows/6/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_07/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w5",
+        "alias": "/tables/item_01/rows/item_07/w11_12",
+        "source_pointer": "/body/0/rows/6/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_07/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w6",
+        "alias": "/tables/item_01/rows/item_07/w13_14",
+        "source_pointer": "/body/0/rows/6/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_07/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item07.w7",
+        "alias": "/tables/item_01/rows/item_07/w15_16",
+        "source_pointer": "/body/0/rows/6/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 6,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_07/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.a",
+        "alias": "/tables/item_01/rows/item_08/avg_fte",
+        "source_pointer": "/body/0/rows/7/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_08/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.r",
+        "alias": "/tables/item_01/rows/item_08/role",
+        "source_pointer": "/body/0/rows/7/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_08/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w0",
+        "alias": "/tables/item_01/rows/item_08/w1_2",
+        "source_pointer": "/body/0/rows/7/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_08/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w1",
+        "alias": "/tables/item_01/rows/item_08/w3_4",
+        "source_pointer": "/body/0/rows/7/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_08/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w2",
+        "alias": "/tables/item_01/rows/item_08/w5_6",
+        "source_pointer": "/body/0/rows/7/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_08/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w3",
+        "alias": "/tables/item_01/rows/item_08/w7_8",
+        "source_pointer": "/body/0/rows/7/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_08/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w4",
+        "alias": "/tables/item_01/rows/item_08/w9_10",
+        "source_pointer": "/body/0/rows/7/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_08/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w5",
+        "alias": "/tables/item_01/rows/item_08/w11_12",
+        "source_pointer": "/body/0/rows/7/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_08/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w6",
+        "alias": "/tables/item_01/rows/item_08/w13_14",
+        "source_pointer": "/body/0/rows/7/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_08/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item08.w7",
+        "alias": "/tables/item_01/rows/item_08/w15_16",
+        "source_pointer": "/body/0/rows/7/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 7,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_08/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.a",
+        "alias": "/tables/item_01/rows/item_09/avg_fte",
+        "source_pointer": "/body/0/rows/8/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_09/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.r",
+        "alias": "/tables/item_01/rows/item_09/role",
+        "source_pointer": "/body/0/rows/8/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_09/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w0",
+        "alias": "/tables/item_01/rows/item_09/w1_2",
+        "source_pointer": "/body/0/rows/8/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_09/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w1",
+        "alias": "/tables/item_01/rows/item_09/w3_4",
+        "source_pointer": "/body/0/rows/8/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_09/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w2",
+        "alias": "/tables/item_01/rows/item_09/w5_6",
+        "source_pointer": "/body/0/rows/8/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_09/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w3",
+        "alias": "/tables/item_01/rows/item_09/w7_8",
+        "source_pointer": "/body/0/rows/8/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_09/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w4",
+        "alias": "/tables/item_01/rows/item_09/w9_10",
+        "source_pointer": "/body/0/rows/8/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_09/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w5",
+        "alias": "/tables/item_01/rows/item_09/w11_12",
+        "source_pointer": "/body/0/rows/8/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_09/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w6",
+        "alias": "/tables/item_01/rows/item_09/w13_14",
+        "source_pointer": "/body/0/rows/8/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_09/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item09.w7",
+        "alias": "/tables/item_01/rows/item_09/w15_16",
+        "source_pointer": "/body/0/rows/8/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 8,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_09/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.a",
+        "alias": "/tables/item_01/rows/item_10/avg_fte",
+        "source_pointer": "/body/0/rows/9/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_10/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.r",
+        "alias": "/tables/item_01/rows/item_10/role",
+        "source_pointer": "/body/0/rows/9/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_10/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w0",
+        "alias": "/tables/item_01/rows/item_10/w1_2",
+        "source_pointer": "/body/0/rows/9/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_10/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w1",
+        "alias": "/tables/item_01/rows/item_10/w3_4",
+        "source_pointer": "/body/0/rows/9/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_10/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w2",
+        "alias": "/tables/item_01/rows/item_10/w5_6",
+        "source_pointer": "/body/0/rows/9/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_10/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w3",
+        "alias": "/tables/item_01/rows/item_10/w7_8",
+        "source_pointer": "/body/0/rows/9/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_10/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w4",
+        "alias": "/tables/item_01/rows/item_10/w9_10",
+        "source_pointer": "/body/0/rows/9/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_10/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w5",
+        "alias": "/tables/item_01/rows/item_10/w11_12",
+        "source_pointer": "/body/0/rows/9/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_10/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w6",
+        "alias": "/tables/item_01/rows/item_10/w13_14",
+        "source_pointer": "/body/0/rows/9/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_10/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item10.w7",
+        "alias": "/tables/item_01/rows/item_10/w15_16",
+        "source_pointer": "/body/0/rows/9/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 9,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_10/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.a",
+        "alias": "/tables/item_01/rows/item_11/avg_fte",
+        "source_pointer": "/body/0/rows/10/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_11/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.r",
+        "alias": "/tables/item_01/rows/item_11/role",
+        "source_pointer": "/body/0/rows/10/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_11/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w0",
+        "alias": "/tables/item_01/rows/item_11/w1_2",
+        "source_pointer": "/body/0/rows/10/w0",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w0",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w0 (number) at /tables/item_01/rows/item_11/w1_2",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w1",
+        "alias": "/tables/item_01/rows/item_11/w3_4",
+        "source_pointer": "/body/0/rows/10/w1",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w1",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w1 (number) at /tables/item_01/rows/item_11/w3_4",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w2",
+        "alias": "/tables/item_01/rows/item_11/w5_6",
+        "source_pointer": "/body/0/rows/10/w2",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w2",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w2 (number) at /tables/item_01/rows/item_11/w5_6",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w3",
+        "alias": "/tables/item_01/rows/item_11/w7_8",
+        "source_pointer": "/body/0/rows/10/w3",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w3",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w3 (number) at /tables/item_01/rows/item_11/w7_8",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w4",
+        "alias": "/tables/item_01/rows/item_11/w9_10",
+        "source_pointer": "/body/0/rows/10/w4",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w4",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w4 (number) at /tables/item_01/rows/item_11/w9_10",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w5",
+        "alias": "/tables/item_01/rows/item_11/w11_12",
+        "source_pointer": "/body/0/rows/10/w5",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w5",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w5 (number) at /tables/item_01/rows/item_11/w11_12",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w6",
+        "alias": "/tables/item_01/rows/item_11/w13_14",
+        "source_pointer": "/body/0/rows/10/w6",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w6",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w6 (number) at /tables/item_01/rows/item_11/w13_14",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item11.w7",
+        "alias": "/tables/item_01/rows/item_11/w15_16",
+        "source_pointer": "/body/0/rows/10/w7",
+        "kind": "number",
+        "allow_empty": false,
+        "role": "w7",
+        "group": "/tables/item_01/rows",
+        "group_index": 10,
+        "cardinality": 12,
+        "description": "w7 (number) at /tables/item_01/rows/item_11/w15_16",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "non_text_scalar",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item12.a",
+        "alias": "/tables/item_01/rows/item_12/avg_fte",
+        "source_pointer": "/body/0/rows/11/a",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "a",
+        "group": "/tables/item_01/rows",
+        "group_index": 11,
+        "cardinality": 12,
+        "description": "a (string) at /tables/item_01/rows/item_12/avg_fte",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node01.rows.item12.r",
+        "alias": "/tables/item_01/rows/item_12/role",
+        "source_pointer": "/body/0/rows/11/r",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "r",
+        "group": "/tables/item_01/rows",
+        "group_index": 11,
+        "cardinality": 12,
+        "description": "r (string) at /tables/item_01/rows/item_12/role",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "unsupported",
+          "basis": "component_internal_layout_not_modeled",
+          "assumptions": [
+            "Component internal layout requires a built slide measurement."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      },
+      {
+        "name": "node02.text",
+        "alias": "/paragraphs/item_01/text",
+        "source_pointer": "/body/1/text",
+        "kind": "string",
+        "allow_empty": false,
+        "role": "body",
+        "group": "/paragraphs",
+        "group_index": 0,
+        "cardinality": 1,
+        "description": "body (string) at /paragraphs/item_01/text",
+        "classification": "content",
+        "classification_basis": "declared_editable_scalar",
+        "review_status": "inferred_from_pinned_source",
+        "capacity": {
+          "status": "estimated_geometry",
+          "basis": "pinned_type_and_inferred_sibling_clearance",
+          "density": "compact",
+          "width_pt": 846,
+          "height_pt": 24,
+          "line_budget": 1,
+          "style": {
+            "id": "body",
+            "font": "IBM Plex Sans",
+            "weight": 400,
+            "italic": false,
+            "size": 12,
+            "leading": 17,
+            "tracking": "0",
+            "use": "Default text; minimum for reading",
+            "tracking_pt": 0
+          },
+          "assumptions": [
+            "Fixed type size; no automatic shrinking; Go shaping is advisory, not native PowerPoint fit.",
+            "Height extends to the next overlapping source content or body bottom; this is a drafting clearance, not a renderer constraint.",
+            "Capacity uses the template's preferred authored body density; automatic fit adjustment is not included."
+          ],
+          "native_fit": "not_evaluated"
+        }
+      }
+    ],
+    "policy": [
+      "Aliases are stable source structure projections, independent of supplied copy.",
+      "Inferred metadata has not received semantic human review; recipes are explicit engineering interpretations.",
+      "Decorative fields stay in the original values contract; capacity is advisory and native fit is not evaluated."
+    ]
+  },
+  "content_contract": "pptxgengo.wmds-library-bindings.v1",
+  "slots": [
+    {
+      "name": "eyebrow",
+      "source_pointer": "/eyebrow",
+      "kind": "string",
+      "synthetic_source_example": "Resource plan"
+    },
+    {
+      "name": "title",
+      "source_pointer": "/title",
+      "kind": "string",
+      "synthetic_source_example": "Loading peaks in weeks 7–8 and eases through launch"
+    },
+    {
+      "name": "node01.cols.item01.label",
+      "source_pointer": "/body/0/cols/0/label",
+      "kind": "string",
+      "synthetic_source_example": "Role"
+    },
+    {
+      "name": "node01.cols.item02.label",
+      "source_pointer": "/body/0/cols/1/label",
+      "kind": "string",
+      "synthetic_source_example": "W1–2"
+    },
+    {
+      "name": "node01.cols.item03.label",
+      "source_pointer": "/body/0/cols/2/label",
+      "kind": "string",
+      "synthetic_source_example": "W3–4"
+    },
+    {
+      "name": "node01.cols.item04.label",
+      "source_pointer": "/body/0/cols/3/label",
+      "kind": "string",
+      "synthetic_source_example": "W5–6"
+    },
+    {
+      "name": "node01.cols.item05.label",
+      "source_pointer": "/body/0/cols/4/label",
+      "kind": "string",
+      "synthetic_source_example": "W7–8"
+    },
+    {
+      "name": "node01.cols.item06.label",
+      "source_pointer": "/body/0/cols/5/label",
+      "kind": "string",
+      "synthetic_source_example": "W9–10"
+    },
+    {
+      "name": "node01.cols.item07.label",
+      "source_pointer": "/body/0/cols/6/label",
+      "kind": "string",
+      "synthetic_source_example": "W11–12"
+    },
+    {
+      "name": "node01.cols.item08.label",
+      "source_pointer": "/body/0/cols/7/label",
+      "kind": "string",
+      "synthetic_source_example": "W13–14"
+    },
+    {
+      "name": "node01.cols.item09.label",
+      "source_pointer": "/body/0/cols/8/label",
+      "kind": "string",
+      "synthetic_source_example": "W15–16"
+    },
+    {
+      "name": "node01.cols.item10.label",
+      "source_pointer": "/body/0/cols/9/label",
+      "kind": "string",
+      "synthetic_source_example": "Avg FTE"
+    },
+    {
+      "name": "node01.rowGroups.item01.label",
+      "source_pointer": "/body/0/rowGroups/0/label",
+      "kind": "string",
+      "synthetic_source_example": "LEADERSHIP"
+    },
+    {
+      "name": "node01.rowGroups.item02.label",
+      "source_pointer": "/body/0/rowGroups/1/label",
+      "kind": "string",
+      "synthetic_source_example": "DELIVERY"
+    },
+    {
+      "name": "node01.rowGroups.item03.label",
+      "source_pointer": "/body/0/rowGroups/2/label",
+      "kind": "string",
+      "synthetic_source_example": "CLIENT"
+    },
+    {
+      "name": "node01.rows.item01.a",
+      "source_pointer": "/body/0/rows/0/a",
+      "kind": "string",
+      "synthetic_source_example": "0.5"
+    },
+    {
+      "name": "node01.rows.item01.r",
+      "source_pointer": "/body/0/rows/0/r",
+      "kind": "string",
+      "synthetic_source_example": "Engagement lead"
+    },
+    {
+      "name": "node01.rows.item01.w0",
+      "source_pointer": "/body/0/rows/0/w0",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item01.w1",
+      "source_pointer": "/body/0/rows/0/w1",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item01.w2",
+      "source_pointer": "/body/0/rows/0/w2",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item01.w3",
+      "source_pointer": "/body/0/rows/0/w3",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item01.w4",
+      "source_pointer": "/body/0/rows/0/w4",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item01.w5",
+      "source_pointer": "/body/0/rows/0/w5",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item01.w6",
+      "source_pointer": "/body/0/rows/0/w6",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item01.w7",
+      "source_pointer": "/body/0/rows/0/w7",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item02.a",
+      "source_pointer": "/body/0/rows/1/a",
+      "kind": "string",
+      "synthetic_source_example": "0.94"
+    },
+    {
+      "name": "node01.rows.item02.r",
+      "source_pointer": "/body/0/rows/1/r",
+      "kind": "string",
+      "synthetic_source_example": "Product manager"
+    },
+    {
+      "name": "node01.rows.item02.w0",
+      "source_pointer": "/body/0/rows/1/w0",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item02.w1",
+      "source_pointer": "/body/0/rows/1/w1",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item02.w2",
+      "source_pointer": "/body/0/rows/1/w2",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item02.w3",
+      "source_pointer": "/body/0/rows/1/w3",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item02.w4",
+      "source_pointer": "/body/0/rows/1/w4",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item02.w5",
+      "source_pointer": "/body/0/rows/1/w5",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item02.w6",
+      "source_pointer": "/body/0/rows/1/w6",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item02.w7",
+      "source_pointer": "/body/0/rows/1/w7",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item03.a",
+      "source_pointer": "/body/0/rows/2/a",
+      "kind": "string",
+      "synthetic_source_example": "0.69"
+    },
+    {
+      "name": "node01.rows.item03.r",
+      "source_pointer": "/body/0/rows/2/r",
+      "kind": "string",
+      "synthetic_source_example": "Solution architect"
+    },
+    {
+      "name": "node01.rows.item03.w0",
+      "source_pointer": "/body/0/rows/2/w0",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item03.w1",
+      "source_pointer": "/body/0/rows/2/w1",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item03.w2",
+      "source_pointer": "/body/0/rows/2/w2",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item03.w3",
+      "source_pointer": "/body/0/rows/2/w3",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item03.w4",
+      "source_pointer": "/body/0/rows/2/w4",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item03.w5",
+      "source_pointer": "/body/0/rows/2/w5",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item03.w6",
+      "source_pointer": "/body/0/rows/2/w6",
+      "kind": "number",
+      "synthetic_source_example": 0.25
+    },
+    {
+      "name": "node01.rows.item03.w7",
+      "source_pointer": "/body/0/rows/2/w7",
+      "kind": "number",
+      "synthetic_source_example": 0.25
+    },
+    {
+      "name": "node01.rows.item04.a",
+      "source_pointer": "/body/0/rows/3/a",
+      "kind": "string",
+      "synthetic_source_example": "0.75"
+    },
+    {
+      "name": "node01.rows.item04.r",
+      "source_pointer": "/body/0/rows/3/r",
+      "kind": "string",
+      "synthetic_source_example": "Data engineer"
+    },
+    {
+      "name": "node01.rows.item04.w0",
+      "source_pointer": "/body/0/rows/3/w0",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item04.w1",
+      "source_pointer": "/body/0/rows/3/w1",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item04.w2",
+      "source_pointer": "/body/0/rows/3/w2",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item04.w3",
+      "source_pointer": "/body/0/rows/3/w3",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item04.w4",
+      "source_pointer": "/body/0/rows/3/w4",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item04.w5",
+      "source_pointer": "/body/0/rows/3/w5",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item04.w6",
+      "source_pointer": "/body/0/rows/3/w6",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item04.w7",
+      "source_pointer": "/body/0/rows/3/w7",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item05.a",
+      "source_pointer": "/body/0/rows/4/a",
+      "kind": "string",
+      "synthetic_source_example": "1.5"
+    },
+    {
+      "name": "node01.rows.item05.r",
+      "source_pointer": "/body/0/rows/4/r",
+      "kind": "string",
+      "synthetic_source_example": "Business analysts (2)"
+    },
+    {
+      "name": "node01.rows.item05.w0",
+      "source_pointer": "/body/0/rows/4/w0",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.w1",
+      "source_pointer": "/body/0/rows/4/w1",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.w2",
+      "source_pointer": "/body/0/rows/4/w2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.w3",
+      "source_pointer": "/body/0/rows/4/w3",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item05.w4",
+      "source_pointer": "/body/0/rows/4/w4",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item05.w5",
+      "source_pointer": "/body/0/rows/4/w5",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item05.w6",
+      "source_pointer": "/body/0/rows/4/w6",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item05.w7",
+      "source_pointer": "/body/0/rows/4/w7",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item06.a",
+      "source_pointer": "/body/0/rows/5/a",
+      "kind": "string",
+      "synthetic_source_example": "1.75"
+    },
+    {
+      "name": "node01.rows.item06.r",
+      "source_pointer": "/body/0/rows/5/r",
+      "kind": "string",
+      "synthetic_source_example": "Developers (3)"
+    },
+    {
+      "name": "node01.rows.item06.w0.value",
+      "source_pointer": "/body/0/rows/5/w0/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item06.w0.text",
+      "source_pointer": "/body/0/rows/5/w0/text",
+      "kind": "string",
+      "synthetic_source_example": "–"
+    },
+    {
+      "name": "node01.rows.item06.w1.value",
+      "source_pointer": "/body/0/rows/5/w1/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item06.w1.text",
+      "source_pointer": "/body/0/rows/5/w1/text",
+      "kind": "string",
+      "synthetic_source_example": "–"
+    },
+    {
+      "name": "node01.rows.item06.w2",
+      "source_pointer": "/body/0/rows/5/w2",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item06.w3",
+      "source_pointer": "/body/0/rows/5/w3",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item06.w4",
+      "source_pointer": "/body/0/rows/5/w4",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item06.w5",
+      "source_pointer": "/body/0/rows/5/w5",
+      "kind": "number",
+      "synthetic_source_example": 3
+    },
+    {
+      "name": "node01.rows.item06.w6",
+      "source_pointer": "/body/0/rows/5/w6",
+      "kind": "number",
+      "synthetic_source_example": 2
+    },
+    {
+      "name": "node01.rows.item06.w7",
+      "source_pointer": "/body/0/rows/5/w7",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item07.a",
+      "source_pointer": "/body/0/rows/6/a",
+      "kind": "string",
+      "synthetic_source_example": "0.62"
+    },
+    {
+      "name": "node01.rows.item07.r",
+      "source_pointer": "/body/0/rows/6/r",
+      "kind": "string",
+      "synthetic_source_example": "QA lead"
+    },
+    {
+      "name": "node01.rows.item07.w0.value",
+      "source_pointer": "/body/0/rows/6/w0/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item07.w0.text",
+      "source_pointer": "/body/0/rows/6/w0/text",
+      "kind": "string",
+      "synthetic_source_example": "–"
+    },
+    {
+      "name": "node01.rows.item07.w1.value",
+      "source_pointer": "/body/0/rows/6/w1/value",
+      "kind": "number",
+      "synthetic_source_example": 0
+    },
+    {
+      "name": "node01.rows.item07.w1.text",
+      "source_pointer": "/body/0/rows/6/w1/text",
+      "kind": "string",
+      "synthetic_source_example": "–"
+    },
+    {
+      "name": "node01.rows.item07.w2",
+      "source_pointer": "/body/0/rows/6/w2",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item07.w3",
+      "source_pointer": "/body/0/rows/6/w3",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item07.w4",
+      "source_pointer": "/body/0/rows/6/w4",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item07.w5",
+      "source_pointer": "/body/0/rows/6/w5",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item07.w6",
+      "source_pointer": "/body/0/rows/6/w6",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item07.w7",
+      "source_pointer": "/body/0/rows/6/w7",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item08.a",
+      "source_pointer": "/body/0/rows/7/a",
+      "kind": "string",
+      "synthetic_source_example": "0.75"
+    },
+    {
+      "name": "node01.rows.item08.r",
+      "source_pointer": "/body/0/rows/7/r",
+      "kind": "string",
+      "synthetic_source_example": "Change lead"
+    },
+    {
+      "name": "node01.rows.item08.w0",
+      "source_pointer": "/body/0/rows/7/w0",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item08.w1",
+      "source_pointer": "/body/0/rows/7/w1",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item08.w2",
+      "source_pointer": "/body/0/rows/7/w2",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item08.w3",
+      "source_pointer": "/body/0/rows/7/w3",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item08.w4",
+      "source_pointer": "/body/0/rows/7/w4",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item08.w5",
+      "source_pointer": "/body/0/rows/7/w5",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item08.w6",
+      "source_pointer": "/body/0/rows/7/w6",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item08.w7",
+      "source_pointer": "/body/0/rows/7/w7",
+      "kind": "number",
+      "synthetic_source_example": 1
+    },
+    {
+      "name": "node01.rows.item09.a",
+      "source_pointer": "/body/0/rows/8/a",
+      "kind": "string",
+      "synthetic_source_example": "0.1"
+    },
+    {
+      "name": "node01.rows.item09.r",
+      "source_pointer": "/body/0/rows/8/r",
+      "kind": "string",
+      "synthetic_source_example": "Executive sponsor"
+    },
+    {
+      "name": "node01.rows.item09.w0",
+      "source_pointer": "/body/0/rows/8/w0",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item09.w1",
+      "source_pointer": "/body/0/rows/8/w1",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item09.w2",
+      "source_pointer": "/body/0/rows/8/w2",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item09.w3",
+      "source_pointer": "/body/0/rows/8/w3",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item09.w4",
+      "source_pointer": "/body/0/rows/8/w4",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item09.w5",
+      "source_pointer": "/body/0/rows/8/w5",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item09.w6",
+      "source_pointer": "/body/0/rows/8/w6",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item09.w7",
+      "source_pointer": "/body/0/rows/8/w7",
+      "kind": "number",
+      "synthetic_source_example": 0.1
+    },
+    {
+      "name": "node01.rows.item10.a",
+      "source_pointer": "/body/0/rows/9/a",
+      "kind": "string",
+      "synthetic_source_example": "0.5"
+    },
+    {
+      "name": "node01.rows.item10.r",
+      "source_pointer": "/body/0/rows/9/r",
+      "kind": "string",
+      "synthetic_source_example": "Product owner"
+    },
+    {
+      "name": "node01.rows.item10.w0",
+      "source_pointer": "/body/0/rows/9/w0",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item10.w1",
+      "source_pointer": "/body/0/rows/9/w1",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item10.w2",
+      "source_pointer": "/body/0/rows/9/w2",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item10.w3",
+      "source_pointer": "/body/0/rows/9/w3",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item10.w4",
+      "source_pointer": "/body/0/rows/9/w4",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item10.w5",
+      "source_pointer": "/body/0/rows/9/w5",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item10.w6",
+      "source_pointer": "/body/0/rows/9/w6",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item10.w7",
+      "source_pointer": "/body/0/rows/9/w7",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item11.a",
+      "source_pointer": "/body/0/rows/10/a",
+      "kind": "string",
+      "synthetic_source_example": "0.38"
+    },
+    {
+      "name": "node01.rows.item11.r",
+      "source_pointer": "/body/0/rows/10/r",
+      "kind": "string",
+      "synthetic_source_example": "IT integration lead"
+    },
+    {
+      "name": "node01.rows.item11.w0",
+      "source_pointer": "/body/0/rows/10/w0",
+      "kind": "number",
+      "synthetic_source_example": 0.25
+    },
+    {
+      "name": "node01.rows.item11.w1",
+      "source_pointer": "/body/0/rows/10/w1",
+      "kind": "number",
+      "synthetic_source_example": 0.25
+    },
+    {
+      "name": "node01.rows.item11.w2",
+      "source_pointer": "/body/0/rows/10/w2",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item11.w3",
+      "source_pointer": "/body/0/rows/10/w3",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item11.w4",
+      "source_pointer": "/body/0/rows/10/w4",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item11.w5",
+      "source_pointer": "/body/0/rows/10/w5",
+      "kind": "number",
+      "synthetic_source_example": 0.5
+    },
+    {
+      "name": "node01.rows.item11.w6",
+      "source_pointer": "/body/0/rows/10/w6",
+      "kind": "number",
+      "synthetic_source_example": 0.25
+    },
+    {
+      "name": "node01.rows.item11.w7",
+      "source_pointer": "/body/0/rows/10/w7",
+      "kind": "number",
+      "synthetic_source_example": 0.25
+    },
+    {
+      "name": "node01.rows.item12.a",
+      "source_pointer": "/body/0/rows/11/a",
+      "kind": "string",
+      "synthetic_source_example": "8.47"
+    },
+    {
+      "name": "node01.rows.item12.r",
+      "source_pointer": "/body/0/rows/11/r",
+      "kind": "string",
+      "synthetic_source_example": "Total FTE"
+    },
+    {
+      "name": "node02.text",
+      "source_pointer": "/body/1/text",
+      "kind": "string",
+      "synthetic_source_example": "Peak fortnight is weeks 7–8 at 10.6 FTE; client counterparts hold near 1 FTE throughout."
+    }
+  ],
+  "arrays": [
+    {
+      "name": "node01.cols",
+      "source_pointer": "/body/0/cols",
+      "count": 10
+    },
+    {
+      "name": "node01.rowGroups",
+      "source_pointer": "/body/0/rowGroups",
+      "count": 3
+    },
+    {
+      "name": "node01.rows",
+      "source_pointer": "/body/0/rows",
+      "count": 12
+    }
+  ],
+  "render_status": "binding_defined_render_review_pending",
+  "policy": [
+    "Named content slots and exact-count key overlays; geometry/base styles remain frozen.",
+    "Source slot metadata is advisory; this definition explicitly names the drawn content fields.",
+    "All scalar content is required; no source-example fallback. Array order remains the declared fixed topology.",
+    "Binding availability does not establish successful rendering, native review or a qualified envelope."
+  ],
+  "revision": 1,
+  "added": "2026-10-08",
+  "status": "active"
+}

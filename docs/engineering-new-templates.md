@@ -1,8 +1,36 @@
 # Upstream template intake
 
+## Current V12 intake — 2026-10-10
+
+The frozen upstream commit is `36132d5637abdbdeb70945ad650b795cabea05ef`:
+735 source / 734 active templates. This expands the earlier 677-template V12
+candidate by 58 additions and two revisions. Against V11, there are 86 additions
+and two revisions; all prior identities remain.
+
+All source and active bound specimens build. The gallery publisher accepts
+88 fresh PowerPoint reviews and 647 retained native previews verified by exact
+composition and paired rendered dependencies. V12 is the new-project and release
+default. Historical project pins and the original V12 intake are preserved.
+See [current intake evidence](../planning/wm-design-contracts/v12/intake-20261010-735-frozen/README.md).
+
+## Historical V12 implementation — 2026-10-08
+
+The then-current upstream commit `efec671fe40d2145d14780dc39c3128bc9c65308` adds
+28 templates: ten product backlogs, nine product strategy roadmaps and nine
+resource plans. They are implemented as the separate pinned V12 candidate
+(677 source / 676 active), with editable content bindings, discovery index and
+native PowerPoint review specimens. Full source/bound generation and the Go
+regression checks pass; primary-agent visual review passed all 28 additions.
+Use `--bundle v12` with the repository-built CLI. Independent publication
+qualification remains pending; the published default remains V11. See the
+[V12 intake](../planning/wm-design-contracts/v12/intake-20261008-677-frozen/README.md)
+for four explicit native allocations, browser metadata behavior and validation.
+
+## Historical intake records
+
 This file retains earlier intake/qualification snapshots. Its production and
 upstream counts below describe their dated v10-era checkpoint, not the current
-package. The published default is now v11 / 649 source templates (648 active);
+package. The V11 checkpoint had 649 source templates (648 active);
 see the [frozen v11 intake record](../planning/wm-design-contracts/v11/intake-20261006-649-frozen/README.md).
 Native render and visual qualification remain pending; see [current release
 status](release-status.md).

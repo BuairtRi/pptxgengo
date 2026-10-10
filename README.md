@@ -3,17 +3,22 @@
 Go tools for creating, inspecting, adapting and reviewing editable PowerPoint
 decks. The Go presentation writer retains PptxGenJS 4.0.1 compatibility goals;
 the repository also contains the `pptxgengo` authoring CLI and West Monroe
-template system. Current source is **v4.2.1** (CLI package
-**0.1.0-local.21**). Requires **Go 1.27.1 or newer**.
+template system. Current release source is **v4.3.1**. Requires **Go 1.27.1 or newer**;
+release builds use Go 1.27.2.
 
-The published default template bundle is **v11** (`release/default-bundle.txt`):
-649 source templates (648 active), with bundled fonts, gallery, compiler sources
-and a SQLite discovery index. New project creation defaults to native-v1
-editable text where a measured template can be emitted safely. Native rendering
-and visual qualification of the v11 templates are still pending; native-v1
-indicates an implementation path, not acceptance. See [current release and
-qualification status](docs/release-status.md) and the [documentation
-index](docs/README.md).
+The default template bundle is **v12** (`release/default-bundle.txt`):
+735 source templates (734 active), with bundled fonts, a native specimen gallery,
+compiler sources and a regenerated SQLite discovery index. The frozen upstream
+commit is `36132d5637abdbdeb70945ad650b795cabea05ef`. V12 adds 86 templates
+and revises two against V11, including openers, contents/indexes, milestones,
+product backlog, strategy roadmaps and resource plans.
+
+All 735 source specimens and 734 active bindings build. Gallery qualification
+combines 88 fresh PowerPoint reviews with 647 retained previews verified by
+composition and rendered dependency comparison. New projects default to native-v1;
+existing project pins remain explicit. Supplied copy needs its own fit/build and
+native review. See [release status](docs/release-status.md) and the
+[V12 bundle](library/wm-design-system/v12/README.md).
 
 The three final converted decks, editable YAML and offline packages are together
 in [`samples/final`](samples/final/README.md).

@@ -3,15 +3,15 @@
 For protected-tag CI releases, platform signing, scans and resource policies,
 see [the CI release runbook](CI.md).
 
-## Current signed release
+## v4.3.1 release source
 
-The current stable release is v4.2.1. Its six private GitLab platform archives
-include signed executables, V11 source/catalog/fonts, the regenerated SQLite
-index and 717-slide template browsing deck. They omit the skill, optional docs
-site, private media originals and curated reusable-slide deck. See
-[release status](../docs/release-status.md) for verified contents and remaining
-desktop qualification, and [skill installation](../docs/skill-installation.md)
-for independent Codex/Claude updates.
+V4.3.1 selects V12: 735 source templates, 734 active, a regenerated discovery
+index and an 804-slide template browsing deck. The gallery combines 88 fresh
+PowerPoint reviews and 647 verified retained previews. The current protected
+package policy includes the presentation skill and registered schematic SVGs.
+See [release status](../docs/release-status.md) for exact qualification and
+publication/download verification state. V4.2.1 remains the last independently
+verified signed package until v4.3.1 completes the protected pipeline.
 
 ## Historical full authoring package: local.21
 
