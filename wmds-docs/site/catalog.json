@@ -310,7 +310,7 @@
       "name": "Roadmaps",
       "summary": "Roadmaps and timelines: graphic roads (straight and branching), now/next/later, roadmap structures and dense grids, narrative roadmaps, phased plans and milestone timelines. Collected from the diagrams, software and approach families on 2026-10-06.",
       "file": "templates/library/roadmaps.json",
-      "count": 45,
+      "count": 57,
       "sections": [
         "Graphic roadmaps",
         "Product strategy roadmaps",
@@ -18372,6 +18372,492 @@
       "legacy": "new 2026-10-08",
       "rev": 1,
       "added": "2026-10-08",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/horizontal-described",
+      "name": "Milestone timeline · weekly axis, described",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A full-width weekly axis with each major milestone's diamond on its exact date. Each milestone carries its number, date, name and a one- or two-sentence description in aligned columns that alternate above and below the axis, with phase spans and date ranges across the top. One Magenta diamond marks the most important milestone.",
+      "nodes": [
+        "connector",
+        "preset",
+        "rule",
+        "text",
+        "timeaxis"
+      ],
+      "uses": [
+        "timeaxis",
+        "preset",
+        "connector",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "phase",
+        "milestone",
+        "date",
+        "description"
+      ],
+      "budget": {
+        "words": 216,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/vertical-described",
+      "name": "Milestone timeline · vertical, described with deliverables",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A vertical timeline down the left: each row gives the milestone's date and week, its diamond on the spine, the milestone name and a one-line description, and its key deliverables as small chips on the right. Eight rows fill the body.",
+      "nodes": [
+        "connector",
+        "preset",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "preset",
+        "connector",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "milestone",
+        "description",
+        "deliverable chip"
+      ],
+      "budget": {
+        "words": 189,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/vertical-split",
+      "name": "Milestone timeline · vertical with program narrative (split)",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "working",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Split frame: the short column carries the title, a one-paragraph program narrative and the three phases with their dates; the tall column runs a vertical timeline from the top of the slide, each row with date and week, diamond, milestone name, a one-line description and deliverable chips.",
+      "nodes": [
+        "connector",
+        "preset",
+        "rule",
+        "text",
+        "textblock"
+      ],
+      "uses": [
+        "split frame",
+        "preset",
+        "connector",
+        "textblock",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "narrative",
+        "phase",
+        "milestone",
+        "description",
+        "deliverable chip"
+      ],
+      "budget": {
+        "words": 234,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/gantt-milestones",
+      "name": "Milestone timeline · Gantt with keyed milestone list",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "core",
+      "frame": "none rail · slim footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A weekly Gantt chart (phases, workstream lanes and bars) with a key-milestones lane of diamonds labelled M1–M8 on their exact weeks; beneath it a numbered key in two columns gives each milestone's name, date and a short description on one line.",
+      "nodes": [
+        "gantt",
+        "text"
+      ],
+      "uses": [
+        "gantt",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "workstream lane",
+        "bar label",
+        "milestone",
+        "short description"
+      ],
+      "budget": {
+        "words": 189,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/gantt-milestone-panel",
+      "name": "Milestone timeline · tall Gantt with milestone panel (split)",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "working",
+      "frame": "split tall-left · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Split frame: a weekly Gantt fills the tall left column from the top of the slide (phases, five workstream lanes, and a key-milestones lane whose diamonds sit on their exact weeks, staggered on two tracks). The short right column holds the title and a numbered milestone list whose M1–M8 match the diamonds, each with name, date and a short description.",
+      "nodes": [
+        "gantt",
+        "text"
+      ],
+      "uses": [
+        "split frame",
+        "gantt",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "workstream lane",
+        "bar label",
+        "milestone",
+        "short description"
+      ],
+      "budget": {
+        "words": 220,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/phases-milestones",
+      "name": "Milestone timeline · phases with milestones and exit criteria",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Three phase headers (rule, dates, name; no chevrons) across the top with their date ranges; beneath each, its milestones on a short spine (number, date and week, name, description), with a hollow diamond for a minor checkpoint; each phase closes with its exit criteria.",
+      "nodes": [
+        "bullets",
+        "connector",
+        "preset",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "preset",
+        "connector",
+        "rule",
+        "bullets",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "phase",
+        "milestone",
+        "description",
+        "exit criterion"
+      ],
+      "budget": {
+        "words": 242,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/quarter-grid",
+      "name": "Milestone timeline · period grid with milestone cards",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Calendar periods as columns (months grouped into quarters for a six-month program; four quarter columns for a 12-month program), with each milestone placed in its period as an unboxed card under the period head: diamond, number and date, name, description and owner. A period with one milestone gives it the longer description and its deliverables; a period with two stacks them under a hairline.",
+      "nodes": [
+        "bullets",
+        "colhead",
+        "preset",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "colhead",
+        "preset",
+        "rule",
+        "bullets",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "period",
+        "milestone card",
+        "description",
+        "owner"
+      ],
+      "budget": {
+        "words": 192,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/critical-path",
+      "name": "Milestone timeline · critical path with feeders and float",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "The eight major milestones as a chain down a spine, linked by Magenta arrows to mark the critical path (zero float), each with date and week, name and a one-line description. Feeder work sits to the left on hollow diamonds, joined to the milestone it gates by a dashed arrow, with its date and float.",
+      "nodes": [
+        "connector",
+        "legend",
+        "preset",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "preset",
+        "connector",
+        "legend",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "critical milestone",
+        "description",
+        "feeder",
+        "float"
+      ],
+      "budget": {
+        "words": 252,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/current-status",
+      "name": "Milestone timeline · current status against baseline",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A weekly axis with a Magenta today line: done milestones are filled, upcoming ones hollow, and a slipped milestone shows a ghost diamond at its baseline with a dashed arrow to its forecast. Beneath, a status table gives baseline, forecast, variance and status per milestone, beside a variance note.",
+      "nodes": [
+        "card",
+        "connector",
+        "legend",
+        "preset",
+        "status",
+        "table",
+        "text",
+        "timeaxis"
+      ],
+      "uses": [
+        "timeaxis",
+        "preset",
+        "connector",
+        "legend",
+        "table",
+        "card",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "status date",
+        "milestone row",
+        "variance title",
+        "variance bullet"
+      ],
+      "budget": {
+        "words": 203,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/dense-list",
+      "name": "Milestone timeline · milestone register (page 1)",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A dense milestone register: phase group cells down the left, then ID, milestone (major milestones carry an M-number badge), baseline and forecast dates, description, owner and status. Fourteen rows per page; pairs with dense-list-continued.",
+      "nodes": [
+        "status",
+        "table"
+      ],
+      "uses": [
+        "table",
+        "rowGroups"
+      ],
+      "slots": [
+        "title",
+        "register row",
+        "milestone",
+        "description",
+        "owner"
+      ],
+      "budget": {
+        "words": 255,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/dense-list-continued",
+      "name": "Milestone timeline · milestone register (continued)",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "The continuation page of the milestone register: the same columns and phase group cells, a continued label above the table, and the remaining rows. Use after dense-list.",
+      "nodes": [
+        "status",
+        "table"
+      ],
+      "uses": [
+        "table",
+        "rowGroups"
+      ],
+      "slots": [
+        "title",
+        "register row",
+        "milestone",
+        "description",
+        "owner"
+      ],
+      "budget": {
+        "words": 231,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestone-timeline/nav",
+      "name": "Milestone timeline · one phase on the nav rail",
+      "family": "roadmaps",
+      "section": "Milestone timelines",
+      "tier": "working",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Nav-rail version with the phases as the rail: the active phase's date range and purpose, a week-by-week axis with every milestone and checkpoint on its date (major milestones as larger diamonds), the two major milestones described as cards with exit criteria, and the checkpoints listed with dates.",
+      "nodes": [
+        "card",
+        "preset",
+        "rule",
+        "text",
+        "timeaxis"
+      ],
+      "uses": [
+        "nav rail",
+        "timeaxis",
+        "preset",
+        "card",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "rail section",
+        "axis milestone",
+        "major milestone card",
+        "checkpoint"
+      ],
+      "budget": {
+        "words": 180,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
       "revised": null,
       "status": "active",
       "replacedBy": null
