@@ -200,11 +200,15 @@
     "families-2026-10-09b": {
       "summary": "New family indexes (Openers group): index-slides (page, continued, continued-last, with-type, with-type-continued, thumbnails), index-sections (overview, nav), index-topics/alphabetical, index-exhibits/list, index-appendix/full. Covers: toc/levels-blocks removed; toc/you-are-here renamed divider/progress-contents (Progress dividers); guide/section-guide strip moved to the top (rev 3); new guide/section-guide-nav and guide/section-opener-nav; narrative TOC padding widened.",
       "pptx": "Add the indexes family; delete toc/levels-blocks; rename toc/you-are-here to divider/progress-contents; update guide/section-guide layout; new guides use the nav rail."
+    },
+    "families-2026-10-10": {
+      "summary": "Approach gains a \"Milestones and deliverables\" section (11 milestones/* templates: table, cards, cards-split, deliverable one-pager, deliverables catalog, acceptance tracker, milestone x deliverable map, phase deliverables, two continued pages, nav). plan/gantt overflow fixed (data only). Milestones and deliverables → milestones/* (approach.json) milestones/cards-split uses split tall-right (short 57–327 with a 3-line heading title, tall 345–903 from y36). Table headers are single-line labels, so the milestone × deliverable map cannot name milestones in its 54pt column headers; it uses M1–M8 codes plus a composed text key under the table. Card bodies have no bottom-anchored block, so sign-off labels in milestones/nav sit directly after the bullets.",
+      "pptx": "Add the milestones/* templates to approach; re-pull plan/gantt item data. The map labels milestone columns M1-M8 with a text key underneath (table headers are single-line)."
     }
   },
   "summary": {
-    "added": 615,
-    "revised": 37,
+    "added": 626,
+    "revised": 38,
     "deprecated": 1,
     "removed": 0,
     "moved": 19
@@ -323,6 +327,105 @@
       "pptx": "Density migration: Set slide density \"compact\" (body 12/17, small 11/15, subhead 16/21, label 8/11, table cells 12/10 per tokens.density); title zone stays comfortable. Drop the per-component small sizes on: bullets at x 327 y 210 (“Care management modernization”) size=small; bullets at x 327 y 294 (“Population health modernization”) size=small; bullets at x 327 y 378 (“Clinical program management”) size=small. Those nodes now take the slide's body/small roles, so their text size is unchanged (12 pt) while the other text on the slide steps down to the same scale. Geometry unchanged."
     },
     {
+      "key": "milestones/acceptance",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Deliverables · acceptance tracker: Who reviews and who approves each deliverable, the criteria it is accepted against and where it stands: Accepted, In review or Not started.",
+      "pptx": "13-row dense table with ref badges and a status column relabelled done=Accepted, progress=In review, notstarted=Not started."
+    },
+    {
+      "key": "milestones/cards",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones · cards with deliverables: One card per major milestone: a mono date, the milestone, what it means in a sentence and the deliverables that prove it. The Magenta edge marks the milestone that matters most.",
+      "pptx": "3x2 grid of 270x162 Light Gray cards, 3pt top edge Grounded (Magenta on the go-live card), Blue mono date label, subhead title, secondary sentence, two lead bullets."
+    },
+    {
+      "key": "milestones/cards-split",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones · split with narrative and cards: The program story and phase summary in the short column; the sign-off milestones as cards with their deliverables in the tall column.",
+      "pptx": "tall-right split: heading-size 3-line title in the short column, narrative paragraph and three rule-separated phase rows (mono label, subhead, small count); tall column 2x2 cards 270x198 with top edges (one Magenta) and four lead bullets."
+    },
+    {
+      "key": "milestones/continued-page-1",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones and deliverables · list, page 1: A dense list of deliverables grouped under their milestones, with description, format, owner and approver. Page 1 of a multi-page list.",
+      "pptx": "Dense table with milestone group rows (22pt, Blue mono caps on Light Gray) and 26pt deliverable rows: ref badge, description, format tag, owner, approver."
+    },
+    {
+      "key": "milestones/continued-page-2",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones and deliverables · list, continued page: The continued page of the milestones-and-deliverables list: a continued marker above the same table columns, picking up at the next milestone.",
+      "pptx": "Same table at y144 with a 'continued' label 18pt above it; picks up at M5."
+    },
+    {
+      "key": "milestones/deliverable-one-pager",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Deliverable · one-pager: One major deliverable in depth: purpose, format, audience, the sections it contains, its inputs and dependencies, the review and acceptance steps and the milestone it supports.",
+      "pptx": "Three columns: thumbnail (diagram, stacked), purpose, format/audience pairs and a subtle left-edge card naming the supported milestone; numbered strongnum sections; inputs bullets and a 3-step vstepper (current step Magenta)."
+    },
+    {
+      "key": "milestones/deliverables-catalog",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Deliverables · catalog: Every program deliverable in one dense table: reference, name, a one-line description, format, the milestone it is due at, owner and reviewer, grouped by phase.",
+      "pptx": "13-row dense table (rowH 24) with phase rowGroups, ref-badge deliverable cells, tag column for format, due as 'M3 · W10'."
+    },
+    {
+      "key": "milestones/milestone-deliverable-map",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones × deliverables · map: A matrix of deliverables (rows) by milestones (columns), with a check where each deliverable is due or updated, a one-line description per deliverable and a milestone key. One milestone column is highlighted.",
+      "pptx": "Matrix table: deliverable + description, eight 54pt check columns M1-M8 under spanning phase group headers, M8 column highlighted (subtle fill, Blue top bar, Blue checks); a 4x2 mono key of milestone names and weeks under the table."
+    },
+    {
+      "key": "milestones/nav",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones · nav rail cards: All eight milestones as compact cards in a long proposal with the nav rail: date, milestone and the deliverables due. M2 card titled \"Baseline signed off\" so every title stays on one line.",
+      "pptx": "Nav rail (4 tabs, active 1) plus a 4x2 grid of 198x162 cards with top edges (Magenta on go-live wave 1), date label, title, two bullets and a Blue mono sign-off label."
+    },
+    {
+      "key": "milestones/phase-deliverables",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones · deliverables by phase: Three phases as columns: each with its weeks, the milestones that close it (date and name) and the deliverables it produces, each described in a few words.",
+      "pptx": "Three 270 columns: colhead (Grounded rule, phase label, subhead), milestone schedule rows (Blue date key, bold name), rule, lead bullets of deliverables, and a 54pt subtle exit card with left edge (Magenta on phase 3)."
+    },
+    {
+      "key": "milestones/table",
+      "family": "approach",
+      "change": "added",
+      "date": "2026-10-10",
+      "rev": 1,
+      "summary": "Milestones and deliverables · table by phase: Every program milestone with its date, the deliverables that prove it (each described in a line), the owner and the acceptance criteria, grouped by phase.",
+      "pptx": "Full-width dense table at y126 with three rotated phase group tabs (rowGroups, 24 wide, alternating Grounded / #50658E), mono ref badge M1-M8 in the milestone cell, a bullets column with bold lead + secondary text, per-row heights 42/34."
+    },
+    {
       "key": "phase-detail/rail-cohort",
       "family": "approach",
       "change": "revised",
@@ -408,6 +511,18 @@
       ],
       "summary": "Density migration (2026-10-06): removed 6 component-level small overrides; slide density compact. Every component now shares the slide's typography.",
       "pptx": "Density migration: Set slide density \"compact\" (body 12/17, small 11/15, subhead 16/21, label 8/11, table cells 12/10 per tokens.density); title zone stays comfortable. Drop the per-component small sizes on: card at x 57 y 216 (“Activities”) bodySize=small; card at x 57 y 360 (“Deliverables”) bodySize=small; card at x 345 y 216 (“Activities”) bodySize=small; card at x 345 y 360 (“Deliverables”) bodySize=small; card at x 633 y 216 (“Activities”) bodySize=small; card at x 633 y 360 (“Deliverables”) bodySize=small. Those nodes now take the slide's body/small roles, so their text size is unchanged (12 pt) while the other text on the slide steps down to the same scale. Geometry unchanged."
+    },
+    {
+      "key": "plan/gantt",
+      "family": "approach",
+      "change": "revised",
+      "date": "2026-10-10",
+      "rev": 2,
+      "fields": [
+        "body nodes changed: 0"
+      ],
+      "summary": "Fix overflow: three lanes packed onto a second track so the chart and legend ran past the footer. Interviews soft end 0.5 -> 0.25 so its label fits on the solid bar; Quality scan relabelled Profiling (fits one period); Kickoff star at 0.1 so its label clears Weekly working sessions. Every lane is now one track; the legend sits above the footer.",
+      "pptx": "Data change only: Interviews and close mapping softEnd 0.25; Systems lane item 2 label 'Profiling' (from 3 to 4); Kickoff event at 0.1. Lane height = max(42, tracks*30+12); with one track per lane the body ends at y=408 and the two-row legend at ~422-460, above the compact footer."
     },
     {
       "key": "roles/dot-scores",

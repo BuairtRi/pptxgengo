@@ -295,9 +295,10 @@
       "name": "Approach and plan",
       "summary": "Phases, phase detail, gates, roadmaps, work plans and cutover.",
       "file": "templates/library/approach.json",
-      "count": 16,
+      "count": 27,
       "sections": [
         "Plans and cutover",
+        "Milestones and deliverables",
         "Phases",
         "Phase detail",
         "Roles by phase",
@@ -320,6 +321,7 @@
         "Dense roadmap grids",
         "Phased plans",
         "Confidence and status",
+        "Milestone timelines",
         "Timelines"
       ]
     },
@@ -15682,9 +15684,9 @@
         "marks": 0
       },
       "legacy": "Timelines, slides 68–98",
-      "rev": 1,
+      "rev": 2,
       "added": null,
-      "revised": null,
+      "revised": "2026-10-10",
       "status": "active",
       "replacedBy": null
     },
@@ -16306,6 +16308,397 @@
       "rev": 2,
       "added": "2026-10-03",
       "revised": "2026-10-06",
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/table",
+      "name": "Milestones and deliverables · table by phase",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Every program milestone with its date, the deliverables that prove it (each described in a line), the owner and the acceptance criteria, grouped by phase.",
+      "nodes": [
+        "bullets",
+        "table"
+      ],
+      "uses": [
+        "table (rowGroups, ref cells, bullets)"
+      ],
+      "slots": [
+        "title",
+        "milestone row",
+        "phase group",
+        "deliverable bullet"
+      ],
+      "budget": {
+        "words": 242,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/cards",
+      "name": "Milestones · cards with deliverables",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "One card per major milestone: a mono date, the milestone, what it means in a sentence and the deliverables that prove it. The Magenta edge marks the milestone that matters most.",
+      "nodes": [
+        "card"
+      ],
+      "uses": [
+        "card (label, edge, bullets)"
+      ],
+      "slots": [
+        "title",
+        "card",
+        "card description",
+        "deliverable bullet"
+      ],
+      "budget": {
+        "words": 170,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/cards-split",
+      "name": "Milestones · split with narrative and cards",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "working",
+      "frame": "split tall-right · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "The program story and phase summary in the short column; the sign-off milestones as cards with their deliverables in the tall column.",
+      "nodes": [
+        "card",
+        "rule",
+        "text"
+      ],
+      "uses": [
+        "split tall-right",
+        "card (label, edge, bullets)",
+        "rule",
+        "text"
+      ],
+      "slots": [
+        "title",
+        "narrative",
+        "phase row",
+        "card",
+        "deliverable bullet"
+      ],
+      "budget": {
+        "words": 194,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/deliverable-one-pager",
+      "name": "Deliverable · one-pager",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "One major deliverable in depth: purpose, format, audience, the sections it contains, its inputs and dependencies, the review and acceptance steps and the milestone it supports.",
+      "nodes": [
+        "bullets",
+        "card",
+        "strongnum",
+        "text",
+        "thumbnail",
+        "vstepper"
+      ],
+      "uses": [
+        "thumbnail",
+        "strongnum",
+        "bullets",
+        "vstepper",
+        "card (inverse)"
+      ],
+      "slots": [
+        "title",
+        "purpose",
+        "section",
+        "input",
+        "review step"
+      ],
+      "budget": {
+        "words": 158,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/deliverables-catalog",
+      "name": "Deliverables · catalog",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Every program deliverable in one dense table: reference, name, a one-line description, format, the milestone it is due at, owner and reviewer, grouped by phase.",
+      "nodes": [
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table (rowGroups, ref cells, tag)"
+      ],
+      "slots": [
+        "title",
+        "deliverable row",
+        "description"
+      ],
+      "budget": {
+        "words": 258,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/acceptance",
+      "name": "Deliverables · acceptance tracker",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Who reviews and who approves each deliverable, the criteria it is accepted against and where it stands: Accepted, In review or Not started.",
+      "nodes": [
+        "status",
+        "table"
+      ],
+      "uses": [
+        "table (ref cells, status labels)"
+      ],
+      "slots": [
+        "title",
+        "deliverable row",
+        "criteria"
+      ],
+      "budget": {
+        "words": 267,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/milestone-deliverable-map",
+      "name": "Milestones × deliverables · map",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A matrix of deliverables (rows) by milestones (columns), with a check where each deliverable is due or updated, a one-line description per deliverable and a milestone key. One milestone column is highlighted.",
+      "nodes": [
+        "check",
+        "table",
+        "text"
+      ],
+      "uses": [
+        "table (check, groups, highlight, ref cells)",
+        "text (key)"
+      ],
+      "slots": [
+        "title",
+        "deliverable row",
+        "milestone column"
+      ],
+      "budget": {
+        "words": 187,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/phase-deliverables",
+      "name": "Milestones · deliverables by phase",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "core",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "Three phases as columns: each with its weeks, the milestones that close it (date and name) and the deliverables it produces, each described in a few words.",
+      "nodes": [
+        "bullets",
+        "card",
+        "colhead",
+        "rule",
+        "schedule",
+        "text"
+      ],
+      "uses": [
+        "colhead",
+        "schedule",
+        "bullets",
+        "rule"
+      ],
+      "slots": [
+        "title",
+        "phase column",
+        "milestone",
+        "deliverable bullet"
+      ],
+      "budget": {
+        "words": 157,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/continued-page-1",
+      "name": "Milestones and deliverables · list, page 1",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "A dense list of deliverables grouped under their milestones, with description, format, owner and approver. Page 1 of a multi-page list.",
+      "nodes": [
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table (group rows, ref cells, tag)"
+      ],
+      "slots": [
+        "title",
+        "milestone group",
+        "deliverable row"
+      ],
+      "budget": {
+        "words": 174,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/continued-page-2",
+      "name": "Milestones and deliverables · list, continued page",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "working",
+      "frame": "none rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "The continued page of the milestones-and-deliverables list: a continued marker above the same table columns, picking up at the next milestone.",
+      "nodes": [
+        "table",
+        "tag"
+      ],
+      "uses": [
+        "table (continued, group rows, ref cells, tag)"
+      ],
+      "slots": [
+        "title",
+        "continued marker",
+        "milestone group",
+        "deliverable row"
+      ],
+      "budget": {
+        "words": 164,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
+      "status": "active",
+      "replacedBy": null
+    },
+    {
+      "key": "milestones/nav",
+      "name": "Milestones · nav rail cards",
+      "family": "approach",
+      "section": "Milestones and deliverables",
+      "tier": "working",
+      "frame": "nav rail · compact footer",
+      "surface": "light",
+      "density": "compact",
+      "purpose": "All eight milestones as compact cards in a long proposal with the nav rail: date, milestone and the deliverables due.",
+      "nodes": [
+        "card"
+      ],
+      "uses": [
+        "nav rail",
+        "card (label, edge, bullets)"
+      ],
+      "slots": [
+        "title",
+        "card",
+        "deliverable"
+      ],
+      "budget": {
+        "words": 157,
+        "marks": 0
+      },
+      "legacy": "new 2026-10-10",
+      "rev": 1,
+      "added": "2026-10-10",
+      "revised": null,
       "status": "active",
       "replacedBy": null
     },
